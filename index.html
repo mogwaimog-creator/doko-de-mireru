@@ -3,11 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>ドコデミレル？</title>
 
 <style>
-
 body{
   margin:0;
   font-family:Arial,"Noto Sans JP",sans-serif;
@@ -89,7 +87,7 @@ button:hover{
   align-items:center;
   gap:10px;
   cursor:pointer;
-  transition:.2s;
+  transition:background .2s;
 }
 
 .series-item:hover{
@@ -107,11 +105,6 @@ button:hover{
   font-weight:bold;
 }
 
-.back-button{
-  background:#6b7280;
-  margin-bottom:15px;
-}
-
 @media(max-width:600px){
 
   .search{
@@ -127,21 +120,15 @@ button:hover{
   }
 
 }
-
 </style>
-
 </head>
 
 <body>
 
 <header>
-
 <h1>🎬 ドコデミレル？</h1>
-
 <p>映画がどこで観られるか検索</p>
-
 </header>
-
 
 <div class="container">
 
@@ -157,9 +144,7 @@ button:hover{
   placeholder="例：トップガン"
 >
 
-<button id="searchButton">
-🔍 検索
-</button>
+<button id="searchButton">🔍 検索</button>
 
 </div>
 
@@ -169,9 +154,7 @@ button:hover{
 
 </div>
 
-
 <script>
-
 
 /* =========================
    検索ボタン
@@ -179,16 +162,10 @@ button:hover{
 
 document
   .getElementById("searchButton")
-  .addEventListener("click", function(){
-
-    searchMovie();
-
-});
+  .addEventListener("click", searchMovie);
 
 
-/* =========================
-   Enterキーでも検索
-========================= */
+/* Enterキーでも検索 */
 
 document
   .getElementById("movie")
@@ -198,7 +175,7 @@ document
       searchMovie();
     }
 
-});
+  });
 
 
 /* =========================
@@ -208,14 +185,10 @@ document
 async function searchMovie(){
 
   const movie =
-    document
-      .getElementById("movie")
-      .value
-      .trim();
+    document.getElementById("movie").value.trim();
 
   const result =
     document.getElementById("result");
-
 
   if(!movie){
 
@@ -225,15 +198,10 @@ async function searchMovie(){
       "</div>";
 
     return;
-
   }
 
-
   result.innerHTML =
-    "<div class='card'>" +
-    "🔍 検索しています……" +
-    "</div>";
-
+    "<div class='card'>🔍 検索しています……</div>";
 
   try{
 
@@ -243,27 +211,20 @@ async function searchMovie(){
         encodeURIComponent(movie)
       );
 
-
     const data =
       await response.json();
-
 
     if(!response.ok){
 
       throw new Error(
-        data.error ||
-        "検索できませんでした"
+        data.error || "検索できませんでした"
       );
 
     }
 
+    displayMovie(data);
 
-    showMovie(data);
-
-  }
-
-
-  catch(error){
+  }catch(error){
 
     result.innerHTML =
       "<div class='card'>" +
@@ -280,21 +241,17 @@ async function searchMovie(){
    映画詳細表示
 ========================= */
 
-function showMovie(data){
+function displayMovie(data){
 
   const result =
     document.getElementById("result");
 
-
-  let html =
-    "<div class='card'>";
-
+  let html = "<div class='card'>";
 
   html +=
     "<h2>🎬 " +
     escapeHtml(data.title) +
     "</h2>";
-
 
   if(data.poster_path){
 
@@ -306,7 +263,6 @@ function showMovie(data){
 
   }
 
-
   if(data.release_date){
 
     html +=
@@ -315,7 +271,6 @@ function showMovie(data){
       "</p>";
 
   }
-
 
   if(data.overview){
 
@@ -327,32 +282,23 @@ function showMovie(data){
   }
 
 
-  /* =========================
-     見放題
-  ========================= */
+  /* 見放題 */
 
   html += "<h3>🟢 見放題</h3>";
 
-
-  if(
-    data.streaming &&
-    data.streaming.length
-  ){
+  if(data.streaming && data.streaming.length){
 
     data.streaming.forEach(function(service){
 
-      html +=
-        createServiceButton(
-          service,
-          data.title,
-          "streaming"
-        );
+      html += createServiceButton(
+        service,
+        data.title,
+        "streaming"
+      );
 
     });
 
-  }
-
-  else{
+  }else{
 
     html +=
       "<div class='service'>" +
@@ -362,32 +308,23 @@ function showMovie(data){
   }
 
 
-  /* =========================
-     レンタル
-  ========================= */
+  /* レンタル */
 
   html += "<h3>🟡 レンタル</h3>";
 
-
-  if(
-    data.rental &&
-    data.rental.length
-  ){
+  if(data.rental && data.rental.length){
 
     data.rental.forEach(function(service){
 
-      html +=
-        createServiceButton(
-          service,
-          data.title,
-          "rental"
-        );
+      html += createServiceButton(
+        service,
+        data.title,
+        "rental"
+      );
 
     });
 
-  }
-
-  else{
+  }else{
 
     html +=
       "<div class='service'>" +
@@ -397,32 +334,23 @@ function showMovie(data){
   }
 
 
-  /* =========================
-     購入
-  ========================= */
+  /* 購入 */
 
   html += "<h3>🔵 購入</h3>";
 
-
-  if(
-    data.purchase &&
-    data.purchase.length
-  ){
+  if(data.purchase && data.purchase.length){
 
     data.purchase.forEach(function(service){
 
-      html +=
-        createServiceButton(
-          service,
-          data.title,
-          "purchase"
-        );
+      html += createServiceButton(
+        service,
+        data.title,
+        "purchase"
+      );
 
     });
 
-  }
-
-  else{
+  }else{
 
     html +=
       "<div class='service'>" +
@@ -431,10 +359,6 @@ function showMovie(data){
 
   }
 
-
-  /* =========================
-     TMDB詳細
-  ========================= */
 
   if(data.link){
 
@@ -448,7 +372,6 @@ function showMovie(data){
       "</p>";
 
   }
-
 
   html += "</div>";
 
@@ -466,10 +389,8 @@ function showMovie(data){
     html +=
       "<h3>🎞️ シリーズ作品</h3>";
 
-
     html +=
       "<div class='series'>";
-
 
     if(data.series.name){
 
@@ -484,24 +405,20 @@ function showMovie(data){
     data.series.movies.forEach(function(movie){
 
       html +=
-        "<div " +
-        "class='service series-item' " +
-        "data-movie-id='" +
+        "<div class='service series-item' " +
+        "data-id='" +
         movie.id +
         "'>";
-
 
       if(movie.poster_path){
 
         html +=
-          "<img " +
-          "class='series-poster' " +
+          "<img class='series-poster' " +
           "src='https://image.tmdb.org/t/p/w200" +
           movie.poster_path +
           "'>";
 
       }
-
 
       html +=
         "<strong>" +
@@ -526,12 +443,9 @@ function showMovie(data){
         "▶ 詳細" +
         "</span>";
 
-
-      html +=
-        "</div>";
+      html += "</div>";
 
     });
-
 
     html += "</div>";
 
@@ -542,65 +456,55 @@ function showMovie(data){
 
 
   /* =========================
-     シリーズ作品クリック設定
+     ここが重要
+     シリーズ作品にクリック処理を追加
   ========================= */
 
-  const seriesItems =
-    document.querySelectorAll(
-      ".series-item"
-    );
+  document
+    .querySelectorAll(".series-item")
+    .forEach(function(item){
 
+      item.addEventListener(
+        "click",
+        function(){
 
-  seriesItems.forEach(function(item){
+          const id =
+            this.dataset.id;
 
-    item.addEventListener(
-      "click",
-      function(){
+          searchMovieById(id);
 
-        const movieId =
-          this.getAttribute(
-            "data-movie-id"
-          );
+        }
+      );
 
-
-        searchMovieById(movieId);
-
-      }
-    );
-
-  });
+    });
 
 }
 
 
 /* =========================
-   シリーズ作品をID検索
+   IDから作品を検索
 ========================= */
 
-async function searchMovieById(movieId){
+async function searchMovieById(id){
 
   const result =
     document.getElementById("result");
-
 
   result.innerHTML =
     "<div class='card'>" +
     "🔍 作品情報を読み込んでいます……" +
     "</div>";
 
-
   try{
 
     const response =
       await fetch(
         "/api/search?id=" +
-        encodeURIComponent(movieId)
+        encodeURIComponent(id)
       );
-
 
     const data =
       await response.json();
-
 
     if(!response.ok){
 
@@ -611,13 +515,9 @@ async function searchMovieById(movieId){
 
     }
 
+    displayMovie(data);
 
-    showMovie(data);
-
-  }
-
-
-  catch(error){
+  }catch(error){
 
     result.innerHTML =
       "<div class='card'>" +
@@ -634,67 +534,48 @@ async function searchMovieById(movieId){
    配信サービスURL
 ========================= */
 
-function getServiceUrl(
-  serviceName,
-  title
-){
+function getServiceUrl(name,title){
 
-  const name =
-    serviceName.toLowerCase();
+  const service =
+    name.toLowerCase();
 
+  if(service.includes("netflix")){
 
-  if(name.includes("netflix")){
-
-    return (
-      "https://www.netflix.com/jp/search?q=" +
-      encodeURIComponent(title)
-    );
+    return "https://www.netflix.com/jp/search?q=" +
+      encodeURIComponent(title);
 
   }
-
 
   if(
-    name.includes("prime") ||
-    name.includes("amazon")
+    service.includes("prime") ||
+    service.includes("amazon")
   ){
 
-    return (
-      "https://www.amazon.co.jp/s?k=" +
-      encodeURIComponent(title)
-    );
+    return "https://www.amazon.co.jp/s?k=" +
+      encodeURIComponent(title);
 
   }
 
+  if(service.includes("u-next")){
 
-  if(name.includes("u-next")){
-
-    return (
-      "https://video.unext.jp/search?query=" +
-      encodeURIComponent(title)
-    );
+    return "https://video.unext.jp/search?query=" +
+      encodeURIComponent(title);
 
   }
 
+  if(service.includes("hulu")){
 
-  if(name.includes("hulu")){
-
-    return (
-      "https://www.hulu.jp/search?q=" +
-      encodeURIComponent(title)
-    );
+    return "https://www.hulu.jp/search?q=" +
+      encodeURIComponent(title);
 
   }
 
+  if(service.includes("disney")){
 
-  if(name.includes("disney")){
-
-    return (
-      "https://www.disneyplus.com/ja-jp/search/" +
-      encodeURIComponent(title)
-    );
+    return "https://www.disneyplus.com/ja-jp/search/" +
+      encodeURIComponent(title);
 
   }
-
 
   return "#";
 
@@ -702,7 +583,7 @@ function getServiceUrl(
 
 
 /* =========================
-   配信ボタン作成
+   配信ボタン
 ========================= */
 
 function createServiceButton(
@@ -711,35 +592,31 @@ function createServiceButton(
   type
 ){
 
-  const url =
-    getServiceUrl(
-      service.provider_name,
-      title
-    );
-
-
   let emoji = "🟢";
   let background = "#2563eb";
-  let label = "見る";
-
+  let text = "見る";
 
   if(type === "rental"){
 
     emoji = "🟡";
     background = "#f59e0b";
-    label = "レンタル";
+    text = "レンタル";
 
   }
-
 
   if(type === "purchase"){
 
     emoji = "🔵";
     background = "#2563eb";
-    label = "購入";
+    text = "購入";
 
   }
 
+  const url =
+    getServiceUrl(
+      service.provider_name,
+      title
+    );
 
   return (
     "<a href='" +
@@ -758,14 +635,9 @@ function createServiceButton(
 
     emoji +
     " " +
-
-    escapeHtml(
-      service.provider_name
-    ) +
-
+    escapeHtml(service.provider_name) +
     " ▶ " +
-
-    label +
+    text +
 
     "</a>"
   );
@@ -788,7 +660,6 @@ function escapeHtml(text){
   return div.innerHTML;
 
 }
-
 
 </script>
 
