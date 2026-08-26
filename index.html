@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ドコデミレル？</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, "Noto Sans JP", sans-serif;
+      background: #f5f7fb;
+      color: #222;
+    }
+
+    header {
+      background: #111827;
+      color: white;
+      padding: 22px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 30px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 0 20px;
+    }
+
+    .search-box {
+      background: white;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+      text-align: center;
+    }
+
+    .search-box h2 {
+      margin-top: 0;
+    }
+
+    .search-area {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    input {
+      flex: 1;
+      padding: 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 17px;
+    }
+
+    button {
+      padding: 15px 25px;
+      border: none;
+      border-radius: 8px;
+      background: #2563eb;
+      color: white;
+      font-size: 17px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #1d4ed8;
+    }
+
+    #result {
+      margin-top: 25px;
+      text-align: left;
+    }
+
+    .movie-card {
+      background: white;
+      padding: 25px;
+      border-radius: 16px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    }
+
+    .service {
+      padding: 15px;
+      margin: 10px 0;
+      border-radius: 8px;
+      background: #f3f4f6;
+    }
+
+    footer {
+      text-align: center;
+      color: #777;
+      padding: 40px;
+    }
+
+    @media (max-width: 600px) {
+      .search-area {
+        flex-direction: column;
+      }
+
+      button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>🎬 ドコデミレル？</h1>
+  <p>映画がどこで観られるか検索</p>
+</header>
+
+<div class="container">
+
+  <div class="search-box">
+
+    <h2>映画を検索</h2>
+
+    <p>
+      映画のタイトルを入力してください
+    </p>
+
+    <div class="search-area">
+
+      <input
+        id="movieInput"
+        type="text"
+        placeholder="例：トップガン マーヴェリック"
+      >
+
+      <button onclick="searchMovie()">
+        🔍 検索
+      </button>
+
+    </div>
+
+    <div id="result"></div>
+
+  </div>
+
+</div>
+
+<footer>
+  © 2026 ドコデミレル？
+</footer>
+
+<script>
+
+function searchMovie() {
+
+  const movie =
+    document.getElementById("movieInput").value.trim();
+
+  const result =
+    document.getElementById("result");
+
+  if (movie === "") {
+
+    result.innerHTML = `
+      <div class="movie-card">
+        <p>⚠️ 映画名を入力してください。</p>
+      </div>
+    `;
+
+    return;
+  }
+
+  result.innerHTML = `
+
+    <div class="movie-card">
+
+      <h2>🎬 ${movie}</h2>
+
+      <p>
+        配信情報を検索しています……
+      </p>
+
+      <div class="service">
+        🟢 Netflix
+        <br>
+        配信情報を取得予定
+      </div>
+
+      <div class="service">
+        🟢 Amazon Prime Video
+        <br>
+        配信情報を取得予定
+      </div>
+
+      <div class="service">
+        🟢 U-NEXT
+        <br>
+        配信情報を取得予定
+      </div>
+
+      <div class="service">
+        🟢 Disney+
+        <br>
+        配信情報を取得予定
+      </div>
+
+    </div>
+
+  `;
+}
+
+</script>
+
+</body>
+</html>
