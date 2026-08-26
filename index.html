@@ -434,7 +434,65 @@ async function searchMovieById(movieId){
 
     }
 
-    html += "</div>";
+        html += "</div>";
+
+    // シリーズ作品を表示
+    if (
+      data.series &&
+      data.series.movies &&
+      data.series.movies.length
+    ) {
+
+      html += "<h3>🎞️ シリーズ作品</h3>";
+
+      html += "<div class='series'>";
+
+      if (data.series.name) {
+        html +=
+          "<h4>" +
+          escapeHtml(data.series.name) +
+          "</h4>";
+      }
+
+      data.series.movies.forEach(function(movie) {
+
+        html +=
+          "<div class='service' " +
+          "style='cursor:pointer;' " +
+          "onclick=\"searchMovieById(" +
+          movie.id +
+          ")\">";
+
+        if (movie.poster_path) {
+          html +=
+            "<img src='https://image.tmdb.org/t/p/w200" +
+            movie.poster_path +
+            "' " +
+            "style='width:70px; vertical-align:middle; " +
+            "margin-right:10px; border-radius:6px;'>";
+        }
+
+        html +=
+          "<strong>" +
+          escapeHtml(movie.title) +
+          "</strong>";
+
+        if (movie.release_date) {
+          html +=
+            " (" +
+            escapeHtml(movie.release_date.substring(0, 4)) +
+            ")";
+        }
+
+        html +=
+          "<span style='margin-left:10px;'>▶ 詳細</span>";
+
+        html += "</div>";
+
+      });
+
+      html += "</div>";
+    }
 
     result.innerHTML = html;
 
