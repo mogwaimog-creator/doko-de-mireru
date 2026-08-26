@@ -2,24 +2,23 @@ export default async function handler(req, res) {
 
   try {
 
-    const query = req.query.query;
-    const movieId = req.query.id;
-
     const apiKey = process.env.TMDB_API_KEY;
 
     if (!apiKey) {
-
       return res.status(500).json({
         error: "TMDB APIキーが設定されていません"
       });
-
     }
 
 
-    /* ==================================================
-       ① IDが指定された場合
-       → 作品詳細を取得
-    ================================================== */
+    /*
+     * =========================================
+     * ① 作品IDがある場合
+     *    → 作品詳細を返す
+     * =========================================
+     */
+
+    const movieId = req.query.id;
 
     if (movieId) {
 
@@ -32,10 +31,14 @@ export default async function handler(req, res) {
     }
 
 
-    /* ==================================================
-       ② 映画名で検索
-       → 複数作品を返す
-    ================================================== */
+    /*
+     * =========================================
+     * ② 映画名で検索
+     *    → 複数作品を返す
+     * =========================================
+     */
+
+    const query = req.query.query;
 
     if (!query) {
 
@@ -75,7 +78,9 @@ export default async function handler(req, res) {
     }
 
 
-    /* 最大10作品 */
+    /*
+     * 最大10作品を返す
+     */
 
     const movies =
       searchData.results
@@ -86,8 +91,7 @@ export default async function handler(req, res) {
 
             id: movie.id,
 
-            title:
-              movie.title,
+            title: movie.title,
 
             original_title:
               movie.original_title,
@@ -95,11 +99,11 @@ export default async function handler(req, res) {
             release_date:
               movie.release_date,
 
-            poster_path:
-              movie.poster_path,
-
             overview:
-              movie.overview
+              movie.overview,
+
+            poster_path:
+              movie.poster_path
 
           };
 
@@ -129,9 +133,11 @@ export default async function handler(req, res) {
 }
 
 
-/* ==================================================
-   作品詳細を取得する関数
-================================================== */
+/*
+ * =========================================
+ * 作品詳細
+ * =========================================
+ */
 
 async function getMovieDetail(
   movieId,
@@ -139,9 +145,9 @@ async function getMovieDetail(
   res
 ) {
 
-  /* -------------------------
-     作品情報
-  ------------------------- */
+  /*
+   * 作品情報
+   */
 
   const detailUrl =
     "https://api.themoviedb.org/3/movie/" +
@@ -173,9 +179,11 @@ async function getMovieDetail(
   }
 
 
-  /* -------------------------
-     配信情報
-  ------------------------- */
+  /*
+   * =========================================
+   * 配信情報
+   * =========================================
+   */
 
   const providersUrl =
     "https://api.themoviedb.org/3/movie/" +
@@ -199,18 +207,18 @@ async function getMovieDetail(
       : {};
 
 
-  /* -------------------------
-     シリーズ情報
-  ------------------------- */
+  /*
+   * =========================================
+   * シリーズ情報
+   * =========================================
+   */
 
   let collection = null;
 
   let seriesMovies = [];
 
 
-  if (
-    detailData.belongs_to_collection
-  ) {
+  if (detailData.belongs_to_collection) {
 
     collection =
       detailData.belongs_to_collection;
@@ -278,9 +286,11 @@ async function getMovieDetail(
   }
 
 
-  /* -------------------------
-     詳細情報を返す
-  ------------------------- */
+  /*
+   * =========================================
+   * 詳細情報を返す
+   * =========================================
+   */
 
   return res.status(200).json({
 
@@ -303,7 +313,9 @@ async function getMovieDetail(
       detailData.poster_path,
 
 
-    /* 配信 */
+    /*
+     * 配信
+     */
 
     streaming:
       japan.flatrate || [],
@@ -318,7 +330,9 @@ async function getMovieDetail(
       japan.link || null,
 
 
-    /* シリーズ */
+    /*
+     * シリーズ
+     */
 
     series:
       collection
@@ -334,7 +348,6 @@ async function getMovieDetail(
               seriesMovies
 
           }
-
         : null
 
   });
