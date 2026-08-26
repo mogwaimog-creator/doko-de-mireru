@@ -1351,6 +1351,8 @@ function createServiceButton(
       .toLowerCase();
 
 
+  /* Netflix */
+
   if(name.includes("netflix")){
 
     url =
@@ -1358,6 +1360,9 @@ function createServiceButton(
       encodeURIComponent(title);
 
   }
+
+
+  /* Amazon Prime / Amazon Video */
 
   else if(
     name.includes("prime") ||
@@ -1370,6 +1375,9 @@ function createServiceButton(
 
   }
 
+
+  /* U-NEXT */
+
   else if(
     name.includes("u-next")
   ){
@@ -1379,6 +1387,9 @@ function createServiceButton(
       encodeURIComponent(title);
 
   }
+
+
+  /* Hulu */
 
   else if(
     name.includes("hulu")
@@ -1390,6 +1401,9 @@ function createServiceButton(
 
   }
 
+
+  /* Disney+ */
+
   else if(
     name.includes("disney")
   ){
@@ -1400,6 +1414,49 @@ function createServiceButton(
 
   }
 
+
+  /* Apple TV */
+
+  else if(
+    name.includes("apple")
+  ){
+
+    url =
+      "https://tv.apple.com/jp/search?term=" +
+      encodeURIComponent(title);
+
+  }
+
+
+  /* Google Play Movies */
+
+  else if(
+    name.includes("google play") ||
+    name.includes("google")
+  ){
+
+    url =
+      "https://play.google.com/store/search?q=" +
+      encodeURIComponent(title) +
+      "&c=movies&hl=ja";
+
+  }
+
+
+  /* FOD */
+
+  else if(
+    name.includes("fod")
+  ){
+
+    url =
+      "https://fod.fujitv.co.jp/search/?keyword=" +
+      encodeURIComponent(title);
+
+  }
+
+
+  /* ボタン色 */
 
   let background = "#2563eb";
 
@@ -1416,6 +1473,8 @@ function createServiceButton(
 
   }
 
+
+  /* 1サービス＝1ボタン */
 
   return (
 
@@ -1436,7 +1495,8 @@ function createServiceButton(
     "'>" +
 
     escapeHtml(
-      service.provider_name || "配信サービス"
+      service.provider_name ||
+      "配信サービス"
     ) +
 
     " ▶" +
@@ -1446,7 +1506,6 @@ function createServiceButton(
   );
 
 }
-
   
 
 
