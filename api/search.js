@@ -1,12 +1,8 @@
 export default async function handler(req, res) {
   try {
-    const query = req.query.query;
 
-    if (!query) {
-      return res.status(400).json({
-        error: "映画名を入力してください"
-      });
-    }
+    const query = req.query.query;
+    const id = req.query.id;
 
     const apiKey = process.env.TMDB_API_KEY;
 
@@ -16,23 +12,85 @@ export default async function handler(req, res) {
       });
     }
 
-    const searchUrl =
-      "https://api.themoviedb.org/3/search/movie" +
-      "?api_key=" + apiKey +
-      "&language=ja-JP" +
-      "&query=" + encodeURIComponent(query) +
-      "&region=JP";
+    let movie;
 
-    const searchResponse = await fetch(searchUrl);
-    const searchData = await searchResponse.json();
+    /*
+     * ① シリーズ作品をクリックした場合
+     * /api/search?id=12345
+     */
+    if (id) {
 
-    if (!searchData.results || searchData.results.length === 0) {
-      return res.status(404).json({
-        error: "映画が見つかりませんでした"
-      });
+      const detailUrl =
+        "https://api.themoviedb.org/3/movie/" +
+        encodeURIComponent(id) +
+        "?api_key=" + apiKey +
+        "&language=ja-JP";
+
+      const detailResponse =
+        await fetch(detailUrl);
+
+      const detailData =
+        await detailResponse.json();
+
+      if (
+        !detailResponse.ok ||
+        !detailData.id
+      ) {
+        return res.status(404).json({
+          error: "作品が見つかりませんでした"
+        });
+      }
+
+      movie = detailData;
+
     }
 
-    const movie = searchData.results[0];
+    /*
+     * ② 通常の映画検索
+     * /api/search?query=トップガン
+     */
+    else if (query) {
+
+      const searchUrl =
+        "https://api.themoviedb.org/3/search/movie" +
+        "?api_key=" + apiKey +
+        "&language=ja-JP" +
+        "&query=" + encodeURIComponent(query) +
+        "&region=JP";
+
+      const searchResponse =
+        await fetch(searchUrl);
+
+      const searchData =
+        await searchResponse.json();
+
+      if (
+        !searchData.results ||
+        searchData.results.length === 0
+      ) {
+        return res.status(404).json({
+          error: "映画が見つかりませんでした"
+        });
+      }
+
+      movie = searchData.results[0];
+
+    }
+
+    /*
+     * ③ queryもidもない場合
+     */
+    else {
+
+      return res.status(400).json({
+        error: "映画名を入力してください"
+      });
+
+    }
+
+    /*
+     * 配信情報を取得
+     */
 
     const providersUrl =
       "https://api.themoviedb.org/3/movie/" +
@@ -40,8 +98,11 @@ export default async function handler(req, res) {
       "/watch/providers" +
       "?api_key=" + apiKey;
 
-    const providersResponse = await fetch(providersUrl);
-    const providersData = await providersResponse.json();
+    const providersResponse =
+      await fetch(providersUrl);
+
+    const providersData =
+      await providersResponse.json();
 
     const japan =
       providersData.results &&
@@ -49,21 +110,36 @@ export default async function handler(req, res) {
         ? providersData.results.JP
         : {};
 
+
+    /*
+     * 詳細情報を取得
+     */
+
     const detailUrl =
       "https://api.themoviedb.org/3/movie/" +
       movie.id +
       "?api_key=" + apiKey +
       "&language=ja-JP";
 
-    const detailResponse = await fetch(detailUrl);
-    const detailData = await detailResponse.json();
+    const detailResponse =
+      await fetch(detailUrl);
+
+    const detailData =
+      await detailResponse.json();
+
+
+    /*
+     * シリーズ情報
+     */
 
     let collection = null;
     let seriesMovies = [];
 
+
     if (detailData.belongs_to_collection) {
 
-      collection = detailData.belongs_to_collection;
+      collection =
+        detailData.belongs_to_collection;
 
       const collectionUrl =
         "https://api.themoviedb.org/3/collection/" +
@@ -71,54 +147,86 @@ export default async function handler(req, res) {
         "?api_key=" + apiKey +
         "&language=ja-JP";
 
-      const collectionResponse = await fetch(collectionUrl);
-      const collectionData = await collectionResponse.json();
+      const collectionResponse =
+        await fetch(collectionUrl);
+
+      const collectionData =
+        await collectionResponse.json();
+
 
       if (
         collectionData.parts &&
         collectionData.parts.length
       ) {
 
-        seriesMovies = collectionData.parts
-          .sort(function(a, b) {
+        seriesMovies =
+          collectionData.parts
+            .sort(function(a, b) {
 
-            const dateA =
-              a.release_date || "9999-99-99";
+              const dateA =
+                a.release_date || "9999-99-99";
 
-            const dateB =
-              b.release_date || "9999-99-99";
+              const dateB =
+                b.release_date || "9999-99-99";
 
-            return dateA.localeCompare(dateB);
+              return dateA.localeCompare(dateB);
 
-          })
-          .map(function(item) {
+            })
+            .map(function(item) {
 
-            return {
-              id: item.id,
-              title: item.title,
-              release_date: item.release_date,
-              poster_path: item.poster_path
-            };
+              return {
+                id: item.id,
+                title: item.title,
+                release_date: item.release_date,
+                poster_path: item.poster_path
+              };
 
-          });
+            });
 
       }
+
     }
+
+
+    /*
+     * 結果を返す
+     */
 
     return res.status(200).json({
 
       id: movie.id,
-      title: movie.title,
-      original_title: movie.original_title,
-      release_date: movie.release_date,
-      overview: movie.overview,
-      poster_path: movie.poster_path,
 
-      streaming: japan.flatrate || [],
-      rental: japan.rent || [],
-      purchase: japan.buy || [],
+      title:
+        detailData.title ||
+        movie.title,
 
-      link: japan.link || null,
+      original_title:
+        detailData.original_title ||
+        movie.original_title,
+
+      release_date:
+        detailData.release_date ||
+        movie.release_date,
+
+      overview:
+        detailData.overview ||
+        movie.overview,
+
+      poster_path:
+        detailData.poster_path ||
+        movie.poster_path,
+
+      streaming:
+        japan.flatrate || [],
+
+      rental:
+        japan.rent || [],
+
+      purchase:
+        japan.buy || [],
+
+      link:
+        japan.link || null,
 
       series: collection
         ? {
@@ -129,6 +237,7 @@ export default async function handler(req, res) {
         : null
 
     });
+
 
   } catch (error) {
 
