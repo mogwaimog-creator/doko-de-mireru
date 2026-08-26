@@ -4,10 +4,20 @@ export default async function handler(req, res) {
 
     const apiKey = process.env.TMDB_API_KEY;
 
+
+    /*
+     * =========================================
+     * APIキー確認
+     * =========================================
+     */
+
     if (!apiKey) {
 
       return res.status(500).json({
-        error: "TMDB APIキーが設定されていません"
+
+        error:
+          "TMDB APIキーが設定されていません"
+
       });
 
     }
@@ -16,11 +26,12 @@ export default async function handler(req, res) {
     /*
      * =========================================
      * ① 作品IDがある場合
-     *    → 作品詳細を返す
+     *    → 作品詳細
      * =========================================
      */
 
     const movieId = req.query.id;
+
 
     if (movieId) {
 
@@ -35,33 +46,52 @@ export default async function handler(req, res) {
 
     /*
      * =========================================
-     * ② 映画名で検索
-     *    → 複数作品を返す
+     * ② 映画名検索
      * =========================================
      */
 
     const query = req.query.query;
 
+
     if (!query) {
 
       return res.status(400).json({
-        error: "映画名を入力してください"
+
+        error:
+          "映画名を入力してください"
+
       });
 
     }
 
 
+    /*
+     * =========================================
+     * TMDB検索
+     * =========================================
+     */
+
     const searchUrl =
       "https://api.themoviedb.org/3/search/movie" +
       "?api_key=" + apiKey +
       "&language=ja-JP" +
-      "&query=" + encodeURIComponent(query) +
+      "&query=" +
+      encodeURIComponent(query) +
       "&region=JP" +
       "&include_adult=false";
 
 
     const searchResponse =
       await fetch(searchUrl);
+
+
+    if (!searchResponse.ok) {
+
+      throw new Error(
+        "TMDB検索に失敗しました"
+      );
+
+    }
 
 
     const searchData =
@@ -74,7 +104,10 @@ export default async function handler(req, res) {
     ) {
 
       return res.status(404).json({
-        error: "映画が見つかりませんでした"
+
+        error:
+          "映画が見つかりませんでした"
+
       });
 
     }
@@ -82,19 +115,19 @@ export default async function handler(req, res) {
 
     /*
      * =========================================
-     * 検索結果を整理
-     *
-     * シリーズ作品なら公開順
-     * それ以外はTMDB関連度順
+     * 最大10作品
      * =========================================
      */
 
     const rawMovies =
-      searchData.results.slice(0, 10);
+      searchData.results
+        .slice(0, 10);
 
 
     /*
+     * =========================================
      * 各作品のシリーズ情報を確認
+     * =========================================
      */
 
     const moviesWithSeries =
@@ -105,12 +138,14 @@ export default async function handler(req, res) {
 
             let collection = null;
 
+
             try {
 
               const detailUrl =
                 "https://api.themoviedb.org/3/movie/" +
                 movie.id +
-                "?api_key=" + apiKey +
+                "?api_key=" +
+                apiKey +
                 "&language=ja-JP";
 
 
@@ -118,13 +153,17 @@ export default async function handler(req, res) {
                 await fetch(detailUrl);
 
 
-              const detailData =
-                await detailResponse.json();
+              if (detailResponse.ok) {
+
+                const detailData =
+                  await detailResponse.json();
 
 
-              collection =
-                detailData.belongs_to_collection ||
-                null;
+                collection =
+                  detailData.belongs_to_collection ||
+                  null;
+
+              }
 
             }
 
@@ -158,6 +197,9 @@ export default async function handler(req, res) {
               poster_path:
                 movie.poster_path,
 
+              vote_average:
+                movie.vote_average,
+
               collection:
                 collection
 
@@ -171,7 +213,7 @@ export default async function handler(req, res) {
 
     /*
      * =========================================
-     * シリーズごとにまとめる
+     * シリーズ作品と通常作品を分ける
      * =========================================
      */
 
@@ -183,13 +225,29 @@ export default async function handler(req, res) {
     moviesWithSeries.forEach(
       function(movie) {
 
-        if(movie.collection) {
+        /*
+         * Untitled作品を検索結果から除外
+         */
+
+        if (
+          !movie.title ||
+          movie.title
+            .toLowerCase()
+            .includes("untitled")
+        ) {
+
+          return;
+
+        }
+
+
+        if (movie.collection) {
 
           const collectionId =
             movie.collection.id;
 
 
-          if(!seriesGroups[collectionId]) {
+          if (!seriesGroups[collectionId]) {
 
             seriesGroups[collectionId] = [];
 
@@ -235,6 +293,7 @@ export default async function handler(req, res) {
               a.release_date ||
               "9999-99-99";
 
+
             const dateB =
               b.release_date ||
               "9999-99-99";
@@ -259,10 +318,15 @@ export default async function handler(req, res) {
 
     /*
      * =========================================
-     * 最終的な検索結果
+     * 最終検索結果
      *
-     * ① シリーズ作品 → 公開順
-     * ② その他 → TMDB関連度順
+     * シリーズ作品
+     *   ↓
+     * 公開順
+     *
+     * その他
+     *   ↓
+     * TMDB関連度順
      * =========================================
      */
 
@@ -287,6 +351,9 @@ export default async function handler(req, res) {
               release_date:
                 movie.release_date,
 
+              vote_average:
+                movie.vote_average,
+
               overview:
                 movie.overview,
 
@@ -298,6 +365,12 @@ export default async function handler(req, res) {
           }
         );
 
+
+    /*
+     * =========================================
+     * 検索結果を返す
+     * =========================================
+     */
 
     return res.status(200).json({
 
@@ -311,7 +384,11 @@ export default async function handler(req, res) {
 
   catch (error) {
 
-    console.error(error);
+    console.error(
+      "検索エラー:",
+      error
+    );
+
 
     return res.status(500).json({
 
@@ -337,24 +414,38 @@ async function getMovieDetail(
   res
 ) {
 
+
   /*
    * =========================================
    * 作品情報
    *
-   * creditsも同時取得
+   * creditsを同時取得
    * =========================================
    */
 
   const detailUrl =
     "https://api.themoviedb.org/3/movie/" +
     movieId +
-    "?api_key=" + apiKey +
+    "?api_key=" +
+    apiKey +
     "&language=ja-JP" +
     "&append_to_response=credits";
 
 
   const detailResponse =
     await fetch(detailUrl);
+
+
+  if (!detailResponse.ok) {
+
+    return res.status(404).json({
+
+      error:
+        "作品情報を取得できませんでした"
+
+    });
+
+  }
 
 
   const detailData =
@@ -386,15 +477,23 @@ async function getMovieDetail(
     "https://api.themoviedb.org/3/movie/" +
     movieId +
     "/watch/providers" +
-    "?api_key=" + apiKey;
+    "?api_key=" +
+    apiKey;
 
 
   const providersResponse =
     await fetch(providersUrl);
 
 
-  const providersData =
-    await providersResponse.json();
+  let providersData = {};
+
+
+  if (providersResponse.ok) {
+
+    providersData =
+      await providersResponse.json();
+
+  }
 
 
   const japan =
@@ -424,7 +523,8 @@ async function getMovieDetail(
     const collectionUrl =
       "https://api.themoviedb.org/3/collection/" +
       collection.id +
-      "?api_key=" + apiKey +
+      "?api_key=" +
+      apiKey +
       "&language=ja-JP";
 
 
@@ -432,66 +532,92 @@ async function getMovieDetail(
       await fetch(collectionUrl);
 
 
-    const collectionData =
-      await collectionResponse.json();
+    if (collectionResponse.ok) {
+
+      const collectionData =
+        await collectionResponse.json();
 
 
-    if (
-      collectionData.parts &&
-      collectionData.parts.length
-    ) {
+      if (
+        collectionData.parts &&
+        collectionData.parts.length
+      ) {
 
-      seriesMovies =
-        collectionData.parts
-          .sort(function(a, b) {
-
-            const dateA =
-              a.release_date ||
-              "9999-99-99";
-
-            const dateB =
-              b.release_date ||
-              "9999-99-99";
-
-            return dateA.localeCompare(
-              dateB
-            );
-
-          })
-          .map(function(item) {
-
-            return {
-
-              id:
-                item.id,
-
-              title:
-                item.title,
-
-              release_date:
-                item.release_date,
-
-              poster_path:
-                item.poster_path
-
-            };
-
-          })
-          .filter(function(item) {
+        seriesMovies =
+          collectionData.parts
 
             /*
-             * Untitled作品を非表示
+             * Untitled作品を除外
              */
 
-            if(!item.title) {
-              return false;
-            }
+            .filter(
+              function(item) {
 
-            return !item.title
-              .toLowerCase()
-              .includes("untitled");
+                if (!item.title) {
 
-          });
+                  return false;
+
+                }
+
+
+                return !item.title
+                  .toLowerCase()
+                  .includes("untitled");
+
+              }
+            )
+
+            /*
+             * 公開順
+             */
+
+            .sort(
+              function(a, b) {
+
+                const dateA =
+                  a.release_date ||
+                  "9999-99-99";
+
+
+                const dateB =
+                  b.release_date ||
+                  "9999-99-99";
+
+
+                return dateA.localeCompare(
+                  dateB
+                );
+
+              }
+            )
+
+            /*
+             * 必要な情報だけ返す
+             */
+
+            .map(
+              function(item) {
+
+                return {
+
+                  id:
+                    item.id,
+
+                  title:
+                    item.title,
+
+                  release_date:
+                    item.release_date,
+
+                  poster_path:
+                    item.poster_path
+
+                };
+
+              }
+            );
+
+      }
 
     }
 
@@ -516,7 +642,10 @@ async function getMovieDetail(
       detailData.credits.crew.find(
         function(person) {
 
-          return person.job === "Director";
+          return (
+            person.job ===
+            "Director"
+          );
 
         }
       ) || null;
@@ -527,6 +656,7 @@ async function getMovieDetail(
   /*
    * =========================================
    * 出演者
+   * 最大8人
    * =========================================
    */
 
@@ -541,19 +671,21 @@ async function getMovieDetail(
     cast =
       detailData.credits.cast
         .slice(0, 8)
-        .map(function(person) {
+        .map(
+          function(person) {
 
-          return {
+            return {
 
-            name:
-              person.name,
+              name:
+                person.name,
 
-            character:
-              person.character
+              character:
+                person.character
 
-          };
+            };
 
-        });
+          }
+        );
 
   }
 
@@ -565,6 +697,10 @@ async function getMovieDetail(
    */
 
   return res.status(200).json({
+
+    /*
+     * 基本情報
+     */
 
     id:
       detailData.id,
@@ -608,9 +744,12 @@ async function getMovieDetail(
     director:
       director
         ? {
+
             name:
               director.name
+
           }
+
         : null,
 
 
@@ -623,28 +762,45 @@ async function getMovieDetail(
 
 
     /*
-     * 配信
+     * 🟢 見放題
      */
 
     streaming:
       japan.flatrate || [],
 
+
+    /*
+     * 🟡 レンタル
+     */
+
     rental:
       japan.rent || [],
 
+
+    /*
+     * 🔵 購入
+     */
+
     purchase:
       japan.buy || [],
+
+
+    /*
+     * 🔗 TMDB配信情報
+     */
 
     link:
       japan.link || null,
 
 
     /*
-     * シリーズ
+     * 🎞️ シリーズ
      */
 
     series:
+
       collection
+
         ? {
 
             id:
