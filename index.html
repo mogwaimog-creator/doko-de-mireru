@@ -187,23 +187,63 @@ async function searchMovie(){
 
   data.streaming.forEach(function(service){
 
+    let serviceUrl = data.link || "#";
+
+    const name =
+      service.provider_name.toLowerCase();
+
+    if(name.includes("netflix")){
+      serviceUrl =
+        "https://www.netflix.com/jp/search?q=" +
+        encodeURIComponent(data.title);
+    }
+
+    else if(
+      name.includes("prime") ||
+      name.includes("amazon")
+    ){
+      serviceUrl =
+        "https://www.amazon.co.jp/s?k=" +
+        encodeURIComponent(data.title);
+    }
+
+    else if(name.includes("u-next")){
+      serviceUrl =
+        "https://video.unext.jp/search?query=" +
+        encodeURIComponent(data.title);
+    }
+
+    else if(name.includes("hulu")){
+      serviceUrl =
+        "https://www.hulu.jp/search?q=" +
+        encodeURIComponent(data.title);
+    }
+
+    else if(name.includes("disney")){
+      serviceUrl =
+        "https://www.disneyplus.com/ja-jp/search/" +
+        encodeURIComponent(data.title);
+    }
+
     html +=
       "<a href='" +
-      (data.link || "#") +
+      serviceUrl +
       "' target='_blank' " +
-      "style='display:inline-block; " +
-      "padding:12px 18px; " +
-      "margin:6px 6px 6px 0; " +
-      "background:#2563eb; " +
-      "color:white; " +
-      "text-decoration:none; " +
-      "border-radius:8px; " +
+      "style='display:inline-block;" +
+      "padding:12px 18px;" +
+      "margin:6px 6px 6px 0;" +
+      "background:#2563eb;" +
+      "color:white;" +
+      "text-decoration:none;" +
+      "border-radius:8px;" +
       "font-weight:bold;'>" +
       "🟢 " +
       escapeHtml(service.provider_name) +
       " ▶ 見る</a>";
 
   });
+
+}
 
 }else{
 
@@ -220,17 +260,55 @@ async function searchMovie(){
 
   data.rental.forEach(function(service){
 
+    let serviceUrl = data.link || "#";
+
+    const name =
+      service.provider_name.toLowerCase();
+
+    if(name.includes("netflix")){
+      serviceUrl =
+        "https://www.netflix.com/jp/search?q=" +
+        encodeURIComponent(data.title);
+    }
+
+    else if(
+      name.includes("prime") ||
+      name.includes("amazon")
+    ){
+      serviceUrl =
+        "https://www.amazon.co.jp/s?k=" +
+        encodeURIComponent(data.title);
+    }
+
+    else if(name.includes("u-next")){
+      serviceUrl =
+        "https://video.unext.jp/search?query=" +
+        encodeURIComponent(data.title);
+    }
+
+    else if(name.includes("hulu")){
+      serviceUrl =
+        "https://www.hulu.jp/search?q=" +
+        encodeURIComponent(data.title);
+    }
+
+    else if(name.includes("disney")){
+      serviceUrl =
+        "https://www.disneyplus.com/ja-jp/search/" +
+        encodeURIComponent(data.title);
+    }
+
     html +=
       "<a href='" +
-      (data.link || "#") +
+      serviceUrl +
       "' target='_blank' " +
-      "style='display:inline-block; " +
-      "padding:12px 18px; " +
-      "margin:6px 6px 6px 0; " +
-      "background:#f59e0b; " +
-      "color:white; " +
-      "text-decoration:none; " +
-      "border-radius:8px; " +
+      "style='display:inline-block;" +
+      "padding:12px 18px;" +
+      "margin:6px 6px 6px 0;" +
+      "background:#f59e0b;" +
+      "color:white;" +
+      "text-decoration:none;" +
+      "border-radius:8px;" +
       "font-weight:bold;'>" +
       "🟡 " +
       escapeHtml(service.provider_name) +
@@ -240,23 +318,63 @@ async function searchMovie(){
 
 }
 
+}
+
     html += "<h3>🔵 購入</h3>";
 
     if(data.purchase && data.purchase.length){
 
   data.purchase.forEach(function(service){
 
+    let serviceUrl = data.link || "#";
+
+    const name =
+      service.provider_name.toLowerCase();
+
+    if(name.includes("netflix")){
+      serviceUrl =
+        "https://www.netflix.com/jp/search?q=" +
+        encodeURIComponent(data.title);
+    }
+
+    else if(
+      name.includes("prime") ||
+      name.includes("amazon")
+    ){
+      serviceUrl =
+        "https://www.amazon.co.jp/s?k=" +
+        encodeURIComponent(data.title);
+    }
+
+    else if(name.includes("u-next")){
+      serviceUrl =
+        "https://video.unext.jp/search?query=" +
+        encodeURIComponent(data.title);
+    }
+
+    else if(name.includes("hulu")){
+      serviceUrl =
+        "https://www.hulu.jp/search?q=" +
+        encodeURIComponent(data.title);
+    }
+
+    else if(name.includes("disney")){
+      serviceUrl =
+        "https://www.disneyplus.com/ja-jp/search/" +
+        encodeURIComponent(data.title);
+    }
+
     html +=
       "<a href='" +
-      (data.link || "#") +
+      serviceUrl +
       "' target='_blank' " +
-      "style='display:inline-block; " +
-      "padding:12px 18px; " +
-      "margin:6px 6px 6px 0; " +
-      "background:#2563eb; " +
-      "color:white; " +
-      "text-decoration:none; " +
-      "border-radius:8px; " +
+      "style='display:inline-block;" +
+      "padding:12px 18px;" +
+      "margin:6px 6px 6px 0;" +
+      "background:#2563eb;" +
+      "color:white;" +
+      "text-decoration:none;" +
+      "border-radius:8px;" +
       "font-weight:bold;'>" +
       "🔵 " +
       escapeHtml(service.provider_name) +
@@ -264,6 +382,7 @@ async function searchMovie(){
 
   });
 
+}
 }
     if(data.link){
 
