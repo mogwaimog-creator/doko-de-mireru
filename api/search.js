@@ -82,39 +82,230 @@ export default async function handler(req, res) {
      * 最大10作品を返す
      */
 
-    const movies =
-      searchData.results
-        .slice(0, 10)
-        .map(function(movie) {
+    /*
+ * =========================================
+ * 検索結果を整理
+ * シリーズ作品なら公開順
+ * それ以外はTMDBの関連度順
+ * =========================================
+ */
 
-          return {
-
-            id: movie.id,
-
-            title: movie.title,
-
-            original_title:
-              movie.original_title,
-
-            release_date:
-              movie.release_date,
-
-            overview:
-              movie.overview,
-
-            poster_path:
-              movie.poster_path
-
-          };
-
-        });
+const rawMovies =
+  searchData.results.slice(0, 10);
 
 
-    return res.status(200).json({
+/*
+ * 各作品のシリーズ情報を確認
+ */
 
-      results: movies
+const moviesWithSeries =
+  await Promise.all(
 
-    });
+    rawMovies.map(
+      async function(movie) {
+
+        let collection = null;
+
+        try {
+
+          const detailUrl =
+            "https://api.themoviedb.org/3/movie/" +
+            movie.id +
+            "?api_key=" + apiKey +
+            "&language=ja-JP";
+
+
+          const detailResponse =
+            await fetch(detailUrl);
+
+
+          const detailData =
+            await detailResponse.json();
+
+
+          collection =
+            detailData.belongs_to_collection ||
+            null;
+
+        }
+
+        catch(error) {
+
+          console.error(
+            "シリーズ確認エラー:",
+            error
+          );
+
+        }
+
+
+        return {
+
+          id:
+            movie.id,
+
+          title:
+            movie.title,
+
+          original_title:
+            movie.original_title,
+
+          release_date:
+            movie.release_date,
+
+          overview:
+            movie.overview,
+
+          poster_path:
+            movie.poster_path,
+
+          collection:
+            collection
+
+        };
+
+      }
+    )
+
+  );
+
+
+/*
+ * =========================================
+ * シリーズごとにまとめる
+ * =========================================
+ */
+
+const seriesGroups = {};
+
+const normalMovies = [];
+
+
+moviesWithSeries.forEach(
+  function(movie) {
+
+    if(movie.collection) {
+
+      const collectionId =
+        movie.collection.id;
+
+
+      if(!seriesGroups[collectionId]) {
+
+        seriesGroups[collectionId] = [];
+
+      }
+
+
+      seriesGroups[collectionId].push(
+        movie
+      );
+
+    }
+
+    else {
+
+      normalMovies.push(movie);
+
+    }
+
+  }
+);
+
+
+/*
+ * =========================================
+ * シリーズ作品を公開順にする
+ * =========================================
+ */
+
+let sortedSeriesMovies = [];
+
+
+Object.keys(seriesGroups).forEach(
+  function(collectionId) {
+
+    const group =
+      seriesGroups[collectionId];
+
+
+    group.sort(
+      function(a, b) {
+
+        const dateA =
+          a.release_date ||
+          "9999-99-99";
+
+        const dateB =
+          b.release_date ||
+          "9999-99-99";
+
+
+        return dateA.localeCompare(
+          dateB
+        );
+
+      }
+    );
+
+
+    sortedSeriesMovies =
+      sortedSeriesMovies.concat(
+        group
+      );
+
+  }
+);
+
+
+/*
+ * =========================================
+ * 最終的な検索結果
+ *
+ * ① シリーズ作品 → 公開順
+ * ② その他 → TMDB関連度順
+ * =========================================
+ */
+
+const movies =
+  sortedSeriesMovies
+    .concat(normalMovies)
+    .slice(0, 10)
+    .map(
+      function(movie) {
+
+        return {
+
+          id:
+            movie.id,
+
+          title:
+            movie.title,
+
+          original_title:
+            movie.original_title,
+
+          release_date:
+            movie.release_date,
+
+          overview:
+            movie.overview,
+
+          poster_path:
+            movie.poster_path
+
+        };
+
+      }
+    );
+
+
+return res.status(200).json({
+
+  results:
+    movies
+
+});
 
 
   } catch (error) {
