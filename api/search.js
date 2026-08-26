@@ -84,8 +84,13 @@ export default async function handler(req, res) {
     let collection = null;
     let seriesMovies = [];
 
-    if (detailData.belongs_to_collection) {
-      collection = detailData.belongs_to_collection;
+        const currentCollection =
+      detailData.belongs_to_collection ||
+      movie.belongs_to_collection ||
+      null;
+
+    if (currentCollection) {
+      collection = currentCollection;
 
       const collectionUrl =
         "https://api.themoviedb.org/3/collection/" +
@@ -93,8 +98,11 @@ export default async function handler(req, res) {
         "?api_key=" + apiKey +
         "&language=ja-JP";
 
-      const collectionResponse = await fetch(collectionUrl);
-      const collectionData = await collectionResponse.json();
+      const collectionResponse =
+        await fetch(collectionUrl);
+
+      const collectionData =
+        await collectionResponse.json();
 
       if (
         collectionData.parts &&
@@ -102,6 +110,7 @@ export default async function handler(req, res) {
       ) {
         seriesMovies = collectionData.parts
           .sort(function(a, b) {
+
             const dateA =
               a.release_date || "9999-99-99";
 
@@ -109,14 +118,17 @@ export default async function handler(req, res) {
               b.release_date || "9999-99-99";
 
             return dateA.localeCompare(dateB);
+
           })
           .map(function(item) {
+
             return {
               id: item.id,
               title: item.title,
               release_date: item.release_date,
               poster_path: item.poster_path
             };
+
           });
       }
     }
