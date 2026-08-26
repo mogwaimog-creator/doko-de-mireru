@@ -288,6 +288,35 @@ const movies =
           release_date:
             movie.release_date,
 
+          vote_average:
+  detailData.vote_average,
+
+genres:
+  detailData.genres || [],
+
+director:
+  detailData.credits &&
+  detailData.credits.crew
+    ? detailData.credits.crew.find(
+        function(person){
+          return person.job === "Director";
+        }
+      ) || null
+    : null,
+
+cast:
+  detailData.credits &&
+  detailData.credits.cast
+    ? detailData.credits.cast
+        .slice(0, 8)
+        .map(function(person){
+          return {
+            name: person.name,
+            character: person.character
+          };
+        })
+    : [],
+
           overview:
             movie.overview,
 
@@ -341,10 +370,11 @@ async function getMovieDetail(
    */
 
   const detailUrl =
-    "https://api.themoviedb.org/3/movie/" +
-    movieId +
-    "?api_key=" + apiKey +
-    "&language=ja-JP";
+  "https://api.themoviedb.org/3/movie/" +
+  movieId +
+  "?api_key=" + apiKey +
+  "&language=ja-JP" +
+  "&append_to_response=credits";
 
 
   const detailResponse =
