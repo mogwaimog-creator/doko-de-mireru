@@ -1049,7 +1049,119 @@ async function searchMovieById(movieId){
         "</p>";
 
     }
+
+    /* =========================
+   ⭐ 評価
+========================= */
+
+if(
+  data.vote_average !== undefined &&
+  data.vote_average !== null
+){
+
+  html +=
+
+    "<p style='font-size:18px;'>" +
+
+    "⭐ 評価：" +
+
+    "<strong>" +
+
+    Number(data.vote_average).toFixed(1) +
+
+    " / 10</strong>" +
+
+    "</p>";
+
+}
+
+
 /* =========================
+   🎭 ジャンル
+========================= */
+
+if(
+  data.genres &&
+  data.genres.length
+){
+
+  html +=
+
+    "<p>" +
+
+    "🎭 ジャンル：" +
+
+    data.genres
+      .map(function(genre){
+
+        return escapeHtml(
+          genre.name
+        );
+
+      })
+      .join(" / ") +
+
+    "</p>";
+
+}
+
+
+/* =========================
+   🎬 監督
+========================= */
+
+if(data.director){
+
+  html +=
+
+    "<p>" +
+
+    "🎬 監督：" +
+
+    "<strong>" +
+
+    escapeHtml(
+      data.director.name
+    ) +
+
+    "</strong>" +
+
+    "</p>";
+
+}
+
+
+/* =========================
+   👤 出演者
+========================= */
+
+if(
+  data.cast &&
+  data.cast.length
+){
+
+  html +=
+
+    "<p>" +
+
+    "👤 出演：" +
+
+    data.cast
+      .slice(0, 6)
+      .map(function(person){
+
+        return escapeHtml(
+          person.name
+        );
+
+      })
+      .join("、") +
+
+    "</p>";
+
+}
+    
+    /* =========================
    映画情報
 ========================= */
 
