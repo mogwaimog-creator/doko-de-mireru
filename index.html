@@ -12,7 +12,6 @@
 
 <title>ドコデミレル？</title>
 
-
 <style>
 
 /* =========================
@@ -1027,6 +1026,45 @@ let lastSearchQuery = "";
 
 
 /* =========================
+   ページ読み込み時
+========================= */
+
+window.addEventListener(
+  "DOMContentLoaded",
+  function(){
+
+    const path =
+      window.location.pathname;
+
+
+    /*
+     * /movie/12345
+     * の場合
+     */
+
+    const match =
+      path.match(
+        /^\/movie\/(\d+)\/?$/
+      );
+
+
+    if(match){
+
+      const movieId =
+        match[1];
+
+      searchMovieById(
+        movieId,
+        false
+      );
+
+    }
+
+  }
+);
+
+
+/* =========================
    映画検索
 ========================= */
 
@@ -1057,6 +1095,17 @@ async function searchMovie(){
 
 
   lastSearchQuery = movie;
+
+
+  /*
+   * トップページへ戻す
+   */
+
+  history.pushState(
+    {},
+    "",
+    "/"
+  );
 
 
   result.innerHTML =
@@ -1266,7 +1315,8 @@ function createMovieCard(movie){
     "class='detail-button' " +
     "onclick='searchMovieById(" +
     movie.id +
-    ")'>" +
+    ", true)' " +
+    "role='button'>" +
     "▶ 詳細を見る" +
     "</span>";
 
@@ -1288,10 +1338,29 @@ function createMovieCard(movie){
    詳細画面
 ========================= */
 
-async function searchMovieById(movieId){
+async function searchMovieById(
+  movieId,
+  changeUrl = true
+){
 
   const result =
     document.getElementById("result");
+
+
+  /*
+   * URLを変更
+   */
+
+  if(changeUrl){
+
+    history.pushState(
+      {},
+      "",
+      "/movie/" +
+      encodeURIComponent(movieId)
+    );
+
+  }
 
 
   result.innerHTML =
@@ -1321,6 +1390,15 @@ async function searchMovieById(movieId){
       );
 
     }
+
+
+    /*
+     * ブラウザタイトル変更
+     */
+
+    document.title =
+      data.title +
+      " | ドコデミレル？";
 
 
     let html =
@@ -1669,10 +1747,6 @@ async function searchMovieById(movieId){
       data.series.movies.forEach(
         function(movie){
 
-          /*
-           * Untitled作品を非表示
-           */
-
           if(
             !movie.title ||
             movie.title
@@ -1691,7 +1765,7 @@ async function searchMovieById(movieId){
             "class='series-item' " +
             "onclick='searchMovieById(" +
             movie.id +
-            ")'>";
+            ", true)'>";
 
 
           if(movie.poster_path){
@@ -1737,7 +1811,9 @@ async function searchMovieById(movieId){
             html +=
 
               "<div class='series-year'>" +
-              movie.release_date.substring(0,4) +
+              escapeHtml(
+                movie.release_date.substring(0,4)
+              ) +
               "年" +
               "</div>";
 
@@ -1763,6 +1839,22 @@ async function searchMovieById(movieId){
         "</div>";
 
     }
+
+
+    /*
+     * TMDB出典
+     */
+
+    html +=
+
+      "<div " +
+      "style='margin-top:30px;padding-top:15px;border-top:1px solid #e5e7eb;color:#777;font-size:13px;line-height:1.7;'>" +
+
+      "映画情報・画像：TMDB<br>" +
+
+      "配信情報：TMDB / JustWatch" +
+
+      "</div>";
 
 
     html +=
@@ -1800,6 +1892,25 @@ async function searchMovieById(movieId){
 
 function backToSearchResults(){
 
+  /*
+   * URLをトップへ戻す
+   */
+
+  history.pushState(
+    {},
+    "",
+    "/"
+  );
+
+
+  /*
+   * タイトルを戻す
+   */
+
+  document.title =
+    "ドコデミレル？";
+
+
   if(lastSearchQuery){
 
     document
@@ -1821,6 +1932,67 @@ function backToSearchResults(){
   }
 
 }
+
+
+/* =========================
+   ブラウザの戻る・進む
+========================= */
+
+window.addEventListener(
+  "popstate",
+  function(){
+
+    const path =
+      window.location.pathname;
+
+
+    const match =
+      path.match(
+        /^\/movie\/(\d+)\/?$/
+      );
+
+
+    if(match){
+
+      searchMovieById(
+        match[1],
+        false
+      );
+
+      return;
+
+    }
+
+
+    /*
+     * トップページ
+     */
+
+    document.title =
+      "ドコデミレル？";
+
+
+    if(lastSearchQuery){
+
+      document
+        .getElementById("movie")
+        .value =
+        lastSearchQuery;
+
+      searchMovie();
+
+    }
+
+    else{
+
+      document
+        .getElementById("result")
+        .innerHTML = "";
+
+    }
+
+  }
+);
 
 
 /* =========================
@@ -1854,10 +2026,6 @@ function createServiceButtons(
   let html =
     "<div class='service-buttons'>";
 
-
-  /*
-   * 同じサービスを重複表示しない
-   */
 
   const used = {};
 
@@ -2103,8 +2271,6 @@ function getServiceUrl(
 
   /*
    * 未対応サービス
-   *
-   * とりあえずGoogle検索
    */
 
   return (
@@ -2179,7 +2345,6 @@ function escapeAttribute(text){
 }
 
 </script>
-
 
 </body>
 
