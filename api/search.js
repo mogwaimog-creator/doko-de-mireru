@@ -81,16 +81,56 @@ export default async function handler(req, res) {
     const detailResponse = await fetch(detailUrl);
     const detailData = await detailResponse.json();
 
-    let collection = null;
+        let collection = null;
     let seriesMovies = [];
 
-        const currentCollection =
-      detailData.belongs_to_collection ||
-      movie.belongs_to_collection ||
-      null;
+    if (detailData.belongs_to_collection) {
 
-    if (currentCollection) {
-      collection = currentCollection;
+      collection = detailData.belongs_to_collection;
+
+    } else if (movie.belongs_to_collection) {
+
+      collection = movie.belongs_to_collection;
+
+    } else {
+
+      // シリーズ情報が直接取得できない場合は
+      // TMDBのコレクション検索を試す
+      const collectionSearchUrl =
+        "https://api.themoviedb.org/3/search/collection" +
+        "?api_key=" + apiKey +
+        "&language=ja-JP" +
+        "&query=" + encodeURIComponent(movie.title);
+
+      const collectionSearchResponse =
+        await fetch(collectionSearchUrl);
+
+      const collectionSearchData =
+        await collectionSearchResponse.json();
+
+      if (
+        collectionSearchData.results &&
+        collectionSearchData.results.length
+      ) {
+
+        const possibleCollection =
+          collectionSearchData.results.find(function(item) {
+
+            return item.name &&
+              movie.title &&
+              item.name.includes(
+                movie.title.split(" ")[0]
+              );
+
+          });
+
+        if (possibleCollection) {
+          collection = possibleCollection;
+        }
+      }
+    }
+
+    if (collection) {
 
       const collectionUrl =
         "https://api.themoviedb.org/3/collection/" +
@@ -108,6 +148,7 @@ export default async function handler(req, res) {
         collectionData.parts &&
         collectionData.parts.length
       ) {
+
         seriesMovies = collectionData.parts
           .sort(function(a, b) {
 
@@ -130,6 +171,7 @@ export default async function handler(req, res) {
             };
 
           });
+
       }
     }
 
