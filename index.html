@@ -1344,6 +1344,109 @@ function createServiceButton(
   type
 ){
 
+  let url = "#";
+
+  const name =
+    (service.provider_name || "")
+      .toLowerCase();
+
+
+  if(name.includes("netflix")){
+
+    url =
+      "https://www.netflix.com/jp/search?q=" +
+      encodeURIComponent(title);
+
+  }
+
+  else if(
+    name.includes("prime") ||
+    name.includes("amazon")
+  ){
+
+    url =
+      "https://www.amazon.co.jp/s?k=" +
+      encodeURIComponent(title);
+
+  }
+
+  else if(
+    name.includes("u-next")
+  ){
+
+    url =
+      "https://video.unext.jp/search?query=" +
+      encodeURIComponent(title);
+
+  }
+
+  else if(
+    name.includes("hulu")
+  ){
+
+    url =
+      "https://www.hulu.jp/search?q=" +
+      encodeURIComponent(title);
+
+  }
+
+  else if(
+    name.includes("disney")
+  ){
+
+    url =
+      "https://www.disneyplus.com/ja-jp/search/" +
+      encodeURIComponent(title);
+
+  }
+
+
+  let background = "#2563eb";
+
+
+  if(type === "rental"){
+
+    background = "#f59e0b";
+
+  }
+
+  else if(type === "purchase"){
+
+    background = "#7c3aed";
+
+  }
+
+
+  return (
+
+    "<a " +
+
+    "class='service-button' " +
+
+    "href='" +
+    url +
+    "' " +
+
+    "target='_blank' " +
+
+    "rel='noopener noreferrer' " +
+
+    "style='background:" +
+    background +
+    "'>" +
+
+    escapeHtml(
+      service.provider_name || "配信サービス"
+    ) +
+
+    " ▶" +
+
+    "</a>"
+
+  );
+
+}
+
   let url =
     "#";
 
