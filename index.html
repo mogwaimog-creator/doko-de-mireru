@@ -1311,14 +1311,13 @@ function createMovieCard(movie){
 
   html +=
 
-    "<span " +
-    "class='detail-button' " +
-    "onclick='searchMovieById(" +
-    movie.id +
-    ", true)' " +
-    "role='button'>" +
-    "▶ 詳細を見る" +
-    "</span>";
+   "<a " +
+"class='detail-button' " +
+"href='/movie/" +
+encodeURIComponent(movie.id) +
+"'>" +
+"▶ 詳細を見る" +
+"</a>";
 
 
   html +=
@@ -1338,36 +1337,15 @@ function createMovieCard(movie){
    詳細画面
 ========================= */
 
-async function searchMovieById(
-  movieId,
-  changeUrl = true
-){
+async function searchMovieById(movieId){
 
   const result =
     document.getElementById("result");
-
-
-  /*
-   * URLを変更
-   */
-
-  if(changeUrl){
-
-    history.pushState(
-      {},
-      "",
-      "/movie/" +
-      encodeURIComponent(movieId)
-    );
-
-  }
-
 
   result.innerHTML =
     "<div class='loading'>" +
     "🔍 作品情報を読み込んでいます……" +
     "</div>";
-
 
   try{
 
@@ -1377,10 +1355,8 @@ async function searchMovieById(
         encodeURIComponent(movieId)
       );
 
-
     const data =
       await response.json();
-
 
     if(!response.ok){
 
@@ -1391,19 +1367,8 @@ async function searchMovieById(
 
     }
 
-
-    /*
-     * ブラウザタイトル変更
-     */
-
-    document.title =
-      data.title +
-      " | ドコデミレル？";
-
-
     let html =
       "<div class='detail-card'>";
-
 
     /* 戻る */
 
@@ -1415,14 +1380,10 @@ async function searchMovieById(
       "← 検索結果に戻る" +
       "</div>";
 
-
-    /* =========================
-       詳細ヘッダー
-    ========================= */
+    /* 詳細ヘッダー */
 
     html +=
       "<div class='detail-header'>";
-
 
     /* ポスター */
 
@@ -1442,10 +1403,8 @@ async function searchMovieById(
 
     }
 
-
     html +=
       "<div class='detail-info'>";
-
 
     /* タイトル */
 
@@ -1455,7 +1414,6 @@ async function searchMovieById(
       "🎬 " +
       escapeHtml(data.title) +
       "</h2>";
-
 
     /* 原題 */
 
@@ -1469,12 +1427,10 @@ async function searchMovieById(
 
     }
 
-
     /* メタ情報 */
 
     html +=
       "<div class='detail-meta'>";
-
 
     if(data.release_date){
 
@@ -1486,7 +1442,6 @@ async function searchMovieById(
         "</span>";
 
     }
-
 
     if(
       data.genres &&
@@ -1510,10 +1465,8 @@ async function searchMovieById(
 
     }
 
-
     html +=
       "</div>";
-
 
     /* 評価 */
 
@@ -1533,7 +1486,6 @@ async function searchMovieById(
 
     }
 
-
     /* 監督 */
 
     if(data.director){
@@ -1547,7 +1499,6 @@ async function searchMovieById(
         "</p>";
 
     }
-
 
     /* 出演者 */
 
@@ -1574,18 +1525,13 @@ async function searchMovieById(
 
     }
 
+    html +=
+      "</div>";
 
     html +=
       "</div>";
 
-
-    html +=
-      "</div>";
-
-
-    /* =========================
-       あらすじ
-    ========================= */
+    /* あらすじ */
 
     if(data.overview){
 
@@ -1605,10 +1551,7 @@ async function searchMovieById(
 
     }
 
-
-    /* =========================
-       配信情報
-    ========================= */
+    /* 配信情報 */
 
     html +=
 
@@ -1616,18 +1559,15 @@ async function searchMovieById(
 
       "<h3>📺 配信情報</h3>";
 
-
     /* 見放題 */
 
     html +=
       "<div class='service-group'>";
 
-
     html +=
       "<h4 class='service-title'>" +
       "🟢 見放題" +
       "</h4>";
-
 
     html +=
       createServiceButtons(
@@ -1636,22 +1576,18 @@ async function searchMovieById(
         "streaming"
       );
 
-
     html +=
       "</div>";
-
 
     /* レンタル */
 
     html +=
       "<div class='service-group'>";
 
-
     html +=
       "<h4 class='service-title'>" +
       "🟡 レンタル" +
       "</h4>";
-
 
     html +=
       createServiceButtons(
@@ -1660,22 +1596,18 @@ async function searchMovieById(
         "rental"
       );
 
-
     html +=
       "</div>";
-
 
     /* 購入 */
 
     html +=
       "<div class='service-group'>";
 
-
     html +=
       "<h4 class='service-title'>" +
       "🔵 購入" +
       "</h4>";
-
 
     html +=
       createServiceButtons(
@@ -1684,10 +1616,8 @@ async function searchMovieById(
         "purchase"
       );
 
-
     html +=
       "</div>";
-
 
     /* TMDBリンク */
 
@@ -1707,14 +1637,10 @@ async function searchMovieById(
 
     }
 
-
     html +=
       "</div>";
 
-
-    /* =========================
-       シリーズ
-    ========================= */
+    /* シリーズ */
 
     if(
       data.series &&
@@ -1728,7 +1654,6 @@ async function searchMovieById(
 
         "<h3>🎞️ シリーズ作品</h3>";
 
-
       if(data.series.name){
 
         html +=
@@ -1739,10 +1664,8 @@ async function searchMovieById(
 
       }
 
-
       html +=
         "<div class='series-list'>";
-
 
       data.series.movies.forEach(
         function(movie){
@@ -1758,15 +1681,13 @@ async function searchMovieById(
 
           }
 
-
           html +=
 
-            "<div " +
+            "<a " +
             "class='series-item' " +
-            "onclick='searchMovieById(" +
-            movie.id +
-            ", true)'>";
-
+            "href='/movie/" +
+            encodeURIComponent(movie.id) +
+            "'>";
 
           if(movie.poster_path){
 
@@ -1787,17 +1708,12 @@ async function searchMovieById(
           else{
 
             html +=
-
-              "<div class='series-poster'>" +
-              "</div>";
+              "<div class='series-poster'></div>";
 
           }
 
-
           html +=
-
             "<div class='series-info'>";
-
 
           html +=
 
@@ -1805,65 +1721,39 @@ async function searchMovieById(
             escapeHtml(movie.title) +
             "</div>";
 
-
           if(movie.release_date){
 
             html +=
 
               "<div class='series-year'>" +
-              escapeHtml(
-                movie.release_date.substring(0,4)
-              ) +
+              movie.release_date.substring(0,4) +
               "年" +
               "</div>";
 
           }
 
-
           html +=
             "</div>";
 
-
           html +=
-            "</div>";
+            "</a>";
 
         }
       );
 
-
       html +=
         "</div>";
-
 
       html +=
         "</div>";
 
     }
 
-
-    /*
-     * TMDB出典
-     */
-
-    html +=
-
-      "<div " +
-      "style='margin-top:30px;padding-top:15px;border-top:1px solid #e5e7eb;color:#777;font-size:13px;line-height:1.7;'>" +
-
-      "映画情報・画像：TMDB<br>" +
-
-      "配信情報：TMDB / JustWatch" +
-
-      "</div>";
-
-
     html +=
       "</div>";
-
 
     result.innerHTML =
       html;
-
 
   }
 
@@ -1884,7 +1774,6 @@ async function searchMovieById(
   }
 
 }
-
 
 /* =========================
    検索結果へ戻る
@@ -2344,6 +2233,33 @@ function escapeAttribute(text){
 
 }
 
+/* =========================
+   ページ読み込み時
+   /movie/作品ID を確認
+========================= */
+
+window.addEventListener(
+  "DOMContentLoaded",
+  function(){
+
+    const path =
+      window.location.pathname;
+
+    const match =
+      path.match(/^\/movie\/(\d+)\/?$/);
+
+    if(match){
+
+      const movieId =
+        match[1];
+
+      searchMovieById(movieId);
+
+    }
+
+  }
+);  
+  
 </script>
 
 </body>
