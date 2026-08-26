@@ -10,8 +10,12 @@
   content="width=device-width, initial-scale=1.0"
 >
 
-<title>ドコデミレル？</title>
+<title>ドコデミレル？｜映画・ドラマの配信先検索</title>
 
+<meta
+  name="description"
+  content="映画・ドラマがどこで見られるか検索できるサイト「ドコデミレル？」。Netflix、Amazon Prime Video、U-NEXTなどの配信情報を確認できます。"
+>
 <style>
 
 /* =========================
@@ -1339,6 +1343,7 @@ encodeURIComponent(movie.id) +
 
 async function searchMovieById(movieId){
 
+  updateMovieSEO(null);
   const result =
     document.getElementById("result");
 
@@ -1356,16 +1361,24 @@ async function searchMovieById(movieId){
       );
 
     const data =
-      await response.json();
+  await response.json();
 
-    if(!response.ok){
 
-      throw new Error(
-        data.error ||
-        "作品情報を取得できませんでした"
-      );
+if(!response.ok){
 
-    }
+  throw new Error(
+    data.error ||
+    "作品情報を取得できませんでした"
+  );
+
+}
+
+
+/* =========================
+   SEO設定
+========================= */
+
+updateMovieSEO(data);
 
     let html =
       "<div class='detail-card'>";
@@ -2259,6 +2272,156 @@ window.addEventListener(
 
   }
 );  
+
+/* =========================
+   作品ページSEO設定
+========================= */
+
+function updateMovieSEO(movie){
+
+  const titleTag =
+    document.querySelector("title");
+
+  let descriptionTag =
+    document.querySelector(
+      'meta[name="description"]'
+    );
+
+
+  /* descriptionタグがなければ作成 */
+
+  if(!descriptionTag){
+
+    descriptionTag =
+      document.createElement("meta");
+
+    descriptionTag.setAttribute(
+      "name",
+      "description"
+    );
+
+    document.head.appendChild(
+      descriptionTag
+    );
+
+  }
+
+
+  /* =========================
+     トップページ
+  ========================= */
+
+  if(!movie){
+
+    titleTag.textContent =
+      "ドコデミレル？｜映画・ドラマの配信先検索";
+
+
+    descriptionTag.setAttribute(
+      "content",
+      "映画・ドラマがどこで見られるか検索できるサイト「ドコデミレル？」。Netflix、Amazon Prime Video、U-NEXTなどの配信情報を確認できます。"
+    );
+
+    return;
+
+  }
+
+
+  /* =========================
+     作品タイトル
+  ========================= */
+
+  const movieTitle =
+    movie.title ||
+    "映画";
+
+
+  /* =========================
+     年
+  ========================= */
+
+  let year = "";
+
+  if(movie.release_date){
+
+    year =
+      movie.release_date.substring(0,4);
+
+  }
+
+
+  /* =========================
+     title
+  ========================= */
+
+  let pageTitle =
+    movieTitle +
+    "はどこで見れる？";
+
+
+  if(year){
+
+    pageTitle +=
+      " " +
+      year +
+      "年";
+
+  }
+
+
+  pageTitle +=
+    "｜配信サービス一覧｜ドコデミレル？";
+
+
+  titleTag.textContent =
+    pageTitle;
+
+
+  /* =========================
+     description
+  ========================= */
+
+  let description =
+    "映画「" +
+    movieTitle +
+    "」がどこで見られるかを紹介。";
+
+
+  if(year){
+
+    description +=
+      year +
+      "年公開。";
+
+  }
+
+
+  description +=
+    "Netflix、Amazon Prime Video、U-NEXTなどの配信情報を確認できます。";
+
+
+  /*
+   * 長すぎないように調整
+   */
+
+  if(description.length > 160){
+
+    description =
+      description.substring(
+        0,
+        157
+      ) +
+      "...";
+
+  }
+
+
+  descriptionTag.setAttribute(
+    "content",
+    description
+  );
+
+}  
   
 </script>
 
