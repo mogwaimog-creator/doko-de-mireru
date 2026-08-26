@@ -58,19 +58,25 @@ export default async function handler(req, res) {
     }
 
     const providersUrl =
-      "https://api.themoviedb.org/3/movie/" +
-      movie.id +
-      "/watch/providers" +
-      "?api_key=" + apiKey;
+  "https://api.themoviedb.org/3/movie/" +
+  movie.id +
+  "/watch/providers" +
+  "?api_key=" + apiKey;
 
-    const providersResponse = await fetch(providersUrl);
-    const providersData = await providersResponse.json();
+const providersResponse =
+  await fetch(providersUrl);
 
-    const japan =
-      providersData.results &&
-      providersData.results.JP
-        ? providersData.results.JP
-        : {};
+const providersData =
+  await providersResponse.json();
+
+const japan =
+  providersData.results &&
+  providersData.results.JP
+    ? providersData.results.JP
+    : {};
+
+const providerLink =
+  japan.link || null;
 
     const detailUrl =
       "https://api.themoviedb.org/3/movie/" +
@@ -183,10 +189,32 @@ export default async function handler(req, res) {
       overview: movie.overview,
       poster_path: movie.poster_path,
 
-      streaming: japan.flatrate || [],
-      rental: japan.rent || [],
-      purchase: japan.buy || [],
+      streaming: (japan.flatrate || []).map(function(service) {
+  return {
+    provider_name: service.provider_name,
+    logo_path: service.logo_path,
+    display_priority: service.display_priority,
+    link: providerLink
+  };
+}),
 
+rental: (japan.rent || []).map(function(service) {
+  return {
+    provider_name: service.provider_name,
+    logo_path: service.logo_path,
+    display_priority: service.display_priority,
+    link: providerLink
+  };
+}),
+
+purchase: (japan.buy || []).map(function(service) {
+  return {
+    provider_name: service.provider_name,
+    logo_path: service.logo_path,
+    display_priority: service.display_priority,
+    link: providerLink
+  };
+}),
       link: japan.link || null,
 
       series: collection
