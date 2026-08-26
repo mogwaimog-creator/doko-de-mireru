@@ -1227,10 +1227,20 @@ async function searchMovieById(movieId){
 
 
       data.series.movies.forEach(
-        function(movie){
+  function(movie){
 
-          html +=
+    /* 未確定タイトルを非表示 */
 
+    if(
+      !movie.title ||
+      movie.title.toLowerCase().includes("untitled")
+    ){
+
+      return;
+
+    }
+
+    html +=
             "<div " +
 
             "class='series-item' " +
