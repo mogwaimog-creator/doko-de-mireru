@@ -244,17 +244,27 @@ async function searchMovie(){
 
     if(data.purchase && data.purchase.length){
 
-      data.purchase.forEach(function(service){
+  data.purchase.forEach(function(service){
 
-        html +=
-          "<div class='service'>🔵 " +
-          escapeHtml(service.provider_name) +
-          "</div>";
+    html +=
+      "<a href='" +
+      (data.link || "#") +
+      "' target='_blank' " +
+      "style='display:inline-block; " +
+      "padding:12px 18px; " +
+      "margin:6px 6px 6px 0; " +
+      "background:#2563eb; " +
+      "color:white; " +
+      "text-decoration:none; " +
+      "border-radius:8px; " +
+      "font-weight:bold;'>" +
+      "🔵 " +
+      escapeHtml(service.provider_name) +
+      " ▶ 購入</a>";
 
-      });
+  });
 
-    }
-
+}
     if(data.link){
 
       html +=
