@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/movie/:id",
+      "destination": "/index.html"
+    }
+  ]
+}
