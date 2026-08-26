@@ -5,9 +5,11 @@ export default async function handler(req, res) {
     const apiKey = process.env.TMDB_API_KEY;
 
     if (!apiKey) {
+
       return res.status(500).json({
         error: "TMDB APIキーが設定されていません"
       });
+
     }
 
 
@@ -79,265 +81,235 @@ export default async function handler(req, res) {
 
 
     /*
-     * 最大10作品を返す
+     * =========================================
+     * 検索結果を整理
+     *
+     * シリーズ作品なら公開順
+     * それ以外はTMDB関連度順
+     * =========================================
      */
 
+    const rawMovies =
+      searchData.results.slice(0, 10);
+
+
     /*
- * =========================================
- * 検索結果を整理
- * シリーズ作品なら公開順
- * それ以外はTMDBの関連度順
- * =========================================
- */
+     * 各作品のシリーズ情報を確認
+     */
 
-const rawMovies =
-  searchData.results.slice(0, 10);
+    const moviesWithSeries =
+      await Promise.all(
 
+        rawMovies.map(
+          async function(movie) {
 
-/*
- * 各作品のシリーズ情報を確認
- */
+            let collection = null;
 
-const moviesWithSeries =
-  await Promise.all(
+            try {
 
-    rawMovies.map(
-      async function(movie) {
-
-        let collection = null;
-
-        try {
-
-          const detailUrl =
-            "https://api.themoviedb.org/3/movie/" +
-            movie.id +
-            "?api_key=" + apiKey +
-            "&language=ja-JP";
+              const detailUrl =
+                "https://api.themoviedb.org/3/movie/" +
+                movie.id +
+                "?api_key=" + apiKey +
+                "&language=ja-JP";
 
 
-          const detailResponse =
-            await fetch(detailUrl);
+              const detailResponse =
+                await fetch(detailUrl);
 
 
-          const detailData =
-            await detailResponse.json();
+              const detailData =
+                await detailResponse.json();
 
 
-          collection =
-            detailData.belongs_to_collection ||
-            null;
+              collection =
+                detailData.belongs_to_collection ||
+                null;
 
-        }
+            }
 
-        catch(error) {
+            catch(error) {
 
-          console.error(
-            "シリーズ確認エラー:",
-            error
+              console.error(
+                "シリーズ確認エラー:",
+                error
+              );
+
+            }
+
+
+            return {
+
+              id:
+                movie.id,
+
+              title:
+                movie.title,
+
+              original_title:
+                movie.original_title,
+
+              release_date:
+                movie.release_date,
+
+              overview:
+                movie.overview,
+
+              poster_path:
+                movie.poster_path,
+
+              collection:
+                collection
+
+            };
+
+          }
+        )
+
+      );
+
+
+    /*
+     * =========================================
+     * シリーズごとにまとめる
+     * =========================================
+     */
+
+    const seriesGroups = {};
+
+    const normalMovies = [];
+
+
+    moviesWithSeries.forEach(
+      function(movie) {
+
+        if(movie.collection) {
+
+          const collectionId =
+            movie.collection.id;
+
+
+          if(!seriesGroups[collectionId]) {
+
+            seriesGroups[collectionId] = [];
+
+          }
+
+
+          seriesGroups[collectionId].push(
+            movie
           );
 
         }
 
+        else {
 
-        return {
+          normalMovies.push(movie);
 
-          id:
-            movie.id,
-
-          title:
-            movie.title,
-
-          original_title:
-            movie.original_title,
-
-          release_date:
-            movie.release_date,
-
-          overview:
-            movie.overview,
-
-          poster_path:
-            movie.poster_path,
-
-          collection:
-            collection
-
-        };
+        }
 
       }
-    )
-
-  );
+    );
 
 
-/*
- * =========================================
- * シリーズごとにまとめる
- * =========================================
- */
+    /*
+     * =========================================
+     * シリーズ作品を公開順にする
+     * =========================================
+     */
 
-const seriesGroups = {};
-
-const normalMovies = [];
+    let sortedSeriesMovies = [];
 
 
-moviesWithSeries.forEach(
-  function(movie) {
+    Object.keys(seriesGroups).forEach(
+      function(collectionId) {
 
-    if(movie.collection) {
-
-      const collectionId =
-        movie.collection.id;
+        const group =
+          seriesGroups[collectionId];
 
 
-      if(!seriesGroups[collectionId]) {
+        group.sort(
+          function(a, b) {
 
-        seriesGroups[collectionId] = [];
+            const dateA =
+              a.release_date ||
+              "9999-99-99";
 
-      }
-
-
-      seriesGroups[collectionId].push(
-        movie
-      );
-
-    }
-
-    else {
-
-      normalMovies.push(movie);
-
-    }
-
-  }
-);
+            const dateB =
+              b.release_date ||
+              "9999-99-99";
 
 
-/*
- * =========================================
- * シリーズ作品を公開順にする
- * =========================================
- */
+            return dateA.localeCompare(
+              dateB
+            );
 
-let sortedSeriesMovies = [];
-
-
-Object.keys(seriesGroups).forEach(
-  function(collectionId) {
-
-    const group =
-      seriesGroups[collectionId];
-
-
-    group.sort(
-      function(a, b) {
-
-        const dateA =
-          a.release_date ||
-          "9999-99-99";
-
-        const dateB =
-          b.release_date ||
-          "9999-99-99";
-
-
-        return dateA.localeCompare(
-          dateB
+          }
         );
 
+
+        sortedSeriesMovies =
+          sortedSeriesMovies.concat(
+            group
+          );
+
       }
     );
 
 
-    sortedSeriesMovies =
-      sortedSeriesMovies.concat(
-        group
-      );
+    /*
+     * =========================================
+     * 最終的な検索結果
+     *
+     * ① シリーズ作品 → 公開順
+     * ② その他 → TMDB関連度順
+     * =========================================
+     */
+
+    const movies =
+      sortedSeriesMovies
+        .concat(normalMovies)
+        .slice(0, 10)
+        .map(
+          function(movie) {
+
+            return {
+
+              id:
+                movie.id,
+
+              title:
+                movie.title,
+
+              original_title:
+                movie.original_title,
+
+              release_date:
+                movie.release_date,
+
+              overview:
+                movie.overview,
+
+              poster_path:
+                movie.poster_path
+
+            };
+
+          }
+        );
+
+
+    return res.status(200).json({
+
+      results:
+        movies
+
+    });
+
 
   }
-);
 
-
-/*
- * =========================================
- * 最終的な検索結果
- *
- * ① シリーズ作品 → 公開順
- * ② その他 → TMDB関連度順
- * =========================================
- */
-
-const movies =
-  sortedSeriesMovies
-    .concat(normalMovies)
-    .slice(0, 10)
-    .map(
-      function(movie) {
-
-        return {
-
-          id:
-            movie.id,
-
-          title:
-            movie.title,
-
-          original_title:
-            movie.original_title,
-
-          release_date:
-            movie.release_date,
-
-          vote_average:
-  detailData.vote_average,
-
-genres:
-  detailData.genres || [],
-
-director:
-  detailData.credits &&
-  detailData.credits.crew
-    ? detailData.credits.crew.find(
-        function(person){
-          return person.job === "Director";
-        }
-      ) || null
-    : null,
-
-cast:
-  detailData.credits &&
-  detailData.credits.cast
-    ? detailData.credits.cast
-        .slice(0, 8)
-        .map(function(person){
-          return {
-            name: person.name,
-            character: person.character
-          };
-        })
-    : [],
-
-          overview:
-            movie.overview,
-
-          poster_path:
-            movie.poster_path
-
-        };
-
-      }
-    );
-
-
-return res.status(200).json({
-
-  results:
-    movies
-
-});
-
-
-  } catch (error) {
+  catch (error) {
 
     console.error(error);
 
@@ -366,15 +338,19 @@ async function getMovieDetail(
 ) {
 
   /*
+   * =========================================
    * 作品情報
+   *
+   * creditsも同時取得
+   * =========================================
    */
 
   const detailUrl =
-  "https://api.themoviedb.org/3/movie/" +
-  movieId +
-  "?api_key=" + apiKey +
-  "&language=ja-JP" +
-  "&append_to_response=credits";
+    "https://api.themoviedb.org/3/movie/" +
+    movieId +
+    "?api_key=" + apiKey +
+    "&language=ja-JP" +
+    "&append_to_response=credits";
 
 
   const detailResponse =
@@ -500,9 +476,84 @@ async function getMovieDetail(
 
             };
 
+          })
+          .filter(function(item) {
+
+            /*
+             * Untitled作品を非表示
+             */
+
+            if(!item.title) {
+              return false;
+            }
+
+            return !item.title
+              .toLowerCase()
+              .includes("untitled");
+
           });
 
     }
+
+  }
+
+
+  /*
+   * =========================================
+   * 監督
+   * =========================================
+   */
+
+  let director = null;
+
+
+  if (
+    detailData.credits &&
+    detailData.credits.crew
+  ) {
+
+    director =
+      detailData.credits.crew.find(
+        function(person) {
+
+          return person.job === "Director";
+
+        }
+      ) || null;
+
+  }
+
+
+  /*
+   * =========================================
+   * 出演者
+   * =========================================
+   */
+
+  let cast = [];
+
+
+  if (
+    detailData.credits &&
+    detailData.credits.cast
+  ) {
+
+    cast =
+      detailData.credits.cast
+        .slice(0, 8)
+        .map(function(person) {
+
+          return {
+
+            name:
+              person.name,
+
+            character:
+              person.character
+
+          };
+
+        });
 
   }
 
@@ -532,6 +583,43 @@ async function getMovieDetail(
 
     poster_path:
       detailData.poster_path,
+
+
+    /*
+     * ⭐ 評価
+     */
+
+    vote_average:
+      detailData.vote_average || 0,
+
+
+    /*
+     * 🎭 ジャンル
+     */
+
+    genres:
+      detailData.genres || [],
+
+
+    /*
+     * 🎬 監督
+     */
+
+    director:
+      director
+        ? {
+            name:
+              director.name
+          }
+        : null,
+
+
+    /*
+     * 👤 出演者
+     */
+
+    cast:
+      cast,
 
 
     /*
@@ -569,6 +657,7 @@ async function getMovieDetail(
               seriesMovies
 
           }
+
         : null
 
   });
