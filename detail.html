@@ -132,7 +132,58 @@ header p{
 .info-line{
   margin:8px 0;
 }
+/* =====================================================
+   作品右側の詳細情報
+===================================================== */
 
+.movie-side-info{
+  flex:1;
+  min-width:0;
+}
+
+.movie-side-info .side-section{
+  margin-top:18px;
+}
+
+.movie-side-info .side-section:first-child{
+  margin-top:0;
+}
+
+.movie-side-info .side-title{
+  font-size:18px;
+  font-weight:bold;
+  margin-bottom:8px;
+}
+
+.movie-side-info .side-text{
+  line-height:1.7;
+  color:#444;
+}
+
+.movie-side-info .cast-list{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+.movie-side-info .cast-item{
+  background:#f3f4f6;
+  padding:7px 11px;
+  border-radius:20px;
+}
+
+
+/* =====================================================
+   スマホ
+===================================================== */
+
+@media(max-width:700px){
+
+  .movie-side-info{
+    width:100%;
+  }
+
+}
 
 /* =====================================================
    共通セクション
@@ -750,26 +801,104 @@ header p{
 
 <div class="movie-header">
 
-<img
-  id="poster"
-  class="poster"
-  alt=""
->
+  <!-- ===================================================
+       ポスター
+  ==================================================== -->
 
-<div class="movie-info">
+  <img
+    id="poster"
+    class="poster"
+    alt=""
+  >
 
-<h2 id="title"></h2>
 
-<div
-  id="originalTitle"
-  class="original-title"
-></div>
+  <!-- ===================================================
+       作品情報＋監督・出演者・あらすじ
+  ==================================================== -->
 
-<div
-  id="releaseDate"
-  class="info-line"
-></div>
+  <div class="movie-info">
 
+    <h2 id="title"></h2>
+
+    <div
+      id="originalTitle"
+      class="original-title"
+    ></div>
+
+    <div
+      id="releaseDate"
+      class="info-line"
+    ></div>
+
+    <div
+      id="language"
+      class="info-line"
+    ></div>
+
+    <div
+      id="rating"
+      class="info-line"
+    ></div>
+
+
+    <!-- ===============================================
+         監督・出演者・あらすじ
+    ================================================ -->
+
+    <div class="movie-side-info">
+
+      <!-- 監督 -->
+
+      <div class="side-section">
+
+        <div class="side-title">
+          🎬 監督
+        </div>
+
+        <div
+          id="director"
+          class="side-text"
+        ></div>
+
+      </div>
+
+
+      <!-- 出演者 -->
+
+      <div class="side-section">
+
+        <div class="side-title">
+          👥 出演者
+        </div>
+
+        <div
+          id="cast"
+          class="cast-list"
+        ></div>
+
+      </div>
+
+
+      <!-- あらすじ -->
+
+      <div class="side-section">
+
+        <div class="side-title">
+          📖 あらすじ
+        </div>
+
+        <div
+          id="overview"
+          class="side-text"
+        ></div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
 <div
   id="language"
   class="info-line"
