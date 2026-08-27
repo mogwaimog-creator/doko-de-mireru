@@ -142,12 +142,16 @@ export default async function handler(req, res) {
 }
 
 
+```javascript
 // =========================================================
 // 映画検索
 //
-// 表示順
-// ① タイトル一致度
-// ② 公開日の早い順
+// 検索結果の並び順
+//
+// ① 検索タイトルとの一致度
+// ② 公開日の早いもの
+//
+// の順に並べます。
 // =========================================================
 
 async function searchMovies(
@@ -164,8 +168,7 @@ async function searchMovies(
     "&region=JP" +
     "&query=" +
     encodeURIComponent(query) +
-    "&include_adult=false" +
-    "&page=1";
+    "&include_adult=false";
 
 
   const response =
@@ -204,261 +207,323 @@ async function searchMovies(
       : [];
 
 
-  // -------------------------------------------------------
-  // 映画として必要なデータだけ残す
-  // -------------------------------------------------------
-
-  results =
-    results.filter(function(movie) {
-
-      return (
-        movie &&
-        movie.id &&
-        movie.title
-      );
-
-    });
-
-
-  // -------------------------------------------------------
-  // 検索タイトルとの一致度を計算
-  // -------------------------------------------------------
+  // =======================================================
+  // 検索文字列を正規化
+  //
+  // ・大文字小文字
+  // ・スペース
+  // ・全角スペース
+  //
+  // などの違いをできるだけ無視します。
+  // =======================================================
 
   const normalizedQuery =
-    normalizeSearchText(query);
+    normalizeTitle(query);
 
 
-  results =
-    results.map(function(movie) {
+  // =======================================================
+  // タイトル一致度を計算
+  // =======================================================
 
-      const title =
-        normalizeSearchText(
-          movie.title || ""
-        );
+  function getMatchScore(movie) {
 
-
-      const originalTitle =
-        normalizeSearchText(
-          movie.original_title || ""
-        );
+    const title =
+      normalizeTitle(
+        movie.title || ""
+      );
 
 
-      let matchScore = 0;
+    const originalTitle =
+      normalizeTitle(
+        movie.original_title || ""
+      );
+
+
+    if (!title && !originalTitle) {
+
+      return 0;
+
+    }
+
+
+    // -----------------------------------------------------
+    // 最高ランク
+    // 日本語タイトルが検索文字列と完全一致
+    // -----------------------------------------------------
+
+    if (
+      title === normalizedQuery
+    ) {
+
+      return 1000;
+
+    }
+
+
+    // -----------------------------------------------------
+    // 日本語タイトルが
+    // 「検索文字列」で始まる
+    // -----------------------------------------------------
+
+    if (
+      title.startsWith(
+        normalizedQuery
+      )
+    ) {
+
+      return 900;
+
+    }
+
+
+    // -----------------------------------------------------
+    // 日本語タイトルに
+    // 検索文字列が含まれる
+    // -----------------------------------------------------
+
+    if (
+      title.includes(
+        normalizedQuery
+      )
+    ) {
+
+      return 800;
+
+    }
+
+
+    // -----------------------------------------------------
+    // 原題が完全一致
+    // -----------------------------------------------------
+
+    if (
+      originalTitle === normalizedQuery
+    ) {
+
+      return 700;
+
+    }
+
+
+    // -----------------------------------------------------
+    // 原題が検索文字列で始まる
+    // -----------------------------------------------------
+
+    if (
+      originalTitle.startsWith(
+        normalizedQuery
+      )
+    ) {
+
+      return 600;
+
+    }
+
+
+    // -----------------------------------------------------
+    // 原題に検索文字列が含まれる
+    // -----------------------------------------------------
+
+    if (
+      originalTitle.includes(
+        normalizedQuery
+      )
+    ) {
+
+      return 500;
+
+    }
+
+
+    // -----------------------------------------------------
+    // 検索文字列の各文字がタイトルに
+    // どれくらい含まれているかを確認
+    // -----------------------------------------------------
+
+    let matchedCharacters = 0;
+
+
+    for (
+      let i = 0;
+      i < normalizedQuery.length;
+      i++
+    ) {
+
+      const char =
+        normalizedQuery.charAt(i);
+
+
+      if (
+        title.includes(char) ||
+        originalTitle.includes(char)
+      ) {
+
+        matchedCharacters++;
+
+      }
+
+    }
+
+
+    if (
+      normalizedQuery.length > 0
+    ) {
+
+      return Math.round(
+        (
+          matchedCharacters /
+          normalizedQuery.length
+        ) * 400
+      );
+
+    }
+
+
+    return 0;
+
+  }
+
+
+  // =======================================================
+  // 並び替え
+  //
+  // ① タイトル一致度が高い
+  // ② 公開日の早い
+  // ③ TMDBの評価が高い
+  //
+  // =======================================================
+
+  results.sort(
+    function(a, b) {
+
+      const scoreA =
+        getMatchScore(a);
+
+
+      const scoreB =
+        getMatchScore(b);
 
 
       // ---------------------------------------------------
-      // ① 日本語タイトル完全一致
+      // ① タイトル一致度
       // ---------------------------------------------------
 
       if (
-        title === normalizedQuery
+        scoreA !== scoreB
       ) {
 
-        matchScore = 1000;
+        return (
+          scoreB -
+          scoreA
+        );
 
       }
 
 
       // ---------------------------------------------------
-      // ② 日本語タイトルが検索文字で始まる
+      // ② 公開日
+      //
+      // 日付がある作品を優先
+      // 古い作品を先
       // ---------------------------------------------------
 
-      else if (
-        title.startsWith(
-          normalizedQuery
-        )
+      const dateA =
+        a.release_date || "";
+
+
+      const dateB =
+        b.release_date || "";
+
+
+      if (
+        dateA &&
+        dateB &&
+        dateA !== dateB
       ) {
 
-        matchScore = 800;
+        return dateA.localeCompare(
+          dateB
+        );
 
       }
 
 
-      // ---------------------------------------------------
-      // ③ 日本語タイトルに検索文字を含む
-      // ---------------------------------------------------
-
-      else if (
-        title.includes(
-          normalizedQuery
-        )
+      if (
+        dateA &&
+        !dateB
       ) {
 
-        matchScore = 600;
+        return -1;
 
       }
 
 
-      // ---------------------------------------------------
-      // ④ 原題完全一致
-      // ---------------------------------------------------
-
-      else if (
-        originalTitle === normalizedQuery
-      ) {
-
-        matchScore = 500;
-
-      }
-
-
-      // ---------------------------------------------------
-      // ⑤ 原題が検索文字で始まる
-      // ---------------------------------------------------
-
-      else if (
-        originalTitle.startsWith(
-          normalizedQuery
-        )
-      ) {
-
-        matchScore = 400;
-
-      }
-
-
-      // ---------------------------------------------------
-      // ⑥ 原題に検索文字を含む
-      // ---------------------------------------------------
-
-      else if (
-        originalTitle.includes(
-          normalizedQuery
-        )
-      ) {
-
-        matchScore = 300;
-
-      }
-
-
-      // ---------------------------------------------------
-      // ⑦ それ以外
-      // ---------------------------------------------------
-
-      else {
-
-        matchScore = 100;
-
-      }
-
-
-      return {
-
-        movie:
-          movie,
-
-        matchScore:
-          matchScore
-
-      };
-
-    });
-
-
-  // -------------------------------------------------------
-  // 一致度 → 公開日の早い順
-  // -------------------------------------------------------
-
-  results.sort(function(a, b) {
-
-    // =====================================================
-    // ① 一致度が高いものを先に
-    // =====================================================
-
-    if (
-      b.matchScore !==
-      a.matchScore
-    ) {
-
-      return (
-        b.matchScore -
-        a.matchScore
-      );
-
-    }
-
-
-    // =====================================================
-    // ② 同じ一致度なら公開日の早いもの
-    // =====================================================
-
-    const dateA =
-      a.movie.release_date ||
-      "";
-
-
-    const dateB =
-      b.movie.release_date ||
-      "";
-
-
-    // 両方とも公開日あり
-    if (
-      dateA &&
-      dateB
-    ) {
-
-      return dateA.localeCompare(
+      if (
+        !dateA &&
         dateB
-      );
+      ) {
+
+        return 1;
+
+      }
+
+
+      // ---------------------------------------------------
+      // ③ 公開日も同じなら評価
+      // ---------------------------------------------------
+
+      const ratingA =
+        Number(
+          a.vote_average || 0
+        );
+
+
+      const ratingB =
+        Number(
+          b.vote_average || 0
+        );
+
+
+      if (
+        ratingA !== ratingB
+      ) {
+
+        return (
+          ratingB -
+          ratingA
+        );
+
+      }
+
+
+      return 0;
 
     }
+  );
 
 
-    // 公開日がある方を先に
-    if (dateA) {
-
-      return -1;
-
-    }
-
-
-    if (dateB) {
-
-      return 1;
-
-    }
-
-
-    // =====================================================
-    // ③ 公開日まで同じならTMDB評価
-    // =====================================================
-
-    const ratingA =
-      Number(
-        a.movie.vote_average || 0
-      );
-
-
-    const ratingB =
-      Number(
-        b.movie.vote_average || 0
-      );
-
-
-    return (
-      ratingB -
-      ratingA
-    );
-
-  });
-
-
-  // -------------------------------------------------------
-  // 上位10作品
-  // -------------------------------------------------------
+  // =======================================================
+  // 並び替えが終わってから上位10件を取得
+  //
+  // ★ここが重要です
+  // =======================================================
 
   const movies =
     results
 
+      .filter(function(movie) {
+
+        return (
+          movie &&
+          movie.id &&
+          movie.title
+        );
+
+      })
+
       .slice(0, 10)
 
-      .map(function(item) {
-
-        const movie =
-          item.movie;
-
+      .map(function(movie) {
 
         return {
 
@@ -496,6 +561,41 @@ async function searchMovies(
   });
 
 }
+
+
+// =========================================================
+// タイトル正規化
+// =========================================================
+
+function normalizeTitle(
+  text
+) {
+
+  return String(
+    text || ""
+  )
+
+    // 全角スペース → 半角スペース
+    .replace(
+      /　/g,
+      " "
+    )
+
+    // 前後の空白を削除
+    .trim()
+
+    // 連続する空白を1つにする
+    .replace(
+      /\s+/g,
+      " "
+    )
+
+    // 小文字化
+    .toLowerCase();
+
+}
+```
+
 
 
 // =========================================================
