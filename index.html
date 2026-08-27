@@ -1959,77 +1959,116 @@ function getServiceUrl(
 
 
   /*
-   * Netflix
-   */
+  /*
+ * Netflix
+ */
 
-  if(
-    name.includes("netflix")
-  ){
+if (
+  name.includes("netflix")
+) {
 
-    const netflixId =
-      getNetflixTitleId(
-        service,
-        movieData
-      );
-
-
-    if(netflixId){
-
-      return (
-        "https://www.netflix.com/jp/title/" +
-        encodeURIComponent(
-          netflixId
-        )
-      );
-
-    }
-
-
-    if(
-      service &&
-      isNetflixTitleUrl(
-        service.netflix_url
-      )
-    ){
-
-      return service.netflix_url;
-
-    }
-
-
-    if(
-      service &&
-      isNetflixTitleUrl(
-        service.watch_link
-      )
-    ){
-
-      return service.watch_link;
-
-    }
-
-
-    if(
-      service &&
-      isNetflixTitleUrl(
-        service.provider_url
-      )
-    ){
-
-      return service.provider_url;
-
-    }
-
-
-    return (
-      "https://www.google.com/search?q=" +
-      encodeURIComponent(
-        "site:netflix.com/jp/title/ " +
-        title
-      )
+  const netflixId =
+    getNetflixTitleId(
+      service,
+      movieData
     );
 
+  /*
+   * Netflix作品IDが取得できた場合
+   */
+  if (netflixId) {
+
+    const netflixUrl =
+      "https://www.netflix.com/jp/title/" +
+      encodeURIComponent(
+        String(netflixId)
+      );
+
+    console.log(
+      "Netflix作品ページ:",
+      netflixUrl
+    );
+
+    return netflixUrl;
   }
+
+
+  /*
+   * Netflix作品URLが取得できている場合
+   */
+  if (
+    service &&
+    isNetflixTitleUrl(
+      service.netflix_url
+    )
+  ) {
+
+    console.log(
+      "Netflix URL:",
+      service.netflix_url
+    );
+
+    return service.netflix_url;
+  }
+
+
+  /*
+   * TMDB / JustWatch のwatch_link
+   */
+  if (
+    service &&
+    isNetflixTitleUrl(
+      service.watch_link
+    )
+  ) {
+
+    console.log(
+      "Netflix watch_link:",
+      service.watch_link
+    );
+
+    return service.watch_link;
+  }
+
+
+  /*
+   * provider_url
+   */
+  if (
+    service &&
+    isNetflixTitleUrl(
+      service.provider_url
+    )
+  ) {
+
+    console.log(
+      "Netflix provider_url:",
+      service.provider_url
+    );
+
+    return service.provider_url;
+  }
+
+
+  /*
+   * Netflix作品ページが見つからない場合
+   * Google検索へ
+   */
+  const searchUrl =
+    "https://www.google.com/search?q=" +
+    encodeURIComponent(
+      "site:netflix.com/jp/title/ " +
+      title
+    );
+
+  console.log(
+    "Netflix作品URLが見つからないためGoogle検索:",
+    searchUrl
+  );
+
+  return searchUrl;
+
+}
 
 
   /*
