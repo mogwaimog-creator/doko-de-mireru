@@ -1559,6 +1559,10 @@ function backToSearchResults(){
    サービスカード作成
 ================================================== */
 
+/* ==================================================
+   サービスカード作成
+================================================== */
+
 function createServiceCards(
   services,
   title,
@@ -1619,11 +1623,43 @@ function createServiceCards(
         );
 
 
-      const url =
+      /*
+       * =========================================
+       * 配信リンク
+       *
+       * APIから watch_link が返ってきた場合は
+       * そのリンクを使用
+       *
+       * ない場合はサービス検索ページを使用
+       * =========================================
+       */
+
+      let url =
+        service.watch_link ||
         getServiceUrl(
           providerName,
           title
         );
+
+
+      /*
+       * =========================================
+       * 配信リンクの安全確認
+       * =========================================
+       */
+
+      if(
+        !url ||
+        typeof url !== "string"
+      ){
+
+        url =
+          getServiceUrl(
+            providerName,
+            title
+          );
+
+      }
 
 
       let statusText =
@@ -1640,6 +1676,12 @@ function createServiceCards(
       let buttonBackground =
         "#2563eb";
 
+
+      /*
+       * =========================================
+       * レンタル
+       * =========================================
+       */
 
       if(type === "rental"){
 
@@ -1658,6 +1700,12 @@ function createServiceCards(
 
       }
 
+
+      /*
+       * =========================================
+       * 購入
+       * =========================================
+       */
 
       else if(type === "purchase"){
 
@@ -1682,7 +1730,11 @@ function createServiceCards(
         "<div class='service-card'>";
 
 
-      /* ロゴ＋名前 */
+      /*
+       * =========================================
+       * ロゴ＋サービス名
+       * =========================================
+       */
 
       html +=
 
@@ -1711,9 +1763,31 @@ function createServiceCards(
         "</div>";
 
 
-   
+      /*
+       * =========================================
+       * 配信状態
+       * =========================================
+       */
 
-      /* ボタン */
+      html +=
+
+        "<div " +
+        "class='service-status " +
+        statusClass +
+        "'>" +
+
+        escapeHtml(
+          statusText
+        ) +
+
+        "</div>";
+
+
+      /*
+       * =========================================
+       * 配信ボタン
+       * =========================================
+       */
 
       html +=
 
@@ -1735,7 +1809,9 @@ function createServiceCards(
         buttonBackground +
         "'>" +
 
-        escapeHtml(buttonText) +
+        escapeHtml(
+          buttonText
+        ) +
 
         "</a>";
 
@@ -1754,7 +1830,6 @@ function createServiceCards(
   return html;
 
 }
-
 
 /* ==================================================
    サービスのロゴ風情報
