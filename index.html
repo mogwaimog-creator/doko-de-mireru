@@ -996,27 +996,95 @@ data.results.forEach(
     });
 
 
-  }catch(error){
+ }catch(error){
 
-    console.error(
-      "検索エラー:",
-      error
-    );
+  console.error(
+    "検索エラー:",
+    error
+  );
 
 
-    result.innerHTML =
-      "<div class='error'>" +
-      "❌ " +
-      escapeHtml(
-        error.message ||
-        "検索中にエラーが発生しました"
-      ) +
-      "</div>";
+  let errorMessage =
+    "検索中にエラーが発生しました";
+
+
+  // Errorオブジェクト
+  if(
+    error instanceof Error &&
+    error.message
+  ){
+
+    errorMessage =
+      error.message;
 
   }
 
-}
 
+  // 文字列
+  else if(
+    typeof error === "string"
+  ){
+
+    errorMessage =
+      error;
+
+  }
+
+
+  // オブジェクト
+  else if(
+    error &&
+    typeof error === "object"
+  ){
+
+    if(
+      typeof error.error === "string"
+    ){
+
+      errorMessage =
+        error.error;
+
+    }
+
+    else if(
+      typeof error.message === "string"
+    ){
+
+      errorMessage =
+        error.message;
+
+    }
+
+    else{
+
+      try{
+
+        errorMessage =
+          JSON.stringify(
+            error
+          );
+
+      }catch(e){
+
+        errorMessage =
+          "検索中にエラーが発生しました";
+
+      }
+
+    }
+
+  }
+
+
+  result.innerHTML =
+    "<div class='error'>" +
+    "❌ " +
+    escapeHtml(
+      errorMessage
+    ) +
+    "</div>";
+
+}
 
 /* =========================================================
    映画カード
