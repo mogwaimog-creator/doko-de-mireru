@@ -177,35 +177,23 @@ header p{
 }
 
 
+```css
 /* =====================================================
    配信サービス
 ===================================================== */
 
 .provider-group{
   margin-top:24px;
+
+  padding:14px;
+
+  border-radius:12px;
+
+  border:1px solid #e5e7eb;
 }
 
 .provider-group:first-child{
   margin-top:0;
-}
-
-.provider-title{
-  display:flex;
-  align-items:center;
-  gap:8px;
-
-  font-size:19px;
-  font-weight:bold;
-
-  margin-bottom:12px;
-
-  padding:10px 12px;
-
-  background:#f8fafc;
-
-  border-radius:9px;
-
-  border-left:5px solid #2563eb;
 }
 
 
@@ -213,8 +201,20 @@ header p{
    見放題
 ===================================================== */
 
+.provider-group.streaming{
+
+  background:#f0fdf4;
+
+  border-color:#bbf7d0;
+}
+
 .provider-group.streaming .provider-title{
+
   border-left-color:#16a34a;
+
+  background:#dcfce7;
+
+  color:#166534;
 }
 
 
@@ -222,8 +222,20 @@ header p{
    レンタル
 ===================================================== */
 
+.provider-group.rental{
+
+  background:#fff7ed;
+
+  border-color:#fed7aa;
+}
+
 .provider-group.rental .provider-title{
+
   border-left-color:#f59e0b;
+
+  background:#ffedd5;
+
+  color:#9a3412;
 }
 
 
@@ -231,8 +243,45 @@ header p{
    購入
 ===================================================== */
 
+.provider-group.purchase{
+
+  background:#eff6ff;
+
+  border-color:#bfdbfe;
+}
+
 .provider-group.purchase .provider-title{
+
   border-left-color:#2563eb;
+
+  background:#dbeafe;
+
+  color:#1e40af;
+}
+
+
+/* =====================================================
+   配信見出し
+===================================================== */
+
+.provider-title{
+  display:flex;
+
+  align-items:center;
+
+  gap:8px;
+
+  font-size:19px;
+
+  font-weight:bold;
+
+  margin-bottom:12px;
+
+  padding:10px 12px;
+
+  border-radius:9px;
+
+  border-left:5px solid #2563eb;
 }
 
 
@@ -262,13 +311,20 @@ header p{
     box-shadow .15s ease;
 }
 
+.provider-card:last-child{
+  margin-bottom:0;
+}
+
 .provider-card:hover{
+
   transform:translateY(-1px);
 
   box-shadow:
     0 3px 10px
     rgba(0,0,0,.08);
 }
+```
+
 
 
 /* =====================================================
