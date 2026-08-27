@@ -14,6 +14,10 @@
 
 <style>
 
+/* =====================================================
+   基本
+===================================================== */
+
 *{
   box-sizing:border-box;
 }
@@ -41,18 +45,19 @@ a{
 header{
   background:#111827;
   color:#fff;
-  padding:20px;
+  padding:18px 20px;
   text-align:center;
 }
 
 header h1{
   margin:0;
-  font-size:28px;
+  font-size:26px;
 }
 
 header p{
-  margin:8px 0 0;
+  margin:6px 0 0;
   color:#d1d5db;
+  font-size:14px;
 }
 
 
@@ -63,7 +68,7 @@ header p{
 .container{
   max-width:1000px;
   margin:0 auto;
-  padding:20px;
+  padding:18px;
 }
 
 
@@ -73,23 +78,162 @@ header p{
 
 .back{
   display:inline-block;
-  margin-bottom:20px;
-  padding:10px 16px;
+  margin-bottom:15px;
+  padding:9px 14px;
   background:#fff;
   color:#111827;
   border-radius:8px;
   font-weight:bold;
+  font-size:14px;
   box-shadow:0 1px 4px rgba(0,0,0,.08);
 }
 
 
 /* =====================================================
-   作品情報
+   上段・作品情報
 ===================================================== */
 
 .movie-header{
   display:flex;
-  gap:20px;
+  gap:18px;
+
+  background:#fff;
+
+  padding:18px;
+
+  border-radius:14px;
+
+  box-shadow:
+    0 2px 8px
+    rgba(0,0,0,.08);
+}
+
+
+/* =====================================================
+   ポスター
+===================================================== */
+
+.poster{
+  width:210px;
+  max-width:28%;
+  height:auto;
+
+  object-fit:cover;
+
+  border-radius:9px;
+
+  align-self:flex-start;
+
+  flex-shrink:0;
+}
+
+
+/* =====================================================
+   右側作品情報
+===================================================== */
+
+.movie-info{
+  flex:1;
+  min-width:0;
+}
+
+.movie-info h2{
+  margin:0 0 4px;
+
+  font-size:25px;
+
+  line-height:1.3;
+}
+
+.original-title{
+  color:#777;
+
+  font-size:13px;
+
+  margin-bottom:8px;
+}
+
+.info-line{
+  display:inline-block;
+
+  margin:2px 10px 2px 0;
+
+  font-size:13px;
+
+  color:#444;
+}
+
+
+/* =====================================================
+   監督・出演者・あらすじ
+===================================================== */
+
+.movie-side-info{
+  margin-top:12px;
+
+  border-top:1px solid #eee;
+
+  padding-top:10px;
+}
+
+.side-section{
+  margin-top:9px;
+}
+
+.side-section:first-child{
+  margin-top:0;
+}
+
+.side-title{
+  font-size:15px;
+
+  font-weight:bold;
+
+  margin-bottom:4px;
+
+  color:#111827;
+}
+
+.side-text{
+  line-height:1.5;
+
+  color:#444;
+
+  font-size:13px;
+}
+
+
+/* =====================================================
+   出演者
+===================================================== */
+
+.cast-list{
+  display:flex;
+
+  flex-wrap:wrap;
+
+  gap:5px;
+}
+
+.cast-item{
+  background:#f3f4f6;
+
+  padding:4px 8px;
+
+  border-radius:15px;
+
+  font-size:12px;
+
+  color:#444;
+}
+
+
+/* =====================================================
+   共通セクション
+===================================================== */
+
+.section{
+  margin-top:20px;
 
   background:#fff;
 
@@ -102,106 +246,10 @@ header p{
     rgba(0,0,0,.08);
 }
 
-.poster{
-  width:230px;
-  max-width:30%;
-  height:auto;
-  object-fit:cover;
-  border-radius:10px;
-  align-self:flex-start;
-}
-
-.movie-info{
-  flex:1;
-  min-width:0;
-}
-
-.movie-info h2{
-  margin:0 0 10px;
-  font-size:30px;
-  line-height:1.4;
-}
-
-.original-title{
-  color:#666;
-  margin-bottom:15px;
-}
-
-.info-line{
-  margin:8px 0;
-}
-
-.movie-info .info-line{
-  font-size:14px;
-}
-
-
-/* =====================================================
-   右側詳細情報
-===================================================== */
-
-.movie-side-info{
-  margin-top:22px;
-}
-
-.side-section{
-  margin-top:18px;
-}
-
-.side-section:first-child{
-  margin-top:0;
-}
-
-.side-title{
-  font-size:18px;
-  font-weight:bold;
-  margin-bottom:8px;
-}
-
-.side-text{
-  line-height:1.7;
-  color:#444;
-}
-
-
-/* =====================================================
-   出演者
-===================================================== */
-
-.cast-list{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-}
-
-.cast-item{
-  background:#f3f4f6;
-  padding:8px 12px;
-  border-radius:20px;
-}
-
-
-/* =====================================================
-   共通セクション
-===================================================== */
-
-.section{
-  margin-top:25px;
-
-  background:#fff;
-
-  padding:25px;
-
-  border-radius:14px;
-
-  box-shadow:
-    0 2px 8px
-    rgba(0,0,0,.08);
-}
-
 .section h3{
-  margin-top:0;
-  font-size:22px;
+  margin:0 0 14px;
+
+  font-size:20px;
 }
 
 
@@ -210,9 +258,12 @@ header p{
 ===================================================== */
 
 .provider-group{
-  margin-top:24px;
-  padding:14px;
+  margin-top:18px;
+
+  padding:12px;
+
   border-radius:12px;
+
   border:1px solid #e5e7eb;
 }
 
@@ -227,12 +278,15 @@ header p{
 
 .provider-group.streaming{
   background:#f0fdf4;
+
   border-color:#bbf7d0;
 }
 
 .provider-group.streaming .provider-title{
   border-left-color:#16a34a;
+
   background:#dcfce7;
+
   color:#166534;
 }
 
@@ -243,12 +297,15 @@ header p{
 
 .provider-group.rental{
   background:#fff7ed;
+
   border-color:#fed7aa;
 }
 
 .provider-group.rental .provider-title{
   border-left-color:#f59e0b;
+
   background:#ffedd5;
+
   color:#9a3412;
 }
 
@@ -259,12 +316,15 @@ header p{
 
 .provider-group.purchase{
   background:#eff6ff;
+
   border-color:#bfdbfe;
 }
 
 .provider-group.purchase .provider-title{
   border-left-color:#2563eb;
+
   background:#dbeafe;
+
   color:#1e40af;
 }
 
@@ -275,19 +335,22 @@ header p{
 
 .provider-title{
   display:flex;
-  align-items:center;
-  gap:8px;
 
-  font-size:19px;
+  align-items:center;
+
+  gap:7px;
+
+  font-size:17px;
+
   font-weight:bold;
 
-  margin-bottom:12px;
+  margin-bottom:10px;
 
-  padding:10px 12px;
+  padding:8px 10px;
 
-  border-radius:9px;
+  border-radius:8px;
 
-  border-left:5px solid #2563eb;
+  border-left:4px solid #2563eb;
 }
 
 
@@ -297,16 +360,18 @@ header p{
 
 .provider-card{
   display:flex;
+
   align-items:center;
-  gap:15px;
 
-  padding:14px 16px;
+  gap:12px;
 
-  margin-bottom:10px;
+  padding:11px 12px;
+
+  margin-bottom:8px;
 
   background:#fff;
 
-  border-radius:12px;
+  border-radius:10px;
 
   border:1px solid #e5e7eb;
 
@@ -333,12 +398,12 @@ header p{
 ===================================================== */
 
 .provider-logo{
-  width:55px;
-  height:55px;
+  width:48px;
+  height:48px;
 
   object-fit:contain;
 
-  border-radius:9px;
+  border-radius:8px;
 
   background:#fff;
 
@@ -354,39 +419,46 @@ header p{
 
 .provider-info{
   flex:1;
+
   min-width:0;
 }
 
 .provider-name{
-  font-size:17px;
+  font-size:16px;
+
   font-weight:bold;
+
   color:#111827;
-  margin-bottom:5px;
+
+  margin-bottom:3px;
 }
 
 .provider-type{
   display:inline-block;
 
-  padding:3px 8px;
+  padding:2px 7px;
 
   background:#f3f4f6;
+
   color:#555;
 
   border-radius:5px;
 
-  font-size:12px;
+  font-size:11px;
 
-  margin-bottom:6px;
+  margin-bottom:4px;
 }
 
 .provider-subinfo{
   display:flex;
+
   flex-wrap:wrap;
-  gap:12px;
+
+  gap:10px;
 
   color:#777;
 
-  font-size:12px;
+  font-size:11px;
 }
 
 
@@ -397,17 +469,15 @@ header p{
 .provider-button{
   display:inline-block;
 
-  padding:11px 16px;
+  padding:9px 13px;
 
   color:#fff;
 
-  text-decoration:none;
-
-  border-radius:8px;
+  border-radius:7px;
 
   font-weight:bold;
 
-  font-size:13px;
+  font-size:12px;
 
   white-space:nowrap;
 
@@ -420,6 +490,7 @@ header p{
 
 .provider-button:hover{
   opacity:.85;
+
   transform:translateY(-1px);
 }
 
@@ -462,15 +533,15 @@ header p{
 .series-list{
   display:flex;
 
-  gap:15px;
+  gap:13px;
 
   overflow-x:auto;
 
-  padding:5px 2px 12px;
+  padding:3px 2px 10px;
 }
 
 .series-item{
-  flex:0 0 150px;
+  flex:0 0 135px;
 
   padding:0;
 
@@ -482,44 +553,39 @@ header p{
 
 /* =====================================================
    シリーズ画像
+   → 画像全体をリンクにする
 ===================================================== */
 
 .series-poster-link{
   display:block;
 
-  width:150px;
-  height:215px;
+  width:135px;
+  height:193px;
 
   border-radius:8px;
 
   overflow:hidden;
 
   background:#e5e7eb;
-
-  transition:
-    transform .15s ease,
-    box-shadow .15s ease;
-}
-
-.series-poster-link:hover{
-  transform:translateY(-3px);
-
-  box-shadow:
-    0 4px 12px
-    rgba(0,0,0,.18);
 }
 
 .series-poster{
-  width:150px;
-  height:215px;
+  width:100%;
+  height:100%;
 
   object-fit:cover;
 
-  border-radius:8px;
-
   display:block;
 
-  background:#e5e7eb;
+  transition:
+    transform .15s ease,
+    opacity .15s ease;
+}
+
+.series-poster-link:hover .series-poster{
+  transform:scale(1.03);
+
+  opacity:.9;
 }
 
 
@@ -532,15 +598,13 @@ header p{
 
   color:#2563eb;
 
-  text-decoration:none;
-
   font-weight:bold;
 
-  font-size:14px;
+  font-size:13px;
 
-  line-height:1.45;
+  line-height:1.4;
 
-  margin-top:8px;
+  margin-top:7px;
 }
 
 .series-item a.series-title:hover{
@@ -550,9 +614,9 @@ header p{
 .series-year{
   color:#666;
 
-  font-size:12px;
+  font-size:11px;
 
-  margin-top:4px;
+  margin-top:3px;
 }
 
 
@@ -563,19 +627,17 @@ header p{
 .tmdb-link{
   display:inline-block;
 
-  margin-top:0;
-
-  padding:12px 18px;
+  padding:10px 16px;
 
   background:#01b4e4;
 
   color:#fff;
 
-  text-decoration:none;
-
   border-radius:8px;
 
   font-weight:bold;
+
+  font-size:13px;
 }
 
 
@@ -588,7 +650,7 @@ header p{
 
   padding:60px 20px;
 
-  font-size:20px;
+  font-size:18px;
 }
 
 
@@ -616,47 +678,104 @@ header p{
 @media(max-width:700px){
 
   .container{
-    padding:15px;
+    padding:12px;
   }
 
   .movie-header{
-    flex-direction:column;
+    padding:14px;
 
-    padding:18px;
-
-    gap:15px;
+    gap:13px;
   }
 
   .poster{
-    max-width:100%;
+    width:145px;
 
-    width:220px;
-
-    margin:auto;
+    max-width:38%;
   }
 
   .movie-info h2{
-    font-size:24px;
+    font-size:20px;
+  }
+
+  .original-title{
+    font-size:11px;
+
+    margin-bottom:5px;
+  }
+
+  .info-line{
+    display:block;
+
+    margin:2px 0;
+
+    font-size:11px;
+  }
+
+  .movie-side-info{
+    margin-top:7px;
+
+    padding-top:7px;
+  }
+
+  .side-section{
+    margin-top:7px;
+  }
+
+  .side-title{
+    font-size:13px;
+
+    margin-bottom:3px;
+  }
+
+  .side-text{
+    font-size:11px;
+
+    line-height:1.45;
+  }
+
+  .cast-list{
+    gap:4px;
+  }
+
+  .cast-item{
+    padding:3px 6px;
+
+    font-size:10px;
   }
 
   .section{
-    padding:18px;
+    margin-top:15px;
+
+    padding:15px;
+  }
+
+  .section h3{
+    font-size:18px;
+
+    margin-bottom:11px;
   }
 
 
-  /* 配信カード */
+  /* ---------------------------------------------
+     配信カード
+  --------------------------------------------- */
 
   .provider-card{
     align-items:flex-start;
 
     flex-wrap:wrap;
 
-    gap:12px;
+    gap:9px;
+  }
+
+  .provider-logo{
+    width:44px;
+    height:44px;
   }
 
   .provider-info{
     min-width:
-      calc(100% - 75px);
+      calc(100% - 60px);
   }
 
   .provider-button{
@@ -664,28 +783,29 @@ header p{
 
     text-align:center;
 
-    margin-top:2px;
+    margin-top:0;
   }
 
 
-  /* シリーズ */
+  /* ---------------------------------------------
+     シリーズ
+  --------------------------------------------- */
 
   .series-list{
-    gap:12px;
+    gap:10px;
   }
 
   .series-item{
-    flex-basis:125px;
+    flex-basis:115px;
   }
 
   .series-poster-link{
-    width:125px;
-    height:180px;
+    width:115px;
+    height:165px;
   }
 
-  .series-poster{
-    width:125px;
-    height:180px;
+  .series-item a.series-title{
+    font-size:12px;
   }
 
 }
@@ -697,13 +817,31 @@ header p{
 
 @media(max-width:420px){
 
+  .poster{
+    width:125px;
+
+    max-width:35%;
+  }
+
+  .movie-info h2{
+    font-size:18px;
+  }
+
+  .side-title{
+    font-size:12px;
+  }
+
+  .side-text{
+    font-size:10px;
+  }
+
   .provider-logo{
-    width:48px;
-    height:48px;
+    width:40px;
+    height:40px;
   }
 
   .provider-name{
-    font-size:16px;
+    font-size:14px;
   }
 
   .provider-subinfo{
@@ -711,7 +849,7 @@ header p{
   }
 
   .provider-subinfo div{
-    margin-top:3px;
+    margin-top:2px;
   }
 
 }
@@ -1036,10 +1174,12 @@ async function loadMovie(){
         url,
         {
           method:"GET",
+
           headers:{
             "Accept":
               "application/json"
           },
+
           cache:"no-store"
         }
       );
@@ -1143,7 +1283,7 @@ function renderMovie(movie){
 
     movie.release_date
 
-      ? "公開日： " +
+      ? "公開日：" +
         formatDate(
           movie.release_date
         )
@@ -1198,6 +1338,10 @@ function renderMovie(movie){
   );
 
 
+  /* ===================================================
+     ポスター
+  =================================================== */
+
   const poster =
     document.getElementById(
       "poster"
@@ -1226,7 +1370,9 @@ function renderMovie(movie){
   }
 
 
-  /* 監督 */
+  /* ===================================================
+     監督
+  =================================================== */
 
   const director =
     movie.director;
@@ -1252,14 +1398,18 @@ function renderMovie(movie){
   }
 
 
-  /* 出演者 */
+  /* ===================================================
+     出演者
+  =================================================== */
 
   renderCast(
     movie.cast
   );
 
 
-  /* あらすじ */
+  /* ===================================================
+     あらすじ
+  =================================================== */
 
   setText(
     "overview",
@@ -1268,21 +1418,27 @@ function renderMovie(movie){
   );
 
 
-  /* 配信 */
+  /* ===================================================
+     配信
+  =================================================== */
 
   renderProviders(
     movie
   );
 
 
-  /* シリーズ */
+  /* ===================================================
+     シリーズ
+  =================================================== */
 
   renderSeries(
     movie.series
   );
 
 
-  /* TMDB */
+  /* ===================================================
+     TMDB
+  =================================================== */
 
   const tmdbLink =
     document.getElementById(
@@ -1612,6 +1768,7 @@ function normalizeProviders(providers){
 
         map[key] = {
           ...provider,
+
           provider_name:
             normalizedName
         };
@@ -1733,7 +1890,9 @@ function createProviderCard(
     "provider-card";
 
 
-  /* ロゴ */
+  /* ---------------------------------------------------
+     ロゴ
+  --------------------------------------------------- */
 
   if(provider.logo_path){
 
@@ -1764,7 +1923,9 @@ function createProviderCard(
   }
 
 
-  /* 情報 */
+  /* ---------------------------------------------------
+     情報
+  --------------------------------------------------- */
 
   const info =
     document.createElement(
@@ -1829,7 +1990,9 @@ function createProviderCard(
   );
 
 
-  /* 字幕・吹き替え */
+  /* ---------------------------------------------------
+     字幕・吹き替え
+  --------------------------------------------------- */
 
   const subInfo =
     document.createElement(
@@ -1881,7 +2044,9 @@ function createProviderCard(
   );
 
 
-  /* 配信リンク */
+  /* ---------------------------------------------------
+     配信リンク
+  --------------------------------------------------- */
 
   const url =
     getProviderLink(
@@ -1953,21 +2118,23 @@ function getProviderLink(
     ).toLowerCase();
 
 
-  /* Netflix
-     → Netflixホームページ */
+  /* ===================================================
+     Netflix
+     → Netflixホームページ
+  =================================================== */
 
   if(
     name.includes("netflix")
   ){
 
-    return (
-      "https://www.netflix.com/jp/"
-    );
+    return "https://www.netflix.com/jp/";
 
   }
 
 
-  /* Amazon */
+  /* ===================================================
+     Amazon
+  =================================================== */
 
   if(
     name.includes("amazon") ||
@@ -1992,7 +2159,9 @@ function getProviderLink(
   }
 
 
-  /* U-NEXT */
+  /* ===================================================
+     U-NEXT
+  =================================================== */
 
   if(
     name.includes("u-next") ||
@@ -2009,7 +2178,9 @@ function getProviderLink(
   }
 
 
-  /* Hulu */
+  /* ===================================================
+     Hulu
+  =================================================== */
 
   if(
     name.includes("hulu")
@@ -2025,7 +2196,9 @@ function getProviderLink(
   }
 
 
-  /* Disney+ */
+  /* ===================================================
+     Disney+
+  =================================================== */
 
   if(
     name.includes("disney")
@@ -2041,7 +2214,9 @@ function getProviderLink(
   }
 
 
-  /* Apple TV */
+  /* ===================================================
+     Apple TV
+  =================================================== */
 
   if(
     name.includes("apple")
@@ -2329,7 +2504,7 @@ function renderSeries(series){
 
 
       /* =================================================
-         ★ シリーズ画像をリンクにする
+         画像リンク
       ================================================= */
 
       if(movie.poster_path){
@@ -2387,7 +2562,7 @@ function renderSeries(series){
 
 
       /* =================================================
-         ★ シリーズタイトルもリンク
+         タイトルリンク
       ================================================= */
 
       const link =
@@ -2416,7 +2591,9 @@ function renderSeries(series){
       );
 
 
-      /* 年 */
+      /* =================================================
+         年
+      ================================================= */
 
       const year =
         document.createElement(
@@ -2573,8 +2750,9 @@ function showError(message){
 <footer
   style="
     text-align:center;
-    padding:30px 20px;
+    padding:25px 20px;
     color:#777;
+    font-size:13px;
   "
 >
 © ドコデミレル？
