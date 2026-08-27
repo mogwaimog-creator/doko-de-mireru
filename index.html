@@ -1653,33 +1653,110 @@ function createServiceCards(
        * ただしNetflixの検索URLは使用しない
        */
 
-      if(
-        service.watch_link &&
-        isUsableServiceUrl(
-          providerName,
-          service.watch_link
-        )
-      ){
+      /*
+ * =========================================
+ * 配信リンク
+ * =========================================
+ *
+ * Netflixだけは特別扱い。
+ *
+ * Netflix作品IDが取得できている場合は
+ * 必ず
+ *
+ * https://www.netflix.com/jp/title/作品ID
+ *
+ * の直接URLを使用する。
+ *
+ * JustWatchのwatch_linkやprovider_urlで
+ * 上書きしない。
+ * =========================================
+ */
 
-        url =
-          service.watch_link;
+if(
+  providerName
+    .toLowerCase()
+    .includes("netflix")
+){
 
-      }
+  const netflixId =
+    getNetflixTitleId(
+      service,
+      movieData
+    );
 
 
-      if(
-        service.provider_url &&
-        isUsableServiceUrl(
-          providerName,
-          service.provider_url
-        )
-      ){
+  if(netflixId){
 
-        url =
-          service.provider_url;
+    url =
+      "https://www.netflix.com/jp/title/" +
+      encodeURIComponent(netflixId);
 
-      }
+  }
 
+  else if(
+    service &&
+    typeof service.provider_url === "string" &&
+    isUsableServiceUrl(
+      providerName,
+      service.provider_url
+    )
+  ){
+
+    url =
+      service.provider_url;
+
+  }
+
+  else if(
+    service &&
+    typeof service.watch_link === "string" &&
+    isUsableServiceUrl(
+      providerName,
+      service.watch_link
+    )
+  ){
+
+    url =
+      service.watch_link;
+
+  }
+
+}
+
+else{
+
+  /*
+   * Netflix以外は従来どおり
+   */
+
+  if(
+    service.watch_link &&
+    isUsableServiceUrl(
+      providerName,
+      service.watch_link
+    )
+  ){
+
+    url =
+      service.watch_link;
+
+  }
+
+
+  if(
+    service.provider_url &&
+    isUsableServiceUrl(
+      providerName,
+      service.provider_url
+    )
+  ){
+
+    url =
+      service.provider_url;
+
+  }
+
+}
 
       let statusText =
         "見放題";
