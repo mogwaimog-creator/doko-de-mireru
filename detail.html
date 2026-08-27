@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 
 <html lang="ja">
@@ -9,7 +10,6 @@
 <meta
 name="viewport"
 content="width=device-width, initial-scale=1.0"
-
 >
 
 <title>作品情報 | ドコデミレル？</title>
@@ -223,7 +223,7 @@ header p{
 
   margin:0;
 
-  font-size:17px;
+  font-size:15px;
 
   color:#444;
 }
@@ -864,7 +864,7 @@ header p{
 
   .info-line{
 
-    font-size:16px;
+    font-size:14px;
 
     margin:4px 0;
   }
@@ -1041,7 +1041,7 @@ header p{
 
   .info-line{
 
-    font-size:14px;
+    font-size:13px;
   }
 
 
@@ -1097,10 +1097,9 @@ header p{
 <a
 class="back"
 href="index.html"
-
 >
-
-← 検索結果に戻る </a>
+← 検索結果に戻る
+</a>
 
 <div
   id="loading"
@@ -1132,7 +1131,6 @@ href="index.html"
 id="poster"
 class="poster"
 alt=""
-
 >
 
 <div class="movie-info">
@@ -1157,6 +1155,11 @@ alt=""
 
 <div
   id="rating"
+  class="info-line"
+></div>
+
+<div
+  id="genres"
   class="info-line"
 ></div>
 
@@ -1211,6 +1214,7 @@ alt=""
 
 </div>
 
+
 <!-- =====================================================
      配信サービス
 ===================================================== -->
@@ -1227,6 +1231,7 @@ alt=""
 <div id="providers"></div>
 
 </div>
+
 
 <!-- =====================================================
      シリーズ
@@ -1251,6 +1256,7 @@ alt=""
 
 </div>
 
+
 <!-- =====================================================
      TMDB
 ===================================================== -->
@@ -1263,16 +1269,16 @@ class="tmdb-link"
 href="#"
 target="_blank"
 rel="noopener noreferrer"
-
 >
-
-TMDBで作品情報を見る → </a>
-
-</div>
+TMDBで作品情報を見る →
+</a>
 
 </div>
 
 </div>
+
+</div>
+
 
 <script>
 
@@ -1507,6 +1513,15 @@ function renderMovie(movie){
   );
 
 
+  /* =================================================
+     ジャンル
+  ================================================= */
+
+  renderGenres(
+    movie.genres
+  );
+
+
   /* ポスター */
 
   const poster =
@@ -1618,6 +1633,119 @@ function renderMovie(movie){
       "作品情報"
     ) +
     " | ドコデミレル？";
+
+}
+
+
+/* =====================================================
+   ジャンル
+===================================================== */
+
+function renderGenres(genres){
+
+  const container =
+    document.getElementById(
+      "genres"
+    );
+
+
+  if(!container){
+
+    return;
+
+  }
+
+
+  container.textContent =
+    "";
+
+
+  if(
+    !genres
+  ){
+
+    return;
+
+  }
+
+
+  let genreNames = [];
+
+
+  /* TMDB形式
+     [
+       { id: 16, name: "Animation" },
+       { id: 35, name: "Comedy" }
+     ]
+  */
+
+  if(
+    Array.isArray(genres)
+  ){
+
+    genres.forEach(
+      function(genre){
+
+        if(
+          genre &&
+          genre.name
+        ){
+
+          genreNames.push(
+            genre.name
+          );
+
+        }else if(
+          typeof genre === "string"
+        ){
+
+          genreNames.push(
+            genre
+          );
+
+        }
+
+      }
+    );
+
+  }
+
+
+  /* 文字列形式にも対応 */
+
+  else if(
+    typeof genres === "string"
+  ){
+
+    genreNames =
+      genres
+        .split(",")
+        .map(
+          function(name){
+            return name.trim();
+          }
+        )
+        .filter(
+          function(name){
+            return name;
+          }
+        );
+
+  }
+
+
+  if(
+    genreNames.length === 0
+  ){
+
+    return;
+
+  }
+
+
+  container.textContent =
+    "ジャンル：" +
+    genreNames.join("・");
 
 }
 
@@ -2654,9 +2782,7 @@ function renderSeries(series){
         "series-item";
 
 
-      /* =================================================
-         画像リンク
-      ================================================= */
+      /* 画像リンク */
 
       if(movie.poster_path){
 
@@ -2722,9 +2848,7 @@ function renderSeries(series){
       }
 
 
-      /* =================================================
-         タイトルリンク
-      ================================================= */
+      /* タイトルリンク */
 
       const link =
         document.createElement(
@@ -2752,9 +2876,7 @@ function renderSeries(series){
       );
 
 
-      /* =================================================
-         年
-      ================================================= */
+      /* 年 */
 
       const year =
         document.createElement(
@@ -2915,6 +3037,7 @@ function showError(message){
 
 </script>
 
+
 <footer
   style="
     text-align:center;
@@ -2926,6 +3049,8 @@ function showError(message){
 © ドコデミレル？
 </footer>
 
+
 </body>
 
 </html>
+```
