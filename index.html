@@ -14,10 +14,6 @@
 
 <style>
 
-/* =========================
-   基本
-========================= */
-
 *{
   box-sizing:border-box;
 }
@@ -73,11 +69,6 @@ header p{
   margin:35px auto;
   padding:0 20px;
 }
-
-
-/* =========================
-   ボックス
-========================= */
 
 .box{
   background:white;
@@ -395,7 +386,7 @@ input:focus{
 .service-grid{
   display:grid;
   grid-template-columns:
-    repeat(3, 1fr);
+    repeat(3,1fr);
   gap:14px;
 }
 
@@ -796,6 +787,7 @@ input:focus{
 
 <script>
 
+
 /* =========================
    最後の検索語
 ========================= */
@@ -940,7 +932,7 @@ function createMovieCard(movie){
       movie.poster_path +
       "' " +
       "alt='" +
-      escapeHtml(movie.title) +
+      escapeAttribute(movie.title) +
       "'>";
 
   }
@@ -1026,7 +1018,7 @@ function createMovieCard(movie){
     "<span " +
     "class='detail-button' " +
     "onclick='searchMovieById(" +
-    movie.id +
+    Number(movie.id) +
     ")'>" +
     "▶ 詳細を見る" +
     "</span>";
@@ -1116,7 +1108,7 @@ async function searchMovieById(movieId){
         data.poster_path +
         "' " +
         "alt='" +
-        escapeHtml(data.title) +
+        escapeAttribute(data.title) +
         "'>";
 
     }
@@ -1425,7 +1417,7 @@ async function searchMovieById(movieId){
             "<div " +
             "class='series-item' " +
             "onclick='searchMovieById(" +
-            movie.id +
+            Number(movie.id) +
             ")'>";
 
 
@@ -1440,7 +1432,7 @@ async function searchMovieById(movieId){
               movie.poster_path +
               "' " +
               "alt='" +
-              escapeHtml(movie.title) +
+              escapeAttribute(movie.title) +
               "'>";
 
           }
@@ -1472,7 +1464,9 @@ async function searchMovieById(movieId){
             html +=
 
               "<div class='series-year'>" +
-              movie.release_date.substring(0,4) +
+              escapeHtml(
+                movie.release_date.substring(0,4)
+              ) +
               "年" +
               "</div>";
 
@@ -1506,7 +1500,6 @@ async function searchMovieById(movieId){
 
     result.innerHTML =
       html;
-
 
   }
 
@@ -1623,18 +1616,7 @@ function createServiceCards(
 
 
       /*
-       * =========================================
-       * 配信リンク
-       * =========================================
-       *
-       * 優先順位
-       *
-       * 1. APIから返ってきた watch_link
-       * 2. APIから返ってきた provider_url
-       * 3. Netflix作品ID
-       * 4. 各サービスURL
-       *
-       * =========================================
+       * 配信URL
        */
 
       let url =
@@ -1647,116 +1629,64 @@ function createServiceCards(
 
 
       /*
-       * APIのwatch_linkが存在し、
-       * 明らかに使えるURLの場合は優先
-       *
-       * ただしNetflixの検索URLは使用しない
+       * APIから取得した
+       * 直接URLを優先
        */
 
+      if(
+        service.provider_url &&
+        isUsableServiceUrl(
+          providerName,
+          service.provider_url
+        )
+      ){
+
+        url =
+          service.provider_url;
+
+      }
+
+
       /*
- * =========================================
- * 配信リンク
- * =========================================
- *
- * Netflixだけは特別扱い。
- *
- * Netflix作品IDが取得できている場合は
- * 必ず
- *
- * https://www.netflix.com/jp/title/作品ID
- *
- * の直接URLを使用する。
- *
- * JustWatchのwatch_linkやprovider_urlで
- * 上書きしない。
- * =========================================
- */
+       * Netflix作品URL
+       */
 
-if(
-  providerName
-    .toLowerCase()
-    .includes("netflix")
-){
+      if(
+        providerName
+          .toLowerCase()
+          .includes("netflix")
+      ){
 
-  const netflixId =
-    getNetflixTitleId(
-      service,
-      movieData
-    );
+        const netflixId =
+          getNetflixTitleId(
+            service,
+            movieData
+          );
 
 
-  if(netflixId){
+        if(netflixId){
 
-    url =
-      "https://www.netflix.com/jp/title/" +
-      encodeURIComponent(netflixId);
+          url =
+            "https://www.netflix.com/jp/title/" +
+            encodeURIComponent(netflixId);
 
-  }
+        }
 
-  else if(
-    service &&
-    typeof service.provider_url === "string" &&
-    isUsableServiceUrl(
-      providerName,
-      service.provider_url
-    )
-  ){
+        else if(
+          service.netflix_url &&
+          isUsableServiceUrl(
+            providerName,
+            service.netflix_url
+          )
+        ){
 
-    url =
-      service.provider_url;
+          url =
+            service.netflix_url;
 
-  }
+        }
 
-  else if(
-    service &&
-    typeof service.watch_link === "string" &&
-    isUsableServiceUrl(
-      providerName,
-      service.watch_link
-    )
-  ){
+      }
 
-    url =
-      service.watch_link;
-
-  }
-
-}
-
-else{
-
-  /*
-   * Netflix以外は従来どおり
-   */
-
-  if(
-    service.watch_link &&
-    isUsableServiceUrl(
-      providerName,
-      service.watch_link
-    )
-  ){
-
-    url =
-      service.watch_link;
-
-  }
-
-
-  if(
-    service.provider_url &&
-    isUsableServiceUrl(
-      providerName,
-      service.provider_url
-    )
-  ){
-
-    url =
-      service.provider_url;
-
-  }
-
-}
 
       let statusText =
         "見放題";
@@ -1768,14 +1698,9 @@ else{
         providerName +
         "で見る →";
 
-
       let buttonBackground =
         "#2563eb";
 
-
-      /* =========================
-         レンタル
-      ========================= */
 
       if(type === "rental"){
 
@@ -1794,10 +1719,6 @@ else{
 
       }
 
-
-      /* =========================
-         購入
-      ========================= */
 
       else if(type === "purchase"){
 
@@ -1821,8 +1742,6 @@ else{
 
         "<div class='service-card'>";
 
-
-      /* ロゴ */
 
       html +=
 
@@ -1851,8 +1770,6 @@ else{
         "</div>";
 
 
-      /* 状態 */
-
       html +=
 
         "<div " +
@@ -1866,8 +1783,6 @@ else{
 
         "</div>";
 
-
-      /* ボタン */
 
       html +=
 
@@ -1913,72 +1828,13 @@ else{
 
 
 /* ==================================================
-   サービスURL判定
-================================================== */
-
-function isUsableServiceUrl(
-  providerName,
-  url
-){
-
-  if(
-    !url ||
-    typeof url !== "string"
-  ){
-
-    return false;
-
-  }
-
-
-  const name =
-    providerName
-      .toLowerCase();
-
-
-  /*
-   * Netflix
-   *
-   * Netflixの検索URLは除外。
-   *
-   * /title/数字
-   * の作品URLだけを有効とする。
-   */
-
-  if(
-    name.includes("netflix")
-  ){
-
-    return (
-      url.includes("netflix.com") &&
-      /\/title\/\d+/.test(url)
-    );
-
-  }
-
-
-  return (
-    /^https?:\/\//i.test(url)
-  );
-
-}
-
-
-/* ==================================================
-   Netflix作品ID取得
+   Netflix ID取得
 ================================================== */
 
 function getNetflixTitleId(
   service,
   movieData
 ){
-
-  /*
-   * APIが将来的に返す可能性のある
-   * Netflix IDの候補をまとめて確認する。
-   *
-   * どれか1つでも数字のIDがあれば使用。
-   */
 
   const candidates = [
 
@@ -2037,18 +1893,6 @@ function getNetflixTitleId(
   }
 
 
-  /*
-   * URLからNetflix作品IDを取得
-   *
-   * 例：
-   *
-   * https://www.netflix.com/jp/title/81776693
-   *
-   * ↓
-   *
-   * 81776693
-   */
-
   const urls = [
 
     service &&
@@ -2056,6 +1900,9 @@ function getNetflixTitleId(
 
     service &&
     service.provider_url,
+
+    service &&
+    service.netflix_url,
 
     movieData &&
     movieData.netflix_url,
@@ -2106,7 +1953,7 @@ function getNetflixTitleId(
 
 
 /* ==================================================
-   配信サービスURL
+   配信URL
 ================================================== */
 
 function getServiceUrl(
@@ -2129,22 +1976,12 @@ function getServiceUrl(
     name.includes("netflix")
   ){
 
-    /*
-     * まずNetflix作品IDを探す
-     */
-
     const netflixId =
       getNetflixTitleId(
         service,
         movieData
       );
 
-
-    /*
-     * IDが取得できた場合
-     *
-     * Netflixの作品ページへ直接移動
-     */
 
     if(netflixId){
 
@@ -2161,19 +1998,16 @@ function getServiceUrl(
     }
 
 
-    /*
-     * APIから完全なNetflix作品URLが
-     * 返ってきている場合
-     */
-
     if(
       service &&
-      typeof service.watch_link === "string" &&
-      /netflix\.com\/.*\/title\/\d+/i
-        .test(service.watch_link)
+      typeof service.netflix_url === "string" &&
+      isUsableServiceUrl(
+        providerName,
+        service.netflix_url
+      )
     ){
 
-      return service.watch_link;
+      return service.netflix_url;
 
     }
 
@@ -2181,8 +2015,10 @@ function getServiceUrl(
     if(
       service &&
       typeof service.provider_url === "string" &&
-      /netflix\.com\/.*\/title\/\d+/i
-        .test(service.provider_url)
+      isUsableServiceUrl(
+        providerName,
+        service.provider_url
+      )
     ){
 
       return service.provider_url;
@@ -2191,14 +2027,8 @@ function getServiceUrl(
 
 
     /*
-     * ここまで取得できなかった場合
-     *
-     * Netflixの検索URLは現在の仕様では
-     * 安定しないため、検索画面ではなく
-     * Netflixトップページを開く。
-     *
-     * 今後API側でIDを返すようにすれば
-     * 自動的に作品ページへ切り替わる。
+     * IDが取得できなかった場合は
+     * Netflixトップへ
      */
 
     return (
@@ -2345,10 +2175,6 @@ function getServiceUrl(
   }
 
 
-  /* =========================
-     その他
-  ========================= */
-
   return (
 
     "https://www.google.com/search?q=" +
@@ -2359,6 +2185,49 @@ function getServiceUrl(
       title
     )
 
+  );
+
+}
+
+
+/* ==================================================
+   URL判定
+================================================== */
+
+function isUsableServiceUrl(
+  providerName,
+  url
+){
+
+  if(
+    !url ||
+    typeof url !== "string"
+  ){
+
+    return false;
+
+  }
+
+
+  const name =
+    providerName
+      .toLowerCase();
+
+
+  if(
+    name.includes("netflix")
+  ){
+
+    return (
+      url.includes("netflix.com") &&
+      /\/title\/\d+/.test(url)
+    );
+
+  }
+
+
+  return (
+    /^https?:\/\//i.test(url)
   );
 
 }
@@ -2550,7 +2419,7 @@ function escapeHtml(text){
 
 
 /* =========================
-   属性用エスケープ
+   属性エスケープ
 ========================= */
 
 function escapeAttribute(text){
@@ -2575,7 +2444,6 @@ function escapeAttribute(text){
 }
 
 </script>
-
 
 </body>
 
