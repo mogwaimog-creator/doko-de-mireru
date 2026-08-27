@@ -1,6 +1,3 @@
-# detail.html 完成版
-
-```html
 <!DOCTYPE html>
 <html lang="ja">
 
@@ -182,80 +179,19 @@ header p{
 ===================================================== */
 
 .provider-group{
-  margin-top:24px;
+  margin-top:18px;
 
   padding:14px;
 
   border-radius:12px;
 
   border:1px solid #e5e7eb;
+
+  background:#fff;
 }
 
 .provider-group:first-child{
   margin-top:0;
-}
-
-
-/* =====================================================
-   見放題
-===================================================== */
-
-.provider-group.streaming{
-
-  background:#f0fdf4;
-
-  border-color:#bbf7d0;
-}
-
-.provider-group.streaming .provider-title{
-
-  border-left-color:#16a34a;
-
-  background:#dcfce7;
-
-  color:#166534;
-}
-
-
-/* =====================================================
-   レンタル
-===================================================== */
-
-.provider-group.rental{
-
-  background:#fff7ed;
-
-  border-color:#fed7aa;
-}
-
-.provider-group.rental .provider-title{
-
-  border-left-color:#f59e0b;
-
-  background:#ffedd5;
-
-  color:#9a3412;
-}
-
-
-/* =====================================================
-   購入
-===================================================== */
-
-.provider-group.purchase{
-
-  background:#eff6ff;
-
-  border-color:#bfdbfe;
-}
-
-.provider-group.purchase .provider-title{
-
-  border-left-color:#2563eb;
-
-  background:#dbeafe;
-
-  color:#1e40af;
 }
 
 
@@ -281,6 +217,10 @@ header p{
   border-radius:9px;
 
   border-left:5px solid #2563eb;
+
+  background:#f3f4f6;
+
+  color:#111827;
 }
 
 
@@ -360,46 +300,6 @@ header p{
   font-weight:bold;
 
   color:#111827;
-
-  margin-bottom:3px;
-}
-
-
-/* =====================================================
-   見放題・レンタル・購入
-===================================================== */
-
-.provider-type{
-  display:inline-block;
-
-  padding:2px 7px;
-
-  background:#f3f4f6;
-
-  color:#555;
-
-  border-radius:5px;
-
-  font-size:11px;
-
-  margin-bottom:4px;
-}
-
-
-/* =====================================================
-   字幕・吹き替え
-===================================================== */
-
-.provider-subinfo{
-  display:flex;
-
-  flex-wrap:wrap;
-
-  gap:10px;
-
-  color:#777;
-
-  font-size:11px;
 }
 
 
@@ -437,7 +337,6 @@ header p{
 
   transform:translateY(-1px);
 }
-```
 
 
 /* =====================================================
@@ -625,10 +524,6 @@ header p{
   }
 
 
-  /* ---------------------------------------------
-     配信カード
-  --------------------------------------------- */
-
   .provider-card{
     align-items:flex-start;
 
@@ -653,10 +548,6 @@ header p{
   }
 
 
-  /* ---------------------------------------------
-     シリーズ
-  --------------------------------------------- */
-
   .series-list{
     gap:12px;
   }
@@ -675,10 +566,6 @@ header p{
 }
 
 
-/* =====================================================
-   とても小さい画面
-===================================================== */
-
 @media(max-width:420px){
 
   .provider-logo{
@@ -688,14 +575,6 @@ header p{
 
   .provider-name{
     font-size:16px;
-  }
-
-  .provider-subinfo{
-    display:block;
-  }
-
-  .provider-subinfo div{
-    margin-top:3px;
   }
 
 }
@@ -1348,38 +1227,64 @@ function renderProviders(movie){
     );
 
 
-  renderProviderGroup(
-    container,
-    "🟢 見放題",
-    streaming,
-    "streaming",
-    movie
-  );
+  /*
+   * 同じサービスを重複表示しない
+   */
+
+  const allProviders = [];
 
 
-  renderProviderGroup(
-    container,
-    "🟠 レンタル",
-    rental,
-    "rental",
-    movie
-  );
+  streaming
+    .concat(rental)
+    .concat(purchase)
+    .forEach(function(provider){
+
+      if(!provider){
+
+        return;
+
+      }
 
 
-  renderProviderGroup(
-    container,
-    "🔵 購入",
-    purchase,
-    "purchase",
-    movie
-  );
+      const name =
+        normalizeProviderName(
+          provider.provider_name
+        );
 
 
-  if(
-    !streaming.length &&
-    !rental.length &&
-    !purchase.length
-  ){
+      if(!name){
+
+        return;
+
+      }
+
+
+      const exists =
+        allProviders.some(function(item){
+
+          return (
+            normalizeProviderName(
+              item.provider_name
+            ).toLowerCase() ===
+            name.toLowerCase()
+          );
+
+        });
+
+
+      if(!exists){
+
+        allProviders.push({
+          ...provider,
+          provider_name:name
+        });
+
+      }
+
+    });
+
+
+  if(!allProviders.length){
 
     const empty =
       document.createElement(
@@ -1395,13 +1300,50 @@ function renderProviders(movie){
       empty
     );
 
+
+    return;
+
   }
+
+
+  /*
+   * Netflixを最初に表示
+   */
+
+  allProviders.sort(function(a,b){
+
+    const aNetflix =
+      a.provider_name === "Netflix"
+        ? 0
+        : 1;
+
+
+    const bNetflix =
+      b.provider_name === "Netflix"
+        ? 0
+        : 1;
+
+
+    return aNetflix - bNetflix;
+
+  });
+
+
+  allProviders.forEach(function(provider){
+
+    createProviderCard(
+      container,
+      provider,
+      movie
+    );
+
+  });
 
 }
 
 
 /* =====================================================
-   サービス名を整理
+   サービス名整理
 ===================================================== */
 
 function normalizeProviderName(name){
@@ -1505,147 +1447,12 @@ function normalizeProviderName(name){
 
 
 /* =====================================================
-   同じサービスをまとめる
-===================================================== */
-
-function normalizeProviders(providers){
-
-  const result = [];
-
-  const map = {};
-
-
-  providers.forEach(
-    function(provider){
-
-      if(!provider){
-
-        return;
-
-      }
-
-
-      const normalizedName =
-        normalizeProviderName(
-          provider.provider_name
-        );
-
-
-      if(!normalizedName){
-
-        return;
-
-      }
-
-
-      const key =
-        normalizedName.toLowerCase();
-
-
-      if(!map[key]){
-
-        map[key] = {
-          ...provider,
-          provider_name:
-            normalizedName
-        };
-
-        result.push(
-          map[key]
-        );
-
-      }
-
-    }
-  );
-
-
-  return result;
-
-}
-
-
-/* =====================================================
-   配信グループ
-===================================================== */
-
-function renderProviderGroup(
-  container,
-  title,
-  providers,
-  type,
-  movie
-){
-
-  if(
-    !Array.isArray(providers) ||
-    providers.length === 0
-  ){
-
-    return;
-
-  }
-
-
-  const group =
-    document.createElement(
-      "div"
-    );
-
-
-  group.className =
-    "provider-group " +
-    type;
-
-
-  const heading =
-    document.createElement(
-      "div"
-    );
-
-
-  heading.className =
-    "provider-title";
-
-
-  heading.textContent =
-    title;
-
-
-  group.appendChild(
-    heading
-  );
-
-
-  providers.forEach(
-    function(provider){
-
-      createProviderCard(
-        group,
-        provider,
-        type,
-        movie
-      );
-
-    }
-  );
-
-
-  container.appendChild(
-    group
-  );
-
-}
-
-
-/* =====================================================
    配信カード
 ===================================================== */
 
 function createProviderCard(
   container,
   provider,
-  type,
   movie
 ){
 
@@ -1700,7 +1507,7 @@ function createProviderCard(
 
 
   /* ---------------------------------------------------
-     情報
+     サービス名
   --------------------------------------------------- */
 
   const info =
@@ -1733,95 +1540,13 @@ function createProviderCard(
   );
 
 
-  const typeText =
-    document.createElement(
-      "div"
-    );
-
-
-  typeText.className =
-    "provider-type";
-
-
-  if(type === "streaming"){
-
-    typeText.textContent =
-      "見放題";
-
-  }else if(type === "rental"){
-
-    typeText.textContent =
-      "レンタル";
-
-  }else{
-
-    typeText.textContent =
-      "購入";
-
-  }
-
-
-  info.appendChild(
-    typeText
-  );
-
-
-  /* ---------------------------------------------------
-     字幕・吹き替え
-  --------------------------------------------------- */
-
-  const subInfo =
-    document.createElement(
-      "div"
-    );
-
-
-  subInfo.className =
-    "provider-subinfo";
-
-
-  const subtitle =
-    document.createElement(
-      "div"
-    );
-
-
-  subtitle.textContent =
-    "🎧 字幕：未確認";
-
-
-  subInfo.appendChild(
-    subtitle
-  );
-
-
-  const dub =
-    document.createElement(
-      "div"
-    );
-
-
-  dub.textContent =
-    "🎙️ 吹き替え：未確認";
-
-
-  subInfo.appendChild(
-    dub
-  );
-
-
-  info.appendChild(
-    subInfo
-  );
-
-
   card.appendChild(
     info
   );
 
 
   /* ---------------------------------------------------
-     配信リンク
+     リンク
   --------------------------------------------------- */
 
   const url =
@@ -1894,26 +1619,26 @@ function getProviderLink(
     ).toLowerCase();
 
 
+  /* ---------------------------------------------------
+     Netflix
+     ※作品IDは使用しない
+     ※Netflix日本公式ホームページへ
+  --------------------------------------------------- */
+
   if(
     name.includes("netflix")
   ){
 
     return (
-      movie.netflix_url ||
-      (
-        movie.netflix &&
-        movie.netflix.url
-      ) ||
-      (
-        "https://www.netflix.com/jp/search?q=" +
-        encodeURIComponent(
-          movie.title || ""
-        )
-      )
+      "https://www.netflix.com/jp/"
     );
 
   }
 
+
+  /* ---------------------------------------------------
+     Prime Video
+  --------------------------------------------------- */
 
   if(
     name.includes("amazon") ||
@@ -1922,10 +1647,6 @@ function getProviderLink(
 
     return (
       movie.amazon_url ||
-      (
-        movie.amazon &&
-        movie.amazon.url
-      ) ||
       (
         "https://www.amazon.co.jp/s?k=" +
         encodeURIComponent(
@@ -1938,6 +1659,10 @@ function getProviderLink(
   }
 
 
+  /* ---------------------------------------------------
+     U-NEXT
+  --------------------------------------------------- */
+
   if(
     name.includes("u-next") ||
     name.includes("unext")
@@ -1945,13 +1670,15 @@ function getProviderLink(
 
     return (
       movie.unext_url ||
-      getGenericProviderUrl(
-        provider
-      )
+      "https://video.unext.jp/"
     );
 
   }
 
+
+  /* ---------------------------------------------------
+     Hulu
+  --------------------------------------------------- */
 
   if(
     name.includes("hulu")
@@ -1959,13 +1686,20 @@ function getProviderLink(
 
     return (
       movie.hulu_url ||
-      getGenericProviderUrl(
-        provider
+      (
+        "https://www.hulu.jp/search?q=" +
+        encodeURIComponent(
+          movie.title || ""
+        )
       )
     );
 
   }
 
+
+  /* ---------------------------------------------------
+     Disney+
+  --------------------------------------------------- */
 
   if(
     name.includes("disney")
@@ -1973,13 +1707,20 @@ function getProviderLink(
 
     return (
       movie.disney_url ||
-      getGenericProviderUrl(
-        provider
+      (
+        "https://www.disneyplus.com/ja-jp/search/" +
+        encodeURIComponent(
+          movie.title || ""
+        )
       )
     );
 
   }
 
+
+  /* ---------------------------------------------------
+     Apple TV
+  --------------------------------------------------- */
 
   if(
     name.includes("apple")
@@ -1987,13 +1728,20 @@ function getProviderLink(
 
     return (
       movie.apple_tv_url ||
-      getGenericProviderUrl(
-        provider
+      (
+        "https://tv.apple.com/jp/search?term=" +
+        encodeURIComponent(
+          movie.title || ""
+        )
       )
     );
 
   }
 
+
+  /* ---------------------------------------------------
+     その他
+  --------------------------------------------------- */
 
   return getGenericProviderUrl(
     provider
@@ -2137,7 +1885,7 @@ function getButtonText(name){
     value.includes("netflix")
   ){
 
-    return "Netflixで作品を見る →";
+    return "Netflixを見る →";
 
   }
 
@@ -2147,7 +1895,7 @@ function getButtonText(name){
     value.includes("prime video")
   ){
 
-    return "Prime Videoで作品を見る →";
+    return "Prime Videoを見る →";
 
   }
 
@@ -2157,7 +1905,7 @@ function getButtonText(name){
     value.includes("unext")
   ){
 
-    return "U-NEXTで作品を見る →";
+    return "U-NEXTを見る →";
 
   }
 
@@ -2166,7 +1914,7 @@ function getButtonText(name){
     value.includes("hulu")
   ){
 
-    return "Huluで作品を見る →";
+    return "Huluを見る →";
 
   }
 
@@ -2175,7 +1923,7 @@ function getButtonText(name){
     value.includes("disney")
   ){
 
-    return "Disney+で作品を見る →";
+    return "Disney+を見る →";
 
   }
 
@@ -2184,12 +1932,63 @@ function getButtonText(name){
     value.includes("apple")
   ){
 
-    return "Apple TVで作品を見る →";
+    return "Apple TVを見る →";
 
   }
 
 
-  return "サービスで作品を見る →";
+  return "サービスを見る →";
+
+}
+
+
+/* =====================================================
+   配信サービス正規化
+===================================================== */
+
+function normalizeProviders(
+  providers
+){
+
+  if(
+    !Array.isArray(
+      providers
+    )
+  ){
+
+    return [];
+
+  }
+
+
+  return providers
+    .filter(function(provider){
+
+      return (
+        provider &&
+        provider.provider_name
+      );
+
+    })
+    .map(function(provider){
+
+      return {
+
+        provider_id:
+          provider.provider_id || null,
+
+        provider_name:
+          provider.provider_name || "",
+
+        logo_path:
+          provider.logo_path || null,
+
+        provider_url:
+          provider.provider_url || null
+
+      };
+
+    });
 
 }
 
@@ -2478,4 +2277,3 @@ function showError(message){
 </body>
 
 </html>
-```
