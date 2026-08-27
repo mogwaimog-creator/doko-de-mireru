@@ -35,7 +35,6 @@ body{
     Arial,
     "Noto Sans JP",
     sans-serif;
-
   background:#f5f7fb;
   color:#222;
 }
@@ -53,24 +52,19 @@ a{
 header{
   background:#111827;
   color:#fff;
-
   padding:22px 15px;
-
   text-align:center;
 }
 
 header h1{
   margin:0;
-
   font-size:30px;
   font-weight:700;
 }
 
 header p{
   margin:8px 0 0;
-
   color:#d1d5db;
-
   font-size:14px;
 }
 
@@ -81,7 +75,6 @@ header p{
 
 .container{
   width:min(1000px,94%);
-
   margin:25px auto 50px;
 }
 
@@ -92,19 +85,12 @@ header p{
 
 .back-button{
   display:inline-block;
-
   margin-bottom:20px;
-
   padding:10px 16px;
-
   background:#fff;
-
   border:1px solid #e5e7eb;
-
   border-radius:10px;
-
   color:#111827;
-
   font-weight:bold;
 
   box-shadow:
@@ -122,21 +108,15 @@ header p{
 
 .status{
   text-align:center;
-
   padding:40px 20px;
-
   color:#6b7280;
 }
 
 .error{
   background:#fee2e2;
-
   color:#b91c1c;
-
   padding:18px;
-
   border-radius:12px;
-
   margin:20px 0;
 }
 
@@ -147,9 +127,7 @@ header p{
 
 .detail-card{
   background:#fff;
-
   border-radius:18px;
-
   padding:25px;
 
   box-shadow:
@@ -163,79 +141,50 @@ header p{
 
 .movie-main{
   display:flex;
-
   gap:25px;
-
   margin-bottom:30px;
 }
 
 .movie-poster{
   width:220px;
   height:330px;
-
   object-fit:cover;
-
   border-radius:12px;
-
   background:#e5e7eb;
-
   flex-shrink:0;
 }
 
 .movie-main-info{
   flex:1;
-
   min-width:0;
 }
 
 .movie-title{
   margin:0 0 7px;
-
   font-size:30px;
-
   color:#111827;
 }
 
 .original-title{
   color:#6b7280;
-
   font-size:14px;
-
   margin-bottom:15px;
 }
 
 .meta{
   color:#4b5563;
-
   font-size:14px;
-
   margin:8px 0;
 }
 
 .rating{
   display:inline-block;
-
   margin-top:5px;
-
   padding:7px 12px;
-
   border-radius:8px;
-
   background:#fff7ed;
-
   color:#c2410c;
-
   font-weight:bold;
-}
-
-.overview{
-  margin-top:18px;
-
-  line-height:1.8;
-
-  font-size:15px;
-
-  color:#374151;
 }
 
 
@@ -245,18 +194,43 @@ header p{
 
 .section{
   margin-top:30px;
-
   padding-top:25px;
-
   border-top:1px solid #e5e7eb;
 }
 
 .section h2{
   margin:0 0 15px;
-
   font-size:21px;
-
   color:#111827;
+}
+
+
+/* =========================
+   人物
+========================= */
+
+.people{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+.person{
+  background:#f3f4f6;
+  border-radius:20px;
+  padding:8px 13px;
+  font-size:13px;
+}
+
+
+/* =========================
+   あらすじ
+========================= */
+
+.overview{
+  line-height:1.8;
+  font-size:15px;
+  color:#374151;
 }
 
 
@@ -270,82 +244,58 @@ header p{
 
 .provider-group-title{
   font-size:18px;
-
   font-weight:bold;
-
   margin-bottom:12px;
 }
 
 .provider-list{
   display:flex;
-
   flex-direction:column;
-
   gap:10px;
 }
 
 .provider{
   background:#f8fafc;
-
   border:1px solid #e5e7eb;
-
   border-radius:12px;
-
   padding:14px;
 }
 
 .provider-top{
   display:flex;
-
   align-items:center;
-
   gap:10px;
 }
 
 .provider-logo{
   width:42px;
   height:42px;
-
   object-fit:contain;
-
   border-radius:8px;
-
   background:#fff;
-
   border:1px solid #eee;
 }
 
 .provider-name{
   flex:1;
-
   font-weight:bold;
-
   font-size:15px;
 }
 
 .provider-type{
   margin-top:6px;
-
   color:#6b7280;
-
   font-size:13px;
 }
 
 .watch-button{
   display:inline-block;
-
   margin-top:11px;
-
   padding:10px 16px;
-
   border-radius:8px;
-
   background:#2563eb;
-
   color:#fff;
-
   font-weight:bold;
-
   font-size:14px;
 }
 
@@ -359,44 +309,34 @@ header p{
 
 .watch-button.amazon{
   background:#ff9900;
-
   color:#111;
+}
+
+.watch-button.unext{
+  background:#00a4de;
+}
+
+.watch-button.hulu{
+  background:#111;
+}
+
+.watch-button.disney{
+  background:#113ccf;
+}
+
+.watch-button.apple{
+  background:#111;
 }
 
 
 /* =========================
-   Netflix専用
+   Netflix ID
 ========================= */
 
 .netflix-id{
   margin-top:8px;
-
   font-size:12px;
-
   color:#6b7280;
-}
-
-
-/* =========================
-   人物
-========================= */
-
-.people{
-  display:flex;
-
-  flex-wrap:wrap;
-
-  gap:8px;
-}
-
-.person{
-  background:#f3f4f6;
-
-  border-radius:20px;
-
-  padding:8px 13px;
-
-  font-size:13px;
 }
 
 
@@ -406,22 +346,20 @@ header p{
 
 .series-name{
   font-size:18px;
-
   font-weight:bold;
-
   margin-bottom:15px;
 }
 
 .series{
   display:grid;
-
   grid-template-columns:
     repeat(auto-fill,minmax(140px,1fr));
-
   gap:15px;
 }
 
 .series-item{
+  display:block;
+
   background:#f9fafb;
 
   border:1px solid #e5e7eb;
@@ -446,31 +384,22 @@ header p{
 
 .series-item img{
   width:100%;
-
   aspect-ratio:2/3;
-
   object-fit:cover;
-
   border-radius:8px;
-
   background:#e5e7eb;
 }
 
 .series-item-title{
   font-size:13px;
-
   font-weight:bold;
-
   margin-top:8px;
-
   line-height:1.5;
 }
 
 .series-item-date{
   font-size:11px;
-
   color:#6b7280;
-
   margin-top:4px;
 }
 
@@ -481,17 +410,11 @@ header p{
 
 .tmdb-link{
   display:inline-block;
-
   margin-top:10px;
-
   padding:9px 14px;
-
   background:#f3f4f6;
-
   border-radius:8px;
-
   font-size:13px;
-
   font-weight:bold;
 }
 
@@ -506,11 +429,8 @@ header p{
 
 footer{
   text-align:center;
-
   padding:30px 15px;
-
   color:#9ca3af;
-
   font-size:12px;
 }
 
@@ -527,7 +447,6 @@ footer{
 
   .container{
     width:94%;
-
     margin-top:15px;
   }
 
@@ -537,13 +456,11 @@ footer{
 
   .movie-main{
     flex-direction:column;
-
     gap:18px;
   }
 
   .movie-poster{
     width:160px;
-
     height:240px;
   }
 
@@ -646,6 +563,11 @@ async function searchMovieById(id){
       JSON.parse(text);
 
   }catch(error){
+
+    console.error(
+      "JSON parse error:",
+      text
+    );
 
     throw new Error(
       "サーバーから正しいデータを取得できませんでした。"
@@ -861,23 +783,116 @@ function createDetail(movie){
           ⭐ TMDB評価 ${rating}
         </div>
 
-
-        ${
-          movie.overview
-          ?
-          `
-          <div class="overview">
-            ${escapeHtml(movie.overview)}
-          </div>
-          `
-          :
-          ""
-        }
-
       </div>
 
     </div>
     `;
+
+
+  /* =====================================================
+     監督
+     ※ あらすじより上
+  ===================================================== */
+
+  if(movie.director){
+
+    html +=
+      `
+      <section class="section">
+
+        <h2>
+          🎬 監督
+        </h2>
+
+        <div class="people">
+
+          <div class="person">
+            ${escapeHtml(
+              movie.director.name || ""
+            )}
+          </div>
+
+        </div>
+
+      </section>
+      `;
+
+  }
+
+
+  /* =====================================================
+     出演者
+     ※ あらすじより上
+  ===================================================== */
+
+  if(
+    Array.isArray(movie.cast) &&
+    movie.cast.length
+  ){
+
+    html +=
+      `
+      <section class="section">
+
+        <h2>
+          👥 出演者
+        </h2>
+
+        <div class="people">
+      `;
+
+
+    movie.cast.forEach(
+      function(person){
+
+        html +=
+          `
+          <div class="person">
+            ${escapeHtml(
+              person.name || ""
+            )}
+          </div>
+          `;
+
+      }
+    );
+
+
+    html +=
+      `
+        </div>
+
+      </section>
+      `;
+
+  }
+
+
+  /* =====================================================
+     あらすじ
+     ※ 監督・出演者の後
+  ===================================================== */
+
+  if(movie.overview){
+
+    html +=
+      `
+      <section class="section">
+
+        <h2>
+          📖 あらすじ
+        </h2>
+
+        <div class="overview">
+          ${escapeHtml(
+            movie.overview
+          )}
+        </div>
+
+      </section>
+      `;
+
+  }
 
 
   /* =========================
@@ -947,83 +962,6 @@ function createDetail(movie){
 
 
   /* =========================
-     監督
-  ========================== */
-
-  if(movie.director){
-
-    html +=
-      `
-      <section class="section">
-
-        <h2>
-          🎬 監督
-        </h2>
-
-        <div class="people">
-
-          <div class="person">
-            ${escapeHtml(
-              movie.director.name || ""
-            )}
-          </div>
-
-        </div>
-
-      </section>
-      `;
-
-  }
-
-
-  /* =========================
-     出演者
-  ========================== */
-
-  if(
-    Array.isArray(movie.cast) &&
-    movie.cast.length
-  ){
-
-    html +=
-      `
-      <section class="section">
-
-        <h2>
-          👥 出演者
-        </h2>
-
-        <div class="people">
-      `;
-
-
-    movie.cast.forEach(
-      function(person){
-
-        html +=
-          `
-          <div class="person">
-            ${escapeHtml(
-              person.name || ""
-            )}
-          </div>
-          `;
-
-      }
-    );
-
-
-    html +=
-      `
-        </div>
-
-      </section>
-      `;
-
-  }
-
-
-  /* =========================
      シリーズ
   ========================== */
 
@@ -1068,11 +1006,23 @@ function createDetail(movie){
           );
 
 
+        /*
+         * シリーズ作品の公開日は
+         * 年だけ表示
+         */
+
+        const year =
+          getYear(
+            item.release_date
+          );
+
+
         html +=
           `
           <a
             class="series-item"
             href="${detailUrl}"
+            title="${escapeHtml(item.title || "")}"
           >
 
             ${
@@ -1114,13 +1064,11 @@ function createDetail(movie){
 
 
             ${
-              item.release_date
+              year
               ?
               `
               <div class="series-item-date">
-                ${escapeHtml(
-                  formatDate(item.release_date)
-                )}
+                ${escapeHtml(year)}年
               </div>
               `
               :
@@ -1264,6 +1212,46 @@ function createProviderGroup(
       }
 
 
+      if(
+        lowerName.includes("unext")
+      ){
+
+        buttonClass +=
+          " unext";
+
+      }
+
+
+      if(
+        lowerName.includes("hulu")
+      ){
+
+        buttonClass +=
+          " hulu";
+
+      }
+
+
+      if(
+        lowerName.includes("disney")
+      ){
+
+        buttonClass +=
+          " disney";
+
+      }
+
+
+      if(
+        lowerName.includes("apple")
+      ){
+
+        buttonClass +=
+          " apple";
+
+      }
+
+
       html +=
         `
         <div class="provider">
@@ -1277,7 +1265,7 @@ function createProviderGroup(
               <img
                 class="provider-logo"
                 src="${logo}"
-                alt=""
+                alt="${escapeHtml(name)}"
               >
               `
               :
@@ -1797,7 +1785,7 @@ function createAmazonSearchUrl(title){
 
 
 /* ========================================================
-   日付
+   通常の日付
 ======================================================== */
 
 function formatDate(date){
@@ -1821,6 +1809,40 @@ function formatDate(date){
     Number(parts[2]) +
     "日"
   );
+
+}
+
+
+/* ========================================================
+   シリーズ用 年だけ
+======================================================== */
+
+function getYear(date){
+
+  if(
+    typeof date !== "string" ||
+    !date
+  ){
+
+    return "";
+
+  }
+
+
+  const match =
+    date.match(
+      /^(\d{4})/
+    );
+
+
+  if(!match){
+
+    return "";
+
+  }
+
+
+  return match[1];
 
 }
 
