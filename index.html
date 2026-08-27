@@ -3,8 +3,13 @@
 <html lang="ja">
 
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
 
 <title>ドコデミレル？｜映画配信検索</title>
 
@@ -31,10 +36,6 @@ a{
   text-decoration:none;
 }
 
-/* =========================
-   ヘッダー
-========================= */
-
 header{
   background:#111827;
   color:#fff;
@@ -54,18 +55,10 @@ header p{
   font-size:14px;
 }
 
-/* =========================
-   全体
-========================= */
-
 .container{
   width:min(1000px,94%);
   margin:25px auto 50px;
 }
-
-/* =========================
-   検索
-========================= */
 
 .search-box{
   background:#fff;
@@ -117,10 +110,6 @@ header p{
   cursor:wait;
 }
 
-/* =========================
-   状態
-========================= */
-
 .status{
   text-align:center;
   padding:20px;
@@ -143,18 +132,10 @@ header p{
   color:#6b7280;
 }
 
-/* =========================
-   検索結果
-========================= */
-
 .results{
   display:grid;
   gap:18px;
 }
-
-/* =========================
-   映画カード
-========================= */
 
 .movie-card{
   background:#fff;
@@ -204,16 +185,12 @@ header p{
   margin:13px 0;
 }
 
-/* =========================
-   詳細ボタン
-========================= */
-
 .detail-button{
   display:inline-block;
   margin-top:5px;
   border:0;
   border-radius:9px;
-  padding:10px 18px;
+  padding:11px 20px;
   background:#111827;
   color:#fff;
   cursor:pointer;
@@ -225,20 +202,12 @@ header p{
   background:#374151;
 }
 
-/* =========================
-   フッター
-========================= */
-
 footer{
   text-align:center;
   padding:30px 15px;
   color:#9ca3af;
   font-size:12px;
 }
-
-/* =========================
-   スマホ
-========================= */
 
 @media(max-width:700px){
 
@@ -270,6 +239,7 @@ footer{
 }
 
 </style>
+
 </head>
 
 <body>
@@ -323,10 +293,6 @@ footer{
 
 <script>
 
-/* =========================================================
-   要素
-========================================================= */
-
 const queryInput =
   document.getElementById("query");
 
@@ -372,14 +338,20 @@ async function searchMovies(){
 
   try{
 
+    const apiUrl =
+      "/api/search?query=" +
+      encodeURIComponent(query);
+
     const response =
-      await fetch(
-        "/api/search?query=" +
-        encodeURIComponent(query)
-      );
+      await fetch(apiUrl);
 
     const text =
       await response.text();
+
+    console.log(
+      "API response:",
+      text
+    );
 
     let data;
 
@@ -389,11 +361,6 @@ async function searchMovies(){
         JSON.parse(text);
 
     }catch(error){
-
-      console.error(
-        "JSON parse error:",
-        text
-      );
 
       throw new Error(
         "サーバーから正しいデータを取得できませんでした。"
@@ -420,9 +387,11 @@ async function searchMovies(){
     if(!movies.length){
 
       results.innerHTML =
-        '<div class="empty">' +
-        '映画が見つかりませんでした。' +
-        '</div>';
+        `
+        <div class="empty">
+          映画が見つかりませんでした。
+        </div>
+        `;
 
       return;
     }
@@ -440,13 +409,15 @@ async function searchMovies(){
     );
 
     status.innerHTML =
-      '<div class="error">' +
-      '❌ ' +
-      escapeHtml(
-        error.message ||
-        "サーバーエラーが発生しました。"
-      ) +
-      '</div>';
+      `
+      <div class="error">
+        ❌
+        ${escapeHtml(
+          error.message ||
+          "サーバーエラーが発生しました。"
+        )}
+      </div>
+      `;
 
   }finally{
 
@@ -480,16 +451,20 @@ function createMovieCard(movie){
 
 
   /*
-   * ここが重要です。
-   *
-   * 小窓は使いません。
-   *
-   * detail.html に映画IDを渡します。
+   * TMDBの映画IDを必ず取得
+   */
+
+  const movieId =
+    String(movie.id || "").trim();
+
+
+  /*
+   * 作品詳細ページ
    */
 
   const detailUrl =
-    "detail.html?id=" +
-    encodeURIComponent(movie.id);
+    "./detail.html?id=" +
+    encodeURIComponent(movieId);
 
 
   return `
@@ -542,7 +517,8 @@ function createMovieCard(movie){
         }
 
         <div class="meta">
-          公開日：${escapeHtml(release)}
+          公開日：
+          ${escapeHtml(release)}
         </div>
 
         <div class="meta">
@@ -561,12 +537,24 @@ function createMovieCard(movie){
           ""
         }
 
-        <a
-          class="detail-button"
-          href="${detailUrl}"
-        >
-          作品詳細を見る →
-        </a>
+        ${
+          movieId
+          ?
+          `
+          <a
+            class="detail-button"
+            href="${detailUrl}"
+          >
+            作品詳細を見る →
+          </a>
+          `
+          :
+          `
+          <div class="error">
+            作品IDを取得できませんでした。
+          </div>
+          `
+        }
 
       </div>
 
@@ -621,7 +609,7 @@ function escapeHtml(value){
 
 
 /* =========================================================
-   Enterキー
+   Enter
 ========================================================= */
 
 queryInput.addEventListener(
@@ -650,5 +638,6 @@ searchButton.addEventListener(
 </script>
 
 </body>
+
 </html>
 ```
