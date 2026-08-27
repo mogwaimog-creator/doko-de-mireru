@@ -128,16 +128,6 @@ input:focus{
   box-shadow:
     0 3px 15px
     rgba(0,0,0,.06);
-  transition:
-    transform .2s,
-    box-shadow .2s;
-}
-
-.movie-card:hover{
-  transform:translateY(-2px);
-  box-shadow:
-    0 8px 25px
-    rgba(0,0,0,.12);
 }
 
 .movie-poster{
@@ -214,8 +204,6 @@ input:focus{
   text-decoration:none;
   border-radius:8px;
   font-weight:bold;
-  cursor:pointer;
-  border:0;
 }
 
 .detail-button:hover{
@@ -627,7 +615,7 @@ input:focus{
 
 <button
   class="search-button"
-  onclick="searchMovie()"
+  id="searchButton"
 >
 🔍 検索
 </button>
@@ -656,6 +644,10 @@ document.addEventListener(
     const input =
       document.getElementById("movie");
 
+    const button =
+      document.getElementById("searchButton");
+
+
     input.addEventListener(
       "keydown",
       function(event){
@@ -671,6 +663,17 @@ document.addEventListener(
       }
     );
 
+
+    button.addEventListener(
+      "click",
+      function(){
+
+        searchMovie();
+
+      }
+    );
+
+
     const params =
       new URLSearchParams(
         window.location.search
@@ -678,6 +681,7 @@ document.addEventListener(
 
     const movieId =
       params.get("id");
+
 
     if(movieId){
 
@@ -713,11 +717,12 @@ async function searchMovie(){
   const movieInput =
     document.getElementById("movie");
 
+  const result =
+    document.getElementById("result");
+
   const movie =
     movieInput.value.trim();
 
-  const result =
-    document.getElementById("result");
 
   if(!movie){
 
@@ -730,35 +735,45 @@ async function searchMovie(){
 
   }
 
+
   lastSearchQuery =
     movie;
 
-  const cleanUrl =
-    window.location.pathname;
 
   window.history.pushState(
     {
       page:"search"
     },
     "",
-    cleanUrl
+    window.location.pathname
   );
+
 
   result.innerHTML =
     "<div class='loading'>" +
     "🔍 映画を検索しています……" +
     "</div>";
 
+
   try{
 
     const response =
       await fetch(
         "/api/search?query=" +
-        encodeURIComponent(movie)
+        encodeURIComponent(movie),
+        {
+          method:"GET",
+          headers:{
+            "Accept":
+              "application/json"
+          }
+        }
       );
+
 
     const data =
       await response.json();
+
 
     if(!response.ok){
 
@@ -769,9 +784,11 @@ async function searchMovie(){
 
     }
 
+
     if(
-      !data.results ||
-      !data.results.length
+      !data ||
+      !Array.isArray(data.results) ||
+      data.results.length === 0
     ){
 
       result.innerHTML =
@@ -783,7 +800,9 @@ async function searchMovie(){
 
     }
 
+
     let html = "";
+
 
     html +=
       "<h2 class='result-title'>" +
@@ -794,32 +813,41 @@ async function searchMovie(){
       "件" +
       "</h2>";
 
+
     data.results.forEach(
-      function(movie){
+      function(item){
 
         html +=
-          createMovieCard(movie);
+          createMovieCard(item);
 
       }
     );
 
+
     result.innerHTML =
       html;
+
 
     window.scrollTo({
       top:0,
       behavior:"smooth"
     });
 
+
   }catch(error){
 
-    console.error(error);
+    console.error(
+      "検索エラー:",
+      error
+    );
+
 
     result.innerHTML =
       "<div class='error'>" +
       "❌ " +
       escapeHtml(
-        error.message
+        error.message ||
+        "検索中にエラーが発生しました"
       ) +
       "</div>";
 
@@ -837,17 +865,22 @@ function createMovieCard(movie){
   let html =
     "<div class='movie-card'>";
 
+
   if(movie.poster_path){
 
     html +=
       "<img " +
       "class='movie-poster' " +
-      "src='" +
-      "https://image.tmdb.org/t/p/w500" +
-      escapeAttribute(movie.poster_path) +
+      "src='https://image.tmdb.org/t/p/w500" +
+      escapeAttribute(
+        movie.poster_path
+      ) +
       "' " +
       "alt='" +
-      escapeAttribute(movie.title) +
+      escapeAttribute(
+        movie.title ||
+        ""
+      ) +
       "'>";
 
   }else{
@@ -859,8 +892,10 @@ function createMovieCard(movie){
 
   }
 
+
   html +=
     "<div class='movie-info'>";
+
 
   html +=
     "<h3 class='movie-title'>" +
@@ -869,6 +904,7 @@ function createMovieCard(movie){
       "タイトル不明"
     ) +
     "</h3>";
+
 
   if(movie.original_title){
 
@@ -881,18 +917,22 @@ function createMovieCard(movie){
 
   }
 
+
   if(movie.release_date){
 
     html +=
       "<span class='movie-year'>" +
       "📅 " +
       escapeHtml(
-        movie.release_date.substring(0,4)
+        String(
+          movie.release_date
+        ).substring(0,4)
       ) +
       "年" +
       "</span>";
 
   }
+
 
   if(
     movie.vote_average !== undefined &&
@@ -911,6 +951,7 @@ function createMovieCard(movie){
 
   }
 
+
   if(movie.overview){
 
     html +=
@@ -921,6 +962,7 @@ function createMovieCard(movie){
       "</p>";
 
   }
+
 
   html +=
     "<a " +
@@ -933,11 +975,14 @@ function createMovieCard(movie){
     "▶ 詳細を見る" +
     "</a>";
 
-  html +=
-    "</div>";
 
   html +=
     "</div>";
+
+
+  html +=
+    "</div>";
+
 
   return html;
 
@@ -945,7 +990,7 @@ function createMovieCard(movie){
 
 
 /* =========================================================
-   詳細画面
+   詳細ページ
 ========================================================= */
 
 async function searchMovieById(
@@ -955,6 +1000,7 @@ async function searchMovieById(
 
   const result =
     document.getElementById("result");
+
 
   if(!movieId){
 
@@ -967,12 +1013,8 @@ async function searchMovieById(
 
   }
 
-  if(updateUrl){
 
-    const newUrl =
-      window.location.pathname +
-      "?id=" +
-      encodeURIComponent(movieId);
+  if(updateUrl){
 
     window.history.pushState(
       {
@@ -980,26 +1022,39 @@ async function searchMovieById(
         id:String(movieId)
       },
       "",
-      newUrl
+      window.location.pathname +
+      "?id=" +
+      encodeURIComponent(movieId)
     );
 
   }
+
 
   result.innerHTML =
     "<div class='loading'>" +
     "🔍 作品情報を読み込んでいます……" +
     "</div>";
 
+
   try{
 
     const response =
       await fetch(
         "/api/search?id=" +
-        encodeURIComponent(movieId)
+        encodeURIComponent(movieId),
+        {
+          method:"GET",
+          headers:{
+            "Accept":
+              "application/json"
+          }
+        }
       );
+
 
     const data =
       await response.json();
+
 
     if(!response.ok){
 
@@ -1010,17 +1065,24 @@ async function searchMovieById(
 
     }
 
+
     renderDetailPage(data);
+
 
   }catch(error){
 
-    console.error(error);
+    console.error(
+      "詳細取得エラー:",
+      error
+    );
+
 
     result.innerHTML =
       "<div class='error'>" +
       "❌ " +
       escapeHtml(
-        error.message
+        error.message ||
+        "作品情報を取得できませんでした"
       ) +
       "</div>";
 
@@ -1030,7 +1092,7 @@ async function searchMovieById(
 
 
 /* =========================================================
-   詳細ページ
+   詳細ページ表示
 ========================================================= */
 
 function renderDetailPage(data){
@@ -1038,8 +1100,10 @@ function renderDetailPage(data){
   const result =
     document.getElementById("result");
 
+
   let html =
     "<div class='detail-card'>";
+
 
   html +=
     "<div " +
@@ -1048,30 +1112,34 @@ function renderDetailPage(data){
     "← 検索結果に戻る" +
     "</div>";
 
+
   html +=
     "<div class='detail-header'>";
+
 
   if(data.poster_path){
 
     html +=
       "<img " +
       "class='detail-poster' " +
-      "src='" +
-      "https://image.tmdb.org/t/p/w500" +
+      "src='https://image.tmdb.org/t/p/w500" +
       escapeAttribute(
         data.poster_path
       ) +
       "' " +
       "alt='" +
       escapeAttribute(
-        data.title
+        data.title ||
+        ""
       ) +
       "'>";
 
   }
 
+
   html +=
     "<div class='detail-info'>";
+
 
   html +=
     "<h2 class='detail-title'>" +
@@ -1081,6 +1149,7 @@ function renderDetailPage(data){
       "タイトル不明"
     ) +
     "</h2>";
+
 
   if(data.original_title){
 
@@ -1093,8 +1162,10 @@ function renderDetailPage(data){
 
   }
 
+
   html +=
     "<div class='detail-meta'>";
+
 
   if(data.release_date){
 
@@ -1108,8 +1179,9 @@ function renderDetailPage(data){
 
   }
 
+
   if(
-    data.genres &&
+    Array.isArray(data.genres) &&
     data.genres.length
   ){
 
@@ -1131,8 +1203,10 @@ function renderDetailPage(data){
 
   }
 
+
   html +=
     "</div>";
+
 
   if(
     data.vote_average !== undefined &&
@@ -1151,21 +1225,24 @@ function renderDetailPage(data){
 
   }
 
+
   if(data.director){
 
     html +=
       "<p>" +
       "🎬 監督：<strong>" +
       escapeHtml(
-        data.director.name || ""
+        data.director.name ||
+        ""
       ) +
       "</strong>" +
       "</p>";
 
   }
 
+
   if(
-    data.cast &&
+    Array.isArray(data.cast) &&
     data.cast.length
   ){
 
@@ -1178,7 +1255,8 @@ function renderDetailPage(data){
           function(person){
 
             return escapeHtml(
-              person.name || ""
+              person.name ||
+              ""
             );
 
           }
@@ -1188,16 +1266,20 @@ function renderDetailPage(data){
 
   }
 
+
   html +=
     createLanguageBox(
       data.language
     );
 
-  html +=
-    "</div>";
 
   html +=
     "</div>";
+
+
+  html +=
+    "</div>";
+
 
   if(data.overview){
 
@@ -1218,10 +1300,16 @@ function renderDetailPage(data){
 
   }
 
+
+  /* =====================================================
+     配信情報
+  ===================================================== */
+
   html +=
     "<div class='detail-section'>" +
 
     "<h3>📺 この作品はどこで見られる？</h3>";
+
 
   html +=
     "<div class='service-group'>" +
@@ -1239,6 +1327,7 @@ function renderDetailPage(data){
 
     "</div>";
 
+
   html +=
     "<div class='service-group'>" +
 
@@ -1255,6 +1344,7 @@ function renderDetailPage(data){
 
     "</div>";
 
+
   html +=
     "<div class='service-group'>" +
 
@@ -1270,6 +1360,7 @@ function renderDetailPage(data){
     ) +
 
     "</div>";
+
 
   if(data.link){
 
@@ -1288,8 +1379,22 @@ function renderDetailPage(data){
 
   }
 
+
   html +=
     "</div>";
+
+
+  /* =====================================================
+     Netflix情報の確認用
+  ===================================================== */
+
+  /*
+   * Netflix作品IDがAPIから返っている場合は
+   * 画面上には余計なIDを表示しません。
+   *
+   * ボタン生成時にのみ使用します。
+   */
+
 
   /* =====================================================
      シリーズ
@@ -1308,6 +1413,7 @@ function renderDetailPage(data){
 
       "<h3>🎞️ シリーズ作品</h3>";
 
+
     if(data.series.name){
 
       html +=
@@ -1319,8 +1425,10 @@ function renderDetailPage(data){
 
     }
 
+
     html +=
       "<div class='series-list'>";
+
 
     const sortedSeries =
       [...data.series.movies]
@@ -1342,6 +1450,7 @@ function renderDetailPage(data){
           }
         );
 
+
     sortedSeries.forEach(
       function(seriesMovie){
 
@@ -1355,6 +1464,7 @@ function renderDetailPage(data){
 
         }
 
+
         html +=
           "<a " +
           "class='series-item' " +
@@ -1364,15 +1474,13 @@ function renderDetailPage(data){
           ) +
           "'>";
 
-        if(
-          seriesMovie.poster_path
-        ){
+
+        if(seriesMovie.poster_path){
 
           html +=
             "<img " +
             "class='series-poster' " +
-            "src='" +
-            "https://image.tmdb.org/t/p/w200" +
+            "src='https://image.tmdb.org/t/p/w200" +
             escapeAttribute(
               seriesMovie.poster_path
             ) +
@@ -1386,13 +1494,14 @@ function renderDetailPage(data){
         }else{
 
           html +=
-            "<div class='series-poster'>" +
-            "</div>";
+            "<div class='series-poster'></div>";
 
         }
 
+
         html +=
           "<div class='series-info'>";
+
 
         html +=
           "<div class='series-title'>" +
@@ -1401,23 +1510,25 @@ function renderDetailPage(data){
           ) +
           "</div>";
 
-        if(
-          seriesMovie.release_date
-        ){
+
+        if(seriesMovie.release_date){
 
           html +=
             "<div class='series-year'>" +
             escapeHtml(
-              seriesMovie.release_date
-                .substring(0,4)
+              String(
+                seriesMovie.release_date
+              ).substring(0,4)
             ) +
             "年" +
             "</div>";
 
         }
 
+
         html +=
           "</div>";
+
 
         html +=
           "</a>";
@@ -1425,18 +1536,21 @@ function renderDetailPage(data){
       }
     );
 
+
     html +=
       "</div>" +
-
       "</div>";
 
   }
 
+
   html +=
     "</div>";
 
+
   result.innerHTML =
     html;
+
 
   window.scrollTo({
     top:0,
@@ -1447,29 +1561,36 @@ function renderDetailPage(data){
 
 
 /* =========================================================
-   戻る
+   検索結果へ戻る
 ========================================================= */
 
 function backToSearchResults(){
 
-  if(
-    window.history.length > 1 &&
-    lastSearchQuery
-  ){
-
-    window.history.back();
-
-    return;
-
-  }
-
   if(lastSearchQuery){
+
+    window.history.pushState(
+      {
+        page:"search"
+      },
+      "",
+      window.location.pathname
+    );
+
+
+    const input =
+      document.getElementById("movie");
+
+
+    input.value =
+      lastSearchQuery;
+
 
     searchMovie();
 
     return;
 
   }
+
 
   goHome();
 
@@ -1490,17 +1611,21 @@ function createLanguageBox(
 
   }
 
+
   const original =
     language.original_language ||
     null;
+
 
   const subtitle =
     language.subtitle ||
     null;
 
+
   const dubbing =
     language.dubbing ||
     null;
+
 
   if(
     !original &&
@@ -1512,13 +1637,16 @@ function createLanguageBox(
 
   }
 
+
   let html =
     "<div class='language-box'>";
+
 
   html +=
     "<div class='language-title'>" +
     "🗣️ 字幕・吹き替え" +
     "</div>";
+
 
   if(original){
 
@@ -1531,6 +1659,7 @@ function createLanguageBox(
       "</span>";
 
   }
+
 
   if(subtitle){
 
@@ -1546,6 +1675,7 @@ function createLanguageBox(
 
   }
 
+
   if(dubbing){
 
     html +=
@@ -1560,8 +1690,10 @@ function createLanguageBox(
 
   }
 
+
   html +=
     "</div>";
+
 
   return html;
 
@@ -1586,6 +1718,7 @@ function getLanguageName(code){
 
   };
 
+
   return (
     languages[code] ||
     code
@@ -1603,6 +1736,7 @@ function formatLanguageValue(value){
     );
 
   }
+
 
   return String(value);
 
@@ -1633,10 +1767,13 @@ function createServiceCards(
 
   }
 
+
   let html =
     "<div class='service-grid'>";
 
+
   const used = {};
+
 
   services.forEach(
     function(service){
@@ -1647,6 +1784,7 @@ function createServiceCards(
 
       }
 
+
       const providerName =
         service.provider_name ||
         service.name ||
@@ -1654,20 +1792,19 @@ function createServiceCards(
         service.clearName ||
         "";
 
-      if(
-        !providerName ||
-        providerName === "undefined" ||
-        providerName === "null"
-      ){
+
+      if(!providerName){
 
         return;
 
       }
 
+
       const cleanProviderName =
         String(
           providerName
         ).trim();
+
 
       if(!cleanProviderName){
 
@@ -1675,9 +1812,11 @@ function createServiceCards(
 
       }
 
+
       const key =
         cleanProviderName
           .toLowerCase();
+
 
       if(used[key]){
 
@@ -1685,12 +1824,15 @@ function createServiceCards(
 
       }
 
+
       used[key] = true;
+
 
       const serviceInfo =
         getServiceInfo(
           cleanProviderName
         );
+
 
       const url =
         getServiceUrl(
@@ -1699,6 +1841,14 @@ function createServiceCards(
           service,
           movieData
         );
+
+
+      if(!url){
+
+        return;
+
+      }
+
 
       let statusText =
         "見放題";
@@ -1712,6 +1862,7 @@ function createServiceCards(
 
       let buttonBackground =
         "#2563eb";
+
 
       if(type === "rental"){
 
@@ -1730,6 +1881,7 @@ function createServiceCards(
 
       }
 
+
       if(type === "purchase"){
 
         statusText =
@@ -1747,80 +1899,69 @@ function createServiceCards(
 
       }
 
+
       html +=
         "<div class='service-card'>";
+
 
       html +=
         "<div class='service-logo-row'>" +
 
-          "<div " +
-          "class='service-logo' " +
-          "style='background:" +
-          escapeAttribute(
-            serviceInfo.background
-          ) +
-          "'>" +
+        "<div " +
+        "class='service-logo' " +
+        "style='background:" +
+        escapeAttribute(
+          serviceInfo.background
+        ) +
+        "'>" +
 
-            escapeHtml(
-              serviceInfo.logo
-            ) +
+        escapeHtml(
+          serviceInfo.logo
+        ) +
 
-          "</div>" +
+        "</div>" +
 
-          "<div class='service-name'>" +
+        "<div class='service-name'>" +
 
-            escapeHtml(
-              cleanProviderName
-            ) +
+        escapeHtml(
+          cleanProviderName
+        ) +
 
-          "</div>" +
+        "</div>" +
 
         "</div>";
 
+
       html +=
-        "<div " +
-        "class='service-status " +
+        "<div class='service-status " +
         statusClass +
         "'>" +
 
-          escapeHtml(
-            statusText
-          ) +
+        escapeHtml(
+          statusText
+        ) +
 
         "</div>";
 
-      /*
-       * URLが取得できた場合だけボタンを表示
-       */
 
-      if(isUsableUrl(url)){
+      html +=
+        "<a " +
+        "class='service-watch-button' " +
+        "href='" +
+        escapeAttribute(url) +
+        "' " +
+        "target='_blank' " +
+        "rel='noopener noreferrer' " +
+        "style='background:" +
+        buttonBackground +
+        "'>" +
 
-        html +=
-          "<a " +
-          "class='service-watch-button' " +
-          "href='" +
-          escapeAttribute(url) +
-          "' " +
-          "target='_blank' " +
-          "rel='noopener noreferrer' " +
-          "style='background:" +
-          buttonBackground +
-          "'>" +
+        escapeHtml(
+          buttonText
+        ) +
 
-            escapeHtml(
-              buttonText
-            ) +
+        "</a>";
 
-          "</a>";
-
-      }else{
-
-        html +=
-          "<div class='no-service'>" +
-          "視聴ページを取得できませんでした" +
-          "</div>";
-
-      }
 
       html +=
         "</div>";
@@ -1828,11 +1969,15 @@ function createServiceCards(
     }
   );
 
+
   html +=
     "</div>";
 
+
   if(
-    !html.includes("service-card")
+    !html.includes(
+      "service-card"
+    )
   ){
 
     return (
@@ -1843,14 +1988,11 @@ function createServiceCards(
 
   }
 
+
   return html;
 
 }
 
-
-/* =========================================================
-   配信URL
-========================================================= */
 
 /* =========================================================
    配信URL
@@ -1871,12 +2013,16 @@ function getServiceUrl(
 
   /* =====================================================
      Netflix
-     最優先でAPIから取得したNetflix作品IDを使用
   ===================================================== */
 
   if(
     name.includes("netflix")
   ){
+
+    /*
+     * 最優先
+     * APIから返ってきたNetflix作品ID
+     */
 
     const netflixId =
       getNetflixTitleId(
@@ -1884,11 +2030,6 @@ function getServiceUrl(
         movieData
       );
 
-
-    /*
-     * Netflix作品IDが取得できた場合
-     * 必ず作品ページへ直接移動
-     */
 
     if(netflixId){
 
@@ -1903,7 +2044,7 @@ function getServiceUrl(
 
 
     /*
-     * Netflix作品URLがAPIから取得できている場合
+     * APIからNetflix作品URLが返ってきた場合
      */
 
     const netflixUrls = [
@@ -1930,15 +2071,13 @@ function getServiceUrl(
       i++
     ){
 
-      const url =
-        netflixUrls[i];
-
-
       if(
-        isNetflixTitleUrl(url)
+        isNetflixTitleUrl(
+          netflixUrls[i]
+        )
       ){
 
-        return url;
+        return netflixUrls[i];
 
       }
 
@@ -1946,8 +2085,7 @@ function getServiceUrl(
 
 
     /*
-     * どうしても作品URLが取得できない場合
-     * Netflix検索へ
+     * IDがない場合のみ検索ページへ
      */
 
     return (
@@ -2143,6 +2281,18 @@ function getServiceUrl(
     }
 
 
+    if(
+      service &&
+      isUsableUrl(
+        service.watch_link
+      )
+    ){
+
+      return service.watch_link;
+
+    }
+
+
     return (
       "https://tv.apple.com/jp/search?term=" +
       encodeURIComponent(title)
@@ -2171,6 +2321,18 @@ function getServiceUrl(
     }
 
 
+    if(
+      service &&
+      isUsableUrl(
+        service.watch_link
+      )
+    ){
+
+      return service.watch_link;
+
+    }
+
+
     return (
       "https://fod.fujitv.co.jp/search/?keyword=" +
       encodeURIComponent(title)
@@ -2195,6 +2357,18 @@ function getServiceUrl(
     ){
 
       return service.provider_url;
+
+    }
+
+
+    if(
+      service &&
+      isUsableUrl(
+        service.watch_link
+      )
+    ){
+
+      return service.watch_link;
 
     }
 
@@ -2249,18 +2423,13 @@ function getServiceUrl(
 
 
 /* =========================================================
-   Netflix作品ID
+   Netflix作品ID取得
 ========================================================= */
 
 function getNetflixTitleId(
   service,
   movieData
 ){
-
-  /*
-   * APIから返ってくる可能性のある
-   * Netflix作品IDを全部確認
-   */
 
   const candidates = [
 
@@ -2298,10 +2467,6 @@ function getNetflixTitleId(
   ];
 
 
-  /*
-   * 数字のIDを探す
-   */
-
   for(
     let i = 0;
     i < candidates.length;
@@ -2326,10 +2491,6 @@ function getNetflixTitleId(
 
   }
 
-
-  /*
-   * Netflix URLからIDを探す
-   */
 
   const urls = [
 
@@ -2382,7 +2543,7 @@ function getNetflixTitleId(
 
 
 /* =========================================================
-   Netflix URLから作品ID取得
+   Netflix URL → ID
 ========================================================= */
 
 function extractNetflixTitleId(
@@ -2464,7 +2625,7 @@ function isNetflixTitleUrl(
 
 
 /* =========================================================
-   使用可能なURLか判定
+   URL判定
 ========================================================= */
 
 function isUsableUrl(
@@ -2478,206 +2639,14 @@ function isUsableUrl(
 
 }
 
-  const candidates = [
-
-    service &&
-    service.netflix_title_id,
-
-    service &&
-    service.netflix_id,
-
-    service &&
-    service.title_id,
-
-    service &&
-    service.netflixTitleId,
-
-    service &&
-    service.netflixTitleID,
-
-    movieData &&
-    movieData.netflix_title_id,
-
-    movieData &&
-    movieData.netflix_id,
-
-    movieData &&
-    movieData.netflixTitleId,
-
-    movieData &&
-    movieData.netflixTitleID,
-
-    movieData &&
-    movieData.netflix &&
-    movieData.netflix.title_id
-
-  ];
-
-  for(
-    let i=0;
-    i<candidates.length;
-    i++
-  ){
-
-    const value =
-      candidates[i];
-
-    if(
-      value !== undefined &&
-      value !== null &&
-      /^\d+$/.test(
-        String(value)
-      )
-    ){
-
-      return String(value);
-
-    }
-
-  }
-
-
-  const urls = [
-
-    service &&
-    service.netflix_url,
-
-    service &&
-    service.watch_link,
-
-    service &&
-    service.provider_url,
-
-    movieData &&
-    movieData.netflix_url,
-
-    movieData &&
-    movieData.netflix_link,
-
-    movieData &&
-    movieData.netflix &&
-    movieData.netflix.url
-
-  ];
-
-  for(
-    let i=0;
-    i<urls.length;
-    i++
-  ){
-
-    const id =
-      extractNetflixTitleId(
-        urls[i]
-      );
-
-    if(id){
-
-      return id;
-
-    }
-
-  }
-
-  return null;
-
-}
-
 
 /* =========================================================
-   Netflix URLから作品ID取得
+   サービス情報
 ========================================================= */
 
-function extractNetflixTitleId(url){
-
-  if(
-    typeof url !== "string" ||
-    !url
-  ){
-
-    return null;
-
-  }
-
-  const patterns = [
-
-    /netflix\.com\/(?:jp\/)?title\/(\d+)/i,
-
-    /netflix\.com\/(?:[^/]+\/)?title\/(\d+)/i,
-
-    /netflix\.com\/(?:jp\/)?watch\/(\d+)/i,
-
-    /netflix\.com\/watch\/(\d+)/i
-
-  ];
-
-  for(
-    let i=0;
-    i<patterns.length;
-    i++
-  ){
-
-    const match =
-      url.match(
-        patterns[i]
-      );
-
-    if(match){
-
-      return match[1];
-
-    }
-
-  }
-
-  return null;
-
-}
-
-
-/* =========================================================
-   Netflix作品URL判定
-========================================================= */
-
-function isNetflixTitleUrl(url){
-
-  if(
-    typeof url !== "string"
-  ){
-
-    return false;
-
-  }
-
-  return (
-    /^https?:\/\/(?:www\.)?netflix\.com\/(?:[^/]+\/)?title\/\d+/i
-      .test(url)
-  );
-
-}
-
-
-/* =========================================================
-   URL判定
-========================================================= */
-
-function isUsableUrl(url){
-
-  return (
-    typeof url === "string" &&
-    /^https?:\/\//i.test(
-      url
-    )
-  );
-
-}
-
-
-/* =========================================================
-   サービスロゴ
-========================================================= */
-
-function getServiceInfo(providerName){
+function getServiceInfo(
+  providerName
+){
 
   const name =
     String(
@@ -2685,17 +2654,12 @@ function getServiceInfo(providerName){
     ).toLowerCase();
 
 
-  if(
-    name.includes("netflix")
-  ){
+  if(name.includes("netflix")){
 
     return {
-
       logo:"N",
-
       background:
         "linear-gradient(135deg,#111,#b91c1c)"
-
     };
 
   }
@@ -2707,120 +2671,84 @@ function getServiceInfo(providerName){
   ){
 
     return {
-
       logo:"▶",
-
       background:
         "linear-gradient(135deg,#0f172a,#0284c7)"
-
     };
 
   }
 
 
-  if(
-    name.includes("u-next")
-  ){
+  if(name.includes("u-next")){
 
     return {
-
       logo:"U",
-
       background:
         "linear-gradient(135deg,#111827,#7c3aed)"
-
     };
 
   }
 
 
-  if(
-    name.includes("hulu")
-  ){
+  if(name.includes("hulu")){
 
     return {
-
       logo:"H",
-
       background:
         "linear-gradient(135deg,#064e3b,#16a34a)"
-
     };
 
   }
 
 
-  if(
-    name.includes("disney")
-  ){
+  if(name.includes("disney")){
 
     return {
-
       logo:"D+",
-
       background:
         "linear-gradient(135deg,#172554,#2563eb)"
-
     };
 
   }
 
 
-  if(
-    name.includes("apple")
-  ){
+  if(name.includes("apple")){
 
     return {
-
       logo:"",
-
       background:
         "linear-gradient(135deg,#111827,#4b5563)"
-
     };
 
   }
 
 
-  if(
-    name.includes("fod")
-  ){
+  if(name.includes("fod")){
 
     return {
-
       logo:"F",
-
       background:
         "linear-gradient(135deg,#7f1d1d,#dc2626)"
-
     };
 
   }
 
 
-  if(
-    name.includes("google")
-  ){
+  if(name.includes("google")){
 
     return {
-
       logo:"G",
-
       background:
         "linear-gradient(135deg,#1d4ed8,#16a34a)"
-
     };
 
   }
 
 
   return {
-
     logo:"▶",
-
     background:
       "linear-gradient(135deg,#374151,#6b7280)"
-
   };
 
 }
@@ -2841,13 +2769,16 @@ function escapeHtml(text){
 
   }
 
+
   const div =
     document.createElement(
       "div"
     );
 
+
   div.textContent =
     String(text);
+
 
   return div.innerHTML;
 
@@ -2868,6 +2799,7 @@ function escapeAttribute(text){
     return "";
 
   }
+
 
   return String(text)
 
@@ -2912,8 +2844,10 @@ window.addEventListener(
         window.location.search
       );
 
+
     const movieId =
       params.get("id");
+
 
     if(movieId){
 
@@ -2925,6 +2859,16 @@ window.addEventListener(
     }else{
 
       if(lastSearchQuery){
+
+        const input =
+          document.getElementById(
+            "movie"
+          );
+
+
+        input.value =
+          lastSearchQuery;
+
 
         searchMovie();
 
