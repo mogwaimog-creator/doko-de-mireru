@@ -12,1066 +12,467 @@ content="width=device-width, initial-scale=1.0"
 
 >
 
+<!-- =========================
+     基本SEO
+========================= -->
+
+<title>作品情報 | ドコデミレル？</title>
+
+<meta
+name="description"
+content="映画やアニメがどこで見られるかを検索できる「ドコデミレル？」の作品詳細ページです。Netflix、Amazon Prime Video、U-NEXTなどの配信情報を確認できます。"
+
+>
+
+<meta
+name="robots"
+content="index,follow,max-image-preview:large"
+
+>
+
+<meta
+name="googlebot"
+content="index,follow"
+
+>
+
+<meta name="author" content="ドコデミレル？">
+
+<link
+  id="canonicalLink"
+  rel="canonical"
+  href=""
+>
+
+<!-- =========================
+     OGP
+========================= -->
+
+<meta
+property="og:type"
+content="video.movie"
+
+>
+
+<meta
+id="ogTitle"
+property="og:title"
+content="作品情報 | ドコデミレル？"
+
+>
+
+<meta
+id="ogDescription"
+property="og:description"
+content="映画やアニメの配信情報を確認できます。"
+
+>
+
+<meta
+id="ogUrl"
+property="og:url"
+content=""
+
+>
+
+<meta
+id="ogImage"
+property="og:image"
+content=""
+
+>
+
+<meta
+property="og:site_name"
+content="ドコデミレル？"
+
+>
+
+<meta
+property="og:locale"
+content="ja_JP"
+
+>
+
+<!-- =========================
+     Twitter / X
+========================= -->
+
+<meta
+name="twitter:card"
+content="summary_large_image"
+
+>
+
+<meta
+id="twitterTitle"
+name="twitter:title"
+content="作品情報 | ドコデミレル？"
+
+>
+
+<meta
+id="twitterDescription"
+name="twitter:description"
+content="映画やアニメの配信情報を確認できます。"
+
+>
+
+<meta
+id="twitterImage"
+name="twitter:image"
+content=""
+
+>
+
+<!-- =========================
+     JSON-LD
+========================= -->
+
+<script
+  id="movieStructuredData"
+  type="application/ld+json"
+>
+{
+  "@context": "https://schema.org",
+  "@type": "Movie",
+  "name": "作品情報",
+  "url": "",
+  "description": "映画やアニメの配信情報を確認できます。"
+}
+</script>
+
 <title>作品情報 | ドコデミレル？</title>
 
 <style>
-
-/* =====================================================
-   基本
-===================================================== */
 
 *{
   box-sizing:border-box;
 }
 
+html{
+  scroll-behavior:smooth;
+}
+
 body{
   margin:0;
-
   font-family:
     Arial,
     "Noto Sans JP",
     sans-serif;
-
   background:#f5f7fb;
-
   color:#222;
-
-  font-size:16px;
 }
 
-a{
-  color:inherit;
-  text-decoration:none;
-}
-
-
-/* =====================================================
+/* =========================
    ヘッダー
-===================================================== */
+========================= */
 
 header{
   background:#111827;
-
-  color:#fff;
-
+  color:white;
   padding:18px 20px;
-
-  text-align:center;
 }
 
-header h1{
-  margin:0;
-
-  font-size:28px;
-}
-
-header p{
-  margin:7px 0 0;
-
-  color:#d1d5db;
-
-  font-size:15px;
-}
-
-
-/* =====================================================
-   コンテナ
-===================================================== */
-
-.container{
-  max-width:1000px;
-
+.header-inner{
+  max-width:1100px;
   margin:0 auto;
-
-  padding:18px;
-}
-
-
-/* =====================================================
-   戻るボタン
-===================================================== */
-
-.back{
-  display:inline-block;
-
-  margin-bottom:15px;
-
-  padding:10px 15px;
-
-  background:#fff;
-
-  color:#111827;
-
-  border-radius:8px;
-
-  font-weight:bold;
-
-  font-size:16px;
-
-  box-shadow:
-    0 1px 4px
-    rgba(0,0,0,.08);
-}
-
-
-/* =====================================================
-   作品上部
-===================================================== */
-
-.movie-header{
-
   display:flex;
-
-  align-items:flex-start;
-
-  gap:22px;
-
-  background:#fff;
-
-  padding:22px;
-
-  border-radius:14px;
-
-  box-shadow:
-    0 2px 8px
-    rgba(0,0,0,.08);
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
 }
 
+.logo{
+  color:white;
+  text-decoration:none;
+  font-size:24px;
+  font-weight:bold;
+}
 
-/* =====================================================
-   ポスター
-===================================================== */
+.back-button{
+  display:inline-block;
+  color:white;
+  text-decoration:none;
+  font-size:14px;
+  padding:9px 14px;
+  border:1px solid rgba(255,255,255,.3);
+  border-radius:8px;
+}
+
+.back-button:hover{
+  background:rgba(255,255,255,.1);
+}
+
+/* =========================
+   メイン
+========================= */
+
+main{
+  max-width:1000px;
+  margin:0 auto;
+  padding:28px 16px 60px;
+}
+
+/* =========================
+   作品詳細
+========================= */
+
+.movie-detail{
+  background:white;
+  border-radius:14px;
+  box-shadow:0 4px 18px rgba(0,0,0,.08);
+  overflow:hidden;
+}
+
+.movie-top{
+  display:grid;
+  grid-template-columns:260px 1fr;
+  gap:30px;
+  padding:30px;
+}
+
+.poster-area{
+  width:100%;
+}
 
 .poster{
-
-  width:230px;
-
-  max-width:30%;
-
-  height:auto;
-
+  display:block;
+  width:100%;
+  max-width:260px;
+  margin:0 auto;
+  border-radius:10px;
+  background:#e5e7eb;
   object-fit:cover;
-
-  border-radius:9px;
-
-  align-self:flex-start;
-
-  flex-shrink:0;
+  box-shadow:0 4px 12px rgba(0,0,0,.12);
 }
-
-
-/* =====================================================
-   右側情報
-===================================================== */
 
 .movie-info{
-
-  flex:1;
-
   min-width:0;
 }
 
-
-/* =====================================================
-   タイトル
-===================================================== */
-
-.movie-info h2{
-
-  margin:0 0 9px;
-
-  font-size:34px;
-
-  line-height:1.4;
-
+.movie-title{
+  margin:0 0 10px;
+  font-size:32px;
+  line-height:1.35;
   color:#111827;
 }
-
-
-/* =====================================================
-   原題
-===================================================== */
 
 .original-title{
-
-  color:#666;
-
-  font-size:16px;
-
-  margin-bottom:13px;
-
-  line-height:1.5;
+  margin:0 0 18px;
+  color:#6b7280;
+  font-size:14px;
 }
 
-
-/* =====================================================
-   基本情報
-===================================================== */
-
-.basic-info{
-
+.movie-meta{
   display:flex;
-
   flex-wrap:wrap;
-
-  gap:8px 20px;
-
-  margin-bottom:15px;
+  gap:8px;
+  margin-bottom:20px;
 }
 
-.info-line{
-
-  margin:0;
-
-  font-size:17px;
-
-  color:#444;
-}
-
-
-/* =====================================================
-   監督・出演者・あらすじ
-===================================================== */
-
-.movie-side-info{
-
-  margin-top:12px;
-}
-
-
-/* =====================================================
-   各項目
-===================================================== */
-
-.side-section{
-
-  margin-top:13px;
-}
-
-.side-section:first-child{
-
-  margin-top:0;
-}
-
-
-/* =====================================================
-   見出し
-===================================================== */
-
-.side-title{
-
-  font-size:18px;
-
-  font-weight:bold;
-
-  margin-bottom:5px;
-
-  color:#333;
-}
-
-
-/* =====================================================
-   本文
-===================================================== */
-
-.side-text{
-
-  line-height:1.65;
-
-  color:#444;
-
-  font-size:17px;
-}
-
-
-/* =====================================================
-   出演者
-===================================================== */
-
-.cast-list{
-
-  display:flex;
-
-  flex-wrap:wrap;
-
-  gap:6px;
-}
-
-.cast-item{
-
+.meta-item{
   background:#f3f4f6;
+  color:#374151;
+  padding:7px 11px;
+  border-radius:7px;
+  font-size:14px;
+}
 
-  padding:6px 10px;
-
-  border-radius:15px;
-
+.overview{
+  margin-top:20px;
+  line-height:1.9;
+  color:#374151;
   font-size:15px;
-
-  color:#444;
 }
 
-
-/* =====================================================
-   あらすじ
-===================================================== */
-
-.overview-text{
-
-  display:-webkit-box;
-
-  -webkit-box-orient:vertical;
-
-  -webkit-line-clamp:4;
-
-  overflow:hidden;
-
-  line-height:1.65;
-}
-
-
-/* =====================================================
-   共通セクション
-===================================================== */
+/* =========================
+   セクション
+========================= */
 
 .section{
-
-  margin-top:20px;
-
-  background:#fff;
-
-  padding:20px;
-
-  border-radius:14px;
-
-  box-shadow:
-    0 2px 8px
-    rgba(0,0,0,.08);
+  padding:0 30px 30px;
 }
 
-.section h3{
-
-  margin:0 0 15px;
-
+.section-title{
+  margin:0 0 18px;
+  padding-bottom:10px;
+  border-bottom:2px solid #e5e7eb;
   font-size:22px;
+  color:#111827;
 }
 
+/* =========================
+   ジャンル
+========================= */
 
-/* =====================================================
+.genre-list{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+.genre{
+  background:#eef2ff;
+  color:#3730a3;
+  border-radius:20px;
+  padding:7px 12px;
+  font-size:13px;
+}
+
+/* =========================
    配信サービス
-===================================================== */
+========================= */
 
 .provider-group{
-
-  margin-top:20px;
-
-  padding:12px;
-
-  border-radius:12px;
-
-  border:1px solid #e5e7eb;
+  margin-bottom:25px;
 }
 
-.provider-group:first-child{
-
-  margin-top:0;
-}
-
-
-/* =====================================================
-   見放題
-===================================================== */
-
-.provider-group.streaming{
-
-  background:#f0fdf4;
-
-  border-color:#bbf7d0;
-}
-
-.provider-group.streaming
-.provider-title{
-
-  border-left-color:#16a34a;
-
-  background:#dcfce7;
-
-  color:#166534;
-}
-
-
-/* =====================================================
-   レンタル
-===================================================== */
-
-.provider-group.rental{
-
-  background:#fff7ed;
-
-  border-color:#fed7aa;
-}
-
-.provider-group.rental
-.provider-title{
-
-  border-left-color:#f59e0b;
-
-  background:#ffedd5;
-
-  color:#9a3412;
-}
-
-
-/* =====================================================
-   購入
-===================================================== */
-
-.provider-group.purchase{
-
-  background:#eff6ff;
-
-  border-color:#bfdbfe;
-}
-
-.provider-group.purchase
-.provider-title{
-
-  border-left-color:#2563eb;
-
-  background:#dbeafe;
-
-  color:#1e40af;
-}
-
-
-/* =====================================================
-   配信見出し
-===================================================== */
-
-.provider-title{
-
-  display:flex;
-
-  align-items:center;
-
-  gap:8px;
-
-  font-size:19px;
-
-  font-weight:bold;
-
-  margin-bottom:10px;
-
-  padding:9px 11px;
-
-  border-radius:9px;
-
-  border-left:5px solid #2563eb;
-}
-
-
-/* =====================================================
-   配信カード
-===================================================== */
-
-.provider-card{
-
-  display:flex;
-
-  align-items:center;
-
-  gap:13px;
-
-  padding:12px 14px;
-
-  margin-bottom:8px;
-
-  background:#fff;
-
-  border-radius:11px;
-
-  border:1px solid #e5e7eb;
-
-  transition:
-    transform .15s ease,
-    box-shadow .15s ease;
-}
-
-.provider-card:last-child{
-
-  margin-bottom:0;
-}
-
-.provider-card:hover{
-
-  transform:translateY(-1px);
-
-  box-shadow:
-    0 3px 10px
-    rgba(0,0,0,.08);
-}
-
-
-/* =====================================================
-   ロゴ
-===================================================== */
-
-.provider-logo{
-
-  width:52px;
-
-  height:52px;
-
-  object-fit:contain;
-
-  border-radius:8px;
-
-  background:#fff;
-
-  border:1px solid #eee;
-
-  flex-shrink:0;
-}
-
-
-/* =====================================================
-   サービス情報
-===================================================== */
-
-.provider-info{
-
-  flex:1;
-
-  min-width:0;
-}
-
-.provider-name{
-
+.provider-group-title{
+  margin:0 0 12px;
   font-size:18px;
-
-  font-weight:bold;
-
   color:#111827;
-
-  margin-bottom:4px;
 }
 
-.provider-type{
-
-  display:inline-block;
-
-  padding:3px 7px;
-
-  background:#f3f4f6;
-
-  color:#555;
-
-  border-radius:5px;
-
-  font-size:13px;
-
-  margin-bottom:4px;
+.provider-list{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:12px;
 }
-
-.provider-subinfo{
-
-  display:flex;
-
-  flex-wrap:wrap;
-
-  gap:10px;
-
-  color:#777;
-
-  font-size:13px;
-}
-
-
-/* =====================================================
-   配信ボタン
-===================================================== */
 
 .provider-button{
-
-  display:inline-block;
-
-  padding:11px 15px;
-
-  color:#fff;
-
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:50px;
+  padding:12px 15px;
+  border-radius:9px;
+  background:#111827;
+  color:white;
   text-decoration:none;
-
-  border-radius:8px;
-
   font-weight:bold;
-
-  font-size:14px;
-
-  white-space:nowrap;
-
-  flex-shrink:0;
-
-  transition:
-    opacity .15s ease,
-    transform .15s ease;
+  transition:.2s;
+  text-align:center;
 }
 
 .provider-button:hover{
-
-  opacity:.85;
-
   transform:translateY(-1px);
+  opacity:.9;
 }
 
-
-/* =====================================================
-   サービスカラー
-===================================================== */
-
-.netflix-button{
-  background:#e50914;
+.no-provider{
+  background:#f3f4f6;
+  border-radius:10px;
+  padding:18px;
+  color:#6b7280;
+  line-height:1.7;
 }
 
-.amazon-button{
-  background:#ff9900;
-  color:#111;
-}
+/* =========================
+   注意
+========================= */
 
-.unext-button{
-  background:#00a3e0;
-}
-
-.hulu-button{
-  background:#1ce783;
-  color:#111;
-}
-
-.disney-button{
-  background:#113ccf;
-}
-
-.apple-button{
-  background:#111;
-}
-
-
-/* =====================================================
-   シリーズ
-===================================================== */
-
-.series-list{
-
-  display:flex;
-
-  gap:13px;
-
-  overflow-x:auto;
-
-  padding:3px 2px 10px;
-}
-
-.series-item{
-
-  flex:0 0 135px;
-
-  padding:0;
-
-  border:none;
-
-  display:block;
-}
-
-
-/* =====================================================
-   シリーズ画像リンク
-===================================================== */
-
-.series-poster-link{
-
-  display:block;
-
-  width:135px;
-
-  height:195px;
-
-  border-radius:8px;
-
-  overflow:hidden;
-
-  background:#e5e7eb;
-
-  cursor:pointer;
-}
-
-.series-poster{
-
-  width:100%;
-
-  height:100%;
-
-  object-fit:cover;
-
-  display:block;
-
-  transition:
-    transform .15s ease;
-}
-
-.series-poster-link:hover
-.series-poster{
-
-  transform:scale(1.04);
-}
-
-
-/* =====================================================
-   シリーズタイトル
-===================================================== */
-
-.series-item a.series-title{
-
-  display:block;
-
-  color:#2563eb;
-
-  text-decoration:none;
-
-  font-weight:bold;
-
-  font-size:15px;
-
-  line-height:1.4;
-
-  margin-top:7px;
-}
-
-.series-year{
-
-  color:#666;
-
+.notice{
+  margin-top:20px;
+  padding:14px 16px;
+  background:#f9fafb;
+  border-left:4px solid #9ca3af;
+  color:#6b7280;
   font-size:13px;
-
-  margin-top:3px;
+  line-height:1.7;
 }
 
-
-/* =====================================================
-   TMDB
-===================================================== */
-
-.tmdb-link{
-
-  display:inline-block;
-
-  padding:11px 17px;
-
-  background:#01b4e4;
-
-  color:#fff;
-
-  text-decoration:none;
-
-  border-radius:8px;
-
-  font-weight:bold;
-
-  font-size:15px;
-}
-
-
-/* =====================================================
-   ローディング
-===================================================== */
+/* =========================
+   エラー・読み込み
+========================= */
 
 .loading{
-
   text-align:center;
-
-  padding:60px 20px;
-
-  font-size:20px;
+  padding:80px 20px;
+  color:#6b7280;
 }
-
-
-/* =====================================================
-   エラー
-===================================================== */
 
 .error{
-
-  text-align:center;
-
+  background:white;
+  border-radius:14px;
   padding:50px 20px;
-
-  color:#b91c1c;
-
-  background:#fff;
-
-  border-radius:12px;
+  text-align:center;
+  box-shadow:0 4px 18px rgba(0,0,0,.08);
 }
 
+.error h1{
+  font-size:24px;
+  margin-top:0;
+}
 
-/* =====================================================
+.error p{
+  color:#6b7280;
+  line-height:1.8;
+}
+
+.home-button{
+  display:inline-block;
+  margin-top:15px;
+  padding:12px 20px;
+  background:#111827;
+  color:white;
+  border-radius:8px;
+  text-decoration:none;
+}
+
+/* =========================
+   フッター
+========================= */
+
+footer{
+  text-align:center;
+  padding:30px 15px;
+  color:#6b7280;
+  font-size:13px;
+}
+
+/* =========================
    スマホ
-===================================================== */
+========================= */
 
 @media(max-width:700px){
 
-  .container{
-
-    padding:13px;
+  header{
+    padding:14px 15px;
   }
 
-
-  .movie-header{
-
-    gap:15px;
-
-    padding:17px;
+  .logo{
+    font-size:20px;
   }
 
+  main{
+    padding:18px 10px 45px;
+  }
+
+  .movie-top{
+    grid-template-columns:1fr;
+    gap:22px;
+    padding:20px;
+  }
 
   .poster{
-
-    width:155px;
-
-    max-width:38%;
+    max-width:220px;
   }
 
-
-  .movie-info h2{
-
-    font-size:25px;
-
-    line-height:1.4;
+  .movie-title{
+    font-size:26px;
   }
-
-
-  .original-title{
-
-    font-size:14px;
-
-    margin-bottom:9px;
-  }
-
-
-  .basic-info{
-
-    display:block;
-
-    margin-bottom:9px;
-  }
-
-
-  .info-line{
-
-    font-size:16px;
-
-    margin:4px 0;
-  }
-
-
-  .movie-side-info{
-
-    margin-top:8px;
-  }
-
-
-  .side-section{
-
-    margin-top:9px;
-  }
-
-
-  .side-title{
-
-    font-size:17px;
-  }
-
-
-  .side-text{
-
-    font-size:16px;
-
-    line-height:1.6;
-  }
-
-
-  .cast-list{
-
-    gap:5px;
-  }
-
-
-  .cast-item{
-
-    font-size:14px;
-
-    padding:5px 8px;
-  }
-
-
-  .overview-text{
-
-    -webkit-line-clamp:3;
-  }
-
 
   .section{
-
-    padding:16px;
-
-    margin-top:17px;
+    padding:0 20px 24px;
   }
 
-
-  .section h3{
-
-    font-size:21px;
-
-    margin-bottom:12px;
+  .section-title{
+    font-size:20px;
   }
 
-
-  .provider-card{
-
-    align-items:flex-start;
-
-    flex-wrap:wrap;
-
-    gap:10px;
-
-    padding:11px 12px;
-  }
-
-
-  .provider-logo{
-
-    width:48px;
-
-    height:48px;
-  }
-
-
-  .provider-info{
-
-    min-width:
-      calc(100% - 65px);
-  }
-
-
-  .provider-name{
-
-    font-size:17px;
-  }
-
-
-  .provider-button{
-
-    width:100%;
-
-    text-align:center;
-
-    margin-top:1px;
-
-    font-size:15px;
-  }
-
-
-  .series-list{
-
-    gap:10px;
-  }
-
-
-  .series-item{
-
-    flex-basis:115px;
-  }
-
-
-  .series-poster-link{
-
-    width:115px;
-
-    height:165px;
-  }
-
-
-  .series-item a.series-title{
-
-    font-size:14px;
-  }
-
-}
-
-
-/* =====================================================
-   小さいスマホ
-===================================================== */
-
-@media(max-width:420px){
-
-  .movie-header{
-
-    gap:11px;
-
-    padding:14px;
-  }
-
-
-  .poster{
-
-    width:125px;
-
-    max-width:36%;
-  }
-
-
-  .movie-info h2{
-
-    font-size:22px;
-  }
-
-
-  .original-title{
-
-    font-size:13px;
-  }
-
-
-  .info-line{
-
-    font-size:14px;
-  }
-
-
-  .side-title{
-
-    font-size:16px;
-  }
-
-
-  .side-text{
-
-    font-size:15px;
-  }
-
-
-  .provider-name{
-
-    font-size:16px;
-  }
-
-
-  .provider-subinfo{
-
-    display:block;
-  }
-
-
-  .provider-subinfo div{
-
-    margin-top:2px;
+  .provider-list{
+    grid-template-columns:1fr;
   }
 
 }
@@ -1084,427 +485,825 @@ header p{
 
 <header>
 
-<h1>🎬 ドコデミレル？</h1>
+  <div class="header-inner">
 
-<p>
-映画がどこで見られるか検索できます
-</p>
+```
+<a
+  href="/"
+  class="logo"
+>
+  ドコデミレル？
+</a>
+
+<a
+  href="/"
+  class="back-button"
+>
+  ← 検索に戻る
+</a>
+```
+
+  </div>
 
 </header>
 
-<div class="container">
+<main>
+
+  <div id="loading" class="loading">
+    作品情報を読み込んでいます…
+  </div>
+
+  <div
+    id="error"
+    class="error"
+    style="display:none;"
+  >
+    <h1>作品情報を取得できませんでした</h1>
+
+```
+<p>
+  作品が見つからないか、URLが正しくありません。
+</p>
 
 <a
-class="back"
-href="index.html"
-
+  href="/"
+  class="home-button"
 >
+  トップページへ戻る
+</a>
+```
 
-← 検索結果に戻る </a>
+  </div>
 
-<div
-  id="loading"
-  class="loading"
->
-作品情報を読み込んでいます…
-</div>
+  <article
+    id="movieDetail"
+    class="movie-detail"
+    style="display:none;"
+  >
 
-<div
-  id="error"
-  class="error"
-  style="display:none;"
->
-作品情報を取得できませんでした。
-</div>
+```
+<div class="movie-top">
 
-<div
-  id="content"
-  style="display:none;"
->
+  <div class="poster-area">
 
-<!-- =====================================================
-     作品情報
-===================================================== -->
+    <img
+      id="poster"
+      class="poster"
+      src=""
+      alt=""
+      loading="eager"
+    >
 
-<div class="movie-header">
+  </div>
 
-<img
-id="poster"
-class="poster"
-alt=""
 
->
+  <div class="movie-info">
 
-<div class="movie-info">
+    <h1
+      id="movieTitle"
+      class="movie-title"
+    ></h1>
 
-<h2 id="title"></h2>
+    <p
+      id="originalTitle"
+      class="original-title"
+    ></p>
 
-<!-- 原題 -->
 
-<div
-  id="originalTitle"
-  class="original-title"
-></div>
+    <div
+      id="movieMeta"
+      class="movie-meta"
+    ></div>
 
-<!-- 基本情報 -->
 
-<div class="basic-info">
+    <div
+      id="overview"
+      class="overview"
+    ></div>
 
-<div
-  id="releaseDate"
-  class="info-line"
-></div>
-
-<div
-  id="rating"
-  class="info-line"
-></div>
+  </div>
 
 </div>
 
-<!-- 監督・出演者・あらすじ -->
 
-<div class="movie-side-info">
-
-<div class="side-section">
-
-<div class="side-title">
-🎬 監督
-</div>
-
-<div
-  id="director"
-  class="side-text"
-></div>
-
-</div>
-
-<div class="side-section">
-
-<div class="side-title">
-👥 出演者
-</div>
-
-<div
-  id="cast"
-  class="cast-list"
-></div>
-
-</div>
-
-<div class="side-section">
-
-<div class="side-title">
-📖 あらすじ
-</div>
-
-<div
-  id="overview"
-  class="side-text overview-text"
-></div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<!-- =====================================================
-     配信サービス
-===================================================== -->
-
-<div
-  id="providersSection"
-  class="section"
->
-
-<h3>
-📺 この作品はどこで見られる？
-</h3>
-
-<div id="providers"></div>
-
-</div>
-
-<!-- =====================================================
-     シリーズ
-===================================================== -->
-
-<div
-  id="seriesSection"
+<section
+  id="genreSection"
   class="section"
   style="display:none;"
 >
 
-<h3>
-🎞️ シリーズ作品
-</h3>
+  <h2 class="section-title">
+    ジャンル
+  </h2>
 
-<h4 id="seriesName"></h4>
+  <div
+    id="genres"
+    class="genre-list"
+  ></div>
 
-<div
-  id="seriesMovies"
-  class="series-list"
-></div>
+</section>
 
-</div>
 
-<!-- =====================================================
-     TMDB
-===================================================== -->
+<section class="section">
 
-<div class="section">
+  <h2 class="section-title">
+    配信サービス
+  </h2>
 
-<a
-id="tmdbLink"
-class="tmdb-link"
-href="#"
-target="_blank"
-rel="noopener noreferrer"
+  <div id="providers">
 
->
+    <div class="loading">
+      配信情報を確認しています…
+    </div>
 
-TMDBで作品情報を見る → </a>
+  </div>
 
-</div>
+  <div class="notice">
+    ※配信状況や料金、字幕・吹き替え対応などは変更される場合があります。
+    ご利用前に各配信サービスの公式サイトで最新情報をご確認ください。
+  </div>
 
-</div>
+</section>
+```
 
-</div>
+  </article>
+
+</main>
+
+<footer>
+
+© ドコデミレル？
+
+</footer>
 
 <script>
 
-(function(){
+/* =========================================================
+   基本設定
+========================================================= */
 
-"use strict";
-
-
-/* =====================================================
-   API
-===================================================== */
-
-const API_URL =
-  "/api/search";
+const API_URL = "/api/search";
 
 
-/* =====================================================
-   DOM
-===================================================== */
+/* =========================================================
+   URLから作品IDを取得
+========================================================= */
 
-const loading =
-  document.getElementById(
-    "loading"
+function getMovieId(){
+
+  const path =
+    window.location.pathname;
+
+  const match =
+    path.match(/\/movie\/(\d+)/);
+
+  if(match){
+    return match[1];
+  }
+
+  const params =
+    new URLSearchParams(
+      window.location.search
+    );
+
+  return (
+    params.get("id") ||
+    params.get("movieId")
   );
-
-const errorBox =
-  document.getElementById(
-    "error"
-  );
-
-const content =
-  document.getElementById(
-    "content"
-  );
-
-
-/* =====================================================
-   ID取得
-===================================================== */
-
-const params =
-  new URLSearchParams(
-    window.location.search
-  );
-
-const movieId =
-  params.get("id");
-
-
-if(!movieId){
-
-  showError(
-    "作品IDが指定されていません。"
-  );
-
-  return;
 
 }
 
 
-/* =====================================================
-   作品読み込み
-===================================================== */
+/* =========================================================
+   HTMLエスケープ
+========================================================= */
 
-loadMovie();
+function escapeHTML(value){
+
+  if(value === null || value === undefined){
+    return "";
+  }
+
+  return String(value)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
 
 
-async function loadMovie(){
+/* =========================================================
+   JSON-LD用
+========================================================= */
 
-  try{
+function setStructuredData(data){
 
-    const url =
-      API_URL +
-      "?id=" +
-      encodeURIComponent(
-        movieId
+  const title =
+    data.title ||
+    data.name ||
+    "作品情報";
+
+  const overview =
+    data.overview ||
+    "";
+
+  const releaseDate =
+    data.release_date ||
+    data.first_air_date ||
+    "";
+
+  const posterPath =
+    data.poster_path ||
+    "";
+
+  const image =
+    posterPath
+      ? (
+          posterPath.startsWith("http")
+            ? posterPath
+            : "https://image.tmdb.org/t/p/w780" + posterPath
+        )
+      : "";
+
+  const structuredData = {
+
+    "@context":"https://schema.org",
+
+    "@type":"Movie",
+
+    "name":title,
+
+    "url":window.location.href,
+
+    "description":
+      overview ||
+      `${title}の配信情報を確認できます。`
+
+  };
+
+  if(releaseDate){
+    structuredData.dateCreated =
+      releaseDate;
+  }
+
+  if(image){
+    structuredData.image =
+      image;
+  }
+
+  if(data.vote_average){
+    structuredData.aggregateRating = {
+
+      "@type":"AggregateRating",
+
+      "ratingValue":
+        Number(data.vote_average).toFixed(1),
+
+      "bestRating":"10",
+
+      "worstRating":"0",
+
+      "ratingCount":
+        data.vote_count || 1
+
+    };
+  }
+
+  document
+    .getElementById("movieStructuredData")
+    .textContent =
+      JSON.stringify(
+        structuredData
       );
 
+}
 
-    console.log(
-      "DETAIL API:",
-      url
+
+/* =========================================================
+   SEO情報更新
+========================================================= */
+
+function updateMovieSEO(data){
+
+  const title =
+    data.title ||
+    data.name ||
+    "作品情報";
+
+  const releaseDate =
+    data.release_date ||
+    data.first_air_date ||
+    "";
+
+  const year =
+    releaseDate
+      ? releaseDate.substring(0,4)
+      : "";
+
+  let pageTitle =
+    `${title}はどこで見れる？`;
+
+  if(year){
+    pageTitle += ` ${year}年`;
+  }
+
+  pageTitle +=
+    "｜配信サービス一覧｜ドコデミレル？";
+
+
+  let description =
+    `${title}がどこで見られるかをチェック。`;
+
+  description +=
+    "Netflix、Amazon Prime Video、U-NEXTなどの配信サービス情報を確認できます。";
+
+  if(data.overview){
+    description +=
+      ` ${data.overview.substring(0,100)}`;
+  }
+
+
+  /* title */
+
+  document.title =
+    pageTitle;
+
+
+  /* description */
+
+  const descriptionTag =
+    document.querySelector(
+      'meta[name="description"]'
     );
 
+  if(descriptionTag){
+    descriptionTag.setAttribute(
+      "content",
+      description
+    );
+  }
 
-    const response =
-      await fetch(
-        url,
-        {
-          method:"GET",
 
-          headers:{
-            "Accept":
-              "application/json"
-          },
+  /* canonical */
 
-          cache:"no-store"
-        }
+  const canonical =
+    document.getElementById(
+      "canonicalLink"
+    );
+
+  if(canonical){
+    canonical.href =
+      window.location.href.split("#")[0];
+  }
+
+
+  /* OGP */
+
+  const ogTitle =
+    document.getElementById(
+      "ogTitle"
+    );
+
+  if(ogTitle){
+    ogTitle.content =
+      pageTitle;
+  }
+
+
+  const ogDescription =
+    document.getElementById(
+      "ogDescription"
+    );
+
+  if(ogDescription){
+    ogDescription.content =
+      description;
+  }
+
+
+  const ogUrl =
+    document.getElementById(
+      "ogUrl"
+    );
+
+  if(ogUrl){
+    ogUrl.content =
+      window.location.href;
+  }
+
+
+  const twitterTitle =
+    document.getElementById(
+      "twitterTitle"
+    );
+
+  if(twitterTitle){
+    twitterTitle.content =
+      pageTitle;
+  }
+
+
+  const twitterDescription =
+    document.getElementById(
+      "twitterDescription"
+    );
+
+  if(twitterDescription){
+    twitterDescription.content =
+      description;
+  }
+
+
+  /* 画像 */
+
+  const posterPath =
+    data.poster_path ||
+    "";
+
+  if(posterPath){
+
+    const image =
+      posterPath.startsWith("http")
+        ? posterPath
+        : "https://image.tmdb.org/t/p/w780" +
+          posterPath;
+
+
+    const ogImage =
+      document.getElementById(
+        "ogImage"
       );
 
-
-    if(!response.ok){
-
-      const errorText =
-        await response.text();
-
-
-      console.error(
-        "API ERROR:",
-        response.status,
-        errorText
-      );
-
-
-      throw new Error(
-        "API ERROR " +
-        response.status
-      );
-
+    if(ogImage){
+      ogImage.content =
+        image;
     }
 
 
-    const movie =
-      await response.json();
-
-
-    console.log(
-      "MOVIE DATA:",
-      movie
-    );
-
-
-    if(
-      !movie ||
-      !movie.id
-    ){
-
-      throw new Error(
-        "作品データがありません。"
+    const twitterImage =
+      document.getElementById(
+        "twitterImage"
       );
 
+    if(twitterImage){
+      twitterImage.content =
+        image;
     }
-
-
-    renderMovie(
-      movie
-    );
-
-
-  }catch(error){
-
-    console.error(
-      "DETAIL PAGE ERROR:",
-      error
-    );
-
-
-    showError(
-      "作品情報を取得できませんでした。"
-    );
 
   }
 
+
+  /* 構造化データ */
+
+  setStructuredData(data);
+
 }
 
 
-/* =====================================================
-   作品表示
-===================================================== */
+/* =========================================================
+   配信サービスボタン
+========================================================= */
 
-function renderMovie(movie){
+function createProviderButton(provider){
 
-  loading.style.display =
-    "none";
+  const name =
+    provider.provider_name ||
+    provider.name ||
+    "配信サービス";
 
-  errorBox.style.display =
-    "none";
 
-  content.style.display =
-    "block";
+  const link =
+    provider.link ||
+    provider.url ||
+    "";
+
+
+  if(!link){
+    return "";
+  }
+
+
+  return `
+    <a
+      class="provider-button"
+      href="${escapeHTML(link)}"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      ${escapeHTML(name)}
+    </a>
+  `;
+
+}
+
+
+/* =========================================================
+   配信情報表示
+========================================================= */
+
+function renderProviders(data){
+
+  const container =
+    document.getElementById(
+      "providers"
+    );
+
+
+  if(!container){
+    return;
+  }
+
+
+  /*
+   * APIから返ってくる配信情報に対応
+   */
+
+  const streaming =
+    data.streaming ||
+    data.flatrate ||
+    [];
+
+  const rental =
+    data.rental ||
+    [];
+
+  const purchase =
+    data.purchase ||
+    [];
+
+
+  let html = "";
+
+
+  /* 見放題 */
+
+  if(
+    Array.isArray(streaming) &&
+    streaming.length
+  ){
+
+    html += `
+      <div class="provider-group">
+
+        <h3 class="provider-group-title">
+          見放題
+        </h3>
+
+        <div class="provider-list">
+          ${
+            streaming
+              .map(createProviderButton)
+              .join("")
+          }
+        </div>
+
+      </div>
+    `;
+
+  }
+
+
+  /* レンタル */
+
+  if(
+    Array.isArray(rental) &&
+    rental.length
+  ){
+
+    html += `
+      <div class="provider-group">
+
+        <h3 class="provider-group-title">
+          レンタル
+        </h3>
+
+        <div class="provider-list">
+          ${
+            rental
+              .map(createProviderButton)
+              .join("")
+          }
+        </div>
+
+      </div>
+    `;
+
+  }
+
+
+  /* 購入 */
+
+  if(
+    Array.isArray(purchase) &&
+    purchase.length
+  ){
+
+    html += `
+      <div class="provider-group">
+
+        <h3 class="provider-group-title">
+          購入
+        </h3>
+
+        <div class="provider-list">
+          ${
+            purchase
+              .map(createProviderButton)
+              .join("")
+          }
+        </div>
+
+      </div>
+    `;
+
+  }
+
+
+  /*
+   * 配信情報が別形式で返る場合
+   */
+
+  if(
+    !html &&
+    Array.isArray(data.providers)
+  ){
+
+    const providers =
+      data.providers
+        .map(createProviderButton)
+        .join("");
+
+
+    if(providers){
+
+      html += `
+        <div class="provider-list">
+          ${providers}
+        </div>
+      `;
+
+    }
+
+  }
+
+
+  if(!html){
+
+    html = `
+      <div class="no-provider">
+        現在、確認できる配信情報がありません。
+      </div>
+    `;
+
+  }
+
+
+  container.innerHTML =
+    html;
+
+}
+
+
+/* =========================================================
+   作品情報表示
+========================================================= */
+
+function renderMovie(data){
+
+  const title =
+    data.title ||
+    data.name ||
+    "作品情報";
+
+
+  const originalTitle =
+    data.original_title ||
+    data.original_name ||
+    "";
+
+
+  const releaseDate =
+    data.release_date ||
+    data.first_air_date ||
+    "";
+
+
+  const year =
+    releaseDate
+      ? releaseDate.substring(0,4)
+      : "";
+
+
+  const runtime =
+    data.runtime ||
+    data.runtime_minutes ||
+    null;
 
 
   /* タイトル */
 
-  setText(
-    "title",
-    movie.title || ""
-  );
+  document.getElementById(
+    "movieTitle"
+  ).textContent =
+    title;
 
 
   /* 原題 */
 
-  setText(
-    "originalTitle",
-    movie.original_title || ""
-  );
-
-
-  /* 公開日 */
-
-  setText(
-    "releaseDate",
-
-    movie.release_date
-
-      ? "公開日：" +
-        formatDate(
-          movie.release_date
-        )
-
-      : ""
-  );
-
-
-  /* 評価 */
-
-  const rating =
-    Number(
-      movie.vote_average || 0
+  const originalTitleElement =
+    document.getElementById(
+      "originalTitle"
     );
 
 
-  setText(
-    "rating",
+  if(originalTitle){
 
-    rating > 0
+    originalTitleElement.textContent =
+      originalTitle;
 
-      ? "⭐ TMDB評価 " +
-        rating.toFixed(1)
+    originalTitleElement.style.display =
+      "block";
 
-      : ""
-  );
+  }else{
+
+    originalTitleElement.style.display =
+      "none";
+
+  }
+
+
+  /* メタ情報 */
+
+  const meta =
+    document.getElementById(
+      "movieMeta"
+    );
+
+
+  let metaHTML = "";
+
+
+  if(year){
+
+    metaHTML += `
+      <span class="meta-item">
+        ${escapeHTML(year)}年
+      </span>
+    `;
+
+  }
+
+
+  if(runtime){
+
+    metaHTML += `
+      <span class="meta-item">
+        ${escapeHTML(runtime)}分
+      </span>
+    `;
+
+  }
+
+
+  if(data.vote_average){
+
+    metaHTML += `
+      <span class="meta-item">
+        評価 ${Number(data.vote_average).toFixed(1)}
+      </span>
+    `;
+
+  }
+
+
+  meta.innerHTML =
+    metaHTML;
+
+
+  /* あらすじ */
+
+  const overview =
+    document.getElementById(
+      "overview"
+    );
+
+
+  if(data.overview){
+
+    overview.textContent =
+      data.overview;
+
+    overview.style.display =
+      "block";
+
+  }else{
+
+    overview.style.display =
+      "none";
+
+  }
 
 
   /* ポスター */
@@ -1515,1416 +1314,248 @@ function renderMovie(movie){
     );
 
 
-  if(movie.poster_path){
+  const posterPath =
+    data.poster_path ||
+    data.poster ||
+    "";
+
+
+  if(posterPath){
+
+    const posterURL =
+      posterPath.startsWith("http")
+        ? posterPath
+        : "https://image.tmdb.org/t/p/w780" +
+          posterPath;
+
 
     poster.src =
-      "https://image.tmdb.org/t/p/w500" +
-      movie.poster_path;
+      posterURL;
 
 
     poster.alt =
-      movie.title || "";
+      `${title}のポスター`;
 
+  }else{
 
     poster.style.display =
+      "none";
+
+  }
+
+
+  /* ジャンル */
+
+  const genres =
+    data.genres ||
+    [];
+
+
+  const genreSection =
+    document.getElementById(
+      "genreSection"
+    );
+
+
+  const genreContainer =
+    document.getElementById(
+      "genres"
+    );
+
+
+  if(
+    Array.isArray(genres) &&
+    genres.length
+  ){
+
+    genreContainer.innerHTML =
+      genres
+        .map(genre => {
+
+          const name =
+            typeof genre === "string"
+              ? genre
+              : genre.name;
+
+          return `
+            <span class="genre">
+              ${escapeHTML(name)}
+            </span>
+          `;
+
+        })
+        .join("");
+
+
+    genreSection.style.display =
       "block";
 
   }else{
 
-    poster.style.display =
+    genreSection.style.display =
       "none";
 
   }
 
 
-  /* 監督 */
+  /* 配信サービス */
 
-  const director =
-    movie.director;
-
-
-  if(
-    director &&
-    director.name
-  ){
-
-    setText(
-      "director",
-      director.name
-    );
-
-  }else{
-
-    setText(
-      "director",
-      "監督情報はありません。"
-    );
-
-  }
+  renderProviders(data);
 
 
-  /* 出演者 */
+  /* SEO */
 
-  renderCast(
-    movie.cast
-  );
+  updateMovieSEO(data);
 
 
-  /* あらすじ */
+  /* 表示 */
 
-  setText(
-    "overview",
-    movie.overview ||
-      "あらすじ情報はありません。"
-  );
-
-
-  /* 配信 */
-
-  renderProviders(
-    movie
-  );
+  document.getElementById(
+    "loading"
+  ).style.display =
+    "none";
 
 
-  /* シリーズ */
-
-  renderSeries(
-    movie.series
-  );
-
-
-  /* TMDB */
-
-  const tmdbLink =
-    document.getElementById(
-      "tmdbLink"
-    );
-
-
-  tmdbLink.href =
-    movie.link ||
-
-    (
-      "https://www.themoviedb.org/movie/" +
-      movie.id
-    );
-
-
-  /* ページタイトル */
-
-  document.title =
-    (
-      movie.title ||
-      "作品情報"
-    ) +
-    " | ドコデミレル？";
+  document.getElementById(
+    "movieDetail"
+  ).style.display =
+    "block";
 
 }
 
 
-/* =====================================================
-   出演者
-===================================================== */
+/* =========================================================
+   APIから作品情報取得
+========================================================= */
 
-function renderCast(cast){
+async function loadMovie(movieId){
 
-  const container =
-    document.getElementById(
-      "cast"
-    );
+  try{
 
+    /*
+     * 現在のAPI構成に合わせて
+     * 作品IDを送信
+     */
 
-  container.innerHTML =
-    "";
-
-
-  if(
-    !Array.isArray(cast) ||
-    cast.length === 0
-  ){
-
-    container.textContent =
-      "出演者情報はありません。";
-
-    return;
-
-  }
-
-
-  cast.forEach(
-    function(person){
-
-      if(
-        !person ||
-        !person.name
-      ){
-
-        return;
-
-      }
-
-
-      const item =
-        document.createElement(
-          "div"
-        );
-
-
-      item.className =
-        "cast-item";
-
-
-      item.textContent =
-        person.name;
-
-
-      container.appendChild(
-        item
+    const response =
+      await fetch(
+        `${API_URL}?id=${encodeURIComponent(movieId)}`
       );
 
+
+    if(!response.ok){
+      throw new Error(
+        "API error"
+      );
     }
-  );
 
-}
 
+    const result =
+      await response.json();
 
-/* =====================================================
-   配信サービス
-===================================================== */
 
-function renderProviders(movie){
+    /*
+     * APIの返却形式に対応
+     */
 
-  const container =
-    document.getElementById(
-      "providers"
-    );
+    let movie =
+      result.movie ||
+      result.data ||
+      result;
 
 
-  container.innerHTML =
-    "";
-
-
-  const streaming =
-    normalizeProviders(
-      Array.isArray(movie.streaming)
-        ? movie.streaming
-        : []
-    );
-
-
-  const rental =
-    normalizeProviders(
-      Array.isArray(movie.rental)
-        ? movie.rental
-        : []
-    );
-
-
-  const purchase =
-    normalizeProviders(
-      Array.isArray(movie.purchase)
-        ? movie.purchase
-        : []
-    );
-
-
-  renderProviderGroup(
-    container,
-    "🟢 見放題",
-    streaming,
-    "streaming",
-    movie
-  );
-
-
-  renderProviderGroup(
-    container,
-    "🟠 レンタル",
-    rental,
-    "rental",
-    movie
-  );
-
-
-  renderProviderGroup(
-    container,
-    "🔵 購入",
-    purchase,
-    "purchase",
-    movie
-  );
-
-
-  if(
-    !streaming.length &&
-    !rental.length &&
-    !purchase.length
-  ){
-
-    const empty =
-      document.createElement(
-        "p"
-      );
-
-
-    empty.textContent =
-      "現在、配信情報を確認できません。";
-
-
-    container.appendChild(
-      empty
-    );
-
-  }
-
-}
-
-
-/* =====================================================
-   サービス名
-===================================================== */
-
-function normalizeProviderName(name){
-
-  const value =
-    String(
-      name || ""
-    ).trim();
-
-
-  const lower =
-    value.toLowerCase();
-
-
-  if(
-    lower.includes("netflix")
-  ){
-
-    return "Netflix";
-
-  }
-
-
-  if(
-    lower.includes("amazon") ||
-    lower.includes("prime video")
-  ){
-
-    return "Prime Video";
-
-  }
-
-
-  if(
-    lower.includes("u-next") ||
-    lower.includes("unext")
-  ){
-
-    return "U-NEXT";
-
-  }
-
-
-  if(
-    lower.includes("hulu")
-  ){
-
-    return "Hulu";
-
-  }
-
-
-  if(
-    lower.includes("disney")
-  ){
-
-    return "Disney+";
-
-  }
-
-
-  if(
-    lower.includes("apple")
-  ){
-
-    return "Apple TV";
-
-  }
-
-
-  if(
-    lower.includes("google play")
-  ){
-
-    return "Google Play";
-
-  }
-
-
-  if(
-    lower.includes("fandango")
-  ){
-
-    return "Fandango";
-
-  }
-
-
-  if(
-    lower.includes("fod")
-  ){
-
-    return "FOD";
-
-  }
-
-
-  return value;
-
-}
-
-
-/* =====================================================
-   同じサービスをまとめる
-===================================================== */
-
-function normalizeProviders(providers){
-
-  const result = [];
-
-  const map = {};
-
-
-  providers.forEach(
-    function(provider){
-
-      if(!provider){
-
-        return;
-
-      }
-
-
-      const normalizedName =
-        normalizeProviderName(
-          provider.provider_name
-        );
-
-
-      if(!normalizedName){
-
-        return;
-
-      }
-
-
-      const key =
-        normalizedName.toLowerCase();
-
-
-      if(!map[key]){
-
-        map[key] = {
-
-          ...provider,
-
-          provider_name:
-            normalizedName
-
-        };
-
-
-        result.push(
-          map[key]
-        );
-
-      }
-
-    }
-  );
-
-
-  return result;
-
-}
-
-
-/* =====================================================
-   配信グループ
-===================================================== */
-
-function renderProviderGroup(
-  container,
-  title,
-  providers,
-  type,
-  movie
-){
-
-  if(
-    !Array.isArray(providers) ||
-    providers.length === 0
-  ){
-
-    return;
-
-  }
-
-
-  const group =
-    document.createElement(
-      "div"
-    );
-
-
-  group.className =
-    "provider-group " +
-    type;
-
-
-  const heading =
-    document.createElement(
-      "div"
-    );
-
-
-  heading.className =
-    "provider-title";
-
-
-  heading.textContent =
-    title;
-
-
-  group.appendChild(
-    heading
-  );
-
-
-  providers.forEach(
-    function(provider){
-
-      createProviderCard(
-        group,
-        provider,
-        type,
-        movie
-      );
-
-    }
-  );
-
-
-  container.appendChild(
-    group
-  );
-
-}
-
-
-/* =====================================================
-   配信カード
-===================================================== */
-
-function createProviderCard(
-  container,
-  provider,
-  type,
-  movie
-){
-
-  if(!provider){
-
-    return;
-
-  }
-
-
-  const card =
-    document.createElement(
-      "div"
-    );
-
-
-  card.className =
-    "provider-card";
-
-
-  /* ロゴ */
-
-  if(provider.logo_path){
-
-    const logo =
-      document.createElement(
-        "img"
-      );
-
-
-    logo.className =
-      "provider-logo";
-
-
-    logo.src =
-      "https://image.tmdb.org/t/p/w92" +
-      provider.logo_path;
-
-
-    logo.alt =
-      provider.provider_name ||
-      "";
-
-
-    card.appendChild(
-      logo
-    );
-
-  }
-
-
-  /* 情報 */
-
-  const info =
-    document.createElement(
-      "div"
-    );
-
-
-  info.className =
-    "provider-info";
-
-
-  const name =
-    document.createElement(
-      "div"
-    );
-
-
-  name.className =
-    "provider-name";
-
-
-  name.textContent =
-    provider.provider_name ||
-    "配信サービス";
-
-
-  info.appendChild(
-    name
-  );
-
-
-  const typeText =
-    document.createElement(
-      "div"
-    );
-
-
-  typeText.className =
-    "provider-type";
-
-
-  if(type === "streaming"){
-
-    typeText.textContent =
-      "見放題";
-
-  }else if(type === "rental"){
-
-    typeText.textContent =
-      "レンタル";
-
-  }else{
-
-    typeText.textContent =
-      "購入";
-
-  }
-
-
-  info.appendChild(
-    typeText
-  );
-
-
-  /* 字幕・吹き替え */
-
-  const subInfo =
-    document.createElement(
-      "div"
-    );
-
-
-  subInfo.className =
-    "provider-subinfo";
-
-
-  const subtitle =
-    document.createElement(
-      "div"
-    );
-
-
-  subtitle.textContent =
-    "🎧 字幕：未確認";
-
-
-  subInfo.appendChild(
-    subtitle
-  );
-
-
-  const dub =
-    document.createElement(
-      "div"
-    );
-
-
-  dub.textContent =
-    "🎙️ 吹き替え：未確認";
-
-
-  subInfo.appendChild(
-    dub
-  );
-
-
-  info.appendChild(
-    subInfo
-  );
-
-
-  card.appendChild(
-    info
-  );
-
-
-  /* 配信リンク */
-
-  const url =
-    getProviderLink(
-      provider,
-      movie
-    );
-
-
-  if(url){
-
-    const button =
-      document.createElement(
-        "a"
-      );
-
-
-    button.className =
-      "provider-button " +
-      getButtonClass(
-        provider.provider_name
-      );
-
-
-    button.href =
-      url;
-
-
-    button.target =
-      "_blank";
-
-
-    button.rel =
-      "noopener noreferrer";
-
-
-    button.textContent =
-      getButtonText(
-        provider.provider_name
-      );
-
-
-    card.appendChild(
-      button
-    );
-
-  }
-
-
-  container.appendChild(
-    card
-  );
-
-}
-
-
-/* =====================================================
-   配信リンク
-===================================================== */
-
-function getProviderLink(
-  provider,
-  movie
-){
-
-  const name =
-    String(
-      provider.provider_name ||
-      ""
-    ).toLowerCase();
-
-
-  /* Netflix */
-
-  if(
-    name.includes("netflix")
-  ){
-
-    return (
-      movie.netflix_url ||
-
-      (
-        movie.netflix &&
-        movie.netflix.url
-      ) ||
-
-      "https://www.netflix.com/jp/"
-    );
-
-  }
-
-
-  /* Amazon */
-
-  if(
-    name.includes("amazon") ||
-    name.includes("prime video")
-  ){
-
-    return (
-      movie.amazon_url ||
-
-      (
-        movie.amazon &&
-        movie.amazon.url
-      ) ||
-
-      (
-        "https://www.amazon.co.jp/s?k=" +
-        encodeURIComponent(
-          movie.title || ""
-        ) +
-        "&i=instant-video"
-      )
-    );
-
-  }
-
-
-  /* U-NEXT */
-
-  if(
-    name.includes("u-next") ||
-    name.includes("unext")
-  ){
-
-    return (
-      movie.unext_url ||
-      getGenericProviderUrl(
-        provider
-      )
-    );
-
-  }
-
-
-  /* Hulu */
-
-  if(
-    name.includes("hulu")
-  ){
-
-    return (
-      movie.hulu_url ||
-      getGenericProviderUrl(
-        provider
-      )
-    );
-
-  }
-
-
-  /* Disney+ */
-
-  if(
-    name.includes("disney")
-  ){
-
-    return (
-      movie.disney_url ||
-      getGenericProviderUrl(
-        provider
-      )
-    );
-
-  }
-
-
-  /* Apple TV */
-
-  if(
-    name.includes("apple")
-  ){
-
-    return (
-      movie.apple_tv_url ||
-      getGenericProviderUrl(
-        provider
-      )
-    );
-
-  }
-
-
-  return getGenericProviderUrl(
-    provider
-  );
-
-}
-
-
-/* =====================================================
-   一般URL
-===================================================== */
-
-function getGenericProviderUrl(
-  provider
-){
-
-  const urls = [
-
-    provider.url,
-
-    provider.link,
-
-    provider.watch_link,
-
-    provider.provider_url
-
-  ];
-
-
-  for(
-    let i = 0;
-    i < urls.length;
-    i++
-  ){
+    /*
+     * resultsの中に入っている場合
+     */
 
     if(
-      typeof urls[i] === "string" &&
-      /^https?:\/\//i.test(
-        urls[i]
-      )
+      (!movie.title && !movie.name) &&
+      Array.isArray(result.results) &&
+      result.results.length
     ){
 
-      return urls[i];
+      movie =
+        result.results[0];
 
     }
 
-  }
 
+    if(
+      !movie ||
+      (!movie.title && !movie.name)
+    ){
 
-  return null;
+      throw new Error(
+        "Movie not found"
+      );
 
-}
+    }
 
 
-/* =====================================================
-   ボタン色
-===================================================== */
+    renderMovie(movie);
 
-function getButtonClass(name){
 
-  const value =
-    String(
-      name || ""
-    ).toLowerCase();
+  }catch(error){
 
-
-  if(
-    value.includes("netflix")
-  ){
-
-    return "netflix-button";
-
-  }
-
-
-  if(
-    value.includes("amazon") ||
-    value.includes("prime video")
-  ){
-
-    return "amazon-button";
-
-  }
-
-
-  if(
-    value.includes("u-next") ||
-    value.includes("unext")
-  ){
-
-    return "unext-button";
-
-  }
-
-
-  if(
-    value.includes("hulu")
-  ){
-
-    return "hulu-button";
-
-  }
-
-
-  if(
-    value.includes("disney")
-  ){
-
-    return "disney-button";
-
-  }
-
-
-  if(
-    value.includes("apple")
-  ){
-
-    return "apple-button";
-
-  }
-
-
-  return "";
-
-}
-
-
-/* =====================================================
-   ボタン文字
-===================================================== */
-
-function getButtonText(name){
-
-  const value =
-    String(
-      name || ""
-    ).toLowerCase();
-
-
-  if(
-    value.includes("netflix")
-  ){
-
-    return "Netflixで作品を見る →";
-
-  }
-
-
-  if(
-    value.includes("amazon") ||
-    value.includes("prime video")
-  ){
-
-    return "Prime Videoで作品を見る →";
-
-  }
-
-
-  if(
-    value.includes("u-next") ||
-    value.includes("unext")
-  ){
-
-    return "U-NEXTで作品を見る →";
-
-  }
-
-
-  if(
-    value.includes("hulu")
-  ){
-
-    return "Huluで作品を見る →";
-
-  }
-
-
-  if(
-    value.includes("disney")
-  ){
-
-    return "Disney+で作品を見る →";
-
-  }
-
-
-  if(
-    value.includes("apple")
-  ){
-
-    return "Apple TVで作品を見る →";
-
-  }
-
-
-  return "サービスで作品を見る →";
-
-}
-
-
-/* =====================================================
-   シリーズ
-===================================================== */
-
-function renderSeries(series){
-
-  const section =
-    document.getElementById(
-      "seriesSection"
+    console.error(
+      "作品情報取得エラー:",
+      error
     );
 
 
-  const container =
     document.getElementById(
-      "seriesMovies"
-    );
-
-
-  if(
-    !series ||
-    !Array.isArray(
-      series.movies
-    ) ||
-    series.movies.length === 0
-  ){
-
-    section.style.display =
+      "loading"
+    ).style.display =
       "none";
 
-    return;
+
+    document.getElementById(
+      "error"
+    ).style.display =
+      "block";
 
   }
 
+}
 
-  section.style.display =
-    "block";
 
+/* =========================================================
+   初期処理
+========================================================= */
 
-  setText(
-    "seriesName",
+document.addEventListener(
+  "DOMContentLoaded",
+  function(){
 
-    series.name ||
-      "シリーズ作品"
-  );
+    const movieId =
+      getMovieId();
 
 
-  container.innerHTML =
-    "";
+    if(!movieId){
 
+      document.getElementById(
+        "loading"
+      ).style.display =
+        "none";
 
-  series.movies.forEach(
-    function(movie){
 
-      if(
-        !movie ||
-        !movie.id
-      ){
+      document.getElementById(
+        "error"
+      ).style.display =
+        "block";
 
-        return;
 
-      }
-
-
-      const item =
-        document.createElement(
-          "div"
-        );
-
-
-      item.className =
-        "series-item";
-
-
-      /* =================================================
-         画像リンク
-      ================================================= */
-
-      if(movie.poster_path){
-
-        const imageLink =
-          document.createElement(
-            "a"
-          );
-
-
-        imageLink.className =
-          "series-poster-link";
-
-
-        imageLink.href =
-          "detail.html?id=" +
-          encodeURIComponent(
-            movie.id
-          );
-
-
-        imageLink.setAttribute(
-          "aria-label",
-          (
-            movie.title ||
-            "シリーズ作品"
-          ) +
-          "の詳細を見る"
-        );
-
-
-        const image =
-          document.createElement(
-            "img"
-          );
-
-
-        image.className =
-          "series-poster";
-
-
-        image.src =
-          "https://image.tmdb.org/t/p/w300" +
-          movie.poster_path;
-
-
-        image.alt =
-          movie.title || "";
-
-
-        image.loading =
-          "lazy";
-
-
-        imageLink.appendChild(
-          image
-        );
-
-
-        item.appendChild(
-          imageLink
-        );
-
-      }
-
-
-      /* =================================================
-         タイトルリンク
-      ================================================= */
-
-      const link =
-        document.createElement(
-          "a"
-        );
-
-
-      link.className =
-        "series-title";
-
-
-      link.href =
-        "detail.html?id=" +
-        encodeURIComponent(
-          movie.id
-        );
-
-
-      link.textContent =
-        movie.title || "";
-
-
-      item.appendChild(
-        link
-      );
-
-
-      /* =================================================
-         年
-      ================================================= */
-
-      const year =
-        document.createElement(
-          "div"
-        );
-
-
-      year.className =
-        "series-year";
-
-
-      year.textContent =
-        movie.release_date
-
-          ? formatYear(
-              movie.release_date
-            )
-
-          : "";
-
-
-      item.appendChild(
-        year
-      );
-
-
-      container.appendChild(
-        item
-      );
+      return;
 
     }
-  );
-
-}
 
 
-/* =====================================================
-   日付
-===================================================== */
-
-function formatDate(date){
-
-  if(!date){
-
-    return "";
+    loadMovie(movieId);
 
   }
-
-
-  const parts =
-    String(date).split("-");
-
-
-  if(parts.length !== 3){
-
-    return date;
-
-  }
-
-
-  return (
-
-    Number(parts[0]) +
-    "年" +
-
-    Number(parts[1]) +
-    "月" +
-
-    Number(parts[2]) +
-    "日"
-
-  );
-
-}
-
-
-/* =====================================================
-   年
-===================================================== */
-
-function formatYear(date){
-
-  if(!date){
-
-    return "";
-
-  }
-
-
-  return (
-
-    Number(
-      String(date).substring(
-        0,
-        4
-      )
-    ) +
-    "年"
-
-  );
-
-}
-
-
-/* =====================================================
-   テキスト
-===================================================== */
-
-function setText(
-  id,
-  text
-){
-
-  const element =
-    document.getElementById(
-      id
-    );
-
-
-  if(!element){
-
-    return;
-
-  }
-
-
-  element.textContent =
-    text || "";
-
-}
-
-
-/* =====================================================
-   エラー
-===================================================== */
-
-function showError(message){
-
-  loading.style.display =
-    "none";
-
-
-  content.style.display =
-    "none";
-
-
-  errorBox.style.display =
-    "block";
-
-
-  errorBox.textContent =
-    message;
-
-}
-
-
-})();
+);
 
 </script>
-
-<footer
-  style="
-    text-align:center;
-    padding:25px 20px;
-    color:#777;
-    font-size:14px;
-  "
->
-© ドコデミレル？
-</footer>
 
 </body>
 
