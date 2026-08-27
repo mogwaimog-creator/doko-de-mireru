@@ -402,6 +402,7 @@ input:focus{
   border-radius:8px;
   font-weight:bold;
   font-size:14px;
+  cursor:pointer;
 }
 
 .service-watch-button:hover{
@@ -497,6 +498,15 @@ input:focus{
   color:#991b1b;
   padding:18px;
   border-radius:10px;
+}
+
+.netflix-fallback{
+  background:#fff1f2;
+  color:#9f1239;
+  padding:12px;
+  border-radius:8px;
+  font-size:13px;
+  margin-bottom:12px;
 }
 
 @media(max-width:700px){
@@ -1385,18 +1395,6 @@ function renderDetailPage(data){
 
 
   /* =====================================================
-     Netflix情報の確認用
-  ===================================================== */
-
-  /*
-   * Netflix作品IDがAPIから返っている場合は
-   * 画面上には余計なIDを表示しません。
-   *
-   * ボタン生成時にのみ使用します。
-   */
-
-
-  /* =====================================================
      シリーズ
   ===================================================== */
 
@@ -2020,8 +2018,7 @@ function getServiceUrl(
   ){
 
     /*
-     * 最優先
-     * APIから返ってきたNetflix作品ID
+     * ① Netflix作品IDを最優先
      */
 
     const netflixId =
@@ -2044,7 +2041,7 @@ function getServiceUrl(
 
 
     /*
-     * APIからNetflix作品URLが返ってきた場合
+     * ② Netflixの直接URL
      */
 
     const netflixUrls = [
@@ -2058,9 +2055,25 @@ function getServiceUrl(
       service &&
       service.watch_link,
 
+      service &&
+      service.url,
+
+      service &&
+      service.link,
+
+      movieData &&
+      movieData.netflix_url,
+
+      movieData &&
+      movieData.netflix_link,
+
       movieData &&
       movieData.netflix &&
-      movieData.netflix.url
+      movieData.netflix.url,
+
+      movieData &&
+      movieData.netflix &&
+      movieData.netflix.link
 
     ];
 
@@ -2072,12 +2085,38 @@ function getServiceUrl(
     ){
 
       if(
-        isNetflixTitleUrl(
+        isUsableUrl(
           netflixUrls[i]
         )
       ){
 
-        return netflixUrls[i];
+        const netflixIdFromUrl =
+          extractNetflixTitleId(
+            netflixUrls[i]
+          );
+
+
+        if(netflixIdFromUrl){
+
+          return (
+            "https://www.netflix.com/title/" +
+            encodeURIComponent(
+              netflixIdFromUrl
+            )
+          );
+
+        }
+
+
+        if(
+          isNetflixUrl(
+            netflixUrls[i]
+          )
+        ){
+
+          return netflixUrls[i];
+
+        }
 
       }
 
@@ -2085,15 +2124,15 @@ function getServiceUrl(
 
 
     /*
-     * IDがない場合のみ検索ページへ
+     * ③ 最後の手段
+     *
+     * Netflixのトップページではなく
+     * Netflix内検索へ移動
      */
 
     return (
-      "https://www.google.com/search?q=" +
-      encodeURIComponent(
-        "site:netflix.com/title/ " +
-        title
-      )
+      "https://www.netflix.com/jp/search?q=" +
+      encodeURIComponent(title)
     );
 
   }
@@ -2132,6 +2171,18 @@ function getServiceUrl(
     }
 
 
+    if(
+      service &&
+      isUsableUrl(
+        service.url
+      )
+    ){
+
+      return service.url;
+
+    }
+
+
     return (
       "https://www.amazon.co.jp/s?k=" +
       encodeURIComponent(title) +
@@ -2146,7 +2197,8 @@ function getServiceUrl(
   ===================================================== */
 
   if(
-    name.includes("u-next")
+    name.includes("u-next") ||
+    name.includes("unext")
   ){
 
     if(
@@ -2169,6 +2221,18 @@ function getServiceUrl(
     ){
 
       return service.watch_link;
+
+    }
+
+
+    if(
+      service &&
+      isUsableUrl(
+        service.url
+      )
+    ){
+
+      return service.url;
 
     }
 
@@ -2213,6 +2277,18 @@ function getServiceUrl(
     }
 
 
+    if(
+      service &&
+      isUsableUrl(
+        service.url
+      )
+    ){
+
+      return service.url;
+
+    }
+
+
     return (
       "https://www.hulu.jp/search?q=" +
       encodeURIComponent(title)
@@ -2249,6 +2325,18 @@ function getServiceUrl(
     ){
 
       return service.watch_link;
+
+    }
+
+
+    if(
+      service &&
+      isUsableUrl(
+        service.url
+      )
+    ){
+
+      return service.url;
 
     }
 
@@ -2293,6 +2381,18 @@ function getServiceUrl(
     }
 
 
+    if(
+      service &&
+      isUsableUrl(
+        service.url
+      )
+    ){
+
+      return service.url;
+
+    }
+
+
     return (
       "https://tv.apple.com/jp/search?term=" +
       encodeURIComponent(title)
@@ -2329,6 +2429,18 @@ function getServiceUrl(
     ){
 
       return service.watch_link;
+
+    }
+
+
+    if(
+      service &&
+      isUsableUrl(
+        service.url
+      )
+    ){
+
+      return service.url;
 
     }
 
@@ -2373,6 +2485,18 @@ function getServiceUrl(
     }
 
 
+    if(
+      service &&
+      isUsableUrl(
+        service.url
+      )
+    ){
+
+      return service.url;
+
+    }
+
+
     return (
       "https://play.google.com/store/search?q=" +
       encodeURIComponent(title) +
@@ -2406,6 +2530,18 @@ function getServiceUrl(
   ){
 
     return service.watch_link;
+
+  }
+
+
+  if(
+    service &&
+    isUsableUrl(
+      service.url
+    )
+  ){
+
+    return service.url;
 
   }
 
@@ -2448,11 +2584,17 @@ function getNetflixTitleId(
     service &&
     service.netflixTitleID,
 
+    service &&
+    service.netflix_titleId,
+
     movieData &&
     movieData.netflix_title_id,
 
     movieData &&
     movieData.netflix_id,
+
+    movieData &&
+    movieData.title_id,
 
     movieData &&
     movieData.netflixTitleId,
@@ -2461,8 +2603,15 @@ function getNetflixTitleId(
     movieData.netflixTitleID,
 
     movieData &&
+    movieData.netflix_titleId,
+
+    movieData &&
     movieData.netflix &&
-    movieData.netflix.title_id
+    movieData.netflix.title_id,
+
+    movieData &&
+    movieData.netflix &&
+    movieData.netflix.id
 
   ];
 
@@ -2481,16 +2630,20 @@ function getNetflixTitleId(
       value !== undefined &&
       value !== null &&
       /^\d+$/.test(
-        String(value)
+        String(value).trim()
       )
     ){
 
-      return String(value);
+      return String(value).trim();
 
     }
 
   }
 
+
+  /*
+   * URLからNetflix作品IDを取得
+   */
 
   const urls = [
 
@@ -2503,6 +2656,12 @@ function getNetflixTitleId(
     service &&
     service.watch_link,
 
+    service &&
+    service.url,
+
+    service &&
+    service.link,
+
     movieData &&
     movieData.netflix_url,
 
@@ -2511,7 +2670,11 @@ function getNetflixTitleId(
 
     movieData &&
     movieData.netflix &&
-    movieData.netflix.url
+    movieData.netflix.url,
+
+    movieData &&
+    movieData.netflix &&
+    movieData.netflix.link
 
   ];
 
@@ -2600,10 +2763,10 @@ function extractNetflixTitleId(
 
 
 /* =========================================================
-   Netflix作品URL判定
+   Netflix URL判定
 ========================================================= */
 
-function isNetflixTitleUrl(
+function isNetflixUrl(
   url
 ){
 
@@ -2617,7 +2780,7 @@ function isNetflixTitleUrl(
 
 
   return (
-    /netflix\.com\/(?:[^/]+\/)?title\/\d+/i
+    /^https?:\/\/(?:www\.)?netflix\.com\//i
       .test(url)
   );
 
@@ -2634,7 +2797,9 @@ function isUsableUrl(
 
   return (
     typeof url === "string" &&
-    /^https?:\/\//i.test(url)
+    /^https?:\/\//i.test(
+      url
+    )
   );
 
 }
@@ -2654,7 +2819,9 @@ function getServiceInfo(
     ).toLowerCase();
 
 
-  if(name.includes("netflix")){
+  if(
+    name.includes("netflix")
+  ){
 
     return {
       logo:"N",
@@ -2679,7 +2846,10 @@ function getServiceInfo(
   }
 
 
-  if(name.includes("u-next")){
+  if(
+    name.includes("u-next") ||
+    name.includes("unext")
+  ){
 
     return {
       logo:"U",
@@ -2690,7 +2860,9 @@ function getServiceInfo(
   }
 
 
-  if(name.includes("hulu")){
+  if(
+    name.includes("hulu")
+  ){
 
     return {
       logo:"H",
@@ -2701,7 +2873,9 @@ function getServiceInfo(
   }
 
 
-  if(name.includes("disney")){
+  if(
+    name.includes("disney")
+  ){
 
     return {
       logo:"D+",
@@ -2712,7 +2886,9 @@ function getServiceInfo(
   }
 
 
-  if(name.includes("apple")){
+  if(
+    name.includes("apple")
+  ){
 
     return {
       logo:"",
@@ -2723,7 +2899,9 @@ function getServiceInfo(
   }
 
 
-  if(name.includes("fod")){
+  if(
+    name.includes("fod")
+  ){
 
     return {
       logo:"F",
@@ -2734,7 +2912,9 @@ function getServiceInfo(
   }
 
 
-  if(name.includes("google")){
+  if(
+    name.includes("google")
+  ){
 
     return {
       logo:"G",
