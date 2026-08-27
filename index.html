@@ -1920,17 +1920,18 @@ function createServiceCards(
   movieData
 ){
 
+  /*
+   * 配信情報がない場合
+   */
   if(
     !Array.isArray(services) ||
     services.length === 0
   ){
 
     return (
-
       "<div class='no-service'>" +
       "この種類の配信情報はありません" +
       "</div>"
-
     );
 
   }
@@ -1946,6 +1947,12 @@ function createServiceCards(
   services.forEach(
     function(service){
 
+      /*
+       * -----------------------------------------
+       * 配信サービス名を安全に取得
+       * -----------------------------------------
+       */
+
       if(!service){
 
         return;
@@ -1954,26 +1961,50 @@ function createServiceCards(
 
 
       const providerName =
-        String(
-          service.provider_name ||
-          ""
-        ).trim();
+        service.provider_name ||
+        service.name ||
+        service.providerName ||
+        service.clearName ||
+        "";
 
 
       /*
-       * undefined / 空文字を
-       * 絶対に画面へ出さない
+       * 名前が取得できないデータは表示しない
+       *
+       * undefined
+       * null
+       * 空文字
+       * を画面に出さない
        */
 
-      if(!providerName){
+      if(
+        !providerName ||
+        providerName === "undefined" ||
+        providerName === "null"
+      ){
 
         return;
 
       }
 
 
+      const cleanProviderName =
+        String(providerName).trim();
+
+
+      if(!cleanProviderName){
+
+        return;
+
+      }
+
+
+      /*
+       * 同じサービスを重複表示しない
+       */
+
       const key =
-        providerName
+        cleanProviderName
           .toLowerCase();
 
 
@@ -1987,62 +2018,168 @@ function createServiceCards(
       used[key] = true;
 
 
+      /*
+       * -----------------------------------------
+       * サービス情報
+       * -----------------------------------------
+       */
+
       const serviceInfo =
         getServiceInfo(
-          providerName
+          cleanProviderName
         );
 
 
       /*
-       * URL決定
+       * -----------------------------------------
+       * 配信URL
+       * -----------------------------------------
        */
 
-      const url =
+      let url =
         getServiceUrl(
-          providerName,
+          cleanProviderName,
           title,
           service,
           movieData
         );
 
 
+      /*
+       * APIから直接取得したURLを優先
+       */
+
+      if(
+        service.watch_link &&
+        isUsableServiceUrl(
+          cleanProviderName,
+          service.watch_link
+        )
+      ){
+
+        url =
+          service.watch_link;
+
+      }
+
+
+      /*
+       * provider_urlを次に使用
+       */
+
+      if(
+        service.provider_url &&
+        isUsableServiceUrl(
+          cleanProviderName,
+          service.provider_url
+        )
+      ){
+
+        url =
+          service.provider_url;
+
+      }
+
+
+      /*
+       * Netflix
+       *
+       * Netflix作品IDがAPIから返っている場合は
+       * 作品ページを直接開く
+       */
+
+      if(
+        cleanProviderName
+          .toLowerCase()
+          .includes("netflix")
+      ){
+
+        const netflixId =
+          getNetflixTitleId(
+            service,
+            movieData
+          );
+
+
+        if(netflixId){
+
+          url =
+            "https://www.netflix.com/jp/title/" +
+            encodeURIComponent(netflixId);
+
+        }
+
+        else if(
+          service.netflix_url &&
+          /netflix\.com\/.*\/title\/\d+/i
+            .test(service.netflix_url)
+        ){
+
+          url =
+            service.netflix_url;
+
+        }
+
+        else if(
+          service.watch_link &&
+          /netflix\.com\/.*\/title\/\d+/i
+            .test(service.watch_link)
+        ){
+
+          url =
+            service.watch_link;
+
+        }
+
+        else if(
+          service.provider_url &&
+          /netflix\.com\/.*\/title\/\d+/i
+            .test(service.provider_url)
+        ){
+
+          url =
+            service.provider_url;
+
+        }
+
+      }
+
+
+      /*
+       * -----------------------------------------
+       * 状態表示
+       * -----------------------------------------
+       */
+
       let statusText =
         "見放題";
-
 
       let statusClass =
         "status-streaming";
 
-
       let buttonText =
-        providerName +
+        cleanProviderName +
         "で見る →";
-
 
       let buttonBackground =
         "#2563eb";
 
 
-      /* =====================
-         レンタル
-      ===================== */
+      /*
+       * レンタル
+       */
 
-      if(
-        type === "rental"
-      ){
+      if(type === "rental"){
 
         statusText =
           "レンタル";
 
-
         statusClass =
           "status-rental";
 
-
         buttonText =
-          providerName +
+          cleanProviderName +
           "でレンタル →";
-
 
         buttonBackground =
           "#f59e0b";
@@ -2050,26 +2187,21 @@ function createServiceCards(
       }
 
 
-      /* =====================
-         購入
-      ===================== */
+      /*
+       * 購入
+       */
 
-      else if(
-        type === "purchase"
-      ){
+      if(type === "purchase"){
 
         statusText =
           "購入";
 
-
         statusClass =
           "status-purchase";
 
-
         buttonText =
-          providerName +
+          cleanProviderName +
           "で購入 →";
-
 
         buttonBackground =
           "#7c3aed";
@@ -2077,41 +2209,52 @@ function createServiceCards(
       }
 
 
-      html +=
+      /*
+       * -----------------------------------------
+       * カード
+       * -----------------------------------------
+       */
 
+      html +=
         "<div class='service-card'>";
 
 
-      /* ロゴ */
+      /*
+       * ロゴ
+       */
 
       html +=
 
         "<div class='service-logo-row'>" +
 
-        "<div " +
-        "class='service-logo' " +
-        "style='background:" +
-        serviceInfo.background +
-        "'>" +
+          "<div " +
+          "class='service-logo' " +
+          "style='background:" +
+          escapeAttribute(
+            serviceInfo.background
+          ) +
+          "'>" +
 
-        escapeHtml(
-          serviceInfo.logo
-        ) +
+            escapeHtml(
+              serviceInfo.logo
+            ) +
 
-        "</div>" +
+          "</div>" +
 
-        "<div class='service-name'>" +
+          "<div class='service-name'>" +
 
-        escapeHtml(
-          providerName
-        ) +
+            escapeHtml(
+              cleanProviderName
+            ) +
 
-        "</div>" +
+          "</div>" +
 
         "</div>";
 
 
-      /* 状態 */
+      /*
+       * 見放題・レンタル・購入
+       */
 
       html +=
 
@@ -2120,14 +2263,16 @@ function createServiceCards(
         statusClass +
         "'>" +
 
-        escapeHtml(
-          statusText
-        ) +
+          escapeHtml(
+            statusText
+          ) +
 
         "</div>";
 
 
-      /* ボタン */
+      /*
+       * ボタン
+       */
 
       html +=
 
@@ -2142,9 +2287,9 @@ function createServiceCards(
         buttonBackground +
         "'>" +
 
-        escapeHtml(
-          buttonText
-        ) +
+          escapeHtml(
+            buttonText
+          ) +
 
         "</a>";
 
@@ -2158,6 +2303,23 @@ function createServiceCards(
 
   html +=
     "</div>";
+
+
+  /*
+   * 1件も正常なサービスがなかった場合
+   */
+
+  if(
+    !html.includes("service-card")
+  ){
+
+    return (
+      "<div class='no-service'>" +
+      "配信サービス情報を取得できませんでした" +
+      "</div>"
+    );
+
+  }
 
 
   return html;
