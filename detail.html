@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="ja">
 
@@ -21,10 +20,6 @@
 
 <style>
 
-/* =========================
-   基本
-========================= */
-
 *{
   box-sizing:border-box;
 }
@@ -43,11 +38,6 @@ a{
   color:inherit;
   text-decoration:none;
 }
-
-
-/* =========================
-   ヘッダー
-========================= */
 
 header{
   background:#111827;
@@ -68,20 +58,10 @@ header p{
   font-size:14px;
 }
 
-
-/* =========================
-   全体
-========================= */
-
 .container{
   width:min(1000px,94%);
   margin:25px auto 50px;
 }
-
-
-/* =========================
-   戻る
-========================= */
 
 .back-button{
   display:inline-block;
@@ -99,11 +79,6 @@ header p{
   background:#f3f4f6;
 }
 
-
-/* =========================
-   状態
-========================= */
-
 .status{
   text-align:center;
   padding:40px 20px;
@@ -118,22 +93,12 @@ header p{
   margin:20px 0;
 }
 
-
-/* =========================
-   詳細カード
-========================= */
-
 .detail-card{
   background:#fff;
   border-radius:18px;
   padding:25px;
   box-shadow:0 4px 18px rgba(0,0,0,.08);
 }
-
-
-/* =========================
-   映画基本情報
-========================= */
 
 .movie-main{
   display:flex;
@@ -184,11 +149,6 @@ header p{
   font-weight:bold;
 }
 
-
-/* =========================
-   国
-========================= */
-
 .country{
   margin-top:12px;
   padding:9px 12px;
@@ -199,11 +159,6 @@ header p{
   font-weight:bold;
   color:#374151;
 }
-
-
-/* =========================
-   監督・出演者
-========================= */
 
 .people-section{
   margin-top:18px;
@@ -229,11 +184,6 @@ header p{
   font-size:13px;
 }
 
-
-/* =========================
-   あらすじ
-========================= */
-
 .overview{
   margin-top:18px;
   line-height:1.8;
@@ -247,11 +197,6 @@ header p{
   margin-bottom:6px;
 }
 
-
-/* =========================
-   セクション
-========================= */
-
 .section{
   margin-top:30px;
   padding-top:25px;
@@ -263,11 +208,6 @@ header p{
   font-size:21px;
   color:#111827;
 }
-
-
-/* =========================
-   配信サービス
-========================= */
 
 .provider-group{
   margin-bottom:25px;
@@ -319,11 +259,6 @@ header p{
   font-size:13px;
 }
 
-
-/* =========================
-   字幕・吹き替え
-========================= */
-
 .language-info{
   margin-top:10px;
   padding:10px 12px;
@@ -342,11 +277,6 @@ header p{
   color:#6b7280;
 }
 
-
-/* =========================
-   ボタン
-========================= */
-
 .watch-button{
   display:inline-block;
   margin-top:11px;
@@ -364,6 +294,7 @@ header p{
 
 .watch-button.netflix{
   background:#e50914;
+  color:#fff;
 }
 
 .watch-button.amazon{
@@ -371,21 +302,24 @@ header p{
   color:#111;
 }
 
+.watch-button.unext{
+  background:#00a0e9;
+}
 
-/* =========================
-   Netflix ID
-========================= */
+.watch-button.hulu{
+  background:#00a650;
+}
+
+.watch-button.disney{
+  background:#113ccf;
+  color:#fff;
+}
 
 .netflix-id{
   margin-top:8px;
   font-size:12px;
   color:#6b7280;
 }
-
-
-/* =========================
-   シリーズ
-========================= */
 
 .series-name{
   font-size:18px;
@@ -437,11 +371,6 @@ header p{
   margin-top:4px;
 }
 
-
-/* =========================
-   TMDB
-========================= */
-
 .tmdb-link{
   display:inline-block;
   margin-top:10px;
@@ -456,22 +385,12 @@ header p{
   background:#e5e7eb;
 }
 
-
-/* =========================
-   フッター
-========================= */
-
 footer{
   text-align:center;
   padding:30px 15px;
   color:#9ca3af;
   font-size:12px;
 }
-
-
-/* =========================
-   スマホ
-========================= */
 
 @media(max-width:700px){
 
@@ -514,9 +433,7 @@ footer{
 
 </head>
 
-
 <body>
-
 
 <header>
 
@@ -528,9 +445,7 @@ footer{
 
 </header>
 
-
 <main class="container">
-
 
   <a
     class="back-button"
@@ -538,7 +453,6 @@ footer{
   >
     ← 検索結果に戻る
   </a>
-
 
   <div
     id="content"
@@ -551,20 +465,17 @@ footer{
 
   </div>
 
-
 </main>
-
 
 <footer>
   © ドコデミレル？
 </footer>
 
-
 <script>
 
-/* ========================================================
-   API
-======================================================== */
+/* =========================================================
+   APIから作品詳細を取得
+========================================================= */
 
 async function searchMovieById(id){
 
@@ -581,10 +492,14 @@ async function searchMovieById(id){
 
   try{
 
-    data =
-      JSON.parse(text);
+    data = JSON.parse(text);
 
   }catch(error){
+
+    console.error(
+      "JSON parse error:",
+      text
+    );
 
     throw new Error(
       "サーバーから正しいデータを取得できませんでした。"
@@ -606,9 +521,9 @@ async function searchMovieById(id){
 }
 
 
-/* ========================================================
+/* =========================================================
    ページ読み込み
-======================================================== */
+========================================================= */
 
 async function loadDetail(){
 
@@ -642,11 +557,6 @@ async function loadDetail(){
     const movie =
       await searchMovieById(id);
 
-
-    /* =====================
-       SEO
-    ====================== */
-
     const title =
       movie.title ||
       movie.original_title ||
@@ -669,10 +579,8 @@ async function loadDetail(){
         description
       );
 
-
     content.innerHTML =
       createDetail(movie);
-
 
   }catch(error){
 
@@ -697,18 +605,13 @@ async function loadDetail(){
 }
 
 
-/* ========================================================
-   詳細
-======================================================== */
+/* =========================================================
+   詳細画面
+========================================================= */
 
 function createDetail(movie){
 
   let html = "";
-
-
-  /* =========================
-     基本情報
-  ========================== */
 
   const poster =
     movie.poster_path
@@ -725,14 +628,8 @@ function createDetail(movie){
     Number(movie.vote_average || 0)
       .toFixed(1);
 
-
-  /* =========================
-     国
-  ========================== */
-
   const country =
     getCountryInfo(movie);
-
 
   html +=
     `
@@ -764,13 +661,11 @@ function createDetail(movie){
         `
       }
 
-
       <div class="movie-main-info">
 
         <h1 class="movie-title">
           ${escapeHtml(movie.title || "")}
         </h1>
-
 
         ${
           movie.original_title
@@ -784,12 +679,10 @@ function createDetail(movie){
           ""
         }
 
-
         <div class="meta">
           公開日：
           ${escapeHtml(release)}
         </div>
-
 
         ${
           country
@@ -803,13 +696,11 @@ function createDetail(movie){
           ""
         }
 
-
         <div>
           <div class="rating">
             ⭐ TMDB評価 ${rating}
           </div>
         </div>
-
 
         ${
           movie.director
@@ -836,7 +727,6 @@ function createDetail(movie){
           :
           ""
         }
-
 
         ${
           Array.isArray(movie.cast) &&
@@ -877,7 +767,6 @@ function createDetail(movie){
           ""
         }
 
-
         ${
           movie.overview
           ?
@@ -904,9 +793,9 @@ function createDetail(movie){
     `;
 
 
-  /* =========================
-     配信
-  ========================== */
+  /* =======================================================
+     配信情報
+  ======================================================= */
 
   html +=
     `
@@ -942,15 +831,15 @@ function createDetail(movie){
   const hasProviders =
     (
       Array.isArray(movie.streaming) &&
-      movie.streaming.length > 0
+      movie.streaming.length
     ) ||
     (
       Array.isArray(movie.rental) &&
-      movie.rental.length > 0
+      movie.rental.length
     ) ||
     (
       Array.isArray(movie.purchase) &&
-      movie.purchase.length > 0
+      movie.purchase.length
     );
 
 
@@ -970,9 +859,9 @@ function createDetail(movie){
     `</section>`;
 
 
-  /* =========================
+  /* =======================================================
      シリーズ
-  ========================== */
+  ======================================================= */
 
   if(
     movie.series &&
@@ -1013,7 +902,6 @@ function createDetail(movie){
             item.id
           );
 
-
         html +=
           `
           <a
@@ -1051,13 +939,11 @@ function createDetail(movie){
               `
             }
 
-
             <div class="series-item-title">
               ${escapeHtml(
                 item.title || ""
               )}
             </div>
-
 
             ${
               item.release_date
@@ -1090,9 +976,9 @@ function createDetail(movie){
   }
 
 
-  /* =========================
+  /* =======================================================
      TMDB
-  ========================== */
+  ======================================================= */
 
   if(movie.link){
 
@@ -1120,9 +1006,9 @@ function createDetail(movie){
 }
 
 
-/* ========================================================
+/* =========================================================
    配信サービス
-======================================================== */
+========================================================= */
 
 function createProviderGroup(
   title,
@@ -1173,6 +1059,14 @@ function createProviderGroup(
           : "";
 
 
+      /*
+       * ここが今回の重要部分です。
+       *
+       * Netflix / Amazonは
+       * TMDBの中間ページよりも
+       * 作品名検索を優先します。
+       */
+
       const link =
         getProviderLink(
           name,
@@ -1206,6 +1100,36 @@ function createProviderGroup(
 
         buttonClass +=
           " amazon";
+
+      }
+
+
+      if(
+        lowerName.includes("unext")
+      ){
+
+        buttonClass +=
+          " unext";
+
+      }
+
+
+      if(
+        lowerName.includes("hulu")
+      ){
+
+        buttonClass +=
+          " hulu";
+
+      }
+
+
+      if(
+        lowerName.includes("disney")
+      ){
+
+        buttonClass +=
+          " disney";
 
       }
 
@@ -1247,6 +1171,7 @@ function createProviderGroup(
           <div class="language-info">
 
             <strong>🎧 字幕：</strong>
+
             <span class="language-unknown">
               ${escapeHtml(
                 getSubtitleInfo(movie)
@@ -1256,6 +1181,7 @@ function createProviderGroup(
             <br>
 
             <strong>🎙 吹き替え：</strong>
+
             <span class="language-unknown">
               ${escapeHtml(
                 getDubbingInfo(movie)
@@ -1321,27 +1247,21 @@ function createProviderGroup(
 }
 
 
-/* ========================================================
+/* =========================================================
    配信種別
-======================================================== */
+========================================================= */
 
 function getProviderType(title){
 
-  if(
-    title.includes("見放題")
-  ){
+  if(title.includes("見放題")){
     return "見放題";
   }
 
-  if(
-    title.includes("レンタル")
-  ){
+  if(title.includes("レンタル")){
     return "レンタル";
   }
 
-  if(
-    title.includes("購入")
-  ){
+  if(title.includes("購入")){
     return "購入";
   }
 
@@ -1350,9 +1270,9 @@ function getProviderType(title){
 }
 
 
-/* ========================================================
-   ボタン
-======================================================== */
+/* =========================================================
+   ボタン文字
+========================================================= */
 
 function getButtonText(name){
 
@@ -1361,10 +1281,8 @@ function getButtonText(name){
       .toLowerCase();
 
 
-  if(
-    lower.includes("netflix")
-  ){
-    return "Netflixで見る →";
+  if(lower.includes("netflix")){
+    return "Netflixで作品を見る →";
   }
 
 
@@ -1372,34 +1290,26 @@ function getButtonText(name){
     lower.includes("amazon") ||
     lower.includes("prime")
   ){
-    return "Prime Videoで見る →";
+    return "Prime Videoで作品を探す →";
   }
 
 
-  if(
-    lower.includes("unext")
-  ){
+  if(lower.includes("unext")){
     return "U-NEXTで見る →";
   }
 
 
-  if(
-    lower.includes("hulu")
-  ){
+  if(lower.includes("hulu")){
     return "Huluで見る →";
   }
 
 
-  if(
-    lower.includes("disney")
-  ){
+  if(lower.includes("disney")){
     return "Disney+で見る →";
   }
 
 
-  if(
-    lower.includes("apple")
-  ){
+  if(lower.includes("apple")){
     return "Apple TVで見る →";
   }
 
@@ -1410,9 +1320,9 @@ function getButtonText(name){
 }
 
 
-/* ========================================================
+/* =========================================================
    配信リンク
-======================================================== */
+========================================================= */
 
 function getProviderLink(
   name,
@@ -1425,11 +1335,23 @@ function getProviderLink(
       .toLowerCase();
 
 
-  /* Netflix */
+  const title =
+    movie.title ||
+    movie.original_title ||
+    "";
+
+
+  /* =======================================================
+     Netflix
+  ======================================================= */
 
   if(
     lower.includes("netflix")
   ){
+
+    /*
+     * まず本物のNetflix作品URLを探す
+     */
 
     const urls = [
 
@@ -1438,15 +1360,13 @@ function getProviderLink(
       movie.netflix &&
       movie.netflix.url,
 
-      provider.provider_url,
-
       provider.watch_link,
-
-      provider.netflix_url,
 
       provider.url,
 
-      provider.link
+      provider.link,
+
+      provider.provider_url
 
     ];
 
@@ -1458,48 +1378,73 @@ function getProviderLink(
     ){
 
       const normalized =
-        normalizeNetflixUrl(
+        normalizeNetflixTitleUrl(
           urls[i]
         );
 
 
       if(normalized){
+
         return normalized;
+
       }
 
     }
 
 
+    /*
+     * Netflix作品URLがない場合
+     * Netflix検索画面へ
+     */
+
     return createNetflixSearchUrl(
-      movie.title ||
-      movie.original_title ||
-      ""
+      title
     );
 
   }
 
 
-  /* Amazon */
+  /* =======================================================
+     Amazon Prime Video
+  ======================================================= */
 
   if(
     lower.includes("amazon") ||
     lower.includes("prime")
   ){
 
+    /*
+     * AmazonはTMDBの
+     * 「本編と他多数」ページを
+     * 優先しない。
+     *
+     * まず作品名検索へ送る。
+     */
+
+    return createAmazonSearchUrl(
+      title
+    );
+
+  }
+
+
+  /* =======================================================
+     U-NEXT
+  ======================================================= */
+
+  if(
+    lower.includes("unext")
+  ){
+
     const urls = [
 
-      movie.amazon_url,
-
-      movie.amazon &&
-      movie.amazon.url,
-
-      provider.provider_url,
-
-      provider.watch_link,
+      movie.unext_url,
 
       provider.url,
 
-      provider.link
+      provider.link,
+
+      provider.provider_url
 
     ];
 
@@ -1510,42 +1455,133 @@ function getProviderLink(
       i++
     ){
 
-      const url =
-        urls[i];
-
-
       if(
-        typeof url === "string" &&
-        /^https?:\/\//i.test(url)
+        isValidHttpUrl(
+          urls[i]
+        )
       ){
 
-        return url;
+        return urls[i];
 
       }
 
     }
 
 
-    return createAmazonSearchUrl(
-      movie.title ||
-      movie.original_title ||
-      ""
+    return createUNEXTSearchUrl(
+      title
     );
 
   }
 
 
-  /* その他 */
+  /* =======================================================
+     Hulu
+  ======================================================= */
+
+  if(
+    lower.includes("hulu")
+  ){
+
+    const urls = [
+
+      movie.hulu_url,
+
+      provider.url,
+
+      provider.link,
+
+      provider.provider_url
+
+    ];
+
+
+    for(
+      let i = 0;
+      i < urls.length;
+      i++
+    ){
+
+      if(
+        isValidHttpUrl(
+          urls[i]
+        )
+      ){
+
+        return urls[i];
+
+      }
+
+    }
+
+
+    return createHuluSearchUrl(
+      title
+    );
+
+  }
+
+
+  /* =======================================================
+     Disney+
+  ======================================================= */
+
+  if(
+    lower.includes("disney")
+  ){
+
+    const urls = [
+
+      movie.disney_url,
+
+      provider.url,
+
+      provider.link,
+
+      provider.provider_url
+
+    ];
+
+
+    for(
+      let i = 0;
+      i < urls.length;
+      i++
+    ){
+
+      if(
+        isValidHttpUrl(
+          urls[i]
+        )
+      ){
+
+        return urls[i];
+
+      }
+
+    }
+
+
+    return createDisneySearchUrl(
+      title
+    );
+
+  }
+
+
+  /* =======================================================
+     その他
+  ======================================================= */
 
   const urls = [
-
-    provider.provider_url,
 
     provider.watch_link,
 
     provider.url,
 
-    provider.link
+    provider.link,
+
+    provider.provider_url
 
   ];
 
@@ -1557,8 +1593,9 @@ function getProviderLink(
   ){
 
     if(
-      typeof urls[i] === "string" &&
-      /^https?:\/\//i.test(urls[i])
+      isValidHttpUrl(
+        urls[i]
+      )
     ){
 
       return urls[i];
@@ -1573,151 +1610,11 @@ function getProviderLink(
 }
 
 
-/* ========================================================
-   字幕
-======================================================== */
+/* =========================================================
+   Netflix作品URL
+========================================================= */
 
-function getSubtitleInfo(movie){
-
-  if(
-    movie &&
-    movie.language &&
-    movie.language.subtitle
-  ){
-
-    return movie.language.subtitle;
-
-  }
-
-  return "未確認";
-
-}
-
-
-/* ========================================================
-   吹き替え
-======================================================== */
-
-function getDubbingInfo(movie){
-
-  if(
-    movie &&
-    movie.language &&
-    movie.language.dubbing
-  ){
-
-    return movie.language.dubbing;
-
-  }
-
-  return "未確認";
-
-}
-
-
-/* ========================================================
-   国
-======================================================== */
-
-function getCountryInfo(movie){
-
-  /*
-   * API側からproduction_countriesが
-   * 来た場合に対応。
-   */
-
-  if(
-    movie &&
-    Array.isArray(movie.production_countries) &&
-    movie.production_countries.length
-  ){
-
-    return movie.production_countries
-      .map(
-        function(country){
-
-          return country.name || "";
-
-        }
-      )
-      .filter(Boolean)
-      .join(" / ");
-
-  }
-
-
-  /*
-   * API側にcountryがある場合にも対応。
-   */
-
-  if(
-    movie &&
-    movie.country
-  ){
-
-    return String(
-      movie.country
-    );
-
-  }
-
-
-  /*
-   * original_languageから推測できる場合。
-   */
-
-  const language =
-    movie &&
-    movie.language &&
-    movie.language.original_language
-      ? movie.language.original_language
-      : null;
-
-
-  const map = {
-
-    ja:"日本 🇯🇵",
-
-    en:"英語圏",
-
-    ko:"韓国 🇰🇷",
-
-    zh:"中国 🇨🇳",
-
-    fr:"フランス 🇫🇷",
-
-    de:"ドイツ 🇩🇪",
-
-    es:"スペイン語圏",
-
-    it:"イタリア 🇮🇹",
-
-    hi:"インド 🇮🇳",
-
-    pt:"ポルトガル語圏",
-
-    ru:"ロシア 🇷🇺"
-
-  };
-
-
-  if(language && map[language]){
-
-    return map[language];
-
-  }
-
-
-  return "";
-
-}
-
-
-/* ========================================================
-   Netflix URL
-======================================================== */
-
-function normalizeNetflixUrl(url){
+function normalizeNetflixTitleUrl(url){
 
   if(
     typeof url !== "string" ||
@@ -1732,6 +1629,10 @@ function normalizeNetflixUrl(url){
   const clean =
     url.trim();
 
+
+  /*
+   * Netflix作品IDが含まれている場合
+   */
 
   const id =
     extractNetflixTitleId(
@@ -1749,8 +1650,12 @@ function normalizeNetflixUrl(url){
   }
 
 
+  /*
+   * Netflixの検索URLならOK
+   */
+
   if(
-    /^https?:\/\/(?:www\.)?netflix\.com\//i
+    /^https?:\/\/(?:www\.)?netflix\.com\/jp\/search/i
       .test(clean)
   ){
 
@@ -1759,14 +1664,19 @@ function normalizeNetflixUrl(url){
   }
 
 
+  /*
+   * Netflixトップページは
+   * 作品URLとして使用しない
+   */
+
   return null;
 
 }
 
 
-/* ========================================================
-   Netflix ID
-======================================================== */
+/* =========================================================
+   Netflix作品ID
+========================================================= */
 
 function extractNetflixTitleId(url){
 
@@ -1819,9 +1729,9 @@ function extractNetflixTitleId(url){
 }
 
 
-/* ========================================================
+/* =========================================================
    Netflix検索
-======================================================== */
+========================================================= */
 
 function createNetflixSearchUrl(title){
 
@@ -1845,9 +1755,9 @@ function createNetflixSearchUrl(title){
 }
 
 
-/* ========================================================
+/* =========================================================
    Amazon検索
-======================================================== */
+========================================================= */
 
 function createAmazonSearchUrl(title){
 
@@ -1874,9 +1784,217 @@ function createAmazonSearchUrl(title){
 }
 
 
-/* ========================================================
+/* =========================================================
+   U-NEXT検索
+========================================================= */
+
+function createUNEXTSearchUrl(title){
+
+  const clean =
+    String(title || "")
+      .trim();
+
+
+  return (
+    "https://video.unext.jp/search?query=" +
+    encodeURIComponent(clean)
+  );
+
+}
+
+
+/* =========================================================
+   Hulu検索
+========================================================= */
+
+function createHuluSearchUrl(title){
+
+  const clean =
+    String(title || "")
+      .trim();
+
+
+  return (
+    "https://www.hulu.jp/search?q=" +
+    encodeURIComponent(clean)
+  );
+
+}
+
+
+/* =========================================================
+   Disney+検索
+========================================================= */
+
+function createDisneySearchUrl(title){
+
+  const clean =
+    String(title || "")
+      .trim();
+
+
+  return (
+    "https://www.disneyplus.com/ja-jp/search/" +
+    encodeURIComponent(clean)
+  );
+
+}
+
+
+/* =========================================================
+   URLチェック
+========================================================= */
+
+function isValidHttpUrl(url){
+
+  return (
+    typeof url === "string" &&
+    /^https?:\/\//i.test(
+      url.trim()
+    )
+  );
+
+}
+
+
+/* =========================================================
+   字幕
+========================================================= */
+
+function getSubtitleInfo(movie){
+
+  if(
+    movie &&
+    movie.language &&
+    movie.language.subtitle
+  ){
+
+    return movie.language.subtitle;
+
+  }
+
+  return "未確認";
+
+}
+
+
+/* =========================================================
+   吹き替え
+========================================================= */
+
+function getDubbingInfo(movie){
+
+  if(
+    movie &&
+    movie.language &&
+    movie.language.dubbing
+  ){
+
+    return movie.language.dubbing;
+
+  }
+
+  return "未確認";
+
+}
+
+
+/* =========================================================
+   国
+========================================================= */
+
+function getCountryInfo(movie){
+
+  if(
+    movie &&
+    Array.isArray(movie.production_countries) &&
+    movie.production_countries.length
+  ){
+
+    return movie.production_countries
+      .map(
+        function(country){
+
+          return country.name || "";
+
+        }
+      )
+      .filter(Boolean)
+      .join(" / ");
+
+  }
+
+
+  if(
+    movie &&
+    movie.country
+  ){
+
+    return String(
+      movie.country
+    );
+
+  }
+
+
+  const language =
+    movie &&
+    movie.original_language
+      ? movie.original_language
+      : (
+          movie &&
+          movie.language &&
+          movie.language.original_language
+            ? movie.language.original_language
+            : null
+        );
+
+
+  const map = {
+
+    ja:"日本 🇯🇵",
+
+    en:"英語圏",
+
+    ko:"韓国 🇰🇷",
+
+    zh:"中国 🇨🇳",
+
+    fr:"フランス 🇫🇷",
+
+    de:"ドイツ 🇩🇪",
+
+    es:"スペイン語圏",
+
+    it:"イタリア 🇮🇹",
+
+    hi:"インド 🇮🇳",
+
+    pt:"ポルトガル語圏",
+
+    ru:"ロシア 🇷🇺"
+
+  };
+
+
+  if(
+    language &&
+    map[language]
+  ){
+
+    return map[language];
+
+  }
+
+
+  return "";
+
+}
+
+
+/* =========================================================
    日付
-======================================================== */
+========================================================= */
 
 function formatDate(date){
 
@@ -1903,9 +2021,9 @@ function formatDate(date){
 }
 
 
-/* ========================================================
-   シリーズ年
-======================================================== */
+/* =========================================================
+   年
+========================================================= */
 
 function getYear(date){
 
@@ -1928,9 +2046,9 @@ function getYear(date){
 }
 
 
-/* ========================================================
+/* =========================================================
    HTMLエスケープ
-======================================================== */
+========================================================= */
 
 function escapeHtml(value){
 
@@ -1944,16 +2062,14 @@ function escapeHtml(value){
 }
 
 
-/* ========================================================
+/* =========================================================
    開始
-======================================================== */
+========================================================= */
 
 loadDetail();
 
 </script>
 
-
 </body>
 
 </html>
-```
