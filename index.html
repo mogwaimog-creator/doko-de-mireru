@@ -39,6 +39,7 @@ header{
 header h1{
   margin:0;
   font-size:30px;
+  cursor:pointer;
 }
 
 header p{
@@ -192,22 +193,6 @@ header p{
   font-weight:bold;
 }
 
-.provider-button{
-  display:inline-block;
-  margin-left:5px;
-  padding:7px 10px;
-  background:#111827;
-  color:white;
-  text-decoration:none;
-  border-radius:6px;
-  font-size:12px;
-  cursor:pointer;
-}
-
-.provider-button:hover{
-  opacity:.85;
-}
-
 .netflix-area{
   margin-top:15px;
 }
@@ -252,6 +237,147 @@ header p{
   text-decoration:underline;
 }
 
+.detail-button{
+  display:inline-block;
+  margin-top:15px;
+  padding:10px 18px;
+  background:#2563eb;
+  color:white;
+  border-radius:8px;
+  text-decoration:none;
+  font-size:14px;
+  font-weight:bold;
+  cursor:pointer;
+  border:0;
+}
+
+.detail-button:hover{
+  background:#1d4ed8;
+}
+
+.back-button{
+  display:inline-block;
+  margin-bottom:18px;
+  padding:9px 16px;
+  background:#6b7280;
+  color:white;
+  border-radius:8px;
+  text-decoration:none;
+  font-size:14px;
+  font-weight:bold;
+  cursor:pointer;
+  border:0;
+}
+
+.back-button:hover{
+  background:#4b5563;
+}
+
+.detail-page{
+  background:white;
+  border-radius:14px;
+  padding:22px;
+  box-shadow:
+    0 3px 12px rgba(0,0,0,.08);
+}
+
+.detail-main{
+  display:flex;
+  gap:22px;
+}
+
+.detail-poster{
+  width:220px;
+  min-width:220px;
+  height:325px;
+  object-fit:cover;
+  border-radius:10px;
+  background:#e5e7eb;
+}
+
+.detail-info{
+  flex:1;
+  min-width:0;
+}
+
+.detail-page-title{
+  margin:0 0 8px;
+  font-size:28px;
+}
+
+.detail-page-original{
+  color:#6b7280;
+  font-size:14px;
+  margin-bottom:12px;
+}
+
+.detail-page-section{
+  margin-top:25px;
+  padding-top:20px;
+  border-top:1px solid #e5e7eb;
+}
+
+.detail-page-section h3{
+  margin:0 0 12px;
+  font-size:18px;
+}
+
+.person-list{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+.person{
+  padding:7px 10px;
+  background:#f3f4f6;
+  border-radius:7px;
+  font-size:13px;
+}
+
+.series-list{
+  display:grid;
+  grid-template-columns:
+    repeat(auto-fill,minmax(150px,1fr));
+  gap:15px;
+}
+
+.series-item{
+  background:#f9fafb;
+  border:1px solid #e5e7eb;
+  border-radius:10px;
+  padding:10px;
+  cursor:pointer;
+  transition:.15s;
+}
+
+.series-item:hover{
+  transform:translateY(-2px);
+  box-shadow:
+    0 3px 10px rgba(0,0,0,.08);
+}
+
+.series-poster{
+  width:100%;
+  aspect-ratio:2/3;
+  object-fit:cover;
+  border-radius:7px;
+  background:#e5e7eb;
+}
+
+.series-title{
+  margin-top:8px;
+  font-size:14px;
+  font-weight:bold;
+  line-height:1.4;
+}
+
+.series-date{
+  margin-top:4px;
+  color:#6b7280;
+  font-size:12px;
+}
+
 .loading{
   text-align:center;
   padding:30px;
@@ -262,6 +388,11 @@ header p{
   text-align:center;
   color:#dc2626;
   padding:20px;
+}
+
+.empty{
+  color:#6b7280;
+  font-size:13px;
 }
 
 @media(max-width:600px){
@@ -296,6 +427,26 @@ header p{
     font-size:13px;
   }
 
+  .detail-main{
+    flex-direction:column;
+  }
+
+  .detail-poster{
+    width:180px;
+    min-width:180px;
+    height:265px;
+    margin:0 auto;
+  }
+
+  .detail-page-title{
+    font-size:22px;
+  }
+
+  .series-list{
+    grid-template-columns:
+      repeat(2,minmax(0,1fr));
+  }
+
 }
 
 </style>
@@ -307,7 +458,7 @@ header p{
 
 <header>
 
-<h1>ドコデミレル？</h1>
+<h1 id="siteTitle">ドコデミレル？</h1>
 
 <p>映画がどの動画配信サービスで見られるか検索</p>
 
@@ -376,6 +527,30 @@ const resultsElement =
 const messageElement =
   document.getElementById("message");
 
+const siteTitle =
+  document.getElementById("siteTitle");
+
+
+/* ========================================================
+   現在の検索結果を保存
+======================================================== */
+
+let lastSearchResults = [];
+
+
+/* ========================================================
+   トップへ戻る
+======================================================== */
+
+siteTitle.addEventListener(
+  "click",
+  function(){
+
+    showSearchPage();
+
+  }
+);
+
 
 /* ========================================================
    検索
@@ -392,7 +567,9 @@ searchInput.addEventListener(
   function(event){
 
     if(event.key === "Enter"){
+
       searchMovies();
+
     }
 
   }
@@ -429,14 +606,12 @@ async function searchMovies(){
 
   try{
 
-    const url =
-      API_URL +
-      "?query=" +
-      encodeURIComponent(query);
-
-
     const response =
-      await fetch(url);
+      await fetch(
+        API_URL +
+        "?query=" +
+        encodeURIComponent(query)
+      );
 
 
     if(!response.ok){
@@ -458,6 +633,10 @@ async function searchMovies(){
         : [];
 
 
+    lastSearchResults =
+      movies;
+
+
     if(!movies.length){
 
       messageElement.textContent =
@@ -473,20 +652,15 @@ async function searchMovies(){
       "作品が見つかりました。";
 
 
-    /*
-     * 検索結果を表示
-     */
-
     for(
       let i = 0;
       i < movies.length;
       i++
     ){
 
-      const movie =
-        movies[i];
-
-      await displayMovie(movie);
+      await displaySearchMovie(
+        movies[i]
+      );
 
     }
 
@@ -505,70 +679,16 @@ async function searchMovies(){
 
 
 /* ========================================================
-   映画カード表示
+   検索結果カード
 ======================================================== */
 
-async function displayMovie(movie){
-
-  /*
-   * 検索結果だけでは配信情報がないため、
-   * APIのID検索で詳細情報を取得する。
-   */
-
-  let detail = null;
-
-
-  try{
-
-    const response =
-      await fetch(
-        API_URL +
-        "?id=" +
-        encodeURIComponent(movie.id)
-      );
-
-
-    if(response.ok){
-
-      detail =
-        await response.json();
-
-    }
-
-  }catch(error){
-
-    console.error(
-      "detail error:",
-      error
-    );
-
-  }
-
-
-  /*
-   * 詳細取得に失敗した場合も
-   * 検索結果は表示する。
-   */
-
-  if(!detail){
-
-    detail = movie;
-
-  }
-
+async function displaySearchMovie(movie){
 
   const card =
     document.createElement("div");
 
   card.className =
     "movie-card";
-
-
-  const poster =
-    detail.poster_path
-      ? "https://image.tmdb.org/t/p/w500" +
-        detail.poster_path
-      : "";
 
 
   const movieMain =
@@ -578,9 +698,14 @@ async function displayMovie(movie){
     "movie-main";
 
 
-  /*
-   * ポスター
-   */
+  /* ポスター */
+
+  const poster =
+    movie.poster_path
+      ? "https://image.tmdb.org/t/p/w500" +
+        movie.poster_path
+      : "";
+
 
   if(poster){
 
@@ -594,7 +719,7 @@ async function displayMovie(movie){
       poster;
 
     img.alt =
-      detail.title || "";
+      movie.title || "";
 
     img.loading =
       "lazy";
@@ -604,22 +729,7 @@ async function displayMovie(movie){
   }else{
 
     const noPoster =
-      document.createElement("div");
-
-    noPoster.className =
-      "poster";
-
-    noPoster.style.display =
-      "flex";
-
-    noPoster.style.alignItems =
-      "center";
-
-    noPoster.style.justifyContent =
-      "center";
-
-    noPoster.textContent =
-      "No Image";
+      createNoPoster();
 
     movieMain.appendChild(
       noPoster
@@ -628,9 +738,7 @@ async function displayMovie(movie){
   }
 
 
-  /*
-   * 映画情報
-   */
+  /* 映画情報 */
 
   const info =
     document.createElement("div");
@@ -646,7 +754,336 @@ async function displayMovie(movie){
     "movie-title";
 
   title.textContent =
-    detail.title || "作品名不明";
+    movie.title || "作品名不明";
+
+  info.appendChild(title);
+
+
+  if(movie.original_title){
+
+    const original =
+      document.createElement("div");
+
+    original.className =
+      "original-title";
+
+    original.textContent =
+      movie.original_title;
+
+    info.appendChild(original);
+
+  }
+
+
+  if(movie.release_date){
+
+    const release =
+      document.createElement("div");
+
+    release.className =
+      "release";
+
+    release.textContent =
+      "公開日：" +
+      movie.release_date;
+
+    info.appendChild(release);
+
+  }
+
+
+  if(
+    movie.vote_average !== undefined &&
+    movie.vote_average !== null
+  ){
+
+    const rating =
+      document.createElement("div");
+
+    rating.className =
+      "rating";
+
+    rating.textContent =
+      "★ " +
+      Number(movie.vote_average)
+        .toFixed(1);
+
+    info.appendChild(rating);
+
+  }
+
+
+  if(movie.overview){
+
+    const overview =
+      document.createElement("div");
+
+    overview.className =
+      "overview";
+
+    overview.textContent =
+      movie.overview;
+
+    info.appendChild(overview);
+
+  }
+
+
+  /* 詳細ボタン */
+
+  const detailButton =
+    document.createElement("button");
+
+  detailButton.className =
+    "detail-button";
+
+  detailButton.type =
+    "button";
+
+  detailButton.textContent =
+    "詳細を見る";
+
+
+  detailButton.addEventListener(
+    "click",
+    function(){
+
+      openMovieDetail(
+        movie.id,
+        true
+      );
+
+    }
+  );
+
+
+  info.appendChild(
+    detailButton
+  );
+
+
+  movieMain.appendChild(
+    info
+  );
+
+
+  card.appendChild(
+    movieMain
+  );
+
+
+  resultsElement.appendChild(
+    card
+  );
+
+}
+
+
+/* ========================================================
+   詳細画面
+======================================================== */
+
+async function openMovieDetail(
+  movieId,
+  saveHistory
+){
+
+  if(!movieId){
+
+    return;
+
+  }
+
+
+  resultsElement.innerHTML = "";
+
+  messageElement.innerHTML =
+    '<div class="loading">作品情報を読み込んでいます…</div>';
+
+
+  try{
+
+    const response =
+      await fetch(
+        API_URL +
+        "?id=" +
+        encodeURIComponent(movieId)
+      );
+
+
+    if(!response.ok){
+
+      throw new Error(
+        "作品情報の取得に失敗しました。"
+      );
+
+    }
+
+
+    const detail =
+      await response.json();
+
+
+    if(saveHistory){
+
+      history.pushState(
+        {
+          page:"detail",
+          movieId:movieId
+        },
+        "",
+        "#movie-" +
+        movieId
+      );
+
+    }
+
+
+    messageElement.textContent =
+      "";
+
+
+    renderDetailPage(
+      detail
+    );
+
+
+  }catch(error){
+
+    console.error(error);
+
+    messageElement.innerHTML =
+      '<div class="error">' +
+      '作品情報を取得できませんでした。' +
+      '</div>';
+
+  }
+
+}
+
+
+/* ========================================================
+   詳細画面表示
+======================================================== */
+
+function renderDetailPage(detail){
+
+  resultsElement.innerHTML = "";
+
+
+  const page =
+    document.createElement("div");
+
+  page.className =
+    "detail-page";
+
+
+  /* 戻る */
+
+  const back =
+    document.createElement("button");
+
+  back.className =
+    "back-button";
+
+  back.type =
+    "button";
+
+  back.textContent =
+    "← 検索結果に戻る";
+
+
+  back.addEventListener(
+    "click",
+    function(){
+
+      showSearchPage();
+
+    }
+  );
+
+
+  page.appendChild(
+    back
+  );
+
+
+  /* メイン */
+
+  const main =
+    document.createElement("div");
+
+  main.className =
+    "detail-main";
+
+
+  /* ポスター */
+
+  const poster =
+    detail.poster_path
+      ? "https://image.tmdb.org/t/p/w500" +
+        detail.poster_path
+      : "";
+
+
+  if(poster){
+
+    const img =
+      document.createElement("img");
+
+    img.className =
+      "detail-poster";
+
+    img.src =
+      poster;
+
+    img.alt =
+      detail.title || "";
+
+    main.appendChild(img);
+
+  }else{
+
+    const noPoster =
+      createNoPoster();
+
+    noPoster.className =
+      "detail-poster";
+
+    noPoster.style.display =
+      "flex";
+
+    noPoster.style.alignItems =
+      "center";
+
+    noPoster.style.justifyContent =
+      "center";
+
+    main.appendChild(
+      noPoster
+    );
+
+  }
+
+
+  /* 情報 */
+
+  const info =
+    document.createElement("div");
+
+  info.className =
+    "detail-info";
+
+
+  const title =
+    document.createElement("h2");
+
+  title.className =
+    "detail-page-title";
+
+  title.textContent =
+    detail.title ||
+    "作品名不明";
 
   info.appendChild(title);
 
@@ -657,7 +1094,7 @@ async function displayMovie(movie){
       document.createElement("div");
 
     original.className =
-      "original-title";
+      "detail-page-original";
 
     original.textContent =
       detail.original_title;
@@ -721,33 +1158,35 @@ async function displayMovie(movie){
   }
 
 
-  movieMain.appendChild(info);
+  main.appendChild(
+    info
+  );
 
-  card.appendChild(movieMain);
+  page.appendChild(
+    main
+  );
 
 
-  /*
-   * 配信情報
-   */
+  /* ======================================================
+     配信サービス
+  ====================================================== */
 
-  const detailArea =
+  const streamingSection =
     document.createElement("div");
 
-  detailArea.className =
-    "detail";
+  streamingSection.className =
+    "detail-page-section";
 
 
-  const detailTitle =
-    document.createElement("div");
+  const streamingTitle =
+    document.createElement("h3");
 
-  detailTitle.className =
-    "detail-title";
-
-  detailTitle.textContent =
+  streamingTitle.textContent =
     "配信サービス";
 
-  detailArea.appendChild(
-    detailTitle
+
+  streamingSection.appendChild(
+    streamingTitle
   );
 
 
@@ -758,19 +1197,11 @@ async function displayMovie(movie){
     "providers";
 
 
-  /*
-   * 見放題
-   */
-
   addProviders(
     providers,
     detail.streaming
   );
 
-
-  /*
-   * レンタル
-   */
 
   addProviders(
     providers,
@@ -778,44 +1209,37 @@ async function displayMovie(movie){
   );
 
 
-  /*
-   * 購入
-   */
-
   addProviders(
     providers,
     detail.purchase
   );
 
 
-  if(!providers.children.length){
+  if(providers.children.length){
+
+    streamingSection.appendChild(
+      providers
+    );
+
+  }else{
 
     const none =
       document.createElement("div");
 
-    none.style.color =
-      "#6b7280";
-
-    none.style.fontSize =
-      "13px";
+    none.className =
+      "empty";
 
     none.textContent =
       "日本で利用できる配信情報が見つかりませんでした。";
 
-    detailArea.appendChild(none);
-
-  }else{
-
-    detailArea.appendChild(
-      providers
+    streamingSection.appendChild(
+      none
     );
 
   }
 
 
-  /*
-   * Netflixボタン
-   */
+  /* Netflix */
 
   if(
     detail.netflix ||
@@ -825,16 +1249,14 @@ async function displayMovie(movie){
   ){
 
     createNetflixButton(
-      detailArea,
+      streamingSection,
       detail
     );
 
   }
 
 
-  /*
-   * TMDB / 配信情報ページ
-   */
+  /* 詳細配信情報 */
 
   if(detail.link){
 
@@ -860,21 +1282,456 @@ async function displayMovie(movie){
     link.textContent =
       "配信情報を詳しく見る";
 
-    more.appendChild(link);
 
-    detailArea.appendChild(more);
+    more.appendChild(
+      link
+    );
+
+    streamingSection.appendChild(
+      more
+    );
 
   }
 
 
-  card.appendChild(
-    detailArea
+  page.appendChild(
+    streamingSection
   );
+
+
+  /* ======================================================
+     監督
+  ====================================================== */
+
+  if(detail.director){
+
+    const directorSection =
+      document.createElement("div");
+
+    directorSection.className =
+      "detail-page-section";
+
+
+    const heading =
+      document.createElement("h3");
+
+    heading.textContent =
+      "監督";
+
+
+    directorSection.appendChild(
+      heading
+    );
+
+
+    const person =
+      document.createElement("div");
+
+    person.className =
+      "person";
+
+
+    person.textContent =
+      detail.director.name ||
+      "";
+
+
+    directorSection.appendChild(
+      person
+    );
+
+
+    page.appendChild(
+      directorSection
+    );
+
+  }
+
+
+  /* ======================================================
+     出演者
+  ====================================================== */
+
+  if(
+    Array.isArray(detail.cast) &&
+    detail.cast.length
+  ){
+
+    const castSection =
+      document.createElement("div");
+
+    castSection.className =
+      "detail-page-section";
+
+
+    const heading =
+      document.createElement("h3");
+
+    heading.textContent =
+      "出演者";
+
+
+    castSection.appendChild(
+      heading
+    );
+
+
+    const people =
+      document.createElement("div");
+
+    people.className =
+      "person-list";
+
+
+    detail.cast.forEach(
+      function(personData){
+
+        const person =
+          document.createElement("div");
+
+        person.className =
+          "person";
+
+        person.textContent =
+          personData.name || "";
+
+        people.appendChild(
+          person
+        );
+
+      }
+    );
+
+
+    castSection.appendChild(
+      people
+    );
+
+
+    page.appendChild(
+      castSection
+    );
+
+  }
+
+
+  /* ======================================================
+     シリーズ作品
+  ====================================================== */
+
+  if(
+    detail.series &&
+    Array.isArray(
+      detail.series.movies
+    ) &&
+    detail.series.movies.length
+  ){
+
+    const seriesSection =
+      document.createElement("div");
+
+    seriesSection.className =
+      "detail-page-section";
+
+
+    const heading =
+      document.createElement("h3");
+
+    heading.textContent =
+      detail.series.name ||
+      "シリーズ作品";
+
+
+    seriesSection.appendChild(
+      heading
+    );
+
+
+    const description =
+      document.createElement("div");
+
+    description.className =
+      "empty";
+
+    description.style.marginBottom =
+      "12px";
+
+    description.textContent =
+      "シリーズ作品を選択すると詳細画面を開けます。";
+
+
+    seriesSection.appendChild(
+      description
+    );
+
+
+    const seriesList =
+      document.createElement("div");
+
+    seriesList.className =
+      "series-list";
+
+
+    detail.series.movies
+      .sort(
+        function(a,b){
+
+          return String(
+            a.release_date || ""
+          ).localeCompare(
+            String(
+              b.release_date || ""
+            )
+          );
+
+        }
+      )
+      .forEach(
+        function(seriesMovie){
+
+          const item =
+            document.createElement("div");
+
+          item.className =
+            "series-item";
+
+
+          const image =
+            document.createElement("img");
+
+          image.className =
+            "series-poster";
+
+
+          if(seriesMovie.poster_path){
+
+            image.src =
+              "https://image.tmdb.org/t/p/w500" +
+              seriesMovie.poster_path;
+
+          }else{
+
+            image.style.display =
+              "none";
+
+          }
+
+
+          image.alt =
+            seriesMovie.title || "";
+
+
+          image.loading =
+            "lazy";
+
+
+          item.appendChild(
+            image
+          );
+
+
+          const title =
+            document.createElement("div");
+
+          title.className =
+            "series-title";
+
+          title.textContent =
+            seriesMovie.title ||
+            "作品名不明";
+
+
+          item.appendChild(
+            title
+          );
+
+
+          if(seriesMovie.release_date){
+
+            const date =
+              document.createElement("div");
+
+            date.className =
+              "series-date";
+
+            date.textContent =
+              seriesMovie.release_date;
+
+
+            item.appendChild(
+              date
+            );
+
+          }
+
+
+          item.addEventListener(
+            "click",
+            function(){
+
+              openMovieDetail(
+                seriesMovie.id,
+                true
+              );
+
+              window.scrollTo({
+                top:0,
+                behavior:"smooth"
+              });
+
+            }
+          );
+
+
+          seriesList.appendChild(
+            item
+          );
+
+        }
+      );
+
+
+    seriesSection.appendChild(
+      seriesList
+    );
+
+
+    page.appendChild(
+      seriesSection
+    );
+
+  }
 
 
   resultsElement.appendChild(
-    card
+    page
   );
+
+}
+
+
+/* ========================================================
+   検索ページへ戻る
+======================================================== */
+
+function showSearchPage(){
+
+  resultsElement.innerHTML = "";
+
+
+  if(
+    lastSearchResults.length
+  ){
+
+    messageElement.textContent =
+      lastSearchResults.length +
+      "作品が見つかりました。";
+
+
+    lastSearchResults.forEach(
+      function(movie){
+
+        displaySearchMovie(
+          movie
+        );
+
+      }
+    );
+
+  }else{
+
+    messageElement.textContent =
+      "映画名を入力して検索してください。";
+
+  }
+
+
+  history.pushState(
+    {
+      page:"search"
+    },
+    "",
+    location.pathname
+  );
+
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+
+}
+
+
+/* ========================================================
+   ブラウザ戻るボタン対応
+======================================================== */
+
+window.addEventListener(
+  "popstate",
+  function(event){
+
+    if(
+      event.state &&
+      event.state.page === "detail" &&
+      event.state.movieId
+    ){
+
+      openMovieDetail(
+        event.state.movieId,
+        false
+      );
+
+    }else{
+
+      showSearchPageWithoutHistory();
+
+    }
+
+  }
+);
+
+
+/* ========================================================
+   履歴を追加しない検索ページ表示
+======================================================== */
+
+function showSearchPageWithoutHistory(){
+
+  resultsElement.innerHTML = "";
+
+
+  if(
+    lastSearchResults.length
+  ){
+
+    messageElement.textContent =
+      lastSearchResults.length +
+      "作品が見つかりました。";
+
+
+    lastSearchResults.forEach(
+      function(movie){
+
+        displaySearchMovie(
+          movie
+        );
+
+      }
+    );
+
+  }else{
+
+    messageElement.textContent =
+      "映画名を入力して検索してください。";
+
+  }
+
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
 
 }
 
@@ -936,7 +1793,9 @@ function addProviders(
       img.loading =
         "lazy";
 
-      item.appendChild(img);
+      item.appendChild(
+        img
+      );
 
     }
 
@@ -951,10 +1810,15 @@ function addProviders(
       provider.provider_name ||
       "配信サービス";
 
-    item.appendChild(name);
+
+    item.appendChild(
+      name
+    );
 
 
-    container.appendChild(item);
+    container.appendChild(
+      item
+    );
 
   }
 
@@ -977,31 +1841,17 @@ function createNetflixButton(
     "netflix-area";
 
 
-  /*
-   * 重要
-   *
-   * APIがNetflix作品IDを取得できた場合：
-   *
-   * https://www.netflix.com/title/作品ID
-   *
-   * に直接移動する。
-   *
-   * IDが取得できなかった場合：
-   *
-   * https://www.netflix.com/search?q=作品名
-   *
-   * に移動する。
-   */
+  let netflixUrl =
+    null;
 
 
-  let netflixUrl = null;
+  let hasTitleId =
+    false;
 
-  let hasTitleId = false;
 
-
-  /*
-   * ① netflix.title_id
-   */
+  /* ======================================================
+     ① netflix.title_id
+  ====================================================== */
 
   if(
     detail.netflix &&
@@ -1019,14 +1869,15 @@ function createNetflixButton(
         detail.netflix.title_id
       );
 
-    hasTitleId = true;
+    hasTitleId =
+      true;
 
   }
 
 
-  /*
-   * ② netflix_title_id
-   */
+  /* ======================================================
+     ② netflix_title_id
+  ====================================================== */
 
   if(
     !netflixUrl &&
@@ -1044,14 +1895,15 @@ function createNetflixButton(
         detail.netflix_title_id
       );
 
-    hasTitleId = true;
+    hasTitleId =
+      true;
 
   }
 
 
-  /*
-   * ③ netflix_id
-   */
+  /* ======================================================
+     ③ netflix_id
+  ====================================================== */
 
   if(
     !netflixUrl &&
@@ -1069,17 +1921,15 @@ function createNetflixButton(
         detail.netflix_id
       );
 
-    hasTitleId = true;
+    hasTitleId =
+      true;
 
   }
 
 
-  /*
-   * ④ APIから返ってきたURL
-   *
-   * ただし、検索URLではなく
-   * title/数字/ の場合だけ作品ページとして扱う。
-   */
+  /* ======================================================
+     ④ netflix_url
+  ====================================================== */
 
   if(
     !netflixUrl &&
@@ -1098,16 +1948,17 @@ function createNetflixButton(
         "https://www.netflix.com/title/" +
         id;
 
-      hasTitleId = true;
+      hasTitleId =
+        true;
 
     }
 
   }
 
 
-  /*
-   * ⑤ netflix.url
-   */
+  /* ======================================================
+     ⑤ netflix.url
+  ====================================================== */
 
   if(
     !netflixUrl &&
@@ -1127,18 +1978,17 @@ function createNetflixButton(
         "https://www.netflix.com/title/" +
         id;
 
-      hasTitleId = true;
+      hasTitleId =
+        true;
 
     }
 
   }
 
 
-  /*
-   * ⑥ IDがない場合
-   *
-   * Netflix検索画面へ。
-   */
+  /* ======================================================
+     ⑥ IDがない場合はNetflix検索
+  ====================================================== */
 
   if(!netflixUrl){
 
@@ -1150,14 +2000,16 @@ function createNetflixButton(
 
     netflixUrl =
       "https://www.netflix.com/search?q=" +
-      encodeURIComponent(title);
+      encodeURIComponent(
+        title
+      );
 
   }
 
 
-  /*
-   * ボタン
-   */
+  /* ======================================================
+     ボタン
+  ====================================================== */
 
   const button =
     document.createElement("a");
@@ -1193,9 +2045,9 @@ function createNetflixButton(
   );
 
 
-  /*
-   * 説明
-   */
+  /* ======================================================
+     説明
+  ====================================================== */
 
   const note =
     document.createElement("div");
@@ -1230,7 +2082,7 @@ function createNetflixButton(
 
 
 /* ========================================================
-   Netflix URLから作品IDを取得
+   Netflix URLから作品ID取得
 ======================================================== */
 
 function extractNetflixId(
@@ -1284,6 +2136,71 @@ function extractNetflixId(
   return null;
 
 }
+
+
+/* ========================================================
+   ポスターなし
+======================================================== */
+
+function createNoPoster(){
+
+  const noPoster =
+    document.createElement("div");
+
+  noPoster.className =
+    "poster";
+
+
+  noPoster.style.display =
+    "flex";
+
+  noPoster.style.alignItems =
+    "center";
+
+  noPoster.style.justifyContent =
+    "center";
+
+  noPoster.style.color =
+    "#6b7280";
+
+  noPoster.textContent =
+    "No Image";
+
+
+  return noPoster;
+
+}
+
+
+/* ========================================================
+   初期状態
+======================================================== */
+
+window.addEventListener(
+  "load",
+  function(){
+
+    if(location.hash){
+
+      const match =
+        location.hash.match(
+          /^#movie-(\d+)$/
+        );
+
+
+      if(match){
+
+        openMovieDetail(
+          match[1],
+          false
+        );
+
+      }
+
+    }
+
+  }
+);
 
 </script>
 
