@@ -3,24 +3,21 @@
 // doko-de-mireru
 // api/search.js
 //
+// 検索順位
+// ① 検索タイトルとの一致度
+// ② 公開日の早い順
+//
 // TMDBから
 // ・映画情報
 // ・日本の配信情報
 // ・Netflix配信判定
-//
-// 検索結果は
-// ①検索タイトルとの一致度
-// ②公開日の早い順
-// で並べます。
+// ・シリーズ情報
+// を取得
 // =========================================================
 
 export default async function handler(req, res) {
 
   try {
-
-    // =====================================================
-    // 環境変数
-    // =====================================================
 
     const TMDB_API_KEY =
       process.env.TMDB_API_KEY;
@@ -28,8 +25,7 @@ export default async function handler(req, res) {
     if (!TMDB_API_KEY) {
 
       return res.status(500).json({
-        error:
-          "TMDB_API_KEY が設定されていません。"
+        error: "TMDB_API_KEY が設定されていません。"
       });
 
     }
@@ -72,7 +68,7 @@ export default async function handler(req, res) {
         : "";
 
     // =====================================================
-    // ID指定
+    // 詳細
     // =====================================================
 
     if (id) {
@@ -86,14 +82,13 @@ export default async function handler(req, res) {
     }
 
     // =====================================================
-    // 映画検索
+    // 検索
     // =====================================================
 
     if (!query) {
 
       return res.status(400).json({
-        error:
-          "映画名を入力してください。"
+        error: "映画名を入力してください。"
       });
 
     }
@@ -112,8 +107,7 @@ export default async function handler(req, res) {
     );
 
     return res.status(500).json({
-      error:
-        getErrorMessage(error)
+      error: getErrorMessage(error)
     });
 
   }
@@ -139,12 +133,11 @@ async function searchMovies(
     "&region=JP" +
     "&query=" +
     encodeURIComponent(query) +
-    "&include_adult=false";
-
+    "&include_adult=false" +
+    "&page=1";
 
   const response =
     await fetch(searchUrl);
-
 
   if (!response.ok) {
 
@@ -157,177 +150,21 @@ async function searchMovies(
     );
 
     return res.status(500).json({
-
-      error:
-        "TMDB映画検索に失敗しました。"
-
+      error: "TMDB映画検索に失敗しました。"
     });
 
   }
 
-
   const data =
     await response.json();
-
 
   const results =
     Array.isArray(data.results)
       ? data.results
       : [];
 
-
   // =====================================================
-  // 検索文字列を正規化
-  // =====================================================
-
-  const normalizeText =
-    function(text) {
-
-      return String(
-        text || ""
-      )
-        .toLowerCase()
-        .replace(
-          /[\s　「」『』・:：\-‐-–—_]/g,
-          ""
-        );
-
-    };
-
-
-  const searchText =
-    normalizeText(query);
-
-
-  // =====================================================
-  // 一致度を計算
-  // =====================================================
-
-  function getMatchScore(movie) {
-
-    const title =
-      normalizeText(
-        movie.title
-      );
-
-    const originalTitle =
-      normalizeText(
-        movie.original_title
-      );
-
-
-    let score = 0;
-
-
-    // 完全一致
-    if(
-      title === searchText
-    ){
-
-      score += 1000;
-
-    }
-
-    if(
-      originalTitle === searchText
-    ){
-
-      score += 950;
-
-    }
-
-
-    // タイトルが検索文字列から始まる
-    if(
-      title.startsWith(searchText)
-    ){
-
-      score += 500;
-
-    }
-
-    if(
-      originalTitle.startsWith(searchText)
-    ){
-
-      score += 450;
-
-    }
-
-
-    // タイトルに検索文字列を含む
-    if(
-      title.includes(searchText)
-    ){
-
-      score += 300;
-
-    }
-
-    if(
-      originalTitle.includes(searchText)
-    ){
-
-      score += 250;
-
-    }
-
-
-    // 検索文字列の各文字がタイトルに含まれる割合
-    if(searchText){
-
-      let matched = 0;
-
-      for(
-        let i = 0;
-        i < searchText.length;
-        i++
-      ){
-
-        if(
-          title.includes(
-            searchText[i]
-          )
-        ){
-
-          matched++;
-
-        }
-
-      }
-
-
-      score +=
-        (matched / searchText.length) *
-        100;
-
-    }
-
-
-    // TMDBの検索順位も少しだけ考慮
-    if(
-      typeof movie.popularity === "number"
-    ){
-
-      score +=
-        Math.min(
-          movie.popularity,
-          50
-        );
-
-    }
-
-
-    return score;
-
-  }
-
-
-  // =====================================================
-  // 検索結果を並べ替え
-  //
-  // ① タイトル一致度
-  // ② 公開日の早い順
+  // タイトル一致度で並び替え
   // =====================================================
 
   const sortedResults =
@@ -341,123 +178,176 @@ async function searchMovies(
         );
 
       })
-      .map(function(movie, index) {
+      .map(function(movie) {
 
         return {
-
-          movie:
-            movie,
-
-          matchScore:
-            getMatchScore(movie),
-
-          originalIndex:
-            index
-
+          movie: movie,
+          score: calculateTitleScore(
+            query,
+            movie
+          )
         };
 
       })
       .sort(function(a, b) {
 
-        // -------------------------------------------------
-        // ① 一致度が高いものを優先
-        // -------------------------------------------------
+        // ① タイトル一致度が高い順
 
-        if(
-          b.matchScore !==
-          a.matchScore
-        ){
+        if (b.score !== a.score) {
 
-          return (
-            b.matchScore -
-            a.matchScore
-          );
+          return b.score - a.score;
 
         }
 
-
-        // -------------------------------------------------
-        // ② 一致度が同じなら公開日の早いもの
-        // -------------------------------------------------
+        // ② 一致度が同じなら公開日の早い順
 
         const dateA =
           a.movie.release_date ||
           "9999-99-99";
 
-
         const dateB =
           b.movie.release_date ||
           "9999-99-99";
 
-
-        if(
-          dateA !== dateB
-        ){
-
-          return dateA.localeCompare(
-            dateB
-          );
-
-        }
-
-
-        // -------------------------------------------------
-        // ③ 最後はTMDB検索順
-        // -------------------------------------------------
-
-        return (
-          a.originalIndex -
-          b.originalIndex
-        );
+        return dateA.localeCompare(dateB);
 
       })
-      .slice(0, 10)
-      .map(function(item) {
-
-        const movie =
-          item.movie;
-
-
-        return {
-
-          id:
-            movie.id,
-
-          title:
-            movie.title || "",
-
-          original_title:
-            movie.original_title || "",
-
-          release_date:
-            movie.release_date || "",
-
-          poster_path:
-            movie.poster_path || null,
-
-          overview:
-            movie.overview || "",
-
-          vote_average:
-            movie.vote_average || 0
-
-        };
-
-      });
-
+      .slice(0, 10);
 
   // =====================================================
-  // 結果返却
+  // 結果
   // =====================================================
+
+  const movies =
+    sortedResults.map(function(item) {
+
+      const movie =
+        item.movie;
+
+      return {
+
+        id:
+          movie.id,
+
+        title:
+          movie.title || "",
+
+        original_title:
+          movie.original_title || "",
+
+        release_date:
+          movie.release_date || "",
+
+        poster_path:
+          movie.poster_path || null,
+
+        overview:
+          movie.overview || "",
+
+        vote_average:
+          movie.vote_average || 0
+
+      };
+
+    });
 
   return res.status(200).json({
-
-    results:
-      sortedResults
-
+    results: movies
   });
 
 }
+
+
+// =========================================================
+// タイトル一致度
+// =========================================================
+
+function calculateTitleScore(
+  query,
+  movie
+) {
+
+  const q =
+    normalizeTitle(query);
+
+  const title =
+    normalizeTitle(
+      movie.title || ""
+    );
+
+  const original =
+    normalizeTitle(
+      movie.original_title || ""
+    );
+
+  if (!q) {
+    return 0;
+  }
+
+  // 完全一致
+  if (title === q) {
+    return 1000;
+  }
+
+  // 日本語タイトルが検索語で始まる
+  if (title.startsWith(q)) {
+    return 900 - Math.min(
+      title.length,
+      100
+    );
+  }
+
+  // 日本語タイトルに完全に含まれる
+  if (title.includes(q)) {
+    return 800 - Math.min(
+      title.length,
+      100
+    );
+  }
+
+  // 原題完全一致
+  if (original === q) {
+    return 750;
+  }
+
+  // 原題が検索語で始まる
+  if (original.startsWith(q)) {
+    return 700 - Math.min(
+      original.length,
+      100
+    );
+  }
+
+  // 原題に含まれる
+  if (original.includes(q)) {
+    return 600 - Math.min(
+      original.length,
+      100
+    );
+  }
+
+  // 文字単位の一致率
+  const similarity =
+    characterSimilarity(
+      q,
+      title
+    );
+
+  const originalSimilarity =
+    characterSimilarity(
+      q,
+      original
+    );
+
+  return Math.round(
+    Math.max(
+      similarity,
+      originalSimilarity
+    ) * 500
+  );
+
+}
+
 
 // =========================================================
 // タイトル正規化
@@ -470,20 +360,57 @@ function normalizeTitle(
   return String(
     value || ""
   )
-    .trim()
     .toLowerCase()
     .replace(
-      /\s+/g,
-      ""
-    )
-    .replace(
-      /[　]/g,
-      ""
-    )
-    .replace(
-      /[「」『』【】（）()［］\[\]・:：\-－―]/g,
+      /[\s　・:：\-ー—–_,，、.!！?？'’"“”「」『』()（）[\]【】]/g,
       ""
     );
+
+}
+
+
+// =========================================================
+// 文字一致率
+// =========================================================
+
+function characterSimilarity(
+  query,
+  title
+) {
+
+  if (
+    !query ||
+    !title
+  ) {
+
+    return 0;
+
+  }
+
+  let matched = 0;
+
+  for (
+    let i = 0;
+    i < query.length;
+    i++
+  ) {
+
+    if (
+      title.includes(
+        query[i]
+      )
+    ) {
+
+      matched++;
+
+    }
+
+  }
+
+  return (
+    matched /
+    query.length
+  );
 
 }
 
@@ -529,10 +456,6 @@ async function getMovieDetail(
   const movie =
     await response.json();
 
-  // =====================================================
-  // 基本情報
-  // =====================================================
-
   const result = {
 
     id:
@@ -570,14 +493,11 @@ async function getMovieDetail(
     language:
       getLanguageInfo(movie),
 
-    streaming:
-      [],
+    streaming: [],
 
-    rental:
-      [],
+    rental: [],
 
-    purchase:
-      [],
+    purchase: [],
 
     link:
       "https://www.themoviedb.org/movie/" +
@@ -613,30 +533,24 @@ async function getMovieDetail(
   if (providers) {
 
     result.streaming =
-      Array.isArray(
-        providers.flatrate
-      )
+      Array.isArray(providers.flatrate)
         ? providers.flatrate
         : [];
 
     result.rental =
-      Array.isArray(
-        providers.rent
-      )
+      Array.isArray(providers.rent)
         ? providers.rent
         : [];
 
     result.purchase =
-      Array.isArray(
-        providers.buy
-      )
+      Array.isArray(providers.buy)
         ? providers.buy
         : [];
 
   }
 
   // =====================================================
-  // Netflixサービス
+  // Netflix
   // =====================================================
 
   const netflixService =
@@ -657,13 +571,10 @@ async function getMovieDetail(
     if (netflixInfo) {
 
       result.netflix = {
-
         title_id:
           netflixInfo.title_id,
-
         url:
           netflixInfo.url
-
       };
 
       result.netflix_title_id =
@@ -675,22 +586,16 @@ async function getMovieDetail(
       result.netflix_url =
         netflixInfo.url;
 
-    }
-
-    if (!result.netflix_url) {
+    } else {
 
       result.netflix = {
-
-        title_id:
-          null,
-
+        title_id: null,
         url:
           createNetflixSearchUrl(
             movie.title ||
             movie.original_title ||
             ""
           )
-
       };
 
       result.netflix_url =
@@ -715,7 +620,7 @@ async function getMovieDetail(
   }
 
   // =====================================================
-  // TMDB / JustWatch 配信ページ
+  // 配信ページ
   // =====================================================
 
   if (
@@ -746,19 +651,16 @@ function findNetflixService(
 ) {
 
   const all = []
-
     .concat(
       Array.isArray(streaming)
         ? streaming
         : []
     )
-
     .concat(
       Array.isArray(rental)
         ? rental
         : []
     )
-
     .concat(
       Array.isArray(purchase)
         ? purchase
@@ -801,7 +703,7 @@ function findNetflixService(
 
 
 // =========================================================
-// Netflix作品ID取得
+// Netflix作品ID
 // =========================================================
 
 function findNetflixTitleId(
@@ -866,7 +768,7 @@ function findNetflixTitleId(
           id,
 
         url:
-          "https://www.netflix.com/jp/title/" +
+          "https://www.netflix.com/title/" +
           id
 
       };
@@ -913,7 +815,7 @@ function findNetflixTitleId(
           id,
 
         url:
-          "https://www.netflix.com/jp/title/" +
+          "https://www.netflix.com/title/" +
           id
 
       };
@@ -955,7 +857,7 @@ function findNetflixTitleId(
           id,
 
         url:
-          "https://www.netflix.com/jp/title/" +
+          "https://www.netflix.com/title/" +
           id
 
       };
@@ -984,14 +886,12 @@ function createNetflixSearchUrl(
 
   if (!cleanTitle) {
 
-    return (
-      "https://www.netflix.com/jp/"
-    );
+    return "https://www.netflix.com/jp/";
 
   }
 
   return (
-    "https://www.netflix.com/jp/search?q=" +
+    "https://www.netflix.com/search?q=" +
     encodeURIComponent(
       cleanTitle
     )
@@ -1001,7 +901,7 @@ function createNetflixSearchUrl(
 
 
 // =========================================================
-// Netflix URLからID抽出
+// Netflix URL → ID
 // =========================================================
 
 function extractNetflixId(
@@ -1208,9 +1108,7 @@ async function getCollectionInfo(
       await response.json();
 
     const movies =
-      Array.isArray(
-        data.parts
-      )
+      Array.isArray(data.parts)
         ? data.parts
         : [];
 
@@ -1259,20 +1157,19 @@ async function getCollectionInfo(
 
 
 // =========================================================
-// エラー文字列化
-//
-// [object Object] を防止
+// エラーメッセージ
 // =========================================================
 
 function getErrorMessage(
   error
 ) {
 
-  if (!error) {
+  if (
+    error &&
+    typeof error.message === "string"
+  ) {
 
-    return (
-      "不明なエラーが発生しました。"
-    );
+    return error.message;
 
   }
 
@@ -1284,44 +1181,7 @@ function getErrorMessage(
 
   }
 
-  if (
-    error instanceof Error &&
-    error.message
-  ) {
-
-    return error.message;
-
-  }
-
-  if (
-    typeof error.message === "string"
-  ) {
-
-    return error.message;
-
-  }
-
-  if (
-    typeof error.error === "string"
-  ) {
-
-    return error.error;
-
-  }
-
-  try {
-
-    return JSON.stringify(
-      error
-    );
-
-  } catch (e) {
-
-    return (
-      "サーバーでエラーが発生しました。"
-    );
-
-  }
+  return "サーバーでエラーが発生しました。";
 
 }
 ```
