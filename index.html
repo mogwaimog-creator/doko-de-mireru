@@ -443,11 +443,34 @@ header p{
   gap:12px;
 }
 
+
+/* =========================
+   シリーズ作品
+   クリックできることを表示
+========================= */
+
 .series-item{
   background:#f9fafb;
   border:1px solid #e5e7eb;
   border-radius:10px;
   padding:8px;
+
+  cursor:pointer;
+
+  transition:
+    transform .15s ease,
+    box-shadow .15s ease;
+}
+
+.series-item:hover{
+  transform:translateY(-3px);
+
+  box-shadow:
+    0 5px 15px rgba(0,0,0,.12);
+}
+
+.series-item:active{
+  transform:translateY(-1px);
 }
 
 .series-item img{
@@ -1003,6 +1026,23 @@ async function openDetail(id){
       createDetail(data);
 
 
+    /*
+     * 新しい作品の詳細を表示したら、
+     * 詳細画面の一番上へ戻す
+     */
+
+    const detailWindow =
+      document.querySelector(
+        ".detail-window"
+      );
+
+    if(detailWindow){
+
+      detailWindow.scrollTop = 0;
+
+    }
+
+
   }catch(error){
 
     console.error(
@@ -1204,9 +1244,20 @@ function createDetail(movie){
             : "";
 
 
+        /*
+         * ここが今回の重要な変更です。
+         *
+         * シリーズ作品をクリックすると
+         * その作品の詳細画面を開きます。
+         */
+
         html += `
 
-          <div class="series-item">
+          <div
+            class="series-item"
+            onclick="openDetail(${item.id})"
+            title="この作品の詳細を見る"
+          >
 
             ${
               poster
@@ -1219,7 +1270,22 @@ function createDetail(movie){
               >
               `
               :
-              ""
+              `
+              <div
+                style="
+                  width:100%;
+                  aspect-ratio:2/3;
+                  display:flex;
+                  align-items:center;
+                  justify-content:center;
+                  color:#6b7280;
+                  background:#e5e7eb;
+                  border-radius:7px;
+                "
+              >
+                NO IMAGE
+              </div>
+              `
             }
 
             <div class="series-item-title">
