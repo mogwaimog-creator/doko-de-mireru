@@ -504,11 +504,12 @@ async function getMovieDetail(
   // =======================================================
 
   const amazonUrl =
-    amazonProvider
-      ? createAmazonUrl(
-          title
-        )
-      : null;
+  amazonProvider
+    ? createAmazonUrl(
+        amazonProvider,
+        title
+      )
+    : null;
 
 
   // =======================================================
@@ -1233,8 +1234,34 @@ function buildNetflixTitleUrl(
 // =========================================================
 
 function createAmazonUrl(
+  provider,
   title
 ) {
+
+  // -------------------------------------------------------
+  // Amazonの直接URLが取得できている場合
+  // -------------------------------------------------------
+
+  if (
+    provider &&
+    typeof provider.provider_url === "string" &&
+    /^https?:\/\//i.test(
+      provider.provider_url
+    ) &&
+    /amazon\./i.test(
+      provider.provider_url
+    )
+  ) {
+
+    return provider.provider_url;
+
+  }
+
+
+  // -------------------------------------------------------
+  // 直接URLが取得できない場合
+  // Amazon検索ページへ
+  // -------------------------------------------------------
 
   return (
     "https://www.amazon.co.jp/s" +
@@ -1246,7 +1273,6 @@ function createAmazonUrl(
   );
 
 }
-
 
 // =========================================================
 // U-NEXT
