@@ -4,16 +4,16 @@
 //
 // 無料版・安定版
 //
+// 検索結果の表示順：
+// ① 検索タイトルとの一致度
+// ② 公開の早いもの
+//
 // TMDBから
 // ・映画情報
 // ・日本の配信情報
 // ・Netflix配信判定
 //
 // を取得します。
-//
-// Netflix作品IDについては、
-// 実際に取得できた場合だけ直接URLを作成します。
-// 推測でIDを作ることはしません。
 // =========================================================
 
 
@@ -144,6 +144,10 @@ export default async function handler(req, res) {
 
 // =========================================================
 // 映画検索
+//
+// 表示順
+// ① タイトル一致度
+// ② 公開日の早い順
 // =========================================================
 
 async function searchMovies(
@@ -160,7 +164,8 @@ async function searchMovies(
     "&region=JP" +
     "&query=" +
     encodeURIComponent(query) +
-    "&include_adult=false";
+    "&include_adult=false" +
+    "&page=1";
 
 
   const response =
@@ -193,10 +198,251 @@ async function searchMovies(
     await response.json();
 
 
-  const results =
+  let results =
     Array.isArray(data.results)
       ? data.results
       : [];
+
+
+  // -------------------------------------------------------
+  // 映画として必要なデータだけ残す
+  // -------------------------------------------------------
+
+  results =
+    results.filter(function(movie) {
+
+      return (
+        movie &&
+        movie.id &&
+        movie.title
+      );
+
+    });
+
+
+  // -------------------------------------------------------
+  // 検索タイトルとの一致度を計算
+  // -------------------------------------------------------
+
+  const normalizedQuery =
+    normalizeSearchText(query);
+
+
+  results =
+    results.map(function(movie) {
+
+      const title =
+        normalizeSearchText(
+          movie.title || ""
+        );
+
+
+      const originalTitle =
+        normalizeSearchText(
+          movie.original_title || ""
+        );
+
+
+      let matchScore = 0;
+
+
+      // ---------------------------------------------------
+      // ① 日本語タイトル完全一致
+      // ---------------------------------------------------
+
+      if (
+        title === normalizedQuery
+      ) {
+
+        matchScore = 1000;
+
+      }
+
+
+      // ---------------------------------------------------
+      // ② 日本語タイトルが検索文字で始まる
+      // ---------------------------------------------------
+
+      else if (
+        title.startsWith(
+          normalizedQuery
+        )
+      ) {
+
+        matchScore = 800;
+
+      }
+
+
+      // ---------------------------------------------------
+      // ③ 日本語タイトルに検索文字を含む
+      // ---------------------------------------------------
+
+      else if (
+        title.includes(
+          normalizedQuery
+        )
+      ) {
+
+        matchScore = 600;
+
+      }
+
+
+      // ---------------------------------------------------
+      // ④ 原題完全一致
+      // ---------------------------------------------------
+
+      else if (
+        originalTitle === normalizedQuery
+      ) {
+
+        matchScore = 500;
+
+      }
+
+
+      // ---------------------------------------------------
+      // ⑤ 原題が検索文字で始まる
+      // ---------------------------------------------------
+
+      else if (
+        originalTitle.startsWith(
+          normalizedQuery
+        )
+      ) {
+
+        matchScore = 400;
+
+      }
+
+
+      // ---------------------------------------------------
+      // ⑥ 原題に検索文字を含む
+      // ---------------------------------------------------
+
+      else if (
+        originalTitle.includes(
+          normalizedQuery
+        )
+      ) {
+
+        matchScore = 300;
+
+      }
+
+
+      // ---------------------------------------------------
+      // ⑦ それ以外
+      // ---------------------------------------------------
+
+      else {
+
+        matchScore = 100;
+
+      }
+
+
+      return {
+
+        movie:
+          movie,
+
+        matchScore:
+          matchScore
+
+      };
+
+    });
+
+
+  // -------------------------------------------------------
+  // 一致度 → 公開日の早い順
+  // -------------------------------------------------------
+
+  results.sort(function(a, b) {
+
+    // =====================================================
+    // ① 一致度が高いものを先に
+    // =====================================================
+
+    if (
+      b.matchScore !==
+      a.matchScore
+    ) {
+
+      return (
+        b.matchScore -
+        a.matchScore
+      );
+
+    }
+
+
+    // =====================================================
+    // ② 同じ一致度なら公開日の早いもの
+    // =====================================================
+
+    const dateA =
+      a.movie.release_date ||
+      "";
+
+
+    const dateB =
+      b.movie.release_date ||
+      "";
+
+
+    // 両方とも公開日あり
+    if (
+      dateA &&
+      dateB
+    ) {
+
+      return dateA.localeCompare(
+        dateB
+      );
+
+    }
+
+
+    // 公開日がある方を先に
+    if (dateA) {
+
+      return -1;
+
+    }
+
+
+    if (dateB) {
+
+      return 1;
+
+    }
+
+
+    // =====================================================
+    // ③ 公開日まで同じならTMDB評価
+    // =====================================================
+
+    const ratingA =
+      Number(
+        a.movie.vote_average || 0
+      );
+
+
+    const ratingB =
+      Number(
+        b.movie.vote_average || 0
+      );
+
+
+    return (
+      ratingB -
+      ratingA
+    );
+
+  });
 
 
   // -------------------------------------------------------
@@ -206,19 +452,13 @@ async function searchMovies(
   const movies =
     results
 
-      .filter(function(movie) {
-
-        return (
-          movie &&
-          movie.id &&
-          movie.title
-        );
-
-      })
-
       .slice(0, 10)
 
-      .map(function(movie) {
+      .map(function(item) {
+
+        const movie =
+          item.movie;
+
 
         return {
 
@@ -254,6 +494,37 @@ async function searchMovies(
       movies
 
   });
+
+}
+
+
+// =========================================================
+// 検索文字を比較しやすい形にする
+// =========================================================
+
+function normalizeSearchText(
+  text
+) {
+
+  return String(
+    text || ""
+  )
+
+    .toLowerCase()
+
+    // 全角スペース・半角スペースを削除
+    .replace(
+      /\s+/g,
+      ""
+    )
+
+    // 記号を一部除去
+    .replace(
+      /[「」『』・:：!！?？、。,．.]/g,
+      ""
+    )
+
+    .trim();
 
 }
 
@@ -432,10 +703,6 @@ async function getMovieDetail(
 
   if (netflixService) {
 
-    // ---------------------------------------------------
-    // Netflix作品IDを確認
-    // ---------------------------------------------------
-
     const netflixInfo =
       findNetflixTitleId(
         movie,
@@ -469,12 +736,6 @@ async function getMovieDetail(
 
     }
 
-
-    // ---------------------------------------------------
-    // Netflix IDがない場合
-    //
-    // 推測したIDは絶対に作らない
-    // ---------------------------------------------------
 
     if (!result.netflix_url) {
 
@@ -616,18 +877,12 @@ function findNetflixService(
 
 // =========================================================
 // Netflix作品ID取得
-//
-// 「本当に存在するID」がデータ内にある場合だけ使用。
 // =========================================================
 
 function findNetflixTitleId(
   movie,
   netflixService
 ) {
-
-  // =====================================================
-  // ① 直接ID
-  // =====================================================
 
   const directIds = [
 
@@ -699,10 +954,6 @@ function findNetflixTitleId(
   }
 
 
-  // =====================================================
-  // ② URLからNetflix作品IDを取得
-  // =====================================================
-
   const urls = [
 
     netflixService &&
@@ -729,13 +980,9 @@ function findNetflixTitleId(
     i++
   ) {
 
-    const url =
-      urls[i];
-
-
     const id =
       extractNetflixId(
-        url
+        urls[i]
       );
 
 
@@ -756,10 +1003,6 @@ function findNetflixTitleId(
 
   }
 
-
-  // =====================================================
-  // ③ movie側のNetflix URL
-  // =====================================================
 
   const movieUrls = [
 
@@ -806,10 +1049,6 @@ function findNetflixTitleId(
   }
 
 
-  // =====================================================
-  // 取得できなかった
-  // =====================================================
-
   return null;
 
 }
@@ -837,10 +1076,6 @@ function createNetflixSearchUrl(
 
   }
 
-
-  // -------------------------------------------------------
-  // Netflix公式検索
-  // -------------------------------------------------------
 
   return (
     "https://www.netflix.com/search?q=" +
