@@ -1282,15 +1282,15 @@ function createUnextUrl(
   title
 ) {
 
+  // U-NEXTの検索ページへ移動
+  // 作品URLを推測して「ページが見つかりません」
+  // になることを避けるため、安全にU-NEXTトップへ移動する
+
   return (
-    "https://video.unext.jp/search/" +
-    encodeURIComponent(
-      title
-    )
+    "https://video.unext.jp/"
   );
 
 }
-
 
 // =========================================================
 // Hulu
