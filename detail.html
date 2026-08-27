@@ -26,12 +26,16 @@ content="width=device-width, initial-scale=1.0"
 
 body{
   margin:0;
+
   font-family:
     Arial,
     "Noto Sans JP",
     sans-serif;
+
   background:#f5f7fb;
+
   color:#222;
+
   font-size:16px;
 }
 
@@ -47,19 +51,25 @@ a{
 
 header{
   background:#111827;
+
   color:#fff;
+
   padding:18px 20px;
+
   text-align:center;
 }
 
 header h1{
   margin:0;
+
   font-size:28px;
 }
 
 header p{
   margin:7px 0 0;
+
   color:#d1d5db;
+
   font-size:15px;
 }
 
@@ -70,7 +80,9 @@ header p{
 
 .container{
   max-width:1000px;
+
   margin:0 auto;
+
   padding:18px;
 }
 
@@ -81,13 +93,21 @@ header p{
 
 .back{
   display:inline-block;
+
   margin-bottom:15px;
+
   padding:10px 15px;
+
   background:#fff;
+
   color:#111827;
+
   border-radius:8px;
+
   font-weight:bold;
+
   font-size:15px;
+
   box-shadow:
     0 1px 4px
     rgba(0,0,0,.08);
@@ -95,16 +115,24 @@ header p{
 
 
 /* =====================================================
-   作品上部
+   作品詳細
+   ※ここだけ少し大きめ
 ===================================================== */
 
 .movie-header{
+
   display:flex;
+
   align-items:flex-start;
+
   gap:22px;
+
   background:#fff;
+
   padding:22px;
+
   border-radius:14px;
+
   box-shadow:
     0 2px 8px
     rgba(0,0,0,.08);
@@ -116,12 +144,19 @@ header p{
 ===================================================== */
 
 .poster{
-  width:235px;
+
+  width:230px;
+
   max-width:30%;
+
   height:auto;
+
   object-fit:cover;
+
   border-radius:9px;
+
   align-self:flex-start;
+
   flex-shrink:0;
 }
 
@@ -131,7 +166,9 @@ header p{
 ===================================================== */
 
 .movie-info{
+
   flex:1;
+
   min-width:0;
 }
 
@@ -141,22 +178,30 @@ header p{
 ===================================================== */
 
 .movie-info h2{
+
   margin:0 0 7px;
+
   font-size:34px;
+
   line-height:1.35;
+
   color:#111827;
 }
 
 
 /* =====================================================
    国名
-   ※国情報がある場合だけJavaScriptで表示
+   ※情報がある場合だけ表示
 ===================================================== */
 
 .country{
-  margin:0 0 10px;
+
+  margin:0 0 11px;
+
   color:#888;
+
   font-size:16px;
+
   line-height:1.4;
 }
 
@@ -166,9 +211,13 @@ header p{
 ===================================================== */
 
 .original-title{
+
   color:#666;
+
   font-size:16px;
+
   margin-bottom:11px;
+
   line-height:1.4;
 }
 
@@ -178,15 +227,22 @@ header p{
 ===================================================== */
 
 .basic-info{
+
   display:flex;
+
   flex-wrap:wrap;
+
   gap:8px 18px;
+
   margin-bottom:14px;
 }
 
 .info-line{
+
   margin:0;
+
   font-size:17px;
+
   color:#444;
 }
 
@@ -196,7 +252,8 @@ header p{
 ===================================================== */
 
 .movie-side-info{
-  margin-top:11px;
+
+  margin-top:12px;
 }
 
 
@@ -205,10 +262,12 @@ header p{
 ===================================================== */
 
 .side-section{
+
   margin-top:11px;
 }
 
 .side-section:first-child{
+
   margin-top:0;
 }
 
@@ -218,9 +277,13 @@ header p{
 ===================================================== */
 
 .side-title{
-  font-size:18px;
+
+  font-size:17px;
+
   font-weight:bold;
+
   margin-bottom:4px;
+
   color:#333;
 }
 
@@ -230,9 +293,12 @@ header p{
 ===================================================== */
 
 .side-text{
+
   line-height:1.6;
+
   color:#444;
-  font-size:17px;
+
+  font-size:16px;
 }
 
 
@@ -241,16 +307,24 @@ header p{
 ===================================================== */
 
 .cast-list{
+
   display:flex;
+
   flex-wrap:wrap;
+
   gap:6px;
 }
 
 .cast-item{
+
   background:#f3f4f6;
+
   padding:6px 10px;
+
   border-radius:15px;
+
   font-size:15px;
+
   color:#444;
 }
 
@@ -260,10 +334,15 @@ header p{
 ===================================================== */
 
 .overview-text{
+
   display:-webkit-box;
+
   -webkit-box-orient:vertical;
+
   -webkit-line-clamp:4;
+
   overflow:hidden;
+
   line-height:1.6;
 }
 
@@ -273,17 +352,24 @@ header p{
 ===================================================== */
 
 .section{
+
   margin-top:20px;
+
   background:#fff;
+
   padding:20px;
+
   border-radius:14px;
+
   box-shadow:
     0 2px 8px
     rgba(0,0,0,.08);
 }
 
 .section h3{
+
   margin:0 0 15px;
+
   font-size:21px;
 }
 
@@ -293,13 +379,18 @@ header p{
 ===================================================== */
 
 .provider-group{
+
   margin-top:20px;
+
   padding:12px;
+
   border-radius:12px;
+
   border:1px solid #e5e7eb;
 }
 
 .provider-group:first-child{
+
   margin-top:0;
 }
 
@@ -309,14 +400,19 @@ header p{
 ===================================================== */
 
 .provider-group.streaming{
+
   background:#f0fdf4;
+
   border-color:#bbf7d0;
 }
 
 .provider-group.streaming
 .provider-title{
+
   border-left-color:#16a34a;
+
   background:#dcfce7;
+
   color:#166534;
 }
 
@@ -326,14 +422,19 @@ header p{
 ===================================================== */
 
 .provider-group.rental{
+
   background:#fff7ed;
+
   border-color:#fed7aa;
 }
 
 .provider-group.rental
 .provider-title{
+
   border-left-color:#f59e0b;
+
   background:#ffedd5;
+
   color:#9a3412;
 }
 
@@ -343,14 +444,19 @@ header p{
 ===================================================== */
 
 .provider-group.purchase{
+
   background:#eff6ff;
+
   border-color:#bfdbfe;
 }
 
 .provider-group.purchase
 .provider-title{
+
   border-left-color:#2563eb;
+
   background:#dbeafe;
+
   color:#1e40af;
 }
 
@@ -360,14 +466,23 @@ header p{
 ===================================================== */
 
 .provider-title{
+
   display:flex;
+
   align-items:center;
+
   gap:8px;
+
   font-size:18px;
+
   font-weight:bold;
+
   margin-bottom:10px;
+
   padding:9px 11px;
+
   border-radius:9px;
+
   border-left:5px solid #2563eb;
 }
 
@@ -377,25 +492,37 @@ header p{
 ===================================================== */
 
 .provider-card{
+
   display:flex;
+
   align-items:center;
+
   gap:13px;
+
   padding:12px 14px;
+
   margin-bottom:8px;
+
   background:#fff;
+
   border-radius:11px;
+
   border:1px solid #e5e7eb;
+
   transition:
     transform .15s ease,
     box-shadow .15s ease;
 }
 
 .provider-card:last-child{
+
   margin-bottom:0;
 }
 
 .provider-card:hover{
+
   transform:translateY(-1px);
+
   box-shadow:
     0 3px 10px
     rgba(0,0,0,.08);
@@ -407,12 +534,19 @@ header p{
 ===================================================== */
 
 .provider-logo{
+
   width:52px;
+
   height:52px;
+
   object-fit:contain;
+
   border-radius:8px;
+
   background:#fff;
+
   border:1px solid #eee;
+
   flex-shrink:0;
 }
 
@@ -422,32 +556,50 @@ header p{
 ===================================================== */
 
 .provider-info{
+
   flex:1;
+
   min-width:0;
 }
 
 .provider-name{
+
   font-size:17px;
+
   font-weight:bold;
+
   color:#111827;
+
   margin-bottom:4px;
 }
 
 .provider-type{
+
   display:inline-block;
+
   padding:3px 7px;
+
   background:#f3f4f6;
+
   color:#555;
+
   border-radius:5px;
+
   font-size:12px;
+
   margin-bottom:4px;
 }
 
 .provider-subinfo{
+
   display:flex;
+
   flex-wrap:wrap;
+
   gap:10px;
+
   color:#777;
+
   font-size:12px;
 }
 
@@ -457,22 +609,34 @@ header p{
 ===================================================== */
 
 .provider-button{
+
   display:inline-block;
+
   padding:10px 14px;
+
   color:#fff;
+
   text-decoration:none;
+
   border-radius:8px;
+
   font-weight:bold;
+
   font-size:13px;
+
   white-space:nowrap;
+
   flex-shrink:0;
+
   transition:
     opacity .15s ease,
     transform .15s ease;
 }
 
 .provider-button:hover{
+
   opacity:.85;
+
   transform:translateY(-1px);
 }
 
@@ -513,16 +677,24 @@ header p{
 ===================================================== */
 
 .series-list{
+
   display:flex;
+
   gap:13px;
+
   overflow-x:auto;
+
   padding:3px 2px 10px;
 }
 
 .series-item{
+
   flex:0 0 135px;
+
   padding:0;
+
   border:none;
+
   display:block;
 }
 
@@ -532,25 +704,39 @@ header p{
 ===================================================== */
 
 .series-poster-link{
+
   display:block;
+
   width:135px;
+
   height:195px;
+
   border-radius:8px;
+
   overflow:hidden;
+
   background:#e5e7eb;
+
+  cursor:pointer;
 }
 
 .series-poster{
+
   width:100%;
+
   height:100%;
+
   object-fit:cover;
+
   display:block;
+
   transition:
     transform .15s ease;
 }
 
 .series-poster-link:hover
 .series-poster{
+
   transform:scale(1.03);
 }
 
@@ -560,18 +746,28 @@ header p{
 ===================================================== */
 
 .series-item a.series-title{
+
   display:block;
+
   color:#2563eb;
+
   text-decoration:none;
+
   font-weight:bold;
+
   font-size:14px;
+
   line-height:1.4;
+
   margin-top:7px;
 }
 
 .series-year{
+
   color:#666;
+
   font-size:12px;
+
   margin-top:3px;
 }
 
@@ -581,13 +777,21 @@ header p{
 ===================================================== */
 
 .tmdb-link{
+
   display:inline-block;
+
   padding:11px 17px;
+
   background:#01b4e4;
+
   color:#fff;
+
   text-decoration:none;
+
   border-radius:8px;
+
   font-weight:bold;
+
   font-size:14px;
 }
 
@@ -597,8 +801,11 @@ header p{
 ===================================================== */
 
 .loading{
+
   text-align:center;
+
   padding:60px 20px;
+
   font-size:20px;
 }
 
@@ -608,10 +815,15 @@ header p{
 ===================================================== */
 
 .error{
+
   text-align:center;
+
   padding:50px 20px;
+
   color:#b91c1c;
+
   background:#fff;
+
   border-radius:12px;
 }
 
@@ -627,114 +839,156 @@ header p{
   }
 
   .movie-header{
-    gap:14px;
-    padding:16px;
+
+    gap:15px;
+
+    padding:17px;
   }
 
   .poster{
+
     width:150px;
+
     max-width:38%;
   }
 
   .movie-info h2{
-    font-size:25px;
+
+    font-size:26px;
+
     line-height:1.35;
   }
 
   .country{
+
     font-size:14px;
+
     margin-bottom:7px;
   }
 
   .original-title{
+
     font-size:14px;
+
     margin-bottom:8px;
   }
 
   .basic-info{
+
     display:block;
+
     margin-bottom:9px;
   }
 
   .info-line{
+
     font-size:15px;
+
     margin:4px 0;
   }
 
   .movie-side-info{
+
     margin-top:8px;
   }
 
   .side-section{
+
     margin-top:8px;
   }
 
   .side-title{
+
     font-size:16px;
   }
 
   .side-text{
+
     font-size:15px;
+
     line-height:1.55;
   }
 
   .cast-list{
+
     gap:4px;
   }
 
   .cast-item{
+
     font-size:14px;
+
     padding:5px 8px;
   }
 
   .overview-text{
+
     -webkit-line-clamp:3;
   }
 
   .section{
+
     padding:16px;
+
     margin-top:17px;
   }
 
   .section h3{
+
     font-size:20px;
+
     margin-bottom:12px;
   }
 
   .provider-card{
+
     align-items:flex-start;
+
     flex-wrap:wrap;
+
     gap:10px;
+
     padding:11px 12px;
   }
 
   .provider-logo{
+
     width:48px;
+
     height:48px;
   }
 
   .provider-info{
+
     min-width:
       calc(100% - 65px);
   }
 
   .provider-button{
+
     width:100%;
+
     text-align:center;
+
     margin-top:1px;
+
     font-size:14px;
   }
 
   .series-list{
+
     gap:10px;
   }
 
   .series-item{
+
     flex-basis:115px;
   }
 
   .series-poster-link{
+
     width:115px;
+
     height:165px;
   }
 
@@ -748,48 +1002,61 @@ header p{
 @media(max-width:420px){
 
   .movie-header{
+
     gap:11px;
-    padding:13px;
+
+    padding:14px;
   }
 
   .poster{
+
     width:125px;
+
     max-width:36%;
   }
 
   .movie-info h2{
-    font-size:22px;
+
+    font-size:23px;
   }
 
   .country{
+
     font-size:13px;
   }
 
   .original-title{
+
     font-size:13px;
   }
 
   .info-line{
+
     font-size:14px;
   }
 
   .side-title{
+
     font-size:15px;
   }
 
   .side-text{
+
     font-size:14px;
   }
 
   .provider-name{
+
     font-size:16px;
   }
 
   .provider-subinfo{
+
     display:block;
   }
 
   .provider-subinfo div{
+
     margin-top:2px;
   }
 
@@ -854,26 +1121,31 @@ alt=""
 
 >
 
-<div class="movie-info">
+  <div class="movie-info">
+
+```
+<!-- タイトル -->
 
 <h2 id="title"></h2>
 
-<!--
-  国情報がある場合だけ表示。
-  国情報がない場合はJavaScriptで
-  display:none にします。
--->
+
+<!-- 国名 -->
 
 <div
   id="country"
   class="country"
-  style="display:none;"
 ></div>
+
+
+<!-- 原題 -->
 
 <div
   id="originalTitle"
   class="original-title"
 ></div>
+
+
+<!-- 基本情報 -->
 
 <div class="basic-info">
 
@@ -889,50 +1161,64 @@ alt=""
 
 </div>
 
+
+<!-- 監督・出演者・あらすじ -->
+
 <div class="movie-side-info">
 
-<div class="side-section">
 
-  <div class="side-title">
-    🎬 監督
+  <!-- 監督 -->
+
+  <div class="side-section">
+
+    <div class="side-title">
+      🎬 監督
+    </div>
+
+    <div
+      id="director"
+      class="side-text"
+    ></div>
+
   </div>
 
-  <div
-    id="director"
-    class="side-text"
-  ></div>
 
-</div>
+  <!-- 出演者 -->
 
-<div class="side-section">
+  <div class="side-section">
 
-  <div class="side-title">
-    👥 出演者
+    <div class="side-title">
+      👥 出演者
+    </div>
+
+    <div
+      id="cast"
+      class="cast-list"
+    ></div>
+
   </div>
 
-  <div
-    id="cast"
-    class="cast-list"
-  ></div>
 
-</div>
+  <!-- あらすじ -->
 
-<div class="side-section">
+  <div class="side-section">
 
-  <div class="side-title">
-    📖 あらすじ
+    <div class="side-title">
+      📖 あらすじ
+    </div>
+
+    <div
+      id="overview"
+      class="side-text overview-text"
+    ></div>
+
   </div>
 
-  <div
-    id="overview"
-    class="side-text overview-text"
-  ></div>
 
 </div>
+```
 
-</div>
-
-</div>
+  </div>
 
 </div>
 
@@ -1096,11 +1382,13 @@ async function loadMovie(){
       const errorText =
         await response.text();
 
+
       console.error(
         "API ERROR:",
         response.status,
         errorText
       );
+
 
       throw new Error(
         "API ERROR " +
@@ -1142,6 +1430,7 @@ async function loadMovie(){
       error
     );
 
+
     showError(
       "作品情報を取得できませんでした。"
     );
@@ -1167,20 +1456,28 @@ function renderMovie(movie){
     "block";
 
 
+  /* タイトル */
+
   setText(
     "title",
     movie.title || ""
   );
 
 
+  /* 国名 */
+
   renderCountries(movie);
 
+
+  /* 原題 */
 
   setText(
     "originalTitle",
     movie.original_title || ""
   );
 
+
+  /* 公開日 */
 
   setText(
     "releaseDate",
@@ -1195,6 +1492,8 @@ function renderMovie(movie){
       : ""
   );
 
+
+  /* 評価 */
 
   const rating =
     Number(
@@ -1214,8 +1513,12 @@ function renderMovie(movie){
   );
 
 
+  /* ポスター */
+
   const poster =
-    document.getElementById("poster");
+    document.getElementById(
+      "poster"
+    );
 
 
   if(movie.poster_path){
@@ -1238,6 +1541,8 @@ function renderMovie(movie){
   }
 
 
+  /* 監督 */
+
   const director =
     movie.director;
 
@@ -1256,33 +1561,36 @@ function renderMovie(movie){
 
     setText(
       "director",
-      "監督情報はありません。"
+      ""
     );
 
   }
 
 
-  renderCast(
-    movie.cast
-  );
+  /* 出演者 */
 
+  renderCast(movie.cast);
+
+
+  /* あらすじ */
 
   setText(
     "overview",
-    movie.overview ||
-      "あらすじ情報はありません。"
+    movie.overview || ""
   );
 
 
-  renderProviders(
-    movie
-  );
+  /* 配信 */
+
+  renderProviders(movie);
 
 
-  renderSeries(
-    movie.series
-  );
+  /* シリーズ */
 
+  renderSeries(movie.series);
+
+
+  /* TMDB */
 
   const tmdbLink =
     document.getElementById(
@@ -1299,6 +1607,8 @@ function renderMovie(movie){
     );
 
 
+  /* ページタイトル */
+
   document.title =
     (
       movie.title ||
@@ -1311,8 +1621,7 @@ function renderMovie(movie){
 
 /* =====================================================
    国名
-   ★重要：
-   国情報がない場合は国欄を完全に非表示
+   情報がない場合は何も表示しない
 ===================================================== */
 
 function renderCountries(movie){
@@ -1324,13 +1633,11 @@ function renderCountries(movie){
 
 
   if(!container){
-
     return;
-
   }
 
 
-  /* 最初に必ず非表示にする */
+  /* 最初に必ず空にする */
 
   container.textContent =
     "";
@@ -1342,9 +1649,7 @@ function renderCountries(movie){
   let countries = [];
 
 
-  /* ===================================================
-     production_countries
-  =================================================== */
+  /* production_countries */
 
   if(
     Array.isArray(
@@ -1354,52 +1659,49 @@ function renderCountries(movie){
 
     countries =
       movie.production_countries
+
         .map(function(country){
 
           if(
             typeof country === "string"
           ){
 
-            return country.trim();
+            return country;
 
           }
-
 
           if(
             country &&
-            typeof country === "object"
+            typeof country.name === "string"
           ){
 
-            return String(
-              country.name ||
-              country.english_name ||
-              ""
-            ).trim();
+            return country.name;
 
           }
 
+          if(
+            country &&
+            typeof country.english_name === "string"
+          ){
+
+            return country.english_name;
+
+          }
 
           return "";
 
         })
+
         .filter(function(value){
 
-          return (
-            value &&
-            value !== "不明" &&
-            value !== "Unknown" &&
-            value !== "unknown" &&
-            value !== "未確認"
-          );
+          return value.trim() !== "";
 
         });
 
   }
 
 
-  /* ===================================================
-     countries
-  =================================================== */
+  /* countries */
 
   if(
     !countries.length &&
@@ -1410,156 +1712,96 @@ function renderCountries(movie){
 
     countries =
       movie.countries
+
         .map(function(country){
 
           if(
             typeof country === "string"
           ){
 
-            return country.trim();
+            return country;
 
           }
-
 
           if(
             country &&
-            typeof country === "object"
+            typeof country.name === "string"
           ){
 
-            return String(
-              country.name ||
-              country.english_name ||
-              ""
-            ).trim();
+            return country.name;
 
           }
 
+          if(
+            country &&
+            typeof country.english_name === "string"
+          ){
+
+            return country.english_name;
+
+          }
 
           return "";
 
         })
+
         .filter(function(value){
 
-          return (
-            value &&
-            value !== "不明" &&
-            value !== "Unknown" &&
-            value !== "unknown" &&
-            value !== "未確認"
-          );
+          return value.trim() !== "";
 
         });
 
   }
 
 
-  /* ===================================================
-     country
-  =================================================== */
+  /* country */
 
   if(
     !countries.length &&
     typeof movie.country === "string"
   ){
 
-    const country =
+    const value =
       movie.country.trim();
 
 
-    if(
-      country &&
-      country !== "不明" &&
-      country !== "Unknown" &&
-      country !== "unknown" &&
-      country !== "未確認"
-    ){
+    if(value){
 
-      countries =
-        [country];
+      countries = [value];
 
     }
 
   }
 
 
-  /* ===================================================
-     production_countries が
-     {iso_3166_1:"JP", name:"Japan"}
-     のような形式の場合にも対応
-  =================================================== */
+  /* 国情報がない */
 
-  if(
-    !countries.length &&
-    Array.isArray(
-      movie.production_countries
-    )
-  ){
-
-    countries =
-      movie.production_countries
-        .map(function(country){
-
-          if(
-            !country ||
-            typeof country !== "object"
-          ){
-
-            return "";
-
-          }
-
-
-          return String(
-            country.name ||
-            country.english_name ||
-            country.native_name ||
-            ""
-          ).trim();
-
-        })
-        .filter(Boolean);
-
-  }
-
-
-  /* ===================================================
-     重複削除
-  =================================================== */
-
-  const unique =
-    [
-      ...new Set(
-        countries
-      )
-    ];
-
-
-  /* ===================================================
-     国情報がない
-     → 何も表示しない
-  =================================================== */
-
-  if(!unique.length){
-
-    container.textContent =
-      "";
-
-    container.style.display =
-      "none";
+  if(!countries.length){
 
     return;
 
   }
 
 
-  /* ===================================================
-     国情報がある
-     → 表示
-  =================================================== */
+  /* 重複削除 */
+
+  const unique =
+    [
+      ...new Set(countries)
+    ];
+
+
+  if(!unique.length){
+
+    return;
+
+  }
+
 
   container.textContent =
     "🌍 " +
     unique.join("・");
+
 
   container.style.display =
     "block";
@@ -1587,9 +1829,6 @@ function renderCast(cast){
     !Array.isArray(cast) ||
     cast.length === 0
   ){
-
-    container.textContent =
-      "出演者情報はありません。";
 
     return;
 
@@ -1741,12 +1980,8 @@ function normalizeProviderName(name){
     value.toLowerCase();
 
 
-  if(
-    lower.includes("netflix")
-  ){
-
+  if(lower.includes("netflix")){
     return "Netflix";
-
   }
 
 
@@ -1770,57 +2005,33 @@ function normalizeProviderName(name){
   }
 
 
-  if(
-    lower.includes("hulu")
-  ){
-
+  if(lower.includes("hulu")){
     return "Hulu";
-
   }
 
 
-  if(
-    lower.includes("disney")
-  ){
-
+  if(lower.includes("disney")){
     return "Disney+";
-
   }
 
 
-  if(
-    lower.includes("apple")
-  ){
-
+  if(lower.includes("apple")){
     return "Apple TV";
-
   }
 
 
-  if(
-    lower.includes("google play")
-  ){
-
+  if(lower.includes("google play")){
     return "Google Play";
-
   }
 
 
-  if(
-    lower.includes("fandango")
-  ){
-
+  if(lower.includes("fandango")){
     return "Fandango";
-
   }
 
 
-  if(
-    lower.includes("fod")
-  ){
-
+  if(lower.includes("fod")){
     return "FOD";
-
   }
 
 
@@ -1844,9 +2055,7 @@ function normalizeProviders(providers){
     function(provider){
 
       if(!provider){
-
         return;
-
       }
 
 
@@ -1857,9 +2066,7 @@ function normalizeProviders(providers){
 
 
       if(!normalizedName){
-
         return;
-
       }
 
 
@@ -1979,9 +2186,7 @@ function createProviderCard(
 ){
 
   if(!provider){
-
     return;
-
   }
 
 
@@ -1994,6 +2199,8 @@ function createProviderCard(
   card.className =
     "provider-card";
 
+
+  /* ロゴ */
 
   if(provider.logo_path){
 
@@ -2023,6 +2230,8 @@ function createProviderCard(
 
   }
 
+
+  /* 情報 */
 
   const info =
     document.createElement(
@@ -2087,6 +2296,8 @@ function createProviderCard(
   );
 
 
+  /* 字幕・吹き替え */
+
   const subInfo =
     document.createElement(
       "div"
@@ -2136,6 +2347,8 @@ function createProviderCard(
     info
   );
 
+
+  /* 配信リンク */
 
   const url =
     getProviderLink(
@@ -2207,16 +2420,23 @@ function getProviderLink(
     ).toLowerCase();
 
 
+  /* Netflix */
+
   if(
     name.includes("netflix")
   ){
 
     return (
-      "https://www.netflix.com/jp/"
+      movie.netflix_url ||
+      (
+        "https://www.netflix.com/jp/"
+      )
     );
 
   }
 
+
+  /* Amazon */
 
   if(
     name.includes("amazon") ||
@@ -2243,6 +2463,8 @@ function getProviderLink(
   }
 
 
+  /* U-NEXT */
+
   if(
     name.includes("u-next") ||
     name.includes("unext")
@@ -2250,13 +2472,13 @@ function getProviderLink(
 
     return (
       movie.unext_url ||
-      getGenericProviderUrl(
-        provider
-      )
+      getGenericProviderUrl(provider)
     );
 
   }
 
+
+  /* Hulu */
 
   if(
     name.includes("hulu")
@@ -2264,13 +2486,13 @@ function getProviderLink(
 
     return (
       movie.hulu_url ||
-      getGenericProviderUrl(
-        provider
-      )
+      getGenericProviderUrl(provider)
     );
 
   }
 
+
+  /* Disney+ */
 
   if(
     name.includes("disney")
@@ -2278,13 +2500,13 @@ function getProviderLink(
 
     return (
       movie.disney_url ||
-      getGenericProviderUrl(
-        provider
-      )
+      getGenericProviderUrl(provider)
     );
 
   }
 
+
+  /* Apple TV */
 
   if(
     name.includes("apple")
@@ -2292,17 +2514,13 @@ function getProviderLink(
 
     return (
       movie.apple_tv_url ||
-      getGenericProviderUrl(
-        provider
-      )
+      getGenericProviderUrl(provider)
     );
 
   }
 
 
-  return getGenericProviderUrl(
-    provider
-  );
+  return getGenericProviderUrl(provider);
 
 }
 
@@ -2311,9 +2529,7 @@ function getProviderLink(
    一般URL
 ===================================================== */
 
-function getGenericProviderUrl(
-  provider
-){
+function getGenericProviderUrl(provider){
 
   const urls = [
 
@@ -2365,12 +2581,8 @@ function getButtonClass(name){
     ).toLowerCase();
 
 
-  if(
-    value.includes("netflix")
-  ){
-
+  if(value.includes("netflix")){
     return "netflix-button";
-
   }
 
 
@@ -2394,30 +2606,18 @@ function getButtonClass(name){
   }
 
 
-  if(
-    value.includes("hulu")
-  ){
-
+  if(value.includes("hulu")){
     return "hulu-button";
-
   }
 
 
-  if(
-    value.includes("disney")
-  ){
-
+  if(value.includes("disney")){
     return "disney-button";
-
   }
 
 
-  if(
-    value.includes("apple")
-  ){
-
+  if(value.includes("apple")){
     return "apple-button";
-
   }
 
 
@@ -2438,12 +2638,8 @@ function getButtonText(name){
     ).toLowerCase();
 
 
-  if(
-    value.includes("netflix")
-  ){
-
+  if(value.includes("netflix")){
     return "Netflixで作品を見る →";
-
   }
 
 
@@ -2467,30 +2663,18 @@ function getButtonText(name){
   }
 
 
-  if(
-    value.includes("hulu")
-  ){
-
+  if(value.includes("hulu")){
     return "Huluで作品を見る →";
-
   }
 
 
-  if(
-    value.includes("disney")
-  ){
-
+  if(value.includes("disney")){
     return "Disney+で作品を見る →";
-
   }
 
 
-  if(
-    value.includes("apple")
-  ){
-
+  if(value.includes("apple")){
     return "Apple TVで作品を見る →";
-
   }
 
 
@@ -2572,7 +2756,8 @@ function renderSeries(series){
 
 
       /* =================================================
-         画像もクリックでdetail.htmlへ
+         画像リンク
+         → 画像を押してもdetail.htmlへ移動
       ================================================= */
 
       if(movie.poster_path){
@@ -2613,6 +2798,10 @@ function renderSeries(series){
           movie.title || "";
 
 
+        image.loading =
+          "lazy";
+
+
         imageLink.appendChild(
           image
         );
@@ -2626,7 +2815,7 @@ function renderSeries(series){
 
 
       /* =================================================
-         タイトルもクリックでdetail.htmlへ
+         タイトルリンク
       ================================================= */
 
       const link =
@@ -2654,6 +2843,10 @@ function renderSeries(series){
         link
       );
 
+
+      /* =================================================
+         年
+      ================================================= */
 
       const year =
         document.createElement(
@@ -2697,9 +2890,7 @@ function renderSeries(series){
 function formatDate(date){
 
   if(!date){
-
     return "";
-
   }
 
 
@@ -2708,9 +2899,7 @@ function formatDate(date){
 
 
   if(parts.length !== 3){
-
     return date;
-
   }
 
 
@@ -2737,9 +2926,7 @@ function formatDate(date){
 function formatYear(date){
 
   if(!date){
-
     return "";
-
   }
 
 
@@ -2774,9 +2961,7 @@ function setText(
 
 
   if(!element){
-
     return;
-
   }
 
 
