@@ -369,37 +369,44 @@ header p{
    シリーズ
 ========================================================= */
 
-.series-item{
-  display:flex;
-  align-items:center;
-  gap:10px;
-
-  padding:9px 0;
-
-  border-bottom:1px solid #eee;
+.series-movies{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(130px,1fr));
+  gap:15px;
 }
 
-.series-item:last-child{
-  border-bottom:none;
+.series-item{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  min-width:0;
 }
 
 .series-poster{
-  width:55px;
-  height:78px;
-
+  width:100%;
+  aspect-ratio:2 / 3;
+  height:auto;
   object-fit:cover;
-
-  border-radius:5px;
-
-  flex-shrink:0;
+  border-radius:8px;
+  background:#e5e7eb;
 }
 
 .series-item a{
   color:#2563eb;
+  text-decoration:none;
   font-weight:bold;
   font-size:14px;
+  line-height:1.4;
 }
 
+.series-item a:hover{
+  text-decoration:underline;
+}
+
+.series-year{
+  color:#777;
+  font-size:12px;
+}
 
 /* =========================================================
    TMDB
