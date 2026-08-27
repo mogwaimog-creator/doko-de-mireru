@@ -1,5 +1,5 @@
+```html
 <!DOCTYPE html>
-
 <html lang="ja">
 
 <head>
@@ -7,9 +7,8 @@
 <meta charset="UTF-8">
 
 <meta
-name="viewport"
-content="width=device-width, initial-scale=1.0"
-
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
 >
 
 <title>ドコデミレル？</title>
@@ -234,26 +233,99 @@ header p{
   background:#374151;
 }
 
+.detail-button:disabled{
+  opacity:.6;
+  cursor:wait;
+}
+
 
 /* =========================
-   詳細
+   詳細モーダル
 ========================= */
 
-.detail{
+.detail-modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.65);
+  z-index:9999;
+
   display:none;
-  margin-top:20px;
-  padding-top:20px;
-  border-top:1px solid #e5e7eb;
+
+  align-items:center;
+  justify-content:center;
+
+  padding:20px;
 }
 
-.detail.open{
-  display:block;
+.detail-modal.open{
+  display:flex;
 }
 
-.detail h3{
-  margin:22px 0 12px;
-  font-size:19px;
+.detail-window{
+  width:min(900px,100%);
+  max-height:90vh;
+  overflow-y:auto;
+
+  background:#fff;
+  border-radius:18px;
+
+  box-shadow:
+    0 15px 50px rgba(0,0,0,.3);
+
+  position:relative;
+}
+
+.detail-header{
+  position:sticky;
+  top:0;
+  z-index:5;
+
+  background:#fff;
+
+  padding:16px 20px;
+
+  border-bottom:1px solid #e5e7eb;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+}
+
+.detail-header-title{
+  font-size:20px;
+  font-weight:bold;
   color:#111827;
+}
+
+.detail-close{
+  width:40px;
+  height:40px;
+
+  border:0;
+  border-radius:50%;
+
+  background:#f3f4f6;
+  color:#111827;
+
+  font-size:22px;
+  line-height:1;
+
+  cursor:pointer;
+}
+
+.detail-close:hover{
+  background:#e5e7eb;
+}
+
+.detail-content{
+  padding:20px;
+}
+
+.detail-loading{
+  text-align:center;
+  padding:50px 20px;
+  color:#6b7280;
 }
 
 
@@ -435,13 +507,41 @@ footer{
     font-size:21px;
   }
 
+  .detail-modal{
+    padding:8px;
+  }
+
+  .detail-window{
+    max-height:94vh;
+    border-radius:14px;
+  }
+
+  .detail-header{
+    padding:13px 15px;
+  }
+
+  .detail-content{
+    padding:15px;
+  }
+
+}
+
+
+/* =========================
+   スクロール固定
+========================= */
+
+body.modal-open{
+  overflow:hidden;
 }
 
 </style>
 
 </head>
 
+
 <body>
+
 
 <header>
 
@@ -453,7 +553,9 @@ footer{
 
 </header>
 
+
 <main class="container">
+
 
   <!-- =====================
        検索
@@ -461,40 +563,86 @@ footer{
 
   <section class="search-box">
 
-```
-<div class="search-row">
+    <div class="search-row">
 
-  <input
-    id="query"
-    type="text"
-    placeholder="映画名を入力してください"
-    autocomplete="off"
-  >
+      <input
+        id="query"
+        type="text"
+        placeholder="映画名を入力してください"
+        autocomplete="off"
+      >
 
-  <button
-    id="searchButton"
-    type="button"
-  >
-    🔍 検索
-  </button>
+      <button
+        id="searchButton"
+        type="button"
+      >
+        🔍 検索
+      </button>
 
-</div>
-```
+    </div>
 
   </section>
 
+
   <div id="status"></div>
+
 
   <div
     id="results"
     class="results"
   ></div>
 
+
 </main>
+
 
 <footer>
   © ドコデミレル？
 </footer>
+
+
+<!-- =========================
+     詳細モーダル
+========================= -->
+
+<div
+  id="detailModal"
+  class="detail-modal"
+>
+
+  <div class="detail-window">
+
+    <div class="detail-header">
+
+      <div
+        id="detailHeaderTitle"
+        class="detail-header-title"
+      >
+        作品詳細
+      </div>
+
+      <button
+        id="detailClose"
+        class="detail-close"
+        type="button"
+        aria-label="閉じる"
+      >
+        ×
+      </button>
+
+    </div>
+
+
+    <div
+      id="detailContent"
+      class="detail-content"
+    >
+    </div>
+
+  </div>
+
+</div>
+
 
 <script>
 
@@ -514,6 +662,18 @@ const status =
 const results =
   document.getElementById("results");
 
+const detailModal =
+  document.getElementById("detailModal");
+
+const detailContent =
+  document.getElementById("detailContent");
+
+const detailClose =
+  document.getElementById("detailClose");
+
+const detailHeaderTitle =
+  document.getElementById("detailHeaderTitle");
+
 
 /* ========================================================
    検索
@@ -523,6 +683,7 @@ async function searchMovies(){
 
   const query =
     queryInput.value.trim();
+
 
   if(!query){
 
@@ -539,10 +700,12 @@ async function searchMovies(){
 
   searchButton.disabled = true;
 
+
   status.innerHTML =
     '<div class="status">' +
     '🔍 検索しています...' +
     '</div>';
+
 
   results.innerHTML = "";
 
@@ -747,16 +910,10 @@ function createMovieCard(movie){
         <button
           class="detail-button"
           type="button"
-          onclick="toggleDetail(${movie.id}, this)"
+          onclick="openDetail(${movie.id})"
         >
           作品詳細を見る
         </button>
-
-
-        <div
-          id="detail-${movie.id}"
-          class="detail"
-        ></div>
 
       </div>
 
@@ -768,38 +925,26 @@ function createMovieCard(movie){
 
 
 /* ========================================================
-   詳細
+   詳細を開く
 ======================================================== */
 
-async function toggleDetail(
-  id,
-  button
-){
+async function openDetail(id){
 
-  const detail =
-    document.getElementById(
-      "detail-" + id
-    );
+  detailModal.classList.add("open");
+
+  document.body.classList.add("modal-open");
 
 
-  if(
-    detail.classList.contains("open")
-  ){
-
-    detail.classList.remove("open");
-
-    button.textContent =
-      "作品詳細を見る";
-
-    return;
-
-  }
+  detailHeaderTitle.textContent =
+    "作品詳細";
 
 
-  button.disabled = true;
-
-  button.textContent =
-    "読み込み中...";
+  detailContent.innerHTML =
+    `
+    <div class="detail-loading">
+      🔍 作品情報を読み込んでいます...
+    </div>
+    `;
 
 
   try{
@@ -842,26 +987,20 @@ async function toggleDetail(
     }
 
 
-    /*
-     * 現在表示中の映画タイトルを保存
-     */
     window.currentMovieTitle =
       data.title ||
       data.original_title ||
       "";
 
 
-    /*
-     * 詳細表示
-     */
-    detail.innerHTML =
+    detailHeaderTitle.textContent =
+      data.title ||
+      data.original_title ||
+      "作品詳細";
+
+
+    detailContent.innerHTML =
       createDetail(data);
-
-
-    detail.classList.add("open");
-
-    button.textContent =
-      "詳細を閉じる";
 
 
   }catch(error){
@@ -872,7 +1011,7 @@ async function toggleDetail(
     );
 
 
-    detail.innerHTML =
+    detailContent.innerHTML =
       '<div class="error">' +
       '❌ ' +
       escapeHtml(
@@ -881,18 +1020,22 @@ async function toggleDetail(
       ) +
       '</div>';
 
-
-    detail.classList.add("open");
-
-    button.textContent =
-      "詳細を閉じる";
-
-
-  }finally{
-
-    button.disabled = false;
-
   }
+
+}
+
+
+/* ========================================================
+   詳細を閉じる
+======================================================== */
+
+function closeDetail(){
+
+  detailModal.classList.remove("open");
+
+  document.body.classList.remove("modal-open");
+
+  detailContent.innerHTML = "";
 
 }
 
@@ -1399,7 +1542,7 @@ function getProviderLink(
 
 
     /*
-     * Netflix作品IDが取得できない場合のみ
+     * Netflix作品IDが取得できない場合だけ
      * Netflix検索ページへ。
      */
 
@@ -1458,7 +1601,8 @@ function getProviderLink(
 
 
     /*
-     * AmazonのURLがTMDBから取得できない場合
+     * 本編URLが取得できない場合のみ
+     * Amazon Prime Video検索へ。
      */
 
     return createAmazonSearchUrl(
@@ -1576,7 +1720,7 @@ function normalizeNetflixUrl(url){
 
 
   /*
-   * NetflixのURLならそのまま使用
+   * NetflixのURLなら使用
    */
 
   if(
@@ -1686,6 +1830,57 @@ function escapeHtml(value){
 
 
 /* ========================================================
+   詳細を閉じる
+======================================================== */
+
+detailClose.addEventListener(
+  "click",
+  closeDetail
+);
+
+
+/* ========================================================
+   モーダル外側クリック
+======================================================== */
+
+detailModal.addEventListener(
+  "click",
+  function(event){
+
+    if(
+      event.target === detailModal
+    ){
+
+      closeDetail();
+
+    }
+
+  }
+);
+
+
+/* ========================================================
+   ESCで閉じる
+======================================================== */
+
+document.addEventListener(
+  "keydown",
+  function(event){
+
+    if(
+      event.key === "Escape" &&
+      detailModal.classList.contains("open")
+    ){
+
+      closeDetail();
+
+    }
+
+  }
+);
+
+
+/* ========================================================
    Enter
 ======================================================== */
 
@@ -1717,3 +1912,4 @@ searchButton.addEventListener(
 </body>
 
 </html>
+```
