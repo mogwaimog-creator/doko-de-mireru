@@ -781,8 +781,10 @@ footer{
 
 <h4 id="seriesName"></h4>
 
-<div id="seriesMovies"></div>
-
+<div
+  id="seriesMovies"
+  class="series-movies"
+></div>
 </div>
 
 
@@ -2130,6 +2132,8 @@ function renderSeries(series){
             )
           : "";
 
+      year.className =
+  "series-year";
 
       year.style.fontSize =
         "12px";
