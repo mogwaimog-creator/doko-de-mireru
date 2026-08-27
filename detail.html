@@ -1,6 +1,3 @@
-# detail.html 完成版
-
-```html
 <!DOCTYPE html>
 <html lang="ja">
 
@@ -120,6 +117,7 @@ header p{
 
 .movie-info h2{
   margin-top:0;
+  margin-bottom:10px;
   font-size:30px;
   line-height:1.4;
 }
@@ -132,58 +130,54 @@ header p{
 .info-line{
   margin:8px 0;
 }
+
+
 /* =====================================================
-   作品右側の詳細情報
+   右側詳細情報
 ===================================================== */
 
 .movie-side-info{
-  flex:1;
-  min-width:0;
+  margin-top:22px;
 }
 
-.movie-side-info .side-section{
+.side-section{
   margin-top:18px;
 }
 
-.movie-side-info .side-section:first-child{
+.side-section:first-child{
   margin-top:0;
 }
 
-.movie-side-info .side-title{
+.side-title{
   font-size:18px;
   font-weight:bold;
   margin-bottom:8px;
 }
 
-.movie-side-info .side-text{
+.side-text{
   line-height:1.7;
   color:#444;
 }
 
-.movie-side-info .cast-list{
+
+/* =====================================================
+   出演者
+===================================================== */
+
+.cast-list{
   display:flex;
   flex-wrap:wrap;
   gap:8px;
 }
 
-.movie-side-info .cast-item{
+.cast-item{
   background:#f3f4f6;
-  padding:7px 11px;
+
+  padding:8px 12px;
+
   border-radius:20px;
 }
 
-
-/* =====================================================
-   スマホ
-===================================================== */
-
-@media(max-width:700px){
-
-  .movie-side-info{
-    width:100%;
-  }
-
-}
 
 /* =====================================================
    共通セクション
@@ -210,26 +204,6 @@ header p{
 
 
 /* =====================================================
-   出演者
-===================================================== */
-
-.cast-list{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-}
-
-.cast-item{
-  background:#f3f4f6;
-
-  padding:8px 12px;
-
-  border-radius:20px;
-}
-
-
-```css
-/* =====================================================
    配信サービス
 ===================================================== */
 
@@ -253,18 +227,13 @@ header p{
 ===================================================== */
 
 .provider-group.streaming{
-
   background:#f0fdf4;
-
   border-color:#bbf7d0;
 }
 
 .provider-group.streaming .provider-title{
-
   border-left-color:#16a34a;
-
   background:#dcfce7;
-
   color:#166534;
 }
 
@@ -274,18 +243,13 @@ header p{
 ===================================================== */
 
 .provider-group.rental{
-
   background:#fff7ed;
-
   border-color:#fed7aa;
 }
 
 .provider-group.rental .provider-title{
-
   border-left-color:#f59e0b;
-
   background:#ffedd5;
-
   color:#9a3412;
 }
 
@@ -295,18 +259,13 @@ header p{
 ===================================================== */
 
 .provider-group.purchase{
-
   background:#eff6ff;
-
   border-color:#bfdbfe;
 }
 
 .provider-group.purchase .provider-title{
-
   border-left-color:#2563eb;
-
   background:#dbeafe;
-
   color:#1e40af;
 }
 
@@ -367,15 +326,12 @@ header p{
 }
 
 .provider-card:hover{
-
   transform:translateY(-1px);
 
   box-shadow:
     0 3px 10px
     rgba(0,0,0,.08);
 }
-```
-
 
 
 /* =====================================================
@@ -662,6 +618,11 @@ header p{
   }
 
 
+  .movie-side-info{
+    margin-top:20px;
+  }
+
+
   .section{
     padding:18px;
   }
@@ -801,9 +762,8 @@ header p{
 
 <div class="movie-header">
 
-  <!-- ===================================================
-       ポスター
-  ==================================================== -->
+
+  <!-- ポスター -->
 
   <img
     id="poster"
@@ -813,27 +773,32 @@ header p{
 
 
   <!-- ===================================================
-       作品情報＋監督・出演者・あらすじ
+       右側
   ==================================================== -->
 
   <div class="movie-info">
 
+
     <h2 id="title"></h2>
+
 
     <div
       id="originalTitle"
       class="original-title"
     ></div>
 
+
     <div
       id="releaseDate"
       class="info-line"
     ></div>
 
+
     <div
       id="language"
       class="info-line"
     ></div>
+
 
     <div
       id="rating"
@@ -841,11 +806,12 @@ header p{
     ></div>
 
 
-    <!-- ===============================================
+    <!-- =================================================
          監督・出演者・あらすじ
-    ================================================ -->
+    ================================================== -->
 
     <div class="movie-side-info">
+
 
       <!-- 監督 -->
 
@@ -894,56 +860,10 @@ header p{
 
       </div>
 
+
     </div>
 
   </div>
-
-</div>
-<div
-  id="language"
-  class="info-line"
-></div>
-
-<div
-  id="rating"
-  class="info-line"
-></div>
-
-<div
-  id="director"
-  class="info-line"
-></div>
-
-</div>
-
-</div>
-
-
-<!-- =====================================================
-     出演者
-===================================================== -->
-
-<div class="section">
-
-<h3>👥 出演者</h3>
-
-<div
-  id="cast"
-  class="cast-list"
-></div>
-
-</div>
-
-
-<!-- =====================================================
-     あらすじ
-===================================================== -->
-
-<div class="section">
-
-<h3>📖 あらすじ</h3>
-
-<p id="overview"></p>
 
 </div>
 
@@ -1291,6 +1211,10 @@ function renderMovie(movie){
   }
 
 
+  /* ===================================================
+     監督
+  =================================================== */
+
   const director =
     movie.director;
 
@@ -1302,7 +1226,6 @@ function renderMovie(movie){
 
     setText(
       "director",
-      "🎬 監督： " +
       director.name
     );
 
@@ -1310,16 +1233,24 @@ function renderMovie(movie){
 
     setText(
       "director",
-      ""
+      "監督情報はありません。"
     );
 
   }
 
 
+  /* ===================================================
+     出演者
+  =================================================== */
+
   renderCast(
     movie.cast
   );
 
+
+  /* ===================================================
+     あらすじ
+  =================================================== */
 
   setText(
     "overview",
@@ -1328,15 +1259,27 @@ function renderMovie(movie){
   );
 
 
+  /* ===================================================
+     配信
+  =================================================== */
+
   renderProviders(
     movie
   );
 
 
+  /* ===================================================
+     シリーズ
+  =================================================== */
+
   renderSeries(
     movie.series
   );
 
+
+  /* ===================================================
+     TMDB
+  =================================================== */
 
   const tmdbLink =
     document.getElementById(
@@ -1521,7 +1464,7 @@ function renderProviders(movie){
 
 
 /* =====================================================
-   サービス名を整理
+   サービス名
 ===================================================== */
 
 function normalizeProviderName(name){
@@ -1670,6 +1613,7 @@ function normalizeProviders(providers){
             normalizedName
         };
 
+
         result.push(
           map[key]
         );
@@ -1786,9 +1730,9 @@ function createProviderCard(
     "provider-card";
 
 
-  /* ---------------------------------------------------
+  /* ===================================================
      ロゴ
-  --------------------------------------------------- */
+  =================================================== */
 
   if(provider.logo_path){
 
@@ -1819,9 +1763,9 @@ function createProviderCard(
   }
 
 
-  /* ---------------------------------------------------
+  /* ===================================================
      情報
-  --------------------------------------------------- */
+  =================================================== */
 
   const info =
     document.createElement(
@@ -1886,9 +1830,9 @@ function createProviderCard(
   );
 
 
-  /* ---------------------------------------------------
+  /* ===================================================
      字幕・吹き替え
-  --------------------------------------------------- */
+  =================================================== */
 
   const subInfo =
     document.createElement(
@@ -1940,9 +1884,9 @@ function createProviderCard(
   );
 
 
-  /* ---------------------------------------------------
+  /* ===================================================
      配信リンク
-  --------------------------------------------------- */
+  =================================================== */
 
   const url =
     getProviderLink(
@@ -2014,26 +1958,25 @@ function getProviderLink(
     ).toLowerCase();
 
 
+  /* ===================================================
+     Netflix
+     → Netflixホームページへ
+  =================================================== */
+
   if(
     name.includes("netflix")
   ){
 
     return (
-      movie.netflix_url ||
-      (
-        movie.netflix &&
-        movie.netflix.url
-      ) ||
-      (
-        "https://www.netflix.com/jp/search?q=" +
-        encodeURIComponent(
-          movie.title || ""
-        )
-      )
+      "https://www.netflix.com/jp/"
     );
 
   }
 
+
+  /* ===================================================
+     Amazon
+  =================================================== */
 
   if(
     name.includes("amazon") ||
@@ -2058,6 +2001,10 @@ function getProviderLink(
   }
 
 
+  /* ===================================================
+     U-NEXT
+  =================================================== */
+
   if(
     name.includes("u-next") ||
     name.includes("unext")
@@ -2073,6 +2020,10 @@ function getProviderLink(
   }
 
 
+  /* ===================================================
+     Hulu
+  =================================================== */
+
   if(
     name.includes("hulu")
   ){
@@ -2087,6 +2038,10 @@ function getProviderLink(
   }
 
 
+  /* ===================================================
+     Disney+
+  =================================================== */
+
   if(
     name.includes("disney")
   ){
@@ -2100,6 +2055,10 @@ function getProviderLink(
 
   }
 
+
+  /* ===================================================
+     Apple TV
+  =================================================== */
 
   if(
     name.includes("apple")
@@ -2568,16 +2527,20 @@ function showError(message){
   loading.style.display =
     "none";
 
+
   content.style.display =
     "none";
 
+
   errorBox.style.display =
     "block";
+
 
   errorBox.textContent =
     message;
 
 }
+
 
 })();
 
@@ -2598,4 +2561,3 @@ function showError(message){
 </body>
 
 </html>
-```
