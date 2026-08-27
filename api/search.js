@@ -1,9 +1,27 @@
+```javascript
 // =========================================================
 // doko-de-mireru
 // api/search.js
 //
-// 安定版 + Netflix / Amazon リンク改善版
+// 安定版
+//
+// ・TMDB映画検索
+// ・日本の配信情報
+// ・Netflix
+// ・Amazon Prime Video
+// ・U-NEXT
+// ・Hulu
+// ・Disney+
+// ・Apple TV
+// ・監督
+// ・出演者
+// ・シリーズ
+// ・字幕 / 吹き替え情報の土台
+// ・国情報
+//
+// CommonJS / Vercel対応
 // =========================================================
+
 
 module.exports = async function handler(req, res) {
 
@@ -28,8 +46,11 @@ module.exports = async function handler(req, res) {
       "Content-Type"
     );
 
+
     if (req.method === "OPTIONS") {
+
       return res.status(200).end();
+
     }
 
 
@@ -40,11 +61,18 @@ module.exports = async function handler(req, res) {
     const apiKey =
       process.env.TMDB_API_KEY;
 
+
     if (!apiKey) {
 
+      console.error(
+        "TMDB_API_KEY is missing"
+      );
+
       return res.status(500).json({
+
         error:
           "TMDB_API_KEY が設定されていません。"
+
       });
 
     }
@@ -59,6 +87,7 @@ module.exports = async function handler(req, res) {
         ? req.query.query.trim()
         : "";
 
+
     const id =
       typeof req.query.id === "string"
         ? req.query.id.trim()
@@ -66,7 +95,7 @@ module.exports = async function handler(req, res) {
 
 
     // =====================================================
-    // IDがある場合 → 詳細
+    // IDあり → 詳細
     // =====================================================
 
     if (id) {
@@ -81,14 +110,16 @@ module.exports = async function handler(req, res) {
 
 
     // =====================================================
-    // 検索文字がない
+    // 検索文字なし
     // =====================================================
 
     if (!query) {
 
       return res.status(400).json({
+
         error:
           "映画名を入力してください。"
+
       });
 
     }
@@ -98,106 +129,11 @@ module.exports = async function handler(req, res) {
     // 映画検索
     // =====================================================
 
-    const url =
-      "https://api.themoviedb.org/3/search/movie" +
-      "?api_key=" +
-      encodeURIComponent(apiKey) +
-      "&language=ja-JP" +
-      "&region=JP" +
-      "&query=" +
-      encodeURIComponent(query) +
-      "&include_adult=false" +
-      "&page=1";
-
-
-    const response =
-      await fetch(url);
-
-
-    if (!response.ok) {
-
-      const text =
-        await response.text();
-
-      console.error(
-        "TMDB search error:",
-        text
-      );
-
-      return res.status(500).json({
-        error:
-          "TMDB映画検索に失敗しました。"
-      });
-
-    }
-
-
-    const data =
-      await response.json();
-
-
-    let movies =
-      Array.isArray(data.results)
-        ? data.results
-        : [];
-
-
-    // =====================================================
-    // 最大10件
-    // =====================================================
-
-    movies =
-      movies
-        .filter(function(movie) {
-
-          return (
-            movie &&
-            movie.id &&
-            movie.title
-          );
-
-        })
-        .slice(0, 10);
-
-
-    // =====================================================
-    // 結果
-    // =====================================================
-
-    const results =
-      movies.map(function(movie) {
-
-        return {
-
-          id:
-            movie.id,
-
-          title:
-            movie.title || "",
-
-          original_title:
-            movie.original_title || "",
-
-          release_date:
-            movie.release_date || "",
-
-          poster_path:
-            movie.poster_path || null,
-
-          overview:
-            movie.overview || "",
-
-          vote_average:
-            Number(movie.vote_average || 0)
-
-        };
-
-      });
-
-
-    return res.status(200).json({
-      results: results
-    });
+    return await searchMovies(
+      query,
+      apiKey,
+      res
+    );
 
 
   } catch (error) {
@@ -207,17 +143,198 @@ module.exports = async function handler(req, res) {
       error
     );
 
+
     return res.status(500).json({
+
       error:
         error &&
         error.message
           ? error.message
           : "サーバーでエラーが発生しました。"
+
     });
 
   }
 
 };
+
+
+// =========================================================
+// 映画検索
+// =========================================================
+
+async function searchMovies(
+  query,
+  apiKey,
+  res
+) {
+
+  const url =
+    "https://api.themoviedb.org/3/search/movie" +
+    "?api_key=" +
+    encodeURIComponent(apiKey) +
+    "&language=ja-JP" +
+    "&region=JP" +
+    "&query=" +
+    encodeURIComponent(query) +
+    "&include_adult=false" +
+    "&page=1";
+
+
+  const response =
+    await fetch(url);
+
+
+  if (!response.ok) {
+
+    const text =
+      await response.text();
+
+
+    console.error(
+      "TMDB SEARCH ERROR:",
+      response.status,
+      text
+    );
+
+
+    return res.status(500).json({
+
+      error:
+        "TMDB映画検索に失敗しました。"
+
+    });
+
+  }
+
+
+  const data =
+    await response.json();
+
+
+  let movies =
+    Array.isArray(data.results)
+      ? data.results
+      : [];
+
+
+  // =====================================================
+  // 不正データ除外
+  // =====================================================
+
+  movies =
+    movies.filter(function(movie) {
+
+      return (
+        movie &&
+        movie.id &&
+        movie.title
+      );
+
+    });
+
+
+  // =====================================================
+  // 完全一致を優先
+  // =====================================================
+
+  const normalizedQuery =
+    normalizeTitle(query);
+
+
+  movies.sort(function(a, b) {
+
+    const aTitle =
+      normalizeTitle(
+        a.title || ""
+      );
+
+
+    const bTitle =
+      normalizeTitle(
+        b.title || ""
+      );
+
+
+    const aExact =
+      aTitle === normalizedQuery
+        ? 0
+        : 1;
+
+
+    const bExact =
+      bTitle === normalizedQuery
+        ? 0
+        : 1;
+
+
+    if (aExact !== bExact) {
+
+      return aExact - bExact;
+
+    }
+
+
+    return String(
+      a.release_date || "9999-99-99"
+    ).localeCompare(
+      String(
+        b.release_date || "9999-99-99"
+      )
+    );
+
+  });
+
+
+  // =====================================================
+  // 最大10件
+  // =====================================================
+
+  movies =
+    movies.slice(0, 10);
+
+
+  const results =
+    movies.map(function(movie) {
+
+      return {
+
+        id:
+          movie.id,
+
+        title:
+          movie.title || "",
+
+        original_title:
+          movie.original_title || "",
+
+        release_date:
+          movie.release_date || "",
+
+        poster_path:
+          movie.poster_path || null,
+
+        overview:
+          movie.overview || "",
+
+        vote_average:
+          Number(
+            movie.vote_average || 0
+          )
+
+      };
+
+    });
+
+
+  return res.status(200).json({
+
+    results:
+      results
+
+  });
+
+}
 
 
 // =========================================================
@@ -250,14 +367,19 @@ async function getMovieDetail(
       const text =
         await response.text();
 
+
       console.error(
-        "TMDB detail error:",
+        "TMDB DETAIL ERROR:",
+        response.status,
         text
       );
 
+
       return res.status(404).json({
+
         error:
           "作品情報を取得できませんでした。"
+
       });
 
     }
@@ -302,43 +424,8 @@ async function getMovieDetail(
     // 監督
     // =====================================================
 
-    let director = null;
-
-
-    const crew =
-      movie &&
-      movie.credits &&
-      Array.isArray(movie.credits.crew)
-        ? movie.credits.crew
-        : [];
-
-
-    for (
-      let i = 0;
-      i < crew.length;
-      i++
-    ) {
-
-      if (
-        crew[i] &&
-        crew[i].job === "Director"
-      ) {
-
-        director = {
-
-          id:
-            crew[i].id,
-
-          name:
-            crew[i].name || ""
-
-        };
-
-        break;
-
-      }
-
-    }
+    const director =
+      getDirector(movie);
 
 
     // =====================================================
@@ -346,25 +433,7 @@ async function getMovieDetail(
     // =====================================================
 
     const cast =
-      movie &&
-      movie.credits &&
-      Array.isArray(movie.credits.cast)
-        ? movie.credits.cast
-            .slice(0, 8)
-            .map(function(person) {
-
-              return {
-
-                id:
-                  person.id,
-
-                name:
-                  person.name || ""
-
-              };
-
-            })
-        : [];
+      getCast(movie);
 
 
     // =====================================================
@@ -413,15 +482,54 @@ async function getMovieDetail(
         movie.overview || "",
 
       vote_average:
-        Number(movie.vote_average || 0),
+        Number(
+          movie.vote_average || 0
+        ),
 
       genres:
         Array.isArray(movie.genres)
           ? movie.genres
           : [],
 
+      // ===================================================
+      // 国
+      // ===================================================
+
+      production_countries:
+        Array.isArray(
+          movie.production_countries
+        )
+          ? movie.production_countries.map(
+              function(country) {
+
+                return {
+
+                  iso_3166_1:
+                    country.iso_3166_1 || "",
+
+                  name:
+                    country.name || ""
+
+                };
+
+              }
+            )
+          : [],
+
+
+      origin_country:
+        Array.isArray(movie.origin_country)
+          ? movie.origin_country
+          : [],
+
+
       original_language:
         movie.original_language || "",
+
+
+      // ===================================================
+      // 人物
+      // ===================================================
 
       director:
         director,
@@ -429,28 +537,57 @@ async function getMovieDetail(
       cast:
         cast,
 
+
+      // ===================================================
+      // 字幕・吹き替え
+      //
+      // TMDBだけでは日本配信サービスごとの
+      // 字幕/吹き替えを完全には判定できないため、
+      // 現時点では取得できる範囲のみ返す。
+      // ===================================================
+
+      language: {
+
+        original_language:
+          movie.original_language || null,
+
+        subtitle:
+          null,
+
+        dubbing:
+          null
+
+      },
+
+
+      // ===================================================
+      // 配信
+      // ===================================================
+
       streaming:
-        streaming,
-
-      rental:
-        rental,
-
-      purchase:
-        purchase,
-
-      series:
-        series,
-
-      link:
-        providers.link ||
-        (
-          "https://www.themoviedb.org/movie/" +
-          movie.id
+        enrichProviders(
+          streaming,
+          "streaming"
         ),
 
-      // Netflix
-      netflix:
-        null,
+
+      rental:
+        enrichProviders(
+          rental,
+          "rental"
+        ),
+
+
+      purchase:
+        enrichProviders(
+          purchase,
+          "purchase"
+        ),
+
+
+      // ===================================================
+      // サービスURL
+      // ===================================================
 
       netflix_url:
         null,
@@ -461,12 +598,43 @@ async function getMovieDetail(
       netflix_id:
         null,
 
-      // Amazon
-      amazon:
-        null,
 
       amazon_url:
-        null
+        null,
+
+
+      unext_url:
+        null,
+
+      hulu_url:
+        null,
+
+      disney_url:
+        null,
+
+      apple_tv_url:
+        null,
+
+
+      // ===================================================
+      // シリーズ
+      // ===================================================
+
+      series:
+        series,
+
+
+      // ===================================================
+      // TMDB / JustWatch
+      // ===================================================
+
+      link:
+        providers.link ||
+        (
+          "https://www.themoviedb.org/movie/" +
+          movie.id +
+          "/watch"
+        )
 
     };
 
@@ -486,33 +654,36 @@ async function getMovieDetail(
 
     if (netflix) {
 
-      const netflixInfo =
-        getNetflixLink(
-          movie
+      const netflixId =
+        extractNetflixIdFromProvider(
+          netflix
         );
 
 
-      result.netflix = {
+      if (netflixId) {
 
-        title_id:
-          netflixInfo.titleId,
+        result.netflix_title_id =
+          netflixId;
 
-        url:
-          netflixInfo.url
+        result.netflix_id =
+          netflixId;
 
-      };
+        result.netflix_url =
+          "https://www.netflix.com/jp/title/" +
+          encodeURIComponent(
+            netflixId
+          );
 
+      } else {
 
-      result.netflix_url =
-        netflixInfo.url;
+        result.netflix_url =
+          createNetflixSearchUrl(
+            movie.title ||
+            movie.original_title ||
+            ""
+          );
 
-
-      result.netflix_title_id =
-        netflixInfo.titleId;
-
-
-      result.netflix_id =
-        netflixInfo.titleId;
+      }
 
     }
 
@@ -532,32 +703,31 @@ async function getMovieDetail(
 
     if (amazon) {
 
-      const amazonInfo =
-        getAmazonLink(
-          movie
-        );
-
-
-      result.amazon = {
-
-        url:
-          amazonInfo.url
-
-      };
-
+      /*
+       * Amazonの作品ページURLは
+       * TMDBのwatch/providersから
+       * 安定して取得できるとは限らないため、
+       * ここではAmazon Video検索へ。
+       *
+       * 不正な作品ページに飛ばすより安全。
+       */
 
       result.amazon_url =
-        amazonInfo.url;
+        createAmazonSearchUrl(
+          movie.title ||
+          movie.original_title ||
+          ""
+        );
 
     }
 
 
     // =====================================================
-    // その他サービス
+    // U-NEXT
     // =====================================================
 
-    result.unext_url =
-      findProviderUrl(
+    const unext =
+      findProvider(
         "unext",
         streaming,
         rental,
@@ -565,8 +735,25 @@ async function getMovieDetail(
       );
 
 
-    result.hulu_url =
-      findProviderUrl(
+    if (unext) {
+
+      result.unext_url =
+        createServiceSearchUrl(
+          "unext",
+          movie.title ||
+          movie.original_title ||
+          ""
+        );
+
+    }
+
+
+    // =====================================================
+    // Hulu
+    // =====================================================
+
+    const hulu =
+      findProvider(
         "hulu",
         streaming,
         rental,
@@ -574,8 +761,25 @@ async function getMovieDetail(
       );
 
 
-    result.disney_url =
-      findProviderUrl(
+    if (hulu) {
+
+      result.hulu_url =
+        createServiceSearchUrl(
+          "hulu",
+          movie.title ||
+          movie.original_title ||
+          ""
+        );
+
+    }
+
+
+    // =====================================================
+    // Disney+
+    // =====================================================
+
+    const disney =
+      findProvider(
         "disney",
         streaming,
         rental,
@@ -583,8 +787,25 @@ async function getMovieDetail(
       );
 
 
-    result.apple_tv_url =
-      findProviderUrl(
+    if (disney) {
+
+      result.disney_url =
+        createServiceSearchUrl(
+          "disney",
+          movie.title ||
+          movie.original_title ||
+          ""
+        );
+
+    }
+
+
+    // =====================================================
+    // Apple TV
+    // =====================================================
+
+    const apple =
+      findProvider(
         "apple",
         streaming,
         rental,
@@ -592,8 +813,21 @@ async function getMovieDetail(
       );
 
 
+    if (apple) {
+
+      result.apple_tv_url =
+        createServiceSearchUrl(
+          "apple",
+          movie.title ||
+          movie.original_title ||
+          ""
+        );
+
+    }
+
+
     // =====================================================
-    // 完了
+    // 結果返却
     // =====================================================
 
     return res.status(200).json(
@@ -608,12 +842,15 @@ async function getMovieDetail(
       error
     );
 
+
     return res.status(500).json({
+
       error:
         error &&
         error.message
           ? error.message
           : "作品詳細の取得に失敗しました。"
+
     });
 
   }
@@ -622,280 +859,123 @@ async function getMovieDetail(
 
 
 // =========================================================
-// Netflix / Amazon 手動確認済みリンク
-//
-// 正確な個別ページを確認できた作品だけ登録します。
+// 配信サービスを整理
 // =========================================================
 
-const VERIFIED_LINKS = {
+function enrichProviders(
+  providers,
+  type
+) {
 
-  "怪盗グルーのミニオン超変身": {
+  if (
+    !Array.isArray(providers)
+  ) {
 
-    netflix: {
-      id:
-        "81776693",
-
-      url:
-        "https://www.netflix.com/jp/title/81776693"
-    },
-
-    amazon: {
-      url:
-        "https://www.primevideo.com/-/ja/detail/0KGWRU9CNGPAMPV8AERAH7RW0L"
-    }
+    return [];
 
   }
 
-};
+
+  return providers.map(
+    function(provider) {
+
+      if (!provider) {
+
+        return null;
+
+      }
 
 
-// =========================================================
-// タイトル正規化
-// =========================================================
+      return {
 
-function normalizeTitle(
-  title
-) {
+        provider_id:
+          provider.provider_id || null,
 
-  return String(
-    title || ""
-  )
-    .toLowerCase()
-    .replace(
-      /[\s　]/g,
-      ""
-    )
-    .replace(
-      /[「」『』【】（）()・:：!?！？,.，。]/g,
-      ""
-    );
+        provider_name:
+          provider.provider_name ||
+          provider.name ||
+          "",
+
+        logo_path:
+          provider.logo_path ||
+          null,
+
+        display_priority:
+          provider.display_priority ||
+          null,
+
+        type:
+          type
+
+      };
+
+    }
+  ).filter(Boolean);
 
 }
 
 
 // =========================================================
-// 確認済みリンク取得
+// サービス検索
 // =========================================================
 
-function getVerifiedLink(
-  movie,
-  service
+function findProvider(
+  keyword,
+  streaming,
+  rental,
+  purchase
 ) {
 
-  const title =
-    normalizeTitle(
-      movie &&
-      (
-        movie.title ||
-        movie.original_title ||
-        ""
-      )
-    );
-
-
-  const keys =
-    Object.keys(
-      VERIFIED_LINKS
+  const all = []
+    .concat(
+      Array.isArray(streaming)
+        ? streaming
+        : []
+    )
+    .concat(
+      Array.isArray(rental)
+        ? rental
+        : []
+    )
+    .concat(
+      Array.isArray(purchase)
+        ? purchase
+        : []
     );
 
 
   for (
     let i = 0;
-    i < keys.length;
+    i < all.length;
     i++
   ) {
 
-    const key =
-      keys[i];
+    const provider =
+      all[i];
+
+
+    if (!provider) {
+
+      continue;
+
+    }
+
+
+    const name =
+      String(
+        provider.provider_name ||
+        provider.name ||
+        ""
+      ).toLowerCase();
 
 
     if (
-      normalizeTitle(key) === title
+      name.includes(keyword)
     ) {
 
-      return (
-        VERIFIED_LINKS[key] &&
-        VERIFIED_LINKS[key][service]
-          ? VERIFIED_LINKS[key][service]
-          : null
-      );
+      return provider;
 
     }
-
-  }
-
-
-  return null;
-
-}
-
-
-// =========================================================
-// Netflixリンク
-// =========================================================
-
-function getNetflixLink(
-  movie
-) {
-
-  // -----------------------------------------------------
-  // まず手動確認済みURL
-  // -----------------------------------------------------
-
-  const verified =
-    getVerifiedLink(
-      movie,
-      "netflix"
-    );
-
-
-  if (verified) {
-
-    return {
-
-      titleId:
-        verified.id || null,
-
-      url:
-        verified.url
-
-    };
-
-  }
-
-
-  // -----------------------------------------------------
-  // TMDBなどにURL情報が存在する場合
-  // -----------------------------------------------------
-
-  const possibleUrls = [
-
-    movie &&
-    movie.netflix_url,
-
-    movie &&
-    movie.netflix_link,
-
-    movie &&
-    movie.netflix &&
-    movie.netflix.url
-
-  ];
-
-
-  for (
-    let i = 0;
-    i < possibleUrls.length;
-    i++
-  ) {
-
-    const info =
-      normalizeNetflixUrl(
-        possibleUrls[i]
-      );
-
-
-    if (info) {
-
-      return info;
-
-    }
-
-  }
-
-
-  // -----------------------------------------------------
-  // 見つからない場合
-  // -----------------------------------------------------
-  //
-  // 間違った作品へ飛ばすより、
-  // Netflix公式検索を使用します。
-  // -----------------------------------------------------
-
-  const title =
-    movie &&
-    (
-      movie.title ||
-      movie.original_title ||
-      ""
-    );
-
-
-  return {
-
-    titleId:
-      null,
-
-    url:
-      createNetflixSearchUrl(
-        title
-      )
-
-  };
-
-}
-
-
-// =========================================================
-// Netflix URL正規化
-// =========================================================
-
-function normalizeNetflixUrl(
-  url
-) {
-
-  if (
-    typeof url !== "string" ||
-    !url.trim()
-  ) {
-
-    return null;
-
-  }
-
-
-  const clean =
-    url.trim();
-
-
-  const titleId =
-    extractNetflixTitleId(
-      clean
-    );
-
-
-  if (titleId) {
-
-    return {
-
-      titleId:
-        titleId,
-
-      url:
-        "https://www.netflix.com/jp/title/" +
-        encodeURIComponent(
-          titleId
-        )
-
-    };
-
-  }
-
-
-  if (
-    /^https?:\/\/(?:www\.)?netflix\.com\//i
-      .test(clean)
-  ) {
-
-    return {
-
-      titleId:
-        null,
-
-      url:
-        clean
-
-    };
 
   }
 
@@ -907,6 +987,62 @@ function normalizeNetflixUrl(
 
 // =========================================================
 // Netflix ID取得
+// =========================================================
+
+function extractNetflixIdFromProvider(
+  provider
+) {
+
+  if (!provider) {
+
+    return null;
+
+  }
+
+
+  const possibleUrls = [
+
+    provider.provider_url,
+
+    provider.watch_link,
+
+    provider.url,
+
+    provider.link,
+
+    provider.netflix_url
+
+  ];
+
+
+  for (
+    let i = 0;
+    i < possibleUrls.length;
+    i++
+  ) {
+
+    const id =
+      extractNetflixTitleId(
+        possibleUrls[i]
+      );
+
+
+    if (id) {
+
+      return id;
+
+    }
+
+  }
+
+
+  return null;
+
+}
+
+
+// =========================================================
+// Netflix ID
 // =========================================================
 
 function extractNetflixTitleId(
@@ -978,172 +1114,15 @@ function createNetflixSearchUrl(
 
   if (!clean) {
 
-    return (
-      "https://www.netflix.com/jp/"
-    );
+    return "https://www.netflix.com/jp/";
 
   }
 
 
   return (
     "https://www.netflix.com/jp/search?q=" +
-    encodeURIComponent(
-      clean
-    )
+    encodeURIComponent(clean)
   );
-
-}
-
-
-// =========================================================
-// Amazonリンク
-// =========================================================
-
-function getAmazonLink(
-  movie
-) {
-
-  // -----------------------------------------------------
-  // まず手動確認済みURL
-  // -----------------------------------------------------
-
-  const verified =
-    getVerifiedLink(
-      movie,
-      "amazon"
-    );
-
-
-  if (verified) {
-
-    return {
-
-      url:
-        verified.url
-
-    };
-
-  }
-
-
-  // -----------------------------------------------------
-  // movie内にAmazon URLがある場合
-  // -----------------------------------------------------
-
-  const possibleUrls = [
-
-    movie &&
-    movie.amazon_url,
-
-    movie &&
-    movie.amazon &&
-    movie.amazon.url
-
-  ];
-
-
-  for (
-    let i = 0;
-    i < possibleUrls.length;
-    i++
-  ) {
-
-    const url =
-      normalizeAmazonUrl(
-        possibleUrls[i]
-      );
-
-
-    if (url) {
-
-      return {
-
-        url:
-          url
-
-      };
-
-    }
-
-  }
-
-
-  // -----------------------------------------------------
-  // 最後はPrime Video検索
-  // -----------------------------------------------------
-
-  const title =
-    movie &&
-    (
-      movie.title ||
-      movie.original_title ||
-      ""
-    );
-
-
-  return {
-
-    url:
-      createAmazonSearchUrl(
-        title
-      )
-
-  };
-
-}
-
-
-// =========================================================
-// Amazon URL正規化
-// =========================================================
-
-function normalizeAmazonUrl(
-  url
-) {
-
-  if (
-    typeof url !== "string" ||
-    !url.trim()
-  ) {
-
-    return null;
-
-  }
-
-
-  const clean =
-    url.trim();
-
-
-  // Prime Video detail URL
-  if (
-    /^https?:\/\/(?:www\.)?primevideo\.com\//i
-      .test(clean)
-  ) {
-
-    return clean;
-
-  }
-
-
-  // Amazon gp/video/detail
-  const match =
-    clean.match(
-      /https?:\/\/(?:www\.)?amazon\.co\.jp\/gp\/video\/detail\/([A-Z0-9]+)/i
-    );
-
-
-  if (match) {
-
-    return (
-      "https://www.amazon.co.jp/gp/video/detail/" +
-      match[1]
-    );
-
-  }
-
-
-  return null;
 
 }
 
@@ -1165,7 +1144,7 @@ function createAmazonSearchUrl(
   if (!clean) {
 
     return (
-      "https://www.primevideo.com/"
+      "https://www.amazon.co.jp/gp/video/storefront"
     );
 
   }
@@ -1173,9 +1152,7 @@ function createAmazonSearchUrl(
 
   return (
     "https://www.amazon.co.jp/s?k=" +
-    encodeURIComponent(
-      clean
-    ) +
+    encodeURIComponent(clean) +
     "&i=instant-video"
   );
 
@@ -1183,129 +1160,80 @@ function createAmazonSearchUrl(
 
 
 // =========================================================
-// 配信サービス検索
+// その他サービス検索URL
 // =========================================================
 
-function findProvider(
-  keyword,
-  streaming,
-  rental,
-  purchase
+function createServiceSearchUrl(
+  service,
+  title
 ) {
 
-  const all = []
-    .concat(
-      Array.isArray(streaming)
-        ? streaming
-        : []
-    )
-    .concat(
-      Array.isArray(rental)
-        ? rental
-        : []
-    )
-    .concat(
-      Array.isArray(purchase)
-        ? purchase
-        : []
-    );
+  const clean =
+    String(
+      title || ""
+    ).trim();
 
 
-  for (
-    let i = 0;
-    i < all.length;
-    i++
+  // -------------------------------------------------------
+  // U-NEXT
+  // -------------------------------------------------------
+
+  if (
+    service === "unext"
   ) {
 
-    const provider =
-      all[i];
-
-
-    if (!provider) {
-      continue;
-    }
-
-
-    const name =
-      String(
-        provider.provider_name ||
-        provider.name ||
-        ""
-      ).toLowerCase();
-
-
-    if (
-      name.includes(keyword)
-    ) {
-
-      return provider;
-
-    }
+    return (
+      "https://video.unext.jp/search?keyword=" +
+      encodeURIComponent(clean)
+    );
 
   }
 
 
-  return null;
+  // -------------------------------------------------------
+  // Hulu
+  // -------------------------------------------------------
 
-}
+  if (
+    service === "hulu"
+  ) {
 
-
-// =========================================================
-// その他配信サービスURL
-// =========================================================
-
-function findProviderUrl(
-  keyword,
-  streaming,
-  rental,
-  purchase
-) {
-
-  const provider =
-    findProvider(
-      keyword,
-      streaming,
-      rental,
-      purchase
+    return (
+      "https://www.hulu.jp/search?q=" +
+      encodeURIComponent(clean)
     );
-
-
-  if (!provider) {
-
-    return null;
 
   }
 
 
-  const urls = [
+  // -------------------------------------------------------
+  // Disney+
+  // -------------------------------------------------------
 
-    provider.provider_url,
-
-    provider.watch_link,
-
-    provider.url,
-
-    provider.link
-
-  ];
-
-
-  for (
-    let i = 0;
-    i < urls.length;
-    i++
+  if (
+    service === "disney"
   ) {
 
-    if (
-      typeof urls[i] === "string" &&
-      /^https?:\/\//i.test(
-        urls[i]
-      )
-    ) {
+    return (
+      "https://www.disneyplus.com/ja-jp/search/" +
+      encodeURIComponent(clean)
+    );
 
-      return urls[i];
+  }
 
-    }
+
+  // -------------------------------------------------------
+  // Apple TV
+  // -------------------------------------------------------
+
+  if (
+    service === "apple"
+  ) {
+
+    return (
+      "https://tv.apple.com/jp/search?term=" +
+      encodeURIComponent(clean)
+    );
 
   }
 
@@ -1340,6 +1268,11 @@ async function getCollection(
 
     if (!response.ok) {
 
+      console.error(
+        "COLLECTION ERROR:",
+        response.status
+      );
+
       return null;
 
     }
@@ -1368,10 +1301,20 @@ async function getCollection(
         .sort(function(a, b) {
 
           const dateA =
-            a.release_date || "9999-99-99";
+            isValidDate(
+              a.release_date
+            )
+              ? a.release_date
+              : "9999-99-99";
+
 
           const dateB =
-            b.release_date || "9999-99-99";
+            isValidDate(
+              b.release_date
+            )
+              ? b.release_date
+              : "9999-99-99";
+
 
           return dateA.localeCompare(
             dateB
@@ -1412,12 +1355,139 @@ async function getCollection(
   } catch (error) {
 
     console.error(
-      "Collection error:",
+      "COLLECTION ERROR:",
       error
     );
+
 
     return null;
 
   }
 
 }
+
+
+// =========================================================
+// 監督
+// =========================================================
+
+function getDirector(
+  movie
+) {
+
+  const crew =
+    movie &&
+    movie.credits &&
+    Array.isArray(movie.credits.crew)
+      ? movie.credits.crew
+      : [];
+
+
+  for (
+    let i = 0;
+    i < crew.length;
+    i++
+  ) {
+
+    if (
+      crew[i] &&
+      crew[i].job === "Director"
+    ) {
+
+      return {
+
+        id:
+          crew[i].id,
+
+        name:
+          crew[i].name || ""
+
+      };
+
+    }
+
+  }
+
+
+  return null;
+
+}
+
+
+// =========================================================
+// 出演者
+// =========================================================
+
+function getCast(
+  movie
+) {
+
+  const cast =
+    movie &&
+    movie.credits &&
+    Array.isArray(movie.credits.cast)
+      ? movie.credits.cast
+      : [];
+
+
+  return cast
+    .slice(0, 8)
+    .map(function(person) {
+
+      return {
+
+        id:
+          person.id,
+
+        name:
+          person.name || "",
+
+        character:
+          person.character || ""
+
+      };
+
+    });
+
+}
+
+
+// =========================================================
+// タイトル正規化
+// =========================================================
+
+function normalizeTitle(
+  title
+) {
+
+  return String(
+    title || ""
+  )
+    .toLowerCase()
+    .replace(
+      /[\s　]/g,
+      ""
+    )
+    .replace(
+      /[「」『』【】（）()・:：!?！？,.，。]/g,
+      ""
+    );
+
+}
+
+
+// =========================================================
+// 日付判定
+// =========================================================
+
+function isValidDate(
+  date
+) {
+
+  return (
+    typeof date === "string" &&
+    /^\d{4}-\d{2}-\d{2}$/.test(date)
+  );
+
+}
+```
