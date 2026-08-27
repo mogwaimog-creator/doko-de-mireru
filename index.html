@@ -74,8 +74,8 @@ header p{
 }
 
 #query{
-  flex:1;
-  min-width:0;
+  width:420px;
+  max-width:100%;
   height:50px;
   padding:0 16px;
   border:1px solid #d1d5db;
@@ -397,10 +397,20 @@ async function searchMovies(){
     }
 
     results.innerHTML =
-      movies
-        .map(createMovieCard)
-        .join("");
+  movies
+    .sort(function(a,b){
 
+      const dateA =
+        a.release_date || "9999-99-99";
+
+      const dateB =
+        b.release_date || "9999-99-99";
+
+      return dateA.localeCompare(dateB);
+
+    })
+    .map(createMovieCard)
+    .join("");
   }catch(error){
 
     console.error(
