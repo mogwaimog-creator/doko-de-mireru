@@ -2,9 +2,20 @@
 // doko-de-mireru
 // api/search.js
 //
-// TMDBから映画情報・日本の配信情報を取得
-// Netflix作品ID / Netflix作品URLを可能な範囲で取得
+// 無料版・安定版
+//
+// TMDBから
+// ・映画情報
+// ・日本の配信情報
+// ・Netflix配信判定
+//
+// を取得します。
+//
+// Netflix作品IDについては、
+// 実際に取得できた場合だけ直接URLを作成します。
+// 推測でIDを作ることはしません。
 // =========================================================
+
 
 export default async function handler(req, res) {
 
@@ -17,11 +28,14 @@ export default async function handler(req, res) {
     const TMDB_API_KEY =
       process.env.TMDB_API_KEY;
 
+
     if (!TMDB_API_KEY) {
 
       return res.status(500).json({
+
         error:
           "TMDB_API_KEY が設定されていません。"
+
       });
 
     }
@@ -63,6 +77,7 @@ export default async function handler(req, res) {
         ? req.query.query.trim()
         : "";
 
+
     const id =
       typeof req.query.id === "string"
         ? req.query.id.trim()
@@ -91,8 +106,10 @@ export default async function handler(req, res) {
     if (!query) {
 
       return res.status(400).json({
+
         error:
           "映画名を入力してください。"
+
       });
 
     }
@@ -112,9 +129,12 @@ export default async function handler(req, res) {
       error
     );
 
+
     return res.status(500).json({
+
       error:
         "サーバーでエラーが発生しました。"
+
     });
 
   }
@@ -152,14 +172,18 @@ async function searchMovies(
     const text =
       await response.text();
 
+
     console.error(
       "TMDB search error:",
       text
     );
 
+
     return res.status(500).json({
+
       error:
         "TMDB映画検索に失敗しました。"
+
     });
 
   }
@@ -175,8 +199,13 @@ async function searchMovies(
       : [];
 
 
+  // -------------------------------------------------------
+  // 上位10作品
+  // -------------------------------------------------------
+
   const movies =
     results
+
       .filter(function(movie) {
 
         return (
@@ -186,7 +215,9 @@ async function searchMovies(
         );
 
       })
+
       .slice(0, 10)
+
       .map(function(movie) {
 
         return {
@@ -255,14 +286,18 @@ async function getMovieDetail(
     const text =
       await response.text();
 
+
     console.error(
       "TMDB detail error:",
       text
     );
 
+
     return res.status(404).json({
+
       error:
         "作品情報を取得できませんでした。"
+
     });
 
   }
@@ -358,19 +393,25 @@ async function getMovieDetail(
   if (providers) {
 
     result.streaming =
-      Array.isArray(providers.flatrate)
+      Array.isArray(
+        providers.flatrate
+      )
         ? providers.flatrate
         : [];
 
 
     result.rental =
-      Array.isArray(providers.rent)
+      Array.isArray(
+        providers.rent
+      )
         ? providers.rent
         : [];
 
 
     result.purchase =
-      Array.isArray(providers.buy)
+      Array.isArray(
+        providers.buy
+      )
         ? providers.buy
         : [];
 
@@ -392,11 +433,11 @@ async function getMovieDetail(
   if (netflixService) {
 
     // ---------------------------------------------------
-    // まずNetflix IDを直接探す
+    // Netflix作品IDを確認
     // ---------------------------------------------------
 
     const netflixInfo =
-      await findNetflixTitleId(
+      findNetflixTitleId(
         movie,
         netflixService
       );
@@ -430,62 +471,9 @@ async function getMovieDetail(
 
 
     // ---------------------------------------------------
-    // URLからIDを取得
-    // ---------------------------------------------------
-
-    if (!result.netflix_url) {
-
-      const possibleUrl =
-        getProviderUrl(
-          netflixService
-        );
-
-
-      if (possibleUrl) {
-
-        const netflixId =
-          extractNetflixId(
-            possibleUrl
-          );
-
-
-        if (netflixId) {
-
-          result.netflix = {
-
-            title_id:
-              netflixId,
-
-            url:
-              "https://www.netflix.com/title/" +
-              netflixId
-
-          };
-
-
-          result.netflix_title_id =
-            netflixId;
-
-
-          result.netflix_id =
-            netflixId;
-
-
-          result.netflix_url =
-            "https://www.netflix.com/title/" +
-            netflixId;
-
-        }
-
-      }
-
-    }
-
-
-    // ---------------------------------------------------
-    // IDが取得できない場合
+    // Netflix IDがない場合
     //
-    // Netflixの公式検索URLを返す
+    // 推測したIDは絶対に作らない
     // ---------------------------------------------------
 
     if (!result.netflix_url) {
@@ -529,7 +517,7 @@ async function getMovieDetail(
 
 
   // =====================================================
-  // JustWatch / TMDB配信ページ
+  // TMDB / JustWatch 配信ページ
   // =====================================================
 
   if (
@@ -542,6 +530,10 @@ async function getMovieDetail(
 
   }
 
+
+  // =====================================================
+  // 結果返却
+  // =====================================================
 
   return res.status(200).json(
     result
@@ -560,23 +552,25 @@ function findNetflixService(
   purchase
 ) {
 
-  const all =
-    []
-      .concat(
-        Array.isArray(streaming)
-          ? streaming
-          : []
-      )
-      .concat(
-        Array.isArray(rental)
-          ? rental
-          : []
-      )
-      .concat(
-        Array.isArray(purchase)
-          ? purchase
-          : []
-      );
+  const all = []
+
+    .concat(
+      Array.isArray(streaming)
+        ? streaming
+        : []
+    )
+
+    .concat(
+      Array.isArray(rental)
+        ? rental
+        : []
+    )
+
+    .concat(
+      Array.isArray(purchase)
+        ? purchase
+        : []
+    );
 
 
   for (
@@ -590,7 +584,9 @@ function findNetflixService(
 
 
     if (!service) {
+
       continue;
+
     }
 
 
@@ -620,9 +616,11 @@ function findNetflixService(
 
 // =========================================================
 // Netflix作品ID取得
+//
+// 「本当に存在するID」がデータ内にある場合だけ使用。
 // =========================================================
 
-async function findNetflixTitleId(
+function findNetflixTitleId(
   movie,
   netflixService
 ) {
@@ -681,14 +679,18 @@ async function findNetflixTitleId(
       )
     ) {
 
+      const id =
+        String(value);
+
+
       return {
 
         title_id:
-          String(value),
+          id,
 
         url:
           "https://www.netflix.com/title/" +
-          String(value)
+          id
 
       };
 
@@ -698,7 +700,7 @@ async function findNetflixTitleId(
 
 
   // =====================================================
-  // ② URLからID
+  // ② URLからNetflix作品IDを取得
   // =====================================================
 
   const urls = [
@@ -756,7 +758,7 @@ async function findNetflixTitleId(
 
 
   // =====================================================
-  // ③ movie側のNetflix情報
+  // ③ movie側のNetflix URL
   // =====================================================
 
   const movieUrls = [
@@ -805,7 +807,7 @@ async function findNetflixTitleId(
 
 
   // =====================================================
-  // ④ 取得できなければnull
+  // 取得できなかった
   // =====================================================
 
   return null;
@@ -815,8 +817,6 @@ async function findNetflixTitleId(
 
 // =========================================================
 // Netflix検索URL
-//
-// Netflix公式APIで作品IDを取得できない場合の安全策
 // =========================================================
 
 function createNetflixSearchUrl(
@@ -831,16 +831,16 @@ function createNetflixSearchUrl(
 
   if (!cleanTitle) {
 
-    return "https://www.netflix.com/jp/";
+    return (
+      "https://www.netflix.com/jp/"
+    );
 
   }
 
 
-  /*
-   * Netflixの検索ページへ
-   *
-   * Netflix側で作品名を検索できるようにする。
-   */
+  // -------------------------------------------------------
+  // Netflix公式検索
+  // -------------------------------------------------------
 
   return (
     "https://www.netflix.com/search?q=" +
@@ -1165,12 +1165,14 @@ async function getCollectionInfo(
 
     };
 
+
   } catch (error) {
 
     console.error(
       "Collection error:",
       error
     );
+
 
     return null;
 
