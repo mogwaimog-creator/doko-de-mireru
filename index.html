@@ -378,10 +378,9 @@ input:focus{
 }
 
 
-/* ==================================================
+/* =========================
    配信サービス
-   ロゴ風カード
-================================================== */
+========================= */
 
 .service-group{
   margin-bottom:30px;
@@ -429,7 +428,7 @@ input:focus{
 
 
 /* =========================
-   ロゴ風
+   ロゴ
 ========================= */
 
 .service-logo-row{
@@ -645,9 +644,9 @@ input:focus{
 }
 
 
-/* ==================================================
+/* =========================
    スマホ
-================================================== */
+========================= */
 
 @media(max-width:700px){
 
@@ -1274,9 +1273,9 @@ async function searchMovieById(movieId){
     }
 
 
-    /* ==================================================
+    /* =========================
        配信情報
-    ================================================== */
+    ========================= */
 
     html +=
 
@@ -1299,7 +1298,8 @@ async function searchMovieById(movieId){
       createServiceCards(
         data.streaming,
         data.title,
-        "streaming"
+        "streaming",
+        data
       );
 
     html +=
@@ -1320,7 +1320,8 @@ async function searchMovieById(movieId){
       createServiceCards(
         data.rental,
         data.title,
-        "rental"
+        "rental",
+        data
       );
 
     html +=
@@ -1341,7 +1342,8 @@ async function searchMovieById(movieId){
       createServiceCards(
         data.purchase,
         data.title,
-        "purchase"
+        "purchase",
+        data
       );
 
     html +=
@@ -1559,14 +1561,11 @@ function backToSearchResults(){
    サービスカード作成
 ================================================== */
 
-/* ==================================================
-   サービスカード作成
-================================================== */
-
 function createServiceCards(
   services,
   title,
-  type
+  type,
+  movieData
 ){
 
   if(
@@ -1626,38 +1625,58 @@ function createServiceCards(
       /*
        * =========================================
        * 配信リンク
+       * =========================================
        *
-       * APIから watch_link が返ってきた場合は
-       * そのリンクを使用
+       * 優先順位
        *
-       * ない場合はサービス検索ページを使用
+       * 1. APIから返ってきた watch_link
+       * 2. APIから返ってきた provider_url
+       * 3. Netflix作品ID
+       * 4. 各サービスURL
+       *
        * =========================================
        */
 
       let url =
-        service.watch_link ||
         getServiceUrl(
           providerName,
-          title
+          title,
+          service,
+          movieData
         );
 
 
       /*
-       * =========================================
-       * 配信リンクの安全確認
-       * =========================================
+       * APIのwatch_linkが存在し、
+       * 明らかに使えるURLの場合は優先
+       *
+       * ただしNetflixの検索URLは使用しない
        */
 
       if(
-        !url ||
-        typeof url !== "string"
+        service.watch_link &&
+        isUsableServiceUrl(
+          providerName,
+          service.watch_link
+        )
       ){
 
         url =
-          getServiceUrl(
-            providerName,
-            title
-          );
+          service.watch_link;
+
+      }
+
+
+      if(
+        service.provider_url &&
+        isUsableServiceUrl(
+          providerName,
+          service.provider_url
+        )
+      ){
+
+        url =
+          service.provider_url;
 
       }
 
@@ -1677,11 +1696,9 @@ function createServiceCards(
         "#2563eb";
 
 
-      /*
-       * =========================================
-       * レンタル
-       * =========================================
-       */
+      /* =========================
+         レンタル
+      ========================= */
 
       if(type === "rental"){
 
@@ -1701,11 +1718,9 @@ function createServiceCards(
       }
 
 
-      /*
-       * =========================================
-       * 購入
-       * =========================================
-       */
+      /* =========================
+         購入
+      ========================= */
 
       else if(type === "purchase"){
 
@@ -1730,11 +1745,7 @@ function createServiceCards(
         "<div class='service-card'>";
 
 
-      /*
-       * =========================================
-       * ロゴ＋サービス名
-       * =========================================
-       */
+      /* ロゴ */
 
       html +=
 
@@ -1763,11 +1774,7 @@ function createServiceCards(
         "</div>";
 
 
-      /*
-       * =========================================
-       * 配信状態
-       * =========================================
-       */
+      /* 状態 */
 
       html +=
 
@@ -1783,11 +1790,7 @@ function createServiceCards(
         "</div>";
 
 
-      /*
-       * =========================================
-       * 配信ボタン
-       * =========================================
-       */
+      /* ボタン */
 
       html +=
 
@@ -1831,8 +1834,461 @@ function createServiceCards(
 
 }
 
+
 /* ==================================================
-   サービスのロゴ風情報
+   サービスURL判定
+================================================== */
+
+function isUsableServiceUrl(
+  providerName,
+  url
+){
+
+  if(
+    !url ||
+    typeof url !== "string"
+  ){
+
+    return false;
+
+  }
+
+
+  const name =
+    providerName
+      .toLowerCase();
+
+
+  /*
+   * Netflix
+   *
+   * Netflixの検索URLは除外。
+   *
+   * /title/数字
+   * の作品URLだけを有効とする。
+   */
+
+  if(
+    name.includes("netflix")
+  ){
+
+    return (
+      url.includes("netflix.com") &&
+      /\/title\/\d+/.test(url)
+    );
+
+  }
+
+
+  return (
+    /^https?:\/\//i.test(url)
+  );
+
+}
+
+
+/* ==================================================
+   Netflix作品ID取得
+================================================== */
+
+function getNetflixTitleId(
+  service,
+  movieData
+){
+
+  /*
+   * APIが将来的に返す可能性のある
+   * Netflix IDの候補をまとめて確認する。
+   *
+   * どれか1つでも数字のIDがあれば使用。
+   */
+
+  const candidates = [
+
+    service &&
+    service.netflix_title_id,
+
+    service &&
+    service.netflix_id,
+
+    service &&
+    service.title_id,
+
+    service &&
+    service.netflixTitleId,
+
+    service &&
+    service.netflixTitleID,
+
+    movieData &&
+    movieData.netflix_title_id,
+
+    movieData &&
+    movieData.netflix_id,
+
+    movieData &&
+    movieData.netflixTitleId,
+
+    movieData &&
+    movieData.netflixTitleID
+
+  ];
+
+
+  for(
+    let i = 0;
+    i < candidates.length;
+    i++
+  ){
+
+    const value =
+      candidates[i];
+
+
+    if(
+      value !== undefined &&
+      value !== null &&
+      /^\d+$/.test(
+        String(value)
+      )
+    ){
+
+      return String(value);
+
+    }
+
+  }
+
+
+  /*
+   * URLからNetflix作品IDを取得
+   *
+   * 例：
+   *
+   * https://www.netflix.com/jp/title/81776693
+   *
+   * ↓
+   *
+   * 81776693
+   */
+
+  const urls = [
+
+    service &&
+    service.watch_link,
+
+    service &&
+    service.provider_url,
+
+    movieData &&
+    movieData.netflix_url,
+
+    movieData &&
+    movieData.netflix_link
+
+  ];
+
+
+  for(
+    let i = 0;
+    i < urls.length;
+    i++
+  ){
+
+    const url =
+      urls[i];
+
+
+    if(
+      typeof url !== "string"
+    ){
+
+      continue;
+
+    }
+
+
+    const match =
+      url.match(
+        /netflix\.com\/(?:[^/]+\/)?title\/(\d+)/i
+      );
+
+
+    if(match){
+
+      return match[1];
+
+    }
+
+  }
+
+
+  return null;
+
+}
+
+
+/* ==================================================
+   配信サービスURL
+================================================== */
+
+function getServiceUrl(
+  providerName,
+  title,
+  service,
+  movieData
+){
+
+  const name =
+    providerName
+      .toLowerCase();
+
+
+  /* =========================
+     Netflix
+  ========================= */
+
+  if(
+    name.includes("netflix")
+  ){
+
+    /*
+     * まずNetflix作品IDを探す
+     */
+
+    const netflixId =
+      getNetflixTitleId(
+        service,
+        movieData
+      );
+
+
+    /*
+     * IDが取得できた場合
+     *
+     * Netflixの作品ページへ直接移動
+     */
+
+    if(netflixId){
+
+      return (
+
+        "https://www.netflix.com/jp/title/" +
+
+        encodeURIComponent(
+          netflixId
+        )
+
+      );
+
+    }
+
+
+    /*
+     * APIから完全なNetflix作品URLが
+     * 返ってきている場合
+     */
+
+    if(
+      service &&
+      typeof service.watch_link === "string" &&
+      /netflix\.com\/.*\/title\/\d+/i
+        .test(service.watch_link)
+    ){
+
+      return service.watch_link;
+
+    }
+
+
+    if(
+      service &&
+      typeof service.provider_url === "string" &&
+      /netflix\.com\/.*\/title\/\d+/i
+        .test(service.provider_url)
+    ){
+
+      return service.provider_url;
+
+    }
+
+
+    /*
+     * ここまで取得できなかった場合
+     *
+     * Netflixの検索URLは現在の仕様では
+     * 安定しないため、検索画面ではなく
+     * Netflixトップページを開く。
+     *
+     * 今後API側でIDを返すようにすれば
+     * 自動的に作品ページへ切り替わる。
+     */
+
+    return (
+      "https://www.netflix.com/jp/"
+    );
+
+  }
+
+
+  /* =========================
+     Amazon
+  ========================= */
+
+  if(
+    name.includes("prime") ||
+    name.includes("amazon")
+  ){
+
+    return (
+
+      "https://www.amazon.co.jp/s?k=" +
+
+      encodeURIComponent(title)
+
+    );
+
+  }
+
+
+  /* =========================
+     U-NEXT
+  ========================= */
+
+  if(
+    name.includes("u-next")
+  ){
+
+    return (
+
+      "https://video.unext.jp/search?query=" +
+
+      encodeURIComponent(title)
+
+    );
+
+  }
+
+
+  /* =========================
+     Hulu
+  ========================= */
+
+  if(
+    name.includes("hulu")
+  ){
+
+    return (
+
+      "https://www.hulu.jp/search?q=" +
+
+      encodeURIComponent(title)
+
+    );
+
+  }
+
+
+  /* =========================
+     Disney+
+  ========================= */
+
+  if(
+    name.includes("disney")
+  ){
+
+    return (
+
+      "https://www.disneyplus.com/ja-jp/search/" +
+
+      encodeURIComponent(title)
+
+    );
+
+  }
+
+
+  /* =========================
+     Apple TV
+  ========================= */
+
+  if(
+    name.includes("apple")
+  ){
+
+    return (
+
+      "https://tv.apple.com/jp/search?term=" +
+
+      encodeURIComponent(title)
+
+    );
+
+  }
+
+
+  /* =========================
+     Google Play
+  ========================= */
+
+  if(
+    name.includes("google play") ||
+    name.includes("google")
+  ){
+
+    return (
+
+      "https://play.google.com/store/search?q=" +
+
+      encodeURIComponent(title) +
+
+      "&c=movies&hl=ja"
+
+    );
+
+  }
+
+
+  /* =========================
+     FOD
+  ========================= */
+
+  if(
+    name.includes("fod")
+  ){
+
+    return (
+
+      "https://fod.fujitv.co.jp/search/?keyword=" +
+
+      encodeURIComponent(title)
+
+    );
+
+  }
+
+
+  /* =========================
+     その他
+  ========================= */
+
+  return (
+
+    "https://www.google.com/search?q=" +
+
+    encodeURIComponent(
+      providerName +
+      " " +
+      title
+    )
+
+  );
+
+}
+
+
+/* ==================================================
+   サービスロゴ
 ================================================== */
 
 function getServiceInfo(
@@ -1981,177 +2437,6 @@ function getServiceInfo(
       "linear-gradient(135deg,#374151,#6b7280)"
 
   };
-
-}
-
-
-/* ==================================================
-   配信サービスURL
-================================================== */
-
-function getServiceUrl(
-  providerName,
-  title
-){
-
-  const name =
-    providerName
-      .toLowerCase();
-
-
-  /* Netflix */
-
-  if(
-    name.includes("netflix")
-  ){
-
-    return (
-
-      "https://www.netflix.com/jp/search?q=" +
-
-      encodeURIComponent(title)
-
-    );
-
-  }
-
-
-  /* Amazon */
-
-  if(
-    name.includes("prime") ||
-    name.includes("amazon")
-  ){
-
-    return (
-
-      "https://www.amazon.co.jp/s?k=" +
-
-      encodeURIComponent(title)
-
-    );
-
-  }
-
-
-  /* U-NEXT */
-
-  if(
-    name.includes("u-next")
-  ){
-
-    return (
-
-      "https://video.unext.jp/search?query=" +
-
-      encodeURIComponent(title)
-
-    );
-
-  }
-
-
-  /* Hulu */
-
-  if(
-    name.includes("hulu")
-  ){
-
-    return (
-
-      "https://www.hulu.jp/search?q=" +
-
-      encodeURIComponent(title)
-
-    );
-
-  }
-
-
-  /* Disney+ */
-
-  if(
-    name.includes("disney")
-  ){
-
-    return (
-
-      "https://www.disneyplus.com/ja-jp/search/" +
-
-      encodeURIComponent(title)
-
-    );
-
-  }
-
-
-  /* Apple TV */
-
-  if(
-    name.includes("apple")
-  ){
-
-    return (
-
-      "https://tv.apple.com/jp/search?term=" +
-
-      encodeURIComponent(title)
-
-    );
-
-  }
-
-
-  /* Google Play */
-
-  if(
-    name.includes("google play") ||
-    name.includes("google")
-  ){
-
-    return (
-
-      "https://play.google.com/store/search?q=" +
-
-      encodeURIComponent(title) +
-
-      "&c=movies&hl=ja"
-
-    );
-
-  }
-
-
-  /* FOD */
-
-  if(
-    name.includes("fod")
-  ){
-
-    return (
-
-      "https://fod.fujitv.co.jp/search/?keyword=" +
-
-      encodeURIComponent(title)
-
-    );
-
-  }
-
-
-  /* その他 */
-
-  return (
-
-    "https://www.google.com/search?q=" +
-
-    encodeURIComponent(
-      providerName +
-      " " +
-      title
-    )
-
-  );
 
 }
 
