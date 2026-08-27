@@ -814,14 +814,176 @@ async function searchMovie(){
       "</h2>";
 
 
-    data.results.forEach(
-      function(item){
+  /* =========================================================
+   検索結果の並び順
+   ① 検索タイトルとの一致度
+   ② 公開日の早い順
+========================================================= */
 
-        html +=
-          createMovieCard(item);
+const normalizedQuery =
+  movie
+    .toLowerCase()
+    .replace(/\s+/g, "");
 
-      }
+
+/*
+ * 一致度を計算
+ */
+function getMatchScore(item){
+
+  const title =
+    String(
+      item.title ||
+      ""
+    )
+    .toLowerCase()
+    .replace(/\s+/g, "");
+
+
+  const originalTitle =
+    String(
+      item.original_title ||
+      ""
+    )
+    .toLowerCase()
+    .replace(/\s+/g, "");
+
+
+  let score = 0;
+
+
+  /* 完全一致 */
+  if(title === normalizedQuery){
+
+    score += 1000;
+
+  }
+
+
+  /* タイトルが検索語と完全一致に近い */
+  if(
+    title.includes(
+      normalizedQuery
+    )
+  ){
+
+    score += 500;
+
+  }
+
+
+  /* 検索語がタイトルに含まれる */
+  if(
+    normalizedQuery.includes(
+      title
+    ) &&
+    title.length > 0
+  ){
+
+    score += 300;
+
+  }
+
+
+  /* 原題にも一致 */
+  if(
+    originalTitle === normalizedQuery
+  ){
+
+    score += 200;
+
+  }
+
+
+  if(
+    originalTitle.includes(
+      normalizedQuery
+    )
+  ){
+
+    score += 100;
+
+  }
+
+
+  /*
+   * タイトルの長さが短いほど
+   * 検索語に近いと判断
+   */
+  if(
+    title.length > 0 &&
+    title.includes(
+      normalizedQuery
+    )
+  ){
+
+    score +=
+      Math.max(
+        0,
+        100 - title.length
+      );
+
+  }
+
+
+  return score;
+
+}
+
+
+/*
+ * 検索結果を並べ替え
+ *
+ * ① 一致度が高い
+ * ② 公開日が早い
+ */
+data.results.sort(
+  function(a,b){
+
+    const scoreA =
+      getMatchScore(a);
+
+    const scoreB =
+      getMatchScore(b);
+
+
+    /* ① 一致度 */
+    if(scoreA !== scoreB){
+
+      return scoreB - scoreA;
+
+    }
+
+
+    /* ② 公開日の早い順 */
+    const dateA =
+      a.release_date ||
+      "9999-99-99";
+
+    const dateB =
+      b.release_date ||
+      "9999-99-99";
+
+
+    return dateA.localeCompare(
+      dateB
     );
+
+  }
+);
+
+
+/*
+ * 並べ替え後に表示
+ */
+data.results.forEach(
+  function(item){
+
+    html +=
+      createMovieCard(item);
+
+  }
+);
 
 
     result.innerHTML =
