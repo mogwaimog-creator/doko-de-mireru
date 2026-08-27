@@ -2555,15 +2555,11 @@ function renderSeries(series){
 
 
   if(
-
     !series ||
-
     !Array.isArray(
       series.movies
     ) ||
-
     series.movies.length === 0
-
   ){
 
     section.style.display =
@@ -2580,7 +2576,6 @@ function renderSeries(series){
 
   setText(
     "seriesName",
-
     series.name ||
       "シリーズ作品"
   );
@@ -2613,9 +2608,34 @@ function renderSeries(series){
         "series-item";
 
 
-      /* ---------------------------------------------
-         ポスター
-      --------------------------------------------- */
+      /* =================================================
+         作品詳細へのリンク
+      ================================================= */
+
+      const link =
+        document.createElement(
+          "a"
+        );
+
+
+      link.href =
+        "detail.html?id=" +
+        encodeURIComponent(
+          movie.id
+        );
+
+
+      link.style.display =
+        "block";
+
+
+      link.style.textDecoration =
+        "none";
+
+
+      /* =================================================
+         ポスター画像
+      ================================================= */
 
       if(movie.poster_path){
 
@@ -2638,42 +2658,72 @@ function renderSeries(series){
           movie.title || "";
 
 
-        item.appendChild(
+        image.style.cursor =
+          "pointer";
+
+
+        link.appendChild(
           image
         );
 
       }
 
 
-      /* ---------------------------------------------
+      /* =================================================
          タイトル
-      --------------------------------------------- */
+      ================================================= */
 
-      const link =
+      const title =
         document.createElement(
-          "a"
+          "div"
         );
 
 
-      link.href =
-        "detail.html?id=" +
-        encodeURIComponent(
-          movie.id
-        );
-
-
-      link.textContent =
+      title.textContent =
         movie.title || "";
 
+
+      title.style.color =
+        "#2563eb";
+
+
+      title.style.fontWeight =
+        "bold";
+
+
+      title.style.fontSize =
+        "14px";
+
+
+      title.style.lineHeight =
+        "1.45";
+
+
+      title.style.marginTop =
+        "8px";
+
+
+      title.style.cursor =
+        "pointer";
+
+
+      link.appendChild(
+        title
+      );
+
+
+      /* =================================================
+         リンクを作品カードに追加
+      ================================================= */
 
       item.appendChild(
         link
       );
 
 
-      /* ---------------------------------------------
-         年
-      --------------------------------------------- */
+      /* =================================================
+         公開年
+      ================================================= */
 
       const year =
         document.createElement(
@@ -2687,11 +2737,9 @@ function renderSeries(series){
 
       year.textContent =
         movie.release_date
-
           ? formatYear(
               movie.release_date
             )
-
           : "";
 
 
@@ -2708,7 +2756,6 @@ function renderSeries(series){
   );
 
 }
-
 
 /* =====================================================
    日付
