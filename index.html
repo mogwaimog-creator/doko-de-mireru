@@ -402,7 +402,6 @@ input:focus{
   border-radius:8px;
   font-weight:bold;
   font-size:14px;
-  cursor:pointer;
 }
 
 .service-watch-button:hover{
@@ -498,15 +497,6 @@ input:focus{
   color:#991b1b;
   padding:18px;
   border-radius:10px;
-}
-
-.netflix-fallback{
-  background:#fff1f2;
-  color:#9f1239;
-  padding:12px;
-  border-radius:8px;
-  font-size:13px;
-  margin-bottom:12px;
 }
 
 @media(max-width:700px){
@@ -2018,7 +2008,8 @@ function getServiceUrl(
   ){
 
     /*
-     * ① Netflix作品IDを最優先
+     * 最優先：
+     * APIから返されたNetflix作品ID
      */
 
     const netflixId =
@@ -2031,7 +2022,7 @@ function getServiceUrl(
     if(netflixId){
 
       return (
-        "https://www.netflix.com/title/" +
+        "https://www.netflix.com/jp/title/" +
         encodeURIComponent(
           String(netflixId)
         )
@@ -2041,7 +2032,7 @@ function getServiceUrl(
 
 
     /*
-     * ② Netflixの直接URL
+     * 次にNetflix作品URLを確認
      */
 
     const netflixUrls = [
@@ -2084,39 +2075,15 @@ function getServiceUrl(
       i++
     ){
 
-      if(
-        isUsableUrl(
+      const validNetflixUrl =
+        normalizeNetflixUrl(
           netflixUrls[i]
-        )
-      ){
-
-        const netflixIdFromUrl =
-          extractNetflixTitleId(
-            netflixUrls[i]
-          );
+        );
 
 
-        if(netflixIdFromUrl){
+      if(validNetflixUrl){
 
-          return (
-            "https://www.netflix.com/title/" +
-            encodeURIComponent(
-              netflixIdFromUrl
-            )
-          );
-
-        }
-
-
-        if(
-          isNetflixUrl(
-            netflixUrls[i]
-          )
-        ){
-
-          return netflixUrls[i];
-
-        }
+        return validNetflixUrl;
 
       }
 
@@ -2124,10 +2091,10 @@ function getServiceUrl(
 
 
     /*
-     * ③ 最後の手段
+     * 作品IDも作品URLもない場合
      *
-     * Netflixのトップページではなく
-     * Netflix内検索へ移動
+     * Netflixホームには飛ばさず、
+     * Netflix内検索ページを開く
      */
 
     return (
@@ -2197,8 +2164,7 @@ function getServiceUrl(
   ===================================================== */
 
   if(
-    name.includes("u-next") ||
-    name.includes("unext")
+    name.includes("u-next")
   ){
 
     if(
@@ -2585,7 +2551,7 @@ function getNetflixTitleId(
     service.netflixTitleID,
 
     service &&
-    service.netflix_titleId,
+    service.netflixId,
 
     movieData &&
     movieData.netflix_title_id,
@@ -2603,7 +2569,7 @@ function getNetflixTitleId(
     movieData.netflixTitleID,
 
     movieData &&
-    movieData.netflix_titleId,
+    movieData.netflixId,
 
     movieData &&
     movieData.netflix &&
@@ -2611,7 +2577,11 @@ function getNetflixTitleId(
 
     movieData &&
     movieData.netflix &&
-    movieData.netflix.id
+    movieData.netflix.netflix_title_id,
+
+    movieData &&
+    movieData.netflix &&
+    movieData.netflix.netflix_id
 
   ];
 
@@ -2667,6 +2637,9 @@ function getNetflixTitleId(
 
     movieData &&
     movieData.netflix_link,
+
+    movieData &&
+    movieData.netflixUrl,
 
     movieData &&
     movieData.netflix &&
@@ -2725,13 +2698,13 @@ function extractNetflixTitleId(
 
   const patterns = [
 
-    /netflix\.com\/(?:jp\/)?title\/(\d+)/i,
-
     /netflix\.com\/(?:[^/]+\/)?title\/(\d+)/i,
 
-    /netflix\.com\/(?:jp\/)?watch\/(\d+)/i,
+    /netflix\.com\/(?:[^/]+\/)?watch\/(\d+)/i,
 
-    /netflix\.com\/(?:[^/]+\/)?watch\/(\d+)/i
+    /netflix\.com\/title\/(\d+)/i,
+
+    /netflix\.com\/watch\/(\d+)/i
 
   ];
 
@@ -2763,10 +2736,72 @@ function extractNetflixTitleId(
 
 
 /* =========================================================
-   Netflix URL判定
+   Netflix URL 正規化
 ========================================================= */
 
-function isNetflixUrl(
+function normalizeNetflixUrl(
+  url
+){
+
+  if(
+    typeof url !== "string" ||
+    !url
+  ){
+
+    return null;
+
+  }
+
+
+  const cleanUrl =
+    url.trim();
+
+
+  /*
+   * Netflix作品IDが含まれている場合
+   * 必ず日本版のtitle URLに統一
+   */
+
+  const id =
+    extractNetflixTitleId(
+      cleanUrl
+    );
+
+
+  if(id){
+
+    return (
+      "https://www.netflix.com/jp/title/" +
+      encodeURIComponent(id)
+    );
+
+  }
+
+
+  /*
+   * Netflixの有効なURLなら使用
+   */
+
+  if(
+    /^https?:\/\/(?:www\.)?netflix\.com\//i
+      .test(cleanUrl)
+  ){
+
+    return cleanUrl;
+
+  }
+
+
+  return null;
+
+}
+
+
+/* =========================================================
+   Netflix作品URL判定
+========================================================= */
+
+function isNetflixTitleUrl(
   url
 ){
 
@@ -2780,7 +2815,7 @@ function isNetflixUrl(
 
 
   return (
-    /^https?:\/\/(?:www\.)?netflix\.com\//i
+    /netflix\.com\/(?:[^/]+\/)?title\/\d+/i
       .test(url)
   );
 
@@ -2798,7 +2833,7 @@ function isUsableUrl(
   return (
     typeof url === "string" &&
     /^https?:\/\//i.test(
-      url
+      url.trim()
     )
   );
 
@@ -2819,9 +2854,7 @@ function getServiceInfo(
     ).toLowerCase();
 
 
-  if(
-    name.includes("netflix")
-  ){
+  if(name.includes("netflix")){
 
     return {
       logo:"N",
@@ -2846,10 +2879,7 @@ function getServiceInfo(
   }
 
 
-  if(
-    name.includes("u-next") ||
-    name.includes("unext")
-  ){
+  if(name.includes("u-next")){
 
     return {
       logo:"U",
@@ -2860,9 +2890,7 @@ function getServiceInfo(
   }
 
 
-  if(
-    name.includes("hulu")
-  ){
+  if(name.includes("hulu")){
 
     return {
       logo:"H",
@@ -2873,9 +2901,7 @@ function getServiceInfo(
   }
 
 
-  if(
-    name.includes("disney")
-  ){
+  if(name.includes("disney")){
 
     return {
       logo:"D+",
@@ -2886,9 +2912,7 @@ function getServiceInfo(
   }
 
 
-  if(
-    name.includes("apple")
-  ){
+  if(name.includes("apple")){
 
     return {
       logo:"",
@@ -2899,9 +2923,7 @@ function getServiceInfo(
   }
 
 
-  if(
-    name.includes("fod")
-  ){
+  if(name.includes("fod")){
 
     return {
       logo:"F",
@@ -2912,9 +2934,7 @@ function getServiceInfo(
   }
 
 
-  if(
-    name.includes("google")
-  ){
+  if(name.includes("google")){
 
     return {
       logo:"G",
