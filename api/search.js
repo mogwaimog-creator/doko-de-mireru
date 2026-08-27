@@ -1,3 +1,4 @@
+```javascript
 // =========================================================
 // doko-de-mireru
 // api/search.js
@@ -11,12 +12,22 @@
 // Hulu
 // Disney+
 // Apple TV
-// など
+// その他
 //
-// Amazonについて
-// TMDBのwatch/providersにはAmazonの個別作品URLが
-// 安定して入っていないため、Amazon Japanを検索して
-// Prime Videoの作品ページを取得します。
+// ---------------------------------------------------------
+// リンク精度向上版
+//
+// TMDBのwatch/providersは配信サービス情報を返しますが、
+// 個別作品ページの完全な直リンクを常に返すわけではありません。
+//
+// そのため、
+// 1. 実際に取得できた個別URLを最優先
+// 2. Netflixは作品IDがあれば直接作品ページ
+// 3. AmazonはPrime Video個別ページを検索
+// 4. 個別URLが確認できない場合は公式検索ページ
+// 5. 最後の手段としてTMDB/JustWatchリンク
+//
+// という順番で処理します。
 // =========================================================
 
 export default async function handler(req, res) {
@@ -203,8 +214,6 @@ async function searchMovies(
 
 
   // =====================================================
-  // 検索結果の並び
-  //
   // 完全一致を優先
   // =====================================================
 
@@ -425,6 +434,18 @@ async function getMovieDetail(
     amazon_url:
       null,
 
+    unext_url:
+      null,
+
+    hulu_url:
+      null,
+
+    disney_url:
+      null,
+
+    apple_tv_url:
+      null,
+
     series:
       null
 
@@ -503,6 +524,7 @@ async function getMovieDetail(
 
       };
 
+
       result.netflix_title_id =
         titleId;
 
@@ -514,22 +536,31 @@ async function getMovieDetail(
 
     } else {
 
+      /*
+       * Netflixの個別URLが確認できない場合は
+       * Netflix公式検索へ。
+       */
+
+      const fallback =
+        createNetflixSearchUrl(
+          movie.title ||
+          movie.original_title ||
+          ""
+        );
+
+
       result.netflix = {
 
         title_id:
           null,
 
         url:
-          createNetflixSearchUrl(
-            movie.title ||
-            movie.original_title ||
-            ""
-          )
+          fallback
 
       };
 
       result.netflix_url =
-        result.netflix.url;
+        fallback;
 
     }
 
@@ -550,11 +581,6 @@ async function getMovieDetail(
 
   if (amazonService) {
 
-    /*
-     * まずAmazon Japanから
-     * 個別Prime Videoページを探します。
-     */
-
     const amazonUrl =
       await findAmazonPrimeVideoUrl(
         movie
@@ -574,11 +600,6 @@ async function getMovieDetail(
         amazonUrl;
 
     } else {
-
-      /*
-       * 個別ページを確認できなかった場合のみ
-       * Amazon検索ページへフォールバック
-       */
 
       const fallbackUrl =
         createAmazonSearchUrl(
@@ -601,6 +622,46 @@ async function getMovieDetail(
     }
 
   }
+
+
+  // =====================================================
+  // その他サービス
+  // =====================================================
+
+  result.unext_url =
+    findProviderUrl(
+      "unext",
+      result.streaming,
+      result.rental,
+      result.purchase
+    );
+
+
+  result.hulu_url =
+    findProviderUrl(
+      "hulu",
+      result.streaming,
+      result.rental,
+      result.purchase
+    );
+
+
+  result.disney_url =
+    findProviderUrl(
+      "disney",
+      result.streaming,
+      result.rental,
+      result.purchase
+    );
+
+
+  result.apple_tv_url =
+    findProviderUrl(
+      "apple",
+      result.streaming,
+      result.rental,
+      result.purchase
+    );
 
 
   // =====================================================
@@ -732,9 +793,7 @@ async function findAmazonPrimeVideoUrl(
 
 
   // =====================================================
-  // 既知の作品
-  //
-  // 怪盗グルーのミニオン超変身
+  // 確認済み作品
   // =====================================================
 
   const known =
@@ -751,7 +810,7 @@ async function findAmazonPrimeVideoUrl(
 
 
   // =====================================================
-  // Amazon Japan検索ページを取得
+  // Amazon Japan検索
   // =====================================================
 
   const searchUrl =
@@ -797,8 +856,10 @@ async function findAmazonPrimeVideoUrl(
 
     /*
      * Amazon Prime Videoの
-     * /gp/video/detail/xxxxxxxx
-     * を探します。
+     *
+     * /gp/video/detail/XXXXXXXXXX
+     *
+     * を検索。
      */
 
     const matches =
@@ -817,8 +878,7 @@ async function findAmazonPrimeVideoUrl(
     }
 
 
-    const unique =
-      [];
+    const unique = [];
 
 
     for (
@@ -845,10 +905,6 @@ async function findAmazonPrimeVideoUrl(
     }
 
 
-    /*
-     * 最初に見つかったPrime Video作品ページを返す
-     */
-
     if (unique.length > 0) {
 
       return unique[0];
@@ -872,7 +928,7 @@ async function findAmazonPrimeVideoUrl(
 
 
 // =========================================================
-// 今回確認済みAmazon作品
+// 確認済みAmazon作品
 // =========================================================
 
 function getKnownAmazonUrl(
@@ -895,10 +951,6 @@ function getKnownAmazonUrl(
       "怪盗グルーのミニオン超変身"
     )
   ) {
-
-    /*
-     * Amazon Prime Videoの作品ページ
-     */
 
     return (
       "https://www.amazon.co.jp/gp/video/detail/B0D6VX533G"
@@ -1129,7 +1181,9 @@ function createNetflixSearchUrl(
 
   if (!cleanTitle) {
 
-    return "https://www.netflix.com/jp/";
+    return (
+      "https://www.netflix.com/jp/"
+    );
 
   }
 
@@ -1255,6 +1309,107 @@ function normalizeNetflixUrl(
 
 
 // =========================================================
+// その他配信サービスURL
+// =========================================================
+
+function findProviderUrl(
+  keyword,
+  streaming,
+  rental,
+  purchase
+) {
+
+  const all = []
+    .concat(
+      Array.isArray(streaming)
+        ? streaming
+        : []
+    )
+    .concat(
+      Array.isArray(rental)
+        ? rental
+        : []
+    )
+    .concat(
+      Array.isArray(purchase)
+        ? purchase
+        : []
+    );
+
+
+  for (
+    let i = 0;
+    i < all.length;
+    i++
+  ) {
+
+    const provider =
+      all[i];
+
+
+    if (!provider) {
+      continue;
+    }
+
+
+    const name =
+      String(
+        provider.provider_name ||
+        provider.name ||
+        ""
+      ).toLowerCase();
+
+
+    if (
+      !name.includes(keyword)
+    ) {
+
+      continue;
+
+    }
+
+
+    const urls = [
+
+      provider.provider_url,
+
+      provider.watch_link,
+
+      provider.url,
+
+      provider.link
+
+    ];
+
+
+    for (
+      let j = 0;
+      j < urls.length;
+      j++
+    ) {
+
+      if (
+        typeof urls[j] === "string" &&
+        /^https?:\/\//i.test(
+          urls[j]
+        )
+      ) {
+
+        return urls[j];
+
+      }
+
+    }
+
+  }
+
+
+  return null;
+
+}
+
+
+// =========================================================
 // 監督
 // =========================================================
 
@@ -1354,6 +1509,12 @@ function getLanguageInfo(
         ? movie.original_language
         : null,
 
+    /*
+     * TMDB標準映画データだけでは
+     * 字幕・吹き替えの日本向け提供状況を
+     * 正確には取得できません。
+     */
+
     subtitle:
       null,
 
@@ -1427,6 +1588,7 @@ async function getCollectionInfo(
           isValidDate(b.release_date)
             ? b.release_date
             : "9999-99-99";
+
 
         return dateA.localeCompare(
           dateB
@@ -1554,3 +1716,4 @@ function getErrorMessage(
   );
 
 }
+```
