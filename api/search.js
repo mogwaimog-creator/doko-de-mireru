@@ -37,10 +37,7 @@ export default async function handler(req, res) {
 
     /*
      * =========================================
-     * Vercel / CDN キャッシュ
-     *
-     * 24時間キャッシュ
-     * 期限後は再取得
+     * キャッシュ
      * =========================================
      */
 
@@ -102,7 +99,7 @@ export default async function handler(req, res) {
     const searchUrl =
       "https://api.themoviedb.org/3/search/movie" +
       "?api_key=" +
-      apiKey +
+      encodeURIComponent(apiKey) +
       "&language=ja-JP" +
       "&query=" +
       encodeURIComponent(query) +
@@ -155,9 +152,7 @@ export default async function handler(req, res) {
 
     /*
      * =========================================
-     * 各作品のシリーズ情報確認
-     *
-     * 既存機能を維持
+     * シリーズ情報確認
      * =========================================
      */
 
@@ -176,7 +171,7 @@ export default async function handler(req, res) {
                 "https://api.themoviedb.org/3/movie/" +
                 movie.id +
                 "?api_key=" +
-                apiKey +
+                encodeURIComponent(apiKey) +
                 "&language=ja-JP";
 
 
@@ -442,16 +437,15 @@ async function getMovieDetail(
   /*
    * =========================================
    * 作品情報
-   *
    * creditsを同時取得
    * =========================================
    */
 
   const detailUrl =
     "https://api.themoviedb.org/3/movie/" +
-    movieId +
+    encodeURIComponent(movieId) +
     "?api_key=" +
-    apiKey +
+    encodeURIComponent(apiKey) +
     "&language=ja-JP" +
     "&append_to_response=credits";
 
@@ -501,10 +495,10 @@ async function getMovieDetail(
 
   const providersUrl =
     "https://api.themoviedb.org/3/movie/" +
-    movieId +
+    encodeURIComponent(movieId) +
     "/watch/providers" +
     "?api_key=" +
-    apiKey;
+    encodeURIComponent(apiKey);
 
 
   const providersResponse =
@@ -524,7 +518,7 @@ async function getMovieDetail(
 
   /*
    * =========================================
-   * 日本 JP の配信情報だけ取得
+   * 日本 JP の配信情報
    * =========================================
    */
 
@@ -539,27 +533,28 @@ async function getMovieDetail(
    * =========================================
    * 配信サービス整理
    *
-   * 重複削除
-   * 表示順整理
-   * サービス名整理
+   * linkも保持する
    * =========================================
    */
 
   const streaming =
     normalizeProviders(
-      japan.flatrate || []
+      japan.flatrate || [],
+      japan.link || null
     );
 
 
   const rental =
     normalizeProviders(
-      japan.rent || []
+      japan.rent || [],
+      japan.link || null
     );
 
 
   const purchase =
     normalizeProviders(
-      japan.buy || []
+      japan.buy || [],
+      japan.link || null
     );
 
 
@@ -582,9 +577,9 @@ async function getMovieDetail(
 
     const collectionUrl =
       "https://api.themoviedb.org/3/collection/" +
-      collection.id +
+      encodeURIComponent(collection.id) +
       "?api_key=" +
-      apiKey +
+      encodeURIComponent(apiKey) +
       "&language=ja-JP";
 
 
@@ -716,7 +711,6 @@ async function getMovieDetail(
   /*
    * =========================================
    * 出演者
-   *
    * 最大8人
    * =========================================
    */
@@ -753,9 +747,7 @@ async function getMovieDetail(
 
   /*
    * =========================================
-   * 配信情報の最終更新時刻
-   *
-   * キャッシュが更新された時点
+   * 配信情報の更新時刻
    * =========================================
    */
 
@@ -859,7 +851,8 @@ async function getMovieDetail(
 
 
     /*
-     * TMDB配信情報ページ
+     * TMDB / JustWatch
+     * 配信情報ページ
      */
 
     link:
@@ -923,18 +916,16 @@ async function getMovieDetail(
  * 配信サービス整理関数
  * =========================================
  *
- * TMDBから返ってきた配信サービスを
- *
  * ① 重複削除
  * ② 表示順整理
  * ③ サービス名整理
- *
- * する
+ * ④ TMDB配信ページURL保持
  * =========================================
  */
 
 function normalizeProviders(
-  providers
+  providers,
+  watchLink
 ) {
 
   if (
@@ -975,11 +966,6 @@ function normalizeProviders(
         );
 
 
-      /*
-       * 同じサービスが複数回入っている
-       * 場合は1つだけ残す
-       */
-
       if (
         !unique.has(providerId)
       ) {
@@ -1010,9 +996,6 @@ function normalizeProviders(
   /*
    * -----------------------------------------
    * 表示順
-   *
-   * display_priority が小さいほど
-   * TMDB上で優先度が高い
    * -----------------------------------------
    */
 
@@ -1087,7 +1070,15 @@ function normalizeProviders(
           provider.logo_path || null,
 
         display_priority:
-          provider.display_priority ?? 9999
+          provider.display_priority ?? 9999,
+
+        /*
+         * TMDBが提供する
+         * 配信情報ページ
+         */
+
+        watch_link:
+          watchLink || null
 
       };
 
@@ -1114,13 +1105,11 @@ function normalizeProviderName(
 
   /*
    * Amazon Prime Video
-   *
-   * Prime Videoという表記が
-   * 返ってきた場合だけ統一
    */
 
   if (
-    value === "Prime Video"
+    value === "Prime Video" ||
+    value === "Amazon Prime Video"
   ) {
 
     return "Amazon Prime Video";
@@ -1159,7 +1148,8 @@ function normalizeProviderName(
    */
 
   if (
-    value === "Disney Plus"
+    value === "Disney Plus" ||
+    value === "Disney+"
   ) {
 
     return "Disney+";
@@ -1185,7 +1175,8 @@ function normalizeProviderName(
    */
 
   if (
-    value === "Apple TV"
+    value === "Apple TV" ||
+    value === "Apple TV Plus"
   ) {
 
     return "Apple TV";
@@ -1198,7 +1189,8 @@ function normalizeProviderName(
    */
 
   if (
-    value === "Google Play Movies"
+    value === "Google Play Movies" ||
+    value === "Google Play"
   ) {
 
     return "Google Play Movies";
@@ -1207,7 +1199,20 @@ function normalizeProviderName(
 
 
   /*
-   * それ以外はTMDBの名称をそのまま使用
+   * FOD
+   */
+
+  if (
+    value === "FOD"
+  ) {
+
+    return "FOD";
+
+  }
+
+
+  /*
+   * それ以外
    */
 
   return value;
