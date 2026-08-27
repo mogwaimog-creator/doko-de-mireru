@@ -1,3 +1,5 @@
+# detail.html 完成版
+
 ```html
 <!DOCTYPE html>
 <html lang="ja">
@@ -180,7 +182,7 @@ header p{
 ===================================================== */
 
 .provider-group{
-  margin-top:22px;
+  margin-top:24px;
 }
 
 .provider-group:first-child{
@@ -188,14 +190,49 @@ header p{
 }
 
 .provider-title{
+  display:flex;
+  align-items:center;
+  gap:8px;
+
   font-size:19px;
   font-weight:bold;
 
-  margin-bottom:10px;
+  margin-bottom:12px;
 
-  padding-bottom:8px;
+  padding:10px 12px;
 
-  border-bottom:2px solid #e5e7eb;
+  background:#f8fafc;
+
+  border-radius:9px;
+
+  border-left:5px solid #2563eb;
+}
+
+
+/* =====================================================
+   見放題
+===================================================== */
+
+.provider-group.streaming .provider-title{
+  border-left-color:#16a34a;
+}
+
+
+/* =====================================================
+   レンタル
+===================================================== */
+
+.provider-group.rental .provider-title{
+  border-left-color:#f59e0b;
+}
+
+
+/* =====================================================
+   購入
+===================================================== */
+
+.provider-group.purchase .provider-title{
+  border-left-color:#2563eb;
 }
 
 
@@ -214,7 +251,7 @@ header p{
 
   margin-bottom:10px;
 
-  background:#f9fafb;
+  background:#fff;
 
   border-radius:12px;
 
@@ -230,7 +267,7 @@ header p{
 
   box-shadow:
     0 3px 10px
-    rgba(0,0,0,.06);
+    rgba(0,0,0,.08);
 }
 
 
@@ -271,15 +308,23 @@ header p{
 
   color:#111827;
 
-  margin-bottom:3px;
+  margin-bottom:5px;
 }
 
 .provider-type{
-  color:#666;
+  display:inline-block;
 
-  font-size:13px;
+  padding:3px 8px;
 
-  margin-bottom:4px;
+  background:#f3f4f6;
+
+  color:#555;
+
+  border-radius:5px;
+
+  font-size:12px;
+
+  margin-bottom:6px;
 }
 
 .provider-subinfo{
@@ -287,9 +332,9 @@ header p{
 
   flex-wrap:wrap;
 
-  gap:10px;
+  gap:12px;
 
-  color:#666;
+  color:#777;
 
   font-size:12px;
 }
@@ -302,7 +347,7 @@ header p{
 .provider-button{
   display:inline-block;
 
-  padding:10px 15px;
+  padding:11px 16px;
 
   color:#fff;
 
@@ -317,10 +362,16 @@ header p{
   white-space:nowrap;
 
   flex-shrink:0;
+
+  transition:
+    opacity .15s ease,
+    transform .15s ease;
 }
 
 .provider-button:hover{
   opacity:.85;
+
+  transform:translateY(-1px);
 }
 
 
@@ -643,49 +694,40 @@ header p{
 
 <div class="movie-header">
 
-
 <img
   id="poster"
   class="poster"
   alt=""
 >
 
-
 <div class="movie-info">
 
-
 <h2 id="title"></h2>
-
 
 <div
   id="originalTitle"
   class="original-title"
 ></div>
 
-
 <div
   id="releaseDate"
   class="info-line"
 ></div>
-
 
 <div
   id="language"
   class="info-line"
 ></div>
 
-
 <div
   id="rating"
   class="info-line"
 ></div>
 
-
 <div
   id="director"
   class="info-line"
 ></div>
-
 
 </div>
 
@@ -1218,27 +1260,27 @@ function renderProviders(movie){
 
 
   const streaming =
-    Array.isArray(
-      movie.streaming
-    )
-      ? movie.streaming
-      : [];
+    normalizeProviders(
+      Array.isArray(movie.streaming)
+        ? movie.streaming
+        : []
+    );
 
 
   const rental =
-    Array.isArray(
-      movie.rental
-    )
-      ? movie.rental
-      : [];
+    normalizeProviders(
+      Array.isArray(movie.rental)
+        ? movie.rental
+        : []
+    );
 
 
   const purchase =
-    Array.isArray(
-      movie.purchase
-    )
-      ? movie.purchase
-      : [];
+    normalizeProviders(
+      Array.isArray(movie.purchase)
+        ? movie.purchase
+        : []
+    );
 
 
   renderProviderGroup(
@@ -1252,7 +1294,7 @@ function renderProviders(movie){
 
   renderProviderGroup(
     container,
-    "🎞️ レンタル",
+    "🟠 レンタル",
     rental,
     "rental",
     movie
@@ -1261,7 +1303,7 @@ function renderProviders(movie){
 
   renderProviderGroup(
     container,
-    "💰 購入",
+    "🔵 購入",
     purchase,
     "purchase",
     movie
@@ -1289,6 +1331,171 @@ function renderProviders(movie){
     );
 
   }
+
+}
+
+
+/* =====================================================
+   サービス名を整理
+===================================================== */
+
+function normalizeProviderName(name){
+
+  const value =
+    String(
+      name || ""
+    ).trim();
+
+
+  const lower =
+    value.toLowerCase();
+
+
+  if(
+    lower.includes("netflix")
+  ){
+
+    return "Netflix";
+
+  }
+
+
+  if(
+    lower.includes("amazon") ||
+    lower.includes("prime video")
+  ){
+
+    return "Prime Video";
+
+  }
+
+
+  if(
+    lower.includes("u-next") ||
+    lower.includes("unext")
+  ){
+
+    return "U-NEXT";
+
+  }
+
+
+  if(
+    lower.includes("hulu")
+  ){
+
+    return "Hulu";
+
+  }
+
+
+  if(
+    lower.includes("disney")
+  ){
+
+    return "Disney+";
+
+  }
+
+
+  if(
+    lower.includes("apple")
+  ){
+
+    return "Apple TV";
+
+  }
+
+
+  if(
+    lower.includes("google play")
+  ){
+
+    return "Google Play";
+
+  }
+
+
+  if(
+    lower.includes("fandango")
+  ){
+
+    return "Fandango";
+
+  }
+
+
+  if(
+    lower.includes("fod")
+  ){
+
+    return "FOD";
+
+  }
+
+
+  return value;
+
+}
+
+
+/* =====================================================
+   同じサービスをまとめる
+===================================================== */
+
+function normalizeProviders(providers){
+
+  const result = [];
+
+  const map = {};
+
+
+  providers.forEach(
+    function(provider){
+
+      if(!provider){
+
+        return;
+
+      }
+
+
+      const normalizedName =
+        normalizeProviderName(
+          provider.provider_name
+        );
+
+
+      if(!normalizedName){
+
+        return;
+
+      }
+
+
+      const key =
+        normalizedName.toLowerCase();
+
+
+      if(!map[key]){
+
+        map[key] = {
+          ...provider,
+          provider_name:
+            normalizedName
+        };
+
+        result.push(
+          map[key]
+        );
+
+      }
+
+    }
+  );
+
+
+  return result;
 
 }
 
@@ -1322,7 +1529,8 @@ function renderProviderGroup(
 
 
   group.className =
-    "provider-group";
+    "provider-group " +
+    type;
 
 
   const heading =
@@ -1549,8 +1757,6 @@ function createProviderCard(
 
   /* ---------------------------------------------------
      配信リンク
-     
-     ★ここは以前の処理を維持
   --------------------------------------------------- */
 
   const url =
@@ -1645,7 +1851,8 @@ function getProviderLink(
 
 
   if(
-    name.includes("amazon")
+    name.includes("amazon") ||
+    name.includes("prime video")
   ){
 
     return (
@@ -1798,7 +2005,8 @@ function getButtonClass(name){
 
 
   if(
-    value.includes("amazon")
+    value.includes("amazon") ||
+    value.includes("prime video")
   ){
 
     return "amazon-button";
@@ -1870,10 +2078,11 @@ function getButtonText(name){
 
 
   if(
-    value.includes("amazon")
+    value.includes("amazon") ||
+    value.includes("prime video")
   ){
 
-    return "Prime Videoで作品を探す →";
+    return "Prime Videoで作品を見る →";
 
   }
 
