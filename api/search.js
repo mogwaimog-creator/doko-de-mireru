@@ -139,11 +139,12 @@ async function searchMovies(
     "&region=JP" +
     "&query=" +
     encodeURIComponent(query) +
-    "&include_adult=false" +
-    "&page=1";
+    "&include_adult=false";
+
 
   const response =
     await fetch(searchUrl);
+
 
   if (!response.ok) {
 
@@ -156,198 +157,266 @@ async function searchMovies(
     );
 
     return res.status(500).json({
+
       error:
         "TMDB映画検索に失敗しました。"
+
     });
 
   }
 
+
   const data =
     await response.json();
 
-  let results =
+
+  const results =
     Array.isArray(data.results)
       ? data.results
       : [];
 
+
   // =====================================================
-  // 検索結果を整理
+  // 検索文字列を正規化
   // =====================================================
 
-  results =
-    results.filter(function(movie) {
+  const normalizeText =
+    function(text) {
 
-      return (
-        movie &&
-        movie.id &&
+      return String(
+        text || ""
+      )
+        .toLowerCase()
+        .replace(
+          /[\s　「」『』・:：\-‐-–—_]/g,
+          ""
+        );
+
+    };
+
+
+  const searchText =
+    normalizeText(query);
+
+
+  // =====================================================
+  // 一致度を計算
+  // =====================================================
+
+  function getMatchScore(movie) {
+
+    const title =
+      normalizeText(
         movie.title
       );
 
-    });
+    const originalTitle =
+      normalizeText(
+        movie.original_title
+      );
 
-  // =====================================================
-  // 検索タイトルとの一致度を計算
-  //
-  // 優先順位
-  //
-  // 100 = 完全一致
-  // 90  = タイトルが検索語で始まる
-  // 80  = タイトルに検索語を含む
-  // 70  = 原題が検索語で始まる
-  // 60  = 原題に検索語を含む
-  // 0   = その他
-  // =====================================================
 
-  const normalizedQuery =
-    normalizeTitle(query);
+    let score = 0;
 
-  results =
-    results.map(function(movie) {
 
-      const title =
-        normalizeTitle(
-          movie.title || ""
-        );
+    // 完全一致
+    if(
+      title === searchText
+    ){
 
-      const originalTitle =
-        normalizeTitle(
-          movie.original_title || ""
-        );
+      score += 1000;
 
-      let matchScore = 0;
+    }
 
-      if (
-        title === normalizedQuery
-      ) {
+    if(
+      originalTitle === searchText
+    ){
 
-        matchScore = 100;
+      score += 950;
 
-      } else if (
-        title.startsWith(
-          normalizedQuery
-        )
-      ) {
+    }
 
-        matchScore = 90;
 
-      } else if (
-        title.includes(
-          normalizedQuery
-        )
-      ) {
+    // タイトルが検索文字列から始まる
+    if(
+      title.startsWith(searchText)
+    ){
 
-        matchScore = 80;
+      score += 500;
 
-      } else if (
-        originalTitle === normalizedQuery
-      ) {
+    }
 
-        matchScore = 70;
+    if(
+      originalTitle.startsWith(searchText)
+    ){
 
-      } else if (
-        originalTitle.startsWith(
-          normalizedQuery
-        )
-      ) {
+      score += 450;
 
-        matchScore = 60;
+    }
 
-      } else if (
-        originalTitle.includes(
-          normalizedQuery
-        )
-      ) {
 
-        matchScore = 50;
+    // タイトルに検索文字列を含む
+    if(
+      title.includes(searchText)
+    ){
+
+      score += 300;
+
+    }
+
+    if(
+      originalTitle.includes(searchText)
+    ){
+
+      score += 250;
+
+    }
+
+
+    // 検索文字列の各文字がタイトルに含まれる割合
+    if(searchText){
+
+      let matched = 0;
+
+      for(
+        let i = 0;
+        i < searchText.length;
+        i++
+      ){
+
+        if(
+          title.includes(
+            searchText[i]
+          )
+        ){
+
+          matched++;
+
+        }
 
       }
 
-      return {
-        movie:
-          movie,
 
-        matchScore:
-          matchScore
+      score +=
+        (matched / searchText.length) *
+        100;
 
-      };
+    }
 
-    });
+
+    // TMDBの検索順位も少しだけ考慮
+    if(
+      typeof movie.popularity === "number"
+    ){
+
+      score +=
+        Math.min(
+          movie.popularity,
+          50
+        );
+
+    }
+
+
+    return score;
+
+  }
+
 
   // =====================================================
-  // 並べ替え
+  // 検索結果を並べ替え
   //
-  // ① 一致度の高いもの
-  // ② 公開の早いもの
-  // ③ TMDB評価の高いもの
+  // ① タイトル一致度
+  // ② 公開日の早い順
   // =====================================================
 
-  results.sort(function(a, b) {
-
-    // ---------------------------------------------------
-    // ① 一致度
-    // ---------------------------------------------------
-
-    if (
-      b.matchScore !==
-      a.matchScore
-    ) {
-
-      return (
-        b.matchScore -
-        a.matchScore
-      );
-
-    }
-
-    // ---------------------------------------------------
-    // ② 公開日
-    // ---------------------------------------------------
-
-    const dateA =
-      a.movie.release_date ||
-      "9999-99-99";
-
-    const dateB =
-      b.movie.release_date ||
-      "9999-99-99";
-
-    if (dateA !== dateB) {
-
-      return dateA.localeCompare(
-        dateB
-      );
-
-    }
-
-    // ---------------------------------------------------
-    // ③ TMDB評価
-    // ---------------------------------------------------
-
-    const ratingA =
-      Number(
-        a.movie.vote_average || 0
-      );
-
-    const ratingB =
-      Number(
-        b.movie.vote_average || 0
-      );
-
-    return ratingB - ratingA;
-
-  });
-
-  // =====================================================
-  // 最大10件
-  // =====================================================
-
-  const movies =
+  const sortedResults =
     results
+      .filter(function(movie) {
+
+        return (
+          movie &&
+          movie.id &&
+          movie.title
+        );
+
+      })
+      .map(function(movie, index) {
+
+        return {
+
+          movie:
+            movie,
+
+          matchScore:
+            getMatchScore(movie),
+
+          originalIndex:
+            index
+
+        };
+
+      })
+      .sort(function(a, b) {
+
+        // -------------------------------------------------
+        // ① 一致度が高いものを優先
+        // -------------------------------------------------
+
+        if(
+          b.matchScore !==
+          a.matchScore
+        ){
+
+          return (
+            b.matchScore -
+            a.matchScore
+          );
+
+        }
+
+
+        // -------------------------------------------------
+        // ② 一致度が同じなら公開日の早いもの
+        // -------------------------------------------------
+
+        const dateA =
+          a.movie.release_date ||
+          "9999-99-99";
+
+
+        const dateB =
+          b.movie.release_date ||
+          "9999-99-99";
+
+
+        if(
+          dateA !== dateB
+        ){
+
+          return dateA.localeCompare(
+            dateB
+          );
+
+        }
+
+
+        // -------------------------------------------------
+        // ③ 最後はTMDB検索順
+        // -------------------------------------------------
+
+        return (
+          a.originalIndex -
+          b.originalIndex
+        );
+
+      })
       .slice(0, 10)
       .map(function(item) {
 
         const movie =
           item.movie;
+
 
         return {
 
@@ -370,22 +439,25 @@ async function searchMovies(
             movie.overview || "",
 
           vote_average:
-            movie.vote_average || 0,
-
-          match_score:
-            item.matchScore
+            movie.vote_average || 0
 
         };
 
       });
 
+
+  // =====================================================
+  // 結果返却
+  // =====================================================
+
   return res.status(200).json({
+
     results:
-      movies
+      sortedResults
+
   });
 
 }
-
 
 // =========================================================
 // タイトル正規化
