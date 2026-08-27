@@ -9,74 +9,8 @@
 <meta
 name="viewport"
 content="width=device-width, initial-scale=1.0"
+
 >
-
-<!-- =====================================================
-     SEO
-===================================================== -->
-
-<title>作品情報 | ドコデミレル？</title>
-
-<meta
-  id="metaDescription"
-  name="description"
-  content="映画がNetflix、Prime Video、U-NEXT、Hulu、Disney+など、どこで見られるか検索できます。"
->
-
-<meta
-  name="robots"
-  content="index,follow"
->
-
-<link
-  id="canonical"
-  rel="canonical"
-  href=""
->
-
-<!-- =====================================================
-     OGP
-===================================================== -->
-
-<meta
-  property="og:type"
-  content="video.movie"
->
-
-<meta
-  id="ogTitle"
-  property="og:title"
-  content="作品情報 | ドコデミレル？"
->
-
-<meta
-  id="ogDescription"
-  property="og:description"
-  content="映画がどこで見られるか検索できます。"
->
-
-<meta
-  id="ogImage"
-  property="og:image"
-  content=""
->
-
-<meta
-  id="ogUrl"
-  property="og:url"
-  content=""
->
-
-<meta
-  property="og:site_name"
-  content="ドコデミレル？"
->
-
-<meta
-  property="og:locale"
-  content="ja_JP"
->
-
 
 <title>作品情報 | ドコデミレル？</title>
 
@@ -292,6 +226,41 @@ header p{
   font-size:17px;
 
   color:#444;
+}
+
+
+/* =====================================================
+   ジャンル
+===================================================== */
+
+.genre-info{
+
+  display:flex;
+
+  flex-wrap:wrap;
+
+  gap:5px 7px;
+
+  margin-top:-5px;
+
+  margin-bottom:13px;
+}
+
+.genre-item{
+
+  display:inline-block;
+
+  padding:3px 8px;
+
+  background:#f3f4f6;
+
+  color:#555;
+
+  border-radius:12px;
+
+  font-size:14px;
+
+  line-height:1.4;
 }
 
 
@@ -936,6 +905,24 @@ header p{
   }
 
 
+  .genre-info{
+
+    gap:4px 6px;
+
+    margin-top:0;
+
+    margin-bottom:9px;
+  }
+
+
+  .genre-item{
+
+    font-size:13px;
+
+    padding:3px 7px;
+  }
+
+
   .movie-side-info{
 
     margin-top:8px;
@@ -1111,6 +1098,21 @@ header p{
   }
 
 
+  .genre-info{
+
+    gap:4px;
+
+  }
+
+
+  .genre-item{
+
+    font-size:12px;
+
+    padding:2px 6px;
+  }
+
+
   .side-title{
 
     font-size:16px;
@@ -1163,6 +1165,7 @@ header p{
 <a
 class="back"
 href="index.html"
+
 >
 
 ← 検索結果に戻る </a>
@@ -1197,6 +1200,7 @@ href="index.html"
 id="poster"
 class="poster"
 alt=""
+
 >
 
 <div class="movie-info">
@@ -1225,6 +1229,13 @@ alt=""
 ></div>
 
 </div>
+
+<!-- ジャンル -->
+
+<div
+  id="genres"
+  class="genre-info"
+></div>
 
 <!-- 監督・出演者・あらすじ -->
 
@@ -1327,6 +1338,7 @@ class="tmdb-link"
 href="#"
 target="_blank"
 rel="noopener noreferrer"
+
 >
 
 TMDBで作品情報を見る → </a>
@@ -1570,6 +1582,13 @@ function renderMovie(movie){
   );
 
 
+  /* ジャンル */
+
+  renderGenres(
+    movie.genres
+  );
+
+
   /* ポスター */
 
   const poster =
@@ -1673,202 +1692,57 @@ function renderMovie(movie){
     );
 
 
-  /* =================================================
-     SEO
-  ================================================= */
-
-  updateSEO(
-    movie
-  );
-
-}
-
-
-/* =====================================================
-   SEO更新
-===================================================== */
-
-function updateSEO(movie){
-
-  const title =
-    movie.title ||
-    movie.original_title ||
-    "作品情報";
-
-
-  const description =
-    createDescription(
-      movie
-    );
-
-
   /* ページタイトル */
 
   document.title =
-    title +
+    (
+      movie.title ||
+      "作品情報"
+    ) +
     " | ドコデミレル？";
-
-
-  /* description */
-
-  const metaDescription =
-    document.getElementById(
-      "metaDescription"
-    );
-
-
-  if(metaDescription){
-
-    metaDescription.setAttribute(
-      "content",
-      description
-    );
-
-  }
-
-
-  /* canonical */
-
-  const canonical =
-    document.getElementById(
-      "canonical"
-    );
-
-
-  const canonicalUrl =
-    window.location.origin +
-    window.location.pathname +
-    "?id=" +
-    encodeURIComponent(
-      movie.id
-    );
-
-
-  if(canonical){
-
-    canonical.href =
-      canonicalUrl;
-
-  }
-
-
-  /* OGP title */
-
-  const ogTitle =
-    document.getElementById(
-      "ogTitle"
-    );
-
-
-  if(ogTitle){
-
-    ogTitle.setAttribute(
-      "content",
-      title +
-      " | ドコデミレル？"
-    );
-
-  }
-
-
-  /* OGP description */
-
-  const ogDescription =
-    document.getElementById(
-      "ogDescription"
-    );
-
-
-  if(ogDescription){
-
-    ogDescription.setAttribute(
-      "content",
-      description
-    );
-
-  }
-
-
-  /* OGP画像 */
-
-  const ogImage =
-    document.getElementById(
-      "ogImage"
-    );
-
-
-  if(
-    ogImage &&
-    movie.poster_path
-  ){
-
-    ogImage.setAttribute(
-      "content",
-
-      "https://image.tmdb.org/t/p/w500" +
-      movie.poster_path
-    );
-
-  }
-
-
-  /* OGP URL */
-
-  const ogUrl =
-    document.getElementById(
-      "ogUrl"
-    );
-
-
-  if(ogUrl){
-
-    ogUrl.setAttribute(
-      "content",
-      canonicalUrl
-    );
-
-  }
-
-
-  /* JSON-LD */
-
-  createStructuredData(
-    movie,
-    canonicalUrl
-  );
 
 }
 
 
 /* =====================================================
-   SEO description
+   ジャンル
 ===================================================== */
 
-function createDescription(movie){
+function renderGenres(genres){
 
-  const title =
-    movie.title ||
-    movie.original_title ||
-    "この作品";
-
-
-  let text =
-    title +
-    "がどこで見られるか検索できます。";
+  const container =
+    document.getElementById(
+      "genres"
+    );
 
 
-  const providers = [];
+  if(!container){
+
+    return;
+
+  }
 
 
-  [
-    movie.streaming,
-    movie.rental,
-    movie.purchase
-  ].forEach(
-    function(list){
+  container.innerHTML =
+    "";
+
+
+  if(
+    !Array.isArray(genres) ||
+    genres.length === 0
+  ){
+
+    return;
+
+  }
+
+
+  genres.forEach(
+    function(genre){
 
       if(
-        !Array.isArray(list)
+        !genre ||
+        !genre.name
       ){
 
         return;
@@ -1876,273 +1750,25 @@ function createDescription(movie){
       }
 
 
-      list.forEach(
-        function(provider){
-
-          if(
-            provider &&
-            provider.provider_name
-          ){
-
-            const name =
-              normalizeProviderName(
-                provider.provider_name
-              );
-
-
-            if(
-              name &&
-              !providers.includes(
-                name
-              )
-            ){
-
-              providers.push(
-                name
-              );
-
-            }
-
-          }
-
-        }
-      );
-
-    }
-  );
-
-
-  if(providers.length){
-
-    text +=
-      providers
-        .slice(0,6)
-        .join("、") +
-      "などの配信情報を確認できます。";
-
-  }
-
-
-  if(movie.overview){
-
-    text +=
-      " " +
-      String(
-        movie.overview
-      )
-      .replace(
-        /\s+/g,
-        " "
-      )
-      .substring(
-        0,
-        100
-      );
-
-  }
-
-
-  return text.substring(
-    0,
-    160
-  );
-
-}
-
-
-/* =====================================================
-   JSON-LD
-===================================================== */
-
-function createStructuredData(
-  movie,
-  canonicalUrl
-){
-
-  const old =
-    document.getElementById(
-      "movieStructuredData"
-    );
-
-
-  if(old){
-
-    old.remove();
-
-  }
-
-
-  const data = {
-
-    "@context":
-      "https://schema.org",
-
-    "@type":
-      "Movie",
-
-    "name":
-      movie.title ||
-      movie.original_title ||
-      "",
-
-    "url":
-      canonicalUrl,
-
-    "dateCreated":
-      movie.release_date ||
-      undefined,
-
-    "description":
-      movie.overview ||
-      "",
-
-    "image":
-      movie.poster_path
-
-        ? (
-            "https://image.tmdb.org/t/p/w500" +
-            movie.poster_path
-          )
-
-        : undefined,
-
-    "inLanguage":
-      "ja"
-
-  };
-
-
-  if(
-    movie.original_title &&
-    movie.original_title !== movie.title
-  ){
-
-    data.alternateName =
-      movie.original_title;
-
-  }
-
-
-  if(
-    movie.vote_average
-  ){
-
-    data.aggregateRating = {
-
-      "@type":
-        "AggregateRating",
-
-      "ratingValue":
-        Number(
-          movie.vote_average
-        ).toFixed(1),
-
-      "bestRating":
-        "10",
-
-      "worstRating":
-        "0"
-
-    };
-
-  }
-
-
-  if(
-    movie.director &&
-    movie.director.name
-  ){
-
-    data.director = {
-
-      "@type":
-        "Person",
-
-      "name":
-        movie.director.name
-
-    };
-
-  }
-
-
-  if(
-    Array.isArray(movie.cast) &&
-    movie.cast.length
-  ){
-
-    data.actor =
-      movie.cast
-        .filter(
-          function(person){
-
-            return (
-              person &&
-              person.name
-            );
-
-          }
-        )
-        .slice(
-          0,
-          8
-        )
-        .map(
-          function(person){
-
-            return {
-
-              "@type":
-                "Person",
-
-              "name":
-                person.name
-
-            };
-
-          }
+      const item =
+        document.createElement(
+          "span"
         );
 
-  }
+
+      item.className =
+        "genre-item";
 
 
-  Object.keys(data).forEach(
-    function(key){
+      item.textContent =
+        genre.name;
 
-      if(
-        data[key] === undefined
-      ){
 
-        delete data[key];
-
-      }
+      container.appendChild(
+        item
+      );
 
     }
-  );
-
-
-  const script =
-    document.createElement(
-      "script"
-    );
-
-
-  script.id =
-    "movieStructuredData";
-
-
-  script.type =
-    "application/ld+json";
-
-
-  script.textContent =
-    JSON.stringify(
-      data
-    );
-
-
-  document.head.appendChild(
-    script
   );
 
 }
