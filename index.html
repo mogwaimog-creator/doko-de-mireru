@@ -470,6 +470,10 @@ async function searchMovies(){
 
   const query =
     queryInput.value.trim();
+  sessionStorage.setItem(
+  "dokoDeMireruLastQuery",
+  query
+);
 
 
   /* -------------------------------------------------------
@@ -969,6 +973,23 @@ searchButton.addEventListener(
   "click",
   searchMovies
 );
+/* =========================================================
+   詳細画面から戻ってきた場合
+========================================================= */
+
+const savedQuery =
+  sessionStorage.getItem(
+    "dokoDeMireruLastQuery"
+  );
+
+if(savedQuery){
+
+  queryInput.value =
+    savedQuery;
+
+  searchMovies();
+
+}  
 
 </script>
 
