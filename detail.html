@@ -1,5 +1,5 @@
-```html
 <!DOCTYPE html>
+
 <html lang="ja">
 
 <head>
@@ -7,15 +7,17 @@
 <meta charset="UTF-8">
 
 <meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0"
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+
 >
 
 <title>作品情報 | ドコデミレル？</title>
 
 <meta
-  name="description"
-  content="映画がNetflix、Amazon Prime Video、U-NEXT、Hulu、Disney+など、どこで見られるか確認できる作品情報ページです。配信サービス、公開日、評価、出演者、あらすじなどを確認できます。"
+name="description"
+content="映画がNetflix、Amazon Prime Video、U-NEXT、Hulu、Disney+など、どこで見られるか確認できる作品情報ページです。配信サービス、公開日、評価、出演者、あらすじなどを確認できます。"
+
 >
 
 <style>
@@ -204,6 +206,10 @@ header p{
   margin:0 0 15px;
   font-size:22px;
 }
+
+/* =========================================================
+   配信サービス
+========================================================= */
 
 .provider-group{
   margin-top:20px;
@@ -399,21 +405,29 @@ header p{
   background:#9333ea;
 }
 
-.series-list{
+/* =========================================================
+   シリーズ作品・おすすめ作品
+========================================================= */
+
+.series-list,
+.recommendation-list{
   display:flex;
   gap:13px;
   overflow-x:auto;
   padding:3px 2px 10px;
+  scrollbar-width:thin;
 }
 
-.series-item{
+.series-item,
+.recommendation-item{
   flex:0 0 135px;
   padding:0;
   border:none;
   display:block;
 }
 
-.series-poster-link{
+.series-poster-link,
+.recommendation-poster-link{
   display:block;
   width:135px;
   height:195px;
@@ -423,7 +437,8 @@ header p{
   cursor:pointer;
 }
 
-.series-poster{
+.series-poster,
+.recommendation-poster{
   width:100%;
   height:100%;
   object-fit:cover;
@@ -431,11 +446,13 @@ header p{
   transition:transform .15s ease;
 }
 
-.series-poster-link:hover .series-poster{
+.series-poster-link:hover .series-poster,
+.recommendation-poster-link:hover .recommendation-poster{
   transform:scale(1.04);
 }
 
-.series-item a.series-title{
+.series-item a.series-title,
+.recommendation-item a.recommendation-title{
   display:block;
   color:#2563eb;
   text-decoration:none;
@@ -445,11 +462,33 @@ header p{
   margin-top:7px;
 }
 
-.series-year{
+.series-year,
+.recommendation-year{
   color:#666;
   font-size:13px;
   margin-top:3px;
 }
+
+/* おすすめ作品 */
+
+.recommendation-section{
+  display:none;
+}
+
+.recommendation-section h3{
+  margin-bottom:5px;
+}
+
+.recommendation-description{
+  color:#666;
+  font-size:14px;
+  margin:0 0 14px;
+  line-height:1.6;
+}
+
+/* =========================================================
+   その他
+========================================================= */
 
 .tmdb-link{
   display:inline-block;
@@ -474,6 +513,10 @@ header p{
   background:#fff;
   border-radius:12px;
 }
+
+/* =========================================================
+   スマートフォン
+========================================================= */
 
 @media(max-width:700px){
 
@@ -589,20 +632,24 @@ header p{
     font-size:15px;
   }
 
-  .series-list{
+  .series-list,
+  .recommendation-list{
     gap:10px;
   }
 
-  .series-item{
+  .series-item,
+  .recommendation-item{
     flex-basis:115px;
   }
 
-  .series-poster-link{
+  .series-poster-link,
+  .recommendation-poster-link{
     width:115px;
     height:165px;
   }
 
-  .series-item a.series-title{
+  .series-item a.series-title,
+  .recommendation-item a.recommendation-title{
     font-size:14px;
   }
 
@@ -678,11 +725,12 @@ header p{
 <div class="container">
 
 <a
-  class="back"
-  href="index.html"
+class="back"
+href="index.html"
+
 >
-← 検索結果に戻る
-</a>
+
+← 検索結果に戻る </a>
 
 <div
   id="loading"
@@ -707,9 +755,10 @@ header p{
 <div class="movie-header">
 
 <img
-  id="poster"
-  class="poster"
-  alt=""
+id="poster"
+class="poster"
+alt=""
+
 >
 
 <div class="movie-info">
@@ -800,6 +849,34 @@ header p{
 
 </div>
 
+<!-- =====================================================
+     おすすめ作品
+===================================================== -->
+
+<div
+  id="recommendationSection"
+  class="section recommendation-section"
+>
+
+<h3>
+🎯 この作品を見た人におすすめ
+</h3>
+
+<p class="recommendation-description">
+この作品と似た作品をピックアップしています。
+</p>
+
+<div
+  id="recommendations"
+  class="recommendation-list"
+></div>
+
+</div>
+
+<!-- =====================================================
+     シリーズ作品
+===================================================== -->
+
 <div
   id="seriesSection"
   class="section"
@@ -822,14 +899,15 @@ header p{
 <div class="section">
 
 <a
-  id="tmdbLink"
-  class="tmdb-link"
-  href="#"
-  target="_blank"
-  rel="noopener noreferrer"
+id="tmdbLink"
+class="tmdb-link"
+href="#"
+target="_blank"
+rel="noopener noreferrer"
+
 >
-TMDBで作品情報を見る →
-</a>
+
+TMDBで作品情報を見る → </a>
 
 </div>
 
@@ -856,15 +934,12 @@ TMDBで作品情報を見る →
 
 /* =========================================================
    Google検索向け
-   作品ごとにページタイトルと説明を設定
 ========================================================= */
 
 function updateSeo(movie){
 
   if(!movie){
-
     return;
-
   }
 
   const title =
@@ -1122,6 +1197,10 @@ function renderMovie(movie){
     movie
   );
 
+  renderRecommendations(
+    movie.recommendations
+  );
+
   renderSeries(
     movie.series
   );
@@ -1146,6 +1225,11 @@ function renderMovie(movie){
     " | ドコデミレル？";
 
 }
+
+
+/* =========================================================
+   ジャンル
+========================================================= */
 
 function renderGenres(genres){
 
@@ -1191,6 +1275,11 @@ function renderGenres(genres){
   });
 
 }
+
+
+/* =========================================================
+   出演者
+========================================================= */
 
 function renderCast(cast){
 
@@ -1239,6 +1328,196 @@ function renderCast(cast){
   });
 
 }
+
+
+/* =========================================================
+   おすすめ作品
+========================================================= */
+
+function renderRecommendations(
+  recommendations
+){
+
+  const section =
+    document.getElementById(
+      "recommendationSection"
+    );
+
+  const container =
+    document.getElementById(
+      "recommendations"
+    );
+
+  container.innerHTML =
+    "";
+
+  if(
+    !Array.isArray(recommendations) ||
+    recommendations.length === 0
+  ){
+
+    section.style.display =
+      "none";
+
+    return;
+
+  }
+
+  const unique = [];
+  const seen = {};
+
+  recommendations.forEach(function(movie){
+
+    if(
+      !movie ||
+      !movie.id ||
+      !movie.title
+    ){
+
+      return;
+
+    }
+
+    if(
+      String(movie.id) ===
+      String(movieId)
+    ){
+
+      return;
+
+    }
+
+    if(seen[movie.id]){
+
+      return;
+
+    }
+
+    seen[movie.id] =
+      true;
+
+    unique.push(
+      movie
+    );
+
+  });
+
+  if(unique.length === 0){
+
+    section.style.display =
+      "none";
+
+    return;
+
+  }
+
+  section.style.display =
+    "block";
+
+  unique
+    .slice(0,10)
+    .forEach(function(movie){
+
+      const item =
+        document.createElement("div");
+
+      item.className =
+        "recommendation-item";
+
+      if(movie.poster_path){
+
+        const imageLink =
+          document.createElement("a");
+
+        imageLink.className =
+          "recommendation-poster-link";
+
+        imageLink.href =
+          "detail.html?id=" +
+          encodeURIComponent(
+            movie.id
+          );
+
+        imageLink.setAttribute(
+          "aria-label",
+          movie.title +
+          "の詳細を見る"
+        );
+
+        const image =
+          document.createElement("img");
+
+        image.className =
+          "recommendation-poster";
+
+        image.src =
+          "https://image.tmdb.org/t/p/w300" +
+          movie.poster_path;
+
+        image.alt =
+          movie.title || "";
+
+        image.loading =
+          "lazy";
+
+        imageLink.appendChild(
+          image
+        );
+
+        item.appendChild(
+          imageLink
+        );
+
+      }
+
+      const link =
+        document.createElement("a");
+
+      link.className =
+        "recommendation-title";
+
+      link.href =
+        "detail.html?id=" +
+        encodeURIComponent(
+          movie.id
+        );
+
+      link.textContent =
+        movie.title || "";
+
+      item.appendChild(
+        link
+      );
+
+      const year =
+        document.createElement("div");
+
+      year.className =
+        "recommendation-year";
+
+      year.textContent =
+        movie.release_date
+          ? formatYear(
+              movie.release_date
+            )
+          : "";
+
+      item.appendChild(
+        year
+      );
+
+      container.appendChild(
+        item
+      );
+
+    });
+
+}
+
+
+/* =========================================================
+   配信サービス
+========================================================= */
 
 function renderProviders(movie){
 
@@ -1750,59 +2029,43 @@ function getPriceText(
     ).toLowerCase();
 
   if(type === "free"){
-
     return "";
-
   }
 
   if(type === "streaming"){
 
     if(value.includes("netflix")){
-
       return "月額 約890円～";
-
     }
 
     if(
       value.includes("amazon") ||
       value.includes("prime video")
     ){
-
       return "月額 約600円～";
-
     }
 
     if(
       value.includes("u-next") ||
       value.includes("unext")
     ){
-
       return "月額 約2,189円～";
-
     }
 
     if(value.includes("hulu")){
-
       return "月額 約1,026円～";
-
     }
 
     if(value.includes("disney")){
-
       return "月額 約1,140円～";
-
     }
 
     if(value.includes("apple")){
-
       return "月額 約1,080円～";
-
     }
 
     if(value.includes("fod")){
-
       return "月額 約1,000円～";
-
     }
 
     return "月額 約600円～";
@@ -1810,15 +2073,11 @@ function getPriceText(
   }
 
   if(type === "rental"){
-
     return "レンタル 約100円～";
-
   }
 
   if(type === "purchase"){
-
     return "購入 約500円～";
-
   }
 
   return "";
@@ -1836,8 +2095,6 @@ function getProviderLink(
       provider.provider_name || ""
     ).toLowerCase();
 
-  /* Netflix */
-
   if(
     name.includes("netflix")
   ){
@@ -1852,8 +2109,6 @@ function getProviderLink(
     );
 
   }
-
-  /* Amazon */
 
   if(
     name.includes("amazon") ||
@@ -1877,8 +2132,6 @@ function getProviderLink(
 
   }
 
-  /* U-NEXT */
-
   if(
     name.includes("u-next") ||
     name.includes("unext")
@@ -1891,8 +2144,6 @@ function getProviderLink(
 
   }
 
-  /* Hulu */
-
   if(
     name.includes("hulu")
   ){
@@ -1904,13 +2155,10 @@ function getProviderLink(
         encodeURIComponent(
           movie.title || ""
         )
-      ) ||
-      "https://www.hulu.jp/"
+      )
     );
 
   }
-
-  /* Disney+ */
 
   if(
     name.includes("disney")
@@ -1923,13 +2171,10 @@ function getProviderLink(
         encodeURIComponent(
           movie.title || ""
         )
-      ) ||
-      "https://www.disneyplus.com/ja-jp/"
+      )
     );
 
   }
-
-  /* Apple TV */
 
   if(
     name.includes("apple")
@@ -1942,13 +2187,10 @@ function getProviderLink(
         encodeURIComponent(
           movie.title || ""
         )
-      ) ||
-      "https://tv.apple.com/jp/"
+      )
     );
 
   }
-
-  /* FOD */
 
   if(
     name.includes("fod")
@@ -1963,8 +2205,6 @@ function getProviderLink(
     );
 
   }
-
-  /* Google Play */
 
   if(
     name.includes("google play") ||
@@ -2000,11 +2240,8 @@ function getGenericProviderUrl(
   const urls = [
 
     provider.provider_url,
-
     provider.url,
-
     provider.link,
-
     provider.watch_link
 
   ];
@@ -2042,80 +2279,52 @@ function getButtonClass(
       name || ""
     ).toLowerCase();
 
-  if(
-    value.includes("netflix")
-  ){
-
+  if(value.includes("netflix")){
     return "netflix-button";
-
   }
 
   if(
     value.includes("amazon") ||
     value.includes("prime video")
   ){
-
     return "amazon-button";
-
   }
 
   if(
     value.includes("u-next") ||
     value.includes("unext")
   ){
-
     return "unext-button";
-
   }
 
-  if(
-    value.includes("hulu")
-  ){
-
+  if(value.includes("hulu")){
     return "hulu-button";
-
   }
 
-  if(
-    value.includes("disney")
-  ){
-
+  if(value.includes("disney")){
     return "disney-button";
-
   }
 
-  if(
-    value.includes("apple")
-  ){
-
+  if(value.includes("apple")){
     return "apple-button";
-
   }
 
-  if(
-    value.includes("fod")
-  ){
-
+  if(value.includes("fod")){
     return "fod-button";
-
   }
 
   if(
     value.includes("google play") ||
     value.includes("googleplay")
   ){
-
     return "googleplay-button";
-
   }
 
   if(
     type === "free" ||
     value.includes("youtube")
   ){
-
     return "free-button";
-
   }
 
   return "";
@@ -2132,82 +2341,59 @@ function getButtonText(
       name || ""
     ).toLowerCase();
 
-  if(
-    value.includes("netflix")
-  ){
-
+  if(value.includes("netflix")){
     return "Netflixで作品を見る →";
-
   }
 
   if(
     value.includes("amazon") ||
     value.includes("prime video")
   ){
-
     return "Prime Videoで作品を見る →";
-
   }
 
   if(
     value.includes("u-next") ||
     value.includes("unext")
   ){
-
     return "U-NEXTで作品を見る →";
-
   }
 
-  if(
-    value.includes("hulu")
-  ){
-
+  if(value.includes("hulu")){
     return "Huluで作品を見る →";
-
   }
 
-  if(
-    value.includes("disney")
-  ){
-
+  if(value.includes("disney")){
     return "Disney+で作品を見る →";
-
   }
 
-  if(
-    value.includes("apple")
-  ){
-
+  if(value.includes("apple")){
     return "Apple TVで作品を見る →";
-
   }
 
-  if(
-    value.includes("fod")
-  ){
-
+  if(value.includes("fod")){
     return "FODで作品を見る →";
-
   }
 
   if(
     value.includes("google play") ||
     value.includes("googleplay")
   ){
-
     return "Google Playで作品を見る →";
-
   }
 
   if(type === "free"){
-
     return "無料で作品を見る →";
-
   }
 
   return "サービスで作品を見る →";
 
 }
+
+
+/* =========================================================
+   シリーズ作品
+========================================================= */
 
 function renderSeries(series){
 
@@ -2358,21 +2544,22 @@ function renderSeries(series){
 
 }
 
+
+/* =========================================================
+   日付
+========================================================= */
+
 function formatDate(date){
 
   if(!date){
-
     return "";
-
   }
 
   const parts =
     String(date).split("-");
 
   if(parts.length !== 3){
-
     return date;
-
   }
 
   return (
@@ -2389,9 +2576,7 @@ function formatDate(date){
 function formatYear(date){
 
   if(!date){
-
     return "";
-
   }
 
   return (
@@ -2412,9 +2597,7 @@ function setText(
     document.getElementById(id);
 
   if(!element){
-
     return;
-
   }
 
   element.textContent =
@@ -2445,4 +2628,3 @@ function showError(message){
 </body>
 
 </html>
-```
