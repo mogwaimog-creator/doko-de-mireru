@@ -1,8 +1,9 @@
+```javascript
 // =========================================================
 // doko-de-mireru
 // api/search.js
 //
-// 安定版
+// 安定版 + おすすめ作品対応
 //
 // ・映画検索
 // ・作品詳細
@@ -21,12 +22,13 @@
 // ・監督
 // ・出演者
 // ・シリーズ
+// ・おすすめ作品
 //
 // Netflix
 // ・Netflix配信判定
 // ・Netflixホームページへ移動
 //
-// ※ Netflix作品ID機能は完全に使用しない
+// ※ Netflix作品ID機能は使用しない
 // =========================================================
 
 
@@ -70,9 +72,11 @@ module.exports = async function handler(req, res) {
   // =======================================================
 
   if (req.method !== "GET") {
+
     return res.status(405).json({
       error: "GETメソッドのみ利用できます。"
     });
+
   }
 
 
@@ -87,10 +91,12 @@ module.exports = async function handler(req, res) {
 
 
     if (!apiKey) {
+
       return res.status(500).json({
         error:
           "TMDB_API_KEY が設定されていません。"
       });
+
     }
 
 
@@ -127,6 +133,7 @@ module.exports = async function handler(req, res) {
       return res
         .status(200)
         .json(movie);
+
     }
 
 
@@ -140,6 +147,7 @@ module.exports = async function handler(req, res) {
         error:
           "映画名を入力してください。"
       });
+
     }
 
 
@@ -256,26 +264,20 @@ module.exports = async function handler(req, res) {
           id:
             movie.id,
 
-
           title:
             movie.title || "",
-
 
           original_title:
             movie.original_title || "",
 
-
           release_date:
             movie.release_date || "",
-
 
           poster_path:
             movie.poster_path || null,
 
-
           overview:
             movie.overview || "",
-
 
           vote_average:
             Number(
@@ -385,6 +387,19 @@ async function getMovieDetail(
     providersJP = {};
 
   }
+
+
+  // =======================================================
+  // おすすめ作品
+  //
+  // TMDB Recommendations API
+  // =======================================================
+
+  const recommendations =
+    await getRecommendations(
+      movieId,
+      apiKey
+    );
 
 
   // =======================================================
@@ -513,8 +528,6 @@ async function getMovieDetail(
 
   // =======================================================
   // FOD
-  //
-  // 「FOD」「FOD Premium」などを認識
   // =======================================================
 
   const fodProvider =
@@ -530,11 +543,6 @@ async function getMovieDetail(
 
   // =======================================================
   // Google Play
-  //
-  // TMDB上では
-  // 「Google Play Movies」
-  // 「Google Play」
-  // などの名前になる場合がある
   // =======================================================
 
   const googlePlayProvider =
@@ -552,8 +560,6 @@ async function getMovieDetail(
 
   // =======================================================
   // Netflix URL
-  //
-  // 作品IDは使用しない
   // =======================================================
 
   const netflixUrl =
@@ -617,14 +623,6 @@ async function getMovieDetail(
 
   // =======================================================
   // FOD URL
-  //
-  // ① TMDBからURLが取得できる
-  //    → そのURL
-  //
-  // ② 取得できない
-  //    → FODホーム
-  //
-  // ※ ボタンを消さない
   // =======================================================
 
   const fodUrl =
@@ -638,12 +636,6 @@ async function getMovieDetail(
 
   // =======================================================
   // Google Play URL
-  //
-  // ① TMDBからURLが取得できる
-  //    → そのURL
-  //
-  // ② 取得できない
-  //    → Google Play検索
   // =======================================================
 
   const googlePlayUrl =
@@ -714,42 +706,33 @@ async function getMovieDetail(
     id:
       movie.id,
 
-
     title:
       movie.title || "",
-
 
     original_title:
       movie.original_title || "",
 
-
     release_date:
       movie.release_date || "",
-
 
     poster_path:
       movie.poster_path || null,
 
-
     overview:
       movie.overview || "",
-
 
     vote_average:
       Number(
         movie.vote_average || 0
       ),
 
-
     original_language:
       movie.original_language || "",
-
 
     genres:
       Array.isArray(movie.genres)
         ? movie.genres
         : [],
-
 
     // ===================================================
     // 監督
@@ -758,14 +741,12 @@ async function getMovieDetail(
     director:
       director,
 
-
     // ===================================================
     // 出演者
     // ===================================================
 
     cast:
       cast,
-
 
     // ===================================================
     // 配信
@@ -774,14 +755,11 @@ async function getMovieDetail(
     streaming:
       streaming,
 
-
     rental:
       rental,
 
-
     purchase:
       purchase,
-
 
     // ===================================================
     // Netflix
@@ -798,10 +776,8 @@ async function getMovieDetail(
           }
         : null,
 
-
     netflix_url:
       netflixUrl,
-
 
     // ===================================================
     // Amazon
@@ -815,10 +791,8 @@ async function getMovieDetail(
           }
         : null,
 
-
     amazon_url:
       amazonUrl,
-
 
     // ===================================================
     // U-NEXT
@@ -827,14 +801,12 @@ async function getMovieDetail(
     unext_url:
       unextUrl,
 
-
     // ===================================================
     // Hulu
     // ===================================================
 
     hulu_url:
       huluUrl,
-
 
     // ===================================================
     // Disney+
@@ -843,14 +815,12 @@ async function getMovieDetail(
     disney_url:
       disneyUrl,
 
-
     // ===================================================
     // Apple TV
     // ===================================================
 
     apple_tv_url:
       appleUrl,
-
 
     // ===================================================
     // FOD
@@ -864,10 +834,8 @@ async function getMovieDetail(
           }
         : null,
 
-
     fod_url:
       fodUrl,
-
 
     // ===================================================
     // Google Play
@@ -881,10 +849,8 @@ async function getMovieDetail(
           }
         : null,
 
-
     google_play_url:
       googlePlayUrl,
-
 
     // ===================================================
     // シリーズ
@@ -893,6 +859,12 @@ async function getMovieDetail(
     series:
       series,
 
+    // ===================================================
+    // おすすめ作品
+    // ===================================================
+
+    recommendations:
+      recommendations,
 
     // ===================================================
     // TMDB
@@ -902,6 +874,113 @@ async function getMovieDetail(
       tmdbWatchLink
 
   };
+
+}
+
+
+// =========================================================
+// おすすめ作品取得
+// =========================================================
+
+async function getRecommendations(
+  movieId,
+  apiKey
+) {
+
+  try {
+
+    const url =
+      "https://api.themoviedb.org/3/movie/" +
+      encodeURIComponent(movieId) +
+      "/recommendations" +
+      "?api_key=" +
+      encodeURIComponent(apiKey) +
+      "&language=ja-JP" +
+      "&page=1";
+
+
+    const data =
+      await fetchJson(url);
+
+
+    let movies =
+      Array.isArray(data.results)
+        ? data.results
+        : [];
+
+
+    // =====================================================
+    // 不正データを除外
+    // =====================================================
+
+    movies =
+      movies.filter(function(movie) {
+
+        return (
+          movie &&
+          movie.id &&
+          movie.title &&
+          movie.poster_path
+        );
+
+      });
+
+
+    // =====================================================
+    // 最大10作品
+    // =====================================================
+
+    movies =
+      movies.slice(0, 10);
+
+
+    // =====================================================
+    // detail.htmlで使いやすい形に整形
+    // =====================================================
+
+    return movies.map(function(movie) {
+
+      return {
+
+        id:
+          movie.id,
+
+        title:
+          movie.title || "",
+
+        original_title:
+          movie.original_title || "",
+
+        release_date:
+          movie.release_date || "",
+
+        poster_path:
+          movie.poster_path || null,
+
+        vote_average:
+          Number(
+            movie.vote_average || 0
+          )
+
+      };
+
+    });
+
+
+  } catch (error) {
+
+    console.error(
+      "RECOMMENDATIONS ERROR:",
+      error
+    );
+
+
+    // おすすめ取得に失敗しても
+    // 作品詳細ページ全体は正常に表示する
+
+    return [];
+
+  }
 
 }
 
@@ -1013,14 +1092,6 @@ function createAppleUrl(title) {
 
 // =========================================================
 // FOD
-//
-// TMDBから作品URLが取れた場合
-// → そのURL
-//
-// 取れない場合
-// → FODホーム
-//
-// 作品検索URLを勝手に作らない
 // =========================================================
 
 function createFodUrl(
@@ -1075,10 +1146,6 @@ function createFodUrl(
 
   }
 
-
-  // =====================================================
-  // 作品URLが取れなければホーム
-  // =====================================================
 
   return (
     "https://fod.fujitv.co.jp/"
@@ -1144,11 +1211,6 @@ function createGooglePlayUrl(
   }
 
 
-  // =====================================================
-  // 作品URLが取得できない場合
-  // Google Play検索へ
-  // =====================================================
-
   return (
     "https://play.google.com/store/search?q=" +
     encodeURIComponent(title) +
@@ -1192,16 +1254,13 @@ function normalizeProviders(
           provider.provider_id ||
           null,
 
-
         provider_name:
           provider.provider_name ||
           "",
 
-
         logo_path:
           provider.logo_path ||
           null,
-
 
         provider_url:
           provider.provider_url ||
@@ -1307,7 +1366,6 @@ function getDirector(movie) {
           crew[i].id ||
           null,
 
-
         name:
           crew[i].name ||
           ""
@@ -1349,7 +1407,6 @@ function getCast(movie) {
         id:
           person.id ||
           null,
-
 
         name:
           person.name ||
@@ -1422,7 +1479,6 @@ async function getCollection(
         data.name ||
         "",
 
-
       movies:
         movies.map(function(movie) {
 
@@ -1431,16 +1487,13 @@ async function getCollection(
             id:
               movie.id,
 
-
             title:
               movie.title ||
               "",
 
-
             release_date:
               movie.release_date ||
               "",
-
 
             poster_path:
               movie.poster_path ||
@@ -1571,3 +1624,4 @@ function normalizeTitle(title) {
     );
 
 }
+```
