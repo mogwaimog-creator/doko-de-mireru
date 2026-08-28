@@ -653,6 +653,8 @@ async function getMovieDetail(
 
   // =======================================================
   // おすすめ作品
+  //
+  // TMDBの「似ている作品」を取得
   // =======================================================
 
   let recommendations = [];
@@ -663,7 +665,7 @@ async function getMovieDetail(
     const recommendationUrl =
       "https://api.themoviedb.org/3/movie/" +
       encodeURIComponent(movieId) +
-      "/recommendations" +
+      "/similar" +
       "?api_key=" +
       encodeURIComponent(apiKey) +
       "&language=ja-JP" +
@@ -690,15 +692,9 @@ async function getMovieDetail(
             return (
               item &&
               item.id &&
-              item.title
-            );
-
-          })
-          .filter(function(item) {
-
-            return (
+              item.title &&
               String(item.id) !==
-              String(movieId)
+                String(movie.id)
             );
 
           })
@@ -739,6 +735,8 @@ async function getMovieDetail(
 
   // =======================================================
   // シリーズ
+  //
+  // TMDBのコレクション情報
   // =======================================================
 
   let series = null;
