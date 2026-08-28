@@ -2,7 +2,7 @@
 // doko-de-mireru
 // api/search.js
 //
-// 安定版
+// 安定版 + おすすめ作品
 //
 // ・映画検索
 // ・作品詳細
@@ -21,12 +21,13 @@
 // ・監督
 // ・出演者
 // ・シリーズ
+// ・おすすめ作品
 //
 // Netflix
 // ・Netflix配信判定
 // ・Netflixホームページへ移動
 //
-// ※ Netflix作品ID機能は完全に使用しない
+// ※ Netflix作品ID機能は使用しない
 // =========================================================
 
 
@@ -513,8 +514,6 @@ async function getMovieDetail(
 
   // =======================================================
   // FOD
-  //
-  // 「FOD」「FOD Premium」などを認識
   // =======================================================
 
   const fodProvider =
@@ -530,11 +529,6 @@ async function getMovieDetail(
 
   // =======================================================
   // Google Play
-  //
-  // TMDB上では
-  // 「Google Play Movies」
-  // 「Google Play」
-  // などの名前になる場合がある
   // =======================================================
 
   const googlePlayProvider =
@@ -617,14 +611,6 @@ async function getMovieDetail(
 
   // =======================================================
   // FOD URL
-  //
-  // ① TMDBからURLが取得できる
-  //    → そのURL
-  //
-  // ② 取得できない
-  //    → FODホーム
-  //
-  // ※ ボタンを消さない
   // =======================================================
 
   const fodUrl =
@@ -638,12 +624,6 @@ async function getMovieDetail(
 
   // =======================================================
   // Google Play URL
-  //
-  // ① TMDBからURLが取得できる
-  //    → そのURL
-  //
-  // ② 取得できない
-  //    → Google Play検索
   // =======================================================
 
   const googlePlayUrl =
@@ -669,6 +649,92 @@ async function getMovieDetail(
 
   const cast =
     getCast(movie);
+
+
+  // =======================================================
+  // おすすめ作品
+  // =======================================================
+
+  let recommendations = [];
+
+
+  try {
+
+    const recommendationUrl =
+      "https://api.themoviedb.org/3/movie/" +
+      encodeURIComponent(movieId) +
+      "/recommendations" +
+      "?api_key=" +
+      encodeURIComponent(apiKey) +
+      "&language=ja-JP" +
+      "&page=1";
+
+
+    const recommendationData =
+      await fetchJson(
+        recommendationUrl
+      );
+
+
+    if (
+      recommendationData &&
+      Array.isArray(
+        recommendationData.results
+      )
+    ) {
+
+      recommendations =
+        recommendationData.results
+          .filter(function(item) {
+
+            return (
+              item &&
+              item.id &&
+              item.title
+            );
+
+          })
+          .filter(function(item) {
+
+            return (
+              String(item.id) !==
+              String(movieId)
+            );
+
+          })
+          .slice(0, 10)
+          .map(function(item) {
+
+            return {
+
+              id:
+                item.id,
+
+              title:
+                item.title || "",
+
+              release_date:
+                item.release_date || "",
+
+              poster_path:
+                item.poster_path || null
+
+            };
+
+          });
+
+    }
+
+  } catch (error) {
+
+    console.error(
+      "RECOMMENDATIONS ERROR:",
+      error
+    );
+
+    recommendations = [];
+
+  }
 
 
   // =======================================================
@@ -887,6 +953,14 @@ async function getMovieDetail(
 
 
     // ===================================================
+    // おすすめ作品
+    // ===================================================
+
+    recommendations:
+      recommendations,
+
+
+    // ===================================================
     // シリーズ
     // ===================================================
 
@@ -1019,8 +1093,6 @@ function createAppleUrl(title) {
 //
 // 取れない場合
 // → FODホーム
-//
-// 作品検索URLを勝手に作らない
 // =========================================================
 
 function createFodUrl(
@@ -1075,10 +1147,6 @@ function createFodUrl(
 
   }
 
-
-  // =====================================================
-  // 作品URLが取れなければホーム
-  // =====================================================
 
   return (
     "https://fod.fujitv.co.jp/"
@@ -1143,11 +1211,6 @@ function createGooglePlayUrl(
 
   }
 
-
-  // =====================================================
-  // 作品URLが取得できない場合
-  // Google Play検索へ
-  // =====================================================
 
   return (
     "https://play.google.com/store/search?q=" +
