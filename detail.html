@@ -429,18 +429,6 @@ header p{
   margin-bottom:4px;
 }
 
-
-/* =====================================================
-   月額料金
-===================================================== */
-
-.provider-price{
-  color:#777;
-  font-size:12px;
-  margin-bottom:5px;
-  line-height:1.4;
-}
-
 .provider-type{
   display:inline-block;
   padding:3px 7px;
@@ -457,6 +445,34 @@ header p{
   gap:10px;
   color:#777;
   font-size:13px;
+}
+
+
+/* =====================================================
+   料金表示
+===================================================== */
+
+.provider-price{
+  margin-top:4px;
+  font-size:14px;
+  font-weight:bold;
+  color:#555;
+}
+
+.provider-price.streaming-price{
+  color:#15803d;
+}
+
+.provider-price.rental-price{
+  color:#c2410c;
+}
+
+.provider-price.purchase-price{
+  color:#1d4ed8;
+}
+
+.provider-price.free-price{
+  color:#7e22ce;
 }
 
 
@@ -726,15 +742,15 @@ header p{
     font-size:17px;
   }
 
-  .provider-price{
-    font-size:12px;
-  }
-
   .provider-button{
     width:100%;
     text-align:center;
     margin-top:1px;
     font-size:15px;
+  }
+
+  .provider-price{
+    font-size:14px;
   }
 
   .series-list{
@@ -1779,67 +1795,99 @@ function normalizeProviders(providers){
 
 
 /* =====================================================
-   月額料金
+   料金表示
 ===================================================== */
 
-function getProviderPrice(name){
+function getPriceText(
+  providerName,
+  type
+){
 
-  const value =
-    String(name || "").toLowerCase();
+  const name =
+    String(
+      providerName || ""
+    ).toLowerCase();
 
 
-  if(
-    value.includes("netflix")
-  ){
+  /*
+   * 現在は目安料金です。
+   * 将来的に料金APIを導入した場合、
+   * この部分を自動料金に変更できます。
+   */
 
-    return "月額1,190円～";
+
+  if(type === "streaming"){
+
+    if(name.includes("netflix")){
+
+      return "月額 約¥890〜";
+
+    }
+
+    if(
+      name.includes("amazon") ||
+      name.includes("prime video")
+    ){
+
+      return "月額 約¥600〜";
+
+    }
+
+    if(
+      name.includes("u-next") ||
+      name.includes("unext")
+    ){
+
+      return "月額 約¥2,189〜";
+
+    }
+
+    if(name.includes("hulu")){
+
+      return "月額 約¥1,026〜";
+
+    }
+
+    if(name.includes("disney")){
+
+      return "月額 約¥1,140〜";
+
+    }
+
+    if(name.includes("apple")){
+
+      return "月額 約¥900〜";
+
+    }
+
+    if(name.includes("fod")){
+
+      return "月額 約¥1,000〜";
+
+    }
+
+    return "月額料金はサービスをご確認ください";
 
   }
 
 
-  if(
-    value.includes("amazon") ||
-    value.includes("prime video")
-  ){
+  if(type === "rental"){
 
-    return "月額600円～";
+    return "レンタル 約¥100〜";
 
   }
 
 
-  if(
-    value.includes("u-next") ||
-    value.includes("unext")
-  ){
+  if(type === "purchase"){
 
-    return "月額2,189円～";
+    return "購入 約¥500〜";
 
   }
 
 
-  if(
-    value.includes("hulu")
-  ){
+  if(type === "free"){
 
-    return "月額1,026円～";
-
-  }
-
-
-  if(
-    value.includes("disney")
-  ){
-
-    return "月額1,250円～";
-
-  }
-
-
-  if(
-    value.includes("apple")
-  ){
-
-    return "月額900円～";
+    return "無料";
 
   }
 
@@ -2003,35 +2051,6 @@ function createProviderCard(
   );
 
 
-  /* 月額料金 */
-
-  const price =
-    getProviderPrice(
-      provider.provider_name
-    );
-
-
-  if(price){
-
-    const priceElement =
-      document.createElement("div");
-
-
-    priceElement.className =
-      "provider-price";
-
-
-    priceElement.textContent =
-      price;
-
-
-    info.appendChild(
-      priceElement
-    );
-
-  }
-
-
   /* 種類 */
 
   const typeText =
@@ -2070,7 +2089,60 @@ function createProviderCard(
   );
 
 
-  /* 字幕・吹き替え */
+  /* =================================================
+     料金
+  ================================================= */
+
+  const price =
+    document.createElement("div");
+
+
+  price.className =
+    "provider-price";
+
+
+  if(type === "streaming"){
+
+    price.classList.add(
+      "streaming-price"
+    );
+
+  }else if(type === "rental"){
+
+    price.classList.add(
+      "rental-price"
+    );
+
+  }else if(type === "purchase"){
+
+    price.classList.add(
+      "purchase-price"
+    );
+
+  }else if(type === "free"){
+
+    price.classList.add(
+      "free-price"
+    );
+
+  }
+
+
+  price.textContent =
+    getPriceText(
+      provider.provider_name,
+      type
+    );
+
+
+  info.appendChild(
+    price
+  );
+
+
+  /* =================================================
+     字幕・吹き替え
+  ================================================= */
 
   const subInfo =
     document.createElement("div");
@@ -2116,7 +2188,9 @@ function createProviderCard(
   );
 
 
-  /* ボタン */
+  /* =================================================
+     ボタン
+  ================================================= */
 
   const url =
     getProviderLink(
