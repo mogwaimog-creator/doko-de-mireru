@@ -1,9 +1,8 @@
-```javascript
 // =========================================================
 // doko-de-mireru
 // api/search.js
 //
-// 安定版
+// 安定復旧版
 //
 // ・映画検索
 // ・作品詳細
@@ -43,15 +42,12 @@ module.exports = async function handler(req, res) {
     "Content-Type"
   );
 
+  // =======================================================
+  // OPTIONS
+  // =======================================================
+
   if (req.method === "OPTIONS") {
     return res.status(200).end();
-  }
-
-  // GET以外は拒否
-  if (req.method !== "GET") {
-    return res.status(405).json({
-      error: "GETメソッドのみ利用できます。"
-    });
   }
 
   try {
@@ -60,14 +56,12 @@ module.exports = async function handler(req, res) {
     // TMDB API KEY
     // =====================================================
 
-    const apiKey =
-      process.env.TMDB_API_KEY;
+    const apiKey = process.env.TMDB_API_KEY;
 
     if (!apiKey) {
 
       return res.status(500).json({
-        error:
-          "TMDB_API_KEY が設定されていません。"
+        error: "TMDB_API_KEY が設定されていません。"
       });
 
     }
@@ -91,7 +85,7 @@ module.exports = async function handler(req, res) {
     // =====================================================
     // 作品詳細
     //
-    // /api/search?id=123
+    // /api/search?id=12345
     // =====================================================
 
     if (id) {
@@ -103,6 +97,7 @@ module.exports = async function handler(req, res) {
         );
 
       return res.status(200).json(movie);
+
     }
 
     // =====================================================
@@ -112,8 +107,7 @@ module.exports = async function handler(req, res) {
     if (!query) {
 
       return res.status(400).json({
-        error:
-          "映画名を入力してください。"
+        error: "映画名を入力してください。"
       });
 
     }
@@ -186,11 +180,7 @@ module.exports = async function handler(req, res) {
           : 1;
 
       if (aExact !== bExact) {
-
-        return (
-          aExact - bExact
-        );
-
+        return aExact - bExact;
       }
 
       return (
@@ -243,11 +233,21 @@ module.exports = async function handler(req, res) {
 
       });
 
+    // =====================================================
+    // キャッシュ
+    // =====================================================
+
+    res.setHeader(
+      "Cache-Control",
+      "public, s-maxage=86400, stale-while-revalidate=3600"
+    );
+
+    // =====================================================
+    // JSON返却
+    // =====================================================
+
     return res.status(200).json({
-
-      results:
-        results
-
+      results: results
     });
 
   } catch (error) {
@@ -282,7 +282,7 @@ async function getMovieDetail(
 ) {
 
   // =======================================================
-  // 作品情報 + 監督・出演者
+  // 映画情報 + 監督 + 出演者
   // =======================================================
 
   const movieUrl =
@@ -312,9 +312,7 @@ async function getMovieDetail(
       encodeURIComponent(apiKey);
 
     const providerData =
-      await fetchJson(
-        providerUrl
-      );
+      await fetchJson(providerUrl);
 
     if (
       providerData &&
@@ -383,10 +381,7 @@ async function getMovieDetail(
       streaming,
       rental,
       purchase,
-      [
-        "amazon",
-        "prime video"
-      ]
+      ["amazon", "prime video"]
     );
 
   const unextProvider =
@@ -394,10 +389,7 @@ async function getMovieDetail(
       streaming,
       rental,
       purchase,
-      [
-        "u-next",
-        "unext"
-      ]
+      ["u-next", "unext"]
     );
 
   const huluProvider =
@@ -719,9 +711,7 @@ function createAmazonUrl(
 
 function createUnextUrl(title) {
 
-  return (
-    "https://video.unext.jp/"
-  );
+  return "https://video.unext.jp/";
 
 }
 
@@ -877,9 +867,7 @@ function getDirector(movie) {
   const crew =
     movie &&
     movie.credits &&
-    Array.isArray(
-      movie.credits.crew
-    )
+    Array.isArray(movie.credits.crew)
       ? movie.credits.crew
       : [];
 
@@ -922,9 +910,7 @@ function getCast(movie) {
   const cast =
     movie &&
     movie.credits &&
-    Array.isArray(
-      movie.credits.cast
-    )
+    Array.isArray(movie.credits.cast)
       ? movie.credits.cast
       : [];
 
@@ -1111,4 +1097,3 @@ function normalizeTitle(title) {
     );
 
 }
-```
