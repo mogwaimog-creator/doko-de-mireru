@@ -1,5 +1,5 @@
+```html
 <!DOCTYPE html>
-
 <html lang="ja">
 
 <head>
@@ -7,17 +7,15 @@
 <meta charset="UTF-8">
 
 <meta
-name="viewport"
-content="width=device-width, initial-scale=1.0"
-
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
 >
 
 <title>作品情報 | ドコデミレル？</title>
 
 <meta
-name="description"
-content="映画・ドラマがどこで見られるか検索できるドコデミレル？の作品情報ページです。"
-
+  name="description"
+  content="映画・ドラマがどこで見られるか検索できるドコデミレル？の作品情報ページです。"
 >
 
 <style>
@@ -447,14 +445,17 @@ header p{
   font-size:13px;
 }
 
-.provider-price{
-  color:#555;
-  font-weight:bold;
-}
 
-.provider-price.unconfirmed{
+/* =====================================================
+   料金表示
+   ※ 控えめに表示
+===================================================== */
+
+.provider-price{
+  margin-top:3px;
   color:#888;
-  font-weight:normal;
+  font-size:12px;
+  line-height:1.4;
 }
 
 
@@ -510,14 +511,6 @@ header p{
 
 .apple-button{
   background:#111;
-}
-
-.fod-button{
-  background:#e60012;
-}
-
-.googleplay-button{
-  background:#4285f4;
 }
 
 .free-button{
@@ -818,7 +811,9 @@ header p{
 
 </head>
 
+
 <body>
+
 
 <header>
 
@@ -830,15 +825,17 @@ header p{
 
 </header>
 
+
 <div class="container">
 
+
 <a
-class="back"
-href="index.html"
-
+  class="back"
+  href="index.html"
 >
+← 検索結果に戻る
+</a>
 
-← 検索結果に戻る </a>
 
 <div
   id="loading"
@@ -846,6 +843,7 @@ href="index.html"
 >
 作品情報を読み込んでいます…
 </div>
+
 
 <div
   id="error"
@@ -855,10 +853,12 @@ href="index.html"
 作品情報を取得できませんでした。
 </div>
 
+
 <div
   id="content"
   style="display:none;"
 >
+
 
 <!-- =====================================================
      作品情報
@@ -866,42 +866,52 @@ href="index.html"
 
 <div class="movie-header">
 
-<img
-id="poster"
-class="poster"
-alt=""
 
+<img
+  id="poster"
+  class="poster"
+  alt=""
 >
+
 
 <div class="movie-info">
 
+
 <h2 id="title"></h2>
+
 
 <div
   id="originalTitle"
   class="original-title"
 ></div>
 
+
 <div class="basic-info">
+
 
 <div
   id="releaseDate"
   class="info-line"
 ></div>
 
+
 <div
   id="rating"
   class="info-line"
 ></div>
 
+
 </div>
+
 
 <div
   id="genres"
   class="genre-list"
 ></div>
 
+
 <div class="movie-side-info">
+
 
 <div class="side-section">
 
@@ -916,6 +926,7 @@ alt=""
 
 </div>
 
+
 <div class="side-section">
 
 <div class="side-title">
@@ -928,6 +939,7 @@ alt=""
 ></div>
 
 </div>
+
 
 <div class="side-section">
 
@@ -942,11 +954,13 @@ alt=""
 
 </div>
 
-</div>
 
 </div>
 
 </div>
+
+</div>
+
 
 <!-- =====================================================
      配信サービス
@@ -964,6 +978,7 @@ alt=""
 <div id="providers"></div>
 
 </div>
+
 
 <!-- =====================================================
      シリーズ
@@ -988,6 +1003,7 @@ alt=""
 
 </div>
 
+
 <!-- =====================================================
      TMDB
 ===================================================== -->
@@ -995,21 +1011,23 @@ alt=""
 <div class="section">
 
 <a
-id="tmdbLink"
-class="tmdb-link"
-href="#"
-target="_blank"
-rel="noopener noreferrer"
-
+  id="tmdbLink"
+  class="tmdb-link"
+  href="#"
+  target="_blank"
+  rel="noopener noreferrer"
 >
-
-TMDBで作品情報を見る → </a>
-
-</div>
+TMDBで作品情報を見る →
+</a>
 
 </div>
 
+
 </div>
+
+
+</div>
+
 
 <footer
   style="
@@ -1021,6 +1039,7 @@ TMDBで作品情報を見る → </a>
 >
 © ドコデミレル？
 </footer>
+
 
 <script>
 
@@ -1070,7 +1089,6 @@ if(!movieId){
   );
 
   return;
-
 }
 
 
@@ -1597,7 +1615,6 @@ function normalizeProviderName(name){
   const value =
     String(name || "").trim();
 
-
   const lower =
     value.toLowerCase();
 
@@ -1660,15 +1677,6 @@ function normalizeProviderName(name){
 
   if(
     lower.includes("google play")
-  ){
-
-    return "Google Play";
-
-  }
-
-
-  if(
-    lower.includes("google tv")
   ){
 
     return "Google Play";
@@ -1770,26 +1778,7 @@ function normalizeProviders(providers){
           provider.logo_path || null,
 
         provider_url:
-          provider.provider_url || null,
-
-        /* 将来API側で料金を追加した場合にも対応 */
-
-        price:
-          provider.price ||
-          provider.display_price ||
-          null,
-
-        monthly_price:
-          provider.monthly_price ||
-          null,
-
-        rent_price:
-          provider.rent_price ||
-          null,
-
-        buy_price:
-          provider.buy_price ||
-          null
+          provider.provider_url || null
 
       };
 
@@ -2000,56 +1989,49 @@ function createProviderCard(
   );
 
 
-  /* =================================================
-     料金表示
-  ================================================= */
-
-  const priceInfo =
-    document.createElement("div");
-
-
-  priceInfo.className =
-    "provider-subinfo";
-
+  /* ===================================================
+     料金
+  =================================================== */
 
   const price =
-    getProviderPrice(
-      provider,
+    getPriceText(
+      provider.provider_name,
       type
     );
 
 
-  const priceText =
-    document.createElement("div");
+  if(price){
+
+    const priceElement =
+      document.createElement("div");
 
 
-  priceText.className =
-    "provider-price";
+    priceElement.className =
+      "provider-price";
 
 
-  priceText.textContent =
-    price;
+    priceElement.textContent =
+      price;
 
 
-  if(
-    price.includes("未確認")
-  ){
-
-    priceText.classList.add(
-      "unconfirmed"
+    info.appendChild(
+      priceElement
     );
 
   }
 
 
-  priceInfo.appendChild(
-    priceText
-  );
-
-
-  /* =================================================
+  /* ===================================================
      字幕・吹き替え
-  ================================================= */
+  =================================================== */
+
+  const subInfo =
+    document.createElement("div");
+
+
+  subInfo.className =
+    "provider-subinfo";
+
 
   const subtitle =
     document.createElement("div");
@@ -2059,7 +2041,7 @@ function createProviderCard(
     "🎧 字幕：未確認";
 
 
-  priceInfo.appendChild(
+  subInfo.appendChild(
     subtitle
   );
 
@@ -2072,13 +2054,13 @@ function createProviderCard(
     "🎙️ 吹き替え：未確認";
 
 
-  priceInfo.appendChild(
+  subInfo.appendChild(
     dub
   );
 
 
   info.appendChild(
-    priceInfo
+    subInfo
   );
 
 
@@ -2087,9 +2069,7 @@ function createProviderCard(
   );
 
 
-  /* =================================================
-     ボタン
-  ================================================= */
+  /* ボタン */
 
   const url =
     getProviderLink(
@@ -2148,88 +2128,99 @@ function createProviderCard(
 
 /* =====================================================
    料金表示
+   控えめな「～」表示
 ===================================================== */
 
-function getProviderPrice(
-  provider,
+function getPriceText(
+  name,
   type
 ){
 
-  if(!provider){
-
-    return "料金情報：未確認";
-
-  }
-
-
-  let price = null;
+  const value =
+    String(
+      name || ""
+    ).toLowerCase();
 
 
-  if(type === "streaming"){
-
-    price =
-      provider.monthly_price ||
-      provider.price ||
-      null;
-
-    if(price){
-
-      return "💴 月額：" +
-        String(price);
-
-    }
-
-    return "💴 月額料金：未確認";
-
-  }
-
-
-  if(type === "rental"){
-
-    price =
-      provider.rent_price ||
-      provider.price ||
-      null;
-
-    if(price){
-
-      return "💴 レンタル料金：" +
-        String(price);
-
-    }
-
-    return "💴 レンタル料金：未確認";
-
-  }
-
-
-  if(type === "purchase"){
-
-    price =
-      provider.buy_price ||
-      provider.price ||
-      null;
-
-    if(price){
-
-      return "💴 購入料金：" +
-        String(price);
-
-    }
-
-    return "💴 購入料金：未確認";
-
-  }
-
+  /* 無料 */
 
   if(type === "free"){
 
-    return "💴 無料";
+    return "";
 
   }
 
 
-  return "料金情報：未確認";
+  /* 見放題 */
+
+  if(type === "streaming"){
+
+    if(value.includes("netflix")){
+
+      return "月額 約890円～";
+
+    }
+
+    if(
+      value.includes("amazon") ||
+      value.includes("prime video")
+    ){
+
+      return "月額 約600円～";
+
+    }
+
+    if(
+      value.includes("u-next") ||
+      value.includes("unext")
+    ){
+
+      return "月額 約2,189円～";
+
+    }
+
+    if(value.includes("hulu")){
+
+      return "月額 約1,026円～";
+
+    }
+
+    if(value.includes("disney")){
+
+      return "月額 約1,140円～";
+
+    }
+
+    if(value.includes("apple")){
+
+      return "月額 約1,080円～";
+
+    }
+
+    return "月額 約600円～";
+
+  }
+
+
+  /* レンタル */
+
+  if(type === "rental"){
+
+    return "レンタル 約100円～";
+
+  }
+
+
+  /* 購入 */
+
+  if(type === "purchase"){
+
+    return "購入 約500円～";
+
+  }
+
+
+  return "";
 
 }
 
@@ -2250,13 +2241,7 @@ function getProviderLink(
     ).toLowerCase();
 
 
-  const title =
-    movie.title || "";
-
-
-  /* =================================================
-     Netflix
-  ================================================= */
+  /* Netflix */
 
   if(
     name.includes("netflix")
@@ -2274,9 +2259,7 @@ function getProviderLink(
   }
 
 
-  /* =================================================
-     Amazon / Prime Video
-  ================================================= */
+  /* Amazon */
 
   if(
     name.includes("amazon") ||
@@ -2291,7 +2274,9 @@ function getProviderLink(
       ) ||
       (
         "https://www.amazon.co.jp/s?k=" +
-        encodeURIComponent(title) +
+        encodeURIComponent(
+          movie.title || ""
+        ) +
         "&i=instant-video"
       )
     );
@@ -2299,9 +2284,7 @@ function getProviderLink(
   }
 
 
-  /* =================================================
-     U-NEXT
-  ================================================= */
+  /* U-NEXT */
 
   if(
     name.includes("u-next") ||
@@ -2310,15 +2293,13 @@ function getProviderLink(
 
     return (
       movie.unext_url ||
-      "https://video.unext.jp/"
+      getGenericProviderUrl(provider)
     );
 
   }
 
 
-  /* =================================================
-     Hulu
-  ================================================= */
+  /* Hulu */
 
   if(
     name.includes("hulu")
@@ -2326,18 +2307,13 @@ function getProviderLink(
 
     return (
       movie.hulu_url ||
-      (
-        "https://www.hulu.jp/search?q=" +
-        encodeURIComponent(title)
-      )
+      getGenericProviderUrl(provider)
     );
 
   }
 
 
-  /* =================================================
-     Disney+
-  ================================================= */
+  /* Disney+ */
 
   if(
     name.includes("disney")
@@ -2345,18 +2321,13 @@ function getProviderLink(
 
     return (
       movie.disney_url ||
-      (
-        "https://www.disneyplus.com/ja-jp/search/" +
-        encodeURIComponent(title)
-      )
+      getGenericProviderUrl(provider)
     );
 
   }
 
 
-  /* =================================================
-     Apple TV
-  ================================================= */
+  /* Apple */
 
   if(
     name.includes("apple")
@@ -2364,74 +2335,13 @@ function getProviderLink(
 
     return (
       movie.apple_tv_url ||
-      (
-        "https://tv.apple.com/jp/search?term=" +
-        encodeURIComponent(title)
-      )
+      getGenericProviderUrl(provider)
     );
 
   }
 
 
-  /* =================================================
-     FOD
-  ================================================= */
-
-  if(
-    name.includes("fod")
-  ){
-
-    return (
-      movie.fod_url ||
-      (
-        "https://fod.fujitv.co.jp/search/?keyword=" +
-        encodeURIComponent(title)
-      )
-    );
-
-  }
-
-
-  /* =================================================
-     Google Play
-  ================================================= */
-
-  if(
-    name.includes("google play") ||
-    name.includes("google tv")
-  ){
-
-    return (
-      movie.google_play_url ||
-      (
-        "https://play.google.com/store/search?q=" +
-        encodeURIComponent(title) +
-        "&c=movies&hl=ja&gl=JP"
-      )
-    );
-
-  }
-
-
-  /* =================================================
-     YouTube
-  ================================================= */
-
-  if(
-    name.includes("youtube")
-  ){
-
-    return (
-      "https://www.youtube.com/results?search_query=" +
-      encodeURIComponent(title)
-    );
-
-  }
-
-
-  /* =================================================
-     一般URL
-  ================================================= */
+  /* YouTubeなど */
 
   return getGenericProviderUrl(
     provider
@@ -2558,25 +2468,6 @@ function getButtonClass(
 
 
   if(
-    value.includes("fod")
-  ){
-
-    return "fod-button";
-
-  }
-
-
-  if(
-    value.includes("google play") ||
-    value.includes("google tv")
-  ){
-
-    return "googleplay-button";
-
-  }
-
-
-  if(
     type === "free" ||
     value.includes("youtube")
   ){
@@ -2658,25 +2549,6 @@ function getButtonText(
   ){
 
     return "Apple TVで作品を見る →";
-
-  }
-
-
-  if(
-    value.includes("fod")
-  ){
-
-    return "FODで作品を見る →";
-
-  }
-
-
-  if(
-    value.includes("google play") ||
-    value.includes("google tv")
-  ){
-
-    return "Google Playで作品を見る →";
 
   }
 
@@ -2992,6 +2864,8 @@ function showError(message){
 
 </script>
 
+
 </body>
 
 </html>
+```
