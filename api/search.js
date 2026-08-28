@@ -1,4 +1,3 @@
-
 // =========================================================
 // doko-de-mireru
 // api/search.js
@@ -25,28 +24,23 @@
 // ・Netflix配信判定
 // ・Netflix作品ID対応
 // ・Netflix直接作品ページ対応
-//
 // =========================================================
 
 
 // =========================================================
-// Netflix作品ID登録
+// Netflix作品ID
+// =========================================================
 //
 // 「TMDB映画ID」:「Netflix作品ID」
 //
-// 例
-//
 // 怪盗グルーのミニオン超変身
-// TMDB ID     : 519182
-// Netflix ID  : 81776693
+// TMDB ID    : 519182
+// Netflix ID : 81776693
 //
-// 必要な作品をここへ追加できます。
 // =========================================================
 
 const NETFLIX_TITLE_IDS = {
-
   "519182": "81776693"
-
 };
 
 
@@ -76,24 +70,23 @@ module.exports = async function handler(req, res) {
   );
 
 
+  // =======================================================
+  // OPTIONS
+  // =======================================================
+
   if (req.method === "OPTIONS") {
-
     return res.status(200).end();
-
   }
 
 
   // =======================================================
-  // GET以外は拒否
+  // GETのみ
   // =======================================================
 
   if (req.method !== "GET") {
 
     return res.status(405).json({
-
-      error:
-        "GETメソッドのみ利用できます。"
-
+      error: "GETメソッドのみ利用できます。"
     });
 
   }
@@ -112,10 +105,8 @@ module.exports = async function handler(req, res) {
     if (!apiKey) {
 
       return res.status(500).json({
-
         error:
           "TMDB_API_KEY が設定されていません。"
-
       });
 
     }
@@ -141,8 +132,6 @@ module.exports = async function handler(req, res) {
 
     // =====================================================
     // 作品詳細
-    //
-    // /api/search?id=519182
     // =====================================================
 
     if (id) {
@@ -152,7 +141,6 @@ module.exports = async function handler(req, res) {
           id,
           apiKey
         );
-
 
       return res
         .status(200)
@@ -168,17 +156,15 @@ module.exports = async function handler(req, res) {
     if (!query) {
 
       return res.status(400).json({
-
         error:
           "映画名を入力してください。"
-
       });
 
     }
 
 
     // =====================================================
-    // TMDB映画検索
+    // TMDB検索
     // =====================================================
 
     const searchUrl =
@@ -258,12 +244,7 @@ module.exports = async function handler(req, res) {
 
 
       if (aExact !== bExact) {
-
-        return (
-          aExact -
-          bExact
-        );
-
+        return aExact - bExact;
       }
 
 
@@ -320,11 +301,12 @@ module.exports = async function handler(req, res) {
       });
 
 
+    // =====================================================
+    // JSON返却
+    // =====================================================
+
     return res.status(200).json({
-
-      results:
-        results
-
+      results: results
     });
 
 
@@ -409,14 +391,12 @@ async function getMovieDetail(
 
     }
 
-
   } catch (error) {
 
     console.error(
       "WATCH PROVIDERS ERROR:",
       error
     );
-
 
     providersJP = {};
 
@@ -464,9 +444,7 @@ async function getMovieDetail(
       streaming,
       rental,
       purchase,
-      [
-        "netflix"
-      ]
+      ["netflix"]
     );
 
 
@@ -511,9 +489,7 @@ async function getMovieDetail(
       streaming,
       rental,
       purchase,
-      [
-        "hulu"
-      ]
+      ["hulu"]
     );
 
 
@@ -526,9 +502,7 @@ async function getMovieDetail(
       streaming,
       rental,
       purchase,
-      [
-        "disney"
-      ]
+      ["disney"]
     );
 
 
@@ -541,14 +515,12 @@ async function getMovieDetail(
       streaming,
       rental,
       purchase,
-      [
-        "apple"
-      ]
+      ["apple"]
     );
 
 
   // =======================================================
-  // Netflix作品ID取得
+  // Netflix作品ID
   // =======================================================
 
   const netflixTitleId =
@@ -588,9 +560,7 @@ async function getMovieDetail(
 
   const unextUrl =
     unextProvider
-      ? createUnextUrl(
-          title
-        )
+      ? createUnextUrl(title)
       : null;
 
 
@@ -600,21 +570,17 @@ async function getMovieDetail(
 
   const huluUrl =
     huluProvider
-      ? createHuluUrl(
-          title
-        )
+      ? createHuluUrl(title)
       : null;
 
 
   // =======================================================
-  // Disney+ URL
+  // Disney URL
   // =======================================================
 
   const disneyUrl =
     disneyProvider
-      ? createDisneyUrl(
-          title
-        )
+      ? createDisneyUrl(title)
       : null;
 
 
@@ -624,9 +590,7 @@ async function getMovieDetail(
 
   const appleUrl =
     appleProvider
-      ? createAppleUrl(
-          title
-        )
+      ? createAppleUrl(title)
       : null;
 
 
@@ -788,10 +752,8 @@ async function getMovieDetail(
     amazon:
       amazonProvider
         ? {
-
             url:
               amazonUrl
-
           }
         : null,
 
@@ -860,7 +822,7 @@ function createNetflixUrl(
 ) {
 
   // =======================================================
-  // Netflix作品IDがある場合
+  // Netflix作品IDあり
   // =======================================================
 
   if (
@@ -881,7 +843,7 @@ function createNetflixUrl(
 
 
   // =======================================================
-  // Netflix作品IDがない場合
+  // Netflix作品IDなし
   // =======================================================
 
   return (
@@ -932,7 +894,7 @@ function createAmazonUrl(
 ) {
 
   // =======================================================
-  // TMDBからAmazon URLが取得できた場合
+  // TMDBのAmazon URL
   // =======================================================
 
   if (
@@ -1046,7 +1008,6 @@ function normalizeProviders(
 
 
   return providers
-
     .filter(function(provider) {
 
       return (
@@ -1055,8 +1016,6 @@ function normalizeProviders(
       );
 
     })
-
-
     .map(function(provider) {
 
       return {
@@ -1093,15 +1052,9 @@ function findProvider(
 
   const all =
     []
-      .concat(
-        streaming || []
-      )
-      .concat(
-        rental || []
-      )
-      .concat(
-        purchase || []
-      );
+      .concat(streaming || [])
+      .concat(rental || [])
+      .concat(purchase || []);
 
 
   for (
@@ -1157,9 +1110,7 @@ function getDirector(
   const crew =
     movie &&
     movie.credits &&
-    Array.isArray(
-      movie.credits.crew
-    )
+    Array.isArray(movie.credits.crew)
       ? movie.credits.crew
       : [];
 
@@ -1206,17 +1157,13 @@ function getCast(
   const cast =
     movie &&
     movie.credits &&
-    Array.isArray(
-      movie.credits.cast
-    )
+    Array.isArray(movie.credits.cast)
       ? movie.credits.cast
       : [];
 
 
   return cast
-
     .slice(0, 8)
-
     .map(function(person) {
 
       return {
@@ -1265,7 +1212,6 @@ async function getCollection(
 
     movies =
       movies
-
         .filter(function(movie) {
 
           return (
@@ -1274,8 +1220,6 @@ async function getCollection(
           );
 
         })
-
-
         .sort(function(a, b) {
 
           return String(
@@ -1295,7 +1239,6 @@ async function getCollection(
 
       name:
         data.name || "",
-
 
       movies:
         movies.map(function(movie) {
@@ -1348,14 +1291,11 @@ async function fetchJson(
     await fetch(
       url,
       {
-        method:
-          "GET",
+        method: "GET",
 
         headers: {
-
-          Accept:
+          "Accept":
             "application/json"
-
         }
 
       }
@@ -1389,9 +1329,7 @@ async function fetchJson(
 
       data &&
       data.status_message
-
         ? data.status_message
-
         : "TMDB API ERROR " +
           response.status
 
@@ -1416,18 +1354,14 @@ function normalizeTitle(
   return String(
     title || ""
   )
-
     .toLowerCase()
-
     .replace(
       /[\s　]/g,
       ""
     )
-
     .replace(
       /[「」『』【】（）()・:：!?！？,.，。]/g,
       ""
     );
 
 }
-```
