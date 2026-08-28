@@ -477,6 +477,26 @@ header p{
   color:#1e40af;
 }
 
+/* =====================================================
+   無料視聴
+===================================================== */
+
+.provider-group.free{
+
+  background:#faf5ff;
+
+  border-color:#e9d5ff;
+}
+
+.provider-group.free
+.provider-title{
+
+  border-left-color:#9333ea;
+
+  background:#f3e8ff;
+
+  color:#6b21a8;
+}   
 
 /* =====================================================
    配信見出し
@@ -1867,6 +1887,12 @@ function renderProviders(movie){
         : []
     );
 
+   const free =
+  normalizeProviders(
+    Array.isArray(movie.free)
+      ? movie.free
+      : []
+  );
 
   renderProviderGroup(
     container,
@@ -1894,12 +1920,20 @@ function renderProviders(movie){
     movie
   );
 
+   renderProviderGroup(
+  container,
+  "🟣 無料視聴",
+  free,
+  "free",
+  movie
+);
 
   if(
-    !streaming.length &&
-    !rental.length &&
-    !purchase.length
-  ){
+  !streaming.length &&
+  !rental.length &&
+  !purchase.length &&
+  !free.length
+){
 
     const empty =
       document.createElement(
