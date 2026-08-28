@@ -20,6 +20,7 @@
   content="xl0TnMDwmY9xpeFPp8_RgJiPBxT0k04iH3LVbyL65V4"
 >
 
+
 <!-- =========================================================
      SEO
 ========================================================= -->
@@ -42,6 +43,7 @@
   rel="canonical"
   href="https://doko-de-mireru.vercel.app/"
 >
+
 
 <!-- =========================================================
      OGP
@@ -77,6 +79,7 @@
   content="ja_JP"
 >
 
+
 <!-- =========================================================
      Twitter / X
 ========================================================= -->
@@ -93,28 +96,8 @@
 
 <meta
   name="twitter:description"
-  content="映画がどの動画配信サービスで見られるか検索できます。"
+  content="映画がどの動画配信サービスで見られるか検索できるサイトです。"
 >
-
-<!-- =========================================================
-     構造化データ
-========================================================= -->
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  "name": "ドコデミレル？",
-  "url": "https://doko-de-mireru.vercel.app/",
-  "description": "映画がNetflix、Amazon Prime Video、U-NEXT、Hulu、Disney+など、どこで見られるか検索できるサイトです。",
-  "inLanguage": "ja-JP",
-  "potentialAction": {
-    "@type": "SearchAction",
-    "target": "https://doko-de-mireru.vercel.app/?query={search_term_string}",
-    "query-input": "required name=search_term_string"
-  }
-}
-</script>
 
 
 <style>
@@ -409,38 +392,47 @@ footer{
     font-size:25px;
   }
 
+
   .search-row{
     flex-direction:column;
   }
+
 
   #query{
     width:100%;
   }
 
+
   #searchButton{
     width:100%;
   }
 
+
   .movie-card{
     align-items:flex-start;
   }
+
 
   .movie-poster{
     width:120px;
     height:180px;
   }
 
+
   .movie-title{
     font-size:19px;
   }
+
 
   .original-title{
     font-size:13px;
   }
 
+
   .meta{
     font-size:13px;
   }
+
 
   .detail-button{
     width:100%;
@@ -475,19 +467,16 @@ footer{
        検索
   ====================================================== -->
 
-  <section
-    class="search-box"
-    aria-label="映画検索"
-  >
+  <section class="search-box">
 
     <div class="search-row">
 
       <input
         id="query"
-        type="search"
+        type="text"
         placeholder="映画名を入力してください"
         autocomplete="off"
-        aria-label="映画名"
+        aria-label="映画名を入力"
       >
 
       <button
@@ -506,10 +495,7 @@ footer{
        ステータス
   ====================================================== -->
 
-  <div
-    id="status"
-    aria-live="polite"
-  ></div>
+  <div id="status"></div>
 
 
   <!-- =====================================================
@@ -533,9 +519,6 @@ footer{
 
 
 <script>
-
-"use strict";
-
 
 /* =========================================================
    DOM
@@ -572,10 +555,6 @@ async function searchMovies(){
     queryInput.value.trim();
 
 
-  /* -------------------------------------------------------
-     検索履歴
-  ------------------------------------------------------- */
-
   sessionStorage.setItem(
     "dokoDeMireruLastQuery",
     query
@@ -608,10 +587,12 @@ async function searchMovies(){
   searchButton.disabled =
     true;
 
+
   status.innerHTML =
     '<div class="status">' +
     '🔍 検索しています...' +
     '</div>';
+
 
   results.innerHTML =
     "";
@@ -716,7 +697,10 @@ async function searchMovies(){
 
     /* -----------------------------------------------------
        年代順
-       古い作品 → 新しい作品
+       
+       古い作品
+       ↓
+       新しい作品
     ----------------------------------------------------- */
 
     movies.sort(
@@ -726,9 +710,11 @@ async function searchMovies(){
           a.release_date ||
           "9999-99-99";
 
+
         const dateB =
           b.release_date ||
           "9999-99-99";
+
 
         return dateA.localeCompare(
           dateB
@@ -763,6 +749,7 @@ async function searchMovies(){
       <div class="error">
 
         ❌
+
         ${escapeHtml(
           error.message ||
           "サーバーエラーが発生しました。"
@@ -855,7 +842,7 @@ function createMovieCard(movie){
         `
         <img
           class="movie-poster"
-          src="${escapeHtml(poster)}"
+          src="${poster}"
           alt="${escapeHtml(
             movie.title || ""
           )}のポスター"
@@ -874,6 +861,7 @@ function createMovieCard(movie){
             justify-content:center;
             color:#6b7280;
           "
+          role="img"
           aria-label="ポスター画像なし"
         >
           NO IMAGE
@@ -953,6 +941,9 @@ function createMovieCard(movie){
           <a
             class="detail-button"
             href="${detailUrl}"
+            aria-label="${escapeHtml(
+              movie.title || "作品"
+            )}の詳細を見る"
           >
             作品詳細を見る →
           </a>
@@ -1045,7 +1036,7 @@ function escapeHtml(value){
 
 
 /* =========================================================
-   Enter検索
+   Enter
 ========================================================= */
 
 queryInput.addEventListener(
