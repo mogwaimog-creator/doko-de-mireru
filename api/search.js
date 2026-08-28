@@ -20,11 +20,16 @@
 // ・出演者
 // ・シリーズ
 //
+// 【将来対応用の土台】
+// ・content_type
+// ・media_type
+// ・映画 / ドラマ / アニメを区別できる構造
+//
 // Netflix
 // ・Netflix配信判定
 // ・Netflixホームページへ移動
 //
-// ※ Netflix作品ID機能は完全に削除
+// ※ Netflix作品ID機能は使用しない
 // =========================================================
 
 
@@ -111,7 +116,41 @@ module.exports = async function handler(req, res) {
 
 
     // =====================================================
+    // 将来対応用
+    //
+    // 現在は映画を基本とする。
+    //
+    // movie
+    // tv
+    //
+    // 将来、ドラマ・アニメ対応時に利用する。
+    // =====================================================
+
+    const requestedType =
+      req.query &&
+      typeof req.query.type === "string"
+        ? req.query.type.trim().toLowerCase()
+        : "movie";
+
+
+    // =====================================================
+    // 現在対応している検索タイプ
+    //
+    // 今回は映画を維持。
+    //
+    // tv は将来の拡張用として認識だけしておく。
+    // =====================================================
+
+    const contentType =
+      requestedType === "tv"
+        ? "tv"
+        : "movie";
+
+
+    // =====================================================
     // 作品詳細
+    //
+    // 現在の映画詳細を維持。
     //
     // /api/search?id=519182
     // =====================================================
@@ -145,10 +184,22 @@ module.exports = async function handler(req, res) {
 
     // =====================================================
     // TMDB映画検索
+    //
+    // 現在は映画検索をそのまま維持。
+    //
+    // 将来、contentType === "tv" の場合に
+    // /search/tv へ切り替える土台を残している。
     // =====================================================
 
+    const searchEndpoint =
+      contentType === "tv"
+        ? "/search/tv"
+        : "/search/movie";
+
+
     const searchUrl =
-      "https://api.themoviedb.org/3/search/movie" +
+      "https://api.themoviedb.org/3" +
+      searchEndpoint +
       "?api_key=" +
       encodeURIComponent(apiKey) +
       "&language=ja-JP" +
@@ -183,7 +234,10 @@ module.exports = async function handler(req, res) {
         return (
           movie &&
           movie.id &&
-          movie.title
+          (
+            movie.title ||
+            movie.name
+          )
         );
 
       });
@@ -201,12 +255,16 @@ module.exports = async function handler(req, res) {
 
       const aTitle =
         normalizeTitle(
-          a.title || ""
+          a.title ||
+          a.name ||
+          ""
         );
 
       const bTitle =
         normalizeTitle(
-          b.title || ""
+          b.title ||
+          b.name ||
+          ""
         );
 
 
@@ -245,10 +303,22 @@ module.exports = async function handler(req, res) {
 
     // =====================================================
     // 結果整形
+    //
+    // 映画
+    // movie
+    //
+    // ドラマ・アニメ
+    // tv
+    //
+    // 将来ここを利用する。
     // =====================================================
 
     const results =
       movies.map(function(movie) {
+
+        const detectedType =
+          contentType;
+
 
         return {
 
@@ -256,24 +326,42 @@ module.exports = async function handler(req, res) {
             movie.id,
 
           title:
-            movie.title || "",
+            movie.title ||
+            movie.name ||
+            "",
 
           original_title:
-            movie.original_title || "",
+            movie.original_title ||
+            movie.original_name ||
+            "",
 
           release_date:
-            movie.release_date || "",
+            movie.release_date ||
+            movie.first_air_date ||
+            "",
 
           poster_path:
-            movie.poster_path || null,
+            movie.poster_path ||
+            null,
 
           overview:
-            movie.overview || "",
+            movie.overview ||
+            "",
 
           vote_average:
             Number(
               movie.vote_average || 0
-            )
+            ),
+
+          // =================================================
+          // 将来対応用
+          // =================================================
+
+          content_type:
+            detectedType,
+
+          media_type:
+            detectedType
 
         };
 
@@ -663,6 +751,18 @@ async function getMovieDetail(
       Array.isArray(movie.genres)
         ? movie.genres
         : [],
+
+
+    // ===================================================
+    // 将来対応用
+    // ===================================================
+
+    content_type:
+      "movie",
+
+
+    media_type:
+      "movie",
 
 
     // ===================================================
@@ -1168,7 +1268,17 @@ async function getCollection(
 
             poster_path:
               movie.poster_path ||
-              null
+              null,
+
+            // =============================================
+            // 将来対応用
+            // =============================================
+
+            content_type:
+              "movie",
+
+            media_type:
+              "movie"
 
           };
 
