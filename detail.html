@@ -708,6 +708,9 @@ header p{
   background:#111;
 }
 
+   .free-button{
+  background:#9333ea;
+}
 
 /* =====================================================
    シリーズ
@@ -2676,6 +2679,14 @@ function getButtonClass(name){
 
   }
 
+   if(
+  value.includes("youtube") ||
+  value.includes("free")
+){
+
+  return "free-button";
+
+}
 
   return "";
 
