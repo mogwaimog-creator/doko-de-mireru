@@ -1284,63 +1284,92 @@ async function getCollection(
 // =========================================================
 
 async function fetchJson(
-  url
+url
 ) {
 
-  const response =
-    await fetch(
-      url,
-      {
-        method: "GET",
+const response =
+await fetch(
+url,
+{
+method: "GET",
 
-        headers: {
-          "Accept":
-            "application/json"
-        }
-
-      }
-    );
-
-
-  const text =
-    await response.text();
-
-
-  let data;
-
-
-  try {
-
-    data =
-      JSON.parse(text);
-
-  } catch (error) {
-
-    throw new Error(
-      "TMDBから正しいJSONデータを取得できませんでした。"
-    );
-
+```
+    headers: {
+      "Accept":
+        "application/json"
+    }
   }
+);
+```
 
+const text =
+await response.text();
 
-  if (!response.ok) {
+// =======================================================
+// TMDBから返ってきた内容を確認
+// =======================================================
 
-    throw new Error(
+console.log(
+"TMDB STATUS:",
+response.status
+);
 
-      data &&
-      data.status_message
-        ? data.status_message
-        : "TMDB API ERROR " +
-          response.status
+console.log(
+"TMDB RESPONSE:",
+text.substring(0, 1000)
+);
 
-    );
+// =======================================================
+// JSON解析
+// =======================================================
 
-  }
+let data;
 
+try {
 
-  return data;
+```
+data =
+  JSON.parse(text);
+```
+
+} catch (error) {
+
+```
+throw new Error(
+  "TMDBの応答をJSONとして解析できませんでした。" +
+  " HTTP STATUS: " +
+  response.status +
+  " RESPONSE: " +
+  text.substring(0, 300)
+);
+```
 
 }
+
+// =======================================================
+// HTTPエラー
+// =======================================================
+
+if (!response.ok) {
+
+```
+throw new Error(
+
+  data &&
+  data.status_message
+    ? data.status_message
+    : "TMDB API ERROR " +
+      response.status
+
+);
+```
+
+}
+
+return data;
+
+}
+
 
 
 // =========================================================
