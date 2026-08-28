@@ -1,4 +1,3 @@
-```javascript
 // =========================================================
 // doko-de-mireru
 // api/search.js
@@ -22,6 +21,13 @@
 // ・監督
 // ・出演者
 // ・シリーズ
+//
+// 無料視聴について
+// TMDBの free + ads を取得し、
+// 重複を除いて無料視聴として返す。
+//
+// Netflix作品IDの取得は行わず、
+// NetflixボタンはNetflix日本公式サイトへ移動。
 //
 // TMDB APIを利用
 // =========================================================
@@ -94,6 +100,8 @@ module.exports = async function handler(req, res) {
 
     // =====================================================
     // 作品詳細
+    //
+    // /api/search?id=519182
     // =====================================================
 
     if (id) {
@@ -382,7 +390,7 @@ async function getMovieDetail(
 
 
   // =======================================================
-  // 通常配信
+  // 配信情報
   // =======================================================
 
   const streaming =
@@ -406,37 +414,48 @@ async function getMovieDetail(
   // =======================================================
   // 無料視聴
   //
-  // TMDBの free
-  // + ads（広告付き無料）
+  // TMDBの
   //
-  // TMDB公式仕様では
-  // free / ads / rent / buy / flatrate
-  // が別の配信タイプとして扱われます。
+  // free
+  // +
+  // ads
+  //
+  // をまとめて取得。
+  //
+  // ads = 広告付き無料
   // =======================================================
 
   const freeProviders =
-    normalizeProviders(
-      providersJP.free
-    );
+    []
+      .concat(
+        Array.isArray(
+          providersJP.free
+        )
+          ? providersJP.free
+          : []
+      )
+      .concat(
+        Array.isArray(
+          providersJP.ads
+        )
+          ? providersJP.ads
+          : []
+      );
 
-
-  const adProviders =
-    normalizeProviders(
-      providersJP.ads
-    );
-
-
-  // =======================================================
-  // 無料視聴を統合
-  //
-  // 無料と広告付き無料の両方に
-  // 同じサービスがある場合は重複させない。
-  // =======================================================
 
   const free =
-    mergeFreeProviders(
-      freeProviders,
-      adProviders
+    normalizeProviders(
+      freeProviders
+    );
+
+
+  // =======================================================
+  // 無料視聴サービスの重複除去
+  // =======================================================
+
+  const freeUnique =
+    uniqueProviders(
+      free
     );
 
 
@@ -459,7 +478,7 @@ async function getMovieDetail(
       streaming,
       rental,
       purchase,
-      free,
+      freeUnique,
       [
         "netflix"
       ]
@@ -471,7 +490,7 @@ async function getMovieDetail(
       streaming,
       rental,
       purchase,
-      free,
+      freeUnique,
       [
         "amazon",
         "prime video"
@@ -484,7 +503,7 @@ async function getMovieDetail(
       streaming,
       rental,
       purchase,
-      free,
+      freeUnique,
       [
         "u-next",
         "unext"
@@ -497,7 +516,7 @@ async function getMovieDetail(
       streaming,
       rental,
       purchase,
-      free,
+      freeUnique,
       [
         "hulu"
       ]
@@ -509,7 +528,7 @@ async function getMovieDetail(
       streaming,
       rental,
       purchase,
-      free,
+      freeUnique,
       [
         "disney"
       ]
@@ -521,7 +540,7 @@ async function getMovieDetail(
       streaming,
       rental,
       purchase,
-      free,
+      freeUnique,
       [
         "apple"
       ]
@@ -530,6 +549,11 @@ async function getMovieDetail(
 
   // =======================================================
   // Netflix
+  //
+  // Netflix作品IDは取得しない。
+  //
+  // TMDBでNetflix配信が確認できた場合だけ
+  // Netflixボタンを表示する。
   // =======================================================
 
   const netflixUrl =
@@ -720,26 +744,9 @@ async function getMovieDetail(
     purchase:
       purchase,
 
-
-    // =====================================================
-    // 無料視聴
-    //
-    // free + ads を統合
-    // =====================================================
-
+    // 無料 + 広告付き無料
     free:
-      free,
-
-
-    // =====================================================
-    // 無料視聴の補足情報
-    // =====================================================
-
-    free_available:
-      free.length > 0,
-
-    free_count:
-      free.length,
+      freeUnique,
 
 
     // =====================================================
@@ -834,156 +841,6 @@ async function getMovieDetail(
       tmdbWatchLink
 
   };
-
-}
-
-
-// =========================================================
-// 無料配信プロバイダー統合
-// =========================================================
-//
-// free:
-//   完全無料としてTMDBが返したサービス
-//
-// ads:
-//   広告付き無料としてTMDBが返したサービス
-//
-// 同じサービスが重複している場合は1件にまとめる。
-// =========================================================
-
-function mergeFreeProviders(
-  freeProviders,
-  adProviders
-) {
-
-  const result = [];
-  const map = {};
-
-
-  // -------------------------------------------------------
-  // free を先に登録
-  // -------------------------------------------------------
-
-  if (
-    Array.isArray(freeProviders)
-  ) {
-
-    freeProviders.forEach(function(provider) {
-
-      if (!provider) {
-        return;
-      }
-
-
-      const name =
-        normalizeProviderName(
-          provider.provider_name
-        );
-
-
-      if (!name) {
-        return;
-      }
-
-
-      const key =
-        name.toLowerCase();
-
-
-      if (!map[key]) {
-
-        map[key] = {
-
-          ...provider,
-
-          provider_name:
-            name,
-
-          free_type:
-            "free",
-
-          free_label:
-            "完全無料"
-
-        };
-
-
-        result.push(
-          map[key]
-        );
-
-      }
-
-    });
-
-  }
-
-
-  // -------------------------------------------------------
-  // ads を追加
-  // -------------------------------------------------------
-
-  if (
-    Array.isArray(adProviders)
-  ) {
-
-    adProviders.forEach(function(provider) {
-
-      if (!provider) {
-        return;
-      }
-
-
-      const name =
-        normalizeProviderName(
-          provider.provider_name
-        );
-
-
-      if (!name) {
-        return;
-      }
-
-
-      const key =
-        name.toLowerCase();
-
-
-      // すでに free に存在する場合
-      // 「完全無料」を優先
-      if (map[key]) {
-
-        return;
-
-      }
-
-
-      map[key] = {
-
-        ...provider,
-
-        provider_name:
-          name,
-
-        free_type:
-          "ads",
-
-        free_label:
-          "広告付き無料"
-
-      };
-
-
-      result.push(
-        map[key]
-      );
-
-    });
-
-  }
-
-
-  return result;
 
 }
 
@@ -1141,6 +998,74 @@ function normalizeProviders(
       };
 
     });
+
+}
+
+
+// =========================================================
+// 無料視聴プロバイダー重複除去
+// =========================================================
+
+function uniqueProviders(
+  providers
+) {
+
+  if (
+    !Array.isArray(
+      providers
+    )
+  ) {
+
+    return [];
+
+  }
+
+
+  const result = [];
+  const seen = {};
+
+
+  providers.forEach(function(provider) {
+
+    if (
+      !provider ||
+      !provider.provider_name
+    ) {
+
+      return;
+
+    }
+
+
+    const key =
+      String(
+        provider.provider_name
+      )
+        .toLowerCase()
+        .trim();
+
+
+    if (
+      !key ||
+      seen[key]
+    ) {
+
+      return;
+
+    }
+
+
+    seen[key] = true;
+
+
+    result.push(
+      provider
+    );
+
+  });
+
+
+  return result;
 
 }
 
@@ -1496,137 +1421,3 @@ function normalizeTitle(
     );
 
 }
-
-
-// =========================================================
-// サービス名正規化
-// =========================================================
-
-function normalizeProviderName(
-  name
-) {
-
-  const value =
-    String(
-      name || ""
-    ).trim();
-
-
-  const lower =
-    value.toLowerCase();
-
-
-  if (
-    lower.includes("netflix")
-  ) {
-
-    return "Netflix";
-
-  }
-
-
-  if (
-    lower.includes("amazon") ||
-    lower.includes("prime video")
-  ) {
-
-    return "Prime Video";
-
-  }
-
-
-  if (
-    lower.includes("u-next") ||
-    lower.includes("unext")
-  ) {
-
-    return "U-NEXT";
-
-  }
-
-
-  if (
-    lower.includes("hulu")
-  ) {
-
-    return "Hulu";
-
-  }
-
-
-  if (
-    lower.includes("disney")
-  ) {
-
-    return "Disney+";
-
-  }
-
-
-  if (
-    lower.includes("apple")
-  ) {
-
-    return "Apple TV";
-
-  }
-
-
-  if (
-    lower.includes("youtube")
-  ) {
-
-    return "YouTube";
-
-  }
-
-
-  if (
-    lower.includes("tver")
-  ) {
-
-    return "TVer";
-
-  }
-
-
-  if (
-    lower.includes("abema")
-  ) {
-
-    return "ABEMA";
-
-  }
-
-
-  if (
-    lower.includes("fod")
-  ) {
-
-    return "FOD";
-
-  }
-
-
-  if (
-    lower.includes("rakuten")
-  ) {
-
-    return "Rakuten TV";
-
-  }
-
-
-  if (
-    lower.includes("dmm")
-  ) {
-
-    return "DMM TV";
-
-  }
-
-
-  return value;
-
-}
-```
