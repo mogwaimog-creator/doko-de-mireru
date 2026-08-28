@@ -1,5 +1,5 @@
-```html
 <!DOCTYPE html>
+
 <html lang="ja">
 
 <head>
@@ -7,8 +7,9 @@
 <meta charset="UTF-8">
 
 <meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0"
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+
 >
 
 <!-- =========================================================
@@ -18,81 +19,103 @@
 <title>作品情報 | ドコデミレル？</title>
 
 <meta
-  name="description"
-  content="映画がNetflix、Amazon Prime Video、U-NEXT、Hulu、Disney+など、どこで見られるか確認できる作品情報ページです。"
+name="description"
+content="映画がNetflix、Amazon Prime Video、U-NEXT、Hulu、Disney+など、どこで見られるか確認できる作品情報ページです。"
+
 >
 
 <meta
-  name="robots"
-  content="index, follow"
+name="robots"
+content="index, follow, max-image-preview:large"
+
 >
 
 <link
   id="canonical"
   rel="canonical"
-  href="https://doko-de-mireru.vercel.app/"
+  href="https://doko-de-mireru.vercel.app/detail.html"
 >
-
 
 <!-- =========================================================
      OGP
 ========================================================= -->
 
 <meta
-  property="og:type"
-  content="website"
+property="og:type"
+content="video.movie"
+
 >
 
 <meta
-  id="ogTitle"
-  property="og:title"
-  content="作品情報 | ドコデミレル？"
+id="ogTitle"
+property="og:title"
+content="作品情報 | ドコデミレル？"
+
 >
 
 <meta
-  id="ogDescription"
-  property="og:description"
-  content="映画がどこで見られるか確認できます。"
+id="ogDescription"
+property="og:description"
+content="映画がどこで見られるか確認できます。"
+
 >
 
 <meta
-  id="ogUrl"
-  property="og:url"
-  content="https://doko-de-mireru.vercel.app/"
+id="ogUrl"
+property="og:url"
+content="https://doko-de-mireru.vercel.app/detail.html"
+
 >
 
 <meta
-  property="og:site_name"
-  content="ドコデミレル？"
+property="og:site_name"
+content="ドコデミレル？"
+
 >
 
 <meta
-  property="og:locale"
-  content="ja_JP"
+property="og:locale"
+content="ja_JP"
+
 >
 
+<meta
+id="ogImage"
+property="og:image"
+content="https://doko-de-mireru.vercel.app/"
+
+>
 
 <!-- =========================================================
      Twitter / X
 ========================================================= -->
 
 <meta
-  name="twitter:card"
-  content="summary"
+name="twitter:card"
+content="summary_large_image"
+
 >
 
 <meta
-  id="twitterTitle"
-  name="twitter:title"
-  content="作品情報 | ドコデミレル？"
+id="twitterTitle"
+name="twitter:title"
+content="作品情報 | ドコデミレル？"
+
 >
 
 <meta
-  id="twitterDescription"
-  name="twitter:description"
-  content="映画がどこで見られるか確認できます。"
+id="twitterDescription"
+name="twitter:description"
+content="映画がどこで見られるか確認できます。"
+
 >
 
+<meta
+id="twitterImage"
+name="twitter:image"
+content="https://doko-de-mireru.vercel.app/"
+
+>
 
 <!-- =========================================================
      スタイル
@@ -359,26 +382,18 @@ header p{
 .provider-logo{
   width:48px;
   height:48px;
-
   object-fit:contain;
-
   border-radius:8px;
-
   background:#fff;
-
   margin-bottom:7px;
 }
 
 .provider-name{
   width:100%;
-
   font-size:15px;
   font-weight:bold;
-
   color:#111827;
-
   line-height:1.3;
-
   overflow:hidden;
   text-overflow:ellipsis;
   white-space:nowrap;
@@ -386,51 +401,32 @@ header p{
 
 .provider-type{
   margin-top:4px;
-
   padding:2px 6px;
-
   background:#f3f4f6;
-
   color:#666;
-
   border-radius:5px;
-
   font-size:11px;
-
   line-height:1.4;
 }
 
 .provider-price{
   margin-top:3px;
-
   color:#888;
-
   font-size:10px;
-
   line-height:1.3;
 }
 
 .provider-button{
   display:block;
-
   width:100%;
-
   margin-top:9px;
-
   padding:7px 4px;
-
   color:#fff;
-
   border-radius:7px;
-
   font-size:12px;
-
   font-weight:bold;
-
   text-align:center;
-
   white-space:nowrap;
-
   transition:
     opacity .15s ease,
     transform .15s ease;
@@ -491,10 +487,8 @@ header p{
 
 .provider-type-heading{
   margin:0 0 9px;
-
   font-size:14px;
   font-weight:bold;
-
   color:#555;
 }
 
@@ -514,40 +508,28 @@ header p{
 .series-list,
 .recommendation-list{
   display:flex;
-
   gap:13px;
-
   overflow-x:auto;
-
   padding:3px 2px 10px;
-
   scrollbar-width:thin;
 }
 
 .series-item,
 .recommendation-item{
   flex:0 0 135px;
-
   padding:0;
-
   border:none;
-
   display:block;
 }
 
 .series-poster-link,
 .recommendation-poster-link{
   display:block;
-
   width:135px;
   height:195px;
-
   border-radius:8px;
-
   overflow:hidden;
-
   background:#e5e7eb;
-
   cursor:pointer;
 }
 
@@ -555,11 +537,8 @@ header p{
 .recommendation-poster{
   width:100%;
   height:100%;
-
   object-fit:cover;
-
   display:block;
-
   transition:
     transform .15s ease;
 }
@@ -572,26 +551,18 @@ header p{
 .series-title,
 .recommendation-title{
   display:block;
-
   color:#2563eb;
-
   text-decoration:none;
-
   font-weight:bold;
-
   font-size:15px;
-
   line-height:1.4;
-
   margin-top:7px;
 }
 
 .series-year,
 .recommendation-year{
   color:#666;
-
   font-size:13px;
-
   margin-top:3px;
 }
 
@@ -610,11 +581,8 @@ header p{
 
 .recommendation-description{
   color:#666;
-
   font-size:14px;
-
   margin:0 0 14px;
-
   line-height:1.6;
 }
 
@@ -625,17 +593,11 @@ header p{
 
 .tmdb-link{
   display:inline-block;
-
   padding:11px 17px;
-
   background:#01b4e4;
-
   color:#fff;
-
   border-radius:8px;
-
   font-weight:bold;
-
   font-size:15px;
 }
 
@@ -650,21 +612,15 @@ header p{
 
 .loading{
   text-align:center;
-
   padding:60px 20px;
-
   font-size:20px;
 }
 
 .error{
   text-align:center;
-
   padding:50px 20px;
-
   color:#b91c1c;
-
   background:#fff;
-
   border-radius:12px;
 }
 
@@ -681,51 +637,42 @@ header p{
 
   .movie-header{
     gap:15px;
-
     padding:17px;
   }
 
   .poster{
     width:155px;
-
     max-width:38%;
   }
 
   .movie-info h2{
     font-size:23px;
-
     line-height:1.4;
   }
 
   .original-title{
     font-size:14px;
-
     margin-bottom:9px;
   }
 
   .basic-info{
     display:block;
-
     margin-bottom:9px;
   }
 
   .info-line{
     font-size:15px;
-
     margin:4px 0;
   }
 
   .genre-list{
     gap:5px;
-
     margin-top:4px;
-
     margin-bottom:9px;
   }
 
   .genre-item{
     font-size:13px;
-
     padding:4px 8px;
   }
 
@@ -743,7 +690,6 @@ header p{
 
   .side-text{
     font-size:15px;
-
     line-height:1.6;
   }
 
@@ -753,7 +699,6 @@ header p{
 
   .cast-item{
     font-size:13px;
-
     padding:5px 8px;
   }
 
@@ -763,20 +708,17 @@ header p{
 
   .section{
     padding:16px;
-
     margin-top:17px;
   }
 
   .section h3{
     font-size:21px;
-
     margin-bottom:12px;
   }
 
   .providers-grid{
     grid-template-columns:
       repeat(3, minmax(0,1fr));
-
     gap:8px;
   }
 
@@ -786,7 +728,6 @@ header p{
 
   .provider-logo{
     width:44px;
-
     height:44px;
   }
 
@@ -796,7 +737,6 @@ header p{
 
   .provider-button{
     font-size:11px;
-
     padding:7px 2px;
   }
 
@@ -813,7 +753,6 @@ header p{
   .series-poster-link,
   .recommendation-poster-link{
     width:115px;
-
     height:165px;
   }
 
@@ -833,13 +772,11 @@ header p{
 
   .movie-header{
     gap:11px;
-
     padding:14px;
   }
 
   .poster{
     width:125px;
-
     max-width:36%;
   }
 
@@ -857,7 +794,6 @@ header p{
 
   .genre-item{
     font-size:12px;
-
     padding:3px 7px;
   }
 
@@ -872,7 +808,6 @@ header p{
   .providers-grid{
     grid-template-columns:
       repeat(2, minmax(0,1fr));
-
     gap:8px;
   }
 
@@ -896,7 +831,6 @@ header p{
   .series-poster-link,
   .recommendation-poster-link{
     width:110px;
-
     height:158px;
   }
 
@@ -905,7 +839,6 @@ header p{
 </style>
 
 </head>
-
 
 <body>
 
@@ -919,16 +852,15 @@ header p{
 
 </header>
 
-
 <div class="container">
 
 <a
-  class="back"
-  href="index.html"
->
-← 検索結果に戻る
-</a>
+class="back"
+href="index.html"
 
+>
+
+← 検索結果に戻る </a>
 
 <div
   id="loading"
@@ -937,7 +869,6 @@ header p{
 作品情報を読み込んでいます…
 </div>
 
-
 <div
   id="error"
   class="error"
@@ -945,7 +876,6 @@ header p{
 >
 作品情報を取得できませんでした。
 </div>
-
 
 <div
   id="content"
@@ -956,21 +886,32 @@ header p{
      作品情報
 ===================================================== -->
 
+<main
+  itemscope
+  itemtype="https://schema.org/Movie"
+>
+
 <div class="movie-header">
 
 <img
-  id="poster"
-  class="poster"
-  alt=""
+id="poster"
+class="poster"
+alt=""
+itemprop="image"
+
 >
 
 <div class="movie-info">
 
-<h2 id="title"></h2>
+<h2
+  id="title"
+  itemprop="name"
+></h2>
 
 <div
   id="originalTitle"
   class="original-title"
+  itemprop="alternateName"
 ></div>
 
 <div class="basic-info">
@@ -1003,6 +944,7 @@ header p{
 <div
   id="director"
   class="side-text"
+  itemprop="director"
 ></div>
 
 </div>
@@ -1016,6 +958,7 @@ header p{
 <div
   id="cast"
   class="cast-list"
+  itemprop="actor"
 ></div>
 
 </div>
@@ -1029,6 +972,7 @@ header p{
 <div
   id="overview"
   class="side-text overview-text"
+  itemprop="description"
 ></div>
 
 </div>
@@ -1039,12 +983,11 @@ header p{
 
 </div>
 
-
 <!-- =====================================================
      配信サービス
 ===================================================== -->
 
-<div
+<section
   id="providersSection"
   class="section"
 >
@@ -1055,14 +998,13 @@ header p{
 
 <div id="providers"></div>
 
-</div>
-
+</section>
 
 <!-- =====================================================
      シリーズ作品
 ===================================================== -->
 
-<div
+<section
   id="seriesSection"
   class="section"
   style="display:none;"
@@ -1086,14 +1028,13 @@ header p{
   class="series-list"
 ></div>
 
-</div>
-
+</section>
 
 <!-- =====================================================
      おすすめ作品
 ===================================================== -->
 
-<div
+<section
   id="recommendationSection"
   class="section recommendation-section"
 >
@@ -1111,31 +1052,32 @@ header p{
   class="recommendation-list"
 ></div>
 
-</div>
-
+</section>
 
 <!-- =====================================================
      TMDB
 ===================================================== -->
 
-<div class="section">
+<section class="section">
 
 <a
-  id="tmdbLink"
-  class="tmdb-link"
-  href="#"
-  target="_blank"
-  rel="noopener noreferrer"
+id="tmdbLink"
+class="tmdb-link"
+href="#"
+target="_blank"
+rel="noopener noreferrer"
+
 >
-TMDBで作品情報を見る →
-</a>
+
+TMDBで作品情報を見る → </a>
+
+</section>
+
+</main>
 
 </div>
 
 </div>
-
-</div>
-
 
 <footer
   style="
@@ -1147,7 +1089,6 @@ TMDBで作品情報を見る →
 >
 © ドコデミレル？
 </footer>
-
 
 <script>
 
@@ -1343,18 +1284,10 @@ function updateSeo(movie){
     "作品情報";
 
 
-  /*
-     Google検索結果用タイトル
-  */
-
   document.title =
     title +
     "｜配信サービス・作品情報 | ドコデミレル？";
 
-
-  /*
-     description
-  */
 
   let description =
     title +
@@ -1387,10 +1320,21 @@ function updateSeo(movie){
     description +=
       overview.substring(
         0,
-        90
+        100
       );
 
   }
+
+
+  /*
+     descriptionが長くなりすぎないよう調整
+  */
+
+  description =
+    description.substring(
+      0,
+      300
+    );
 
 
   setMeta(
@@ -1400,7 +1344,7 @@ function updateSeo(movie){
 
 
   /*
-     canonical
+     作品固有URL
   */
 
   const canonicalUrl =
@@ -1448,6 +1392,29 @@ function updateSeo(movie){
     "content",
     canonicalUrl
   );
+
+
+  if(movie.poster_path){
+
+    const imageUrl =
+      "https://image.tmdb.org/t/p/w780" +
+      movie.poster_path;
+
+
+    setMetaProperty(
+      "ogImage",
+      "content",
+      imageUrl
+    );
+
+
+    setMetaProperty(
+      "twitterImage",
+      "content",
+      imageUrl
+    );
+
+  }
 
 
   /*
@@ -1544,34 +1511,51 @@ function setMetaProperty(
 
 function updateStructuredData(movie){
 
-  const old =
+  const oldMovie =
     document.getElementById(
       "movieStructuredData"
     );
 
 
-  if(old){
-
-    old.remove();
-
-  }
-
-
-  const script =
-    document.createElement(
-      "script"
+  const oldPage =
+    document.getElementById(
+      "pageStructuredData"
     );
 
 
-  script.type =
-    "application/ld+json";
+  const oldBreadcrumb =
+    document.getElementById(
+      "breadcrumbStructuredData"
+    );
 
 
-  script.id =
-    "movieStructuredData";
+  if(oldMovie){
+    oldMovie.remove();
+  }
 
 
-  const data = {
+  if(oldPage){
+    oldPage.remove();
+  }
+
+
+  if(oldBreadcrumb){
+    oldBreadcrumb.remove();
+  }
+
+
+  const canonicalUrl =
+    "https://doko-de-mireru.vercel.app/detail.html?id=" +
+    encodeURIComponent(
+      movie.id
+    );
+
+
+  /* =======================================================
+     Movie
+  ======================================================= */
+
+  const movieData = {
 
     "@context":
       "https://schema.org",
@@ -1583,59 +1567,44 @@ function updateStructuredData(movie){
       movie.title ||
       "",
 
-    alternateName:
-      movie.original_title ||
-      "",
-
     url:
-      "https://doko-de-mireru.vercel.app/detail.html?id=" +
-      encodeURIComponent(
-        movie.id
-      )
+      canonicalUrl
 
   };
 
 
-  /*
-     公開日
-  */
+  if(movie.original_title){
+
+    movieData.alternateName =
+      movie.original_title;
+
+  }
+
 
   if(movie.release_date){
 
-    data.dateCreated =
+    movieData.dateCreated =
       movie.release_date;
 
   }
 
 
-  /*
-     ポスター
-  */
-
   if(movie.poster_path){
 
-    data.image =
-      "https://image.tmdb.org/t/p/w500" +
+    movieData.image =
+      "https://image.tmdb.org/t/p/w780" +
       movie.poster_path;
 
   }
 
 
-  /*
-     あらすじ
-  */
-
   if(movie.overview){
 
-    data.description =
+    movieData.description =
       movie.overview;
 
   }
 
-
-  /*
-     評価
-  */
 
   const rating =
     Number(
@@ -1645,7 +1614,7 @@ function updateStructuredData(movie){
 
   if(rating > 0){
 
-    data.aggregateRating = {
+    movieData.aggregateRating = {
 
       "@type":
         "AggregateRating",
@@ -1664,16 +1633,12 @@ function updateStructuredData(movie){
   }
 
 
-  /*
-     監督
-  */
-
   if(
     movie.director &&
     movie.director.name
   ){
 
-    data.director = {
+    movieData.director = {
 
       "@type":
         "Person",
@@ -1686,10 +1651,6 @@ function updateStructuredData(movie){
   }
 
 
-  /*
-     出演者
-  */
-
   if(
     Array.isArray(
       movie.cast
@@ -1697,7 +1658,7 @@ function updateStructuredData(movie){
     movie.cast.length
   ){
 
-    data.actor =
+    movieData.actor =
       movie.cast
         .filter(function(person){
 
@@ -1725,14 +1686,168 @@ function updateStructuredData(movie){
   }
 
 
-  script.textContent =
+  const movieScript =
+    document.createElement(
+      "script"
+    );
+
+
+  movieScript.type =
+    "application/ld+json";
+
+
+  movieScript.id =
+    "movieStructuredData";
+
+
+  movieScript.textContent =
     JSON.stringify(
-      data
+      movieData
     );
 
 
   document.head.appendChild(
-    script
+    movieScript
+  );
+
+
+  /* =======================================================
+     WebPage
+  ======================================================= */
+
+  const pageData = {
+
+    "@context":
+      "https://schema.org",
+
+    "@type":
+      "WebPage",
+
+    name:
+      (
+        movie.title ||
+        "作品情報"
+      ) +
+      "｜ドコデミレル？",
+
+    url:
+      canonicalUrl,
+
+    isPartOf:{
+
+      "@type":
+        "WebSite",
+
+      name:
+        "ドコデミレル？",
+
+      url:
+        "https://doko-de-mireru.vercel.app/"
+
+    }
+
+  };
+
+
+  const pageScript =
+    document.createElement(
+      "script"
+    );
+
+
+  pageScript.type =
+    "application/ld+json";
+
+
+  pageScript.id =
+    "pageStructuredData";
+
+
+  pageScript.textContent =
+    JSON.stringify(
+      pageData
+    );
+
+
+  document.head.appendChild(
+    pageScript
+  );
+
+
+  /* =======================================================
+     BreadcrumbList
+  ======================================================= */
+
+  const breadcrumbData = {
+
+    "@context":
+      "https://schema.org",
+
+    "@type":
+      "BreadcrumbList",
+
+    itemListElement:[
+
+      {
+
+        "@type":
+          "ListItem",
+
+        position:
+          1,
+
+        name:
+          "ドコデミレル？",
+
+        item:
+          "https://doko-de-mireru.vercel.app/"
+
+      },
+
+      {
+
+        "@type":
+          "ListItem",
+
+        position:
+          2,
+
+        name:
+          movie.title ||
+          "作品情報",
+
+        item:
+          canonicalUrl
+
+      }
+
+    ]
+
+  };
+
+
+  const breadcrumbScript =
+    document.createElement(
+      "script"
+    );
+
+
+  breadcrumbScript.type =
+    "application/ld+json";
+
+
+  breadcrumbScript.id =
+    "breadcrumbStructuredData";
+
+
+  breadcrumbScript.textContent =
+    JSON.stringify(
+      breadcrumbData
+    );
+
+
+  document.head.appendChild(
+    breadcrumbScript
   );
 
 }
@@ -2614,11 +2729,6 @@ function createProviderCard(
     button.rel =
       "noopener noreferrer";
 
-
-    /*
-       「見る」は使わず
-       サービス名で統一
-    */
 
     button.textContent =
       provider.provider_name;
@@ -3616,4 +3726,3 @@ function showError(message){
 </body>
 
 </html>
-```
