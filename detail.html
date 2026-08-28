@@ -15,7 +15,7 @@
 
 <meta
   name="description"
-  content="映画・ドラマがどこで見られるか検索できるドコデミレル？の作品情報ページです。"
+  content="映画がNetflix、Amazon Prime Video、U-NEXT、Hulu、Disney+など、どこで見られるか確認できる作品情報ページです。配信サービス、公開日、評価、出演者、あらすじなどを確認できます。"
 >
 
 <style>
@@ -854,6 +854,55 @@ TMDBで作品情報を見る →
 
 "use strict";
 
+/* =========================================================
+   Google検索向け
+   作品ごとにページタイトルと説明を設定
+========================================================= */
+
+function updateSeo(movie){
+
+  if(!movie){
+
+    return;
+
+  }
+
+  const title =
+    movie.title ||
+    "作品情報";
+
+  document.title =
+    title +
+    "｜どこで見られる？ | ドコデミレル？";
+
+  const description =
+    title +
+    "がNetflix、Amazon Prime Video、U-NEXT、Hulu、Disney+など、どこで見られるか確認できます。公開日、評価、出演者、あらすじなどの作品情報も掲載しています。";
+
+  let meta =
+    document.querySelector(
+      'meta[name="description"]'
+    );
+
+  if(!meta){
+
+    meta =
+      document.createElement("meta");
+
+    meta.name =
+      "description";
+
+    document.head.appendChild(
+      meta
+    );
+
+  }
+
+  meta.content =
+    description;
+
+}
+
 const API_URL = "/api/search";
 
 const loading =
@@ -955,6 +1004,7 @@ async function loadMovie(){
     }
 
     renderMovie(movie);
+    updateSeo(movie);
 
   }catch(error){
 
