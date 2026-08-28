@@ -1,8 +1,9 @@
+```javascript
 // =========================================================
 // doko-de-mireru
 // api/search.js
 //
-// 安定版 + おすすめ作品機能
+// 安定版・検索復旧用 完成版
 //
 // ・映画検索
 // ・作品詳細
@@ -10,6 +11,7 @@
 // ・見放題
 // ・レンタル
 // ・購入
+// ・無料視聴
 // ・Netflix
 // ・Amazon Prime Video
 // ・U-NEXT
@@ -21,13 +23,9 @@
 // ・監督
 // ・出演者
 // ・シリーズ
-// ・おすすめ作品
 //
-// Netflix
-// ・Netflix配信判定
-// ・Netflixホームページへ移動
-//
-// ※ Netflix作品ID機能は完全に使用しない
+// ※ Netflix作品IDは使用しない
+// ※ おすすめ機能は今回は追加しない
 // =========================================================
 
 
@@ -62,7 +60,11 @@ module.exports = async function handler(req, res) {
   // =======================================================
 
   if (req.method === "OPTIONS") {
-    return res.status(200).end();
+
+    return res
+      .status(200)
+      .end();
+
   }
 
 
@@ -71,9 +73,12 @@ module.exports = async function handler(req, res) {
   // =======================================================
 
   if (req.method !== "GET") {
+
     return res.status(405).json({
-      error: "GETメソッドのみ利用できます。"
+      error:
+        "GETメソッドのみ利用できます。"
     });
+
   }
 
 
@@ -87,11 +92,21 @@ module.exports = async function handler(req, res) {
       process.env.TMDB_API_KEY;
 
 
-    if (!apiKey) {
+    if (
+      !apiKey ||
+      typeof apiKey !== "string" ||
+      !apiKey.trim()
+    ) {
+
+      console.error(
+        "TMDB_API_KEY が設定されていません。"
+      );
+
       return res.status(500).json({
         error:
           "TMDB_API_KEY が設定されていません。"
       });
+
     }
 
 
@@ -128,6 +143,7 @@ module.exports = async function handler(req, res) {
       return res
         .status(200)
         .json(movie);
+
     }
 
 
@@ -141,6 +157,7 @@ module.exports = async function handler(req, res) {
         error:
           "映画名を入力してください。"
       });
+
     }
 
 
@@ -158,6 +175,12 @@ module.exports = async function handler(req, res) {
       "&page=1" +
       "&query=" +
       encodeURIComponent(query);
+
+
+    console.log(
+      "TMDB SEARCH:",
+      query
+    );
 
 
     const data =
@@ -184,7 +207,10 @@ module.exports = async function handler(req, res) {
         return (
           movie &&
           movie.id &&
-          movie.title
+          (
+            movie.title ||
+            movie.original_title
+          )
         );
 
       });
@@ -202,36 +228,71 @@ module.exports = async function handler(req, res) {
 
       const aTitle =
         normalizeTitle(
-          a.title || ""
+          a.title ||
+          a.original_title ||
+          ""
         );
 
 
       const bTitle =
         normalizeTitle(
-          b.title || ""
+          b.title ||
+          b.original_title ||
+          ""
+        );
+
+
+      const aOriginalTitle =
+        normalizeTitle(
+          a.original_title ||
+          ""
+        );
+
+
+      const bOriginalTitle =
+        normalizeTitle(
+          b.original_title ||
+          ""
         );
 
 
       const aExact =
-        aTitle === normalizedQuery
+        (
+          aTitle === normalizedQuery ||
+          aOriginalTitle === normalizedQuery
+        )
           ? 0
           : 1;
 
 
       const bExact =
-        bTitle === normalizedQuery
+        (
+          bTitle === normalizedQuery ||
+          bOriginalTitle === normalizedQuery
+        )
           ? 0
           : 1;
 
 
-      if (aExact !== bExact) {
-        return aExact - bExact;
+      if (
+        aExact !== bExact
+      ) {
+
+        return (
+          aExact -
+          bExact
+        );
+
       }
 
 
       return (
-        Number(b.vote_average || 0) -
-        Number(a.vote_average || 0)
+        Number(
+          b.vote_average || 0
+        ) -
+        Number(
+          a.vote_average || 0
+        )
       );
 
     });
@@ -242,7 +303,10 @@ module.exports = async function handler(req, res) {
     // =====================================================
 
     movies =
-      movies.slice(0, 10);
+      movies.slice(
+        0,
+        10
+      );
 
 
     // =====================================================
@@ -257,26 +321,26 @@ module.exports = async function handler(req, res) {
           id:
             movie.id,
 
-
           title:
-            movie.title || "",
-
+            movie.title ||
+            movie.original_title ||
+            "",
 
           original_title:
-            movie.original_title || "",
-
+            movie.original_title ||
+            "",
 
           release_date:
-            movie.release_date || "",
-
+            movie.release_date ||
+            "",
 
           poster_path:
-            movie.poster_path || null,
-
+            movie.poster_path ||
+            null,
 
           overview:
-            movie.overview || "",
-
+            movie.overview ||
+            "",
 
           vote_average:
             Number(
@@ -293,7 +357,10 @@ module.exports = async function handler(req, res) {
     // =====================================================
 
     return res.status(200).json({
-      results: results
+
+      results:
+        results
+
     });
 
 
@@ -306,11 +373,13 @@ module.exports = async function handler(req, res) {
 
 
     return res.status(500).json({
+
       error:
         error &&
         error.message
           ? error.message
           : "サーバーでエラーが発生しました。"
+
     });
 
   }
@@ -410,6 +479,12 @@ async function getMovieDetail(
     );
 
 
+  const free =
+    normalizeProviders(
+      providersJP.free
+    );
+
+
   // =======================================================
   // タイトル
   // =======================================================
@@ -429,6 +504,7 @@ async function getMovieDetail(
       streaming,
       rental,
       purchase,
+      free,
       [
         "netflix"
       ]
@@ -444,6 +520,7 @@ async function getMovieDetail(
       streaming,
       rental,
       purchase,
+      free,
       [
         "amazon",
         "prime video"
@@ -460,6 +537,7 @@ async function getMovieDetail(
       streaming,
       rental,
       purchase,
+      free,
       [
         "u-next",
         "unext"
@@ -476,6 +554,7 @@ async function getMovieDetail(
       streaming,
       rental,
       purchase,
+      free,
       [
         "hulu"
       ]
@@ -491,6 +570,7 @@ async function getMovieDetail(
       streaming,
       rental,
       purchase,
+      free,
       [
         "disney"
       ]
@@ -506,6 +586,7 @@ async function getMovieDetail(
       streaming,
       rental,
       purchase,
+      free,
       [
         "apple"
       ]
@@ -521,6 +602,7 @@ async function getMovieDetail(
       streaming,
       rental,
       purchase,
+      free,
       [
         "fod"
       ]
@@ -536,6 +618,7 @@ async function getMovieDetail(
       streaming,
       rental,
       purchase,
+      free,
       [
         "google play",
         "google play movies",
@@ -546,6 +629,8 @@ async function getMovieDetail(
 
   // =======================================================
   // Netflix URL
+  //
+  // ※ Netflix作品IDは使用しない
   // =======================================================
 
   const netflixUrl =
@@ -671,20 +756,6 @@ async function getMovieDetail(
 
 
   // =======================================================
-  // おすすめ作品
-  //
-  // TMDBの /movie/{id}/recommendations を使用
-  // 日本語で取得
-  // =======================================================
-
-  const recommendations =
-    await getRecommendations(
-      movie.id,
-      apiKey
-    );
-
-
-  // =======================================================
   // TMDB配信ページ
   // =======================================================
 
@@ -706,36 +777,34 @@ async function getMovieDetail(
     id:
       movie.id,
 
-
     title:
-      movie.title || "",
-
+      movie.title ||
+      "",
 
     original_title:
-      movie.original_title || "",
-
+      movie.original_title ||
+      "",
 
     release_date:
-      movie.release_date || "",
-
+      movie.release_date ||
+      "",
 
     poster_path:
-      movie.poster_path || null,
-
+      movie.poster_path ||
+      null,
 
     overview:
-      movie.overview || "",
-
+      movie.overview ||
+      "",
 
     vote_average:
       Number(
         movie.vote_average || 0
       ),
 
-
     original_language:
-      movie.original_language || "",
-
+      movie.original_language ||
+      "",
 
     genres:
       Array.isArray(movie.genres)
@@ -766,13 +835,14 @@ async function getMovieDetail(
     streaming:
       streaming,
 
-
     rental:
       rental,
 
-
     purchase:
       purchase,
+
+    free:
+      free,
 
 
     // ===================================================
@@ -790,7 +860,6 @@ async function getMovieDetail(
           }
         : null,
 
-
     netflix_url:
       netflixUrl,
 
@@ -806,7 +875,6 @@ async function getMovieDetail(
               amazonUrl
           }
         : null,
-
 
     amazon_url:
       amazonUrl,
@@ -856,7 +924,6 @@ async function getMovieDetail(
           }
         : null,
 
-
     fod_url:
       fodUrl,
 
@@ -873,7 +940,6 @@ async function getMovieDetail(
           }
         : null,
 
-
     google_play_url:
       googlePlayUrl,
 
@@ -884,14 +950,6 @@ async function getMovieDetail(
 
     series:
       series,
-
-
-    // ===================================================
-    // おすすめ作品
-    // ===================================================
-
-    recommendations:
-      recommendations,
 
 
     // ===================================================
@@ -908,6 +966,8 @@ async function getMovieDetail(
 
 // =========================================================
 // Netflix URL
+//
+// ※ 作品IDは使用しない
 // =========================================================
 
 function createNetflixUrl() {
@@ -1140,129 +1200,6 @@ function createGooglePlayUrl(
 
 
 // =========================================================
-// おすすめ作品
-// =========================================================
-
-async function getRecommendations(
-  movieId,
-  apiKey
-) {
-
-  try {
-
-    const url =
-      "https://api.themoviedb.org/3/movie/" +
-      encodeURIComponent(movieId) +
-      "/recommendations" +
-      "?api_key=" +
-      encodeURIComponent(apiKey) +
-      "&language=ja-JP" +
-      "&page=1";
-
-
-    const data =
-      await fetchJson(url);
-
-
-    let movies =
-      Array.isArray(data.results)
-        ? data.results
-        : [];
-
-
-    // =====================================================
-    // 不正データ除外
-    // =====================================================
-
-    movies =
-      movies.filter(function(movie) {
-
-        return (
-          movie &&
-          movie.id &&
-          movie.title &&
-          movie.poster_path
-        );
-
-      });
-
-
-    // =====================================================
-    // 評価順
-    // =====================================================
-
-    movies.sort(function(a, b) {
-
-      return (
-        Number(b.vote_average || 0) -
-        Number(a.vote_average || 0)
-      );
-
-    });
-
-
-    // =====================================================
-    // 最大10作品
-    // =====================================================
-
-    movies =
-      movies.slice(0, 10);
-
-
-    // =====================================================
-    // 必要な情報だけ返す
-    // =====================================================
-
-    return movies.map(function(movie) {
-
-      return {
-
-        id:
-          movie.id,
-
-
-        title:
-          movie.title || "",
-
-
-        release_date:
-          movie.release_date || "",
-
-
-        poster_path:
-          movie.poster_path || null,
-
-
-        vote_average:
-          Number(
-            movie.vote_average || 0
-          )
-
-      };
-
-    });
-
-  } catch (error) {
-
-    console.error(
-      "RECOMMENDATIONS ERROR:",
-      error
-    );
-
-
-    // =====================================================
-    // おすすめ取得に失敗しても
-    // 作品詳細ページ自体は正常に表示する
-    // =====================================================
-
-    return [];
-
-  }
-
-}
-
-
-// =========================================================
 // 配信サービス正規化
 // =========================================================
 
@@ -1296,16 +1233,13 @@ function normalizeProviders(
           provider.provider_id ||
           null,
 
-
         provider_name:
           provider.provider_name ||
           "",
 
-
         logo_path:
           provider.logo_path ||
           null,
-
 
         provider_url:
           provider.provider_url ||
@@ -1326,6 +1260,7 @@ function findProvider(
   streaming,
   rental,
   purchase,
+  free,
   keywords
 ) {
 
@@ -1333,7 +1268,8 @@ function findProvider(
     []
       .concat(streaming || [])
       .concat(rental || [])
-      .concat(purchase || []);
+      .concat(purchase || [])
+      .concat(free || []);
 
 
   for (
@@ -1360,7 +1296,9 @@ function findProvider(
 
       if (
         name.includes(
-          keywords[j].toLowerCase()
+          String(
+            keywords[j]
+          ).toLowerCase()
         )
       ) {
 
@@ -1411,7 +1349,6 @@ function getDirector(movie) {
           crew[i].id ||
           null,
 
-
         name:
           crew[i].name ||
           ""
@@ -1445,7 +1382,10 @@ function getCast(movie) {
 
 
   return cast
-    .slice(0, 8)
+    .slice(
+      0,
+      8
+    )
     .map(function(person) {
 
       return {
@@ -1453,7 +1393,6 @@ function getCast(movie) {
         id:
           person.id ||
           null,
-
 
         name:
           person.name ||
@@ -1526,7 +1465,6 @@ async function getCollection(
         data.name ||
         "",
 
-
       movies:
         movies.map(function(movie) {
 
@@ -1535,16 +1473,13 @@ async function getCollection(
             id:
               movie.id,
 
-
             title:
               movie.title ||
               "",
 
-
             release_date:
               movie.release_date ||
               "",
-
 
             poster_path:
               movie.poster_path ||
@@ -1582,13 +1517,13 @@ async function fetchJson(url) {
     await fetch(
       url,
       {
-        method: "GET",
+        method:
+          "GET",
 
         headers: {
           "Accept":
             "application/json"
         }
-
       }
     );
 
@@ -1615,7 +1550,10 @@ async function fetchJson(url) {
 
     console.error(
       "TMDB RESPONSE:",
-      text.substring(0, 1000)
+      text.substring(
+        0,
+        1000
+      )
     );
 
 
@@ -1675,3 +1613,4 @@ function normalizeTitle(title) {
     );
 
 }
+```
