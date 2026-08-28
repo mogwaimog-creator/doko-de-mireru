@@ -23,13 +23,8 @@
 // ・シリーズ
 //
 // 無料視聴について
-// TMDBの free + ads を取得し、
-// 重複を除いて無料視聴として返す。
-//
-// Netflix作品IDの取得は行わず、
-// NetflixボタンはNetflix日本公式サイトへ移動。
-//
-// TMDB APIを利用
+// TMDBの free + ads を取得。
+// 同じサービスは重複表示しない。
 // =========================================================
 
 
@@ -100,8 +95,6 @@ module.exports = async function handler(req, res) {
 
     // =====================================================
     // 作品詳細
-    //
-    // /api/search?id=519182
     // =====================================================
 
     if (id) {
@@ -250,7 +243,7 @@ module.exports = async function handler(req, res) {
 
 
     // =====================================================
-    // 結果
+    // 検索結果
     // =====================================================
 
     const results =
@@ -287,8 +280,10 @@ module.exports = async function handler(req, res) {
 
 
     return res.status(200).json({
+
       results:
         results
+
     });
 
 
@@ -390,7 +385,7 @@ async function getMovieDetail(
 
 
   // =======================================================
-  // 配信情報
+  // 見放題
   // =======================================================
 
   const streaming =
@@ -399,11 +394,19 @@ async function getMovieDetail(
     );
 
 
+  // =======================================================
+  // レンタル
+  // =======================================================
+
   const rental =
     normalizeProviders(
       providersJP.rent
     );
 
+
+  // =======================================================
+  // 購入
+  // =======================================================
 
   const purchase =
     normalizeProviders(
@@ -416,13 +419,10 @@ async function getMovieDetail(
   //
   // TMDBの
   //
-  // free
-  // +
-  // ads
+  // free = 無料
+  // ads  = 広告付き無料
   //
-  // をまとめて取得。
-  //
-  // ads = 広告付き無料
+  // の両方を取得。
   // =======================================================
 
   const freeProviders =
@@ -443,38 +443,18 @@ async function getMovieDetail(
       );
 
 
+  // =======================================================
+  // 無料サービス正規化
+  // =======================================================
+
   const free =
     normalizeProviders(
       freeProviders
     );
 
-// =======================================================
-// 無料視聴
-//
-// TMDBでは無料視聴が
-// free と ads に分かれているため、
-// 両方をまとめて取得する
-// =======================================================
 
-const freeProviders =
-  []
-    .concat(
-      Array.isArray(providersJP.free)
-        ? providersJP.free
-        : []
-    )
-    .concat(
-      Array.isArray(providersJP.ads)
-        ? providersJP.ads
-        : []
-    );
-
-const free =
-  normalizeProviders(
-    freeProviders
-  );
   // =======================================================
-  // 無料視聴サービスの重複除去
+  // 無料サービス重複除去
   // =======================================================
 
   const freeUnique =
@@ -573,11 +553,6 @@ const free =
 
   // =======================================================
   // Netflix
-  //
-  // Netflix作品IDは取得しない。
-  //
-  // TMDBでNetflix配信が確認できた場合だけ
-  // Netflixボタンを表示する。
   // =======================================================
 
   const netflixUrl =
@@ -710,28 +685,36 @@ const free =
     id:
       movie.id,
 
+
     title:
       movie.title || "",
+
 
     original_title:
       movie.original_title || "",
 
+
     release_date:
       movie.release_date || "",
+
 
     poster_path:
       movie.poster_path || null,
 
+
     overview:
       movie.overview || "",
+
 
     vote_average:
       Number(
         movie.vote_average || 0
       ),
 
+
     original_language:
       movie.original_language || "",
+
 
     genres:
       Array.isArray(movie.genres)
@@ -762,13 +745,19 @@ const free =
     streaming:
       streaming,
 
+
     rental:
       rental,
+
 
     purchase:
       purchase,
 
-    // 無料 + 広告付き無料
+
+    // =====================================================
+    // 無料視聴
+    // =====================================================
+
     free:
       freeUnique,
 
@@ -791,11 +780,14 @@ const free =
           }
         : null,
 
+
     netflix_url:
       netflixUrl,
 
+
     netflix_title_id:
       null,
+
 
     netflix_id:
       null,
@@ -812,6 +804,7 @@ const free =
               amazonUrl
           }
         : null,
+
 
     amazon_url:
       amazonUrl,
@@ -1046,6 +1039,7 @@ function uniqueProviders(
 
 
   const result = [];
+
   const seen = {};
 
 
@@ -1320,6 +1314,7 @@ async function getCollection(
       name:
         data.name || "",
 
+
       movies:
         movies.map(function(movie) {
 
@@ -1343,6 +1338,7 @@ async function getCollection(
         })
 
     };
+
 
   } catch (error) {
 
