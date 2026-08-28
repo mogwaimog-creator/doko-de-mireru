@@ -11,12 +11,92 @@
   content="width=device-width, initial-scale=1.0"
 >
 
+<!-- =========================================================
+     基本SEO
+========================================================= -->
+
 <title>作品情報 | ドコデミレル？</title>
 
 <meta
   name="description"
   content="映画がNetflix、Amazon Prime Video、U-NEXT、Hulu、Disney+など、どこで見られるか確認できる作品情報ページです。"
 >
+
+<meta
+  name="robots"
+  content="index, follow"
+>
+
+<link
+  id="canonical"
+  rel="canonical"
+  href="https://doko-de-mireru.vercel.app/"
+>
+
+
+<!-- =========================================================
+     OGP
+========================================================= -->
+
+<meta
+  property="og:type"
+  content="website"
+>
+
+<meta
+  id="ogTitle"
+  property="og:title"
+  content="作品情報 | ドコデミレル？"
+>
+
+<meta
+  id="ogDescription"
+  property="og:description"
+  content="映画がどこで見られるか確認できます。"
+>
+
+<meta
+  id="ogUrl"
+  property="og:url"
+  content="https://doko-de-mireru.vercel.app/"
+>
+
+<meta
+  property="og:site_name"
+  content="ドコデミレル？"
+>
+
+<meta
+  property="og:locale"
+  content="ja_JP"
+>
+
+
+<!-- =========================================================
+     Twitter / X
+========================================================= -->
+
+<meta
+  name="twitter:card"
+  content="summary"
+>
+
+<meta
+  id="twitterTitle"
+  name="twitter:title"
+  content="作品情報 | ドコデミレル？"
+>
+
+<meta
+  id="twitterDescription"
+  name="twitter:description"
+  content="映画がどこで見られるか確認できます。"
+>
+
+
+<!-- =========================================================
+     スタイル
+========================================================= -->
 
 <style>
 
@@ -44,6 +124,7 @@ a{
   text-decoration:none;
 }
 
+
 /* =========================================================
    ヘッダー
 ========================================================= */
@@ -66,6 +147,7 @@ header p{
   font-size:15px;
 }
 
+
 /* =========================================================
    コンテナ
 ========================================================= */
@@ -75,6 +157,7 @@ header p{
   margin:0 auto;
   padding:18px;
 }
+
 
 /* =========================================================
    戻るボタン
@@ -95,6 +178,7 @@ header p{
 .back:hover{
   background:#f3f4f6;
 }
+
 
 /* =========================================================
    作品ヘッダー
@@ -216,6 +300,7 @@ header p{
   overflow:hidden;
 }
 
+
 /* =========================================================
    共通セクション
 ========================================================= */
@@ -232,6 +317,7 @@ header p{
   margin:0 0 15px;
   font-size:22px;
 }
+
 
 /* =========================================================
    配信サービス
@@ -355,6 +441,7 @@ header p{
   transform:translateY(-1px);
 }
 
+
 /* =========================================================
    サービスカラー
 ========================================================= */
@@ -397,8 +484,9 @@ header p{
   background:#9333ea;
 }
 
+
 /* =========================================================
-   配信種別の見出し
+   配信種別
 ========================================================= */
 
 .provider-type-heading{
@@ -417,6 +505,7 @@ header p{
 .provider-type-block:last-child{
   margin-bottom:0;
 }
+
 
 /* =========================================================
    シリーズ作品
@@ -506,6 +595,7 @@ header p{
   margin-top:3px;
 }
 
+
 /* =========================================================
    おすすめ
 ========================================================= */
@@ -527,6 +617,7 @@ header p{
 
   line-height:1.6;
 }
+
 
 /* =========================================================
    TMDB
@@ -552,6 +643,7 @@ header p{
   opacity:.85;
 }
 
+
 /* =========================================================
    ローディング
 ========================================================= */
@@ -575,6 +667,7 @@ header p{
 
   border-radius:12px;
 }
+
 
 /* =========================================================
    スマートフォン
@@ -731,6 +824,7 @@ header p{
 
 }
 
+
 /* =========================================================
    小さいスマホ
 ========================================================= */
@@ -812,6 +906,7 @@ header p{
 
 </head>
 
+
 <body>
 
 <header>
@@ -824,6 +919,7 @@ header p{
 
 </header>
 
+
 <div class="container">
 
 <a
@@ -833,12 +929,14 @@ header p{
 ← 検索結果に戻る
 </a>
 
+
 <div
   id="loading"
   class="loading"
 >
 作品情報を読み込んでいます…
 </div>
+
 
 <div
   id="error"
@@ -847,6 +945,7 @@ header p{
 >
 作品情報を取得できませんでした。
 </div>
+
 
 <div
   id="content"
@@ -1037,6 +1136,7 @@ TMDBで作品情報を見る →
 
 </div>
 
+
 <footer
   style="
     text-align:center;
@@ -1054,52 +1154,6 @@ TMDBで作品情報を見る →
 (function(){
 
 "use strict";
-
-/* =========================================================
-   Google検索向けSEO
-========================================================= */
-
-function updateSeo(movie){
-
-  if(!movie){
-    return;
-  }
-
-  const title =
-    movie.title ||
-    "作品情報";
-
-  document.title =
-    title +
-    "｜どこで見られる？ | ドコデミレル？";
-
-  const description =
-    title +
-    "がNetflix、Amazon Prime Video、U-NEXT、Hulu、Disney+など、どこで見られるか確認できます。公開日、評価、出演者、あらすじなどの作品情報も掲載しています。";
-
-  let meta =
-    document.querySelector(
-      'meta[name="description"]'
-    );
-
-  if(!meta){
-
-    meta =
-      document.createElement("meta");
-
-    meta.name =
-      "description";
-
-    document.head.appendChild(
-      meta
-    );
-
-  }
-
-  meta.content =
-    description;
-
-}
 
 
 /* =========================================================
@@ -1135,6 +1189,7 @@ const params =
     window.location.search
   );
 
+
 const movieId =
   params.get("id");
 
@@ -1167,6 +1222,7 @@ async function loadMovie(){
       encodeURIComponent(
         movieId
       );
+
 
     const response =
       await fetch(
@@ -1238,9 +1294,19 @@ async function loadMovie(){
     }
 
 
-    renderMovie(movie);
+    renderMovie(
+      movie
+    );
 
-    updateSeo(movie);
+
+    updateSeo(
+      movie
+    );
+
+
+    updateStructuredData(
+      movie
+    );
 
 
   }catch(error){
@@ -1255,6 +1321,419 @@ async function loadMovie(){
     );
 
   }
+
+}
+
+
+/* =========================================================
+   SEO
+========================================================= */
+
+function updateSeo(movie){
+
+  if(!movie){
+
+    return;
+
+  }
+
+
+  const title =
+    movie.title ||
+    "作品情報";
+
+
+  /*
+     Google検索結果用タイトル
+  */
+
+  document.title =
+    title +
+    "｜配信サービス・作品情報 | ドコデミレル？";
+
+
+  /*
+     description
+  */
+
+  let description =
+    title +
+    "がNetflix、Amazon Prime Video、U-NEXT、Hulu、Disney+など、どこで見られるか確認できます。";
+
+
+  if(movie.release_date){
+
+    description +=
+      "公開日は" +
+      formatDate(
+        movie.release_date
+      ) +
+      "。";
+
+  }
+
+
+  if(movie.overview){
+
+    const overview =
+      String(
+        movie.overview
+      ).replace(
+        /\s+/g,
+        " "
+      );
+
+
+    description +=
+      overview.substring(
+        0,
+        90
+      );
+
+  }
+
+
+  setMeta(
+    "description",
+    description
+  );
+
+
+  /*
+     canonical
+  */
+
+  const canonicalUrl =
+    "https://doko-de-mireru.vercel.app/detail.html?id=" +
+    encodeURIComponent(
+      movie.id
+    );
+
+
+  const canonical =
+    document.getElementById(
+      "canonical"
+    );
+
+
+  if(canonical){
+
+    canonical.href =
+      canonicalUrl;
+
+  }
+
+
+  /*
+     OGP
+  */
+
+  setMetaProperty(
+    "ogTitle",
+    "content",
+    title +
+    "｜ドコデミレル？"
+  );
+
+
+  setMetaProperty(
+    "ogDescription",
+    "content",
+    description
+  );
+
+
+  setMetaProperty(
+    "ogUrl",
+    "content",
+    canonicalUrl
+  );
+
+
+  /*
+     Twitter / X
+  */
+
+  setMetaProperty(
+    "twitterTitle",
+    "content",
+    title +
+    "｜ドコデミレル？"
+  );
+
+
+  setMetaProperty(
+    "twitterDescription",
+    "content",
+    description
+  );
+
+}
+
+
+/* =========================================================
+   meta更新
+========================================================= */
+
+function setMeta(
+  name,
+  contentValue
+){
+
+  let meta =
+    document.querySelector(
+      'meta[name="' +
+      name +
+      '"]'
+    );
+
+
+  if(!meta){
+
+    meta =
+      document.createElement(
+        "meta"
+      );
+
+    meta.name =
+      name;
+
+    document.head.appendChild(
+      meta
+    );
+
+  }
+
+
+  meta.content =
+    contentValue;
+
+}
+
+
+function setMetaProperty(
+  id,
+  attribute,
+  value
+){
+
+  const element =
+    document.getElementById(
+      id
+    );
+
+
+  if(!element){
+
+    return;
+
+  }
+
+
+  element.setAttribute(
+    attribute,
+    value
+  );
+
+}
+
+
+/* =========================================================
+   構造化データ
+========================================================= */
+
+function updateStructuredData(movie){
+
+  const old =
+    document.getElementById(
+      "movieStructuredData"
+    );
+
+
+  if(old){
+
+    old.remove();
+
+  }
+
+
+  const script =
+    document.createElement(
+      "script"
+    );
+
+
+  script.type =
+    "application/ld+json";
+
+
+  script.id =
+    "movieStructuredData";
+
+
+  const data = {
+
+    "@context":
+      "https://schema.org",
+
+    "@type":
+      "Movie",
+
+    name:
+      movie.title ||
+      "",
+
+    alternateName:
+      movie.original_title ||
+      "",
+
+    url:
+      "https://doko-de-mireru.vercel.app/detail.html?id=" +
+      encodeURIComponent(
+        movie.id
+      )
+
+  };
+
+
+  /*
+     公開日
+  */
+
+  if(movie.release_date){
+
+    data.dateCreated =
+      movie.release_date;
+
+  }
+
+
+  /*
+     ポスター
+  */
+
+  if(movie.poster_path){
+
+    data.image =
+      "https://image.tmdb.org/t/p/w500" +
+      movie.poster_path;
+
+  }
+
+
+  /*
+     あらすじ
+  */
+
+  if(movie.overview){
+
+    data.description =
+      movie.overview;
+
+  }
+
+
+  /*
+     評価
+  */
+
+  const rating =
+    Number(
+      movie.vote_average || 0
+    );
+
+
+  if(rating > 0){
+
+    data.aggregateRating = {
+
+      "@type":
+        "AggregateRating",
+
+      ratingValue:
+        rating.toFixed(1),
+
+      bestRating:
+        "10",
+
+      worstRating:
+        "0"
+
+    };
+
+  }
+
+
+  /*
+     監督
+  */
+
+  if(
+    movie.director &&
+    movie.director.name
+  ){
+
+    data.director = {
+
+      "@type":
+        "Person",
+
+      name:
+        movie.director.name
+
+    };
+
+  }
+
+
+  /*
+     出演者
+  */
+
+  if(
+    Array.isArray(
+      movie.cast
+    ) &&
+    movie.cast.length
+  ){
+
+    data.actor =
+      movie.cast
+        .filter(function(person){
+
+          return (
+            person &&
+            person.name
+          );
+
+        })
+        .slice(0,10)
+        .map(function(person){
+
+          return {
+
+            "@type":
+              "Person",
+
+            name:
+              person.name
+
+          };
+
+        });
+
+  }
+
+
+  script.textContent =
+    JSON.stringify(
+      data
+    );
+
+
+  document.head.appendChild(
+    script
+  );
 
 }
 
@@ -1331,7 +1810,11 @@ function renderMovie(movie){
       movie.poster_path;
 
     poster.alt =
-      movie.title || "";
+      (
+        movie.title ||
+        "映画"
+      ) +
+      "のポスター";
 
     poster.style.display =
       "block";
@@ -1376,13 +1859,13 @@ function renderMovie(movie){
   );
 
 
-  /* =====================================================
+  /*
      表示順
-     
+
      ① 配信サービス
      ② シリーズ
      ③ おすすめ
-  ===================================================== */
+  */
 
   renderProviders(
     movie
@@ -1412,14 +1895,6 @@ function renderMovie(movie){
       movie.id
     );
 
-
-  document.title =
-    (
-      movie.title ||
-      "作品情報"
-    ) +
-    " | ドコデミレル？";
-
 }
 
 
@@ -1433,6 +1908,7 @@ function renderGenres(genres){
     document.getElementById(
       "genres"
     );
+
 
   container.innerHTML =
     "";
@@ -1465,11 +1941,14 @@ function renderGenres(genres){
         "span"
       );
 
+
     item.className =
       "genre-item";
 
+
     item.textContent =
       genre.name;
+
 
     container.appendChild(
       item
@@ -1490,6 +1969,7 @@ function renderCast(cast){
     document.getElementById(
       "cast"
     );
+
 
   container.innerHTML =
     "";
@@ -1525,11 +2005,14 @@ function renderCast(cast){
         "div"
       );
 
+
     item.className =
       "cast-item";
 
+
     item.textContent =
       person.name;
+
 
     container.appendChild(
       item
@@ -1550,6 +2033,7 @@ function renderProviders(movie){
     document.getElementById(
       "providers"
     );
+
 
   container.innerHTML =
     "";
@@ -1654,11 +2138,14 @@ function renderProviders(movie){
         "p"
       );
 
+
     empty.textContent =
       "現在、配信情報を確認できません。";
 
+
     empty.style.color =
       "#777";
+
 
     container.appendChild(
       empty
@@ -1686,6 +2173,7 @@ function renderProviderType(
       "div"
     );
 
+
   block.className =
     "provider-type-block";
 
@@ -1695,8 +2183,10 @@ function renderProviderType(
       "div"
     );
 
+
   heading.className =
     "provider-type-heading";
+
 
   heading.textContent =
     title;
@@ -1711,6 +2201,7 @@ function renderProviderType(
     document.createElement(
       "div"
     );
+
 
   grid.className =
     "providers-grid";
@@ -1962,6 +2453,7 @@ function createProviderCard(
       "div"
     );
 
+
   card.className =
     "provider-card";
 
@@ -1973,16 +2465,20 @@ function createProviderCard(
         "img"
       );
 
+
     logo.className =
       "provider-logo";
+
 
     logo.src =
       "https://image.tmdb.org/t/p/w92" +
       provider.logo_path;
 
+
     logo.alt =
       provider.provider_name ||
       "";
+
 
     logo.loading =
       "lazy";
@@ -2000,8 +2496,10 @@ function createProviderCard(
       "div"
     );
 
+
   name.className =
     "provider-name";
+
 
   name.textContent =
     provider.provider_name ||
@@ -2017,6 +2515,7 @@ function createProviderCard(
     document.createElement(
       "div"
     );
+
 
   typeText.className =
     "provider-type";
@@ -2064,11 +2563,14 @@ function createProviderCard(
         "div"
       );
 
+
     priceElement.className =
       "provider-price";
 
+
     priceElement.textContent =
       price;
+
 
     card.appendChild(
       priceElement
@@ -2092,6 +2594,7 @@ function createProviderCard(
         "a"
       );
 
+
     button.className =
       "provider-button " +
       getButtonClass(
@@ -2099,19 +2602,22 @@ function createProviderCard(
         type
       );
 
+
     button.href =
       url;
 
+
     button.target =
       "_blank";
+
 
     button.rel =
       "noopener noreferrer";
 
 
     /*
-       「見る」を使わず、
-       サービス名だけに統一
+       「見る」は使わず
+       サービス名で統一
     */
 
     button.textContent =
@@ -2626,6 +3132,7 @@ function renderSeries(series){
         "div"
       );
 
+
     item.className =
       "series-item";
 
@@ -2636,6 +3143,7 @@ function renderSeries(series){
         document.createElement(
           "a"
         );
+
 
       imageLink.className =
         "series-poster-link";
@@ -2663,6 +3171,7 @@ function renderSeries(series){
           "img"
         );
 
+
       image.className =
         "series-poster";
 
@@ -2673,7 +3182,11 @@ function renderSeries(series){
 
 
       image.alt =
-        movie.title || "";
+        (
+          movie.title ||
+          "シリーズ作品"
+        ) +
+        "のポスター";
 
 
       image.loading =
@@ -2696,6 +3209,7 @@ function renderSeries(series){
       document.createElement(
         "a"
       );
+
 
     link.className =
       "series-title";
@@ -2721,6 +3235,7 @@ function renderSeries(series){
       document.createElement(
         "div"
       );
+
 
     year.className =
       "series-year";
@@ -2860,6 +3375,7 @@ function renderRecommendations(
           "div"
         );
 
+
       item.className =
         "recommendation-item";
 
@@ -2870,6 +3386,7 @@ function renderRecommendations(
           document.createElement(
             "a"
           );
+
 
         imageLink.className =
           "recommendation-poster-link";
@@ -2894,6 +3411,7 @@ function renderRecommendations(
             "img"
           );
 
+
         image.className =
           "recommendation-poster";
 
@@ -2904,7 +3422,11 @@ function renderRecommendations(
 
 
         image.alt =
-          movie.title || "";
+          (
+            movie.title ||
+            "おすすめ作品"
+          ) +
+          "のポスター";
 
 
         image.loading =
@@ -2927,6 +3449,7 @@ function renderRecommendations(
         document.createElement(
           "a"
         );
+
 
       link.className =
         "recommendation-title";
@@ -2952,6 +3475,7 @@ function renderRecommendations(
         document.createElement(
           "div"
         );
+
 
       year.className =
         "recommendation-year";
