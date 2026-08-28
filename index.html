@@ -1,5 +1,5 @@
+```html
 <!DOCTYPE html>
-
 <html lang="ja">
 
 <head>
@@ -7,31 +7,35 @@
 <meta charset="UTF-8">
 
 <meta
-name="viewport"
-content="width=device-width, initial-scale=1.0"
-
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
 >
 
-<!-- =====================================================
+<!-- =========================================================
      Google Search Console 所有権確認
-===================================================== -->
+========================================================= -->
 
 <meta
-name="google-site-verification"
-content="xl0TnMDwmY9xpeFPp8_RgJiPBxT0k04iH3LVbyL65V4"
-
+  name="google-site-verification"
+  content="xl0TnMDwmY9xpeFPp8_RgJiPBxT0k04iH3LVbyL65V4"
 >
 
-<!-- =====================================================
+<!-- =========================================================
      SEO
-===================================================== -->
+========================================================= -->
 
-<title>ドコデミレル？｜映画がどこで見られるか検索</title>
+<title>
+ドコデミレル？｜映画がどこで見られるか検索
+</title>
 
 <meta
-name="description"
-content="ドコデミレル？は、映画がNetflix、Amazon Prime Video、U-NEXT、Hulu、Disney+など、どの動画配信サービスで見られるか検索できるサイトです。作品情報や配信サービスを簡単に確認できます。"
+  name="description"
+  content="ドコデミレル？は、映画がNetflix、Amazon Prime Video、U-NEXT、Hulu、Disney+など、どの動画配信サービスで見られるか検索できるサイトです。"
+>
 
+<meta
+  name="robots"
+  content="index, follow"
 >
 
 <link
@@ -39,66 +43,79 @@ content="ドコデミレル？は、映画がNetflix、Amazon Prime Video、U-NE
   href="https://doko-de-mireru.vercel.app/"
 >
 
-<meta
-name="robots"
-content="index, follow"
-
->
-
-<!-- =====================================================
+<!-- =========================================================
      OGP
-===================================================== -->
+========================================================= -->
 
 <meta
-property="og:type"
-content="website"
-
+  property="og:type"
+  content="website"
 >
 
 <meta
-property="og:title"
-content="ドコデミレル？｜映画がどこで見られるか検索"
-
+  property="og:title"
+  content="ドコデミレル？｜映画がどこで見られるか検索"
 >
 
 <meta
-property="og:description"
-content="Netflix、Amazon Prime Video、U-NEXT、Hulu、Disney+など、映画がどこで見られるか検索できます。"
-
+  property="og:description"
+  content="映画がNetflix、Amazon Prime Video、U-NEXT、Hulu、Disney+など、どこで見られるか検索できます。"
 >
 
 <meta
-property="og:url"
-content="https://doko-de-mireru.vercel.app/"
-
+  property="og:url"
+  content="https://doko-de-mireru.vercel.app/"
 >
 
 <meta
-property="og:site_name"
-content="ドコデミレル？"
-
+  property="og:site_name"
+  content="ドコデミレル？"
 >
 
 <meta
-property="og:locale"
-content="ja_JP"
-
+  property="og:locale"
+  content="ja_JP"
 >
 
-<!-- =====================================================
+<!-- =========================================================
+     Twitter / X
+========================================================= -->
+
+<meta
+  name="twitter:card"
+  content="summary"
+>
+
+<meta
+  name="twitter:title"
+  content="ドコデミレル？｜映画がどこで見られるか検索"
+>
+
+<meta
+  name="twitter:description"
+  content="映画がどの動画配信サービスで見られるか検索できます。"
+>
+
+<!-- =========================================================
      構造化データ
-===================================================== -->
+========================================================= -->
 
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "WebSite",
   "name": "ドコデミレル？",
-  "alternateName": "どこで見られる？",
   "url": "https://doko-de-mireru.vercel.app/",
-  "description": "映画がNetflix、Amazon Prime Video、U-NEXT、Hulu、Disney+など、どこで見られるか検索できるサイトです。"
+  "description": "映画がNetflix、Amazon Prime Video、U-NEXT、Hulu、Disney+など、どこで見られるか検索できるサイトです。",
+  "inLanguage": "ja-JP",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://doko-de-mireru.vercel.app/?query={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
 }
 </script>
+
 
 <style>
 
@@ -392,47 +409,38 @@ footer{
     font-size:25px;
   }
 
-
   .search-row{
     flex-direction:column;
   }
-
 
   #query{
     width:100%;
   }
 
-
   #searchButton{
     width:100%;
   }
 
-
   .movie-card{
     align-items:flex-start;
   }
-
 
   .movie-poster{
     width:120px;
     height:180px;
   }
 
-
   .movie-title{
     font-size:19px;
   }
-
 
   .original-title{
     font-size:13px;
   }
 
-
   .meta{
     font-size:13px;
   }
-
 
   .detail-button{
     width:100%;
@@ -445,7 +453,9 @@ footer{
 
 </head>
 
+
 <body>
+
 
 <header>
 
@@ -457,42 +467,50 @@ footer{
 
 </header>
 
+
 <main class="container">
+
 
   <!-- =====================================================
        検索
   ====================================================== -->
 
-  <section class="search-box">
-
-```
-<div class="search-row">
-
-  <input
-    id="query"
-    type="text"
-    placeholder="映画名を入力してください"
-    autocomplete="off"
-    aria-label="映画名を入力"
+  <section
+    class="search-box"
+    aria-label="映画検索"
   >
 
-  <button
-    id="searchButton"
-    type="button"
-  >
-    🔍 検索
-  </button>
+    <div class="search-row">
 
-</div>
-```
+      <input
+        id="query"
+        type="search"
+        placeholder="映画名を入力してください"
+        autocomplete="off"
+        aria-label="映画名"
+      >
+
+      <button
+        id="searchButton"
+        type="button"
+      >
+        🔍 検索
+      </button>
+
+    </div>
 
   </section>
+
 
   <!-- =====================================================
        ステータス
   ====================================================== -->
 
-  <div id="status"></div>
+  <div
+    id="status"
+    aria-live="polite"
+  ></div>
+
 
   <!-- =====================================================
        検索結果
@@ -503,15 +521,21 @@ footer{
     class="results"
   ></div>
 
+
 </main>
+
 
 <footer>
 
-© ドコデミレル？
+  © ドコデミレル？
 
 </footer>
 
+
 <script>
+
+"use strict";
+
 
 /* =========================================================
    DOM
@@ -547,6 +571,11 @@ async function searchMovies(){
   const query =
     queryInput.value.trim();
 
+
+  /* -------------------------------------------------------
+     検索履歴
+  ------------------------------------------------------- */
+
   sessionStorage.setItem(
     "dokoDeMireruLastQuery",
     query
@@ -579,12 +608,10 @@ async function searchMovies(){
   searchButton.disabled =
     true;
 
-
   status.innerHTML =
     '<div class="status">' +
     '🔍 検索しています...' +
     '</div>';
-
 
   results.innerHTML =
     "";
@@ -689,10 +716,7 @@ async function searchMovies(){
 
     /* -----------------------------------------------------
        年代順
-
-       古い作品
-       ↓
-       新しい作品
+       古い作品 → 新しい作品
     ----------------------------------------------------- */
 
     movies.sort(
@@ -702,11 +726,9 @@ async function searchMovies(){
           a.release_date ||
           "9999-99-99";
 
-
         const dateB =
           b.release_date ||
           "9999-99-99";
-
 
         return dateA.localeCompare(
           dateB
@@ -741,7 +763,6 @@ async function searchMovies(){
       <div class="error">
 
         ❌
-
         ${escapeHtml(
           error.message ||
           "サーバーエラーが発生しました。"
@@ -834,10 +855,10 @@ function createMovieCard(movie){
         `
         <img
           class="movie-poster"
-          src="${poster}"
+          src="${escapeHtml(poster)}"
           alt="${escapeHtml(
             movie.title || ""
-          )}"
+          )}のポスター"
           loading="lazy"
         >
         `
@@ -853,6 +874,7 @@ function createMovieCard(movie){
             justify-content:center;
             color:#6b7280;
           "
+          aria-label="ポスター画像なし"
         >
           NO IMAGE
         </div>
@@ -1023,7 +1045,7 @@ function escapeHtml(value){
 
 
 /* =========================================================
-   Enter
+   Enter検索
 ========================================================= */
 
 queryInput.addEventListener(
@@ -1061,6 +1083,7 @@ const savedQuery =
     "dokoDeMireruLastQuery"
   );
 
+
 if(savedQuery){
 
   queryInput.value =
@@ -1072,6 +1095,8 @@ if(savedQuery){
 
 </script>
 
+
 </body>
 
 </html>
+```
