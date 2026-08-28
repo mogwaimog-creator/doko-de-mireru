@@ -2302,20 +2302,30 @@ function createProviderCard(
 
   if(type === "streaming"){
 
-    typeText.textContent =
-      "見放題";
+  typeText.textContent =
+    "見放題";
 
-  }else if(type === "rental"){
+}else if(type === "rental"){
 
-    typeText.textContent =
-      "レンタル";
+  typeText.textContent =
+    "レンタル";
 
-  }else{
+}else if(type === "purchase"){
 
-    typeText.textContent =
-      "購入";
+  typeText.textContent =
+    "購入";
 
-  }
+}else if(type === "free"){
+
+  typeText.textContent =
+    "無料視聴";
+
+}else{
+
+  typeText.textContent =
+    "配信";
+
+}
 
 
   info.appendChild(
@@ -2558,7 +2568,27 @@ function getProviderLink(
 
   }
 
+/* 無料視聴 */
 
+if(
+  name.includes("youtube") ||
+  name.includes("free")
+){
+
+  return (
+    provider.url ||
+    provider.link ||
+    provider.watch_link ||
+    provider.provider_url ||
+    (
+      "https://www.youtube.com/results?search_query=" +
+      encodeURIComponent(
+        movie.title || ""
+      )
+    )
+  );
+
+}
   return getGenericProviderUrl(
     provider
   );
@@ -2760,7 +2790,14 @@ function getButtonText(name){
 
   }
 
+if(
+  value.includes("youtube") ||
+  value.includes("free")
+){
 
+  return "無料で作品を見る →";
+
+}
   return "サービスで作品を見る →";
 
 }
