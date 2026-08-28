@@ -1,8 +1,8 @@
+```javascript
 // =========================================================
 // doko-de-mireru
 // api/search.js
 //
-// 安定版
 // ABEMA対応・無料視聴強化版
 //
 // ・映画検索
@@ -13,8 +13,8 @@
 // ・購入
 // ・無料視聴
 // ・広告付き無料
-// ・ABEMA
-// ・YouTube
+// ・ABEMA無料候補
+// ・YouTube無料候補
 // ・Netflix
 // ・Amazon Prime Video
 // ・U-NEXT
@@ -25,7 +25,7 @@
 // ・出演者
 // ・シリーズ
 //
-// TMDB APIを利用
+// TMDB API + Watch Providers
 // =========================================================
 
 
@@ -48,11 +48,6 @@ module.exports = async function handler(req, res) {
   res.setHeader(
     "Access-Control-Allow-Headers",
     "Content-Type"
-  );
-
-  res.setHeader(
-    "Content-Type",
-    "application/json; charset=utf-8"
   );
 
 
@@ -101,6 +96,7 @@ module.exports = async function handler(req, res) {
 
     // =====================================================
     // 作品詳細
+    // /api/search?id=123
     // =====================================================
 
     if (id) {
@@ -120,7 +116,7 @@ module.exports = async function handler(req, res) {
 
 
     // =====================================================
-    // 検索
+    // 検索文字チェック
     // =====================================================
 
     if (!query) {
@@ -132,6 +128,10 @@ module.exports = async function handler(req, res) {
 
     }
 
+
+    // =====================================================
+    // TMDB映画検索
+    // =====================================================
 
     const searchUrl =
       "https://api.themoviedb.org/3/search/movie" +
@@ -174,7 +174,7 @@ module.exports = async function handler(req, res) {
 
 
     // =====================================================
-    // 完全一致を優先
+    // 完全一致優先
     // =====================================================
 
     const normalizedQuery =
@@ -245,7 +245,7 @@ module.exports = async function handler(req, res) {
 
 
     // =====================================================
-    // 結果
+    // 検索結果
     // =====================================================
 
     const results =
@@ -385,7 +385,7 @@ async function getMovieDetail(
 
 
   // =======================================================
-  // 通常の配信
+  // 通常配信
   // =======================================================
 
   const streaming =
@@ -436,34 +436,36 @@ async function getMovieDetail(
 
 
   // =======================================================
-  // ABEMA
+  // ABEMA検出
   //
-  // TMDBの各配信カテゴリーからABEMAを探す
+  // ABEMAがfree / adsに入っている場合は
+  // 無料視聴として扱う。
   //
-  // ABEMAは無料作品もありますが、
-  // すべてのABEMA作品が無料とは限らないため、
-  // 「無料視聴候補」として扱います。
+  // さらにTMDB上でABEMAが別カテゴリーに
+  // 登録されている場合も検出する。
   // =======================================================
 
   const allProviders =
     []
-      .concat(streaming)
-      .concat(rental)
-      .concat(purchase)
       .concat(
-        normalizeProviders(
-          providersJP.free
-        )
+        providersJP.flatrate || []
       )
       .concat(
-        normalizeProviders(
-          providersJP.ads
-        )
+        providersJP.free || []
+      )
+      .concat(
+        providersJP.ads || []
+      )
+      .concat(
+        providersJP.rent || []
+      )
+      .concat(
+        providersJP.buy || []
       );
 
 
-  const abemaProviders =
-    findProvidersByKeywords(
+  const abemaProvider =
+    findProviderByKeywords(
       allProviders,
       [
         "abema",
@@ -473,22 +475,110 @@ async function getMovieDetail(
 
 
   // =======================================================
-  // 無料視聴リスト
-  //
-  // TMDB free / ads
-  // +
-  // ABEMA
+  // 無料候補
   // =======================================================
 
-  const freeProviders =
-    []
-      .concat(
-        tmdbFree
-      )
-      .concat(
-        abemaProviders
-      );
+  let freeProviders =
+    tmdbFree.slice();
 
+
+  // =======================================================
+  // ABEMAがTMDBのfree / adsにある場合
+  //
+  // → そのまま無料
+  // =======================================================
+
+  if (
+    abemaProvider &&
+    isProviderInList(
+      abemaProvider,
+      tmdbFree
+    )
+  ) {
+
+    freeProviders.push(
+      abemaProvider
+    );
+
+  }
+
+
+  // =======================================================
+  // ABEMAがflatrate等にしかない場合
+  //
+  // 注意：
+  // 「ABEMAにある」だけでは無料確定ではない。
+  //
+  // そのため、無料候補として表示する場合は
+  // free_candidate フラグを付ける。
+  //
+  // detail.htmlでは通常の free 配列として
+  // 表示できるようにする。
+  // =======================================================
+
+  if (
+    abemaProvider &&
+    !isProviderInList(
+      abemaProvider,
+      tmdbFree
+    )
+  ) {
+
+    freeProviders.push({
+
+      provider_id:
+        abemaProvider.provider_id || null,
+
+      provider_name:
+        "ABEMA",
+
+      logo_path:
+        abemaProvider.logo_path || null,
+
+      provider_url:
+        abemaProvider.provider_url || null,
+
+      free_candidate:
+        true
+
+    });
+
+  }
+
+
+  // =======================================================
+  // YouTube無料候補
+  //
+  // TMDBのfree / adsに入っている場合のみ無料扱い。
+  // =======================================================
+
+  const youtubeProvider =
+    findProviderByKeywords(
+      tmdbFree,
+      [
+        "youtube"
+      ]
+    );
+
+
+  if (
+    youtubeProvider &&
+    !isProviderInList(
+      youtubeProvider,
+      freeProviders
+    )
+  ) {
+
+    freeProviders.push(
+      youtubeProvider
+    );
+
+  }
+
+
+  // =======================================================
+  // 無料プロバイダー重複削除
+  // =======================================================
 
   const free =
     uniqueProviders(
@@ -507,12 +597,15 @@ async function getMovieDetail(
 
 
   // =======================================================
-  // 各サービス検索
+  // サービス検索
   // =======================================================
 
   const netflixProvider =
     findProvider(
-      allProviders,
+      streaming,
+      rental,
+      purchase,
+      free,
       [
         "netflix"
       ]
@@ -521,7 +614,10 @@ async function getMovieDetail(
 
   const amazonProvider =
     findProvider(
-      allProviders,
+      streaming,
+      rental,
+      purchase,
+      free,
       [
         "amazon",
         "prime video"
@@ -531,7 +627,10 @@ async function getMovieDetail(
 
   const unextProvider =
     findProvider(
-      allProviders,
+      streaming,
+      rental,
+      purchase,
+      free,
       [
         "u-next",
         "unext"
@@ -541,7 +640,10 @@ async function getMovieDetail(
 
   const huluProvider =
     findProvider(
-      allProviders,
+      streaming,
+      rental,
+      purchase,
+      free,
       [
         "hulu"
       ]
@@ -550,7 +652,10 @@ async function getMovieDetail(
 
   const disneyProvider =
     findProvider(
-      allProviders,
+      streaming,
+      rental,
+      purchase,
+      free,
       [
         "disney"
       ]
@@ -559,7 +664,10 @@ async function getMovieDetail(
 
   const appleProvider =
     findProvider(
-      allProviders,
+      streaming,
+      rental,
+      purchase,
+      free,
       [
         "apple"
       ]
@@ -638,6 +746,19 @@ async function getMovieDetail(
 
 
   // =======================================================
+  // ABEMA URL
+  // =======================================================
+
+  const abemaUrl =
+    abemaProvider
+      ? createAbemaUrl(
+          abemaProvider,
+          title
+        )
+      : null;
+
+
+  // =======================================================
   // 監督
   // =======================================================
 
@@ -689,25 +810,6 @@ async function getMovieDetail(
       movie.id +
       "/watch?locale=JP"
     );
-
-
-  // =======================================================
-  // ABEMA URL
-  // =======================================================
-
-  const abemaProvider =
-    abemaProviders.length > 0
-      ? abemaProviders[0]
-      : null;
-
-
-  const abemaUrl =
-    abemaProvider
-      ? createAbemaUrl(
-          title,
-          abemaProvider
-        )
-      : null;
 
 
   // =======================================================
@@ -777,8 +879,38 @@ async function getMovieDetail(
     purchase:
       purchase,
 
+
+    // =====================================================
+    // 無料視聴
+    // =====================================================
+
     free:
       free,
+
+
+    // =====================================================
+    // ABEMA
+    // =====================================================
+
+    abema:
+      abemaProvider
+        ? {
+            url:
+              abemaUrl,
+
+            provider_name:
+              "ABEMA",
+
+            free_candidate:
+              !isProviderInList(
+                abemaProvider,
+                tmdbFree
+              )
+          }
+        : null,
+
+    abema_url:
+      abemaUrl,
 
 
     // =====================================================
@@ -855,28 +987,6 @@ async function getMovieDetail(
 
     apple_tv_url:
       appleUrl,
-
-
-    // =====================================================
-    // ABEMA
-    // =====================================================
-
-    abema:
-      abemaProvider
-        ? {
-            provider_name:
-              abemaProvider.provider_name,
-
-            url:
-              abemaUrl,
-
-            free_candidate:
-              true
-          }
-        : null,
-
-    abema_url:
-      abemaUrl,
 
 
     // =====================================================
@@ -1010,11 +1120,11 @@ function createAppleUrl(
 // =========================================================
 
 function createAbemaUrl(
-  title,
-  provider
+  provider,
+  title
 ) {
 
-  // TMDBにABEMAのURLがある場合
+  // TMDB側に有効なURLがある場合
   if (
     provider &&
     typeof provider.provider_url === "string" &&
@@ -1036,8 +1146,7 @@ function createAbemaUrl(
   }
 
 
-  // URLが取得できない場合は
-  // ABEMAの検索ページへ
+  // ABEMA検索
   return (
     "https://abema.tv/search?q=" +
     encodeURIComponent(
@@ -1100,12 +1209,11 @@ function normalizeProviders(
 
 
 // =========================================================
-// キーワードで複数サービス検索
+// 無料視聴プロバイダー重複除去
 // =========================================================
 
-function findProvidersByKeywords(
-  providers,
-  keywords
+function uniqueProviders(
+  providers
 ) {
 
   if (
@@ -1120,6 +1228,7 @@ function findProvidersByKeywords(
 
 
   const result = [];
+  const seen = {};
 
 
   providers.forEach(function(provider) {
@@ -1134,35 +1243,28 @@ function findProvidersByKeywords(
     }
 
 
-    const name =
-      String(
+    const key =
+      normalizeProviderKey(
         provider.provider_name
-      ).toLowerCase();
+      );
 
 
-    for (
-      let i = 0;
-      i < keywords.length;
-      i++
+    if (
+      !key ||
+      seen[key]
     ) {
 
-      if (
-        name.includes(
-          String(
-            keywords[i]
-          ).toLowerCase()
-        )
-      ) {
-
-        result.push(
-          provider
-        );
-
-        break;
-
-      }
+      return;
 
     }
+
+
+    seen[key] = true;
+
+
+    result.push(
+      provider
+    );
 
   });
 
@@ -1173,28 +1275,110 @@ function findProvidersByKeywords(
 
 
 // =========================================================
-// 配信サービス検索
+// プロバイダーキー
 // =========================================================
 
-function findProvider(
+function normalizeProviderKey(
+  name
+) {
+
+  return String(
+    name || ""
+  )
+    .toLowerCase()
+    .replace(
+      /[\s　]+/g,
+      ""
+    )
+    .replace(
+      /[+＋]/g,
+      ""
+    );
+
+}
+
+
+// =========================================================
+// 指定リスト内に存在するか
+// =========================================================
+
+function isProviderInList(
+  provider,
+  list
+) {
+
+  if (
+    !provider ||
+    !Array.isArray(list)
+  ) {
+
+    return false;
+
+  }
+
+
+  const target =
+    normalizeProviderKey(
+      provider.provider_name
+    );
+
+
+  if (!target) {
+
+    return false;
+
+  }
+
+
+  return list.some(function(item) {
+
+    if (
+      !item ||
+      !item.provider_name
+    ) {
+
+      return false;
+
+    }
+
+
+    return (
+      normalizeProviderKey(
+        item.provider_name
+      ) === target
+    );
+
+  });
+
+}
+
+
+// =========================================================
+// キーワードでプロバイダー検索
+// =========================================================
+
+function findProviderByKeywords(
   providers,
   keywords
 ) {
 
-  const list =
-    Array.isArray(providers)
-      ? providers
-      : [];
+  if (
+    !Array.isArray(providers)
+  ) {
+
+    return null;
+
+  }
 
 
   for (
     let i = 0;
-    i < list.length;
+    i < providers.length;
     i++
   ) {
 
     const provider =
-      list[i];
+      providers[i];
 
 
     if (
@@ -1242,69 +1426,37 @@ function findProvider(
 
 
 // =========================================================
-// 無料視聴プロバイダー重複除去
+// 配信サービス検索
 // =========================================================
 
-function uniqueProviders(
-  providers
+function findProvider(
+  streaming,
+  rental,
+  purchase,
+  free,
+  keywords
 ) {
 
-  if (
-    !Array.isArray(
-      providers
-    )
-  ) {
-
-    return [];
-
-  }
-
-
-  const result = [];
-  const seen = {};
-
-
-  providers.forEach(function(provider) {
-
-    if (
-      !provider ||
-      !provider.provider_name
-    ) {
-
-      return;
-
-    }
-
-
-    const key =
-      String(
-        provider.provider_name
+  const all =
+    []
+      .concat(
+        streaming || []
       )
-        .toLowerCase()
-        .trim();
+      .concat(
+        rental || []
+      )
+      .concat(
+        purchase || []
+      )
+      .concat(
+        free || []
+      );
 
 
-    if (
-      !key ||
-      seen[key]
-    ) {
-
-      return;
-
-    }
-
-
-    seen[key] = true;
-
-
-    result.push(
-      provider
-    );
-
-  });
-
-
-  return result;
+  return findProviderByKeywords(
+    all,
+    keywords
+  );
 
 }
 
@@ -1590,3 +1742,4 @@ function normalizeTitle(
     );
 
 }
+```
