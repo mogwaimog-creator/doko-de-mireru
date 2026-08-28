@@ -1,23 +1,104 @@
-```html
 <!DOCTYPE html>
+
 <html lang="ja">
 
 <head>
 
 <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
 
-<meta name="google-site-verification" content="xl0TnMDwmY9xpeFPp8_RgJiPBxT0k04iH3LVbyL65V4" />
+>
 
-<title>ドコデミレル？</title>
+<!-- =====================================================
+     Google Search Console 所有権確認
+===================================================== -->
+
+<meta
+name="google-site-verification"
+content="xl0TnMDwmY9xpeFPp8_RgJiPBxT0k04iH3LVbyL65V4"
+
+>
+
+<!-- =====================================================
+     SEO
+===================================================== -->
 
 <title>ドコデミレル？｜映画がどこで見られるか検索</title>
 
 <meta
-  name="description"
-  content="ドコデミレル？は、映画がNetflix、Amazon Prime Video、U-NEXT、Hulu、Disney+など、どの動画配信サービスで見られるか検索できるサイトです。"
+name="description"
+content="ドコデミレル？は、映画がNetflix、Amazon Prime Video、U-NEXT、Hulu、Disney+など、どの動画配信サービスで見られるか検索できるサイトです。作品情報や配信サービスを簡単に確認できます。"
+
 >
+
+<link
+  rel="canonical"
+  href="https://doko-de-mireru.vercel.app/"
+>
+
+<meta
+name="robots"
+content="index, follow"
+
+>
+
+<!-- =====================================================
+     OGP
+===================================================== -->
+
+<meta
+property="og:type"
+content="website"
+
+>
+
+<meta
+property="og:title"
+content="ドコデミレル？｜映画がどこで見られるか検索"
+
+>
+
+<meta
+property="og:description"
+content="Netflix、Amazon Prime Video、U-NEXT、Hulu、Disney+など、映画がどこで見られるか検索できます。"
+
+>
+
+<meta
+property="og:url"
+content="https://doko-de-mireru.vercel.app/"
+
+>
+
+<meta
+property="og:site_name"
+content="ドコデミレル？"
+
+>
+
+<meta
+property="og:locale"
+content="ja_JP"
+
+>
+
+<!-- =====================================================
+     構造化データ
+===================================================== -->
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "ドコデミレル？",
+  "alternateName": "どこで見られる？",
+  "url": "https://doko-de-mireru.vercel.app/",
+  "description": "映画がNetflix、Amazon Prime Video、U-NEXT、Hulu、Disney+など、どこで見られるか検索できるサイトです。"
+}
+</script>
 
 <style>
 
@@ -364,9 +445,7 @@ footer{
 
 </head>
 
-
 <body>
-
 
 <header>
 
@@ -378,9 +457,7 @@ footer{
 
 </header>
 
-
 <main class="container">
-
 
   <!-- =====================================================
        検索
@@ -388,33 +465,34 @@ footer{
 
   <section class="search-box">
 
-    <div class="search-row">
+```
+<div class="search-row">
 
-      <input
-        id="query"
-        type="text"
-        placeholder="映画名を入力してください"
-        autocomplete="off"
-      >
+  <input
+    id="query"
+    type="text"
+    placeholder="映画名を入力してください"
+    autocomplete="off"
+    aria-label="映画名を入力"
+  >
 
-      <button
-        id="searchButton"
-        type="button"
-      >
-        🔍 検索
-      </button>
+  <button
+    id="searchButton"
+    type="button"
+  >
+    🔍 検索
+  </button>
 
-    </div>
+</div>
+```
 
   </section>
-
 
   <!-- =====================================================
        ステータス
   ====================================================== -->
 
   <div id="status"></div>
-
 
   <!-- =====================================================
        検索結果
@@ -425,16 +503,13 @@ footer{
     class="results"
   ></div>
 
-
 </main>
-
 
 <footer>
 
-  © ドコデミレル？
+© ドコデミレル？
 
 </footer>
-
 
 <script>
 
@@ -471,10 +546,11 @@ async function searchMovies(){
 
   const query =
     queryInput.value.trim();
+
   sessionStorage.setItem(
-  "dokoDeMireruLastQuery",
-  query
-);
+    "dokoDeMireruLastQuery",
+    query
+  );
 
 
   /* -------------------------------------------------------
@@ -613,7 +689,7 @@ async function searchMovies(){
 
     /* -----------------------------------------------------
        年代順
-       
+
        古い作品
        ↓
        新しい作品
@@ -974,6 +1050,8 @@ searchButton.addEventListener(
   "click",
   searchMovies
 );
+
+
 /* =========================================================
    詳細画面から戻ってきた場合
 ========================================================= */
@@ -990,12 +1068,10 @@ if(savedQuery){
 
   searchMovies();
 
-}  
+}
 
 </script>
-
 
 </body>
 
 </html>
-```
