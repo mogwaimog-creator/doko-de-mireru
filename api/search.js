@@ -2,7 +2,7 @@
 // doko-de-mireru
 // api/search.js
 //
-// 安定版・検索復旧用 完成版
+// 安定版・検索復旧＋おすすめ作品対応 完成版
 //
 // ・映画検索
 // ・作品詳細
@@ -22,9 +22,9 @@
 // ・監督
 // ・出演者
 // ・シリーズ
+// ・おすすめ作品
 //
 // ※ Netflix作品IDは使用しない
-// ※ おすすめ機能は今回は追加しない
 // =========================================================
 
 
@@ -755,6 +755,127 @@ async function getMovieDetail(
 
 
   // =======================================================
+  // おすすめ作品
+  //
+  // TMDBのおすすめ映画APIを使用
+  //
+  // ※ ここで失敗しても作品詳細は表示できる
+  // =======================================================
+
+  let recommendations = [];
+
+
+  try {
+
+    const recommendationUrl =
+      "https://api.themoviedb.org/3/movie/" +
+      encodeURIComponent(movieId) +
+      "/recommendations" +
+      "?api_key=" +
+      encodeURIComponent(apiKey) +
+      "&language=ja-JP" +
+      "&page=1";
+
+
+    console.log(
+      "TMDB RECOMMENDATIONS:",
+      movieId
+    );
+
+
+    const recommendationData =
+      await fetchJson(
+        recommendationUrl
+      );
+
+
+    if (
+      recommendationData &&
+      Array.isArray(
+        recommendationData.results
+      )
+    ) {
+
+      recommendations =
+        recommendationData.results
+          .filter(function(recommendation) {
+
+            return (
+              recommendation &&
+              recommendation.id &&
+              (
+                recommendation.title ||
+                recommendation.original_title
+              )
+            );
+
+          })
+          .filter(function(recommendation) {
+
+            return (
+              String(
+                recommendation.id
+              ) !==
+              String(movie.id)
+            );
+
+          })
+          .slice(
+            0,
+            10
+          )
+          .map(function(recommendation) {
+
+            return {
+
+              id:
+                recommendation.id,
+
+              title:
+                recommendation.title ||
+                recommendation.original_title ||
+                "",
+
+              original_title:
+                recommendation.original_title ||
+                "",
+
+              release_date:
+                recommendation.release_date ||
+                "",
+
+              poster_path:
+                recommendation.poster_path ||
+                null,
+
+              overview:
+                recommendation.overview ||
+                "",
+
+              vote_average:
+                Number(
+                  recommendation.vote_average || 0
+                )
+
+            };
+
+          });
+
+    }
+
+  } catch (error) {
+
+    console.error(
+      "RECOMMENDATIONS ERROR:",
+      error
+    );
+
+    recommendations = [];
+
+  }
+
+
+  // =======================================================
   // TMDB配信ページ
   // =======================================================
 
@@ -949,6 +1070,14 @@ async function getMovieDetail(
 
     series:
       series,
+
+
+    // ===================================================
+    // おすすめ作品
+    // ===================================================
+
+    recommendations:
+      recommendations,
 
 
     // ===================================================
@@ -1612,4 +1741,3 @@ function normalizeTitle(title) {
     );
 
 }
-```
