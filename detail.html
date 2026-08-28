@@ -1,5 +1,5 @@
-```html
 <!DOCTYPE html>
+
 <html lang="ja">
 
 <head>
@@ -7,15 +7,17 @@
 <meta charset="UTF-8">
 
 <meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0"
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+
 >
 
 <title>作品情報 | ドコデミレル？</title>
 
 <meta
-  name="description"
-  content="映画・ドラマがどこで見られるか検索できるドコデミレル？の作品情報ページです。"
+name="description"
+content="映画・ドラマがどこで見られるか検索できるドコデミレル？の作品情報ページです。"
+
 >
 
 <style>
@@ -427,6 +429,18 @@ header p{
   margin-bottom:4px;
 }
 
+
+/* =====================================================
+   月額料金
+===================================================== */
+
+.provider-price{
+  color:#777;
+  font-size:12px;
+  margin-bottom:5px;
+  line-height:1.4;
+}
+
 .provider-type{
   display:inline-block;
   padding:3px 7px;
@@ -712,6 +726,10 @@ header p{
     font-size:17px;
   }
 
+  .provider-price{
+    font-size:12px;
+  }
+
   .provider-button{
     width:100%;
     text-align:center;
@@ -798,9 +816,7 @@ header p{
 
 </head>
 
-
 <body>
-
 
 <header>
 
@@ -812,17 +828,15 @@ header p{
 
 </header>
 
-
 <div class="container">
 
-
 <a
-  class="back"
-  href="index.html"
->
-← 検索結果に戻る
-</a>
+class="back"
+href="index.html"
 
+>
+
+← 検索結果に戻る </a>
 
 <div
   id="loading"
@@ -830,7 +844,6 @@ header p{
 >
 作品情報を読み込んでいます…
 </div>
-
 
 <div
   id="error"
@@ -840,12 +853,10 @@ header p{
 作品情報を取得できませんでした。
 </div>
 
-
 <div
   id="content"
   style="display:none;"
 >
-
 
 <!-- =====================================================
      作品情報
@@ -853,25 +864,21 @@ header p{
 
 <div class="movie-header">
 
-
 <img
-  id="poster"
-  class="poster"
-  alt=""
->
+id="poster"
+class="poster"
+alt=""
 
+>
 
 <div class="movie-info">
 
-
 <h2 id="title"></h2>
-
 
 <div
   id="originalTitle"
   class="original-title"
 ></div>
-
 
 <div class="basic-info">
 
@@ -887,15 +894,12 @@ header p{
 
 </div>
 
-
 <div
   id="genres"
   class="genre-list"
 ></div>
 
-
 <div class="movie-side-info">
-
 
 <div class="side-section">
 
@@ -910,7 +914,6 @@ header p{
 
 </div>
 
-
 <div class="side-section">
 
 <div class="side-title">
@@ -923,7 +926,6 @@ header p{
 ></div>
 
 </div>
-
 
 <div class="side-section">
 
@@ -938,13 +940,11 @@ header p{
 
 </div>
 
-
 </div>
 
 </div>
 
 </div>
-
 
 <!-- =====================================================
      配信サービス
@@ -962,7 +962,6 @@ header p{
 <div id="providers"></div>
 
 </div>
-
 
 <!-- =====================================================
      シリーズ
@@ -987,7 +986,6 @@ header p{
 
 </div>
 
-
 <!-- =====================================================
      TMDB
 ===================================================== -->
@@ -995,22 +993,21 @@ header p{
 <div class="section">
 
 <a
-  id="tmdbLink"
-  class="tmdb-link"
-  href="#"
-  target="_blank"
-  rel="noopener noreferrer"
+id="tmdbLink"
+class="tmdb-link"
+href="#"
+target="_blank"
+rel="noopener noreferrer"
+
 >
-TMDBで作品情報を見る →
-</a>
 
-</div>
-
+TMDBで作品情報を見る → </a>
 
 </div>
 
 </div>
 
+</div>
 
 <footer
   style="
@@ -1022,7 +1019,6 @@ TMDBで作品情報を見る →
 >
 © ドコデミレル？
 </footer>
-
 
 <script>
 
@@ -1783,6 +1779,77 @@ function normalizeProviders(providers){
 
 
 /* =====================================================
+   月額料金
+===================================================== */
+
+function getProviderPrice(name){
+
+  const value =
+    String(name || "").toLowerCase();
+
+
+  if(
+    value.includes("netflix")
+  ){
+
+    return "月額1,190円～";
+
+  }
+
+
+  if(
+    value.includes("amazon") ||
+    value.includes("prime video")
+  ){
+
+    return "月額600円～";
+
+  }
+
+
+  if(
+    value.includes("u-next") ||
+    value.includes("unext")
+  ){
+
+    return "月額2,189円～";
+
+  }
+
+
+  if(
+    value.includes("hulu")
+  ){
+
+    return "月額1,026円～";
+
+  }
+
+
+  if(
+    value.includes("disney")
+  ){
+
+    return "月額1,250円～";
+
+  }
+
+
+  if(
+    value.includes("apple")
+  ){
+
+    return "月額900円～";
+
+  }
+
+
+  return "";
+
+}
+
+
+/* =====================================================
    配信グループ
 ===================================================== */
 
@@ -1934,6 +2001,35 @@ function createProviderCard(
   info.appendChild(
     name
   );
+
+
+  /* 月額料金 */
+
+  const price =
+    getProviderPrice(
+      provider.provider_name
+    );
+
+
+  if(price){
+
+    const priceElement =
+      document.createElement("div");
+
+
+    priceElement.className =
+      "provider-price";
+
+
+    priceElement.textContent =
+      price;
+
+
+    info.appendChild(
+      priceElement
+    );
+
+  }
 
 
   /* 種類 */
@@ -2716,8 +2812,6 @@ function showError(message){
 
 </script>
 
-
 </body>
 
 </html>
-```
