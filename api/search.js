@@ -797,7 +797,7 @@ async function getMovieDetail(
 
 function createNetflixUrl() {
 
-  return "https://www.netflix.com/jp/";
+  return "https://www.netflix.com/jp/search";
 
 }
 
