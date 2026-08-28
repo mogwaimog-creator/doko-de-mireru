@@ -448,7 +448,31 @@ async function getMovieDetail(
       freeProviders
     );
 
+// =======================================================
+// 無料視聴
+//
+// TMDBでは無料視聴が
+// free と ads に分かれているため、
+// 両方をまとめて取得する
+// =======================================================
 
+const freeProviders =
+  []
+    .concat(
+      Array.isArray(providersJP.free)
+        ? providersJP.free
+        : []
+    )
+    .concat(
+      Array.isArray(providersJP.ads)
+        ? providersJP.ads
+        : []
+    );
+
+const free =
+  normalizeProviders(
+    freeProviders
+  );
   // =======================================================
   // 無料視聴サービスの重複除去
   // =======================================================
