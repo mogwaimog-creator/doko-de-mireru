@@ -473,8 +473,65 @@ header p{
 }
 
 
+```css
 /* =========================================================
    配信サービス
+   ドコデミレル？ デザイン強化版
+========================================================= */
+
+#providers{
+  margin-top:2px;
+}
+
+
+/* =========================================================
+   配信タイプ
+========================================================= */
+
+.provider-type-block{
+  margin-bottom:24px;
+
+  padding:16px;
+
+  background:#f8fafc;
+
+  border:1px solid #e5e7eb;
+
+  border-radius:12px;
+}
+
+.provider-type-block:last-child{
+  margin-bottom:0;
+}
+
+
+/* =========================================================
+   配信タイプ見出し
+========================================================= */
+
+.provider-type-heading{
+  display:flex;
+
+  align-items:center;
+
+  margin:0 0 13px;
+
+  padding-bottom:9px;
+
+  border-bottom:1px solid #e5e7eb;
+
+  color:#1f2937;
+
+  font-size:16px;
+
+  font-weight:bold;
+
+  line-height:1.4;
+}
+
+
+/* =========================================================
+   配信サービス一覧
 ========================================================= */
 
 .providers-grid{
@@ -483,10 +540,17 @@ header p{
   grid-template-columns:
     repeat(4, minmax(0,1fr));
 
-  gap:10px;
+  gap:12px;
 }
 
+
+/* =========================================================
+   配信サービスカード
+========================================================= */
+
 .provider-card{
+  position:relative;
+
   display:flex;
 
   flex-direction:column;
@@ -497,52 +561,72 @@ header p{
 
   min-width:0;
 
-  padding:12px 8px;
+  padding:15px 10px 12px;
 
   background:#fff;
 
   border:1px solid #e5e7eb;
 
-  border-radius:11px;
+  border-radius:12px;
 
   text-align:center;
 
+  box-shadow:
+    0 1px 3px rgba(0,0,0,.05);
+
   transition:
-    transform .15s ease,
-    box-shadow .15s ease;
+    transform .18s ease,
+    box-shadow .18s ease,
+    border-color .18s ease;
 }
+
 
 .provider-card:hover{
-  transform:translateY(-2px);
+  transform:translateY(-3px);
+
+  border-color:#d1d5db;
 
   box-shadow:
-    0 4px 12px rgba(0,0,0,.10);
+    0 6px 16px rgba(0,0,0,.10);
 }
 
-.provider-logo{
-  width:48px;
 
-  height:48px;
+/* =========================================================
+   配信サービスロゴ
+========================================================= */
+
+.provider-logo{
+  width:54px;
+
+  height:54px;
 
   object-fit:contain;
 
-  border-radius:8px;
+  border-radius:10px;
 
   background:#fff;
 
-  margin-bottom:7px;
+  margin-bottom:9px;
+
+  box-shadow:
+    0 1px 4px rgba(0,0,0,.08);
 }
+
+
+/* =========================================================
+   サービス名
+========================================================= */
 
 .provider-name{
   width:100%;
+
+  color:#111827;
 
   font-size:15px;
 
   font-weight:bold;
 
-  color:#111827;
-
-  line-height:1.3;
+  line-height:1.35;
 
   overflow:hidden;
 
@@ -551,40 +635,65 @@ header p{
   white-space:nowrap;
 }
 
-.provider-type{
-  margin-top:4px;
 
-  padding:2px 6px;
+/* =========================================================
+   見放題・レンタル・購入
+========================================================= */
+
+.provider-type{
+  margin-top:6px;
+
+  padding:3px 8px;
 
   background:#f3f4f6;
 
-  color:#666;
+  color:#4b5563;
 
-  border-radius:5px;
+  border-radius:20px;
 
   font-size:11px;
+
+  font-weight:bold;
 
   line-height:1.4;
 }
 
-.provider-price{
-  margin-top:3px;
 
-  color:#888;
+/* =========================================================
+   料金
+========================================================= */
+
+.provider-price{
+  min-height:16px;
+
+  margin-top:5px;
+
+  color:#6b7280;
 
   font-size:10px;
 
-  line-height:1.3;
+  line-height:1.4;
 }
 
+
+/* =========================================================
+   配信サービスを見るボタン
+========================================================= */
+
 .provider-button{
-  display:block;
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
 
   width:100%;
 
-  margin-top:9px;
+  min-height:34px;
 
-  padding:7px 4px;
+  margin-top:10px;
+
+  padding:7px 5px;
 
   color:#fff;
 
@@ -594,19 +703,29 @@ header p{
 
   font-weight:bold;
 
+  line-height:1.3;
+
   text-align:center;
 
   white-space:nowrap;
 
+  box-shadow:
+    0 1px 3px rgba(0,0,0,.10);
+
   transition:
     opacity .15s ease,
-    transform .15s ease;
+    transform .15s ease,
+    box-shadow .15s ease;
 }
 
+
 .provider-button:hover{
-  opacity:.85;
+  opacity:.9;
 
   transform:translateY(-1px);
+
+  box-shadow:
+    0 3px 8px rgba(0,0,0,.15);
 }
 
 
@@ -620,6 +739,7 @@ header p{
 
 .amazon-button{
   background:#ff9900;
+
   color:#111;
 }
 
@@ -629,6 +749,7 @@ header p{
 
 .hulu-button{
   background:#1ce783;
+
   color:#111;
 }
 
@@ -654,26 +775,131 @@ header p{
 
 
 /* =========================================================
-   配信種別
+   スマートフォン
 ========================================================= */
 
-.provider-type-heading{
-  margin:0 0 9px;
+@media(max-width:700px){
 
-  font-size:14px;
+  .provider-type-block{
+    padding:13px;
 
-  font-weight:bold;
+    margin-bottom:18px;
+  }
 
-  color:#555;
+
+  .provider-type-heading{
+    font-size:15px;
+
+    margin-bottom:11px;
+  }
+
+
+  .providers-grid{
+    grid-template-columns:
+      repeat(3, minmax(0,1fr));
+
+    gap:9px;
+  }
+
+
+  .provider-card{
+    padding:12px 7px 10px;
+
+    border-radius:10px;
+  }
+
+
+  .provider-logo{
+    width:46px;
+
+    height:46px;
+
+    margin-bottom:7px;
+  }
+
+
+  .provider-name{
+    font-size:13px;
+  }
+
+
+  .provider-type{
+    margin-top:5px;
+
+    padding:2px 6px;
+
+    font-size:10px;
+  }
+
+
+  .provider-price{
+    font-size:9px;
+
+    margin-top:4px;
+  }
+
+
+  .provider-button{
+    min-height:32px;
+
+    margin-top:8px;
+
+    padding:6px 2px;
+
+    font-size:11px;
+  }
+
 }
 
-.provider-type-block{
-  margin-bottom:15px;
-}
 
-.provider-type-block:last-child{
-  margin-bottom:0;
+/* =========================================================
+   小さいスマホ
+========================================================= */
+
+@media(max-width:420px){
+
+  .provider-type-block{
+    padding:11px;
+  }
+
+
+  .providers-grid{
+    grid-template-columns:
+      repeat(2, minmax(0,1fr));
+
+    gap:9px;
+  }
+
+
+  .provider-card{
+    padding:12px 8px 10px;
+  }
+
+
+  .provider-logo{
+    width:48px;
+
+    height:48px;
+  }
+
+
+  .provider-name{
+    font-size:14px;
+  }
+
+
+  .provider-type{
+    font-size:10px;
+  }
+
+
+  .provider-button{
+    font-size:11px;
+  }
+
 }
+```
+
 
 
 /* =========================================================
