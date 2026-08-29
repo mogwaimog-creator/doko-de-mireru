@@ -276,145 +276,151 @@ header p{
 
 
 /* =========================================================
-   人気作品
+人気作品
 ========================================================= */
 
 .popular-section{
-  background:#fff;
-  border-radius:16px;
-  padding:22px;
-  margin-bottom:25px;
+background:#fff;
+border-radius:16px;
+padding:22px;
+margin-bottom:25px;
 
-  box-shadow:
-    0 3px 15px
-    rgba(0,0,0,.08);
+box-shadow:
+0 3px 15px
+rgba(0,0,0,.08);
 }
 
 .popular-title{
-  margin:0;
-  font-size:23px;
-  color:#111827;
-  line-height:1.4;
+margin:0;
+font-size:23px;
+color:#111827;
+line-height:1.4;
 }
 
 .popular-description{
-  margin:8px 0 18px;
-  color:#6b7280;
-  font-size:14px;
-  line-height:1.6;
+margin:8px 0 18px;
+color:#6b7280;
+font-size:14px;
+line-height:1.6;
 }
 
 .popular-grid{
-  display:grid;
-  grid-template-columns:
-    repeat(3, minmax(0,1fr));
-  gap:14px;
+display:grid;
+grid-template-columns:
+repeat(3, minmax(0,1fr));
+gap:14px;
 }
 
 .popular-card{
-  display:block;
-  background:#f5f7fb;
-  border:1px solid #e5e7eb;
-  border-radius:12px;
-  overflow:hidden;
+display:block;
+background:#f5f7fb;
+border:1px solid #e5e7eb;
+border-radius:12px;
+overflow:hidden;
 
-  transition:
-    transform .15s ease,
-    box-shadow .15s ease,
-    border-color .15s ease;
+transition:
+transform .15s ease,
+box-shadow .15s ease,
+border-color .15s ease;
 }
 
 .popular-card:hover{
-  transform:translateY(-2px);
-  border-color:#2563eb;
+transform:translateY(-2px);
+border-color:#2563eb;
 
-  box-shadow:
-    0 5px 15px
-    rgba(0,0,0,.08);
+box-shadow:
+0 5px 15px
+rgba(0,0,0,.08);
 }
 
-
 /* =========================================================
-   人気作品ポスター
+人気作品ポスター
 ========================================================= */
 
 .popular-poster{
-  width:100%;
-  aspect-ratio:2 / 3;
+width:100%;
+aspect-ratio:2 / 3;
 
-  object-fit:cover;
+object-fit:cover;
 
-  display:block;
+display:block;
 
-  background:#e5e7eb;
+background:#e5e7eb;
 }
 
+.popular-poster.no-image{
+display:flex;
+align-items:center;
+justify-content:center;
+
+color:#6b7280;
+font-size:13px;
+}
 
 /* =========================================================
-   人気作品カード情報
+人気作品カード情報
 ========================================================= */
 
 .popular-card-info{
-  padding:15px;
+padding:15px;
 }
 
 .popular-card-title{
-  color:#111827;
-  font-size:16px;
-  font-weight:bold;
-  line-height:1.5;
+color:#111827;
+font-size:16px;
+font-weight:bold;
+line-height:1.5;
 }
 
 .popular-card-link{
-  margin-top:9px;
-  color:#2563eb;
-  font-size:13px;
-  font-weight:bold;
+margin-top:9px;
+color:#2563eb;
+font-size:13px;
+font-weight:bold;
 }
 
-
 /* =========================================================
-   人気作品 スマホ
+人気作品 スマホ
 ========================================================= */
 
 @media(max-width:700px){
 
-  .popular-section{
-    padding:17px;
-  }
+.popular-section{
+padding:17px;
+}
 
-  .popular-title{
-    font-size:21px;
-  }
+.popular-title{
+font-size:21px;
+}
 
-  .popular-grid{
-    grid-template-columns:1fr;
-    gap:12px;
-  }
+.popular-grid{
+grid-template-columns:1fr;
+gap:12px;
+}
 
-  .popular-card{
-    display:flex;
-    align-items:center;
-  }
+.popular-card{
+display:flex;
+align-items:center;
+}
 
-  .popular-poster{
-    width:105px;
-    height:158px;
-    aspect-ratio:auto;
-    flex-shrink:0;
-  }
+.popular-poster{
+width:105px;
+height:158px;
+aspect-ratio:auto;
+flex-shrink:0;
+}
 
-  .popular-card-info{
-    padding:15px;
-  }
+.popular-card-info{
+padding:15px;
+}
 
-  .popular-card-title{
-    font-size:15px;
-  }
+.popular-card-title{
+font-size:15px;
+}
 
-  .popular-card-link{
-    font-size:13px;
-  }
+.popular-card-link{
+font-size:13px;
+}
 
 }
 
