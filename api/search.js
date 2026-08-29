@@ -1978,263 +1978,372 @@ function createMiddleDotSearchQuery(query) {
 // ・公開予定
 //
 // を取得して人気順にまとめる
+//
+// ※ 片方のAPIが失敗しても
+//    もう片方を使用する
 // =========================================================
 
 async function getPopularMovies(apiKey) {
 
-try {
+  // =======================================================
+  // 現在上映中
+  // =======================================================
+
+  const nowPlayingUrl =
+    "https://api.themoviedb.org/3/movie/now_playing" +
+    "?api_key=" +
+    encodeURIComponent(apiKey) +
+    "&language=ja-JP" +
+    "&region=JP" +
+    "&page=1";
 
 
-// =======================================================
-// 現在上映中
-// =======================================================
+  // =======================================================
+  // 公開予定
+  // =======================================================
 
-const nowPlayingUrl =
-  "https://api.themoviedb.org/3/movie/now_playing" +
-  "?api_key=" +
-  encodeURIComponent(apiKey) +
-  "&language=ja-JP" +
-  "&region=JP" +
-  "&page=1";
-
-
-// =======================================================
-// 公開予定
-// =======================================================
-
-const upcomingUrl =
-  "https://api.themoviedb.org/3/movie/upcoming" +
-  "?api_key=" +
-  encodeURIComponent(apiKey) +
-  "&language=ja-JP" +
-  "&region=JP" +
-  "&page=1";
+  const upcomingUrl =
+    "https://api.themoviedb.org/3/movie/upcoming" +
+    "?api_key=" +
+    encodeURIComponent(apiKey) +
+    "&language=ja-JP" +
+    "&region=JP" +
+    "&page=1";
 
 
-const [
-  nowPlayingData,
-  upcomingData
-] =
-  await Promise.all([
-    fetchJson(nowPlayingUrl),
-    fetchJson(upcomingUrl)
-  ]);
+  let nowPlayingMovies = [];
+  let upcomingMovies = [];
 
 
-// =======================================================
-// データ結合
-// =======================================================
+  // =======================================================
+  // 現在上映中を取得
+  // =======================================================
 
-const allMovies = []
-  .concat(
-    Array.isArray(nowPlayingData.results)
-      ? nowPlayingData.results
-      : []
-  )
-  .concat(
-    Array.isArray(upcomingData.results)
-      ? upcomingData.results
-      : []
-  );
+  try {
 
-
-// =======================================================
-// 重複削除
-// =======================================================
-
-const movieMap =
-  new Map();
-
-
-allMovies.forEach(function(movie) {
-
-  if (
-    movie &&
-    movie.id
-  ) {
-
-    movieMap.set(
-      String(movie.id),
-      movie
-    );
-
-  }
-
-});
-
-
-let movies =
-  Array.from(
-    movieMap.values()
-  );
-
-
-// =======================================================
-// 人気順
-// =======================================================
-
-movies.sort(function(a, b) {
-
-  return (
-    Number(b.popularity || 0) -
-    Number(a.popularity || 0)
-  );
-
-});
-
-
-// =======================================================
-// 今日の日付
-// =======================================================
-
-const today =
-  new Date();
-
-
-today.setHours(
-  0,
-  0,
-  0,
-  0
-);
-
-
-// =======================================================
-// 最大3作品
-// =======================================================
-
-movies =
-  movies.slice(0, 3);
-
-
-// =======================================================
-// 結果整形
-// =======================================================
-
-return movies.map(function(movie) {
-
-  const releaseDate =
-    movie.release_date || "";
-
-
-  let status =
-    "公開済み";
-
-
-  let statusType =
-    "planned";
-
-
-  // =====================================================
-  // 公開日がある場合
-  // =====================================================
-
-  if (releaseDate) {
-
-    const release =
-      new Date(
-        releaseDate + "T00:00:00"
+    const nowPlayingData =
+      await fetchJson(
+        nowPlayingUrl
       );
 
 
     if (
-      release > today
+      nowPlayingData &&
+      Array.isArray(
+        nowPlayingData.results
+      )
     ) {
 
-      // -----------------------------------------------
-      // 公開予定
-      // -----------------------------------------------
+      nowPlayingMovies =
+        nowPlayingData.results;
 
-      status =
-        formatJapaneseReleaseDate(
-          releaseDate
-        ) +
-        " 公開予定";
+    }
 
-      statusType =
-        "coming";
+  } catch (error) {
 
-    } else {
+    console.error(
+      "NOW PLAYING ERROR:",
+      error
+    );
 
-      // -----------------------------------------------
-      // 公開済み
-      // -----------------------------------------------
+  }
 
-      status =
-        "上映中";
 
-      statusType =
-        "now";
+  // =======================================================
+  // 公開予定を取得
+  // =======================================================
+
+  try {
+
+    const upcomingData =
+      await fetchJson(
+        upcomingUrl
+      );
+
+
+    if (
+      upcomingData &&
+      Array.isArray(
+        upcomingData.results
+      )
+    ) {
+
+      upcomingMovies =
+        upcomingData.results;
+
+    }
+
+  } catch (error) {
+
+    console.error(
+      "UPCOMING ERROR:",
+      error
+    );
+
+  }
+
+
+  // =======================================================
+  // データ結合
+  // =======================================================
+
+  let allMovies =
+    []
+      .concat(
+        nowPlayingMovies
+      )
+      .concat(
+        upcomingMovies
+      );
+
+
+  // =======================================================
+  // 両方とも取得できなかった場合
+  //
+  // TMDB人気映画を取得
+  // =======================================================
+
+  if (!allMovies.length) {
+
+    try {
+
+      const popularUrl =
+        "https://api.themoviedb.org/3/movie/popular" +
+        "?api_key=" +
+        encodeURIComponent(apiKey) +
+        "&language=ja-JP" +
+        "&region=JP" +
+        "&page=1";
+
+
+      const popularData =
+        await fetchJson(
+          popularUrl
+        );
+
+
+      if (
+        popularData &&
+        Array.isArray(
+          popularData.results
+        )
+      ) {
+
+        allMovies =
+          popularData.results;
+
+      }
+
+    } catch (error) {
+
+      console.error(
+        "POPULAR FALLBACK ERROR:",
+        error
+      );
 
     }
 
   }
 
 
-  return {
+  // =======================================================
+  // まだ作品がない場合
+  // =======================================================
 
-    id:
-      movie.id,
+  if (!allMovies.length) {
 
+    return [];
 
-    // =================================================
-    // 日本で使われているタイトル
-    // =================================================
-
-    title:
-      movie.title ||
-      movie.original_title ||
-      "",
+  }
 
 
-    original_title:
-      movie.original_title ||
-      "",
+  // =======================================================
+  // 重複削除
+  // =======================================================
+
+  const movieMap =
+    new Map();
 
 
-    release_date:
-      releaseDate,
+  allMovies.forEach(function(movie) {
+
+    if (
+      movie &&
+      movie.id
+    ) {
+
+      movieMap.set(
+        String(movie.id),
+        movie
+      );
+
+    }
+
+  });
 
 
-    poster_path:
-      movie.poster_path ||
-      null,
+  let movies =
+    Array.from(
+      movieMap.values()
+    );
 
 
-    popularity:
+  // =======================================================
+  // 人気順
+  // =======================================================
+
+  movies.sort(function(a, b) {
+
+    return (
       Number(
-        movie.popularity || 0
-      ),
+        b.popularity || 0
+      ) -
+      Number(
+        a.popularity || 0
+      )
+    );
+
+  });
 
 
-    status:
-      status,
+  // =======================================================
+  // 今日の日付
+  // =======================================================
+
+  const today =
+    new Date();
 
 
-    status_type:
-      statusType
-
-  };
-
-});
-
-
-} catch (error) {
+  today.setHours(
+    0,
+    0,
+    0,
+    0
+  );
 
 
-console.error(
-  "POPULAR MOVIES ERROR:",
-  error
-);
+  // =======================================================
+  // 最大3作品
+  // =======================================================
+
+  movies =
+    movies.slice(
+      0,
+      3
+    );
 
 
-return [];
+  // =======================================================
+  // 結果整形
+  // =======================================================
 
+  return movies.map(function(movie) {
+
+    const releaseDate =
+      movie.release_date || "";
+
+
+    let status =
+      "公開済み";
+
+
+    let statusType =
+      "planned";
+
+
+    // =====================================================
+    // 公開日がある場合
+    // =====================================================
+
+    if (releaseDate) {
+
+      const release =
+        new Date(
+          releaseDate +
+          "T00:00:00"
+        );
+
+
+      if (
+        release > today
+      ) {
+
+        // -----------------------------------------------
+        // 公開予定
+        // -----------------------------------------------
+
+        status =
+          formatJapaneseReleaseDate(
+            releaseDate
+          ) +
+          " 公開予定";
+
+
+        statusType =
+          "coming";
+
+      } else {
+
+        // -----------------------------------------------
+        // 公開済み
+        // -----------------------------------------------
+
+        status =
+          "上映中";
+
+
+        statusType =
+          "now";
+
+      }
+
+    }
+
+
+    return {
+
+      id:
+        movie.id,
+
+
+      title:
+        movie.title ||
+        movie.original_title ||
+        "",
+
+
+      original_title:
+        movie.original_title ||
+        "",
+
+
+      release_date:
+        releaseDate,
+
+
+      poster_path:
+        movie.poster_path ||
+        null,
+
+
+      popularity:
+        Number(
+          movie.popularity || 0
+        ),
+
+
+      status:
+        status,
+
+
+      status_type:
+        statusType
+
+    };
+
+  });
 
 }
-
-}
-
 // =========================================================
 // 公開日表示
 //
