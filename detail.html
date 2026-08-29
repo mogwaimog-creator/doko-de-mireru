@@ -26,14 +26,20 @@ content="映画がNetflix、Amazon Prime Video、U-NEXT、Hulu、Disney+など�
 
 <meta
 name="robots"
-content="index, follow, max-image-preview:large"
+content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+
+>
+
+<meta
+name="googlebot"
+content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
 
 >
 
 <link
-  id="canonical"
-  rel="canonical"
-  href="https://doko-de-mireru.vercel.app/detail.html"
+id="canonical"
+rel="canonical"
+href="https://doko-de-mireru.vercel.app/detail.html"
 >
 
 <!-- =========================================================
@@ -86,6 +92,13 @@ content="https://doko-de-mireru.vercel.app/"
 
 >
 
+<meta
+id="ogImageAlt"
+property="og:image:alt"
+content="ドコデミレル？ 作品情報"
+
+>
+
 <!-- =========================================================
      Twitter / X
 ========================================================= -->
@@ -114,6 +127,23 @@ content="映画がどこで見られるか確認できます。"
 id="twitterImage"
 name="twitter:image"
 content="https://doko-de-mireru.vercel.app/"
+
+>
+
+<meta
+id="twitterImageAlt"
+name="twitter:image:alt"
+content="ドコデミレル？ 作品情報"
+
+>
+
+<!-- =========================================================
+     サイト情報
+========================================================= -->
+
+<meta
+name="theme-color"
+content="#111827"
 
 >
 
@@ -1280,14 +1310,36 @@ function updateSeo(movie){
 
 
   const title =
-    movie.title ||
-    "作品情報";
+    String(
+      movie.title ||
+      "作品情報"
+    ).trim();
 
 
-  document.title =
+  /*
+     Google検索向けタイトル
+
+     作品名を先頭にすることで、
+     「作品名 + 配信サービス」などの
+     検索意図に対応しやすくする。
+  */
+
+  const seoTitle =
     title +
     "｜配信サービス・作品情報 | ドコデミレル？";
 
+
+  document.title =
+    seoTitle;
+
+
+  /*
+     description
+
+     作品名を先頭に置き、
+     公開日・あらすじを追加。
+     長くなりすぎないよう調整。
+  */
 
   let description =
     title +
@@ -1311,29 +1363,35 @@ function updateSeo(movie){
     const overview =
       String(
         movie.overview
-      ).replace(
+      )
+      .replace(
         /\s+/g,
         " "
-      );
+      )
+      .trim();
 
 
-    description +=
-      overview.substring(
-        0,
-        100
-      );
+    if(overview){
+
+      description +=
+        overview;
+
+    }
 
   }
 
 
   /*
-     descriptionが長くなりすぎないよう調整
+     descriptionの最終調整
+
+     検索結果で長くなりすぎないよう、
+     最大160文字程度に抑える。
   */
 
   description =
     description.substring(
       0,
-      300
+      160
     );
 
 
@@ -1375,8 +1433,7 @@ function updateSeo(movie){
   setMetaProperty(
     "ogTitle",
     "content",
-    title +
-    "｜ドコデミレル？"
+    seoTitle
   );
 
 
@@ -1409,9 +1466,25 @@ function updateSeo(movie){
 
 
     setMetaProperty(
+      "ogImageAlt",
+      "content",
+      title +
+      "のポスター"
+    );
+
+
+    setMetaProperty(
       "twitterImage",
       "content",
       imageUrl
+    );
+
+
+    setMetaProperty(
+      "twitterImageAlt",
+      "content",
+      title +
+      "のポスター"
     );
 
   }
@@ -1424,8 +1497,7 @@ function updateSeo(movie){
   setMetaProperty(
     "twitterTitle",
     "content",
-    title +
-    "｜ドコデミレル？"
+    seoTitle
   );
 
 
@@ -1551,6 +1623,10 @@ function updateStructuredData(movie){
     );
 
 
+  const siteUrl =
+    "https://doko-de-mireru.vercel.app/";
+
+
   /* =======================================================
      Movie
   ======================================================= */
@@ -1563,12 +1639,24 @@ function updateStructuredData(movie){
     "@type":
       "Movie",
 
+    "@id":
+      canonicalUrl +
+      "#movie",
+
     name:
       movie.title ||
       "",
 
     url:
-      canonicalUrl
+      canonicalUrl,
+
+    mainEntityOfPage:{
+      "@type":
+        "WebPage",
+
+      "@id":
+        canonicalUrl
+    }
 
   };
 
@@ -1581,13 +1669,21 @@ function updateStructuredData(movie){
   }
 
 
+  /*
+     映画の公開日
+  */
+
   if(movie.release_date){
 
-    movieData.dateCreated =
+    movieData.datePublished =
       movie.release_date;
 
   }
 
+
+  /*
+     ポスター
+  */
 
   if(movie.poster_path){
 
@@ -1598,6 +1694,10 @@ function updateStructuredData(movie){
   }
 
 
+  /*
+     あらすじ
+  */
+
   if(movie.overview){
 
     movieData.description =
@@ -1606,13 +1706,85 @@ function updateStructuredData(movie){
   }
 
 
+  /*
+     TMDB作品ページとの関連
+  */
+
+  if(movie.link){
+
+    movieData.sameAs =
+      movie.link;
+
+  }else{
+
+    movieData.sameAs =
+      "https://www.themoviedb.org/movie/" +
+      movie.id;
+
+  }
+
+
+  /*
+     ジャンル
+  */
+
+  if(
+    Array.isArray(
+      movie.genres
+    ) &&
+    movie.genres.length
+  ){
+
+    const genres =
+      movie.genres
+        .filter(function(genre){
+
+          return (
+            genre &&
+            genre.name
+          );
+
+        })
+        .map(function(genre){
+
+          return genre.name;
+
+        });
+
+
+    if(genres.length){
+
+      movieData.genre =
+        genres;
+
+    }
+
+  }
+
+
+  /*
+     評価
+
+     rating_count等が存在しない場合は
+     無理にAggregateRatingを生成しない。
+  */
+
   const rating =
     Number(
       movie.vote_average || 0
     );
 
 
-  if(rating > 0){
+  const ratingCount =
+    Number(
+      movie.vote_count || 0
+    );
+
+
+  if(
+    rating > 0 &&
+    ratingCount > 0
+  ){
 
     movieData.aggregateRating = {
 
@@ -1626,12 +1798,19 @@ function updateStructuredData(movie){
         "10",
 
       worstRating:
-        "0"
+        "0",
+
+      ratingCount:
+        ratingCount
 
     };
 
   }
 
+
+  /*
+     監督
+  */
 
   if(
     movie.director &&
@@ -1650,6 +1829,10 @@ function updateStructuredData(movie){
 
   }
 
+
+  /*
+     出演者
+  */
 
   if(
     Array.isArray(
@@ -1723,6 +1906,10 @@ function updateStructuredData(movie){
     "@type":
       "WebPage",
 
+    "@id":
+      canonicalUrl +
+      "#webpage",
+
     name:
       (
         movie.title ||
@@ -1733,16 +1920,36 @@ function updateStructuredData(movie){
     url:
       canonicalUrl,
 
+    description:
+      movie.overview ||
+      (
+        movie.title ||
+        "作品情報"
+      ) +
+      "の配信サービス・作品情報を確認できます。",
+
     isPartOf:{
 
       "@type":
         "WebSite",
 
+      "@id":
+        siteUrl +
+        "#website",
+
       name:
         "ドコデミレル？",
 
       url:
-        "https://doko-de-mireru.vercel.app/"
+        siteUrl
+
+    },
+
+    mainEntity:{
+
+      "@id":
+        canonicalUrl +
+        "#movie"
 
     }
 
@@ -1800,7 +2007,7 @@ function updateStructuredData(movie){
           "ドコデミレル？",
 
         item:
-          "https://doko-de-mireru.vercel.app/"
+          siteUrl
 
       },
 
