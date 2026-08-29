@@ -111,7 +111,13 @@ module.exports = async function handler(req, res) {
       typeof req.query.id === "string"
         ? req.query.id.trim()
         : "";
-　　
+
+    const popular =
+  　　req.query &&
+  　　typeof req.query.popular === "string"
+    　　? req.query.popular.trim()
+   　　 : "";
+    
     const popular =
 req.query &&
 typeof req.query.popular === "string"
@@ -136,7 +142,26 @@ typeof req.query.popular === "string"
         .json(movie);
     }
 
-    // =====================================================
+// =====================================================
+// 人気作品
+// =====================================================
+
+if (popular === "1") {
+
+  const popularMovies =
+    await getPopularMovies(
+      apiKey
+    );
+
+  return res
+    .status(200)
+    .json({
+      results: popularMovies
+    });
+
+}
+
+// =====================================================
 // 人気作品
 //
 // TMDBから現在注目されている作品を自動取得
