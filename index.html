@@ -956,16 +956,31 @@ results.innerHTML =
 
     if(!movies.length){
 
-      results.innerHTML =
-        `
-        <div class="empty">
-          映画が見つかりませんでした。
-        </div>
-        `;
+  searchResultsHeading.textContent =
+    '🔍「' + query + '」の検索結果（0件）';
 
-      return;
+  results.innerHTML =
+    `
+    <div class="empty">
 
-    }
+      <div style="font-size:32px; margin-bottom:10px;">
+        🎬
+      </div>
+
+      <div style="font-weight:bold; font-size:17px; margin-bottom:8px;">
+        映画が見つかりませんでした。
+      </div>
+
+      <div>
+        別の作品名で検索してみてください。
+      </div>
+
+    </div>
+    `;
+
+  return;
+
+}
 
 
     /* -----------------------------------------------------
