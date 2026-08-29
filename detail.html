@@ -1178,12 +1178,10 @@ header p{
 
 <div class="basic-info">
 
-<time
+<div
   id="releaseDate"
   class="info-line"
-  itemprop="datePublished"
-  datetime=""
-></time>
+></div>
 
 <div
   id="rating"
@@ -1211,6 +1209,7 @@ header p{
 <div
   id="director"
   class="side-text"
+  itemprop="director"
 ></div>
 
 </div>
@@ -1225,6 +1224,7 @@ header p{
 <div
   id="cast"
   class="cast-list"
+  itemprop="actor"
 ></div>
 
 </div>
@@ -2127,22 +2127,24 @@ function updateStructuredData(movie){
      監督
   */
 
-  if(
-    movie.director &&
+ if(
+  movie.director &&
+  movie.director.name
+){
+
+  setText(
+    "director",
     movie.director.name
-  ){
+  );
 
-    movieData.director = {
+}else{
 
-      "@type":
-        "Person",
+  setText(
+    "director",
+    "監督情報はありません。"
+  );
 
-      name:
-        movie.director.name
-
-    };
-
-  }
+}
 
 
   /*
@@ -2435,16 +2437,15 @@ if(
   movie.release_date
 ){
 
-  releaseDateElement.textContent =
-    "公開日：" +
-    formatDate(
-      movie.release_date
-    );
-
-  releaseDateElement.setAttribute(
-    "datetime",
-    movie.release_date
-  );
+  setText(
+  "releaseDate",
+  movie.release_date
+    ? "公開日：" +
+      formatDate(
+        movie.release_date
+      )
+    : ""
+);
 
 }else if(releaseDateElement){
 
@@ -2799,24 +2800,22 @@ function renderCast(cast){
 
 
     const item =
-      document.createElement(
-        "div"
-      );
+  document.createElement(
+    "div"
+  );
 
 
-    item.className =
-      "cast-item";
+item.className =
+  "cast-item";
 
 
-    item.textContent =
-      person.name;
+item.textContent =
+  person.name;
 
 
-    container.appendChild(
-      item
-    );
-
-  });
+container.appendChild(
+  item
+);
 
 }
 
