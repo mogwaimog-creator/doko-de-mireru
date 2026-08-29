@@ -1989,7 +1989,7 @@ async function getPopularMovies(apiKey) {
 
 try {
 
-```
+
 // =======================================================
 // 現在上映中
 // =======================================================
@@ -2222,11 +2222,11 @@ return movies.map(function(movie) {
   };
 
 });
-```
+
 
 } catch (error) {
 
-```
+
 console.error(
   "POPULAR MOVIES ERROR:",
   error
@@ -2234,7 +2234,7 @@ console.error(
 
 
 return [];
-```
+
 
 }
 
@@ -2266,9 +2266,9 @@ if (
 parts.length !== 3
 ) {
 
-```
+
 return date;
-```
+
 
 }
 
@@ -2287,9 +2287,9 @@ if (
 !day
 ) {
 
-```
+
 return date;
-```
+
 
 }
 
