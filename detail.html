@@ -31,12 +31,25 @@
   content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
 >
 
+<meta
+  name="bingbot"
+  content="index, follow, max-image-preview:large, max-snippet:-1, max-image-preview:large"
+>
+
 <link
   id="canonical"
   rel="canonical"
   href="https://doko-de-mireru.vercel.app/detail.html"
 >
 
+<!-- =========================================================
+     Google検索向け
+========================================================= -->
+
+<meta
+  name="referrer"
+  content="strict-origin-when-cross-origin"
+>
 
 <!-- =========================================================
      OGP
@@ -87,6 +100,17 @@
   content="ドコデミレル？の作品情報"
 >
 
+<meta
+  id="ogImageWidth"
+  property="og:image:width"
+  content="780"
+>
+
+<meta
+  id="ogImageHeight"
+  property="og:image:height"
+  content="1170"
+>
 
 <!-- =========================================================
      X / Twitter
@@ -121,7 +145,6 @@
   content="ドコデミレル？の作品情報"
 >
 
-
 <!-- =========================================================
      サイト情報
 ========================================================= -->
@@ -135,7 +158,6 @@
   name="theme-color"
   content="#111827"
 >
-
 
 <!-- =========================================================
      スタイル
@@ -767,7 +789,49 @@ header p{
 
   line-height:1.6;
 }
+/* =========================================================
+   パンくず
+========================================================= */
 
+.breadcrumb{
+  display:flex;
+
+  flex-wrap:wrap;
+
+  align-items:center;
+
+  gap:6px;
+
+  margin-bottom:10px;
+
+  color:#666;
+
+  font-size:14px;
+
+  line-height:1.5;
+}
+
+.breadcrumb a{
+  color:#2563eb;
+
+  font-weight:bold;
+}
+
+.breadcrumb a:hover{
+  text-decoration:underline;
+}
+
+.breadcrumb span:last-child{
+  color:#555;
+
+  overflow:hidden;
+
+  text-overflow:ellipsis;
+
+  white-space:nowrap;
+
+  max-width:70%;
+}
 
 /* =========================================================
    TMDB
@@ -1077,7 +1141,32 @@ header p{
 
 <div class="container">
 
+<!-- =========================================================
+     パンくずナビ
+========================================================= -->
 
+<nav
+  class="breadcrumb"
+  aria-label="パンくずリスト"
+>
+
+<a
+  href="index.html"
+>
+ドコデミレル？
+</a>
+
+<span aria-hidden="true">
+›
+</span>
+
+<span
+  id="breadcrumbMovieName"
+>
+作品情報
+</span>
+
+</nav>
 <!-- =========================================================
      戻る
 ========================================================= -->
