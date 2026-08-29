@@ -3,6 +3,7 @@
 // api/sitemap.js
 //
 // 作品ページ用サイトマップ生成API
+// TMDBから複数ページの人気作品を取得
 // =========================================================
 
 module.exports = async function handler(req, res) {
@@ -12,6 +13,10 @@ module.exports = async function handler(req, res) {
     const apiKey =
       process.env.TMDB_API_KEY;
 
+
+    // =====================================================
+    // APIキー確認
+    // =====================================================
 
     if (!apiKey) {
 
@@ -23,40 +28,146 @@ module.exports = async function handler(req, res) {
 
 
     // =====================================================
-    // TMDBから人気作品を取得
+    // 設定
+    //
+    // 1ページ = 最大20作品
+    // 20ページ = 最大400作品
     // =====================================================
 
-    const url =
-      "https://api.themoviedb.org/3/movie/popular" +
-      "?api_key=" +
-      encodeURIComponent(apiKey) +
-      "&language=ja-JP" +
-      "&region=JP" +
-      "&page=1";
+    const MAX_PAGES = 20;
 
 
-    const response =
-      await fetch(url);
+    const baseUrl =
+      "https://api.themoviedb.org/3/movie/popular";
 
 
-    if (!response.ok) {
+    // =====================================================
+    // TMDBから複数ページ取得
+    // =====================================================
 
-      throw new Error(
-        "TMDB API ERROR: " +
-        response.status
+    const requests = [];
+
+
+    for (
+      let page = 1;
+      page <= MAX_PAGES;
+      page++
+    ) {
+
+      const url =
+        baseUrl +
+        "?api_key=" +
+        encodeURIComponent(apiKey) +
+        "&language=ja-JP" +
+        "&region=JP" +
+        "&page=" +
+        page;
+
+
+      requests.push(
+        fetch(url)
       );
 
     }
 
 
-    const data =
-      await response.json();
+    const responses =
+      await Promise.all(requests);
 
 
-    const movies =
-      Array.isArray(data.results)
-        ? data.results
-        : [];
+    // =====================================================
+    // APIエラー確認
+    // =====================================================
+
+    for (const response of responses) {
+
+      if (!response.ok) {
+
+        throw new Error(
+          "TMDB API ERROR: " +
+          response.status
+        );
+
+      }
+
+    }
+
+
+    // =====================================================
+    // JSON取得
+    // =====================================================
+
+    const datasets =
+      await Promise.all(
+        responses.map(function(response) {
+
+          return response.json();
+
+        })
+      );
+
+
+    // =====================================================
+    // 作品一覧
+    // =====================================================
+
+    const movies = [];
+
+
+    datasets.forEach(function(data) {
+
+      if (
+        data &&
+        Array.isArray(data.results)
+      ) {
+
+        data.results.forEach(function(movie) {
+
+          if (
+            movie &&
+            movie.id &&
+            movie.title
+          ) {
+
+            movies.push(movie);
+
+          }
+
+        });
+
+      }
+
+    });
+
+
+    // =====================================================
+    // 重複削除
+    // =====================================================
+
+    const seen =
+      new Set();
+
+
+    const uniqueMovies =
+      movies.filter(function(movie) {
+
+        const movieId =
+          String(movie.id);
+
+
+        if (seen.has(movieId)) {
+
+          return false;
+
+        }
+
+
+        seen.add(movieId);
+
+
+        return true;
+
+      });
 
 
     // =====================================================
@@ -64,8 +175,6 @@ module.exports = async function handler(req, res) {
     // =====================================================
 
     const urls = [];
-
-    const seen = new Set();
 
 
     // =====================================================
@@ -81,56 +190,32 @@ module.exports = async function handler(req, res) {
 
 
     // =====================================================
-    // 作品ページ
-    //
-    // release_date は「作品公開日」であり、
-    // ページの更新日ではないため lastmod には使用しない。
+    // 作品詳細ページ
     // =====================================================
 
-    movies
-      .filter(function(movie) {
+    uniqueMovies.forEach(function(movie) {
 
-        return (
-          movie &&
-          movie.id &&
-          movie.title
-        );
-
-      })
-      .forEach(function(movie) {
-
-        const movieId =
-          String(movie.id);
+      const movieId =
+        String(movie.id);
 
 
-        // 重複防止
-        if(seen.has(movieId)) {
-
-          return;
-
-        }
+      const detailUrl =
+        "https://doko-de-mireru.vercel.app/detail.html?id=" +
+        encodeURIComponent(movieId);
 
 
-        seen.add(movieId);
-
-
-        const detailUrl =
-          "https://doko-de-mireru.vercel.app/detail.html?id=" +
-          encodeURIComponent(movieId);
-
-
-        urls.push(`
+      urls.push(`
   <url>
     <loc>${detailUrl}</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>`);
 
-      });
+    });
 
 
     // =====================================================
-    // XML
+    // XML生成
     // =====================================================
 
     const xml =
@@ -150,11 +235,16 @@ ${urls.join("\n")}
     );
 
 
+    // 24時間キャッシュ
     res.setHeader(
       "Cache-Control",
       "public, s-maxage=86400, stale-while-revalidate=3600"
     );
 
+
+    // =====================================================
+    // 完了
+    // =====================================================
 
     return res
       .status(200)
@@ -176,4 +266,3 @@ ${urls.join("\n")}
   }
 
 };
-
