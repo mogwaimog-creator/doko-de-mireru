@@ -637,6 +637,20 @@ footer{
 
 }
 
+/* =========================================================
+   検索結果
+========================================================= */
+
+.search-results-section{
+  margin-top: 24px;
+}
+
+.search-results-title{
+  margin: 0 0 16px;
+  font-size: 22px;
+  font-weight: 700;
+}
+     
 </style>
 
 </head>
@@ -721,14 +735,28 @@ footer{
   <div id="status"></div>
 
   <!-- =====================================================
-       検索結果
-  ====================================================== -->
+     検索結果
+====================================================== -->
+
+<section
+  id="searchResultsSection"
+  class="search-results-section"
+  aria-labelledby="searchResultsHeading"
+>
+
+  <h2
+    id="searchResultsHeading"
+    class="search-results-title"
+  >
+    🔍 検索結果
+  </h2>
 
   <div
     id="results"
     class="results"
   ></div>
 
+</section>
 </main>
 
 <footer>
@@ -800,21 +828,41 @@ async function searchMovies(){
 
 
   /* -------------------------------------------------------
-     検索中
-  ------------------------------------------------------- */
+   検索中
+------------------------------------------------------- */
 
-  searchButton.disabled =
-    true;
-
-
-  status.innerHTML =
-    '<div class="status">' +
-    '🔍 検索しています...' +
-    '</div>';
+searchButton.disabled =
+  true;
 
 
-  results.innerHTML =
-    "";
+/* -------------------------------------------------------
+   検索結果見出し
+------------------------------------------------------- */
+
+const searchResultsHeading =
+  document.getElementById(
+    "searchResultsHeading"
+  );
+
+if(searchResultsHeading){
+
+  searchResultsHeading.textContent =
+    '🔍「' + query + '」の検索結果';
+
+}
+
+
+/* -------------------------------------------------------
+   検索中
+------------------------------------------------------- */
+
+status.innerHTML =
+  '<div class="status">' +
+  '🔍 検索しています...' +
+  '</div>';
+
+results.innerHTML =
+  "";
 
 
   try{
