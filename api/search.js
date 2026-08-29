@@ -95,24 +95,31 @@ module.exports = async function handler(req, res) {
     }
 
 
-    // =====================================================
-    // パラメータ
-    // =====================================================
+// =====================================================
+// パラメータ
+// =====================================================
 
-    const query =
-      req.query &&
-      typeof req.query.query === "string"
-        ? req.query.query.trim()
-        : "";
+const query =
+  req.query &&
+  typeof req.query.query === "string"
+    ? req.query.query.trim()
+    : "";
 
 
-    const popular =
-  　　req.query &&
-  　　typeof req.query.popular === "string"
-    　　? req.query.popular.trim()
-   　　 : "";
+const id =
+  req.query &&
+  typeof req.query.id === "string"
+    ? req.query.id.trim()
+    : "";
+
+
+const popular =
+  req.query &&
+  typeof req.query.popular === "string"
+    ? req.query.popular.trim()
+    : "";
     
-
+    
     // =====================================================
     // 作品詳細
     // =====================================================
