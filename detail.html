@@ -1591,6 +1591,7 @@ Netflix、Amazon Prime Video、U-NEXT、Hulu、Disney+などの
 ></div>
 
 
+```html
 <div class="basic-info">
 
 <div
@@ -1603,7 +1604,19 @@ Netflix、Amazon Prime Video、U-NEXT、Hulu、Disney+などの
   class="info-line"
 ></div>
 
+<div
+  id="movieType"
+  class="info-line"
+></div>
+
+<div
+  id="runtime"
+  class="info-line"
+></div>
+
 </div>
+```
+
 
 
 <div
@@ -2787,6 +2800,23 @@ function renderMovie(movie){
         rating.toFixed(1)
       : ""
   );
+
+
+setText(
+  "movieType",
+  "🎬 作品タイプ：映画"
+);
+
+
+setText(
+  "runtime",
+  movie.runtime
+    ? "⏱️ 上映時間：" +
+      movie.runtime +
+      "分"
+    : ""
+);
+
 
 
   renderGenres(
