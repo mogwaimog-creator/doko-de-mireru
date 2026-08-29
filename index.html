@@ -797,103 +797,8 @@ footer{
   </p>
 
 
-  <div class="popular-grid">
+    <div class="popular-grid" id="popularMovies"></div>
 
-
-    <!-- Spider-Man -->
-
-    <a
-      class="popular-card"
-      href="./detail.html?id=969681"
-    >
-
-      <img
-        class="popular-poster"
-        src="https://image.tmdb.org/t/p/w500/9JCQtDCSpPR2ld55yNlEg1VwcQo.jpg"
-        alt="スパイダーマン：ブランド・ニュー・デイのポスター"
-        loading="lazy"
-      >
-
-      <div class="popular-card-title">
-        スパイダーマン：ブランド・ニュー・デイ
-      </div>
-
-      <div
-        class="popular-card-status status-now"
-      >
-        🔴 大ヒット上映中
-      </div>
-
-      <div class="popular-card-link">
-        作品詳細を見る →
-      </div>
-
-    </a>
-
-
-    <!-- The Odyssey -->
-
-    <a
-      class="popular-card"
-      href="./detail.html?id=1368337"
-    >
-
-      <img
-        class="popular-poster"
-        src="https://image.tmdb.org/t/p/w500/5rhTDKUhPYvpdQIijFIs5VoWsON.jpg"
-        alt="オデュッセイアのポスター"
-        loading="lazy"
-      >
-
-      <div class="popular-card-title">
-        オデュッセイア
-      </div>
-
-      <div
-        class="popular-card-status status-coming"
-      >
-        🔵 2026年9月11日 公開予定
-      </div>
-
-      <div class="popular-card-link">
-        作品詳細を見る →
-      </div>
-
-    </a>
-
-
-    <!-- Mutiny -->
-
-    <a
-      class="popular-card"
-      href="./detail.html?id=1288445"
-    >
-
-      <img
-        class="popular-poster"
-        src="https://image.tmdb.org/t/p/w500/aAnTt6KpmbbHbd6xH3FQFlppZjc.jpg"
-        alt="ミューティニーのポスター"
-        loading="lazy"
-      >
-
-      <div class="popular-card-title">
-        ミューティニー
-      </div>
-
-      <div
-        class="popular-card-status status-planned"
-      >
-        🟡 公開予定
-      </div>
-
-      <div class="popular-card-link">
-        作品詳細を見る →
-      </div>
-
-    </a>
-
-
-  </div>
 
 </section>
 
@@ -1488,6 +1393,233 @@ if(savedQuery){
 
 }
 
+// =========================================================
+// 人気作品 自動取得
+// =========================================================
+
+async function loadPopularMovies(){
+
+const popularContainer =
+document.getElementById(
+"popularMovies"
+);
+
+if(!popularContainer){
+return;
+}
+
+try{
+
+
+const response =
+  await fetch(
+    "/api/search?popular=1"
+  );
+
+
+if(!response.ok){
+
+  throw new Error(
+    "人気作品の取得に失敗しました。"
+  );
+
+}
+
+
+const data =
+  await response.json();
+
+
+const movies =
+  Array.isArray(
+    data.results
+  )
+    ? data.results
+    : [];
+
+
+if(!movies.length){
+
+  popularContainer.innerHTML =
+    `
+    <div class="empty">
+      人気作品を取得できませんでした。
+    </div>
+    `;
+
+  return;
+
+}
+
+
+popularContainer.innerHTML =
+  movies
+    .map(
+      createPopularMovieCard
+    )
+    .join("");
+
+
+}catch(error){
+
+
+console.error(
+  "POPULAR MOVIES ERROR:",
+  error
+);
+
+
+popularContainer.innerHTML =
+  `
+  <div class="empty">
+    人気作品を取得できませんでした。
+  </div>
+  `;
+
+
+}
+
+}
+
+// =========================================================
+// 人気作品カード
+// =========================================================
+
+function createPopularMovieCard(movie){
+
+const poster =
+movie.poster_path
+? "https://image.tmdb.org/t/p/w500" +
+movie.poster_path
+: "";
+
+const movieId =
+String(
+movie.id || ""
+).trim();
+
+const detailUrl =
+"./detail.html?id=" +
+encodeURIComponent(
+movieId
+);
+
+let statusClass =
+"status-planned";
+
+if(
+movie.status_type ===
+"now"
+){
+
+
+statusClass =
+  "status-now";
+
+
+}else if(
+movie.status_type ===
+"coming"
+){
+
+
+statusClass =
+  "status-coming";
+
+
+}
+
+return `
+
+
+<a
+  class="popular-card"
+  href="${detailUrl}"
+>
+
+  ${
+    poster
+
+    ?
+
+    `
+    <img
+      class="popular-poster"
+      src="${poster}"
+      alt="${escapeHtml(
+        movie.title || ""
+      )}のポスター"
+      loading="lazy"
+    >
+    `
+
+    :
+
+    `
+    <div
+      class="popular-poster no-image"
+      role="img"
+      aria-label="ポスター画像なし"
+    >
+      NO IMAGE
+    </div>
+    `
+
+  }
+
+
+  <div class="popular-card-info">
+
+    <div class="popular-card-title">
+
+      ${escapeHtml(
+        movie.title || ""
+      )}
+
+    </div>
+
+
+    <div
+      class="popular-card-status ${statusClass}"
+    >
+
+      ${
+        movie.status_type === "now"
+          ? "🔴 "
+          : movie.status_type === "coming"
+            ? "🔵 "
+            : "🟡 "
+      }
+
+      ${escapeHtml(
+        movie.status || ""
+      )}
+
+    </div>
+
+
+    <div class="popular-card-link">
+
+      作品詳細を見る →
+
+    </div>
+
+  </div>
+
+</a>
+
+
+`;
+
+}
+
+// =========================================================
+// 人気作品読み込み開始
+// =========================================================
+
+loadPopularMovies();
+
+     
 </script>
 
 </body>
