@@ -1,13 +1,8 @@
-```xml
 <?xml version="1.0" encoding="UTF-8"?>
 
-<urlset
-  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
-  <!-- =====================================================
-       ドコデミレル？ トップページ
-  ====================================================== -->
+  <!-- ドコデミル？ トップページ -->
 
   <url>
     <loc>https://doko-de-mireru.vercel.app/</loc>
@@ -15,5 +10,7 @@
     <priority>1.0</priority>
   </url>
 
+  <!-- 作品詳細ページ -->
+  <!-- 今後、作品ページを追加したらここに追加します -->
+
 </urlset>
-```
