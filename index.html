@@ -1373,7 +1373,245 @@ searchButton.addEventListener(
   searchMovies
 );
 
+/* =========================================================
+   人気作品 自動取得
+========================================================= */
 
+async function loadPopularMovies(){
+
+  const popularMovies =
+    document.getElementById(
+      "popularMovies"
+    );
+
+  if(!popularMovies){
+    return;
+  }
+
+  try{
+
+    const response =
+      await fetch(
+        "/api/search?popular=1"
+      );
+
+    const data =
+      await response.json();
+
+    if(
+      !response.ok ||
+      !Array.isArray(data.results) ||
+      !data.results.length
+    ){
+
+      throw new Error(
+        "人気作品を取得できませんでした。"
+      );
+
+    }
+
+
+    popularMovies.innerHTML =
+      data.results
+        .map(
+          createPopularMovieCard
+        )
+        .join("");
+
+
+  }catch(error){
+
+    console.error(
+      "Popular movies error:",
+      error
+    );
+
+    popularMovies.innerHTML =
+      `
+      <div class="empty">
+        人気作品を取得できませんでした。
+      </div>
+      `;
+
+  }
+
+}     
+
+/* =========================================================
+   人気作品カード
+========================================================= */
+
+function createPopularMovieCard(movie){
+
+  const poster =
+    movie.poster_path
+      ? "https://image.tmdb.org/t/p/w500" +
+        movie.poster_path
+      : "";
+
+  const movieId =
+    String(
+      movie.id || ""
+    ).trim();
+
+  const detailUrl =
+    "./detail.html?id=" +
+    encodeURIComponent(
+      movieId
+    );
+
+
+  const title =
+    movie.title ||
+    movie.original_title ||
+    "作品名不明";
+
+
+  let statusText =
+    "";
+
+  let statusClass =
+    "";
+
+
+  /* -------------------------------------------------------
+     公開日判定
+  ------------------------------------------------------- */
+
+  if(movie.release_date){
+
+    const releaseDate =
+      new Date(
+        movie.release_date +
+        "T00:00:00"
+      );
+
+    const today =
+      new Date();
+
+    today.setHours(
+      0,0,0,0
+    );
+
+
+    if(
+      releaseDate > today
+    ){
+
+      const year =
+        releaseDate.getFullYear();
+
+      const month =
+        releaseDate.getMonth() + 1;
+
+      const day =
+        releaseDate.getDate();
+
+
+      statusText =
+        "🔵 " +
+        year +
+        "年" +
+        month +
+        "月" +
+        day +
+        "日 公開予定";
+
+      statusClass =
+        "status-coming";
+
+    }else{
+
+      statusText =
+        "🔴 公開中";
+
+      statusClass =
+        "status-now";
+
+    }
+
+  }else{
+
+    statusText =
+      "🟡 公開日不明";
+
+    statusClass =
+      "status-planned";
+
+  }
+
+
+  return `
+
+    <a
+      class="popular-card"
+      href="${detailUrl}"
+    >
+
+      ${
+        poster
+
+        ?
+
+        `
+        <img
+          class="popular-poster"
+          src="${poster}"
+          alt="${escapeHtml(
+            title
+          )}のポスター"
+          loading="lazy"
+        >
+        `
+
+        :
+
+        `
+        <div
+          class="popular-poster no-image"
+        >
+          NO IMAGE
+        </div>
+        `
+      }
+
+
+      <div class="popular-card-info">
+
+        <div class="popular-card-title">
+
+          ${escapeHtml(
+            title
+          )}
+
+        </div>
+
+
+        <div
+          class="popular-card-status ${statusClass}"
+        >
+
+          ${escapeHtml(
+            statusText
+          )}
+
+        </div>
+
+
+        <div class="popular-card-link">
+
+          作品詳細を見る →
+
+        </div>
+
+      </div>
+
+    </a>
+
+  `;
+
+}
+     
 /* =========================================================
    詳細画面から戻ってきた場合
 ========================================================= */
@@ -1393,6 +1631,8 @@ if(savedQuery){
 
 }
 
+loadPopularMovies();     
+     
 // =========================================================
 // 人気作品 自動取得
 // =========================================================
