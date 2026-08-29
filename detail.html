@@ -4719,7 +4719,60 @@ function formatYear(date){
 
 }
 
+/* =========================================================
+   上映時間
+========================================================= */
 
+function formatRuntime(minutes){
+
+  const value =
+    Number(minutes || 0);
+
+  if(!value){
+
+    return "";
+
+  }
+
+
+  const hours =
+    Math.floor(
+      value / 60
+    );
+
+
+  const mins =
+    value % 60;
+
+
+  if(hours > 0 && mins > 0){
+
+    return (
+      hours +
+      "時間" +
+      mins +
+      "分"
+    );
+
+  }
+
+
+  if(hours > 0){
+
+    return (
+      hours +
+      "時間"
+    );
+
+  }
+
+
+  return (
+    mins +
+    "分"
+  );
+
+}
 /* =========================================================
    テキスト
 ========================================================= */
