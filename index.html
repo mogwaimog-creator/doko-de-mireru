@@ -643,6 +643,7 @@ footer{
 
 .search-results-section{
   margin-top: 24px;
+  scroll-margin-top: 20px;
 }
 
 .search-results-title{
@@ -848,6 +849,11 @@ if(searchResultsHeading){
 
   searchResultsHeading.textContent =
     '🔍「' + query + '」の検索結果';
+
+  searchResultsHeading.scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
 
 }
 
