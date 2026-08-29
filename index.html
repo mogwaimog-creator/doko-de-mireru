@@ -275,63 +275,121 @@ header p{
 }
 
 
+```css
 /* =========================================================
-人気作品
+   人気作品
 ========================================================= */
 
 .popular-section{
-background:#fff;
-border-radius:16px;
-padding:22px;
-margin-bottom:25px;
+  background:#fff;
+  border-radius:16px;
+  padding:22px;
+  margin-bottom:25px;
 
-box-shadow:
-0 3px 15px
-rgba(0,0,0,.08);
+  box-shadow:
+    0 3px 15px
+    rgba(0,0,0,.08);
 }
 
 .popular-title{
-margin:0;
-font-size:23px;
-color:#111827;
-line-height:1.4;
+  margin:0;
+  font-size:23px;
+  color:#111827;
 }
 
 .popular-description{
-margin:8px 0 18px;
-color:#6b7280;
-font-size:14px;
-line-height:1.6;
+  margin:8px 0 18px;
+  color:#6b7280;
+  font-size:14px;
+  line-height:1.6;
 }
 
 .popular-grid{
-display:grid;
-grid-template-columns:
-repeat(3, minmax(0,1fr));
-gap:14px;
+  display:grid;
+  grid-template-columns:
+    repeat(3,1fr);
+  gap:14px;
 }
 
 .popular-card{
-display:block;
-background:#f5f7fb;
-border:1px solid #e5e7eb;
-border-radius:12px;
-overflow:hidden;
+  display:block;
+  background:#f5f7fb;
+  border:1px solid #e5e7eb;
+  border-radius:12px;
+  padding:14px;
 
-transition:
-transform .15s ease,
-box-shadow .15s ease,
-border-color .15s ease;
+  transition:
+    transform .15s ease,
+    box-shadow .15s ease,
+    border-color .15s ease;
 }
 
 .popular-card:hover{
-transform:translateY(-2px);
-border-color:#2563eb;
+  transform:translateY(-2px);
 
-box-shadow:
-0 5px 15px
-rgba(0,0,0,.08);
+  border-color:#2563eb;
+
+  box-shadow:
+    0 5px 15px
+    rgba(0,0,0,.08);
 }
+
+.popular-poster{
+  width:100%;
+  height:330px;
+
+  object-fit:cover;
+
+  border-radius:9px;
+
+  background:#e5e7eb;
+
+  display:block;
+
+  margin-bottom:12px;
+}
+
+.popular-card-title{
+  color:#111827;
+  font-size:16px;
+  font-weight:bold;
+  line-height:1.5;
+}
+
+.popular-card-link{
+  margin-top:8px;
+  color:#2563eb;
+  font-size:13px;
+  font-weight:bold;
+}
+
+
+/* =========================================================
+   人気作品 スマホ
+========================================================= */
+
+@media(max-width:700px){
+
+  .popular-grid{
+    grid-template-columns:1fr;
+  }
+
+  .popular-title{
+    font-size:21px;
+  }
+
+  .popular-card{
+    padding:12px;
+  }
+
+  .popular-poster{
+    height:auto;
+    max-height:none;
+  }
+
+}
+```
+
 
 /* =========================================================
 人気作品ポスター
@@ -647,49 +705,44 @@ footer{
 
   </section>
 
-  <!-- =====================================================
-       人気作品
-  ====================================================== -->
+```html
+<!-- =====================================================
+     人気作品
+====================================================== -->
 
-  <section
-    class="popular-section"
-    aria-labelledby="popularHeading"
-  >
-
-```
-<h2
-  id="popularHeading"
-  class="popular-title"
+<section
+  class="popular-section"
+  aria-labelledby="popularHeading"
 >
-  🎬 人気作品
-</h2>
 
-<p class="popular-description">
-  話題の映画や人気作品の配信情報をチェックできます。
-</p>
-
-
-<div class="popular-grid">
-
-
-  <!-- =================================================
-       Spider-Man: Brand New Day
-  ================================================== -->
-
-  <a
-    class="popular-card"
-    href="./detail.html?id=969681"
-    aria-label="Spider-Man: Brand New Dayの詳細を見る"
+  <h2
+    id="popularHeading"
+    class="popular-title"
   >
+    🎬 人気作品
+  </h2>
 
-    <img
-      class="popular-poster"
-      src="https://image.tmdb.org/t/p/w500/9whuWvGzJv4YQyWZpN3j0ZkX6xS.jpg"
-      alt="Spider-Man: Brand New Dayのポスター"
-      loading="lazy"
+  <p class="popular-description">
+    話題の映画や人気作品の配信情報をチェックできます。
+  </p>
+
+
+  <div class="popular-grid">
+
+
+    <!-- Spider-Man -->
+
+    <a
+      class="popular-card"
+      href="./detail.html?id=969681"
     >
 
-    <div class="popular-card-info">
+      <img
+        class="popular-poster"
+        src="https://image.tmdb.org/t/p/w500/9JCQtDCSpPR2ld55yNlEg1VwcQo.jpg"
+        alt="Spider-Man: Brand New Dayのポスター"
+        loading="lazy"
+      >
 
       <div class="popular-card-title">
         Spider-Man: Brand New Day
@@ -699,29 +752,22 @@ footer{
         作品詳細を見る →
       </div>
 
-    </div>
-
-  </a>
+    </a>
 
 
-  <!-- =================================================
-       The Odyssey
-  ================================================== -->
+    <!-- The Odyssey -->
 
-  <a
-    class="popular-card"
-    href="./detail.html?id=1368337"
-    aria-label="The Odysseyの詳細を見る"
-  >
-
-    <img
-      class="popular-poster"
-      src="https://image.tmdb.org/t/p/w500/9whuWvGzJv4YQyWZpN3j0ZkX6xS.jpg"
-      alt="The Odysseyのポスター"
-      loading="lazy"
+    <a
+      class="popular-card"
+      href="./detail.html?id=1368337"
     >
 
-    <div class="popular-card-info">
+      <img
+        class="popular-poster"
+        src="https://image.tmdb.org/t/p/w500/9whuWvGzJv4YQyWZpN3j0ZkX6xS.jpg"
+        alt="The Odysseyのポスター"
+        loading="lazy"
+      >
 
       <div class="popular-card-title">
         The Odyssey
@@ -731,29 +777,22 @@ footer{
         作品詳細を見る →
       </div>
 
-    </div>
-
-  </a>
+    </a>
 
 
-  <!-- =================================================
-       Mutiny
-  ================================================== -->
+    <!-- Mutiny -->
 
-  <a
-    class="popular-card"
-    href="./detail.html?id=1288445"
-    aria-label="Mutinyの詳細を見る"
-  >
-
-    <img
-      class="popular-poster"
-      src="https://image.tmdb.org/t/p/w500/9whuWvGzJv4YQyWZpN3j0ZkX6xS.jpg"
-      alt="Mutinyのポスター"
-      loading="lazy"
+    <a
+      class="popular-card"
+      href="./detail.html?id=1288445"
     >
 
-    <div class="popular-card-info">
+      <img
+        class="popular-poster"
+        src="https://image.tmdb.org/t/p/w500/9whuWvGzJv4YQyWZpN3j0ZkX6xS.jpg"
+        alt="Mutinyのポスター"
+        loading="lazy"
+      >
 
       <div class="popular-card-title">
         Mutiny
@@ -763,15 +802,13 @@ footer{
         作品詳細を見る →
       </div>
 
-    </div>
-
-  </a>
+    </a>
 
 
-</div>
+  </div>
+
+</section>
 ```
-
-  </section>
 
   <!-- =====================================================
        ステータス
