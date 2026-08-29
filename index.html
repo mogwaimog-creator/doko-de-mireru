@@ -265,6 +265,125 @@ header p{
   gap:18px;
 }
 
+/* =========================================================
+人気作品
+========================================================= */
+
+.popular-section{
+margin-top:25px;
+
+background:#fff;
+
+border-radius:16px;
+
+padding:22px;
+
+box-shadow:
+0 3px 15px
+rgba(0,0,0,.07);
+}
+
+.popular-section h2{
+margin:0 0 6px;
+
+color:#111827;
+
+font-size:22px;
+
+line-height:1.4;
+}
+
+.popular-description{
+margin:0 0 15px;
+
+color:#6b7280;
+
+font-size:14px;
+
+line-height:1.6;
+}
+
+.popular-list{
+display:grid;
+
+grid-template-columns:
+repeat(3, minmax(0,1fr));
+
+gap:10px;
+}
+
+.popular-item{
+display:block;
+
+padding:12px 14px;
+
+background:#f8fafc;
+
+border:1px solid #e5e7eb;
+
+border-radius:10px;
+
+color:#2563eb;
+
+font-size:15px;
+
+font-weight:bold;
+
+line-height:1.5;
+
+transition:
+background .15s ease,
+border-color .15s ease,
+transform .15s ease;
+}
+
+.popular-item:hover{
+background:#eff6ff;
+
+border-color:#bfdbfe;
+
+transform:translateY(-1px);
+}
+
+/* =========================================================
+人気作品：スマートフォン
+========================================================= */
+
+@media(max-width:700px){
+
+.popular-section{
+padding:17px;
+
+
+margin-top:20px;
+
+
+}
+
+.popular-section h2{
+font-size:20px;
+}
+
+.popular-list{
+grid-template-columns:
+1fr;
+
+
+gap:8px;
+
+
+}
+
+.popular-item{
+font-size:14px;
+
+
+padding:11px 12px;
+
+
+}
+
+}
 
 /* =========================================================
    映画カード
@@ -507,6 +626,43 @@ footer{
     class="results"
   ></div>
 
+<section class="popular-section" aria-labelledby="popularHeading">
+
+  <h2 id="popularHeading">
+    🎬 人気作品
+  </h2>
+
+  <p class="popular-description">
+    話題の映画や人気作品の配信情報をチェックできます。
+  </p>
+
+  <div class="popular-list">
+
+```
+<a
+  class="popular-item"
+  href="./detail.html?id=969681"
+>
+  Spider-Man: Brand New Day
+</a>
+
+<a
+  class="popular-item"
+  href="./detail.html?id=1368337"
+>
+  The Odyssey
+</a>
+
+<a
+  class="popular-item"
+  href="./detail.html?id=1288445"
+>
+  Mutiny
+</a>
+
+  </div>
+
+</section>
 
 </main>
 
