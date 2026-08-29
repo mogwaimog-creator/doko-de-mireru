@@ -14,6 +14,10 @@
      基本SEO
 ========================================================= -->
 
+<!-- =========================================================
+     基本SEO
+========================================================= -->
+
 <title>作品情報 | ドコデミレル？</title>
 
 <meta
@@ -32,23 +36,18 @@
 >
 
 <meta
-  name="bingbot"
-  content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+  name="referrer"
+  content="strict-origin-when-cross-origin"
 >
+
+<!-- =========================================================
+     Canonical
+========================================================= -->
 
 <link
   id="canonical"
   rel="canonical"
   href="https://doko-de-mireru.vercel.app/detail.html"
->
-
-<!-- =========================================================
-     Google検索向け
-========================================================= -->
-
-<meta
-  name="referrer"
-  content="strict-origin-when-cross-origin"
 >
 
 <!-- =========================================================
@@ -69,7 +68,7 @@
 <meta
   id="ogDescription"
   property="og:description"
-  content="映画がNetflix、Amazon Prime Video、U-NEXT、Hulu、Disney+など、どこで見られるか確認できます。"
+  content="映画がどこで見られるか確認できる作品情報ページです。"
 >
 
 <meta
@@ -113,7 +112,7 @@
 >
 
 <!-- =========================================================
-     X / Twitter
+     X
 ========================================================= -->
 
 <meta
@@ -130,7 +129,7 @@
 <meta
   id="twitterDescription"
   name="twitter:description"
-  content="映画がNetflix、Amazon Prime Video、U-NEXT、Hulu、Disney+など、どこで見られるか確認できます。"
+  content="映画がどこで見られるか確認できる作品情報ページです。"
 >
 
 <meta
@@ -163,7 +162,6 @@
   name="theme-color"
   content="#111827"
 >
-
 
 <!-- =========================================================
      スタイル
@@ -1552,12 +1550,16 @@ header p{
 
 <p>
 ドコデミレル？では、映画の作品情報と、
-Netflix、Amazon Prime Video、U-NEXT、Hulu、Disney+などの
-配信サービス情報を確認できます。
+Netflix、Amazon Prime Video、U-NEXT、Hulu、Disney+など、
+各配信サービスでどこで見られるかを確認できます。
+</p>
+
+<p>
+作品ページでは、公開日、上映時間、ジャンル、監督、出演者、
+あらすじ、配信サービスなどの情報を確認できます。
 </p>
 
 </noscript>
-
 
 <!-- =========================================================
      作品情報
@@ -2052,21 +2054,51 @@ function updateSeo(movie){
     String(
       movie.title ||
       "作品情報"
-    ).trim();
+    )
+    .replace(/\s+/g," ")
+    .trim();
 
+
+  /*
+     Google検索向けタイトル
+  */
 
   const seoTitle =
     title +
-    "｜配信サービス・作品情報 | ドコデミレル？";
+    "｜どこで見れる？配信サービス・作品情報 | ドコデミレル？";
 
 
   document.title =
     seoTitle;
 
 
+  /*
+     説明文
+  */
+
   let description =
     title +
-    "がNetflix、Amazon Prime Video、U-NEXT、Hulu、Disney+など、どこで見られるか確認できます。";
+    "がどこで見られるか確認できます。";
+
+
+  if(movie.streaming &&
+     Array.isArray(movie.streaming) &&
+     movie.streaming.length){
+
+    description +=
+      "見放題の配信サービスを掲載。";
+
+  }
+
+
+  if(movie.rental &&
+     Array.isArray(movie.rental) &&
+     movie.rental.length){
+
+    description +=
+      "レンタル・購入情報も確認できます。";
+
+  }
 
 
   if(movie.release_date){
@@ -2080,6 +2112,10 @@ function updateSeo(movie){
 
   }
 
+
+  /*
+     あらすじを短く追加
+  */
 
   if(movie.overview){
 
@@ -2104,11 +2140,17 @@ function updateSeo(movie){
   }
 
 
+  /*
+     長すぎるdescriptionを防止
+  */
+
   description =
-    description.substring(
-      0,
-      160
-    );
+    description
+      .substring(
+        0,
+        155
+      )
+      .trim();
 
 
   setMeta(
@@ -2116,6 +2158,10 @@ function updateSeo(movie){
     description
   );
 
+
+  /*
+     正規URL
+  */
 
   const canonicalUrl =
     DETAIL_URL +
@@ -2132,6 +2178,10 @@ function updateSeo(movie){
 
   }
 
+
+  /*
+     OGP
+  */
 
   setMetaProperty(
     "ogTitle",
@@ -2154,6 +2204,10 @@ function updateSeo(movie){
   );
 
 
+  /*
+     X
+  */
+
   setMetaProperty(
     "twitterTitle",
     "content",
@@ -2167,6 +2221,10 @@ function updateSeo(movie){
     description
   );
 
+
+  /*
+     ポスター
+  */
 
   if(movie.poster_path){
 
@@ -2286,43 +2344,47 @@ function setMetaProperty(
 
 function updateStructuredData(movie){
 
-  const oldMovie =
-    document.getElementById(
-      "movieStructuredData"
-    );
+  if(!movie || !movie.id){
 
-  const oldPage =
-    document.getElementById(
-      "pageStructuredData"
-    );
+    return;
 
-  const oldBreadcrumb =
-    document.getElementById(
-      "breadcrumbStructuredData"
-    );
-
-  const oldWebsite =
-    document.getElementById(
-      "websiteStructuredData"
-    );
-
-
-  if(oldMovie){
-    oldMovie.remove();
   }
 
-  if(oldPage){
-    oldPage.remove();
-  }
 
-  if(oldBreadcrumb){
-    oldBreadcrumb.remove();
-  }
+  /*
+     古い構造化データを削除
+  */
 
-  if(oldWebsite){
-    oldWebsite.remove();
-  }
+  const oldIds = [
 
+    "movieStructuredData",
+    "pageStructuredData",
+    "websiteStructuredData",
+    "breadcrumbStructuredData"
+
+  ];
+
+
+  oldIds.forEach(function(id){
+
+    const element =
+      document.getElementById(
+        id
+      );
+
+
+    if(element){
+
+      element.remove();
+
+    }
+
+  });
+
+
+  /*
+     正規URL
+  */
 
   const canonicalUrl =
     DETAIL_URL +
@@ -2332,9 +2394,24 @@ function updateStructuredData(movie){
     );
 
 
-  /* =======================================================
+  /*
+     ポスター
+  */
+
+  const imageUrl =
+    movie.poster_path
+      ? (
+          "https://image.tmdb.org/t/p/w780" +
+          movie.poster_path
+        )
+      : null;
+
+
+  /*
+     ========================================================
      Movie
-  ======================================================= */
+     ========================================================
+  */
 
   const movieData = {
 
@@ -2350,19 +2427,10 @@ function updateStructuredData(movie){
 
     name:
       movie.title ||
-      "",
+      "作品情報",
 
     url:
-      canonicalUrl,
-
-    mainEntityOfPage:{
-      "@type":
-        "WebPage",
-
-      "@id":
-        canonicalUrl +
-        "#webpage"
-    }
+      canonicalUrl
 
   };
 
@@ -2383,11 +2451,10 @@ function updateStructuredData(movie){
   }
 
 
-  if(movie.poster_path){
+  if(imageUrl){
 
     movieData.image =
-      "https://image.tmdb.org/t/p/w780" +
-      movie.poster_path;
+      imageUrl;
 
   }
 
@@ -2400,25 +2467,24 @@ function updateStructuredData(movie){
   }
 
 
-  if(movie.link){
+  /*
+     TMDB
+  */
 
-    movieData.sameAs =
-      movie.link;
-
-  }else{
-
-    movieData.sameAs =
+  movieData.sameAs =
+    movie.link ||
+    (
       "https://www.themoviedb.org/movie/" +
-      movie.id;
+      movie.id
+    );
 
-  }
 
+  /*
+     ジャンル
+  */
 
   if(
-    Array.isArray(
-      movie.genres
-    ) &&
-    movie.genres.length
+    Array.isArray(movie.genres)
   ){
 
     const genres =
@@ -2447,6 +2513,10 @@ function updateStructuredData(movie){
 
   }
 
+
+  /*
+     評価
+  */
 
   const rating =
     Number(
@@ -2487,6 +2557,10 @@ function updateStructuredData(movie){
   }
 
 
+  /*
+     監督
+  */
+
   if(
     movie.director &&
     movie.director.name
@@ -2505,11 +2579,12 @@ function updateStructuredData(movie){
   }
 
 
+  /*
+     出演者
+  */
+
   if(
-    Array.isArray(
-      movie.cast
-    ) &&
-    movie.cast.length
+    Array.isArray(movie.cast)
   ){
 
     const actors =
@@ -2554,9 +2629,11 @@ function updateStructuredData(movie){
   );
 
 
-  /* =======================================================
+  /*
+     ========================================================
      WebPage
-  ======================================================= */
+     ========================================================
+  */
 
   const pageData = {
 
@@ -2570,37 +2647,56 @@ function updateStructuredData(movie){
       canonicalUrl +
       "#webpage",
 
+    url:
+      canonicalUrl,
+
     name:
       (
         movie.title ||
         "作品情報"
       ) +
-      "｜配信サービス・作品情報 | ドコデミレル？",
-
-    url:
-      canonicalUrl,
-
-    description:
-      movie.overview ||
-      (
-        movie.title ||
-        "作品情報"
-      ) +
-      "の配信サービス・作品情報を確認できます。",
+      "｜どこで見れる？配信サービス・作品情報 | ドコデミレル？",
 
     isPartOf:{
+
       "@id":
         SITE_URL +
         "#website"
+
     },
 
     mainEntity:{
+
       "@id":
         canonicalUrl +
         "#movie"
+
     }
 
   };
+
+
+  if(movie.overview){
+
+    pageData.description =
+      movie.overview;
+
+  }
+
+
+  if(imageUrl){
+
+    pageData.primaryImageOfPage = {
+
+      "@type":
+        "ImageObject",
+
+      url:
+        imageUrl
+
+    };
+
+  }
 
 
   appendStructuredData(
@@ -2609,9 +2705,11 @@ function updateStructuredData(movie){
   );
 
 
-  /* =======================================================
+  /*
+     ========================================================
      WebSite
-  ======================================================= */
+     ========================================================
+  */
 
   const websiteData = {
 
@@ -2632,7 +2730,7 @@ function updateStructuredData(movie){
       SITE_URL,
 
     description:
-      "映画がNetflix、Amazon Prime Video、U-NEXT、Hulu、Disney+など、どこで見られるか検索できるサイト。"
+      "映画がどこで見られるか検索できる映画配信サービス検索サイト。"
 
   };
 
@@ -2643,9 +2741,11 @@ function updateStructuredData(movie){
   );
 
 
-  /* =======================================================
+  /*
+     ========================================================
      BreadcrumbList
-  ======================================================= */
+     ========================================================
+  */
 
   const breadcrumbData = {
 
@@ -2811,8 +2911,9 @@ setText(
   "runtime",
   movie.runtime
     ? "⏱️ 上映時間：" +
-      movie.runtime +
-      "分"
+      formatRuntime(
+        movie.runtime
+      )
     : ""
 );
 
