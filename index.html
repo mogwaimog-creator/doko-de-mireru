@@ -1210,27 +1210,38 @@ function createMovieCard(movie){
         }
 
 
-        <!-- 公開年 -->
+        <!-- 作品タイプ -->
 
-        <div class="meta">
+<div class="meta">
 
-          📅 公開年：
-          ${escapeHtml(
-            release
-          )}
+  🎬 作品タイプ：
+  ${escapeHtml(
+    movie.media_type || "映画"
+  )}
 
-        </div>
+</div>
 
 
-        <!-- 評価 -->
+<!-- 公開年 -->
 
-        <div class="meta">
+<div class="meta">
 
-          ⭐ TMDB評価：
-          ${rating}
+  📅 公開年：
+  ${escapeHtml(
+    release
+  )}
 
-        </div>
+</div>
 
+
+<!-- 評価 -->
+
+<div class="meta">
+
+  ⭐ TMDB評価：
+  ${rating}
+
+</div>
 
         <!-- 詳細 -->
 
