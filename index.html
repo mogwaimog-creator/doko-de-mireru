@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="ja">
 
@@ -112,11 +111,14 @@
 
 body{
   margin:0;
+
   font-family:
     Arial,
     "Noto Sans JP",
     sans-serif;
+
   background:#f5f7fb;
+
   color:#222;
 }
 
@@ -132,20 +134,27 @@ a{
 
 header{
   background:#111827;
+
   color:#fff;
+
   padding:22px 15px;
+
   text-align:center;
 }
 
 header h1{
   margin:0;
+
   font-size:30px;
+
   font-weight:700;
 }
 
 header p{
   margin:8px 0 0;
+
   color:#d1d5db;
+
   font-size:14px;
 }
 
@@ -156,6 +165,7 @@ header p{
 
 .container{
   width:min(1000px,94%);
+
   margin:25px auto 50px;
 }
 
@@ -166,16 +176,25 @@ header p{
 
 .search-box{
   background:#fff;
+
   border-radius:16px;
+
   padding:22px;
+
   margin-bottom:25px;
-  box-shadow:0 3px 15px rgba(0,0,0,.08);
+
+  box-shadow:
+    0 3px 15px
+    rgba(0,0,0,.08);
 }
 
 .search-row{
   display:flex;
+
   gap:10px;
+
   justify-content:center;
+
   align-items:center;
 }
 
@@ -186,17 +205,25 @@ header p{
 
 #query{
   width:520px;
+
   max-width:100%;
+
   height:50px;
+
   padding:0 16px;
+
   border:1px solid #d1d5db;
+
   border-radius:10px;
+
   font-size:16px;
+
   outline:none;
 }
 
 #query:focus{
   border-color:#2563eb;
+
   box-shadow:
     0 0 0 3px
     rgba(37,99,235,.12);
@@ -209,13 +236,21 @@ header p{
 
 #searchButton{
   height:50px;
+
   padding:0 25px;
+
   border:0;
+
   border-radius:10px;
+
   background:#2563eb;
+
   color:#fff;
+
   font-size:16px;
+
   font-weight:bold;
+
   cursor:pointer;
 }
 
@@ -225,6 +260,7 @@ header p{
 
 #searchButton:disabled{
   opacity:.6;
+
   cursor:wait;
 }
 
@@ -235,24 +271,134 @@ header p{
 
 .status{
   text-align:center;
+
   padding:20px;
+
   color:#6b7280;
 }
 
 .error{
   background:#fee2e2;
+
   color:#b91c1c;
+
   padding:15px;
+
   border-radius:10px;
+
   margin:15px 0;
 }
 
 .empty{
   background:#fff;
+
   border-radius:16px;
+
   padding:35px;
+
   text-align:center;
+
   color:#6b7280;
+}
+
+
+/* =========================================================
+   人気作品
+========================================================= */
+
+.popular-section{
+  background:#fff;
+
+  border-radius:16px;
+
+  padding:22px;
+
+  margin-bottom:25px;
+
+  box-shadow:
+    0 3px 15px
+    rgba(0,0,0,.08);
+}
+
+
+.popular-title{
+  margin:0;
+
+  font-size:23px;
+
+  color:#111827;
+}
+
+
+.popular-description{
+  margin:8px 0 18px;
+
+  color:#6b7280;
+
+  font-size:14px;
+
+  line-height:1.6;
+}
+
+
+.popular-grid{
+  display:grid;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  gap:14px;
+}
+
+
+.popular-card{
+  display:block;
+
+  background:#f5f7fb;
+
+  border:1px solid #e5e7eb;
+
+  border-radius:12px;
+
+  padding:18px;
+
+  transition:
+    transform .15s ease,
+    box-shadow .15s ease,
+    border-color .15s ease;
+}
+
+
+.popular-card:hover{
+  transform:translateY(-2px);
+
+  border-color:#2563eb;
+
+  box-shadow:
+    0 5px 15px
+    rgba(0,0,0,.08);
+}
+
+
+.popular-card-title{
+  color:#111827;
+
+  font-size:16px;
+
+  font-weight:bold;
+
+  line-height:1.5;
+}
+
+
+.popular-card-link{
+  margin-top:10px;
+
+  color:#2563eb;
+
+  font-size:13px;
+
+  font-weight:bold;
 }
 
 
@@ -262,128 +408,10 @@ header p{
 
 .results{
   display:grid;
+
   gap:18px;
 }
 
-/* =========================================================
-人気作品
-========================================================= */
-
-.popular-section{
-margin-top:25px;
-
-background:#fff;
-
-border-radius:16px;
-
-padding:22px;
-
-box-shadow:
-0 3px 15px
-rgba(0,0,0,.07);
-}
-
-.popular-section h2{
-margin:0 0 6px;
-
-color:#111827;
-
-font-size:22px;
-
-line-height:1.4;
-}
-
-.popular-description{
-margin:0 0 15px;
-
-color:#6b7280;
-
-font-size:14px;
-
-line-height:1.6;
-}
-
-.popular-list{
-display:grid;
-
-grid-template-columns:
-repeat(3, minmax(0,1fr));
-
-gap:10px;
-}
-
-.popular-item{
-display:block;
-
-padding:12px 14px;
-
-background:#f8fafc;
-
-border:1px solid #e5e7eb;
-
-border-radius:10px;
-
-color:#2563eb;
-
-font-size:15px;
-
-font-weight:bold;
-
-line-height:1.5;
-
-transition:
-background .15s ease,
-border-color .15s ease,
-transform .15s ease;
-}
-
-.popular-item:hover{
-background:#eff6ff;
-
-border-color:#bfdbfe;
-
-transform:translateY(-1px);
-}
-
-/* =========================================================
-人気作品：スマートフォン
-========================================================= */
-
-@media(max-width:700px){
-
-.popular-section{
-padding:17px;
-
-
-margin-top:20px;
-
-
-}
-
-.popular-section h2{
-font-size:20px;
-}
-
-.popular-list{
-grid-template-columns:
-1fr;
-
-
-gap:8px;
-
-
-}
-
-.popular-item{
-font-size:14px;
-
-
-padding:11px 12px;
-
-
-}
-
-}
 
 /* =========================================================
    映画カード
@@ -391,10 +419,13 @@ padding:11px 12px;
 
 .movie-card{
   background:#fff;
+
   border-radius:16px;
+
   padding:18px;
 
   display:flex;
+
   align-items:center;
 
   gap:20px;
@@ -411,6 +442,7 @@ padding:11px 12px;
 
 .movie-poster{
   width:150px;
+
   height:225px;
 
   object-fit:cover;
@@ -429,6 +461,7 @@ padding:11px 12px;
 
 .movie-info{
   flex:1;
+
   min-width:0;
 }
 
@@ -444,13 +477,17 @@ padding:11px 12px;
 
 .original-title{
   color:#6b7280;
+
   font-size:14px;
+
   margin-bottom:14px;
 }
 
 .meta{
   color:#4b5563;
+
   font-size:14px;
+
   margin:7px 0;
 }
 
@@ -527,6 +564,26 @@ footer{
   }
 
 
+  .popular-section{
+    padding:17px;
+  }
+
+
+  .popular-title{
+    font-size:21px;
+  }
+
+
+  .popular-grid{
+    grid-template-columns:1fr;
+  }
+
+
+  .popular-card{
+    padding:16px;
+  }
+
+
   .movie-card{
     align-items:flex-start;
   }
@@ -534,6 +591,7 @@ footer{
 
   .movie-poster{
     width:120px;
+
     height:180px;
   }
 
@@ -555,6 +613,7 @@ footer{
 
   .detail-button{
     width:100%;
+
     text-align:center;
   }
 
@@ -611,6 +670,84 @@ footer{
 
 
   <!-- =====================================================
+       人気作品
+  ====================================================== -->
+
+  <section
+    class="popular-section"
+    aria-labelledby="popularHeading"
+  >
+
+    <h2
+      id="popularHeading"
+      class="popular-title"
+    >
+      🎬 人気作品
+    </h2>
+
+
+    <p class="popular-description">
+      話題の映画や人気作品の配信情報をチェックできます。
+    </p>
+
+
+    <div class="popular-grid">
+
+
+      <a
+        class="popular-card"
+        href="./detail.html?id=969681"
+      >
+
+        <div class="popular-card-title">
+          Spider-Man: Brand New Day
+        </div>
+
+        <div class="popular-card-link">
+          作品詳細を見る →
+        </div>
+
+      </a>
+
+
+      <a
+        class="popular-card"
+        href="./detail.html?id=1368337"
+      >
+
+        <div class="popular-card-title">
+          The Odyssey
+        </div>
+
+        <div class="popular-card-link">
+          作品詳細を見る →
+        </div>
+
+      </a>
+
+
+      <a
+        class="popular-card"
+        href="./detail.html?id=1288445"
+      >
+
+        <div class="popular-card-title">
+          Mutiny
+        </div>
+
+        <div class="popular-card-link">
+          作品詳細を見る →
+        </div>
+
+      </a>
+
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
        ステータス
   ====================================================== -->
 
@@ -626,43 +763,6 @@ footer{
     class="results"
   ></div>
 
-<section class="popular-section" aria-labelledby="popularHeading">
-
-  <h2 id="popularHeading">
-    🎬 人気作品
-  </h2>
-
-  <p class="popular-description">
-    話題の映画や人気作品の配信情報をチェックできます。
-  </p>
-
-  <div class="popular-list">
-
-```
-<a
-  class="popular-item"
-  href="./detail.html?id=969681"
->
-  Spider-Man: Brand New Day
-</a>
-
-<a
-  class="popular-item"
-  href="./detail.html?id=1368337"
->
-  The Odyssey
-</a>
-
-<a
-  class="popular-item"
-  href="./detail.html?id=1288445"
->
-  Mutiny
-</a>
-
-  </div>
-
-</section>
 
 </main>
 
@@ -1246,4 +1346,3 @@ if(savedQuery){
 </body>
 
 </html>
-```
