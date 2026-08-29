@@ -3,6 +3,10 @@
     {
       "source": "/movie/:id",
       "destination": "/index.html"
+    },
+    {
+      "source": "/sitemap.xml",
+      "destination": "/api/sitemap"
     }
   ]
 }
