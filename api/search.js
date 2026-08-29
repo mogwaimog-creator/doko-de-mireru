@@ -460,40 +460,56 @@ const results =
 
     return {
 
-      id:
-        movie.id,
+  id:
+    movie.id,
 
 
-      title:
-        movie.title || "",
+  title:
+    movie.title || "",
 
 
-      media_type:
-        "映画",
+  // ===================================================
+  // 作品タイプ
+  // ===================================================
+
+  media_type:
+    "劇場版",
 
 
-      original_title:
-        movie.original_title || "",
+  // ===================================================
+  // 上映時間
+  //
+  // 検索一覧では映画検索APIだけでは
+  // runtimeが取得できないため、
+  // 詳細ページ側で取得する
+  // ===================================================
+
+  runtime:
+    0,
 
 
-      release_date:
-        movie.release_date || "",
+  original_title:
+    movie.original_title || "",
 
 
-      poster_path:
-        movie.poster_path || null,
+  release_date:
+    movie.release_date || "",
 
 
-      overview:
-        movie.overview || "",
+  poster_path:
+    movie.poster_path || null,
 
 
-      vote_average:
-        Number(
-          movie.vote_average || 0
-        )
+  overview:
+    movie.overview || "",
 
-    };
+
+  vote_average:
+    Number(
+      movie.vote_average || 0
+    )
+
+};
 
   });
 
