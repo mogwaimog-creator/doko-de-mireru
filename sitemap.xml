@@ -11,6 +11,11 @@
   </url>
 
   <!-- 作品詳細ページ -->
-  <!-- 今後、作品ページを追加したらここに追加します -->
+
+  <url>
+    <loc>https://doko-de-mireru.vercel.app/detail.html?id=519182</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
 
 </urlset>
