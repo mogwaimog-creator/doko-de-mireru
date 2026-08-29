@@ -1168,6 +1168,30 @@ if(!movieId){
 
 }
 
+/* =========================================================
+   初期canonical
+   URLの作品IDを使って作品ページの正規URLを設定
+========================================================= */
+
+const initialCanonicalUrl =
+  "https://doko-de-mireru.vercel.app/detail.html?id=" +
+  encodeURIComponent(
+    movieId
+  );
+
+
+const canonical =
+  document.getElementById(
+    "canonical"
+  );
+
+
+if(canonical){
+
+  canonical.href =
+    initialCanonicalUrl;
+
+}
 
 /* =========================================================
    読み込み
