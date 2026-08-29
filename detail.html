@@ -33,7 +33,7 @@
 
 <meta
   name="bingbot"
-  content="index, follow, max-image-preview:large, max-snippet:-1, max-image-preview:large"
+  content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
 >
 
 <link
@@ -153,15 +153,17 @@
   name="author"
   content="ドコデミレル？"
 >
+
 <meta
   name="keywords"
   content="映画,映画配信,映画サブスク,映画どこで見れる,Netflix,Amazon Prime Video,U-NEXT,Hulu,Disney+,映画情報"
 >
-  
+
 <meta
   name="theme-color"
   content="#111827"
 >
+
 
 <!-- =========================================================
      スタイル
@@ -191,8 +193,8 @@ body{
 
   background:#f5f7fb;
   color:#222;
-  font-size:16px;
 
+  font-size:16px;
   line-height:1.6;
 }
 
@@ -230,6 +232,7 @@ header p{
   margin:7px 0 0;
 
   color:#d1d5db;
+
   font-size:15px;
 }
 
@@ -366,7 +369,6 @@ header p{
   gap:6px;
 
   margin-top:2px;
-
   margin-bottom:12px;
 }
 
@@ -473,10 +475,8 @@ header p{
 }
 
 
-```css
 /* =========================================================
    配信サービス
-   ドコデミレル？ デザイン強化版
 ========================================================= */
 
 #providers{
@@ -498,10 +498,58 @@ header p{
   border:1px solid #e5e7eb;
 
   border-radius:12px;
+
+  transition:
+    background .15s ease,
+    border-color .15s ease;
 }
 
 .provider-type-block:last-child{
   margin-bottom:0;
+}
+
+
+/* =========================================================
+   見放題
+========================================================= */
+
+.provider-type-block.streaming{
+  background:#f0fdf4;
+
+  border-color:#bbf7d0;
+}
+
+
+/* =========================================================
+   レンタル
+========================================================= */
+
+.provider-type-block.rental{
+  background:#fff7ed;
+
+  border-color:#fed7aa;
+}
+
+
+/* =========================================================
+   購入
+========================================================= */
+
+.provider-type-block.purchase{
+  background:#eff6ff;
+
+  border-color:#bfdbfe;
+}
+
+
+/* =========================================================
+   無料視聴
+========================================================= */
+
+.provider-type-block.free{
+  background:#faf5ff;
+
+  border-color:#e9d5ff;
 }
 
 
@@ -518,7 +566,7 @@ header p{
 
   padding-bottom:9px;
 
-  border-bottom:1px solid #e5e7eb;
+  border-bottom:1px solid rgba(0,0,0,.08);
 
   color:#1f2937;
 
@@ -527,6 +575,31 @@ header p{
   font-weight:bold;
 
   line-height:1.4;
+}
+
+
+/* =========================================================
+   見出しカラー
+========================================================= */
+
+.provider-type-block.streaming
+.provider-type-heading{
+  color:#166534;
+}
+
+.provider-type-block.rental
+.provider-type-heading{
+  color:#c2410c;
+}
+
+.provider-type-block.purchase
+.provider-type-heading{
+  color:#1d4ed8;
+}
+
+.provider-type-block.free
+.provider-type-heading{
+  color:#7e22ce;
 }
 
 
@@ -579,7 +652,6 @@ header p{
     box-shadow .18s ease,
     border-color .18s ease;
 }
-
 
 .provider-card:hover{
   transform:translateY(-3px);
@@ -718,7 +790,6 @@ header p{
     box-shadow .15s ease;
 }
 
-
 .provider-button:hover{
   opacity:.9;
 
@@ -775,10 +846,369 @@ header p{
 
 
 /* =========================================================
+   シリーズ作品・おすすめ作品
+========================================================= */
+
+.series-list,
+.recommendation-list{
+  display:flex;
+
+  flex-direction:row;
+
+  flex-wrap:nowrap;
+
+  gap:13px;
+
+  overflow-x:auto;
+
+  overflow-y:hidden;
+
+  padding:3px 2px 10px;
+
+  scrollbar-width:thin;
+
+  width:100%;
+}
+
+.series-item,
+.recommendation-item{
+  flex:0 0 135px;
+
+  width:135px;
+
+  min-width:135px;
+
+  padding:0;
+
+  border:none;
+
+  display:block;
+}
+
+
+/* =========================================================
+   ポスター
+========================================================= */
+
+.series-poster-link,
+.recommendation-poster-link{
+  display:block;
+
+  width:135px;
+
+  height:195px;
+
+  border-radius:8px;
+
+  overflow:hidden;
+
+  background:#e5e7eb;
+
+  cursor:pointer;
+}
+
+.series-poster,
+.recommendation-poster{
+  width:100%;
+
+  height:100%;
+
+  object-fit:cover;
+
+  display:block;
+
+  transition:
+    transform .15s ease;
+}
+
+.series-poster-link:hover
+.series-poster,
+.recommendation-poster-link:hover
+.recommendation-poster{
+  transform:scale(1.04);
+}
+
+
+/* =========================================================
+   タイトル
+========================================================= */
+
+.series-title,
+.recommendation-title{
+  display:block;
+
+  color:#2563eb;
+
+  text-decoration:none;
+
+  font-weight:bold;
+
+  font-size:15px;
+
+  line-height:1.4;
+
+  margin-top:7px;
+}
+
+.series-title:hover,
+.recommendation-title:hover{
+  text-decoration:underline;
+}
+
+
+/* =========================================================
+   公開年
+========================================================= */
+
+.series-year,
+.recommendation-year{
+  color:#666;
+
+  font-size:13px;
+
+  margin-top:3px;
+}
+
+
+/* =========================================================
+   おすすめ
+========================================================= */
+
+.recommendation-section{
+  display:none;
+}
+
+.recommendation-section h3{
+  margin-bottom:5px;
+}
+
+.recommendation-description{
+  color:#666;
+
+  font-size:14px;
+
+  margin:0 0 14px;
+
+  line-height:1.6;
+}
+
+
+/* =========================================================
+   パンくず
+========================================================= */
+
+.breadcrumb{
+  display:flex;
+
+  flex-wrap:wrap;
+
+  align-items:center;
+
+  gap:6px;
+
+  margin-bottom:10px;
+
+  color:#666;
+
+  font-size:14px;
+
+  line-height:1.5;
+}
+
+.breadcrumb a{
+  color:#2563eb;
+
+  font-weight:bold;
+}
+
+.breadcrumb a:hover{
+  text-decoration:underline;
+}
+
+.breadcrumb span:last-child{
+  color:#555;
+
+  overflow:hidden;
+
+  text-overflow:ellipsis;
+
+  white-space:nowrap;
+
+  max-width:70%;
+}
+
+
+/* =========================================================
+   TMDB
+========================================================= */
+
+.tmdb-link{
+  display:inline-block;
+
+  padding:11px 17px;
+
+  background:#01b4e4;
+
+  color:#fff;
+
+  border-radius:8px;
+
+  font-weight:bold;
+
+  font-size:15px;
+}
+
+.tmdb-link:hover{
+  opacity:.85;
+}
+
+
+/* =========================================================
+   ローディング
+========================================================= */
+
+.loading{
+  text-align:center;
+
+  padding:60px 20px;
+
+  font-size:20px;
+}
+
+.error{
+  text-align:center;
+
+  padding:50px 20px;
+
+  color:#b91c1c;
+
+  background:#fff;
+
+  border-radius:12px;
+}
+
+
+/* =========================================================
    スマートフォン
 ========================================================= */
 
 @media(max-width:700px){
+
+  .container{
+    padding:13px;
+  }
+
+
+  .movie-header{
+    gap:15px;
+
+    padding:17px;
+  }
+
+
+  .poster{
+    width:155px;
+
+    max-width:38%;
+  }
+
+
+  .movie-info h1{
+    font-size:23px;
+
+    line-height:1.4;
+  }
+
+
+  .original-title{
+    font-size:14px;
+
+    margin-bottom:9px;
+  }
+
+
+  .basic-info{
+    display:block;
+
+    margin-bottom:9px;
+  }
+
+
+  .info-line{
+    font-size:15px;
+
+    margin:4px 0;
+  }
+
+
+  .genre-list{
+    gap:5px;
+
+    margin-top:4px;
+
+    margin-bottom:9px;
+  }
+
+
+  .genre-item{
+    font-size:13px;
+
+    padding:4px 8px;
+  }
+
+
+  .movie-side-info{
+    margin-top:8px;
+  }
+
+
+  .side-section{
+    margin-top:9px;
+  }
+
+
+  .side-title{
+    font-size:16px;
+  }
+
+
+  .side-text{
+    font-size:15px;
+
+    line-height:1.6;
+  }
+
+
+  .cast-list{
+    gap:5px;
+  }
+
+
+  .cast-item{
+    font-size:13px;
+
+    padding:5px 8px;
+  }
+
+
+  .overview-text{
+    -webkit-line-clamp:3;
+  }
+
+
+  .section{
+    padding:16px;
+
+    margin-top:17px;
+  }
+
+
+  .section h3{
+    font-size:21px;
+
+    margin-bottom:12px;
+  }
+
 
   .provider-type-block{
     padding:13px;
@@ -849,6 +1279,44 @@ header p{
     font-size:11px;
   }
 
+
+  .series-list,
+  .recommendation-list{
+    flex-direction:row;
+
+    flex-wrap:nowrap;
+
+    gap:10px;
+
+    overflow-x:auto;
+
+    overflow-y:hidden;
+  }
+
+
+  .series-item,
+  .recommendation-item{
+    flex:0 0 115px;
+
+    width:115px;
+
+    min-width:115px;
+  }
+
+
+  .series-poster-link,
+  .recommendation-poster-link{
+    width:115px;
+
+    height:165px;
+  }
+
+
+  .series-title,
+  .recommendation-title{
+    font-size:14px;
+  }
+
 }
 
 
@@ -857,6 +1325,54 @@ header p{
 ========================================================= */
 
 @media(max-width:420px){
+
+  .movie-header{
+    gap:11px;
+
+    padding:14px;
+  }
+
+
+  .poster{
+    width:125px;
+
+    max-width:36%;
+  }
+
+
+  .movie-info h1{
+    font-size:21px;
+
+    line-height:1.4;
+  }
+
+
+  .original-title{
+    font-size:13px;
+  }
+
+
+  .info-line{
+    font-size:14px;
+  }
+
+
+  .genre-item{
+    font-size:12px;
+
+    padding:3px 7px;
+  }
+
+
+  .side-title{
+    font-size:15px;
+  }
+
+
+  .side-text{
+    font-size:14px;
+  }
+
 
   .provider-type-block{
     padding:11px;
@@ -897,445 +1413,22 @@ header p{
     font-size:11px;
   }
 
-}
-```
-
-
-
-/* =========================================================
-   シリーズ作品
-========================================================= */
-
-.series-list,
-.recommendation-list{
-  display:flex;
-
-  gap:13px;
-
-  overflow-x:auto;
-
-  padding:3px 2px 10px;
-
-  scrollbar-width:thin;
-}
-
-.series-item,
-.recommendation-item{
-  flex:0 0 135px;
-
-  padding:0;
-
-  border:none;
-
-  display:block;
-}
-
-.series-poster-link,
-.recommendation-poster-link{
-  display:block;
-
-  width:135px;
-
-  height:195px;
-
-  border-radius:8px;
-
-  overflow:hidden;
-
-  background:#e5e7eb;
-
-  cursor:pointer;
-}
-
-.series-poster,
-.recommendation-poster{
-  width:100%;
-
-  height:100%;
-
-  object-fit:cover;
-
-  display:block;
-
-  transition:
-    transform .15s ease;
-}
-
-.series-poster-link:hover .series-poster,
-.recommendation-poster-link:hover .recommendation-poster{
-  transform:scale(1.04);
-}
-
-.series-title,
-.recommendation-title{
-  display:block;
-
-  color:#2563eb;
-
-  text-decoration:none;
-
-  font-weight:bold;
-
-  font-size:15px;
-
-  line-height:1.4;
-
-  margin-top:7px;
-}
-
-.series-title:hover,
-.recommendation-title:hover{
-  text-decoration:underline;
-}
-
-.series-year,
-.recommendation-year{
-  color:#666;
-
-  font-size:13px;
-
-  margin-top:3px;
-}
-
-
-/* =========================================================
-   おすすめ
-========================================================= */
-
-.recommendation-section{
-  display:none;
-}
-
-.recommendation-section h3{
-  margin-bottom:5px;
-}
-
-.recommendation-description{
-  color:#666;
-
-  font-size:14px;
-
-  margin:0 0 14px;
-
-  line-height:1.6;
-}
-/* =========================================================
-   パンくず
-========================================================= */
-
-.breadcrumb{
-  display:flex;
-
-  flex-wrap:wrap;
-
-  align-items:center;
-
-  gap:6px;
-
-  margin-bottom:10px;
-
-  color:#666;
-
-  font-size:14px;
-
-  line-height:1.5;
-}
-
-.breadcrumb a{
-  color:#2563eb;
-
-  font-weight:bold;
-}
-
-.breadcrumb a:hover{
-  text-decoration:underline;
-}
-
-.breadcrumb span:last-child{
-  color:#555;
-
-  overflow:hidden;
-
-  text-overflow:ellipsis;
-
-  white-space:nowrap;
-
-  max-width:70%;
-}
-
-/* =========================================================
-   TMDB
-========================================================= */
-
-.tmdb-link{
-  display:inline-block;
-
-  padding:11px 17px;
-
-  background:#01b4e4;
-
-  color:#fff;
-
-  border-radius:8px;
-
-  font-weight:bold;
-
-  font-size:15px;
-}
-
-.tmdb-link:hover{
-  opacity:.85;
-}
-
-
-/* =========================================================
-   ローディング
-========================================================= */
-
-.loading{
-  text-align:center;
-
-  padding:60px 20px;
-
-  font-size:20px;
-}
-
-.error{
-  text-align:center;
-
-  padding:50px 20px;
-
-  color:#b91c1c;
-
-  background:#fff;
-
-  border-radius:12px;
-}
-
-
-/* =========================================================
-   スマートフォン
-========================================================= */
-
-@media(max-width:700px){
-
-  .container{
-    padding:13px;
-  }
-
-  .movie-header{
-    gap:15px;
-
-    padding:17px;
-  }
-
-  .poster{
-    width:155px;
-
-    max-width:38%;
-  }
-
-  .movie-info h1
-    font-size:23px;
-
-    line-height:1.4;
-  }
-
-  .original-title{
-    font-size:14px;
-
-    margin-bottom:9px;
-  }
-
-  .basic-info{
-    display:block;
-
-    margin-bottom:9px;
-  }
-
-  .info-line{
-    font-size:15px;
-
-    margin:4px 0;
-  }
-
-  .genre-list{
-    gap:5px;
-
-    margin-top:4px;
-
-    margin-bottom:9px;
-  }
-
-  .genre-item{
-    font-size:13px;
-
-    padding:4px 8px;
-  }
-
-  .movie-side-info{
-    margin-top:8px;
-  }
-
-  .side-section{
-    margin-top:9px;
-  }
-
-  .side-title{
-    font-size:16px;
-  }
-
-  .side-text{
-    font-size:15px;
-
-    line-height:1.6;
-  }
-
-  .cast-list{
-    gap:5px;
-  }
-
-  .cast-item{
-    font-size:13px;
-
-    padding:5px 8px;
-  }
-
-  .overview-text{
-    -webkit-line-clamp:3;
-  }
-
-  .section{
-    padding:16px;
-
-    margin-top:17px;
-  }
-
-  .section h3{
-    font-size:21px;
-
-    margin-bottom:12px;
-  }
-
-  .providers-grid{
-    grid-template-columns:
-      repeat(3, minmax(0,1fr));
-
-    gap:8px;
-  }
-
-  .provider-card{
-    padding:10px 6px;
-  }
-
-  .provider-logo{
-    width:44px;
-
-    height:44px;
-  }
-
-  .provider-name{
-    font-size:14px;
-  }
-
-  .provider-button{
-    font-size:11px;
-
-    padding:7px 2px;
-  }
 
   .series-list,
   .recommendation-list{
     gap:10px;
   }
 
-  .series-item,
-  .recommendation-item{
-    flex-basis:115px;
-  }
-
-  .series-poster-link,
-  .recommendation-poster-link{
-    width:115px;
-
-    height:165px;
-  }
-
-  .series-title,
-  .recommendation-title{
-    font-size:14px;
-  }
-
-}
-
-
-/* =========================================================
-   小さいスマホ
-========================================================= */
-
-@media(max-width:420px){
-
-  .movie-header{
-    gap:11px;
-
-    padding:14px;
-  }
-
-  .poster{
-    width:125px;
-
-    max-width:36%;
-  }
-
-  .movie-info h2{
-    font-size:21px;
-  }
-
-  .original-title{
-    font-size:13px;
-  }
-
-  .info-line{
-    font-size:14px;
-  }
-
-  .genre-item{
-    font-size:12px;
-
-    padding:3px 7px;
-  }
-
-  .side-title{
-    font-size:15px;
-  }
-
-  .side-text{
-    font-size:14px;
-  }
-
-  .providers-grid{
-    grid-template-columns:
-      repeat(2, minmax(0,1fr));
-
-    gap:8px;
-  }
-
-  .provider-card{
-    padding:10px 7px;
-  }
-
-  .provider-name{
-    font-size:14px;
-  }
-
-  .provider-price{
-    font-size:10px;
-  }
 
   .series-item,
   .recommendation-item{
-    flex-basis:110px;
+    flex:0 0 110px;
+
+    width:110px;
+
+    min-width:110px;
   }
+
 
   .series-poster-link,
   .recommendation-poster-link{
@@ -1371,6 +1464,7 @@ header p{
 
 <div class="container">
 
+
 <!-- =========================================================
      パンくずナビ
 ========================================================= -->
@@ -1397,6 +1491,8 @@ header p{
 </span>
 
 </nav>
+
+
 <!-- =========================================================
      戻る
 ========================================================= -->
@@ -1446,23 +1542,22 @@ header p{
   style="display:none;"
 >
 
-
 <main
   itemscope
   itemtype="https://schema.org/Movie"
   id="movieMain"
 >
 
-
 <noscript>
-  <p>
-    ドコデミレル？では、映画の作品情報と、
-    Netflix、Amazon Prime Video、U-NEXT、Hulu、Disney+などの
-    配信サービス情報を確認できます。
-  </p>
+
+<p>
+ドコデミレル？では、映画の作品情報と、
+Netflix、Amazon Prime Video、U-NEXT、Hulu、Disney+などの
+配信サービス情報を確認できます。
+</p>
+
 </noscript>
 
-  
 
 <!-- =========================================================
      作品情報
@@ -1896,27 +1991,15 @@ async function loadMovie(){
     }
 
 
-    /* =====================================================
-       表示
-    ===================================================== */
-
     renderMovie(
       movie
     );
 
 
-    /* =====================================================
-       SEO
-    ===================================================== */
-
     updateSeo(
       movie
     );
 
-
-    /* =====================================================
-       構造化データ
-    ===================================================== */
 
     updateStructuredData(
       movie
@@ -1960,10 +2043,6 @@ function updateSeo(movie){
     ).trim();
 
 
-  /*
-     作品名を先頭にしたSEOタイトル
-  */
-
   const seoTitle =
     title +
     "｜配信サービス・作品情報 | ドコデミレル？";
@@ -1972,10 +2051,6 @@ function updateSeo(movie){
   document.title =
     seoTitle;
 
-
-  /*
-     description
-  */
 
   let description =
     title +
@@ -2017,10 +2092,6 @@ function updateSeo(movie){
   }
 
 
-  /*
-     最大160文字程度
-  */
-
   description =
     description.substring(
       0,
@@ -2033,10 +2104,6 @@ function updateSeo(movie){
     description
   );
 
-
-  /*
-     canonical
-  */
 
   const canonicalUrl =
     DETAIL_URL +
@@ -2053,10 +2120,6 @@ function updateSeo(movie){
 
   }
 
-
-  /*
-     OGP
-  */
 
   setMetaProperty(
     "ogTitle",
@@ -2079,10 +2142,6 @@ function updateSeo(movie){
   );
 
 
-  /*
-     X
-  */
-
   setMetaProperty(
     "twitterTitle",
     "content",
@@ -2096,10 +2155,6 @@ function updateSeo(movie){
     description
   );
 
-
-  /*
-     ポスター画像
-  */
 
   if(movie.poster_path){
 
@@ -2219,10 +2274,6 @@ function setMetaProperty(
 
 function updateStructuredData(movie){
 
-  /*
-     古い構造化データ削除
-  */
-
   const oldMovie =
     document.getElementById(
       "movieStructuredData"
@@ -2304,10 +2355,6 @@ function updateStructuredData(movie){
   };
 
 
-  /*
-     原題
-  */
-
   if(movie.original_title){
 
     movieData.alternateName =
@@ -2316,10 +2363,6 @@ function updateStructuredData(movie){
   }
 
 
-  /*
-     公開日
-  */
-
   if(movie.release_date){
 
     movieData.datePublished =
@@ -2327,10 +2370,6 @@ function updateStructuredData(movie){
 
   }
 
-
-  /*
-     ポスター
-  */
 
   if(movie.poster_path){
 
@@ -2341,10 +2380,6 @@ function updateStructuredData(movie){
   }
 
 
-  /*
-     あらすじ
-  */
-
   if(movie.overview){
 
     movieData.description =
@@ -2352,10 +2387,6 @@ function updateStructuredData(movie){
 
   }
 
-
-  /*
-     TMDB
-  */
 
   if(movie.link){
 
@@ -2370,10 +2401,6 @@ function updateStructuredData(movie){
 
   }
 
-
-  /*
-     ジャンル
-  */
 
   if(
     Array.isArray(
@@ -2408,10 +2435,6 @@ function updateStructuredData(movie){
 
   }
 
-
-  /*
-     TMDB評価
-  */
 
   const rating =
     Number(
@@ -2452,10 +2475,6 @@ function updateStructuredData(movie){
   }
 
 
-  /*
-     監督
-  */
-
   if(
     movie.director &&
     movie.director.name
@@ -2473,10 +2492,6 @@ function updateStructuredData(movie){
 
   }
 
-
-  /*
-     出演者
-  */
 
   if(
     Array.isArray(
@@ -2730,29 +2745,23 @@ function renderMovie(movie){
     "block";
 
 
-  /*
-     タイトル
-  */
-
   setText(
     "title",
     movie.title || ""
   );
 
 
-  /*
-     原題
-  */
+  setText(
+    "breadcrumbMovieName",
+    movie.title || "作品情報"
+  );
+
 
   setText(
     "originalTitle",
     movie.original_title || ""
   );
 
-
-  /*
-     公開日
-  */
 
   setText(
     "releaseDate",
@@ -2764,10 +2773,6 @@ function renderMovie(movie){
       : ""
   );
 
-
-  /*
-     評価
-  */
 
   const rating =
     Number(
@@ -2784,18 +2789,10 @@ function renderMovie(movie){
   );
 
 
-  /*
-     ジャンル
-  */
-
   renderGenres(
     movie.genres
   );
 
-
-  /*
-     ポスター
-  */
 
   const poster =
     document.getElementById(
@@ -2830,16 +2827,11 @@ function renderMovie(movie){
     poster.alt =
       "";
 
-
     poster.style.display =
       "none";
 
   }
 
-
-  /*
-     監督
-  */
 
   if(
     movie.director &&
@@ -2861,18 +2853,10 @@ function renderMovie(movie){
   }
 
 
-  /*
-     出演者
-  */
-
   renderCast(
     movie.cast
   );
 
-
-  /*
-     あらすじ
-  */
 
   setText(
     "overview",
@@ -2881,36 +2865,20 @@ function renderMovie(movie){
   );
 
 
-  /*
-     配信サービス
-  */
-
   renderProviders(
     movie
   );
 
-
-  /*
-     シリーズ
-  */
 
   renderSeries(
     movie.series
   );
 
 
-  /*
-     おすすめ
-  */
-
   renderRecommendations(
     movie.recommendations
   );
 
-
-  /*
-     TMDBリンク
-  */
 
   const tmdbLink =
     document.getElementById(
@@ -3204,8 +3172,16 @@ function renderProviderType(
     );
 
 
+  /*
+     重要：
+     streaming / rental / purchase / free
+     をクラスとして付与することで、
+     表示順が変わっても色がずれない
+  */
+
   block.className =
-    "provider-type-block";
+    "provider-type-block " +
+    type;
 
 
   const heading =
@@ -4219,10 +4195,6 @@ function renderSeries(series){
       "series-item";
 
 
-    /*
-       内部リンク
-    */
-
     const detailUrl =
       "detail.html?id=" +
       encodeURIComponent(
@@ -4503,10 +4475,6 @@ function renderRecommendations(
       item.className =
         "recommendation-item";
 
-
-      /*
-         内部リンク
-      */
 
       const detailUrl =
         "detail.html?id=" +
