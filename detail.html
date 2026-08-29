@@ -3453,7 +3453,8 @@ function renderSeries(series){
 
     if(
       !movie ||
-      !movie.id
+      !movie.id ||
+      !movie.title
     ){
 
       return;
@@ -3471,6 +3472,32 @@ function renderSeries(series){
       "series-item";
 
 
+    /*
+       =====================================================
+       作品ページへの内部リンク
+
+       Googleがリンク先の作品を理解しやすいように、
+       通常の <a href=""> を使用。
+    =====================================================
+    */
+
+    const detailUrl =
+      "detail.html?id=" +
+      encodeURIComponent(
+        movie.id
+      );
+
+
+    const movieTitle =
+      String(
+        movie.title
+      ).trim();
+
+
+    /*
+       ポスター
+    */
+
     if(movie.poster_path){
 
       const imageLink =
@@ -3484,19 +3511,18 @@ function renderSeries(series){
 
 
       imageLink.href =
-        "detail.html?id=" +
-        encodeURIComponent(
-          movie.id
-        );
+        detailUrl;
+
+
+      imageLink.title =
+        movieTitle +
+        "の作品情報";
 
 
       imageLink.setAttribute(
         "aria-label",
-        (
-          movie.title ||
-          "シリーズ作品"
-        ) +
-        "の詳細を見る"
+        movieTitle +
+        "の作品情報を見る"
       );
 
 
@@ -3516,10 +3542,7 @@ function renderSeries(series){
 
 
       image.alt =
-        (
-          movie.title ||
-          "シリーズ作品"
-        ) +
+        movieTitle +
         "のポスター";
 
 
@@ -3539,6 +3562,13 @@ function renderSeries(series){
     }
 
 
+    /*
+       作品タイトル
+
+       作品名そのものをアンカーテキストにすることで、
+       リンク先が何のページなのかを明確にする。
+    */
+
     const link =
       document.createElement(
         "a"
@@ -3550,20 +3580,33 @@ function renderSeries(series){
 
 
     link.href =
-      "detail.html?id=" +
-      encodeURIComponent(
-        movie.id
-      );
+      detailUrl;
+
+
+    link.title =
+      movieTitle +
+      "の作品情報";
 
 
     link.textContent =
-      movie.title || "";
+      movieTitle;
+
+
+    link.setAttribute(
+      "aria-label",
+      movieTitle +
+      "の作品情報を見る"
+    );
 
 
     item.appendChild(
       link
     );
 
+
+    /*
+       公開年
+    */
 
     const year =
       document.createElement(
@@ -3654,6 +3697,10 @@ function renderRecommendations(
     }
 
 
+    /*
+       現在表示している作品自身は除外
+    */
+
     if(
       String(movie.id) ===
       String(movieId)
@@ -3663,6 +3710,10 @@ function renderRecommendations(
 
     }
 
+
+    /*
+       同じ作品の重複を除外
+    */
 
     if(seen[movie.id]){
 
@@ -3714,6 +3765,29 @@ function renderRecommendations(
         "recommendation-item";
 
 
+      /*
+         =====================================================
+         作品ページへの内部リンク
+      =====================================================
+      */
+
+      const detailUrl =
+        "detail.html?id=" +
+        encodeURIComponent(
+          movie.id
+        );
+
+
+      const movieTitle =
+        String(
+          movie.title
+        ).trim();
+
+
+      /*
+         ポスター
+      */
+
       if(movie.poster_path){
 
         const imageLink =
@@ -3727,16 +3801,18 @@ function renderRecommendations(
 
 
         imageLink.href =
-          "detail.html?id=" +
-          encodeURIComponent(
-            movie.id
-          );
+          detailUrl;
+
+
+        imageLink.title =
+          movieTitle +
+          "の作品情報";
 
 
         imageLink.setAttribute(
           "aria-label",
-          movie.title +
-          "の詳細を見る"
+          movieTitle +
+          "の作品情報を見る"
         );
 
 
@@ -3756,10 +3832,7 @@ function renderRecommendations(
 
 
         image.alt =
-          (
-            movie.title ||
-            "おすすめ作品"
-          ) +
+          movieTitle +
           "のポスター";
 
 
@@ -3779,6 +3852,14 @@ function renderRecommendations(
       }
 
 
+      /*
+         =====================================================
+         作品タイトルリンク
+
+         アンカーテキストに作品名を使用。
+      =====================================================
+      */
+
       const link =
         document.createElement(
           "a"
@@ -3790,20 +3871,33 @@ function renderRecommendations(
 
 
       link.href =
-        "detail.html?id=" +
-        encodeURIComponent(
-          movie.id
-        );
+        detailUrl;
+
+
+      link.title =
+        movieTitle +
+        "の作品情報";
 
 
       link.textContent =
-        movie.title || "";
+        movieTitle;
+
+
+      link.setAttribute(
+        "aria-label",
+        movieTitle +
+        "の作品情報を見る"
+      );
 
 
       item.appendChild(
         link
       );
 
+
+      /*
+         公開年
+      */
 
       const year =
         document.createElement(
@@ -3835,7 +3929,6 @@ function renderRecommendations(
     });
 
 }
-
 
 /* =========================================================
    日付
