@@ -3,9 +3,6 @@
 // api/sitemap.js
 //
 // 作品ページ用サイトマップ生成API
-//
-// TMDBの日本向け人気映画を取得し、
-// detail.html?id=作品ID のURLを生成する。
 // =========================================================
 
 module.exports = async function handler(req, res) {
@@ -26,300 +23,120 @@ module.exports = async function handler(req, res) {
 
 
     // =====================================================
-    // 基本URL
+    // TMDBから人気作品を取得
     // =====================================================
 
-    const siteUrl =
-      "https://doko-de-mireru.vercel.app";
+    const url =
+      "https://api.themoviedb.org/3/movie/popular" +
+      "?api_key=" +
+      encodeURIComponent(apiKey) +
+      "&language=ja-JP" +
+      "&region=JP" +
+      "&page=1";
 
 
-    // =====================================================
-    // TMDBから取得するページ数
-    //
-    // 1ページ = 最大20作品
-    //
-    // 5ページ取得すると最大100作品
-    // =====================================================
-
-    const pages =
-      5;
+    const response =
+      await fetch(url);
 
 
-    const moviesMap =
-      new Map();
+    if (!response.ok) {
 
-
-    // =====================================================
-    // TMDBから映画を取得
-    // =====================================================
-
-    for (
-      let page = 1;
-      page <= pages;
-      page++
-    ) {
-
-      const url =
-        "https://api.themoviedb.org/3/movie/popular" +
-        "?api_key=" +
-        encodeURIComponent(apiKey) +
-        "&language=ja-JP" +
-        "&region=JP" +
-        "&page=" +
-        page;
-
-
-      const response =
-        await fetch(url);
-
-
-      if (!response.ok) {
-
-        throw new Error(
-          "TMDB API ERROR: " +
-          response.status
-        );
-
-      }
-
-
-      const data =
-        await response.json();
-
-
-      const movies =
-        Array.isArray(data.results)
-          ? data.results
-          : [];
-
-
-      movies.forEach(function(movie) {
-
-        if (
-          !movie ||
-          !movie.id ||
-          !movie.title
-        ) {
-
-          return;
-
-        }
-
-
-        /*
-           同じ作品が複数ページに存在する場合は
-           重複登録しない。
-        */
-
-        if (
-          !moviesMap.has(
-            String(movie.id)
-          )
-        ) {
-
-          moviesMap.set(
-            String(movie.id),
-            movie
-          );
-
-        }
-
-      });
+      throw new Error(
+        "TMDB API ERROR: " +
+        response.status
+      );
 
     }
 
 
-    // =====================================================
-    // 取得作品
-    // =====================================================
+    const data =
+      await response.json();
+
 
     const movies =
-      Array.from(
-        moviesMap.values()
-      );
+      Array.isArray(data.results)
+        ? data.results
+        : [];
 
 
     // =====================================================
-    // サイトマップURL
+    // URL一覧
     // =====================================================
 
     const urls = [];
+
+    const seen = new Set();
 
 
     // =====================================================
     // トップページ
     // =====================================================
 
-    urls.push({
-      loc:
-        siteUrl + "/",
-
-      changefreq:
-        "daily",
-
-      priority:
-        "1.0"
-    });
+    urls.push(`
+  <url>
+    <loc>https://doko-de-mireru.vercel.app/</loc>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>`);
 
 
     // =====================================================
     // 作品ページ
+    //
+    // release_date は「作品公開日」であり、
+    // ページの更新日ではないため lastmod には使用しない。
     // =====================================================
 
-    movies.forEach(function(movie) {
+    movies
+      .filter(function(movie) {
 
-      const detailUrl =
-        siteUrl +
-        "/detail.html?id=" +
-        encodeURIComponent(
-          movie.id
+        return (
+          movie &&
+          movie.id &&
+          movie.title
         );
 
+      })
+      .forEach(function(movie) {
 
-      /*
-         TMDBの公開日がある場合は
-         lastmodとして利用。
-      */
-
-      let lastmod =
-        "";
+        const movieId =
+          String(movie.id);
 
 
-      if (movie.release_date) {
+        // 重複防止
+        if(seen.has(movieId)) {
 
-        const date =
-          String(
-            movie.release_date
-          ).trim();
-
-
-        /*
-           YYYY-MM-DD形式だけ採用
-        */
-
-        if (
-          /^\d{4}-\d{2}-\d{2}$/.test(
-            date
-          )
-        ) {
-
-          lastmod =
-            date;
+          return;
 
         }
 
-      }
+
+        seen.add(movieId);
 
 
-      urls.push({
-        loc:
-          detailUrl,
+        const detailUrl =
+          "https://doko-de-mireru.vercel.app/detail.html?id=" +
+          encodeURIComponent(movieId);
 
-        lastmod:
-          lastmod,
 
-        changefreq:
-          "weekly",
+        urls.push(`
+  <url>
+    <loc>${detailUrl}</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>`);
 
-        priority:
-          "0.8"
       });
 
-    });
-
 
     // =====================================================
-    // XMLエスケープ
-    // =====================================================
-
-    function escapeXml(value) {
-
-      return String(
-        value || ""
-      )
-      .replace(
-        /&/g,
-        "&amp;"
-      )
-      .replace(
-        /</g,
-        "&lt;"
-      )
-      .replace(
-        />/g,
-        "&gt;"
-      )
-      .replace(
-        /"/g,
-        "&quot;"
-      )
-      .replace(
-        /'/g,
-        "&apos;"
-      );
-
-    }
-
-
-    // =====================================================
-    // XML生成
-    // =====================================================
-
-    const xmlUrls =
-      urls.map(function(item) {
-
-        let xml =
-          "  <url>\n" +
-          "    <loc>" +
-          escapeXml(
-            item.loc
-          ) +
-          "</loc>\n";
-
-
-        if (item.lastmod) {
-
-          xml +=
-            "    <lastmod>" +
-            escapeXml(
-              item.lastmod
-            ) +
-            "</lastmod>\n";
-
-        }
-
-
-        xml +=
-          "    <changefreq>" +
-          escapeXml(
-            item.changefreq
-          ) +
-          "</changefreq>\n" +
-
-          "    <priority>" +
-          escapeXml(
-            item.priority
-          ) +
-          "</priority>\n" +
-
-          "  </url>";
-
-
-        return xml;
-
-      }).join("\n");
-
-
-    // =====================================================
-    // 完成XML
+    // XML
     // =====================================================
 
     const xml =
 `<?xml version="1.0" encoding="UTF-8"?>
-<urlset
-  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
->
-${xmlUrls}
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urls.join("\n")}
 </urlset>`;
 
 
@@ -333,21 +150,11 @@ ${xmlUrls}
     );
 
 
-    /*
-       24時間キャッシュ
-
-       同じ内容を毎回TMDBへ問い合わせないようにする。
-    */
-
     res.setHeader(
       "Cache-Control",
       "public, s-maxage=86400, stale-while-revalidate=3600"
     );
 
-
-    // =====================================================
-    // 完了
-    // =====================================================
 
     return res
       .status(200)
@@ -362,12 +169,11 @@ ${xmlUrls}
     );
 
 
-    return res
-      .status(500)
-      .send(
-        "サイトマップを生成できませんでした。"
-      );
+    return res.status(500).send(
+      "サイトマップを生成できませんでした。"
+    );
 
   }
 
 };
+
