@@ -509,6 +509,11 @@ const results =
       movie.vote_average || 0
     )
 
+　runtime:
+  Number(
+    movie.runtime || 0
+  ) 
+      
 };
 
   });
