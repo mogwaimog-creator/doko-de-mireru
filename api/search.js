@@ -106,24 +106,12 @@ module.exports = async function handler(req, res) {
         : "";
 
 
-    const id =
-      req.query &&
-      typeof req.query.id === "string"
-        ? req.query.id.trim()
-        : "";
-
     const popular =
   　　req.query &&
   　　typeof req.query.popular === "string"
     　　? req.query.popular.trim()
    　　 : "";
     
-    const popular =
-req.query &&
-typeof req.query.popular === "string"
-? req.query.popular.trim()
-: "";
-
 
     // =====================================================
     // 作品詳細
@@ -161,32 +149,7 @@ if (popular === "1") {
 
 }
 
-// =====================================================
-// 人気作品
-//
-// TMDBから現在注目されている作品を自動取得
-// ・上映中
-// ・公開予定
-// ・日本語タイトル
-// ・ポスター
-// ・公開日
-// =====================================================
 
-if (popular) {
-
-const popularMovies =
-await getPopularMovies(
-apiKey
-);
-
-return res
-.status(200)
-.json({
-results:
-popularMovies
-});
-
-}
 
 
     // =====================================================
