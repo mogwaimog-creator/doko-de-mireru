@@ -454,69 +454,107 @@ movies =
 // =====================================================
 // 結果整形
 // =====================================================
+//
+// TMDB映画検索APIでは上映時間が取得できないため
+// 各作品の詳細APIからruntimeを取得する
+// =====================================================
 
 const results =
-  movies.map(function(movie) {
+  await Promise.all(
 
-    return {
+    movies.map(
+      async function(movie) {
 
-  id:
-    movie.id,
-
-
-  title:
-    movie.title || "",
+        let runtime = 0;
 
 
-  // ===================================================
-  // 作品タイプ
-  // ===================================================
+        // =================================================
+        // 上映時間取得
+        // =================================================
 
-  media_type:
-    "劇場版",
+        try {
 
-
-  // ===================================================
-  // 上映時間
-  //
-  // 検索一覧では映画検索APIだけでは
-  // runtimeが取得できないため、
-  // 詳細ページ側で取得する
-  // ===================================================
-
-  runtime:
-    0,
+          const detailUrl =
+            "https://api.themoviedb.org/3/movie/" +
+            encodeURIComponent(movie.id) +
+            "?api_key=" +
+            encodeURIComponent(apiKey) +
+            "&language=ja-JP";
 
 
-  original_title:
-    movie.original_title || "",
+          const detailData =
+            await fetchJson(
+              detailUrl
+            );
 
 
-  release_date:
-    movie.release_date || "",
+          runtime =
+            Number(
+              detailData.runtime || 0
+            );
 
 
-  poster_path:
-    movie.poster_path || null,
+        } catch (error) {
+
+          console.error(
+            "RUNTIME ERROR:",
+            error
+          );
+
+          runtime = 0;
+
+        }
 
 
-  overview:
-    movie.overview || "",
+        return {
+
+          id:
+            movie.id,
 
 
-  vote_average:
-    Number(
-      movie.vote_average || 0
+          // =================================================
+          // 作品タイプ
+          // =================================================
+
+          media_type:
+            "劇場版",
+
+
+          // =================================================
+          // 上映時間
+          // =================================================
+
+          runtime:
+            runtime,
+
+
+          original_title:
+            movie.original_title || "",
+
+
+          release_date:
+            movie.release_date || "",
+
+
+          poster_path:
+            movie.poster_path || null,
+
+
+          overview:
+            movie.overview || "",
+
+
+          vote_average:
+            Number(
+              movie.vote_average || 0
+            )
+
+        };
+
+      }
     )
 
-　runtime:
-  Number(
-    movie.runtime || 0
-  ) 
-      
-};
-
-  });
+  );
 
 
     // =====================================================
