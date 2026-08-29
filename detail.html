@@ -2093,7 +2093,16 @@ function updateStructuredData(movie){
      TMDB評価
   */
 
+  const rating =
+    Number(
+      movie.vote_average || 0
+    );
 
+
+  const ratingCount =
+    Number(
+      movie.vote_count || 0
+    );
 
 
   if(
@@ -2127,24 +2136,22 @@ function updateStructuredData(movie){
      監督
   */
 
- if(
-  movie.director &&
-  movie.director.name
-){
-
-  setText(
-    "director",
+  if(
+    movie.director &&
     movie.director.name
-  );
+  ){
 
-}else{
+    movieData.director = {
 
-  setText(
-    "director",
-    "監督情報はありません。"
-  );
+      "@type":
+        "Person",
 
-}
+      name:
+        movie.director.name
+
+    };
+
+  }
 
 
   /*
@@ -2427,36 +2434,15 @@ function renderMovie(movie){
      公開日
   */
 
-  const releaseDateElement =
-  document.getElementById(
-    "releaseDate"
-  );
-
-if(
-  releaseDateElement &&
-  movie.release_date
-){
-
   setText(
-  "releaseDate",
-  movie.release_date
-    ? "公開日：" +
-      formatDate(
-        movie.release_date
-      )
-    : ""
-);
-
-}else if(releaseDateElement){
-
-  releaseDateElement.textContent =
-    "";
-
-  releaseDateElement.removeAttribute(
-    "datetime"
+    "releaseDate",
+    movie.release_date
+      ? "公開日：" +
+        formatDate(
+          movie.release_date
+        )
+      : ""
   );
-
-}
 
 
   /*
@@ -2535,69 +2521,24 @@ if(
      監督
   */
 
- const directorElement =
-  document.getElementById(
-    "director"
-  );
+  if(
+    movie.director &&
+    movie.director.name
+  ){
 
-if(
-  directorElement &&
-  movie.director &&
-  movie.director.name
-){
-
-  directorElement.innerHTML =
-    "";
-
-  const directorPerson =
-    document.createElement(
-      "span"
+    setText(
+      "director",
+      movie.director.name
     );
 
-  directorPerson.setAttribute(
-    "itemprop",
-    "director"
-  );
+  }else{
 
-  directorPerson.setAttribute(
-    "itemscope",
-    ""
-  );
-
-  directorPerson.setAttribute(
-    "itemtype",
-    "https://schema.org/Person"
-  );
-
-
-  const directorName =
-    document.createElement(
-      "span"
+    setText(
+      "director",
+      "監督情報はありません。"
     );
 
-  directorName.setAttribute(
-    "itemprop",
-    "name"
-  );
-
-  directorName.textContent =
-    movie.director.name;
-
-
-  directorPerson.appendChild(
-    directorName
-  );
-
-  directorElement.appendChild(
-    directorPerson
-  );
-
-}else if(directorElement){
-
-  directorElement.textContent =
-    "監督情報はありません。";
-
-}
+  }
 
 
   /*
@@ -2714,40 +2655,10 @@ function renderGenres(genres){
     item.className =
       "genre-item";
 
-    item.setAttribute(
-  "itemprop",
-  "actor"
-);
-
-item.setAttribute(
-  "itemscope",
-  ""
-);
-
-item.setAttribute(
-  "itemtype",
-  "https://schema.org/Person"
-);
 
     item.textContent =
-  "";
+      genre.name;
 
-const nameElement =
-  document.createElement(
-    "span"
-  );
-
-nameElement.setAttribute(
-  "itemprop",
-  "name"
-);
-
-nameElement.textContent =
-  person.name;
-
-item.appendChild(
-  nameElement
-);
 
     container.appendChild(
       item
@@ -2800,22 +2711,24 @@ function renderCast(cast){
 
 
     const item =
-  document.createElement(
-    "div"
-  );
+      document.createElement(
+        "div"
+      );
 
 
-item.className =
-  "cast-item";
+    item.className =
+      "cast-item";
 
 
-item.textContent =
-  person.name;
+    item.textContent =
+      person.name;
 
 
-container.appendChild(
-  item
-);
+    container.appendChild(
+      item
+    );
+
+  });
 
 }
 
