@@ -1829,21 +1829,32 @@ function normalizeTitle(title) {
 
 function normalizeSearchQuery(query) {
 
+  return String(
+    query || ""
+  )
+    .replace(
+      /[\s　]/g,
+      ""
+    )
+    .replace(
+      /[「」『』【】（）()・:：!?！？,.，。]/g,
+      ""
+    )
+    .trim();
+
+}
+
+
 // =========================================================
 // 検索用スペース補正
 //
-// 「オブ」「ザ」などを分離して検索候補を作る
-//
 // 例:
-//
 // ロードオブザリング
 // ↓
 // ロード オブ ザ リング
 // =========================================================
 
-function createSpacedSearchQuery(
-  query
-) {
+function createSpacedSearchQuery(query) {
 
   let value =
     String(
@@ -1856,7 +1867,6 @@ function createSpacedSearchQuery(
   }
 
 
-  // オブを分離
   value =
     value.replace(
       /オブ/g,
@@ -1864,7 +1874,6 @@ function createSpacedSearchQuery(
     );
 
 
-  // ザを分離
   value =
     value.replace(
       /ザ/g,
@@ -1872,7 +1881,6 @@ function createSpacedSearchQuery(
     );
 
 
-  // 前後の空白を整理
   value =
     value
       .replace(
@@ -1891,15 +1899,12 @@ function createSpacedSearchQuery(
 // 中黒補正
 //
 // 例:
-//
 // ロードオブザリング
 // ↓
 // ロード・オブ・ザ・リング
 // =========================================================
 
-function createMiddleDotSearchQuery(
-  query
-) {
+function createMiddleDotSearchQuery(query) {
 
   let value =
     String(
@@ -1912,7 +1917,6 @@ function createMiddleDotSearchQuery(
   }
 
 
-  // オブの前後
   value =
     value.replace(
       /オブ/g,
@@ -1920,7 +1924,6 @@ function createMiddleDotSearchQuery(
     );
 
 
-  // ザの前後
   value =
     value.replace(
       /ザ/g,
@@ -1928,7 +1931,6 @@ function createMiddleDotSearchQuery(
     );
 
 
-  // 中黒の重複を整理
   value =
     value.replace(
       /・+/g,
@@ -1939,18 +1941,3 @@ function createMiddleDotSearchQuery(
   return value;
 
 }
-  return String(
-    query || ""
-  )
-    .replace(
-      /[\s　]/g,
-      ""
-    )
-    .replace(
-      /[「」『』【】（）()・:：!?！？,.，。]/g,
-      ""
-    )
-    .trim();
-
-}
-
