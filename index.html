@@ -1243,6 +1243,21 @@ function createMovieCard(movie){
 
 </div>
 
+
+<!-- 上映時間 -->
+
+${
+  movie.runtime
+    ? `
+      <div class="meta">
+
+        ⏱ 上映時間：
+        ${formatRuntime(movie.runtime)}
+
+      </div>
+      `
+    : ""
+}
         <!-- 詳細 -->
 
         ${
