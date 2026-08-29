@@ -147,30 +147,104 @@ module.exports = async function handler(req, res) {
 // =====================================================
 // TMDB映画検索
 //
-// 通常検索 + 表記ゆれ検索
+// 通常検索 + 表記ゆれ検索 + 日本語タイトル補正
 //
 // 例:
+//
 // ロード・オブ・ザ・リング
 // ロードオブザリング
 // ロード オブ ザ リング
 //
-// などをできるだけ同じ作品として検索
+// どの表記でもできるだけ検索できるようにする
 // =====================================================
 
 const searchQueries = [];
 
+
+// =====================================================
 // 元の検索語
+// =====================================================
+
 searchQueries.push(query);
 
+
+// =====================================================
 // 記号・空白を除去した検索語
+// =====================================================
+
 const compactQuery =
   normalizeSearchQuery(query);
 
+
 if (
   compactQuery &&
-  compactQuery !== query
+  !searchQueries.includes(compactQuery)
 ) {
-  searchQueries.push(compactQuery);
+
+  searchQueries.push(
+    compactQuery
+  );
+
+}
+
+
+// =====================================================
+// 日本語タイトルの表記ゆれ候補
+//
+// 「オブ」「ザ」などを分離して検索
+//
+// 例:
+// ロードオブザリング
+//
+// ↓
+//
+// ロード オブ ザ リング
+//
+// TMDBではこちらの方が検索にヒットしやすい
+// =====================================================
+
+const spacedQuery =
+  createSpacedSearchQuery(
+    compactQuery
+  );
+
+
+if (
+  spacedQuery &&
+  !searchQueries.includes(spacedQuery)
+) {
+
+  searchQueries.push(
+    spacedQuery
+  );
+
+}
+
+
+// =====================================================
+// 中黒を使った検索候補
+//
+// 例:
+// ロード・オブ・ザ・リング
+// =====================================================
+
+const middleDotQuery =
+  createMiddleDotSearchQuery(
+    compactQuery
+  );
+
+
+if (
+  middleDotQuery &&
+  !searchQueries.includes(
+    middleDotQuery
+  )
+) {
+
+  searchQueries.push(
+    middleDotQuery
+  );
+
 }
 
 
@@ -210,7 +284,9 @@ for (
   try {
 
     const data =
-      await fetchJson(searchUrl);
+      await fetchJson(
+        searchUrl
+      );
 
 
     if (
@@ -287,7 +363,8 @@ movies =
 
 // =====================================================
 // 完全一致を優先
-// 表記ゆれも一致扱い
+//
+// 表記ゆれも同じタイトルとして扱う
 // =====================================================
 
 const normalizedQuery =
@@ -347,47 +424,47 @@ movies =
   movies.slice(0, 10);
 
 
-    // =====================================================
-    // 結果整形
-    // =====================================================
+// =====================================================
+// 結果整形
+// =====================================================
 
-    const results =
-      movies.map(function(movie) {
+const results =
+  movies.map(function(movie) {
 
-        return {
+    return {
 
-          id:
-            movie.id,
-
-
-          title:
-            movie.title || "",
+      id:
+        movie.id,
 
 
-          original_title:
-            movie.original_title || "",
+      title:
+        movie.title || "",
 
 
-          release_date:
-            movie.release_date || "",
+      original_title:
+        movie.original_title || "",
 
 
-          poster_path:
-            movie.poster_path || null,
+      release_date:
+        movie.release_date || "",
 
 
-          overview:
-            movie.overview || "",
+      poster_path:
+        movie.poster_path || null,
 
 
-          vote_average:
-            Number(
-              movie.vote_average || 0
-            )
+      overview:
+        movie.overview || "",
 
-        };
 
-      });
+      vote_average:
+        Number(
+          movie.vote_average || 0
+        )
+
+    };
+
+  });
 
 
     // =====================================================
@@ -1752,6 +1829,116 @@ function normalizeTitle(title) {
 
 function normalizeSearchQuery(query) {
 
+// =========================================================
+// 検索用スペース補正
+//
+// 「オブ」「ザ」などを分離して検索候補を作る
+//
+// 例:
+//
+// ロードオブザリング
+// ↓
+// ロード オブ ザ リング
+// =========================================================
+
+function createSpacedSearchQuery(
+  query
+) {
+
+  let value =
+    String(
+      query || ""
+    );
+
+
+  if (!value) {
+    return "";
+  }
+
+
+  // オブを分離
+  value =
+    value.replace(
+      /オブ/g,
+      " オブ "
+    );
+
+
+  // ザを分離
+  value =
+    value.replace(
+      /ザ/g,
+      " ザ "
+    );
+
+
+  // 前後の空白を整理
+  value =
+    value
+      .replace(
+        /\s+/g,
+        " "
+      )
+      .trim();
+
+
+  return value;
+
+}
+
+
+// =========================================================
+// 中黒補正
+//
+// 例:
+//
+// ロードオブザリング
+// ↓
+// ロード・オブ・ザ・リング
+// =========================================================
+
+function createMiddleDotSearchQuery(
+  query
+) {
+
+  let value =
+    String(
+      query || ""
+    );
+
+
+  if (!value) {
+    return "";
+  }
+
+
+  // オブの前後
+  value =
+    value.replace(
+      /オブ/g,
+      "・オブ・"
+    );
+
+
+  // ザの前後
+  value =
+    value.replace(
+      /ザ/g,
+      "・ザ・"
+    );
+
+
+  // 中黒の重複を整理
+  value =
+    value.replace(
+      /・+/g,
+      "・"
+    );
+
+
+  return value;
+
+}
   return String(
     query || ""
   )
@@ -1766,3 +1953,4 @@ function normalizeSearchQuery(query) {
     .trim();
 
 }
+
