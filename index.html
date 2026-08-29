@@ -277,117 +277,186 @@ header p{
 
 
 /* =========================================================
-   人気作品
+人気作品
 ========================================================= */
 
 .popular-section{
-  background:#fff;
-  border-radius:16px;
-  padding:22px;
-  margin-bottom:25px;
+background:#fff;
+border-radius:16px;
+padding:22px;
+margin-bottom:25px;
 
-  box-shadow:
-    0 3px 15px
-    rgba(0,0,0,.08);
+box-shadow:
+0 3px 15px
+rgba(0,0,0,.08);
 }
 
 .popular-title{
-  margin:0;
-  font-size:23px;
-  color:#111827;
+margin:0;
+font-size:23px;
+color:#111827;
 }
 
 .popular-description{
-  margin:8px 0 18px;
-  color:#6b7280;
-  font-size:14px;
-  line-height:1.6;
+margin:8px 0 18px;
+color:#6b7280;
+font-size:14px;
+line-height:1.6;
 }
 
 .popular-grid{
-  display:grid;
-  grid-template-columns:
-    repeat(3,1fr);
-  gap:14px;
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:14px;
 }
 
 .popular-card{
-  display:block;
-  background:#f5f7fb;
-  border:1px solid #e5e7eb;
-  border-radius:12px;
-  padding:14px;
+display:block;
+background:#f5f7fb;
+border:1px solid #e5e7eb;
+border-radius:12px;
+padding:14px;
 
-  transition:
-    transform .15s ease,
-    box-shadow .15s ease,
-    border-color .15s ease;
+transition:
+transform .15s ease,
+box-shadow .15s ease,
+border-color .15s ease;
 }
 
 .popular-card:hover{
-  transform:translateY(-2px);
+transform:translateY(-2px);
 
-  border-color:#2563eb;
+border-color:#2563eb;
 
-  box-shadow:
-    0 5px 15px
-    rgba(0,0,0,.08);
+box-shadow:
+0 5px 15px
+rgba(0,0,0,.08);
 }
-
-.popular-poster{
-  width:100%;
-  height:330px;
-
-  object-fit:cover;
-
-  border-radius:9px;
-
-  background:#e5e7eb;
-
-  display:block;
-
-  margin-bottom:12px;
-}
-
-.popular-card-title{
-  color:#111827;
-  font-size:16px;
-  font-weight:bold;
-  line-height:1.5;
-}
-
-.popular-card-link{
-  margin-top:8px;
-  color:#2563eb;
-  font-size:13px;
-  font-weight:bold;
-}
-
 
 /* =========================================================
-   人気作品 スマホ
+人気作品ポスター
+========================================================= */
+
+.popular-poster{
+width:100%;
+aspect-ratio:2 / 3;
+
+object-fit:cover;
+
+display:block;
+
+background:#e5e7eb;
+
+border-radius:9px;
+
+margin-bottom:12px;
+}
+
+.popular-poster.no-image{
+display:flex;
+align-items:center;
+justify-content:center;
+
+color:#6b7280;
+font-size:13px;
+}
+
+/* =========================================================
+人気作品カード情報
+========================================================= */
+
+.popular-card-title{
+color:#111827;
+font-size:16px;
+font-weight:bold;
+line-height:1.5;
+}
+
+/* =========================================================
+人気作品 上映・公開状況
+========================================================= */
+
+.popular-card-status{
+margin-top:8px;
+font-size:13px;
+font-weight:bold;
+line-height:1.5;
+}
+
+.status-now{
+color:#dc2626;
+}
+
+.status-coming{
+color:#2563eb;
+}
+
+.status-planned{
+color:#ca8a04;
+}
+
+/* =========================================================
+人気作品 詳細リンク
+========================================================= */
+
+.popular-card-link{
+margin-top:8px;
+color:#2563eb;
+font-size:13px;
+font-weight:bold;
+}
+
+/* =========================================================
+人気作品 スマホ
 ========================================================= */
 
 @media(max-width:700px){
 
-  .popular-grid{
-    grid-template-columns:1fr;
-  }
+.popular-section{
+padding:17px;
+}
 
-  .popular-title{
-    font-size:21px;
-  }
+.popular-title{
+font-size:21px;
+}
 
-  .popular-card{
-    padding:12px;
-  }
+.popular-grid{
+grid-template-columns:1fr;
+gap:12px;
+}
 
-  .popular-poster{
-    height:auto;
-    max-height:none;
-  }
+.popular-card{
+display:flex;
+align-items:center;
+padding:12px;
+}
+
+.popular-poster{
+width:105px;
+height:158px;
+aspect-ratio:auto;
+flex-shrink:0;
+margin-bottom:0;
+}
+
+.popular-card-info{
+padding:15px;
+}
+
+.popular-card-title{
+font-size:15px;
+}
+
+.popular-card-status{
+font-size:13px;
+}
+
+.popular-card-link{
+font-size:13px;
+}
 
 }
+
 
 
 
@@ -706,6 +775,7 @@ footer{
   </section>
 
 
+
 <!-- =====================================================
      人気作品
 ====================================================== -->
@@ -740,12 +810,18 @@ footer{
       <img
         class="popular-poster"
         src="https://image.tmdb.org/t/p/w500/9JCQtDCSpPR2ld55yNlEg1VwcQo.jpg"
-        alt="Spider-Man: Brand New Dayのポスター"
+        alt="スパイダーマン：ブランド・ニュー・デイのポスター"
         loading="lazy"
       >
 
       <div class="popular-card-title">
-        Spider-Man: Brand New Day
+        スパイダーマン：ブランド・ニュー・デイ
+      </div>
+
+      <div
+        class="popular-card-status status-now"
+      >
+        🔴 大ヒット上映中
       </div>
 
       <div class="popular-card-link">
@@ -765,12 +841,18 @@ footer{
       <img
         class="popular-poster"
         src="https://image.tmdb.org/t/p/w500/5rhTDKUhPYvpdQIijFIs5VoWsON.jpg"
-        alt="The Odysseyのポスター"
+        alt="オデュッセイアのポスター"
         loading="lazy"
       >
 
       <div class="popular-card-title">
-        The Odyssey
+        オデュッセイア
+      </div>
+
+      <div
+        class="popular-card-status status-coming"
+      >
+        🔵 2026年9月11日 公開予定
       </div>
 
       <div class="popular-card-link">
@@ -780,36 +862,41 @@ footer{
     </a>
 
 
-  
-<!-- Mutiny -->
+    <!-- Mutiny -->
 
-<a
-  class="popular-card"
-  href="./detail.html?id=1288445"
->
+    <a
+      class="popular-card"
+      href="./detail.html?id=1288445"
+    >
 
-  <img
-    class="popular-poster"
-    src="https://image.tmdb.org/t/p/w500/aAnTt6KpmbbHbd6xH3FQFlppZjc.jpg"
-    alt="Mutinyのポスター"
-    loading="lazy"
-  >
+      <img
+        class="popular-poster"
+        src="https://image.tmdb.org/t/p/w500/aAnTt6KpmbbHbd6xH3FQFlppZjc.jpg"
+        alt="ミューティニーのポスター"
+        loading="lazy"
+      >
 
-  <div class="popular-card-title">
-    Mutiny
-  </div>
+      <div class="popular-card-title">
+        ミューティニー
+      </div>
 
-  <div class="popular-card-link">
-    作品詳細を見る →
-  </div>
+      <div
+        class="popular-card-status status-planned"
+      >
+        🟡 公開予定
+      </div>
 
-</a>
+      <div class="popular-card-link">
+        作品詳細を見る →
+      </div>
 
+    </a>
 
 
   </div>
 
 </section>
+
 
 
   <!-- =====================================================
