@@ -144,105 +144,207 @@ module.exports = async function handler(req, res) {
     }
 
 
-    // =====================================================
-    // TMDB映画検索
-    // =====================================================
+// =====================================================
+// TMDB映画検索
+//
+// 通常検索 + 表記ゆれ検索
+//
+// 例:
+// ロード・オブ・ザ・リング
+// ロードオブザリング
+// ロード オブ ザ リング
+//
+// などをできるだけ同じ作品として検索
+// =====================================================
 
-    const searchUrl =
-      "https://api.themoviedb.org/3/search/movie" +
-      "?api_key=" +
-      encodeURIComponent(apiKey) +
-      "&language=ja-JP" +
-      "&region=JP" +
-      "&include_adult=false" +
-      "&page=1" +
-      "&query=" +
-      encodeURIComponent(query);
+const searchQueries = [];
 
+// 元の検索語
+searchQueries.push(query);
+
+// 記号・空白を除去した検索語
+const compactQuery =
+  normalizeSearchQuery(query);
+
+if (
+  compactQuery &&
+  compactQuery !== query
+) {
+  searchQueries.push(compactQuery);
+}
+
+
+// =====================================================
+// TMDB検索結果をまとめる
+// =====================================================
+
+let allMovies = [];
+
+
+// =====================================================
+// 複数の検索語でTMDBを検索
+// =====================================================
+
+for (
+  let i = 0;
+  i < searchQueries.length;
+  i++
+) {
+
+  const searchQuery =
+    searchQueries[i];
+
+
+  const searchUrl =
+    "https://api.themoviedb.org/3/search/movie" +
+    "?api_key=" +
+    encodeURIComponent(apiKey) +
+    "&language=ja-JP" +
+    "&region=JP" +
+    "&include_adult=false" +
+    "&page=1" +
+    "&query=" +
+    encodeURIComponent(searchQuery);
+
+
+  try {
 
     const data =
       await fetchJson(searchUrl);
 
 
-    // =====================================================
-    // 検索結果
-    // =====================================================
-
-    let movies =
+    if (
+      data &&
       Array.isArray(data.results)
-        ? data.results
-        : [];
+    ) {
 
-
-    // =====================================================
-    // 不正データ除外
-    // =====================================================
-
-    movies =
-      movies.filter(function(movie) {
-
-        return (
-          movie &&
-          movie.id &&
-          movie.title
+      allMovies =
+        allMovies.concat(
+          data.results
         );
 
-      });
+    }
+
+  } catch (error) {
+
+    console.error(
+      "TMDB SEARCH ERROR:",
+      error
+    );
+
+  }
+
+}
 
 
-    // =====================================================
-    // 完全一致を優先
-    // =====================================================
+// =====================================================
+// 重複作品を削除
+// =====================================================
 
-    const normalizedQuery =
-      normalizeTitle(query);
-
-
-    movies.sort(function(a, b) {
-
-      const aTitle =
-        normalizeTitle(
-          a.title || ""
-        );
+const movieMap =
+  new Map();
 
 
-      const bTitle =
-        normalizeTitle(
-          b.title || ""
-        );
+allMovies.forEach(function(movie) {
+
+  if (
+    movie &&
+    movie.id &&
+    movie.title
+  ) {
+
+    movieMap.set(
+      String(movie.id),
+      movie
+    );
+
+  }
+
+});
 
 
-      const aExact =
-        aTitle === normalizedQuery
-          ? 0
-          : 1;
+let movies =
+  Array.from(
+    movieMap.values()
+  );
 
 
-      const bExact =
-        bTitle === normalizedQuery
-          ? 0
-          : 1;
+// =====================================================
+// 不正データ除外
+// =====================================================
+
+movies =
+  movies.filter(function(movie) {
+
+    return (
+      movie &&
+      movie.id &&
+      movie.title
+    );
+
+  });
 
 
-      if (aExact !== bExact) {
-        return aExact - bExact;
-      }
+// =====================================================
+// 完全一致を優先
+// 表記ゆれも一致扱い
+// =====================================================
+
+const normalizedQuery =
+  normalizeTitle(query);
 
 
-      return (
-        Number(b.vote_average || 0) -
-        Number(a.vote_average || 0)
-      );
+movies.sort(function(a, b) {
 
-    });
+  const aTitle =
+    normalizeTitle(
+      a.title || ""
+    );
 
 
-    // =====================================================
-    // 最大10件
-    // =====================================================
+  const bTitle =
+    normalizeTitle(
+      b.title || ""
+    );
 
-    movies =
-      movies.slice(0, 10);
+
+  const aExact =
+    aTitle === normalizedQuery
+      ? 0
+      : 1;
+
+
+  const bExact =
+    bTitle === normalizedQuery
+      ? 0
+      : 1;
+
+
+  if (
+    aExact !== bExact
+  ) {
+
+    return (
+      aExact - bExact
+    );
+
+  }
+
+
+  return (
+    Number(b.vote_average || 0) -
+    Number(a.vote_average || 0)
+  );
+
+});
+
+
+// =====================================================
+// 最大10件
+// =====================================================
+
+movies =
+  movies.slice(0, 10);
 
 
     // =====================================================
@@ -1630,5 +1732,37 @@ function normalizeTitle(title) {
       /[「」『』【】（）()・:：!?！？,.，。]/g,
       ""
     );
+
+}
+
+// =========================================================
+// 検索用タイトル正規化
+//
+// 検索入力の表記ゆれ対策
+//
+// 例:
+// ロード・オブ・ザ・リング
+// ↓
+// ロードオブザリング
+//
+// ロード オブ ザ リング
+// ↓
+// ロードオブザリング
+// =========================================================
+
+function normalizeSearchQuery(query) {
+
+  return String(
+    query || ""
+  )
+    .replace(
+      /[\s　]/g,
+      ""
+    )
+    .replace(
+      /[「」『』【】（）()・:：!?！？,.，。]/g,
+      ""
+    )
+    .trim();
 
 }
