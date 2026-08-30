@@ -977,87 +977,40 @@ const runtime =
     getCast(movie);
 
 
-  // =======================================================
-  // おすすめ作品
-  //
-  // TMDBの「似ている作品」を取得
-  // =======================================================
+// =======================================================
+// おすすめ作品
+//
+// 改良版
+//
+// ・TMDB recommendations を優先
+// ・同じシリーズ作品を最優先
+// ・ジャンルの近さを考慮
+// ・明らかに関連性の低い作品を除外
+// ・元作品自身を除外
+// ・最大10作品
+// =======================================================
 
-  let recommendations = [];
-
-
-  try {
-
-    const recommendationUrl =
-      "https://api.themoviedb.org/3/movie/" +
-      encodeURIComponent(movieId) +
-      "/similar" +
-      "?api_key=" +
-      encodeURIComponent(apiKey) +
-      "&language=ja-JP" +
-      "&page=1";
+let recommendations = [];
 
 
-    const recommendationData =
-      await fetchJson(
-        recommendationUrl
-      );
+try {
 
-
-    if (
-      recommendationData &&
-      Array.isArray(
-        recommendationData.results
-      )
-    ) {
-
-      recommendations =
-        recommendationData.results
-          .filter(function(item) {
-
-            return (
-              item &&
-              item.id &&
-              item.title &&
-              String(item.id) !==
-                String(movie.id)
-            );
-
-          })
-          .slice(0, 10)
-          .map(function(item) {
-
-            return {
-
-              id:
-                item.id,
-
-              title:
-                item.title || "",
-
-              release_date:
-                item.release_date || "",
-
-              poster_path:
-                item.poster_path || null
-
-            };
-
-          });
-
-    }
-
-  } catch (error) {
-
-    console.error(
-      "RECOMMENDATIONS ERROR:",
-      error
+  recommendations =
+    await getRecommendations(
+      movie,
+      apiKey
     );
 
-    recommendations = [];
+} catch (error) {
 
-  }
+  console.error(
+    "RECOMMENDATIONS ERROR:",
+    error
+  );
 
+  recommendations = [];
+
+}
 
   // =======================================================
   // シリーズ
@@ -1952,6 +1905,433 @@ async function fetchJson(url) {
 
 }
 
+// =========================================================
+// おすすめ作品取得
+//
+// 優先順位
+//
+// 1. 同じシリーズ
+// 2. TMDB recommendations
+// 3. ジャンル一致
+// 4. 評価・人気度
+//
+// =========================================================
+
+async function getRecommendations(
+  movie,
+  apiKey
+) {
+
+  const movieId =
+    movie &&
+    movie.id
+      ? movie.id
+      : null;
+
+
+  if (!movieId) {
+
+    return [];
+
+  }
+
+
+  // =======================================================
+  // 元作品のジャンル
+  // =======================================================
+
+  const originalGenres =
+    Array.isArray(movie.genres)
+      ? movie.genres.map(function(genre) {
+
+          return Number(
+            genre.id
+          );
+
+        })
+      : [];
+
+
+  // =======================================================
+  // 元作品のシリーズID
+  // =======================================================
+
+  const collectionId =
+    movie.belongs_to_collection &&
+    movie.belongs_to_collection.id
+      ? String(
+          movie.belongs_to_collection.id
+        )
+      : null;
+
+
+  // =======================================================
+  // TMDB recommendations
+  // =======================================================
+
+  const recommendationUrl =
+    "https://api.themoviedb.org/3/movie/" +
+    encodeURIComponent(movieId) +
+    "/recommendations" +
+    "?api_key=" +
+    encodeURIComponent(apiKey) +
+    "&language=ja-JP" +
+    "&page=1";
+
+
+  let recommendationMovies = [];
+
+
+  try {
+
+    const recommendationData =
+      await fetchJson(
+        recommendationUrl
+      );
+
+
+    if (
+      recommendationData &&
+      Array.isArray(
+        recommendationData.results
+      )
+    ) {
+
+      recommendationMovies =
+        recommendationData.results;
+
+    }
+
+  } catch (error) {
+
+    console.error(
+      "TMDB RECOMMENDATIONS ERROR:",
+      error
+    );
+
+  }
+
+
+  // =======================================================
+  // 同じシリーズ作品
+  // =======================================================
+
+  let collectionMovies = [];
+
+
+  if (collectionId) {
+
+    try {
+
+      const collection =
+        await getCollection(
+          collectionId,
+          apiKey
+        );
+
+
+      if (
+        collection &&
+        Array.isArray(
+          collection.movies
+        )
+      ) {
+
+        collectionMovies =
+          collection.movies
+            .filter(function(item) {
+
+              return (
+                item &&
+                item.id &&
+                String(item.id) !==
+                  String(movie.id)
+              );
+
+            });
+
+      }
+
+    } catch (error) {
+
+      console.error(
+        "COLLECTION RECOMMENDATIONS ERROR:",
+        error
+      );
+
+    }
+
+  }
+
+
+  // =======================================================
+  // 同じシリーズを最優先
+  // =======================================================
+
+  const collectionMap =
+    new Map();
+
+
+  collectionMovies.forEach(
+    function(item) {
+
+      collectionMap.set(
+        String(item.id),
+        item
+      );
+
+    }
+  );
+
+
+  // =======================================================
+  // recommendationsを整理
+  // =======================================================
+
+  const candidateMap =
+    new Map();
+
+
+  recommendationMovies.forEach(
+    function(item) {
+
+      if (
+        !item ||
+        !item.id ||
+        !item.title
+      ) {
+
+        return;
+
+      }
+
+
+      if (
+        String(item.id) ===
+        String(movie.id)
+      ) {
+
+        return;
+
+      }
+
+
+      candidateMap.set(
+        String(item.id),
+        item
+      );
+
+    }
+  );
+
+
+  // =======================================================
+  // recommendations候補に
+  // シリーズ作品を追加
+  // =======================================================
+
+  collectionMovies.forEach(
+    function(item) {
+
+      if (
+        !item ||
+        !item.id ||
+        !item.title
+      ) {
+
+        return;
+
+      }
+
+
+      if (
+        String(item.id) ===
+        String(movie.id)
+      ) {
+
+        return;
+
+      }
+
+
+      if (
+        !candidateMap.has(
+          String(item.id)
+        )
+      ) {
+
+        candidateMap.set(
+          String(item.id),
+          item
+        );
+
+      }
+
+    }
+  );
+
+
+  // =======================================================
+  // スコアリング
+  // =======================================================
+
+  const candidates =
+    Array.from(
+      candidateMap.values()
+    );
+
+
+  const scored =
+    candidates.map(
+      function(item) {
+
+        let score = 0;
+
+
+        // =================================================
+        // 同じシリーズ
+        // =================================================
+
+        if (
+          collectionMap.has(
+            String(item.id)
+          )
+        ) {
+
+          score += 1000;
+
+        }
+
+
+        // =================================================
+        // ジャンル一致
+        // =================================================
+
+        const itemGenres =
+          Array.isArray(
+            item.genre_ids
+          )
+            ? item.genre_ids.map(
+                function(id) {
+                  return Number(id);
+                }
+              )
+            : [];
+
+
+        let genreMatches = 0;
+
+
+        itemGenres.forEach(
+          function(genreId) {
+
+            if (
+              originalGenres.includes(
+                genreId
+              )
+            ) {
+
+              genreMatches++;
+
+            }
+
+          }
+        );
+
+
+        score +=
+          genreMatches * 100;
+
+
+        // =================================================
+        // 人気度
+        // =================================================
+
+        score +=
+          Math.min(
+            Number(
+              item.popularity || 0
+            ),
+            100
+          );
+
+
+        // =================================================
+        // 評価
+        // =================================================
+
+        score +=
+          Number(
+            item.vote_average || 0
+          ) * 5;
+
+
+        return {
+
+          item:
+            item,
+
+          score:
+            score
+
+        };
+
+      }
+    );
+
+
+  // =======================================================
+  // スコア順
+  // =======================================================
+
+  scored.sort(
+    function(a, b) {
+
+      return (
+        b.score -
+        a.score
+      );
+
+    }
+  );
+
+
+  // =======================================================
+  // 最大10作品
+  // =======================================================
+
+  return scored
+    .slice(0, 10)
+    .map(
+      function(result) {
+
+        const item =
+          result.item;
+
+
+        return {
+
+          id:
+            item.id,
+
+
+          title:
+            item.title || "",
+
+
+          release_date:
+            item.release_date || "",
+
+
+          poster_path:
+            item.poster_path || null
+
+        };
+
+      }
+    );
+
+}
 
 // =========================================================
 // タイトル正規化
