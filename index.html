@@ -1011,33 +1011,72 @@ results.innerHTML =
 }
 
 
-    /* -----------------------------------------------------
-       年代順
+   /* -----------------------------------------------------
+   検索結果の並び順
 
-       古い作品
-       ↓
-       新しい作品
-    ----------------------------------------------------- */
+   ① タイトル完全一致
+   ② タイトルに検索語を含む作品
+   ③ TMDB評価の高い順
+----------------------------------------------------- */
 
-    movies.sort(
-      function(a,b){
+movies.sort(
+  function(a, b){
 
-        const dateA =
-          a.release_date ||
-          "9999-99-99";
+    const titleA =
+      String(
+        a.title || ""
+      ).toLowerCase();
+
+    const titleB =
+      String(
+        b.title || ""
+      ).toLowerCase();
+
+    const q =
+      query.toLowerCase();
 
 
-        const dateB =
-          b.release_date ||
-          "9999-99-99";
+    /* 完全一致 */
+
+    const exactA =
+      titleA === q ? 1 : 0;
+
+    const exactB =
+      titleB === q ? 1 : 0;
 
 
-        return dateA.localeCompare(
-          dateB
-        );
+    if(exactA !== exactB){
 
-      }
+      return exactB - exactA;
+
+    }
+
+
+    /* タイトルに検索語を含む */
+
+    const containsA =
+      titleA.includes(q) ? 1 : 0;
+
+    const containsB =
+      titleB.includes(q) ? 1 : 0;
+
+
+    if(containsA !== containsB){
+
+      return containsB - containsA;
+
+    }
+
+
+    /* 評価の高い順 */
+
+    return (
+      Number(b.vote_average || 0) -
+      Number(a.vote_average || 0)
     );
+
+  }
+);
 
 
     /* -----------------------------------------------------
