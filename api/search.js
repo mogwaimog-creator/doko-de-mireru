@@ -475,23 +475,65 @@ const results =
         try {
 
           const detailUrl =
-            "https://api.themoviedb.org/3/movie/" +
-            encodeURIComponent(movie.id) +
-            "?api_key=" +
-            encodeURIComponent(apiKey) +
-            "&language=ja-JP";
+             "https://api.themoviedb.org/3/movie/" +
+             encodeURIComponent(movie.id) +
+             "?api_key=" +
+             encodeURIComponent(apiKey) +
+            "&language=ja-JP" +
+            "&append_to_response=watch/providers";
 
 
-          const detailData =
-            await fetchJson(
-              detailUrl
-            );
+         const detailData =
+  await fetchJson(
+    detailUrl
+  );
 
 
-          runtime =
-            Number(
-              detailData.runtime || 0
-            );
+runtime =
+  Number(
+    detailData.runtime || 0
+  );
+
+
+// =================================================
+// 日本の配信情報
+// =================================================
+
+let providersJP = {};
+
+if (
+  detailData &&
+  detailData["watch/providers"] &&
+  detailData["watch/providers"].results &&
+  detailData["watch/providers"].results.JP
+) {
+
+  providersJP =
+    detailData["watch/providers"].results.JP;
+
+}
+
+
+// =================================================
+// 配信サービス
+// =================================================
+
+const streaming =
+  normalizeProviders(
+    providersJP.flatrate
+  );
+
+
+const rental =
+  normalizeProviders(
+    providersJP.rent
+  );
+
+
+const purchase =
+  normalizeProviders(
+    providersJP.buy
+  );
 
 
         } catch (error) {
@@ -528,6 +570,16 @@ const results =
             runtime,
 
 
+          streaming:
+  streaming,
+
+rental:
+  rental,
+
+purchase:
+  purchase,
+
+          
           original_title:
             movie.original_title || "",
 
