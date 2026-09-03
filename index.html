@@ -1011,42 +1011,51 @@ results.innerHTML =
 }
 
 
-   /* -----------------------------------------------------
+ /* -----------------------------------------------------
    検索結果の並び順
 
    ① タイトル完全一致
-   ② タイトルに検索語を含む作品
-   ③ TMDB評価の高い順
------------------------------------------------------ */
-
-/* -----------------------------------------------------
-   検索結果の並び順
-
-   ① タイトル完全一致
-   ② タイトルに検索語を含む作品
+   ② タイトルに検索語を含む
    ③ TMDB評価の高い順
 ----------------------------------------------------- */
 
 movies.sort(
   function(a, b){
 
+    const normalizeTitle = function(title){
+
+      return String(title || "")
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g, "");
+
+    };
+
+
     const titleA =
-      String(a.title || "").trim();
+      normalizeTitle(a.title);
 
     const titleB =
-      String(b.title || "").trim();
+      normalizeTitle(b.title);
 
     const q =
-      String(query || "").trim();
+      normalizeTitle(query);
 
 
     /* ① タイトル完全一致 */
 
-    if(titleA === q && titleB !== q){
+    const exactA =
+      titleA === q;
+
+    const exactB =
+      titleB === q;
+
+
+    if(exactA && !exactB){
       return -1;
     }
 
-    if(titleB === q && titleA !== q){
+    if(exactB && !exactA){
       return 1;
     }
 
