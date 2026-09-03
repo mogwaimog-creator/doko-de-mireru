@@ -1019,56 +1019,57 @@ results.innerHTML =
    ③ TMDB評価の高い順
 ----------------------------------------------------- */
 
+/* -----------------------------------------------------
+   検索結果の並び順
+
+   ① タイトル完全一致
+   ② タイトルに検索語を含む作品
+   ③ TMDB評価の高い順
+----------------------------------------------------- */
+
 movies.sort(
   function(a, b){
 
     const titleA =
-      String(
-        a.title || ""
-      ).toLowerCase();
+      String(a.title || "").trim();
 
     const titleB =
-      String(
-        b.title || ""
-      ).toLowerCase();
+      String(b.title || "").trim();
 
     const q =
-      query.toLowerCase();
+      String(query || "").trim();
 
 
-    /* 完全一致 */
+    /* ① タイトル完全一致 */
 
-    const exactA =
-      titleA === q ? 1 : 0;
+    if(titleA === q && titleB !== q){
+      return -1;
+    }
 
-    const exactB =
-      titleB === q ? 1 : 0;
-
-
-    if(exactA !== exactB){
-
-      return exactB - exactA;
-
+    if(titleB === q && titleA !== q){
+      return 1;
     }
 
 
-    /* タイトルに検索語を含む */
+    /* ② タイトルに検索語を含む */
 
     const containsA =
-      titleA.includes(q) ? 1 : 0;
+      titleA.includes(q);
 
     const containsB =
-      titleB.includes(q) ? 1 : 0;
+      titleB.includes(q);
 
 
-    if(containsA !== containsB){
+    if(containsA && !containsB){
+      return -1;
+    }
 
-      return containsB - containsA;
-
+    if(containsB && !containsA){
+      return 1;
     }
 
 
-    /* 評価の高い順 */
+    /* ③ TMDB評価の高い順 */
 
     return (
       Number(b.vote_average || 0) -
