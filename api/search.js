@@ -465,51 +465,105 @@ const results =
     movies.map(
       async function(movie) {
 
-        let runtime = 0;
+let runtime = 0;
 
-
-        // =================================================
-        // 上映時間取得
-        // =================================================
-
-        try {
-
-          const detailUrl =
-             "https://api.themoviedb.org/3/movie/" +
-             encodeURIComponent(movie.id) +
-             "?api_key=" +
-             encodeURIComponent(apiKey) +
-            "&language=ja-JP" +
-            "&append_to_response=watch/providers";
-
-
-         const detailData =
-  await fetchJson(
-    detailUrl
-  );
-
-
-runtime =
-  Number(
-    detailData.runtime || 0
-  );
+let streaming = [];
+let rental = [];
+let purchase = [];
 
 
 // =================================================
-// 日本の配信情報
+// 上映時間・配信情報取得
 // =================================================
 
-let providersJP = {};
+try {
 
-if (
-  detailData &&
-  detailData["watch/providers"] &&
-  detailData["watch/providers"].results &&
-  detailData["watch/providers"].results.JP
-) {
+  const detailUrl =
+    "https://api.themoviedb.org/3/movie/" +
+    encodeURIComponent(movie.id) +
+    "?api_key=" +
+    encodeURIComponent(apiKey) +
+    "&language=ja-JP" +
+    "&append_to_response=watch/providers";
 
-  providersJP =
-    detailData["watch/providers"].results.JP;
+
+  const detailData =
+    await fetchJson(
+      detailUrl
+    );
+
+
+  // =================================================
+  // 上映時間
+  // =================================================
+
+  runtime =
+    Number(
+      detailData.runtime || 0
+    );
+
+
+  // =================================================
+  // 日本の配信情報
+  // =================================================
+
+  let providersJP = {};
+
+  if (
+    detailData &&
+    detailData["watch/providers"] &&
+    detailData["watch/providers"].results &&
+    detailData["watch/providers"].results.JP
+  ) {
+
+    providersJP =
+      detailData["watch/providers"].results.JP;
+
+  }
+
+
+  // =================================================
+  // 見放題
+  // =================================================
+
+  streaming =
+    normalizeProviders(
+      providersJP.flatrate
+    );
+
+
+  // =================================================
+  // レンタル
+  // =================================================
+
+  rental =
+    normalizeProviders(
+      providersJP.rent
+    );
+
+
+  // =================================================
+  // 購入
+  // =================================================
+
+  purchase =
+    normalizeProviders(
+      providersJP.buy
+    );
+
+
+} catch (error) {
+
+  console.error(
+    "RUNTIME / PROVIDER ERROR:",
+    error
+  );
+
+  runtime = 0;
+
+  streaming = [];
+  rental = [];
+  purchase = [];
 
 }
 
