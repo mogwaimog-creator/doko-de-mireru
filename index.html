@@ -1307,15 +1307,65 @@ ${
   <div class="availability-status availability-streaming">
 
     🟢 配信中：
-    ${movie.streaming
+   ${(() => {
+
+  const providerNames =
+    movie.streaming
       .map(function(provider){
-        return escapeHtml(
-          provider.provider_name || ""
-        );
-      })
-      .filter(Boolean)
-      .join("・")
+        return provider.provider_name || "";
+      });
+
+  const simplifiedProviders = [];
+
+  providerNames.forEach(function(name){
+
+    let simpleName = name;
+
+    /* Netflix系 */
+    if(name.includes("Netflix")){
+      simpleName = "Netflix";
     }
+
+    /* Amazon Prime Video系 */
+    else if(
+      name.includes("Amazon Prime Video") ||
+      name.includes("Anime Times Amazon Channel") ||
+      name.includes("dAnime Amazon Channel")
+    ){
+      simpleName = "Prime Video";
+    }
+
+    /* Hulu */
+    else if(name.includes("Hulu")){
+      simpleName = "Hulu";
+    }
+
+    /* U-NEXT */
+    else if(name.includes("U-NEXT")){
+      simpleName = "U-NEXT";
+    }
+
+    /* Disney+ */
+    else if(name.includes("Disney")){
+      simpleName = "Disney+";
+    }
+
+    /* 重複を防ぐ */
+    if(
+      !simplifiedProviders.includes(simpleName)
+    ){
+      simplifiedProviders.push(simpleName);
+    }
+
+  });
+
+  return simplifiedProviders
+    .map(function(name){
+      return escapeHtml(name);
+    })
+    .join("・");
+
+})()}
 
   </div>
   `
