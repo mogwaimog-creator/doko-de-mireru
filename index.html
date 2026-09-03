@@ -1294,6 +1294,65 @@ ${
       `
     : ""
 }
+     
+        <!-- 配信状況 -->
+
+${
+  Array.isArray(movie.streaming) &&
+  movie.streaming.length > 0
+
+  ?
+
+  `
+  <div class="availability-status availability-streaming">
+
+    🟢 配信中：
+    ${movie.streaming
+      .map(function(provider){
+        return escapeHtml(
+          provider.provider_name || ""
+        );
+      })
+      .filter(Boolean)
+      .join("・")
+    }
+
+  </div>
+  `
+
+  :
+
+  Array.isArray(movie.rental) &&
+  movie.rental.length > 0
+
+  ||
+
+  Array.isArray(movie.purchase) &&
+  movie.purchase.length > 0
+
+  ?
+
+  `
+  <div class="availability-status availability-rental">
+
+    🟠 レンタル・購入で視聴できます
+
+  </div>
+  `
+
+  :
+
+  `
+  <div class="availability-status availability-none">
+
+    ⚪ 現在、配信情報はありません
+
+  </div>
+  `
+
+}
+        
+        
         <!-- 詳細 -->
 
         ${
@@ -1360,23 +1419,6 @@ function formatYear(date){
 
 }
 
-function formatYear(date){
-
-  if(!date){
-
-    return "";
-
-  }
-
-  const year =
-    String(date).substring(
-      0,
-      4
-    );
-
-  return year + "年";
-
-}
 
 
 /* =========================================================
