@@ -18,11 +18,11 @@
      基本SEO
 ========================================================= -->
 
-<title>作品情報 | ドコデミレル？</title>
+<title>映画の配信サービス・作品情報 | ドコデミレル？</title>
 
 <meta
   name="description"
-  content="映画がNetflix、Amazon Prime Video、U-NEXT、Hulu、Disney+など、どこで見られるか確認できる作品情報ページです。"
+  content="映画がどこで見れるか、配信サービスを確認できます。Netflix、Amazon Prime Video、U-NEXT、Hulu、Disney+などの見放題・レンタル・購入情報を掲載しています。"
 >
 
 <meta
@@ -1695,6 +1695,11 @@ Netflix、Amazon Prime Video、U-NEXT、Hulu、Disney+など、
 📺 この作品はどこで見られる？
 </h3>
 
+<p id="providersDescription">
+この作品が現在どの動画配信サービスで見られるかを確認できます。
+見放題・レンタル・購入などの配信情報を掲載しています。
+</p>
+
 <div id="providers"></div>
 
 </section>
@@ -3261,25 +3266,23 @@ function renderProviders(movie){
 
   if(!hasProvider){
 
-    const empty =
-      document.createElement(
-        "p"
-      );
-
-
-    empty.textContent =
-      "現在、配信情報を確認できません。";
-
-
-    empty.style.color =
-      "#777";
-
-
-    container.appendChild(
-      empty
+  const empty =
+    document.createElement(
+      "p"
     );
 
-  }
+  empty.textContent =
+    (movie.title || "この作品") +
+    "は、現在、動画配信サービスでの配信情報を確認できません。見放題・レンタル・購入などの配信情報を掲載しています。";
+
+  empty.style.color =
+    "#777";
+
+  container.appendChild(
+    empty
+  );
+
+}
 
 }
 
