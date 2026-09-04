@@ -529,6 +529,43 @@ font-size:13px;
 
 
 /* =========================================================
+   映画カード
+========================================================= */
+
+.movie-card{
+  background:#fff;
+  border:1px solid #e5e7eb;
+  border-radius:14px;
+  padding:18px;
+
+  display:grid;
+
+  grid-template-columns:
+    150px
+    minmax(0,1fr)
+    285px;
+
+  align-items:stretch;
+
+  gap:20px;
+
+  box-shadow:
+    0 3px 12px
+    rgba(0,0,0,.06);
+
+  transition:
+    box-shadow .15s ease,
+    transform .15s ease;
+}
+
+.movie-card:hover{
+  box-shadow:
+    0 5px 18px
+    rgba(0,0,0,.09);
+}
+
+
+/* =========================================================
    ポスター
 ========================================================= */
 
@@ -538,7 +575,9 @@ font-size:13px;
 
   object-fit:cover;
 
-  border-radius:10px;
+  display:block;
+
+  border-radius:9px;
 
   background:#e5e7eb;
 
@@ -552,12 +591,17 @@ font-size:13px;
 
 .movie-info{
   min-width:0;
+
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
 }
 
 .movie-title{
-  margin:0 0 7px;
+  margin:0 0 4px;
 
   font-size:23px;
+  font-weight:800;
 
   color:#111827;
 
@@ -566,29 +610,127 @@ font-size:13px;
 
 .original-title{
   color:#6b7280;
+
   font-size:14px;
-  margin-bottom:14px;
+
+  margin-bottom:12px;
 }
 
-.meta{
-  color:#4b5563;
+
+/* =========================================================
+   メタ情報
+========================================================= */
+
+.movie-meta-row{
+  display:flex;
+
+  flex-wrap:wrap;
+
+  align-items:center;
+
+  gap:7px 18px;
+
+  margin:2px 0 12px;
+
+  color:#374151;
+
   font-size:14px;
-  margin:7px 0;
+
+  line-height:1.6;
 }
+
+.movie-meta-item{
+  white-space:nowrap;
+}
+
+
+/* =========================================================
+   あらすじ
+========================================================= */
+
+.movie-overview{
+  margin:0 0 14px;
+
+  color:#374151;
+
+  font-size:14px;
+
+  line-height:1.7;
+
+  display:-webkit-box;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:3;
+
+  overflow:hidden;
+}
+
+
+/* =========================================================
+   詳細ボタン
+========================================================= */
+
+.detail-button{
+  display:inline-flex;
+
+  align-items:center;
+  justify-content:center;
+
+  margin-top:auto;
+
+  padding:9px 20px;
+
+  min-height:42px;
+
+  border:2px solid #2563eb;
+
+  border-radius:8px;
+
+  background:#fff;
+
+  color:#2563eb;
+
+  font-weight:700;
+
+  font-size:14px;
+
+  cursor:pointer;
+
+  transition:
+    background .15s ease,
+    color .15s ease,
+    transform .15s ease;
+}
+
+.detail-button:hover{
+  background:#2563eb;
+  color:#fff;
+
+  transform:translateY(-1px);
+}
+
 
 /* =========================================================
    配信情報パネル
 ========================================================= */
+
 .availability-panel{
   min-width:0;
   min-height:225px;
+
   padding:16px;
-  border-radius:14px;
+
+  border-radius:13px;
+
   display:flex;
+
   flex-direction:column;
+
   justify-content:center;
+
   align-items:center;
+
   text-align:center;
+
   border:1px solid #e5e7eb;
 }
 
@@ -607,10 +749,18 @@ font-size:13px;
   border-color:#e5e7eb;
 }
 
+
+/* =========================================================
+   配信見出し
+========================================================= */
+
 .availability-heading{
   margin:0 0 12px;
+
   font-size:19px;
+
   font-weight:800;
+
   line-height:1.4;
 }
 
@@ -626,137 +776,126 @@ font-size:13px;
   color:#6b7280;
 }
 
+
+/* =========================================================
+   配信サービス
+========================================================= */
+
 .provider-list{
   display:flex;
+
   flex-wrap:wrap;
+
   justify-content:center;
+
   align-items:flex-start;
+
   gap:14px;
 }
 
 .provider-chip{
   width:72px;
+
   display:flex;
+
   flex-direction:column;
+
   align-items:center;
+
   justify-content:flex-start;
+
   gap:6px;
+
   font-size:12px;
+
   font-weight:700;
+
   color:#111827;
+
   text-align:center;
 }
 
 .provider-logo{
   width:52px;
   height:52px;
+
   object-fit:cover;
+
+  display:block;
+
   border-radius:11px;
+
   background:#fff;
+
   border:1px solid #d1d5db;
-  box-shadow:0 2px 7px rgba(0,0,0,.08);
+
+  box-shadow:
+    0 2px 7px
+    rgba(0,0,0,.08);
 }
 
 .provider-logo-fallback{
   width:52px;
   height:52px;
+
   display:flex;
+
   align-items:center;
   justify-content:center;
+
   border-radius:11px;
+
   background:#fff;
+
   border:1px solid #d1d5db;
+
   font-size:11px;
+
   text-align:center;
 }
 
+
+/* =========================================================
+   配信情報なし
+========================================================= */
+
 .availability-note{
   margin:0;
-  font-size:14px;
+
+  font-size:13px;
+
   font-weight:700;
+
   line-height:1.6;
 }
 
 .availability-empty-icon{
   font-size:38px;
+
   line-height:1;
+
   margin-bottom:10px;
 }
+
+
+/* =========================================================
+   タブレット
+========================================================= */
 
 @media(max-width:900px){
 
   .movie-card{
-    grid-template-columns:140px minmax(0,1fr);
+    grid-template-columns:
+      140px
+      minmax(0,1fr);
   }
 
   .availability-panel{
     grid-column:1 / -1;
+
     min-height:150px;
   }
 
-}
-
-@media(max-width:700px){
-
-  .availability-panel{
-    min-height:130px;
-    padding:17px;
-  }
-
-  .availability-heading{
-    font-size:18px;
-    margin-bottom:12px;
-  }
-
-  .provider-chip{
-    font-size:13px;
-  }
-
-}
-     
-/* =========================================================
-   詳細ボタン
-========================================================= */
-
-.detail-button{
-  display:inline-block;
-
-  margin-top:12px;
-
-  border:0;
-
-  border-radius:9px;
-
-  padding:11px 20px;
-
-  background:#111827;
-
-  color:#fff;
-
-  cursor:pointer;
-
-  font-weight:bold;
-
-  font-size:14px;
-}
-
-.detail-button:hover{
-  background:#374151;
-}
-
-
-/* =========================================================
-   フッター
-========================================================= */
-
-footer{
-  text-align:center;
-
-  padding:30px 15px;
-
-  color:#9ca3af;
-
-  font-size:12px;
 }
 
 
@@ -766,61 +905,78 @@ footer{
 
 @media(max-width:700px){
 
-  header h1{
-    font-size:25px;
-  }
-
-
-  .search-row{
-    flex-direction:column;
-  }
-
-
-  #query{
-    width:100%;
-  }
-
-
-  #searchButton{
-    width:100%;
-  }
-
-
   .movie-card{
-    grid-template-columns:120px minmax(0,1fr);
-    gap:14px;
-    padding:14px;
-  }
+    grid-template-columns:
+      105px
+      minmax(0,1fr);
 
+    gap:14px;
+
+    padding:14px;
+
+    border-radius:13px;
+  }
 
   .movie-poster{
-    width:120px;
-    height:180px;
+    width:105px;
+    height:158px;
   }
-
 
   .movie-title{
     font-size:19px;
   }
 
-
   .original-title{
     font-size:13px;
+
+    margin-bottom:8px;
   }
 
+  .movie-meta-row{
+    gap:4px 10px;
 
-  .meta{
+    font-size:12px;
+
+    margin-bottom:9px;
+  }
+
+  .movie-meta-item{
+    white-space:normal;
+  }
+
+  .movie-overview{
     font-size:13px;
-  }
 
+    line-height:1.6;
+
+    -webkit-line-clamp:3;
+
+    margin-bottom:10px;
+  }
 
   .detail-button{
     width:100%;
-    text-align:center;
+
+    padding:9px 12px;
+
+    font-size:13px;
+  }
+
+  .availability-panel{
+    min-height:130px;
+
+    padding:15px;
+  }
+
+  .availability-heading{
+    font-size:18px;
+  }
+
+  .provider-chip{
+    font-size:12px;
   }
 
 }
-
 /* =========================================================
    検索結果
 ========================================================= */
@@ -1545,24 +1701,24 @@ function createMovieCard(movie){
       : "";
 
 
+  /* -------------------------------------------------------
+     公開年
+  ------------------------------------------------------- */
 
-/* -------------------------------------------------------
-   公開日・上映時間
-------------------------------------------------------- */
+  const release =
+    movie.release_date
+      ? formatYear(movie.release_date)
+      : "公開年不明";
 
-const release =
-  movie.release_date
-    ? formatYear(
-        movie.release_date
-      )
-    : "公開年不明";
 
-const runtime =
-  movie.runtime
-    ? formatRuntime(
-        movie.runtime
-      )
-    : "";
+  /* -------------------------------------------------------
+     上映時間
+  ------------------------------------------------------- */
+
+  const runtime =
+    movie.runtime
+      ? formatRuntime(movie.runtime)
+      : "";
 
 
   /* -------------------------------------------------------
@@ -1591,52 +1747,407 @@ const runtime =
 
   const detailUrl =
     "./detail.html?id=" +
-    encodeURIComponent(
-      movieId
+    encodeURIComponent(movieId);
+
+
+  /* -------------------------------------------------------
+     作品タイプ
+  ------------------------------------------------------- */
+
+  const mediaType =
+    movie.media_type ||
+    "映画";
+
+
+  /* -------------------------------------------------------
+     あらすじ
+  ------------------------------------------------------- */
+
+  const overview =
+    String(
+      movie.overview || ""
+    ).trim();
+
+
+  /* -------------------------------------------------------
+     配信サービス名
+  ------------------------------------------------------- */
+
+  const simplifyProviderName =
+    function(name){
+
+      name =
+        String(name || "");
+
+
+      if(name.includes("Netflix")){
+        return "Netflix";
+      }
+
+
+      if(
+        name.includes("Amazon Prime Video") ||
+        name.includes("Anime Times Amazon Channel") ||
+        name.includes("dAnime Amazon Channel")
+      ){
+        return "Prime Video";
+      }
+
+
+      if(name.includes("Hulu")){
+        return "Hulu";
+      }
+
+
+      if(name.includes("U-NEXT")){
+        return "U-NEXT";
+      }
+
+
+      if(name.includes("Disney")){
+        return "Disney+";
+      }
+
+
+      return name;
+
+    };
+
+
+  /* -------------------------------------------------------
+     配信サービス取得
+  ------------------------------------------------------- */
+
+  const getProviders =
+    function(providers){
+
+      const list = [];
+
+
+      (
+        Array.isArray(providers)
+          ? providers
+          : []
+      )
+      .forEach(
+        function(provider){
+
+          const simpleName =
+            simplifyProviderName(
+              provider.provider_name || ""
+            );
+
+
+          if(
+            simpleName &&
+            !list.some(
+              function(item){
+
+                return item.name === simpleName;
+
+              }
+            )
+          ){
+
+            list.push({
+
+              name:
+                simpleName,
+
+              logo_path:
+                provider.logo_path || ""
+
+            });
+
+          }
+
+        }
+      );
+
+
+      return list;
+
+    };
+
+
+  /* -------------------------------------------------------
+     配信ロゴ表示
+  ------------------------------------------------------- */
+
+  const renderProviders =
+    function(providers){
+
+      return providers
+        .map(
+          function(provider){
+
+            const logo =
+              provider.logo_path
+                ? "https://image.tmdb.org/t/p/w92" +
+                  provider.logo_path
+                : "";
+
+
+            return `
+              <div class="provider-chip">
+
+                ${
+                  logo
+
+                    ?
+
+                    `
+                    <img
+                      class="provider-logo"
+                      src="${logo}"
+                      alt="${escapeHtml(provider.name)}のロゴ"
+                      loading="lazy"
+                    >
+                    `
+
+                    :
+
+                    `
+                    <div class="provider-logo-fallback">
+                      ${escapeHtml(provider.name)}
+                    </div>
+                    `
+                }
+
+                <span>
+                  ${escapeHtml(provider.name)}
+                </span>
+
+              </div>
+            `;
+
+          }
+        )
+        .join("");
+
+    };
+
+
+  /* -------------------------------------------------------
+     配信情報
+  ------------------------------------------------------- */
+
+  const streamingProviders =
+    getProviders(
+      movie.streaming
     );
 
+
+  const rentalProviders =
+    getProviders(
+
+      (
+        Array.isArray(movie.rental)
+          ? movie.rental
+          : []
+      )
+      .concat(
+
+        Array.isArray(movie.purchase)
+          ? movie.purchase
+          : []
+
+      )
+
+    );
+
+
+  /* -------------------------------------------------------
+     配信パネル
+  ------------------------------------------------------- */
+
+  let availabilityHtml = "";
+
+
+  if(
+    streamingProviders.length > 0
+  ){
+
+    availabilityHtml = `
+
+      <aside
+        class="availability-panel streaming"
+        aria-label="配信情報"
+      >
+
+        <h3
+          class="
+            availability-heading
+            availability-streaming
+          "
+        >
+          🟢 配信中
+        </h3>
+
+
+        <div class="provider-list">
+
+          ${renderProviders(
+            streamingProviders
+          )}
+
+        </div>
+
+      </aside>
+
+    `;
+
+  }
+
+  else if(
+    rentalProviders.length > 0
+  ){
+
+    availabilityHtml = `
+
+      <aside
+        class="availability-panel rental"
+        aria-label="レンタル・購入情報"
+      >
+
+        <h3
+          class="
+            availability-heading
+            availability-rental
+          "
+        >
+          🟠 レンタル・購入で視聴できます
+        </h3>
+
+
+        <div class="provider-list">
+
+          ${renderProviders(
+            rentalProviders
+          )}
+
+        </div>
+
+      </aside>
+
+    `;
+
+  }
+
+  else{
+
+    availabilityHtml = `
+
+      <aside
+        class="availability-panel none"
+        aria-label="配信情報なし"
+      >
+
+        <div
+          class="availability-empty-icon"
+        >
+          ⚪
+        </div>
+
+
+        <p
+          class="
+            availability-heading
+            availability-none
+          "
+        >
+          現在、配信情報はありません
+        </p>
+
+
+        <p
+          class="
+            availability-note
+            availability-none
+          "
+        >
+          配信サービスが確認できませんでした
+        </p>
+
+      </aside>
+
+    `;
+
+  }
+
+
+  /* -------------------------------------------------------
+     あらすじHTML
+  ------------------------------------------------------- */
+
+  const overviewHtml =
+    overview
+
+      ?
+
+      `
+      <p class="movie-overview">
+        ${escapeHtml(overview)}
+      </p>
+      `
+
+      :
+
+      "";
+
+
+  /* -------------------------------------------------------
+     カード
+  ------------------------------------------------------- */
 
   return `
 
     <article class="movie-card">
 
 
+      <!-- =================================================
+           ポスター
+      ================================================== -->
+
       ${
         poster
 
-        ?
+          ?
 
-        `
-        <img
-          class="movie-poster"
-          src="${poster}"
-          alt="${escapeHtml(
-            movie.title || ""
-          )}のポスター"
-          loading="lazy"
-        >
-        `
+          `
+          <img
+            class="movie-poster"
+            src="${poster}"
+            alt="${escapeHtml(
+              movie.title || ""
+            )}のポスター"
+            loading="lazy"
+          >
+          `
 
-        :
+          :
 
-        `
-        <div
-          class="movie-poster"
-          style="
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            color:#6b7280;
-          "
-          role="img"
-          aria-label="ポスター画像なし"
-        >
-          NO IMAGE
-        </div>
-        `
-
+          `
+          <div
+            class="movie-poster"
+            style="
+              display:flex;
+              align-items:center;
+              justify-content:center;
+              color:#6b7280;
+            "
+            role="img"
+            aria-label="ポスター画像なし"
+          >
+            NO IMAGE
+          </div>
+          `
       }
 
+
+      <!-- =================================================
+           作品情報
+      ================================================== -->
 
       <div class="movie-info">
 
@@ -1657,259 +2168,112 @@ const runtime =
         ${
           movie.original_title
 
-          ?
+            ?
 
-          `
-          <div class="original-title">
+            `
+            <div class="original-title">
 
-            ${escapeHtml(
-              movie.original_title
-            )}
+              ${escapeHtml(
+                movie.original_title
+              )}
 
-          </div>
-          `
+            </div>
+            `
 
-          :
+            :
 
-          ""
+            ""
         }
 
 
-        <!-- 作品タイプ -->
+        <!-- =================================================
+             メタ情報
+        ================================================== -->
 
-<div class="meta">
-
-  🎬 作品タイプ：
-  ${escapeHtml(
-    movie.media_type || "映画"
-  )}
-
-</div>
+        <div class="movie-meta-row">
 
 
-<!-- 公開年 -->
-
-<div class="meta">
-
-  📅 公開年：
-  ${escapeHtml(
-    release
-  )}
-
-</div>
+          <span class="movie-meta-item">
+            🎬 ${escapeHtml(mediaType)}
+          </span>
 
 
-<!-- 評価 -->
-
-<div class="meta">
-
-  ⭐ TMDB評価：
-  ${rating}
-
-</div>
+          <span class="movie-meta-item">
+            📅 ${escapeHtml(release)}
+          </span>
 
 
-<!-- 上映時間 -->
+          <span class="movie-meta-item">
+            ⭐ TMDB評価：${rating}
+          </span>
 
-${
-  movie.runtime
-    ? `
-      <div class="meta">
 
-        ⏱ 上映時間：
-        ${formatRuntime(movie.runtime)}
+          ${
+            runtime
 
-      </div>
-      `
-    : ""
-}
-     
-        <!-- 詳細 -->
+              ?
+
+              `
+              <span class="movie-meta-item">
+                🕐 ${escapeHtml(runtime)}
+              </span>
+              `
+
+              :
+
+              ""
+          }
+
+
+        </div>
+
+
+        <!-- =================================================
+             あらすじ
+        ================================================== -->
+
+        ${overviewHtml}
+
+
+        <!-- =================================================
+             詳細ボタン
+        ================================================== -->
 
         ${
           movieId
 
-          ?
+            ?
 
-          `
-          <a
-            class="detail-button"
-            href="${detailUrl}"
-            aria-label="${escapeHtml(
-              movie.title || "作品"
-            )}の詳細を見る"
-          >
-            作品詳細を見る →
-          </a>
-          `
+            `
+            <a
+              class="detail-button"
+              href="${detailUrl}"
+              aria-label="${escapeHtml(
+                movie.title || "作品"
+              )}の詳細を見る"
+            >
+              作品詳細を見る →
+            </a>
+            `
 
-          :
+            :
 
-          `
-          <div class="error">
-
-            作品IDを取得できませんでした。
-
-          </div>
-          `
-
+            `
+            <div class="error">
+              作品IDを取得できませんでした。
+            </div>
+            `
         }
 
 
       </div>
 
-      <!-- 配信状況：右側パネル -->
 
-${(() => {
+      <!-- =================================================
+           配信状況
+      ================================================== -->
 
-  const simplifyProviderName = function(name){
-
-    name = String(name || "");
-
-    if(name.includes("Netflix")){
-      return "Netflix";
-    }
-
-    if(
-      name.includes("Amazon Prime Video") ||
-      name.includes("Anime Times Amazon Channel") ||
-      name.includes("dAnime Amazon Channel")
-    ){
-      return "Prime Video";
-    }
-
-    if(name.includes("Hulu")){
-      return "Hulu";
-    }
-
-    if(name.includes("U-NEXT")){
-      return "U-NEXT";
-    }
-
-    if(name.includes("Disney")){
-      return "Disney+";
-    }
-
-    return name;
-  };
-
-  const getProviders = function(providers){
-
-    const list = [];
-
-    (Array.isArray(providers) ? providers : [])
-      .forEach(function(provider){
-
-        const simpleName =
-          simplifyProviderName(
-            provider.provider_name || ""
-          );
-
-        if(
-          simpleName &&
-          !list.some(function(item){
-            return item.name === simpleName;
-          })
-        ){
-          list.push({
-            name: simpleName,
-            logo_path: provider.logo_path || ""
-          });
-        }
-
-      });
-
-    return list;
-  };
-
-  const renderProviders = function(providers){
-
-    return providers
-      .map(function(provider){
-
-        const logo = provider.logo_path
-          ? `https://image.tmdb.org/t/p/w92${provider.logo_path}`
-          : "";
-
-        return `
-          <div class="provider-chip">
-            ${
-              logo
-                ? `<img class="provider-logo" src="${logo}" alt="${escapeHtml(provider.name)}のロゴ" loading="lazy">`
-                : `<div class="provider-logo-fallback">${escapeHtml(provider.name)}</div>`
-            }
-            <span>${escapeHtml(provider.name)}</span>
-          </div>
-        `;
-
-      })
-      .join("");
-  };
-
-  const streamingProviders =
-    getProviders(movie.streaming);
-
-  const rentalProviders =
-    getProviders(
-      (Array.isArray(movie.rental) ? movie.rental : [])
-        .concat(
-          Array.isArray(movie.purchase) ? movie.purchase : []
-        )
-    );
-
-  if(streamingProviders.length > 0){
-
-    return `
-      <aside class="availability-panel streaming" aria-label="配信情報">
-
-        <h3 class="availability-heading availability-streaming">
-          🟢 配信中
-        </h3>
-
-        <div class="provider-list">
-          ${renderProviders(streamingProviders)}
-        </div>
-
-      </aside>
-    `;
-
-  }
-
-  if(rentalProviders.length > 0){
-
-    return `
-      <aside class="availability-panel rental" aria-label="レンタル・購入情報">
-
-        <h3 class="availability-heading availability-rental">
-          🟠 レンタル・購入で視聴できます
-        </h3>
-
-        <div class="provider-list">
-          ${renderProviders(rentalProviders)}
-        </div>
-
-      </aside>
-    `;
-
-  }
-
-  return `
-    <aside class="availability-panel none" aria-label="配信情報なし">
-
-      <div class="availability-empty-icon">⚪</div>
-
-      <p class="availability-heading availability-none">
-        現在、配信情報はありません
-      </p>
-
-      <p class="availability-note availability-none">
-        配信サービスが確認できませんでした
-      </p>
-
-    </aside>
-  `;
-
-})()}
+      ${availabilityHtml}
 
 
     </article>
