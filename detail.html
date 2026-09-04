@@ -1437,6 +1437,40 @@ header p{
 
 }
 
+/* =========================================================
+   配信情報なし
+========================================================= */
+
+.provider-empty{
+  padding:14px 16px;
+
+  background:#f8fafc;
+
+  border:1px solid #e5e7eb;
+
+  border-radius:10px;
+}
+
+.provider-empty-title{
+  margin-bottom:5px;
+
+  color:#111827;
+
+  font-size:17px;
+
+  font-weight:bold;
+
+  line-height:1.5;
+}
+
+.provider-empty-message{
+  color:#666;
+
+  font-size:15px;
+
+  line-height:1.6;
+}
+  
 </style>
 
 </head>
@@ -3268,21 +3302,45 @@ function renderProviders(movie){
 
   const empty =
     document.createElement(
-      "p"
+      "div"
     );
 
-  empty.textContent =
-    (movie.title || "この作品") +
-    "は、現在、動画配信サービスでの配信情報を確認できません。見放題・レンタル・購入などの配信情報を掲載しています。";
+  empty.className =
+    "provider-empty";
 
-  empty.style.color =
-    "#777";
+  const title =
+    document.createElement(
+      "div"
+    );
+
+  title.className =
+    "provider-empty-title";
+
+  title.textContent =
+    movie.title || "この作品";
+
+  const message =
+    document.createElement(
+      "div"
+    );
+
+  message.className =
+    "provider-empty-message";
+
+  message.textContent =
+    "現在、動画配信サービスでの配信情報を確認できません。";
+
+  empty.appendChild(
+    title
+  );
+
+  empty.appendChild(
+    message
+  );
 
   container.appendChild(
     empty
   );
-
-}
 
 }
 
