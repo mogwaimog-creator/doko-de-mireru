@@ -913,11 +913,10 @@ results.innerHTML =
     ----------------------------------------------------- */
 
     const apiUrl =
-      "/api/search?query=" +
-      encodeURIComponent(
-        query
-      );
-
+  "/api/search?query=" +
+  encodeURIComponent(query) +
+  "&page=" +
+  currentPage;
 
     const response =
       await fetch(
