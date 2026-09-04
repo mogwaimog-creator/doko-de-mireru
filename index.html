@@ -820,6 +820,9 @@ const results =
     "results"
   );
 
+let currentPage = 1;
+let currentQuery = "";
+let isLoadingMore = false;
 
 /* =========================================================
    映画検索
@@ -829,6 +832,9 @@ async function searchMovies(){
 
   const query =
     queryInput.value.trim();
+
+  currentPage = 1;
+currentQuery = query;   
 
 
   sessionStorage.setItem(
@@ -1114,6 +1120,25 @@ results.innerHTML =
     )
     .join("");
 
+if (movies.length === 20) {
+
+  results.insertAdjacentHTML(
+    "beforeend",
+    `
+    <div class="load-more-wrapper">
+      <button
+        id="loadMoreButton"
+        type="button"
+        class="load-more-button"
+      >
+        さらに20件表示
+      </button>
+    </div>
+    `
+  );
+
+}
+       
 
   }catch(error){
 
