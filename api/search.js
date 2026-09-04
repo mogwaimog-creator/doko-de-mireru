@@ -289,7 +289,7 @@ if (
 // =====================================================
 
 let allMovies = [];
-
+let hasMore = false;
 
 // =====================================================
 // 複数の検索語でTMDBを検索
@@ -321,22 +321,36 @@ for (
   try {
 
     const data =
-      await fetchJson(
-        searchUrl
-      );
+  await fetchJson(
+    searchUrl
+  );
 
 
-    if (
-      data &&
-      Array.isArray(data.results)
-    ) {
+if (
+  data &&
+  Array.isArray(data.results)
+) {
 
-      allMovies =
-        allMovies.concat(
-          data.results
-        );
+  allMovies =
+    allMovies.concat(
+      data.results
+    );
 
-    }
+
+  // ===================================================
+  // 次のページが存在するか確認
+  // ===================================================
+
+  if (
+    Number(data.page || page) <
+    Number(data.total_pages || page)
+  ) {
+
+    hasMore = true;
+
+  }
+
+}
 
   } catch (error) {
 
@@ -677,7 +691,7 @@ const results =
     return res.status(200).json({
   results: results,
   page: page,
-  hasMore: results.length === 20
+  hasMore: hasMore
 });
 
   } catch (error) {
