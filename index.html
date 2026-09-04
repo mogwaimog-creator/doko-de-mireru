@@ -1703,9 +1703,24 @@ function createMovieCard(movie){
   ------------------------------------------------------- */
 
   const overview =
-    String(
-      movie.overview || ""
-    ).trim();
+  String(
+    movie.overview || ""
+  ).trim();
+
+
+/* -------------------------------------------------------
+   検索結果用の短いあらすじ
+   最初の1文だけを表示
+------------------------------------------------------- */
+
+const shortOverview =
+  overview
+    ? (
+        overview.match(
+          /^.*?[。！？](?:\s|$)/
+        ) || [overview]
+      )[0].trim()
+    : "";
 
 
   /* -------------------------------------------------------
@@ -2018,20 +2033,24 @@ function createMovieCard(movie){
      あらすじHTML
   ------------------------------------------------------- */
 
-  const overviewHtml =
-    overview
+  /* -------------------------------------------------------
+   短いあらすじHTML
+------------------------------------------------------- */
 
-      ?
+const overviewHtml =
+  shortOverview
 
-      `
-      <p class="movie-overview">
-        ${escapeHtml(overview)}
-      </p>
-      `
+    ?
 
-      :
+    `
+    <p class="movie-overview">
+      ${escapeHtml(shortOverview)}
+    </p>
+    `
 
-      "";
+    :
+
+    "";
 
 
   /* -------------------------------------------------------
