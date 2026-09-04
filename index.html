@@ -1708,13 +1708,116 @@ function createMovieCard(movie){
    検索結果用の短いあらすじ
 ------------------------------------------------------- */
 
+/*
+  個別に用意した短いあらすじ
+  → 登録されている作品はこちらを優先
+*/
+
 const shortOverviewMap = {
 
-  /* インターステラー */
-  "157336":
+  "インターステラー":
     "人類の存続をかけ、未知の領域へと旅立つ宇宙飛行士たちの壮大なSFアドベンチャー。"
 
 };
+
+
+/* -------------------------------------------------------
+   短いあらすじ作成
+------------------------------------------------------- */
+
+const createShortOverview =
+  function(text){
+
+    const source =
+      String(text || "").trim();
+
+    if(!source){
+      return "";
+    }
+
+
+    /*
+      まず文章を句点などで区切る
+    */
+
+    const sentences =
+      source
+        .split(/(?<=[。！？])/)
+        .map(
+          function(sentence){
+            return sentence.trim();
+          }
+        )
+        .filter(
+          function(sentence){
+            return sentence.length > 0;
+          }
+        );
+
+
+    /*
+      最初の文章が短ければそのまま使用
+    */
+
+    if(
+      sentences.length > 0 &&
+      sentences[0].length <= 70
+    ){
+
+      return sentences[0];
+
+    }
+
+
+    /*
+      最初の文章が長い場合、
+      途中で切らずに複数の文章から
+      70文字程度にまとめる
+    */
+
+    let result = "";
+
+
+    for(
+      let i = 0;
+      i < sentences.length;
+      i++
+    ){
+
+      const candidate =
+        result
+          ? result + sentences[i]
+          : sentences[i];
+
+
+      if(candidate.length > 75){
+        break;
+      }
+
+
+      result = candidate;
+
+    }
+
+
+    /*
+      文章が長すぎる場合は
+      最後の文字を無理に切らない
+    */
+
+    if(result){
+      return result;
+    }
+
+
+    /*
+      どうしても短くできない場合のみ
+      70文字程度で表示
+    */
+
+    return source.slice(0, 70) + "…";
+
+  };
 
 
 /* -------------------------------------------------------
@@ -1722,8 +1825,8 @@ const shortOverviewMap = {
 ------------------------------------------------------- */
 
 const shortOverview =
-  shortOverviewMap[movieId] ||
-  "";
+  shortOverviewMap[movie.title] ||
+  createShortOverview(overview);
 
 
   /* -------------------------------------------------------
