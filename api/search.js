@@ -118,7 +118,15 @@ const popular =
   typeof req.query.popular === "string"
     ? req.query.popular.trim()
     : "";
-    
+
+    const page =
+  req.query &&
+  typeof req.query.page === "string"
+    ? Math.max(
+        1,
+        parseInt(req.query.page, 10) || 1
+      )
+    : 1;
     
     // =====================================================
     // 作品詳細
@@ -304,7 +312,8 @@ for (
     "&language=ja-JP" +
     "&region=JP" +
     "&include_adult=false" +
-    "&page=1" +
+    "&page=" +
+　　　page +
     "&query=" +
     encodeURIComponent(searchQuery);
 
@@ -666,9 +675,10 @@ const results =
     // =====================================================
 
     return res.status(200).json({
-      results: results
-    });
-
+  results: results,
+  page: page,
+  hasMore: results.length === 20
+});
 
   } catch (error) {
 
