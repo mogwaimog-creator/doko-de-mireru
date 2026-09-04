@@ -1706,35 +1706,24 @@ function createMovieCard(movie){
 
 /* -------------------------------------------------------
    検索結果用の短いあらすじ
-   50文字前後にまとめる
 ------------------------------------------------------- */
 
-const shortOverview = (() => {
+const shortOverviewMap = {
 
-  if(!overview){
-    return "";
-  }
+  /* インターステラー */
+  "157336":
+    "人類の存続をかけ、未知の領域へと旅立つ宇宙飛行士たちの壮大なSFアドベンチャー。"
 
-  /* まず最初の文章を取得 */
-  const firstSentence =
-    (
-      overview.match(
-        /^.*?[。！？](?:\s|$)/
-      ) || [overview]
-    )[0].trim();
+};
 
-  /* 60文字以内ならそのまま */
-  if(firstSentence.length <= 60){
-    return firstSentence;
-  }
 
-  /* 60文字を超える場合は自然な位置で短縮 */
-  const shortened =
-    firstSentence.slice(0, 57);
+/* -------------------------------------------------------
+   短いあらすじ取得
+------------------------------------------------------- */
 
-  return shortened + "…";
-
-})();
+const shortOverview =
+  shortOverviewMap[movieId] ||
+  "";
 
 
   /* -------------------------------------------------------
