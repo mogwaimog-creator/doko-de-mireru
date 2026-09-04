@@ -664,7 +664,7 @@ font-size:13px;
 @media(max-width:900px){
 
   .movie-card{
-    grid-template-columns:140px minmax(0,1fr);
+    grid-template-columns:150px minmax(0,1fr);
   }
 
   .availability-panel{
@@ -1702,7 +1702,41 @@ ${
     : ""
 }
      
-        <!-- 配信状況：右側パネル -->
+        <!-- 詳細 -->
+
+        ${
+          movieId
+
+          ?
+
+          `
+          <a
+            class="detail-button"
+            href="${detailUrl}"
+            aria-label="${escapeHtml(
+              movie.title || "作品"
+            )}の詳細を見る"
+          >
+            作品詳細を見る →
+          </a>
+          `
+
+          :
+
+          `
+          <div class="error">
+
+            作品IDを取得できませんでした。
+
+          </div>
+          `
+
+        }
+
+
+      </div>
+
+      <!-- 配信状況：右側パネル -->
 
 ${(() => {
 
@@ -1833,41 +1867,6 @@ ${(() => {
   `;
 
 })()}
-        
-        
-        <!-- 詳細 -->
-
-        ${
-          movieId
-
-          ?
-
-          `
-          <a
-            class="detail-button"
-            href="${detailUrl}"
-            aria-label="${escapeHtml(
-              movie.title || "作品"
-            )}の詳細を見る"
-          >
-            作品詳細を見る →
-          </a>
-          `
-
-          :
-
-          `
-          <div class="error">
-
-            作品IDを取得できませんでした。
-
-          </div>
-          `
-
-        }
-
-
-      </div>
 
 
     </article>
