@@ -1129,6 +1129,7 @@ if (data.hasMore) {
         id="loadMoreButton"
         type="button"
         class="load-more-button"
+        onclick="loadMoreMovies()"
       >
         さらに20件表示
       </button>
@@ -1290,23 +1291,23 @@ async function loadMoreMovies() {
 
     if (data.hasMore) {
 
-      results.insertAdjacentHTML(
-        "beforeend",
-        `
-        <div class="load-more-wrapper">
-          <button
-            id="loadMoreButton"
-            type="button"
-            class="load-more-button"
-          >
-            さらに20件表示
-          </button>
-        </div>
-        `
-      );
+  results.insertAdjacentHTML(
+    "beforeend",
+    `
+    <div class="load-more-wrapper">
+      <button
+        id="loadMoreButton"
+        type="button"
+        class="load-more-button"
+        onclick="loadMoreMovies()"
+      >
+        さらに20件表示
+      </button>
+    </div>
+    `
+  );
 
-    }
-
+}
 
   } catch(error) {
 
@@ -1353,10 +1354,11 @@ async function loadMoreMovies() {
         `
         <div class="load-more-wrapper">
           <button
-            id="loadMoreButton"
-            type="button"
-            class="load-more-button"
-          >
+  　　　　　id="loadMoreButton"
+  　　　　　type="button"
+  class="load-more-button"
+  onclick="loadMoreMovies()"
+>
             さらに20件表示
           </button>
         </div>
