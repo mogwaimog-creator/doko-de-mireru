@@ -164,7 +164,7 @@ header p{
 ========================================================= */
 
 .container{
-  width:min(1000px,94%);
+  width:min(1250px,94%);
   margin:25px auto 50px;
 }
 
@@ -264,6 +264,51 @@ header p{
   color:#6b7280;
 }
 
+
+/* =========================================================
+   さらに20件表示
+========================================================= */
+
+.load-more-wrapper{
+  margin-top:4px;
+}
+
+.load-more-button{
+  width:100%;
+  min-height:78px;
+  padding:16px 24px;
+  border:0;
+  border-radius:14px;
+  background:#2563eb;
+  color:#fff;
+  font-size:22px;
+  font-weight:800;
+  letter-spacing:.02em;
+  cursor:pointer;
+  box-shadow:0 5px 14px rgba(37,99,235,.22);
+  transition:transform .15s ease, background .15s ease, box-shadow .15s ease;
+}
+
+.load-more-button:hover{
+  background:#1d4ed8;
+  transform:translateY(-1px);
+  box-shadow:0 7px 18px rgba(37,99,235,.28);
+}
+
+.load-more-button:disabled{
+  opacity:.65;
+  cursor:wait;
+  transform:none;
+}
+
+@media(max-width:700px){
+
+  .load-more-button{
+    min-height:64px;
+    font-size:18px;
+  }
+
+}
 
 /* =========================================================
    検索結果
@@ -471,10 +516,11 @@ font-size:13px;
   border-radius:16px;
   padding:18px;
 
-  display:flex;
-  align-items:center;
+  display:grid;
+  grid-template-columns:150px minmax(0,1fr) 340px;
+  align-items:stretch;
 
-  gap:20px;
+  gap:24px;
 
   box-shadow:
     0 3px 15px
@@ -505,7 +551,6 @@ font-size:13px;
 ========================================================= */
 
 .movie-info{
-  flex:1;
   min-width:0;
 }
 
@@ -531,13 +576,42 @@ font-size:13px;
   margin:7px 0;
 }
 
-/* 配信状況 */
-.availability-status{
-  margin:10px 0 6px;
-  font-size:14px;
-  font-weight:700;
-  line-height:1.5;
-  overflow-wrap:anywhere;
+/* =========================================================
+   配信情報パネル
+========================================================= */
+.availability-panel{
+  min-width:0;
+  min-height:190px;
+  padding:20px;
+  border-radius:14px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  border:1px solid #e5e7eb;
+}
+
+.availability-panel.streaming{
+  background:#f0fdf4;
+  border-color:#bbf7d0;
+}
+
+.availability-panel.rental{
+  background:#fffbeb;
+  border-color:#fde68a;
+}
+
+.availability-panel.none{
+  background:#f9fafb;
+  border-color:#e5e7eb;
+}
+
+.availability-heading{
+  margin:0 0 16px;
+  font-size:21px;
+  font-weight:800;
+  line-height:1.4;
 }
 
 .availability-streaming{
@@ -552,9 +626,67 @@ font-size:13px;
   color:#6b7280;
 }
 
+.provider-list{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:9px;
+}
+
+.provider-chip{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:38px;
+  padding:7px 12px;
+  background:#fff;
+  border:1px solid #d1d5db;
+  border-radius:10px;
+  font-size:14px;
+  font-weight:700;
+  color:#111827;
+  box-shadow:0 2px 7px rgba(0,0,0,.05);
+}
+
+.availability-note{
+  margin:0;
+  font-size:14px;
+  font-weight:700;
+  line-height:1.6;
+}
+
+.availability-empty-icon{
+  font-size:38px;
+  line-height:1;
+  margin-bottom:10px;
+}
+
+@media(max-width:900px){
+
+  .movie-card{
+    grid-template-columns:140px minmax(0,1fr);
+  }
+
+  .availability-panel{
+    grid-column:1 / -1;
+    min-height:150px;
+  }
+
+}
+
 @media(max-width:700px){
 
-  .availability-status{
+  .availability-panel{
+    min-height:130px;
+    padding:17px;
+  }
+
+  .availability-heading{
+    font-size:18px;
+    margin-bottom:12px;
+  }
+
+  .provider-chip{
     font-size:13px;
   }
 
@@ -633,7 +765,9 @@ footer{
 
 
   .movie-card{
-    align-items:flex-start;
+    grid-template-columns:120px minmax(0,1fr);
+    gap:14px;
+    padding:14px;
   }
 
 
@@ -1291,23 +1425,24 @@ async function loadMoreMovies() {
 
     if (data.hasMore) {
 
-  results.insertAdjacentHTML(
-    "beforeend",
-    `
-    <div class="load-more-wrapper">
-      <button
-        id="loadMoreButton"
-        type="button"
-        class="load-more-button"
-        onclick="loadMoreMovies()"
-      >
-        さらに20件表示
-      </button>
-    </div>
-    `
-  );
+      results.insertAdjacentHTML(
+        "beforeend",
+        `
+        <div class="load-more-wrapper">
+          <button
+            id="loadMoreButton"
+            type="button"
+            class="load-more-button"
+            onclick="loadMoreMovies()"
+          >
+            さらに20件表示
+          </button>
+        </div>
+        `
+      );
 
-}
+    }
+
 
   } catch(error) {
 
@@ -1354,11 +1489,11 @@ async function loadMoreMovies() {
         `
         <div class="load-more-wrapper">
           <button
-  　　　　　id="loadMoreButton"
-  　　　　　type="button"
-  class="load-more-button"
-  onclick="loadMoreMovies()"
->
+            id="loadMoreButton"
+            type="button"
+            class="load-more-button"
+            onclick="loadMoreMovies()"
+          >
             さらに20件表示
           </button>
         </div>
@@ -1567,112 +1702,137 @@ ${
     : ""
 }
      
-        <!-- 配信状況 -->
+        <!-- 配信状況：右側パネル -->
 
-${
-  Array.isArray(movie.streaming) &&
-  movie.streaming.length > 0
+${(() => {
 
-  ?
+  const simplifyProviderName = function(name){
 
-  `
-  <div class="availability-status availability-streaming">
+    name = String(name || "");
 
-    🟢 配信中：
-   ${(() => {
-
-  const providerNames =
-    movie.streaming
-      .map(function(provider){
-        return provider.provider_name || "";
-      });
-
-  const simplifiedProviders = [];
-
-  providerNames.forEach(function(name){
-
-    let simpleName = name;
-
-    /* Netflix系 */
     if(name.includes("Netflix")){
-      simpleName = "Netflix";
+      return "Netflix";
     }
 
-    /* Amazon Prime Video系 */
-    else if(
+    if(
       name.includes("Amazon Prime Video") ||
       name.includes("Anime Times Amazon Channel") ||
       name.includes("dAnime Amazon Channel")
     ){
-      simpleName = "Prime Video";
+      return "Prime Video";
     }
 
-    /* Hulu */
-    else if(name.includes("Hulu")){
-      simpleName = "Hulu";
+    if(name.includes("Hulu")){
+      return "Hulu";
     }
 
-    /* U-NEXT */
-    else if(name.includes("U-NEXT")){
-      simpleName = "U-NEXT";
+    if(name.includes("U-NEXT")){
+      return "U-NEXT";
     }
 
-    /* Disney+ */
-    else if(name.includes("Disney")){
-      simpleName = "Disney+";
+    if(name.includes("Disney")){
+      return "Disney+";
     }
 
-    /* 重複を防ぐ */
-    if(
-      !simplifiedProviders.includes(simpleName)
-    ){
-      simplifiedProviders.push(simpleName);
-    }
+    return name;
+  };
 
-  });
+  const getProviderNames = function(providers){
 
-  return simplifiedProviders
-    .map(function(name){
-      return escapeHtml(name);
-    })
-    .join("・");
+    const names = [];
+
+    (Array.isArray(providers) ? providers : [])
+      .forEach(function(provider){
+
+        const simpleName =
+          simplifyProviderName(
+            provider.provider_name || ""
+          );
+
+        if(
+          simpleName &&
+          !names.includes(simpleName)
+        ){
+          names.push(simpleName);
+        }
+
+      });
+
+    return names;
+  };
+
+  const streamingProviders =
+    getProviderNames(movie.streaming);
+
+  const rentalProviders =
+    getProviderNames(
+      (Array.isArray(movie.rental) ? movie.rental : [])
+        .concat(
+          Array.isArray(movie.purchase) ? movie.purchase : []
+        )
+    );
+
+  if(streamingProviders.length > 0){
+
+    return `
+      <aside class="availability-panel streaming" aria-label="配信情報">
+
+        <h3 class="availability-heading availability-streaming">
+          🟢 配信中
+        </h3>
+
+        <div class="provider-list">
+          ${streamingProviders
+            .map(function(name){
+              return `<span class="provider-chip">${escapeHtml(name)}</span>`;
+            })
+            .join("")}
+        </div>
+
+      </aside>
+    `;
+
+  }
+
+  if(rentalProviders.length > 0){
+
+    return `
+      <aside class="availability-panel rental" aria-label="レンタル・購入情報">
+
+        <h3 class="availability-heading availability-rental">
+          🟠 レンタル・購入で視聴できます
+        </h3>
+
+        <div class="provider-list">
+          ${rentalProviders
+            .map(function(name){
+              return `<span class="provider-chip">${escapeHtml(name)}</span>`;
+            })
+            .join("")}
+        </div>
+
+      </aside>
+    `;
+
+  }
+
+  return `
+    <aside class="availability-panel none" aria-label="配信情報なし">
+
+      <div class="availability-empty-icon">⚪</div>
+
+      <p class="availability-heading availability-none">
+        現在、配信情報はありません
+      </p>
+
+      <p class="availability-note availability-none">
+        配信サービスが確認できませんでした
+      </p>
+
+    </aside>
+  `;
 
 })()}
-
-  </div>
-  `
-
-  :
-
-  Array.isArray(movie.rental) &&
-  movie.rental.length > 0
-
-  ||
-
-  Array.isArray(movie.purchase) &&
-  movie.purchase.length > 0
-
-  ?
-
-  `
-  <div class="availability-status availability-rental">
-
-    🟠 レンタル・購入で視聴できます
-
-  </div>
-  `
-
-  :
-
-  `
-  <div class="availability-status availability-none">
-
-    ⚪ 現在、配信情報はありません
-
-  </div>
-  `
-
-}
         
         
         <!-- 詳細 -->
