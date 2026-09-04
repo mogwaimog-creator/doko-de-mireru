@@ -1171,6 +1171,203 @@ if (data.hasMore) {
 
 }
 
+// =========================================================
+// さらに20件表示
+// =========================================================
+
+async function loadMoreMovies() {
+
+  const button =
+    document.getElementById(
+      "loadMoreButton"
+    );
+
+
+  if (!button) {
+    return;
+  }
+
+
+  // =======================================================
+  // 次のページ
+  // =======================================================
+
+  currentPage++;
+
+
+  button.disabled = true;
+
+  button.textContent =
+    "読み込み中…";
+
+
+  try {
+
+    const apiUrl =
+      "/api/search?query=" +
+      encodeURIComponent(
+        currentQuery
+      ) +
+      "&page=" +
+      currentPage;
+
+
+    const response =
+      await fetch(
+        apiUrl
+      );
+
+
+    const data =
+      await response.json();
+
+
+    if (
+      !response.ok ||
+      !Array.isArray(
+        data.results
+      )
+    ) {
+
+      throw new Error(
+        data.error ||
+        "追加の検索結果を取得できませんでした。"
+      );
+
+    }
+
+
+    // =====================================================
+    // ボタンを一旦削除
+    // =====================================================
+
+    const wrapper =
+      button.closest(
+        ".load-more-wrapper"
+      );
+
+
+    if (wrapper) {
+      wrapper.remove();
+    }
+
+
+    // =====================================================
+    // 追加作品を下に追加
+    // =====================================================
+
+    results.insertAdjacentHTML(
+      "beforeend",
+      data.results
+        .map(
+          createMovieCard
+        )
+        .join("")
+    );
+
+
+    // =====================================================
+    // 件数更新
+    // =====================================================
+
+    const currentCount =
+      results.querySelectorAll(
+        ".movie-card"
+      ).length;
+
+
+    searchResultsHeading.textContent =
+      '🔍「' +
+      currentQuery +
+      '」の検索結果（' +
+      currentCount +
+      '件）';
+
+
+    // =====================================================
+    // まだ次がある場合
+    // =====================================================
+
+    if (data.hasMore) {
+
+      results.insertAdjacentHTML(
+        "beforeend",
+        `
+        <div class="load-more-wrapper">
+          <button
+            id="loadMoreButton"
+            type="button"
+            class="load-more-button"
+          >
+            さらに20件表示
+          </button>
+        </div>
+        `
+      );
+
+    }
+
+
+  } catch(error) {
+
+    console.error(
+      "Load more error:",
+      error
+    );
+
+
+    currentPage--;
+
+
+    button.disabled = false;
+
+    button.textContent =
+      "さらに20件表示";
+
+
+    status.innerHTML =
+      `
+      <div class="error">
+
+        ${escapeHtml(
+          error.message ||
+          "追加の検索結果を取得できませんでした。"
+        )}
+
+      </div>
+      `;
+
+
+    // =====================================================
+    // エラー時はボタンを戻す
+    // =====================================================
+
+    if (
+      !document.getElementById(
+        "loadMoreButton"
+      )
+    ) {
+
+      results.insertAdjacentHTML(
+        "beforeend",
+        `
+        <div class="load-more-wrapper">
+          <button
+            id="loadMoreButton"
+            type="button"
+            class="load-more-button"
+          >
+            さらに20件表示
+          </button>
+        </div>
+        `
+      );
+
+    }
+
+  }
+
+}     
 
 /* =========================================================
    映画カード
