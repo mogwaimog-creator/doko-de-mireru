@@ -1219,6 +1219,79 @@ let currentQuery = "";
 let isLoadingMore = false;
 
 /* =========================================================
+   検索対象
+========================================================= */
+
+let currentSearchType = "movie";
+
+
+const searchTypeButtons =
+  document.querySelectorAll(
+    ".search-type-button"
+  );
+
+
+searchTypeButtons.forEach(
+  function(button){
+
+    button.addEventListener(
+      "click",
+      function(){
+
+        currentSearchType =
+          button.dataset.type;
+
+
+        searchTypeButtons.forEach(
+          function(item){
+
+            item.classList.remove(
+              "active"
+            );
+
+          }
+        );
+
+
+        button.classList.add(
+          "active"
+        );
+
+
+        /* -----------------------------------------------
+           プレースホルダー変更
+        ----------------------------------------------- */
+
+        if(
+          currentSearchType === "movie"
+        ){
+
+          queryInput.placeholder =
+            "映画名を入力してください";
+
+        }else if(
+          currentSearchType === "drama"
+        ){
+
+          queryInput.placeholder =
+            "ドラマ名を入力してください";
+
+        }else if(
+          currentSearchType === "anime"
+        ){
+
+          queryInput.placeholder =
+            "アニメ名を入力してください";
+
+        }
+
+      }
+    );
+
+  }
+);
+     
+/* =========================================================
    映画検索
 ========================================================= */
 
@@ -1306,12 +1379,26 @@ results.innerHTML =
        API
     ----------------------------------------------------- */
 
-    const apiUrl =
+    let apiUrl =
   "/api/search?query=" +
   encodeURIComponent(query) +
   "&page=" +
   currentPage;
 
+
+/* -------------------------------------------------------
+   ドラマ・アニメはTV検索
+------------------------------------------------------- */
+
+if(
+  currentSearchType === "drama" ||
+  currentSearchType === "anime"
+){
+
+  apiUrl +=
+    "&type=tv";
+
+}
     const response =
       await fetch(
         apiUrl
@@ -1365,15 +1452,50 @@ results.innerHTML =
        結果
     ----------------------------------------------------- */
 
-    const movies =
-      Array.isArray(
-        data.results
-      )
-        ? data.results
-        : [];
+    let movies =
+  Array.isArray(
+    data.results
+  )
+    ? data.results
+    : [];
+
+    
+  let movies =
+  Array.isArray(
+    data.results
+  )
+    ? data.results
+    : [];
 
 
-    status.innerHTML =
+/* -------------------------------------------------------
+   アニメの場合
+   TMDBのアニメーションジャンル(ID:16)だけ表示
+------------------------------------------------------- */
+
+if(
+  currentSearchType === "anime"
+){
+
+  movies =
+    movies.filter(
+      function(movie){
+
+        return (
+          movie &&
+          Array.isArray(
+            movie.genre_ids
+          ) &&
+          movie.genre_ids.includes(16)
+        );
+
+      }
+    );
+
+}     
+       
+       
+       status.innerHTML =
       "";
 
 
