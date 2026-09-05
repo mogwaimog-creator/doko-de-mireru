@@ -841,35 +841,19 @@ const results =
 
         return {
 
-          id:
-            movie.id,
+  id:
+    movie.id,
 
+  title:
+    detailData.title ||
+    movie.title ||
+    "",
 
-          // =================================================
-          // タイトル
-          // =================================================
+  media_type:
+    "劇場版",
 
-          title:
-            detailData.title ||
-            movie.title ||
-            "",
-
-
-          // =================================================
-          // 作品タイプ
-          // =================================================
-
-          media_type:
-            "劇場版",
-
-
-          // =================================================
-          // 上映時間
-          // =================================================
-
-          runtime:
-            runtime,
-
+  content_type:
+    "movie",
 
           // =================================================
           // 配信情報
@@ -1668,7 +1652,179 @@ return {
   };
 
 }
+// =========================================================
+// TV配信用 URL
+// =========================================================
 
+function createNetflixProviderUrl(
+  provider,
+  title
+) {
+
+  if (
+    provider &&
+    typeof provider.provider_url === "string" &&
+    /^https?:\/\//i.test(
+      provider.provider_url
+    ) &&
+    /netflix\./i.test(
+      provider.provider_url
+    )
+  ) {
+
+    return provider.provider_url;
+
+  }
+
+  return createNetflixUrl();
+
+}
+
+
+// =========================================================
+// U-NEXT
+// =========================================================
+
+function createUnextProviderUrl(
+  provider,
+  title
+) {
+
+  if (
+    provider &&
+    typeof provider.provider_url === "string" &&
+    /^https?:\/\//i.test(
+      provider.provider_url
+    ) &&
+    /unext\./i.test(
+      provider.provider_url
+    )
+  ) {
+
+    return provider.provider_url;
+
+  }
+
+  if (
+    provider &&
+    typeof provider.url === "string" &&
+    /^https?:\/\//i.test(
+      provider.url
+    ) &&
+    /unext\./i.test(
+      provider.url
+    )
+  ) {
+
+    return provider.url;
+
+  }
+
+  if (
+    provider &&
+    typeof provider.link === "string" &&
+    /^https?:\/\//i.test(
+      provider.link
+    ) &&
+    /unext\./i.test(
+      provider.link
+    )
+  ) {
+
+    return provider.link;
+
+  }
+
+  return createUnextUrl();
+
+}
+
+
+// =========================================================
+// Hulu
+// =========================================================
+
+function createHuluProviderUrl(
+  provider,
+  title
+) {
+
+  if (
+    provider &&
+    typeof provider.provider_url === "string" &&
+    /^https?:\/\//i.test(
+      provider.provider_url
+    ) &&
+    /hulu\./i.test(
+      provider.provider_url
+    )
+  ) {
+
+    return provider.provider_url;
+
+  }
+
+  return createHuluUrl(title);
+
+}
+
+
+// =========================================================
+// Disney+
+// =========================================================
+
+function createDisneyProviderUrl(
+  provider,
+  title
+) {
+
+  if (
+    provider &&
+    typeof provider.provider_url === "string" &&
+    /^https?:\/\//i.test(
+      provider.provider_url
+    ) &&
+    /disneyplus\./i.test(
+      provider.provider_url
+    )
+  ) {
+
+    return provider.provider_url;
+
+  }
+
+  return createDisneyUrl(title);
+
+}
+
+
+// =========================================================
+// Apple TV
+// =========================================================
+
+function createAppleProviderUrl(
+  provider,
+  title
+) {
+
+  if (
+    provider &&
+    typeof provider.provider_url === "string" &&
+    /^https?:\/\//i.test(
+      provider.provider_url
+    ) &&
+    /apple\./i.test(
+      provider.provider_url
+    )
+  ) {
+
+    return provider.provider_url;
+
+  }
+
+  return createAppleUrl(title);
+
+}
 
 // =========================================================
 // Netflix URL
@@ -4188,6 +4344,26 @@ async function searchTvShows(
   // → アニメーション以外
   // =======================================================
 
+// =======================================================
+// ドラマ・アニメの振り分け
+//
+// TMDBジャンルID
+//
+// 16    = Animation
+// 18    = Drama
+// 35    = Comedy
+// 80    = Crime
+// 9648  = Mystery
+// 10749 = Romance
+// 10759 = Action & Adventure
+// 10765 = Sci-Fi & Fantasy
+// 10768 = War & Politics
+// 37    = Western
+//
+// ドラマ検索では
+// ニュース・トーク・リアリティなどを除外
+// =======================================================
+
 shows =
   shows.filter(
     function(show) {
@@ -4202,44 +4378,102 @@ shows =
           : [];
 
 
-      /*
-       * TMDBのアニメーションジャンル
-       * ID:16
-       */
+      // =================================================
+      // アニメ
+      // =================================================
 
       const isAnime =
         genreIds.includes(16);
 
 
-      /*
-       * TVアニメ
-       */
+      // =================================================
+      // TVアニメ
+      // =================================================
 
-      if(type === "anime"){
+      if (type === "anime") {
 
         return isAnime;
 
       }
 
 
-      /*
-       * TVドラマ
-       *
-       * アニメーション以外
-       */
+      // =================================================
+      // ドラマ
+      // =================================================
 
-      if(type === "drama"){
+      if (type === "drama") {
 
-        return !isAnime;
+        // アニメは除外
+        if (isAnime) {
+          return false;
+        }
+
+
+        // -----------------------------------------------
+        // ドラマとして扱うジャンル
+        // -----------------------------------------------
+
+        const dramaGenres = [
+          18,      // Drama
+          35,      // Comedy
+          80,      // Crime
+          9648,    // Mystery
+          10749,   // Romance
+          10759,   // Action & Adventure
+          10765,   // Sci-Fi & Fantasy
+          10768,   // War & Politics
+          37       // Western
+        ];
+
+
+        const isDrama =
+          genreIds.some(
+            function(genreId) {
+
+              return dramaGenres.includes(
+                genreId
+              );
+
+            }
+          );
+
+
+        // -----------------------------------------------
+        // ドラマ系ジャンルがある場合のみ採用
+        // -----------------------------------------------
+
+        if (isDrama) {
+          return true;
+        }
+
+
+        // -----------------------------------------------
+        // ジャンル情報がない作品は
+        // 検索結果から完全に消さない
+        //
+        // TMDB側のジャンル情報不足対策
+        // -----------------------------------------------
+
+        if (!genreIds.length) {
+          return true;
+        }
+
+
+        return false;
 
       }
 
+
+      // =================================================
+      // type=tv
+      //
+      // TV作品をそのまま返す
+      // =================================================
 
       return true;
 
     }
   );
-
 
   // =======================================================
   // 最大20件
@@ -4402,9 +4636,13 @@ shows =
 
 
   content_type:
-    type === "anime"
-      ? "anime_tv"
-      : "tv",
+  type === "anime"
+    ? "anime_tv"
+    : (
+        type === "drama"
+          ? "tv_drama"
+          : "tv"
+      ),
 
 
             runtime:
@@ -4739,6 +4977,122 @@ const googlePlay =
       "?language=ja-JP"
     );
 
+  // =======================================================
+  // 配信サービスURL
+  //
+  // TMDBから作品URLが取得できる場合は優先
+  // 取得できない場合は各サービスの検索ページへ
+  // =======================================================
+
+  const tvTitle =
+    tv.name ||
+    tv.original_name ||
+    "";
+
+
+  // =======================================================
+  // Netflix
+  // =======================================================
+
+  const netflixUrl =
+    netflix
+      ? createNetflixProviderUrl(
+          netflix,
+          tvTitle
+        )
+      : null;
+
+
+  // =======================================================
+  // Amazon Prime Video
+  // =======================================================
+
+  const amazonUrl =
+    amazon
+      ? createAmazonUrl(
+          amazon,
+          tvTitle
+        )
+      : null;
+
+
+  // =======================================================
+  // U-NEXT
+  // =======================================================
+
+  const unextUrl =
+    unext
+      ? createUnextProviderUrl(
+          unext,
+          tvTitle
+        )
+      : null;
+
+
+  // =======================================================
+  // Hulu
+  // =======================================================
+
+  const huluUrl =
+    hulu
+      ? createHuluProviderUrl(
+          hulu,
+          tvTitle
+        )
+      : null;
+
+
+  // =======================================================
+  // Disney+
+  // =======================================================
+
+  const disneyUrl =
+    disney
+      ? createDisneyProviderUrl(
+          disney,
+          tvTitle
+        )
+      : null;
+
+
+  // =======================================================
+  // Apple TV
+  // =======================================================
+
+  const appleUrl =
+    apple
+      ? createAppleProviderUrl(
+          apple,
+          tvTitle
+        )
+      : null;
+
+
+  // =======================================================
+  // FOD
+  // =======================================================
+
+  const fodUrl =
+    fod
+      ? createFodUrl(
+          fod,
+          tvTitle
+        )
+      : null;
+
+
+  // =======================================================
+  // Google Play
+  // =======================================================
+
+  const googlePlayUrl =
+    googlePlay
+      ? createGooglePlayUrl(
+          googlePlay,
+          tvTitle
+        )
+      : null;
+
 
   // =======================================================
   // 詳細情報を返す
@@ -4746,7 +5100,8 @@ const googlePlay =
 
   return {
 
-    id: tv.id,
+    id:
+      tv.id,
 
     title:
       tv.name ||
@@ -4760,6 +5115,11 @@ const googlePlay =
 
     media_type:
       mediaType,
+
+    content_type:
+      isAnime
+        ? "anime_tv"
+        : "tv_drama",
 
     runtime:
       runtime,
@@ -4808,14 +5168,17 @@ const googlePlay =
         tv.number_of_episodes || 0
       ),
 
-　　status:
-  tv.status ||
-  "",
-    
+    status:
+      tv.status ||
+      "",
+
     seasons:
       seasons,
 
-    
+    // ===================================================
+    // 配信情報
+    // ===================================================
+
     streaming:
       streaming,
 
@@ -4825,47 +5188,41 @@ const googlePlay =
     purchase:
       purchase,
 
+    // ===================================================
+    // 配信サービスURL
+    // ===================================================
+
     netflix_url:
-      netflix
-        ? netflix.provider_url
-        : null,
+      netflixUrl,
 
     amazon_url:
-      amazon
-        ? amazon.provider_url
-        : null,
+      amazonUrl,
 
     unext_url:
-      unext
-        ? unext.provider_url
-        : null,
+      unextUrl,
 
     hulu_url:
-      hulu
-        ? hulu.provider_url
-        : null,
+      huluUrl,
 
     disney_url:
-      disney
-        ? disney.provider_url
-        : null,
+      disneyUrl,
 
     apple_url:
-      apple
-        ? apple.provider_url
-        : null,
+      appleUrl,
 
     fod_url:
-      fod
-        ? fod.provider_url
-        : null,
+      fodUrl,
 
     google_play_url:
-      googlePlay
-        ? googlePlay.provider_url
-        : null,
+      googlePlayUrl,
+
+    // ===================================================
+    // TMDB
+    // ===================================================
 
     link:
       tmdbLink
+
   };
+
 }
