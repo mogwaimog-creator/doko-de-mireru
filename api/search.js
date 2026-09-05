@@ -5203,9 +5203,9 @@ const googlePlay =
       ),
 
     status:
-      tv.status ||
-      "",
+  formatTvStatus(tv),
 
+    
     seasons:
       seasons,
 
@@ -5258,6 +5258,70 @@ const googlePlay =
       tmdbLink
 
   };
+
+}
+
+// =========================================================
+// TV作品ステータス表示
+//
+// TMDBのステータスを
+// サイト用の日本語に変換
+//
+// 「Ended」を「完結」とせず
+// 「TVシリーズ終了」と表示する
+// =========================================================
+
+function formatTvStatus(tv) {
+
+  if (!tv) {
+    return "";
+  }
+
+
+  const status =
+    String(
+      tv.status ||
+      ""
+    ).trim();
+
+
+  switch (status) {
+
+    case "Returning Series":
+
+      return "放送中";
+
+
+    case "In Production":
+
+      return "制作中";
+
+
+    case "Planned":
+
+      return "放送予定";
+
+
+    case "Pilot":
+
+      return "パイロット";
+
+
+    case "Canceled":
+
+      return "打ち切り";
+
+
+    case "Ended":
+
+      return "TVシリーズ終了";
+
+
+    default:
+
+      return status;
+
+  }
 
 }
 
