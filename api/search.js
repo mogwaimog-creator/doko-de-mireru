@@ -3831,6 +3831,47 @@ const runtime =
     ? episodeRunTime[0]
     : 0;
 
+  // =======================================================
+  // シーズン情報
+  // =======================================================
+
+  const seasons =
+    Array.isArray(tv.seasons)
+      ? tv.seasons
+          .filter(
+            season =>
+              Number(season.season_number) > 0
+          )
+          .map(
+            season => ({
+              season_number:
+                Number(
+                  season.season_number
+                ),
+
+              name:
+                season.name ||
+                (
+                  "シーズン" +
+                  season.season_number
+                ),
+
+              episode_count:
+                Number(
+                  season.episode_count || 0
+                ),
+
+              air_date:
+                season.air_date ||
+                "",
+
+              poster_path:
+                season.poster_path ||
+                null
+            })
+          )
+      : [];
+  
 
   // =======================================================
   // 制作者
@@ -4039,6 +4080,10 @@ const googlePlay =
         tv.number_of_episodes || 0
       ),
 
+    seasons:
+      seasons,
+
+    
     streaming:
       streaming,
 
