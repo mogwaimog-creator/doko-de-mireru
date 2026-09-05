@@ -120,6 +120,22 @@ const popular =
     : "";
 
     const page =
+
+      // =====================================================
+// 作品タイプ
+//
+// movie = 映画
+// tv    = ドラマ・アニメ
+//
+// 指定がない場合は映画
+// =====================================================
+
+const type =
+  req.query &&
+  typeof req.query.type === "string"
+    ? req.query.type.trim().toLowerCase()
+    : "movie";
+
   req.query &&
   typeof req.query.page === "string"
     ? Math.max(
@@ -179,7 +195,34 @@ if (popular === "1") {
       });
     }
 
+// =====================================================
+// ドラマ・アニメ検索
+//
+// TMDBではドラマ・アニメのTV作品を
+// /search/tv で検索する
+//
+// type=tv の場合はこちらを使用
+// =====================================================
 
+if (type === "tv") {
+
+  const tvResults =
+    await searchTvShows(
+      query,
+      apiKey,
+      page
+    );
+
+  return res.status(200).json({
+    results: tvResults.results,
+    page: tvResults.page,
+    hasMore: tvResults.hasMore
+  });
+
+}
+
+
+    
 // =====================================================
 // TMDB映画検索
 //
@@ -3046,5 +3089,522 @@ month +
 day +
 "日"
 );
+
+}
+
+// =========================================================
+// ドラマ・アニメ検索
+//
+// TMDB /search/tv を使用
+//
+// ・ドラマ
+// ・アニメ
+// ・その他TV作品
+//
+// を検索する
+// =========================================================
+
+async function searchTvShows(
+  query,
+  apiKey,
+  page
+) {
+
+  // =======================================================
+  // 検索候補
+  // =======================================================
+
+  const searchQueries = [];
+
+
+  // =======================================================
+  // 元の検索語
+  // =======================================================
+
+  searchQueries.push(
+    query
+  );
+
+
+  // =======================================================
+  // 空白・記号を除去
+  // =======================================================
+
+  const compactQuery =
+    normalizeSearchQuery(
+      query
+    );
+
+
+  if (
+    compactQuery &&
+    !searchQueries.includes(
+      compactQuery
+    )
+  ) {
+
+    searchQueries.push(
+      compactQuery
+    );
+
+  }
+
+
+  // =======================================================
+  // スペース補正
+  // =======================================================
+
+  const spacedQuery =
+    createSpacedSearchQuery(
+      compactQuery
+    );
+
+
+  if (
+    spacedQuery &&
+    !searchQueries.includes(
+      spacedQuery
+    )
+  ) {
+
+    searchQueries.push(
+      spacedQuery
+    );
+
+  }
+
+
+  // =======================================================
+  // 中黒補正
+  // =======================================================
+
+  const middleDotQuery =
+    createMiddleDotSearchQuery(
+      compactQuery
+    );
+
+
+  if (
+    middleDotQuery &&
+    !searchQueries.includes(
+      middleDotQuery
+    )
+  ) {
+
+    searchQueries.push(
+      middleDotQuery
+    );
+
+  }
+
+
+  // =======================================================
+  // 検索結果
+  // =======================================================
+
+  let allShows = [];
+
+  let hasMore = false;
+
+
+  // =======================================================
+  // 複数候補で検索
+  // =======================================================
+
+  for (
+    let i = 0;
+    i < searchQueries.length;
+    i++
+  ) {
+
+    const searchQuery =
+      searchQueries[i];
+
+
+    const searchUrl =
+      "https://api.themoviedb.org/3/search/tv" +
+      "?api_key=" +
+      encodeURIComponent(apiKey) +
+      "&language=ja-JP" +
+      "&include_adult=false" +
+      "&page=" +
+      page +
+      "&query=" +
+      encodeURIComponent(
+        searchQuery
+      );
+
+
+    try {
+
+      const data =
+        await fetchJson(
+          searchUrl
+        );
+
+
+      if (
+        data &&
+        Array.isArray(
+          data.results
+        )
+      ) {
+
+        allShows =
+          allShows.concat(
+            data.results
+          );
+
+
+        if (
+          Number(
+            data.page || page
+          ) <
+          Number(
+            data.total_pages || page
+          )
+        ) {
+
+          hasMore = true;
+
+        }
+
+      }
+
+    } catch (error) {
+
+      console.error(
+        "TMDB TV SEARCH ERROR:",
+        error
+      );
+
+    }
+
+  }
+
+
+  // =======================================================
+  // 重複削除
+  // =======================================================
+
+  const showMap =
+    new Map();
+
+
+  allShows.forEach(
+    function(show) {
+
+      if (
+        show &&
+        show.id &&
+        (
+          show.name ||
+          show.original_name
+        )
+      ) {
+
+        showMap.set(
+          String(show.id),
+          show
+        );
+
+      }
+
+    }
+  );
+
+
+  let shows =
+    Array.from(
+      showMap.values()
+    );
+
+
+  // =======================================================
+  // 完全一致を優先
+  // =======================================================
+
+  const normalizedQuery =
+    normalizeTitle(
+      query
+    );
+
+
+  shows.sort(
+    function(a, b) {
+
+      const aTitle =
+        normalizeTitle(
+          a.name ||
+          a.original_name ||
+          ""
+        );
+
+
+      const bTitle =
+        normalizeTitle(
+          b.name ||
+          b.original_name ||
+          ""
+        );
+
+
+      const aExact =
+        aTitle === normalizedQuery
+          ? 0
+          : 1;
+
+
+      const bExact =
+        bTitle === normalizedQuery
+          ? 0
+          : 1;
+
+
+      if (
+        aExact !== bExact
+      ) {
+
+        return (
+          aExact -
+          bExact
+        );
+
+      }
+
+
+      return (
+        Number(
+          b.vote_average || 0
+        ) -
+        Number(
+          a.vote_average || 0
+        )
+      );
+
+    }
+  );
+
+
+  // =======================================================
+  // 最大20件
+  // =======================================================
+
+  shows =
+    shows.slice(
+      0,
+      20
+    );
+
+
+  // =======================================================
+  // 詳細情報・配信情報取得
+  // =======================================================
+
+  const results =
+    await Promise.all(
+
+      shows.map(
+        async function(show) {
+
+          let episodeRuntime = 0;
+
+          let streaming = [];
+
+          let rental = [];
+
+          let purchase = [];
+
+
+          try {
+
+            const detailUrl =
+              "https://api.themoviedb.org/3/tv/" +
+              encodeURIComponent(
+                show.id
+              ) +
+              "?api_key=" +
+              encodeURIComponent(
+                apiKey
+              ) +
+              "&language=ja-JP" +
+              "&append_to_response=watch/providers";
+
+
+            const detailData =
+              await fetchJson(
+                detailUrl
+              );
+
+
+            // =================================================
+            // 1話あたりの時間
+            // =================================================
+
+            if (
+              Array.isArray(
+                detailData.episode_run_time
+              ) &&
+              detailData.episode_run_time.length
+            ) {
+
+              episodeRuntime =
+                Number(
+                  detailData
+                    .episode_run_time[0] ||
+                  0
+                );
+
+            }
+
+
+            // =================================================
+            // 日本の配信情報
+            // =================================================
+
+            let providersJP = {};
+
+
+            if (
+              detailData &&
+              detailData["watch/providers"] &&
+              detailData["watch/providers"].results &&
+              detailData["watch/providers"].results.JP
+            ) {
+
+              providersJP =
+                detailData[
+                  "watch/providers"
+                ].results.JP;
+
+            }
+
+
+            // =================================================
+            // 見放題
+            // =================================================
+
+            streaming =
+              normalizeProviders(
+                providersJP.flatrate
+              );
+
+
+            // =================================================
+            // レンタル
+            // =================================================
+
+            rental =
+              normalizeProviders(
+                providersJP.rent
+              );
+
+
+            // =================================================
+            // 購入
+            // =================================================
+
+            purchase =
+              normalizeProviders(
+                providersJP.buy
+              );
+
+          } catch (error) {
+
+            console.error(
+              "TV DETAIL / PROVIDER ERROR:",
+              error
+            );
+
+          }
+
+
+          // =================================================
+          // TV作品として返却
+          // =================================================
+
+          return {
+
+            id:
+              show.id,
+
+
+            title:
+              show.name ||
+              show.original_name ||
+              "",
+
+
+            original_title:
+              show.original_name ||
+              "",
+
+
+            media_type:
+              "TV",
+
+
+            runtime:
+              episodeRuntime,
+
+
+            release_date:
+              show.first_air_date ||
+              "",
+
+
+            poster_path:
+              show.poster_path ||
+              null,
+
+
+            overview:
+              show.overview ||
+              "",
+
+
+            vote_average:
+              Number(
+                show.vote_average ||
+                0
+              ),
+
+
+            original_language:
+              show.original_language ||
+              "",
+
+
+            streaming:
+              streaming,
+
+
+            rental:
+              rental,
+
+
+            purchase:
+              purchase
+
+          };
+
+        }
+      )
+
+    );
+
+
+  return {
+
+    results:
+      results,
+
+    page:
+      page,
+
+    hasMore:
+      hasMore
+
+  };
 
 }
