@@ -308,17 +308,19 @@ header p{
 
   border-radius:9px;
 
+  /* 白いポスターが背景と同化しないようにする */
+  border:1px solid #d1d5db;
+  box-sizing:border-box;
+
+  box-shadow:
+    0 2px 8px
+    rgba(0,0,0,.12);
+
   align-self:flex-start;
 
   flex-shrink:0;
 
   background:#e5e7eb;
-}
-
-.movie-info{
-  flex:1;
-
-  min-width:0;
 }
 
 .movie-info h1{
