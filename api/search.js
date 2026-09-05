@@ -155,7 +155,11 @@ const type =
     if (id) {
 
   // TV作品の場合
-  if (type === "tv") {
+  if (
+  type === "tv" ||
+  type === "drama" ||
+  type === "anime"
+) {
 
     const result =
       await getTvDetail(
