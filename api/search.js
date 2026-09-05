@@ -463,7 +463,7 @@ for (
     "&region=JP" +
     "&include_adult=false" +
     "&page=" +
-　　　page +
+　   page +
     "&query=" +
     encodeURIComponent(searchQuery);
 
