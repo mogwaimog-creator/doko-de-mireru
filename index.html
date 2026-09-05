@@ -1009,6 +1009,30 @@ font-size:13px;
 }
 
 /* =========================================================
+   アニメ検索結果の分類見出し
+========================================================= */
+
+.anime-results-group{
+  margin-bottom:24px;
+}
+
+.anime-results-group-title{
+  margin:0 0 14px;
+  padding:10px 14px;
+
+  background:#f3f6fb;
+
+  border-left:5px solid #2563eb;
+  border-radius:8px;
+
+  color:#111827;
+
+  font-size:19px;
+  font-weight:800;
+  line-height:1.4;
+}
+     
+/* =========================================================
    配信サービス表示
 ========================================================= */
 
@@ -1515,6 +1539,29 @@ if(
     ? data.results
     : [];
 
+
+/* -----------------------------------------------------
+   アニメ検索の場合
+   TVアニメと劇場版アニメを分離
+----------------------------------------------------- */
+
+let tvAnimeMovies = [];
+
+let animeMovieMovies = [];
+
+if(currentSearchType === "anime"){
+
+  tvAnimeMovies =
+    Array.isArray(data.tvAnime)
+      ? data.tvAnime
+      : [];
+
+  animeMovieMovies =
+    Array.isArray(data.animeMovies)
+      ? data.animeMovies
+      : [];
+
+}
           
        status.innerHTML =
       "";
@@ -1538,7 +1585,7 @@ if(
       </div>
 
       <div style="font-weight:bold; font-size:17px; margin-bottom:8px;">
-        映画が見つかりませんでした。
+        作品が見つかりませんでした。
       </div>
 
       <div>
@@ -1632,30 +1679,147 @@ movies.sort(
 
 
     /* -----------------------------------------------------
-       表示
-    ----------------------------------------------------- */
-
-    /* -----------------------------------------------------
    検索結果件数
 ----------------------------------------------------- */
 
-searchResultsHeading.textContent =
-  '🔍「' + query + '」の検索結果（' +
-  movies.length +
-  '件）';
+if(currentSearchType === "anime"){
+
+  const totalCount =
+    tvAnimeMovies.length +
+    animeMovieMovies.length;
+
+  searchResultsHeading.textContent =
+    '🔍「' + query + '」の検索結果（' +
+    totalCount +
+    '件）';
 
 
-/* -----------------------------------------------------
-   表示
------------------------------------------------------ */
+  let animeHtml = "";
 
-results.innerHTML =
-  movies
-    .map(
-      createMovieCard
-    )
-    .join("");
 
+  /* ===================================================
+     TVアニメ
+  =================================================== */
+
+  if(tvAnimeMovies.length > 0){
+
+    animeHtml += `
+
+      <section class="anime-results-group">
+
+        <h3 class="anime-results-group-title">
+          📺 TVアニメ
+        </h3>
+
+        <div class="results">
+
+          ${
+            tvAnimeMovies
+              .map(createMovieCard)
+              .join("")
+          }
+
+        </div>
+
+      </section>
+
+    `;
+
+  }
+
+
+  /* ===================================================
+     劇場版アニメ
+  =================================================== */
+
+  if(animeMovieMovies.length > 0){
+
+    animeHtml += `
+
+      <section class="anime-results-group">
+
+        <h3 class="anime-results-group-title">
+          🎬 劇場版アニメ
+        </h3>
+
+        <div class="results">
+
+          ${
+            animeMovieMovies
+              .map(createMovieCard)
+              .join("")
+          }
+
+        </div>
+
+      </section>
+
+    `;
+
+  }
+
+
+  if(!animeHtml){
+
+    results.innerHTML = `
+
+      <div class="empty">
+
+        <div
+          style="
+            font-size:32px;
+            margin-bottom:10px;
+          "
+        >
+          🎌
+        </div>
+
+        <div
+          style="
+            font-weight:bold;
+            font-size:17px;
+            margin-bottom:8px;
+          "
+        >
+          アニメが見つかりませんでした。
+        </div>
+
+        <div>
+          別の作品名で検索してみてください。
+        </div>
+
+      </div>
+
+    `;
+
+  }else{
+
+    results.innerHTML =
+      animeHtml;
+
+  }
+
+}else{
+
+  /* ===================================================
+     映画・ドラマ
+     → 今まで通り
+  =================================================== */
+
+  searchResultsHeading.textContent =
+    '🔍「' + query + '」の検索結果（' +
+    movies.length +
+    '件）';
+
+
+  results.innerHTML =
+    movies
+      .map(
+        createMovieCard
+      )
+      .join("");
+
+}
 if (data.hasMore) {
 
   results.insertAdjacentHTML(
@@ -2002,12 +2166,27 @@ let detailUrl =
 ------------------------------------------------------- */
 
 if(
-  currentSearchType === "drama" ||
-  currentSearchType === "anime"
+  currentSearchType === "drama"
 ){
 
   detailUrl +=
     "&type=tv";
+
+}else if(
+  currentSearchType === "anime"
+){
+
+  if(movie.content_type === "anime_movie"){
+
+    detailUrl +=
+      "&type=movie";
+
+  }else{
+
+    detailUrl +=
+      "&type=tv";
+
+  }
 
 }
 
@@ -2015,9 +2194,22 @@ if(
      作品タイプ
   ------------------------------------------------------- */
 
-  const mediaType =
-    movie.media_type ||
-    "映画";
+  let mediaType =
+  movie.media_type ||
+  "映画";
+
+
+if(movie.content_type === "anime_tv"){
+
+  mediaType =
+    "TVアニメ";
+
+}else if(movie.content_type === "anime_movie"){
+
+  mediaType =
+    "劇場版アニメ";
+
+}
 
 
   /* -------------------------------------------------------
