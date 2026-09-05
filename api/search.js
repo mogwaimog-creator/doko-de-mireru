@@ -154,16 +154,27 @@ const type =
 
     if (id) {
 
-      const movie =
-        await getMovieDetail(
-          id,
-          apiKey
-        );
+  // TV作品の場合
+  if (type === "tv") {
 
-      return res
-        .status(200)
-        .json(movie);
-    }
+    const result =
+      await getTvDetail(
+        id,
+        apiKey
+      );
+
+    return res.status(200).json(result);
+  }
+
+  // 映画の場合
+  const result =
+    await getMovieDetail(
+      id,
+      apiKey
+    );
+
+  return res.status(200).json(result);
+}
 
 // =====================================================
 // 人気作品
@@ -3611,4 +3622,307 @@ async function searchTvShows(
 
   };
 
+}
+
+// =========================================================
+// TV作品 詳細取得
+// =========================================================
+
+async function getTvDetail(tvId, apiKey) {
+
+  const url =
+    "https://api.themoviedb.org/3/tv/" +
+    tvId +
+    "?api_key=" +
+    apiKey +
+    "&language=ja-JP" +
+    "&append_to_response=credits,watch/providers";
+
+  const tv =
+    await fetchJson(url);
+
+
+  // =======================================================
+  // 日本の配信情報
+  // =======================================================
+
+  const providersData =
+    tv["watch/providers"] &&
+    tv["watch/providers"].results &&
+    tv["watch/providers"].results.JP
+      ? tv["watch/providers"].results.JP
+      : {};
+
+
+  const streaming =
+    normalizeProviders(
+      providersData.flatrate || []
+    );
+
+  const rental =
+    normalizeProviders(
+      providersData.rent || []
+    );
+
+  const purchase =
+    normalizeProviders(
+      providersData.buy || []
+    );
+
+
+  // =======================================================
+  // 作品タイプ
+  //
+  // TMDBのジャンルID
+  // 16 = Animation
+  // =======================================================
+
+  const genres =
+    Array.isArray(tv.genres)
+      ? tv.genres
+      : [];
+
+
+  const isAnime =
+    genres.some(
+      genre =>
+        Number(genre.id) === 16 ||
+        genre.name === "アニメーション"
+      );
+
+
+  const mediaType =
+    isAnime
+      ? "アニメ"
+      : "ドラマ";
+
+
+  // =======================================================
+  // 1話あたりの放送時間
+  // =======================================================
+
+  const runtime =
+    Array.isArray(tv.episode_run_time) &&
+    tv.episode_run_time.length > 0
+      ? tv.episode_run_time[0]
+      : 0;
+
+
+  // =======================================================
+  // 制作者
+  // =======================================================
+
+  const creators =
+    Array.isArray(tv.created_by)
+      ? tv.created_by.map(
+          person => person.name
+        )
+      : [];
+
+
+  // =======================================================
+  // 出演者
+  // =======================================================
+
+  const cast =
+    tv.credits &&
+    Array.isArray(tv.credits.cast)
+      ? tv.credits.cast
+          .slice(0, 10)
+          .map(person => ({
+            id: person.id,
+            name: person.name,
+            character: person.character || "",
+            profile_path:
+              person.profile_path || null
+          }))
+      : [];
+
+
+  // =======================================================
+  // 配信サービスURL
+  // =======================================================
+
+  const netflix =
+    findProvider(
+      streaming,
+      "Netflix"
+    );
+
+  const amazon =
+    findProvider(
+      streaming,
+      "Amazon Prime Video"
+    );
+
+  const unext =
+    findProvider(
+      streaming,
+      "U-NEXT"
+    );
+
+  const hulu =
+    findProvider(
+      streaming,
+      "Hulu"
+    );
+
+  const disney =
+    findProvider(
+      streaming,
+      "Disney Plus"
+    );
+
+  const apple =
+    findProvider(
+      streaming,
+      "Apple TV"
+    );
+
+  const fod =
+    findProvider(
+      streaming,
+      "FOD"
+    );
+
+  const googlePlay =
+    findProvider(
+      purchase,
+      "Google Play Movies"
+    );
+
+
+  // =======================================================
+  // TMDB作品ページ
+  // =======================================================
+
+  const tmdbLink =
+    providersData.link ||
+    (
+      "https://www.themoviedb.org/tv/" +
+      tvId +
+      "?language=ja-JP"
+    );
+
+
+  // =======================================================
+  // 詳細情報を返す
+  // =======================================================
+
+  return {
+
+    id: tv.id,
+
+    title:
+      tv.name ||
+      tv.original_name ||
+      "",
+
+    original_title:
+      tv.original_name ||
+      tv.name ||
+      "",
+
+    media_type:
+      mediaType,
+
+    runtime:
+      runtime,
+
+    release_date:
+      tv.first_air_date ||
+      "",
+
+    poster_path:
+      tv.poster_path ||
+      null,
+
+    backdrop_path:
+      tv.backdrop_path ||
+      null,
+
+    overview:
+      tv.overview ||
+      "",
+
+    vote_average:
+      Number(
+        tv.vote_average || 0
+      ),
+
+    original_language:
+      tv.original_language ||
+      "",
+
+    genres:
+      genres,
+
+    creators:
+      creators,
+
+    cast:
+      cast,
+
+    number_of_seasons:
+      Number(
+        tv.number_of_seasons || 0
+      ),
+
+    number_of_episodes:
+      Number(
+        tv.number_of_episodes || 0
+      ),
+
+    streaming:
+      streaming,
+
+    rental:
+      rental,
+
+    purchase:
+      purchase,
+
+    netflix_url:
+      netflix
+        ? netflix.provider_url
+        : null,
+
+    amazon_url:
+      amazon
+        ? amazon.provider_url
+        : null,
+
+    unext_url:
+      unext
+        ? unext.provider_url
+        : null,
+
+    hulu_url:
+      hulu
+        ? hulu.provider_url
+        : null,
+
+    disney_url:
+      disney
+        ? disney.provider_url
+        : null,
+
+    apple_url:
+      apple
+        ? apple.provider_url
+        : null,
+
+    fod_url:
+      fod
+        ? fod.provider_url
+        : null,
+
+    google_play_url:
+      googlePlay
+        ? googlePlay.provider_url
+        : null,
+
+    link:
+      tmdbLink
+  };
 }
