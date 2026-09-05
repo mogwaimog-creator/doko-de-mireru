@@ -3748,53 +3748,95 @@ const runtime =
   // =======================================================
 
   const netflix =
-    findProvider(
-      streaming,
-      "Netflix"
-    );
+  findProvider(
+    streaming,
+    rental,
+    purchase,
+    [
+      "netflix"
+    ]
+  );
 
-  const amazon =
-    findProvider(
-      streaming,
-      "Amazon Prime Video"
-    );
 
-  const unext =
-    findProvider(
-      streaming,
-      "U-NEXT"
-    );
+const amazon =
+  findProvider(
+    streaming,
+    rental,
+    purchase,
+    [
+      "amazon",
+      "prime video"
+    ]
+  );
 
-  const hulu =
-    findProvider(
-      streaming,
-      "Hulu"
-    );
 
-  const disney =
-    findProvider(
-      streaming,
-      "Disney Plus"
-    );
+const unext =
+  findProvider(
+    streaming,
+    rental,
+    purchase,
+    [
+      "u-next",
+      "unext"
+    ]
+  );
 
-  const apple =
-    findProvider(
-      streaming,
-      "Apple TV"
-    );
 
-  const fod =
-    findProvider(
-      streaming,
-      "FOD"
-    );
+const hulu =
+  findProvider(
+    streaming,
+    rental,
+    purchase,
+    [
+      "hulu"
+    ]
+  );
 
-  const googlePlay =
-    findProvider(
-      purchase,
-      "Google Play Movies"
-    );
 
+const disney =
+  findProvider(
+    streaming,
+    rental,
+    purchase,
+    [
+      "disney"
+    ]
+  );
+
+
+const apple =
+  findProvider(
+    streaming,
+    rental,
+    purchase,
+    [
+      "apple"
+    ]
+  );
+
+
+const fod =
+  findProvider(
+    streaming,
+    rental,
+    purchase,
+    [
+      "fod"
+    ]
+  );
+
+
+const googlePlay =
+  findProvider(
+    streaming,
+    rental,
+    purchase,
+    [
+      "google play",
+      "google play movies",
+      "google"
+    ]
+  );
 
   // =======================================================
   // TMDB作品ページ
