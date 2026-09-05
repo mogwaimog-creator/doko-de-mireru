@@ -846,6 +846,55 @@ header p{
 
 
 /* =========================================================
+   シーズン情報
+========================================================= */
+
+.season-list{
+  display:grid;
+
+  grid-template-columns:
+    repeat(4, minmax(0,1fr));
+
+  gap:10px;
+
+  width:100%;
+}
+
+.season-item{
+  padding:12px 10px;
+
+  background:#f8fafc;
+
+  border:1px solid #e5e7eb;
+
+  border-radius:10px;
+
+  text-align:center;
+
+  box-sizing:border-box;
+}
+
+.season-name{
+  color:#111827;
+
+  font-size:15px;
+
+  font-weight:bold;
+
+  line-height:1.4;
+}
+
+.season-episodes{
+  margin-top:3px;
+
+  color:#666;
+
+  font-size:13px;
+
+  line-height:1.4;
+}
+
+/* =========================================================
    シリーズ作品・おすすめ作品
 ========================================================= */
 
@@ -1287,7 +1336,29 @@ header p{
     font-size:11px;
   }
 
+　　  .season-list{
+    grid-template-columns:
+      repeat(3, minmax(0,1fr));
 
+    gap:8px;
+  }
+
+
+  .season-item{
+    padding:10px 6px;
+  }
+
+
+  .season-name{
+    font-size:14px;
+  }
+
+
+  .season-episodes{
+    font-size:12px;
+  }
+
+  
   .series-list,
   .recommendation-list{
     flex-direction:row;
@@ -1748,6 +1819,28 @@ Netflix、Amazon Prime Video、U-NEXT、Hulu、Disney+など、
 
 </section>
 
+
+<!-- =========================================================
+     シーズン情報
+========================================================= -->
+
+<section
+  id="seasonSection"
+  class="section"
+  style="display:none;"
+  aria-labelledby="seasonHeading"
+>
+
+<h3 id="seasonHeading">
+📚 シーズン情報
+</h3>
+
+<div
+  id="seasonList"
+  class="season-list"
+></div>
+
+</section>  
 
 <!-- =========================================================
      シリーズ作品
@@ -3135,6 +3228,9 @@ if(mediaType === "tv"){
     movie
   );
 
+    renderSeasons(
+    movie.seasons
+  );
 
   renderSeries(
     movie.series
@@ -4417,6 +4513,145 @@ function getButtonClass(
 }
 
 
+/* =========================================================
+   シーズン情報
+========================================================= */
+
+function renderSeasons(seasons){
+
+  const section =
+    document.getElementById(
+      "seasonSection"
+    );
+
+
+  const container =
+    document.getElementById(
+      "seasonList"
+    );
+
+
+  if(
+    !Array.isArray(seasons) ||
+    seasons.length === 0
+  ){
+
+    section.style.display =
+      "none";
+
+    return;
+
+  }
+
+
+  container.innerHTML =
+    "";
+
+
+  seasons.forEach(function(season){
+
+    if(
+      !season ||
+      !season.season_number
+    ){
+
+      return;
+
+    }
+
+
+    const item =
+      document.createElement(
+        "div"
+      );
+
+
+    item.className =
+      "season-item";
+
+
+    /*
+       シーズン名
+    */
+
+    const name =
+      document.createElement(
+        "div"
+      );
+
+
+    name.className =
+      "season-name";
+
+
+    name.textContent =
+      season.name ||
+      (
+        "シーズン" +
+        season.season_number
+      );
+
+
+    item.appendChild(
+      name
+    );
+
+
+    /*
+       話数
+    */
+
+    if(
+      season.episode_count
+    ){
+
+      const episodes =
+        document.createElement(
+          "div"
+        );
+
+
+      episodes.className =
+        "season-episodes";
+
+
+      episodes.textContent =
+        season.episode_count +
+        "話";
+
+
+      item.appendChild(
+        episodes
+      );
+
+    }
+
+
+    container.appendChild(
+      item
+    );
+
+  });
+
+
+  if(
+    container.children.length === 0
+  ){
+
+    section.style.display =
+      "none";
+
+    return;
+
+  }
+
+
+  section.style.display =
+    "block";
+
+}
+
+  
 /* =========================================================
    シリーズ作品
 ========================================================= */
