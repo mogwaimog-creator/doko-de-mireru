@@ -238,6 +238,73 @@ if (
   type === "anime"
 ) {
 
+  // =====================================================
+  // アニメ検索
+  //
+  // TVアニメ
+  // ＋
+  // 劇場版アニメ
+  //
+  // の2種類を別々に取得
+  // =====================================================
+
+  if (type === "anime") {
+
+    const tvAnime =
+      await searchTvShows(
+        query,
+        apiKey,
+        page,
+        "anime"
+      );
+
+
+    const animeMovies =
+      await searchAnimeMovies(
+        query,
+        apiKey,
+        page
+      );
+
+
+    return res.status(200).json({
+
+      // 既存互換用
+      results:
+        []
+          .concat(
+            tvAnime.results || []
+          )
+          .concat(
+            animeMovies.results || []
+          ),
+
+      // TVアニメ
+      tvAnime:
+        tvAnime.results || [],
+
+      // 劇場版アニメ
+      animeMovies:
+        animeMovies.results || [],
+
+      page:
+        page,
+
+      hasMore:
+        Boolean(
+          tvAnime.hasMore ||
+          animeMovies.hasMore
+        )
+
+    });
+
+  }
+
+
+  // =====================================================
+  // ドラマ
+  // =====================================================
+
   const tvResults =
     await searchTvShows(
       query,
@@ -246,10 +313,18 @@ if (
       type
     );
 
+
   return res.status(200).json({
-    results: tvResults.results,
-    page: tvResults.page,
-    hasMore: tvResults.hasMore
+
+    results:
+      tvResults.results,
+
+    page:
+      tvResults.page,
+
+    hasMore:
+      tvResults.hasMore
+
   });
 
 }
@@ -3245,6 +3320,566 @@ day +
 }
 
 // =========================================================
+// 劇場版アニメ検索
+//
+// TMDB /search/movie を使用
+//
+// TMDBのAnimationジャンル
+// ID:16
+//
+// アニメ検索時に
+// TVアニメとは別に劇場版アニメを取得する
+// =========================================================
+
+async function searchAnimeMovies(
+  query,
+  apiKey,
+  page
+) {
+
+  // =======================================================
+  // 検索候補
+  // =======================================================
+
+  const searchQueries = [];
+
+
+  // =======================================================
+  // 元の検索語
+  // =======================================================
+
+  searchQueries.push(
+    query
+  );
+
+
+  // =======================================================
+  // 空白・記号を除去
+  // =======================================================
+
+  const compactQuery =
+    normalizeSearchQuery(
+      query
+    );
+
+
+  if (
+    compactQuery &&
+    !searchQueries.includes(
+      compactQuery
+    )
+  ) {
+
+    searchQueries.push(
+      compactQuery
+    );
+
+  }
+
+
+  // =======================================================
+  // スペース補正
+  // =======================================================
+
+  const spacedQuery =
+    createSpacedSearchQuery(
+      compactQuery
+    );
+
+
+  if (
+    spacedQuery &&
+    !searchQueries.includes(
+      spacedQuery
+    )
+  ) {
+
+    searchQueries.push(
+      spacedQuery
+    );
+
+  }
+
+
+  // =======================================================
+  // 中黒補正
+  // =======================================================
+
+  const middleDotQuery =
+    createMiddleDotSearchQuery(
+      compactQuery
+    );
+
+
+  if (
+    middleDotQuery &&
+    !searchQueries.includes(
+      middleDotQuery
+    )
+  ) {
+
+    searchQueries.push(
+      middleDotQuery
+    );
+
+  }
+
+
+  // =======================================================
+  // TMDB検索
+  // =======================================================
+
+  let allMovies = [];
+
+  let hasMore = false;
+
+
+  for (
+    let i = 0;
+    i < searchQueries.length;
+    i++
+  ) {
+
+    const searchQuery =
+      searchQueries[i];
+
+
+    const searchUrl =
+      "https://api.themoviedb.org/3/search/movie" +
+      "?api_key=" +
+      encodeURIComponent(apiKey) +
+      "&language=ja-JP" +
+      "&region=JP" +
+      "&include_adult=false" +
+      "&page=" +
+      page +
+      "&query=" +
+      encodeURIComponent(
+        searchQuery
+      );
+
+
+    try {
+
+      const data =
+        await fetchJson(
+          searchUrl
+        );
+
+
+      if (
+        data &&
+        Array.isArray(
+          data.results
+        )
+      ) {
+
+        // =================================================
+        // Animationジャンルだけ残す
+        //
+        // TMDB
+        // 16 = Animation
+        // =================================================
+
+        const animeResults =
+          data.results.filter(
+            function(movie) {
+
+              if (
+                !movie ||
+                !movie.id ||
+                !movie.title
+              ) {
+
+                return false;
+
+              }
+
+
+              const genreIds =
+                Array.isArray(
+                  movie.genre_ids
+                )
+                  ? movie.genre_ids.map(
+                      function(id) {
+                        return Number(id);
+                      }
+                    )
+                  : [];
+
+
+              return genreIds.includes(16);
+
+            }
+          );
+
+
+        allMovies =
+          allMovies.concat(
+            animeResults
+          );
+
+
+        // =================================================
+        // 次ページ確認
+        // =================================================
+
+        if (
+          Number(
+            data.page || page
+          ) <
+          Number(
+            data.total_pages || page
+          )
+        ) {
+
+          hasMore = true;
+
+        }
+
+      }
+
+    } catch (error) {
+
+      console.error(
+        "TMDB ANIME MOVIE SEARCH ERROR:",
+        error
+      );
+
+    }
+
+  }
+
+
+  // =======================================================
+  // 重複削除
+  // =======================================================
+
+  const movieMap =
+    new Map();
+
+
+  allMovies.forEach(
+    function(movie) {
+
+      if (
+        movie &&
+        movie.id &&
+        movie.title
+      ) {
+
+        movieMap.set(
+          String(movie.id),
+          movie
+        );
+
+      }
+
+    }
+  );
+
+
+  let movies =
+    Array.from(
+      movieMap.values()
+    );
+
+
+  // =======================================================
+  // 完全一致を優先
+  // =======================================================
+
+  const normalizedQuery =
+    normalizeTitle(
+      query
+    );
+
+
+  movies.sort(
+    function(a, b) {
+
+      const aTitle =
+        normalizeTitle(
+          a.title || ""
+        );
+
+
+      const bTitle =
+        normalizeTitle(
+          b.title || ""
+        );
+
+
+      const aExact =
+        aTitle === normalizedQuery
+          ? 0
+          : 1;
+
+
+      const bExact =
+        bTitle === normalizedQuery
+          ? 0
+          : 1;
+
+
+      if (
+        aExact !== bExact
+      ) {
+
+        return (
+          aExact -
+          bExact
+        );
+
+      }
+
+
+      return (
+        Number(
+          b.vote_average || 0
+        ) -
+        Number(
+          a.vote_average || 0
+        )
+      );
+
+    }
+  );
+
+
+  // =======================================================
+  // 最大20件
+  // =======================================================
+
+  movies =
+    movies.slice(
+      0,
+      20
+    );
+
+
+  // =======================================================
+  // 詳細・配信情報取得
+  // =======================================================
+
+  const results =
+    await Promise.all(
+
+      movies.map(
+        async function(movie) {
+
+          let runtime = 0;
+
+          let streaming = [];
+
+          let rental = [];
+
+          let purchase = [];
+
+          let detailData = null;
+
+
+          try {
+
+            const detailUrl =
+              "https://api.themoviedb.org/3/movie/" +
+              encodeURIComponent(
+                movie.id
+              ) +
+              "?api_key=" +
+              encodeURIComponent(apiKey) +
+              "&language=ja-JP" +
+              "&append_to_response=watch/providers";
+
+
+            detailData =
+              await fetchJson(
+                detailUrl
+              );
+
+
+            if (
+              !detailData ||
+              !detailData.id ||
+              detailData.id !== movie.id ||
+              !detailData.title
+            ) {
+
+              return null;
+
+            }
+
+
+            // =================================================
+            // 上映時間
+            // =================================================
+
+            runtime =
+              Number(
+                detailData.runtime || 0
+              );
+
+
+            // =================================================
+            // 日本の配信情報
+            // =================================================
+
+            let providersJP = {};
+
+
+            if (
+              detailData &&
+              detailData["watch/providers"] &&
+              detailData["watch/providers"].results &&
+              detailData["watch/providers"].results.JP
+            ) {
+
+              providersJP =
+                detailData[
+                  "watch/providers"
+                ].results.JP;
+
+            }
+
+
+            streaming =
+              normalizeProviders(
+                providersJP.flatrate
+              );
+
+
+            rental =
+              normalizeProviders(
+                providersJP.rent
+              );
+
+
+            purchase =
+              normalizeProviders(
+                providersJP.buy
+              );
+
+
+          } catch (error) {
+
+            console.error(
+              "ANIME MOVIE DETAIL ERROR:",
+              movie.id,
+              movie.title,
+              error
+            );
+
+            return null;
+
+          }
+
+
+          // =================================================
+          // 劇場版アニメとして返却
+          // =================================================
+
+          return {
+
+            id:
+              movie.id,
+
+            title:
+              detailData.title ||
+              movie.title ||
+              "",
+
+            original_title:
+              detailData.original_title ||
+              movie.original_title ||
+              "",
+
+            media_type:
+              "劇場版アニメ",
+
+            content_type:
+              "anime_movie",
+
+            runtime:
+              runtime,
+
+            release_date:
+              detailData.release_date ||
+              movie.release_date ||
+              "",
+
+            poster_path:
+              detailData.poster_path ||
+              movie.poster_path ||
+              null,
+
+            overview:
+              detailData.overview ||
+              movie.overview ||
+              "",
+
+            vote_average:
+              Number(
+                detailData.vote_average ??
+                movie.vote_average ??
+                0
+              ),
+
+            original_language:
+              detailData.original_language ||
+              movie.original_language ||
+              "",
+
+            streaming:
+              streaming,
+
+            rental:
+              rental,
+
+            purchase:
+              purchase
+
+          };
+
+        }
+      )
+
+    );
+
+
+  // =======================================================
+  // null除外
+  // =======================================================
+
+  const validResults =
+    results.filter(
+      function(movie) {
+
+        return (
+          movie &&
+          movie.id &&
+          movie.title
+        );
+
+      }
+    );
+
+
+  return {
+
+    results:
+      validResults,
+
+    page:
+      page,
+
+    hasMore:
+      hasMore
+
+  };
+
+}
+
+// =========================================================
 // ドラマ・アニメ検索
 //
 // TMDB /search/tv を使用
@@ -3743,25 +4378,33 @@ shows =
           // TV作品として返却
           // =================================================
 
-          return {
+         return {
 
-            id:
-              show.id,
-
-
-            title:
-              show.name ||
-              show.original_name ||
-              "",
+  id:
+    show.id,
 
 
-            original_title:
-              show.original_name ||
-              "",
+  title:
+    show.name ||
+    show.original_name ||
+    "",
 
 
-            media_type:
-              "TV",
+  original_title:
+    show.original_name ||
+    "",
+
+
+  media_type:
+    type === "anime"
+      ? "TVアニメ"
+      : "TV",
+
+
+  content_type:
+    type === "anime"
+      ? "anime_tv"
+      : "tv",
 
 
             runtime:
