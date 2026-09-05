@@ -1165,7 +1165,7 @@ font-size:13px;
 
 </section>
 
-  </section>
+
 
 
 
@@ -1741,13 +1741,34 @@ async function loadMoreMovies() {
 
   try {
 
-    const apiUrl =
-      "/api/search?query=" +
-      encodeURIComponent(
-        currentQuery
-      ) +
-      "&page=" +
-      currentPage;
+    let apiUrl =
+  "/api/search?query=" +
+  encodeURIComponent(
+    currentQuery
+  ) +
+  "&page=" +
+  currentPage;
+
+
+/* -------------------------------------------------------
+   ドラマ・アニメはTV検索
+------------------------------------------------------- */
+
+if(
+  currentSearchType === "drama"
+){
+
+  apiUrl +=
+    "&type=drama";
+
+}else if(
+  currentSearchType === "anime"
+){
+
+  apiUrl +=
+    "&type=anime";
+
+}
 
 
     const response =
