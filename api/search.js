@@ -221,11 +221,12 @@ if (popular === "1") {
 
 if (type === "tv") {
 
-  const tvResults =
+ const tvResults =
     await searchTvShows(
       query,
       apiKey,
-      page
+      page,
+      type
     );
 
   return res.status(200).json({
@@ -3242,9 +3243,10 @@ day +
 async function searchTvShows(
   query,
   apiKey,
-  page
+  page,
+  type
 ) {
-
+  
   // =======================================================
   // 検索候補
   // =======================================================
@@ -3519,6 +3521,68 @@ async function searchTvShows(
 
     }
   );
+
+
+   // =======================================================
+  // ドラマ・アニメの振り分け
+  //
+  // TMDBジャンルID
+  //
+  // 16 = Animation
+  //
+  // anime
+  // → アニメーション作品のみ
+  //
+  // drama
+  // → アニメーション以外
+  // =======================================================
+
+  shows =
+    shows.filter(
+      function(show) {
+
+        const genreIds =
+          Array.isArray(
+            show.genre_ids
+          )
+            ? show.genre_ids.map(
+                function(id) {
+                  return Number(id);
+                }
+              )
+            : [];
+
+        const isAnime =
+          genreIds.includes(16);
+
+        // -----------------------------------------------
+        // アニメ検索
+        // -----------------------------------------------
+
+        if(type === "anime"){
+
+          return isAnime;
+
+        }
+
+        // -----------------------------------------------
+        // ドラマ検索
+        // -----------------------------------------------
+
+        if(type === "drama"){
+
+          return !isAnime;
+
+        }
+
+        // -----------------------------------------------
+        // その他
+        // -----------------------------------------------
+
+        return true;
+
+      }
+    );
 
 
   // =======================================================
