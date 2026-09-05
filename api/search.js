@@ -462,8 +462,8 @@ for (
     "&language=ja-JP" +
     "&region=JP" +
     "&include_adult=false" +
-    "&page=" +
-　   page +
+    "&page="
+     page + 
     "&query=" +
     encodeURIComponent(searchQuery);
 
