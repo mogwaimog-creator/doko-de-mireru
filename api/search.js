@@ -119,9 +119,21 @@ const popular =
     ? req.query.popular.trim()
     : "";
 
-    const page =
+    // =====================================================
+// ページ番号
+// =====================================================
 
-      // =====================================================
+const page =
+  req.query &&
+  typeof req.query.page === "string"
+    ? Math.max(
+        1,
+        parseInt(req.query.page, 10) || 1
+      )
+    : 1;
+
+
+// =====================================================
 // 作品タイプ
 //
 // movie = 映画
@@ -135,14 +147,6 @@ const type =
   typeof req.query.type === "string"
     ? req.query.type.trim().toLowerCase()
     : "movie";
-
-  req.query &&
-  typeof req.query.page === "string"
-    ? Math.max(
-        1,
-        parseInt(req.query.page, 10) || 1
-      )
-    : 1;
     
     // =====================================================
     // 作品詳細
