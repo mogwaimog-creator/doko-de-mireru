@@ -3541,52 +3541,57 @@ async function searchTvShows(
   // → アニメーション以外
   // =======================================================
 
-  shows =
-    shows.filter(
-      function(show) {
+shows =
+  shows.filter(
+    function(show) {
 
-        const genreIds =
-          Array.isArray(
-            show.genre_ids
-          )
-            ? show.genre_ids.map(
-                function(id) {
-                  return Number(id);
-                }
-              )
-            : [];
+      const genreIds =
+        Array.isArray(show.genre_ids)
+          ? show.genre_ids.map(
+              function(id) {
+                return Number(id);
+              }
+            )
+          : [];
 
-        const isAnime =
-          genreIds.includes(16);
 
-        // -----------------------------------------------
-        // アニメ検索
-        // -----------------------------------------------
+      /*
+       * TMDBのアニメーションジャンル
+       * ID:16
+       */
 
-        if(type === "anime"){
+      const isAnime =
+        genreIds.includes(16);
 
-          return isAnime;
 
-        }
+      /*
+       * TVアニメ
+       */
 
-        // -----------------------------------------------
-        // ドラマ検索
-        // -----------------------------------------------
+      if(type === "anime"){
 
-        if(type === "drama"){
-
-          return !isAnime;
-
-        }
-
-        // -----------------------------------------------
-        // その他
-        // -----------------------------------------------
-
-        return true;
+        return isAnime;
 
       }
-    );
+
+
+      /*
+       * TVドラマ
+       *
+       * アニメーション以外
+       */
+
+      if(type === "drama"){
+
+        return !isAnime;
+
+      }
+
+
+      return true;
+
+    }
+  );
 
 
   // =======================================================
