@@ -4080,6 +4080,10 @@ const googlePlay =
         tv.number_of_episodes || 0
       ),
 
+　　status:
+  tv.status ||
+  "",
+    
     seasons:
       seasons,
 
