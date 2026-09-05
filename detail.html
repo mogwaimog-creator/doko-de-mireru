@@ -3126,6 +3126,81 @@ if(mediaType === "tv"){
 
   }
 
+  /* TV作品の状態 */
+
+if(movie.status){
+
+  const statusElement =
+    document.createElement(
+      "div"
+    );
+
+  statusElement.className =
+    "info-line";
+
+  let statusText = "";
+
+  switch(movie.status){
+
+    case "Ended":
+
+      statusText =
+        "✅ 完結";
+
+      break;
+
+    case "Returning Series":
+
+      statusText =
+        "🔴 放送・配信継続中";
+
+      break;
+
+    case "In Production":
+
+      statusText =
+        "🟡 制作中";
+
+      break;
+
+    case "Planned":
+
+      statusText =
+        "🟡 放送・配信予定";
+
+      break;
+
+    case "Canceled":
+
+      statusText =
+        "⏹️ 放送終了";
+
+      break;
+
+    default:
+
+      statusText =
+        movie.status;
+
+  }
+
+  statusElement.textContent =
+    statusText;
+
+  const basicInfo =
+    document.querySelector(
+      ".basic-info"
+    );
+
+  if(basicInfo){
+
+    basicInfo.appendChild(
+      statusElement
+    );
+
+  }
+
+}
 
 }else{
 
