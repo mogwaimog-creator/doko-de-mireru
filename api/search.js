@@ -849,10 +849,21 @@ return res.status(200).json({
 
 
 
+  } catch (error) {
+
+    console.error(
+      "SEARCH API ERROR:",
+      error
+    );
+
+    return res.status(500).json({
+      error:
+        "サーバー内部でエラーが発生しました。"
+    });
+
   }
 
 };
-
 
 // =========================================================
 // 作品詳細
