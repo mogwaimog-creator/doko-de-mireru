@@ -490,17 +490,16 @@ for (
 
 
   const searchUrl =
-    "https://api.themoviedb.org/3/search/movie" +
-    "?api_key=" +
-    encodeURIComponent(apiKey) +
-    "&language=ja-JP" +
-    "&region=JP" +
-    "&include_adult=false" +
-    "&page="
-     page + 
-    "&query=" +
-    encodeURIComponent(searchQuery);
-
+  "https://api.themoviedb.org/3/search/movie" +
+  "?api_key=" +
+  encodeURIComponent(apiKey) +
+  "&language=ja-JP" +
+  "&region=JP" +
+  "&include_adult=false" +
+  "&page=" +
+  page +
+  "&query=" +
+  encodeURIComponent(searchQuery);
 
   try {
 
