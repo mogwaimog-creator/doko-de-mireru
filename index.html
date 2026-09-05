@@ -237,6 +237,44 @@ header p{
   cursor:wait;
 }
 
+/* =========================================================
+   検索対象切り替え
+========================================================= */
+
+.search-type-row{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:8px;
+  margin-top:14px;
+  flex-wrap:wrap;
+}
+
+.search-type-button{
+  border:1px solid #d1d5db;
+  background:#fff;
+  color:#374151;
+  border-radius:8px;
+  padding:8px 18px;
+  font-size:14px;
+  font-weight:600;
+  cursor:pointer;
+  transition:
+    background .15s ease,
+    color .15s ease,
+    border-color .15s ease;
+}
+
+.search-type-button:hover{
+  border-color:#2563eb;
+  color:#2563eb;
+}
+
+.search-type-button.active{
+  background:#2563eb;
+  border-color:#2563eb;
+  color:#fff;
+}     
 
 /* =========================================================
    ステータス
@@ -1018,32 +1056,68 @@ font-size:13px;
 
 <main class="container">
 
-  <!-- =====================================================
-       検索
-  ====================================================== -->
+<!-- =====================================================
+     検索
+====================================================== -->
 
-  <section class="search-box">
+<section class="search-box">
+
+  <div class="search-row">
+
+    <input
+      id="query"
+      type="text"
+      placeholder="映画名を入力してください"
+      autocomplete="off"
+      aria-label="作品名を入力"
+    >
+
+    <button
+      id="searchButton"
+      type="button"
+    >
+      🔍 検索
+    </button>
+
+  </div>
 
 
-<div class="search-row">
+  <!-- ===================================================
+       検索対象
+  ==================================================== -->
 
-  <input
-    id="query"
-    type="text"
-    placeholder="映画名を入力してください"
-    autocomplete="off"
-    aria-label="映画名を入力"
-  >
+  <div class="search-type-row">
 
-  <button
-    id="searchButton"
-    type="button"
-  >
-    🔍 検索
-  </button>
+    <button
+      type="button"
+      class="search-type-button active"
+      data-type="movie"
+      id="movieSearchButton"
+    >
+      🎬 映画
+    </button>
 
-</div>
+    <button
+      type="button"
+      class="search-type-button"
+      data-type="drama"
+      id="dramaSearchButton"
+    >
+      📺 ドラマ
+    </button>
 
+    <button
+      type="button"
+      class="search-type-button"
+      data-type="anime"
+      id="animeSearchButton"
+    >
+      🎌 アニメ
+    </button>
+
+  </div>
+
+</section>
 
   </section>
 
