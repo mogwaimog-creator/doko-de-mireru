@@ -4871,8 +4871,34 @@ const runtime =
             })
           )
       : [];
-  
 
+　  // =======================================================
+  // 関連シリーズ
+  // =======================================================
+
+  let series = [];
+
+
+  try {
+
+    series =
+      await getTvRelatedSeries(
+        tvId,
+        apiKey
+      );
+
+  } catch (error) {
+
+    console.error(
+      "TV RELATED SERIES ERROR:",
+      error
+    );
+
+    series = [];
+
+  }
+
+  
   // =======================================================
   // 制作者
   // =======================================================
@@ -5206,8 +5232,17 @@ const googlePlay =
   formatTvStatus(tv),
 
     
-    seasons:
+        seasons:
       seasons,
+
+
+    // ===================================================
+    // 関連シリーズ
+    // ===================================================
+
+    series:
+      series,
+
 
     // ===================================================
     // 配信情報
@@ -5258,6 +5293,236 @@ const googlePlay =
       tmdbLink
 
   };
+
+}
+
+// =========================================================
+// TV関連シリーズ取得
+//
+// ・TMDB recommendations
+// ・TMDB similar
+//
+// TV作品同士の関連作品を取得して
+// 「関連シリーズ」として表示する
+// =========================================================
+
+async function getTvRelatedSeries(
+  tvId,
+  apiKey
+) {
+
+  let recommendations = [];
+  let similar = [];
+
+
+  // =======================================================
+  // TMDB recommendations
+  // =======================================================
+
+  try {
+
+    const recommendationsUrl =
+      "https://api.themoviedb.org/3/tv/" +
+      encodeURIComponent(tvId) +
+      "/recommendations" +
+      "?api_key=" +
+      encodeURIComponent(apiKey) +
+      "&language=ja-JP" +
+      "&page=1";
+
+
+    const data =
+      await fetchJson(
+        recommendationsUrl
+      );
+
+
+    if (
+      data &&
+      Array.isArray(
+        data.results
+      )
+    ) {
+
+      recommendations =
+        data.results;
+
+    }
+
+  } catch (error) {
+
+    console.error(
+      "TV RECOMMENDATIONS ERROR:",
+      error
+    );
+
+  }
+
+
+  // =======================================================
+  // TMDB similar
+  // =======================================================
+
+  try {
+
+    const similarUrl =
+      "https://api.themoviedb.org/3/tv/" +
+      encodeURIComponent(tvId) +
+      "/similar" +
+      "?api_key=" +
+      encodeURIComponent(apiKey) +
+      "&language=ja-JP" +
+      "&page=1";
+
+
+    const data =
+      await fetchJson(
+        similarUrl
+      );
+
+
+    if (
+      data &&
+      Array.isArray(
+        data.results
+      )
+    ) {
+
+      similar =
+        data.results;
+
+    }
+
+  } catch (error) {
+
+    console.error(
+      "TV SIMILAR ERROR:",
+      error
+    );
+
+  }
+
+
+  // =======================================================
+  // 結合
+  // =======================================================
+
+  const combined =
+    []
+      .concat(
+        recommendations
+      )
+      .concat(
+        similar
+      );
+
+
+  // =======================================================
+  // 重複削除
+  // =======================================================
+
+  const seriesMap =
+    new Map();
+
+
+  combined.forEach(
+    function(item) {
+
+      if (
+        !item ||
+        !item.id
+      ) {
+
+        return;
+
+      }
+
+
+      // 元作品自身を除外
+
+      if (
+        String(item.id) ===
+        String(tvId)
+      ) {
+
+        return;
+
+      }
+
+
+      // TV作品だけを対象
+
+      if (
+        !(
+          item.name ||
+          item.original_name
+        )
+      ) {
+
+        return;
+
+      }
+
+
+      seriesMap.set(
+        String(item.id),
+        item
+      );
+
+    }
+  );
+
+
+  // =======================================================
+  // 最大10作品
+  // =======================================================
+
+  const series =
+    Array.from(
+      seriesMap.values()
+    )
+      .slice(0, 10);
+
+
+  // =======================================================
+  // サイト用データに整形
+  // =======================================================
+
+  return series.map(
+    function(item) {
+
+      return {
+
+        id:
+          item.id,
+
+        title:
+          item.name ||
+          item.original_name ||
+          "",
+
+        original_title:
+          item.original_name ||
+          "",
+
+        release_date:
+          item.first_air_date ||
+          "",
+
+        poster_path:
+          item.poster_path ||
+          null,
+
+        media_type:
+          "TVシリーズ",
+
+        content_type:
+          "tv"
+
+      };
+
+    }
+  );
 
 }
 
