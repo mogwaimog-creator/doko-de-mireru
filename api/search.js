@@ -398,16 +398,32 @@ if (
   // =================================================
 
   const movieResults =
-    data.results.filter(
-      function(movie) {
+  data.results.filter(
+    function(movie) {
 
-        return (
-          movie &&
-          movie.media_type !== "collection"
-        );
-
+      if (!movie) {
+        return false;
       }
-    );
+
+      // TMDBのコレクションを除外
+      if (
+        movie.media_type === "collection"
+      ) {
+        return false;
+      }
+
+      // 映画として必要な情報がないものを除外
+      if (!movie.id) {
+        return false;
+      }
+
+      if (!movie.title) {
+        return false;
+      }
+
+      return true;
+    }
+  );
 
 
   allMovies =
@@ -482,13 +498,25 @@ let movies =
 movies =
   movies.filter(function(movie) {
 
-    return (
-      movie &&
-      movie.id &&
-      movie.title &&
-      movie.media_type !== "collection"
-    );
+    if (!movie) {
+      return false;
+    }
 
+    if (
+      movie.media_type === "collection"
+    ) {
+      return false;
+    }
+
+    if (!movie.id) {
+      return false;
+    }
+
+    if (!movie.title) {
+      return false;
+    }
+
+    return true;
   });
 
 // =====================================================
