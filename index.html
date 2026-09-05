@@ -277,6 +277,46 @@ header p{
 }     
 
 /* =========================================================
+   検索・検索対象ボタン
+========================================================= */
+
+/* 検索ボタンだけ目立たせる */
+#searchButton{
+  background:#e63946;
+  color:#fff;
+}
+
+#searchButton:hover{
+  background:#c92f3b;
+}
+
+
+/* 映画・ドラマ・アニメは同じ色 */
+.search-type-button{
+  background:#263b5c;
+  color:#fff;
+  border:1px solid #3d5578;
+}
+
+
+/* ホバー */
+.search-type-button:hover{
+  background:#324b70;
+}
+
+
+/* 選択中 */
+.search-type-button.active{
+  background:#3d5f8f;
+  color:#fff;
+
+  border:2px solid #ffffff;
+
+  box-shadow:
+    0 0 0 2px rgba(61,95,143,0.5);
+}
+     
+/* =========================================================
    ステータス
 ========================================================= */
 
