@@ -1441,12 +1441,18 @@ results.innerHTML =
 ------------------------------------------------------- */
 
 if(
-  currentSearchType === "drama" ||
+  currentSearchType === "drama"
+){
+
+  apiUrl +=
+    "&type=drama";
+
+}else if(
   currentSearchType === "anime"
 ){
 
   apiUrl +=
-    "&type=tv";
+    "&type=anime";
 
 }
     const response =
