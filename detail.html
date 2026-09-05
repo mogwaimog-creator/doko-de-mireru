@@ -1896,6 +1896,9 @@ const params =
 const movieId =
   params.get("id");
 
+const mediaType =
+  params.get("type") || "movie";  
+
 
 /* =========================================================
    作品ID確認
@@ -1965,12 +1968,15 @@ async function loadMovie(){
   try{
 
     const url =
-      API_URL +
-      "?id=" +
-      encodeURIComponent(
-        movieId
-      );
-
+  API_URL +
+  "?id=" +
+  encodeURIComponent(
+    movieId
+  ) +
+  "&type=" +
+  encodeURIComponent(
+    mediaType
+  );
 
     const response =
       await fetch(
@@ -2458,7 +2464,9 @@ function updateStructuredData(movie){
       "https://schema.org",
 
     "@type":
-      "Movie",
+  mediaType === "tv"
+    ? "TVSeries"
+    : "Movie",
 
     "@id":
       canonicalUrl +
@@ -2511,11 +2519,16 @@ function updateStructuredData(movie){
   */
 
   movieData.sameAs =
-    movie.link ||
+  movie.link ||
+  (
+    "https://www.themoviedb.org/" +
     (
-      "https://www.themoviedb.org/movie/" +
-      movie.id
-    );
+      mediaType === "tv"
+        ? "tv/"
+        : "movie/"
+    ) +
+    movie.id
+  );
 
 
   /*
@@ -2940,21 +2953,49 @@ function renderMovie(movie){
   );
 
 
-setText(
-  "movieType",
-  "🎬 作品タイプ：映画"
-);
+/* =========================================================
+   作品タイプ・時間
+========================================================= */
+
+if(mediaType === "tv"){
+
+  setText(
+    "movieType",
+    movie.media_type === "アニメ"
+      ? "📺 作品タイプ：アニメ"
+      : "📺 作品タイプ：ドラマ"
+  );
 
 
-setText(
-  "runtime",
-  movie.runtime
-    ? "⏱️ 上映時間：" +
-      formatRuntime(
-        movie.runtime
-      )
-    : ""
-);
+  setText(
+    "runtime",
+    movie.runtime
+      ? "⏱️ 1話：約" +
+        formatRuntime(
+          movie.runtime
+        )
+      : ""
+  );
+
+}else{
+
+  setText(
+    "movieType",
+    "🎬 作品タイプ：映画"
+  );
+
+
+  setText(
+    "runtime",
+    movie.runtime
+      ? "⏱️ 上映時間：" +
+        formatRuntime(
+          movie.runtime
+        )
+      : ""
+  );
+
+}
 
 
 
@@ -3056,11 +3097,16 @@ setText(
 
 
   tmdbLink.href =
-    movie.link ||
+  movie.link ||
+  (
+    "https://www.themoviedb.org/" +
     (
-      "https://www.themoviedb.org/movie/" +
-      movie.id
-    );
+      mediaType === "tv"
+        ? "tv/"
+        : "movie/"
+    ) +
+    movie.id
+  );
 
 }
 
