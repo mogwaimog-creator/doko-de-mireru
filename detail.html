@@ -2976,7 +2976,6 @@ if(mediaType === "tv"){
       : "📺 作品タイプ：ドラマ"
   );
 
-
   setText(
     "runtime",
     movie.runtime
@@ -2987,13 +2986,60 @@ if(mediaType === "tv"){
       : ""
   );
 
+
+  /* =========================================================
+     シーズン・エピソード数
+  ========================================================= */
+
+  if(
+    movie.number_of_seasons
+  ){
+
+    const seasonText =
+      "📚 全" +
+      movie.number_of_seasons +
+      "シーズン" +
+      (
+        movie.number_of_episodes
+          ? "・" +
+            movie.number_of_episodes +
+            "話"
+          : ""
+      );
+
+    const seasonElement =
+      document.createElement(
+        "div"
+      );
+
+    seasonElement.className =
+      "info-line";
+
+    seasonElement.textContent =
+      seasonText;
+
+    const basicInfo =
+      document.querySelector(
+        ".basic-info"
+      );
+
+    if(basicInfo){
+
+      basicInfo.appendChild(
+        seasonElement
+      );
+
+    }
+
+  }
+
+
 }else{
 
   setText(
     "movieType",
     "🎬 作品タイプ：映画"
   );
-
 
   setText(
     "runtime",
