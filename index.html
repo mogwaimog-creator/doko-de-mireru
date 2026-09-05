@@ -1157,22 +1157,43 @@ font-size:13px;
 
   <div class="search-type-row">
 
+  <button
+    type="button"
+    class="search-type-button active"
+    data-type="all"
+    id="allSearchButton"
+  >
+    🔎 すべて
+  </button>
 
-    <button
-      type="button"
-      class="search-type-button active"
-      data-type="movie"
-      id="movieSearchButton"
-    >
-      🎬 映画
-    </button>
+  <button
+    type="button"
+    class="search-type-button"
+    data-type="movie"
+    id="movieSearchButton"
+  >
+    🎬 映画
+  </button>
 
-    <button
-      type="button"
-      class="search-type-button"
-      data-type="drama"
-      id="dramaSearchButton"
-    >
+  <button
+    type="button"
+    class="search-type-button"
+    data-type="drama"
+    id="dramaSearchButton"
+  >
+    📺 ドラマ
+  </button>
+
+  <button
+    type="button"
+    class="search-type-button"
+    data-type="anime"
+    id="animeSearchButton"
+  >
+    🎌 アニメ
+  </button>
+
+</div>
       📺 ドラマ
     </button>
 
@@ -1292,7 +1313,7 @@ let isLoadingMore = false;
    検索対象
 ========================================================= */
 
-let currentSearchType = "movie";
+let currentSearchType = "all";
 
 
 const searchTypeButtons =
@@ -1332,28 +1353,35 @@ searchTypeButtons.forEach(
            プレースホルダー変更
         ----------------------------------------------- */
 
-        if(
-          currentSearchType === "movie"
-        ){
+if(
+  currentSearchType === "all"
+){
 
-          queryInput.placeholder =
-            "映画名を入力してください";
+  queryInput.placeholder =
+    "映画・ドラマ・アニメの作品名を入力してください";
 
-        }else if(
-          currentSearchType === "drama"
-        ){
+}else if(
+  currentSearchType === "movie"
+){
 
-          queryInput.placeholder =
-            "ドラマ名を入力してください";
+  queryInput.placeholder =
+    "映画名を入力してください";
 
-        }else if(
-          currentSearchType === "anime"
-        ){
+}else if(
+  currentSearchType === "drama"
+){
 
-          queryInput.placeholder =
-            "アニメ名を入力してください";
+  queryInput.placeholder =
+    "ドラマ名を入力してください";
 
-        }
+}else if(
+  currentSearchType === "anime"
+){
+
+  queryInput.placeholder =
+    "アニメ名を入力してください";
+
+}
 
       }
     );
@@ -3261,10 +3289,11 @@ if(lastQuery){
   ------------------------------------------------------- */
 
   if(
-    lastSearchType === "movie" ||
-    lastSearchType === "drama" ||
-    lastSearchType === "anime"
-  ){
+  lastSearchType === "all" ||
+  lastSearchType === "movie" ||
+  lastSearchType === "drama" ||
+  lastSearchType === "anime"
+){
 
     currentSearchType =
       lastSearchType;
