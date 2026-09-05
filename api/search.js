@@ -430,17 +430,7 @@ if (
   }
 
 }
-  if (
-    Number(data.page || page) <
-    Number(data.total_pages || page)
-  ) {
-
-    hasMore = true;
-
-  }
-
-}
-
+  
   } catch (error) {
 
     console.error(
