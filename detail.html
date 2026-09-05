@@ -5456,12 +5456,49 @@ function renderSeries(series){
     );
 
 
+  /*
+     映画の場合
+     series.movies
+
+     ドラマ・アニメの場合
+     series が配列
+  */
+
+  let seriesItems = [];
+
+  let seriesTitle =
+    "関連シリーズ";
+
+
   if(
-    !series ||
-    !Array.isArray(
+    series &&
+    Array.isArray(
       series.movies
-    ) ||
-    series.movies.length === 0
+    )
+  ){
+
+    seriesItems =
+      series.movies;
+
+    seriesTitle =
+      series.name ||
+      "関連シリーズ";
+
+  }
+  else if(
+    Array.isArray(
+      series
+    )
+  ){
+
+    seriesItems =
+      series;
+
+  }
+
+
+  if(
+    seriesItems.length === 0
   ){
 
     section.style.display =
@@ -5477,194 +5514,215 @@ function renderSeries(series){
 
 
   setText(
-  "seriesName",
-  series.name ||
-  "関連シリーズ"
-);
+    "seriesName",
+    seriesTitle
+  );
 
 
   container.innerHTML =
     "";
 
 
-  series.movies.forEach(function(movie){
+  seriesItems.forEach(
+    function(movie){
 
-    if(
-      !movie ||
-      !movie.id ||
-      !movie.title
-    ){
+      if(
+        !movie ||
+        !movie.id ||
+        !movie.title
+      ){
 
-      return;
+        return;
 
-    }
-
-
-    const item =
-      document.createElement(
-        "div"
-      );
+      }
 
 
-    item.className =
-      "series-item";
+      const item =
+        document.createElement(
+          "div"
+        );
 
 
-    const detailUrl =
-  "detail.html?id=" +
-  encodeURIComponent(
-    movie.id
-  ) +
-  "&type=tv";
+      item.className =
+        "series-item";
 
 
-    const movieTitle =
-      String(
-        movie.title
-      ).trim();
+      /*
+         ドラマ・アニメかどうか
+      */
+
+      const isTv =
+        movie.content_type === "tv" ||
+        movie.media_type ===
+          "TVシリーズ";
 
 
-    /*
-       ポスター
-    */
+      /*
+         詳細ページ
+      */
 
-    if(movie.poster_path){
+      const detailUrl =
+        "detail.html?id=" +
+        encodeURIComponent(
+          movie.id
+        ) +
+        (
+          isTv
+            ? "&type=tv"
+            : ""
+        );
 
-      const imageLink =
+
+      const movieTitle =
+        String(
+          movie.title
+        ).trim();
+
+
+      /*
+         ポスター
+      */
+
+      if(movie.poster_path){
+
+        const imageLink =
+          document.createElement(
+            "a"
+          );
+
+
+        imageLink.className =
+          "series-poster-link";
+
+
+        imageLink.href =
+          detailUrl;
+
+
+        imageLink.title =
+          movieTitle +
+          "の作品情報";
+
+
+        imageLink.setAttribute(
+          "aria-label",
+          movieTitle +
+          "の作品情報を見る"
+        );
+
+
+        const image =
+          document.createElement(
+            "img"
+          );
+
+
+        image.className =
+          "series-poster";
+
+
+        image.src =
+          "https://image.tmdb.org/t/p/w300" +
+          movie.poster_path;
+
+
+        image.alt =
+          movieTitle +
+          "のポスター";
+
+
+        image.loading =
+          "lazy";
+
+
+        imageLink.appendChild(
+          image
+        );
+
+
+        item.appendChild(
+          imageLink
+        );
+
+      }
+
+
+      /*
+         タイトルリンク
+      */
+
+      const link =
         document.createElement(
           "a"
         );
 
 
-      imageLink.className =
-        "series-poster-link";
+      link.className =
+        "series-title";
 
 
-      imageLink.href =
+      link.href =
         detailUrl;
 
 
-      imageLink.title =
+      link.title =
         movieTitle +
         "の作品情報";
 
 
-      imageLink.setAttribute(
+      link.textContent =
+        movieTitle;
+
+
+      link.setAttribute(
         "aria-label",
         movieTitle +
         "の作品情報を見る"
       );
 
 
-      const image =
+      item.appendChild(
+        link
+      );
+
+
+      /*
+         公開年
+      */
+
+      const year =
         document.createElement(
-          "img"
+          "div"
         );
 
 
-      image.className =
-        "series-poster";
+      year.className =
+        "series-year";
 
 
-      image.src =
-        "https://image.tmdb.org/t/p/w300" +
-        movie.poster_path;
-
-
-      image.alt =
-        movieTitle +
-        "のポスター";
-
-
-      image.loading =
-        "lazy";
-
-
-      imageLink.appendChild(
-        image
-      );
+      year.textContent =
+        movie.release_date
+          ? formatYear(
+              movie.release_date
+            )
+          : "";
 
 
       item.appendChild(
-        imageLink
+        year
+      );
+
+
+      container.appendChild(
+        item
       );
 
     }
-
-
-    /*
-       タイトルリンク
-    */
-
-    const link =
-      document.createElement(
-        "a"
-      );
-
-
-    link.className =
-      "series-title";
-
-
-    link.href =
-      detailUrl;
-
-
-    link.title =
-      movieTitle +
-      "の作品情報";
-
-
-    link.textContent =
-      movieTitle;
-
-
-    link.setAttribute(
-      "aria-label",
-      movieTitle +
-      "の作品情報を見る"
-    );
-
-
-    item.appendChild(
-      link
-    );
-
-
-    /*
-       公開年
-    */
-
-    const year =
-      document.createElement(
-        "div"
-      );
-
-
-    year.className =
-      "series-year";
-
-
-    year.textContent =
-      movie.release_date
-        ? formatYear(
-            movie.release_date
-          )
-        : "";
-
-
-    item.appendChild(
-      year
-    );
-
-
-    container.appendChild(
-      item
-    );
-
-  });
+  );
 
 }
+
+
 
 
 /* =========================================================
