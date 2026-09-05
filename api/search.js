@@ -3698,14 +3698,18 @@ async function getTvDetail(tvId, apiKey) {
 
 
   // =======================================================
-  // 1話あたりの放送時間
-  // =======================================================
+// 1話あたりの放送時間
+// =======================================================
 
-  const runtime =
-    Array.isArray(tv.episode_run_time) &&
-    tv.episode_run_time.length > 0
-      ? tv.episode_run_time[0]
-      : 0;
+const episodeRunTime =
+  Array.isArray(tv.episode_run_time)
+    ? tv.episode_run_time
+    : [];
+
+const runtime =
+  episodeRunTime.length > 0
+    ? episodeRunTime[0]
+    : 0;
 
 
   // =======================================================
