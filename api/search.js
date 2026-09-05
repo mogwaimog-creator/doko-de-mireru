@@ -113,6 +113,16 @@ const id =
     : "";
 
 
+const season =
+  req.query &&
+  typeof req.query.season === "string"
+    ? Math.max(
+        1,
+        parseInt(req.query.season, 10) || 1
+      )
+    : 0;
+
+
 const popular =
   req.query &&
   typeof req.query.popular === "string"
@@ -149,17 +159,39 @@ const type =
     : "movie";
     
     // =====================================================
-    // 作品詳細
-    // =====================================================
+// 作品詳細
+// =====================================================
 
-    if (id) {
+if (id) {
 
   // TV作品の場合
   if (
-  type === "tv" ||
-  type === "drama" ||
-  type === "anime"
-) {
+    type === "tv" ||
+    type === "drama" ||
+    type === "anime"
+  ) {
+
+    // ===================================================
+    // シーズン指定がある場合
+    //
+    // 例:
+    // ?id=12345&type=tv&season=1
+    // ===================================================
+
+    if (season > 0) {
+
+      const result =
+        await getTvSeason(
+          id,
+          season,
+          apiKey
+        );
+
+      return res
+        .status(200)
+        .json(result);
+    }
+
 
     const result =
       await getTvDetail(
@@ -167,7 +199,9 @@ const type =
         apiKey
       );
 
-    return res.status(200).json(result);
+    return res
+      .status(200)
+      .json(result);
   }
 
   // 映画の場合
@@ -5222,6 +5256,256 @@ const googlePlay =
 
     link:
       tmdbLink
+
+  };
+
+}
+
+// =========================================================
+// TVシーズン詳細取得
+//
+// ・シーズン情報
+// ・エピソード一覧
+// ・話数
+// ・放送日
+// ・エピソード概要
+//
+// 配信情報は作品全体の配信情報を取得する
+// =========================================================
+
+async function getTvSeason(
+  tvId,
+  seasonNumber,
+  apiKey
+) {
+
+  // =======================================================
+  // シーズン情報
+  // =======================================================
+
+  const seasonUrl =
+    "https://api.themoviedb.org/3/tv/" +
+    encodeURIComponent(tvId) +
+    "/season/" +
+    encodeURIComponent(seasonNumber) +
+    "?api_key=" +
+    encodeURIComponent(apiKey) +
+    "&language=ja-JP";
+
+
+  const season =
+    await fetchJson(
+      seasonUrl
+    );
+
+
+  // =======================================================
+  // TV作品本体の情報も取得
+  //
+  // 配信サービスを表示するため
+  // =======================================================
+
+  let tv = null;
+
+  let providersData = {};
+
+  try {
+
+    const tvUrl =
+      "https://api.themoviedb.org/3/tv/" +
+      encodeURIComponent(tvId) +
+      "?api_key=" +
+      encodeURIComponent(apiKey) +
+      "&language=ja-JP" +
+      "&append_to_response=watch/providers";
+
+
+    tv =
+      await fetchJson(
+        tvUrl
+      );
+
+
+    if (
+      tv &&
+      tv["watch/providers"] &&
+      tv["watch/providers"].results &&
+      tv["watch/providers"].results.JP
+    ) {
+
+      providersData =
+        tv["watch/providers"].results.JP;
+
+    }
+
+  } catch (error) {
+
+    console.error(
+      "TV SEASON PROVIDER ERROR:",
+      error
+    );
+
+  }
+
+
+  // =======================================================
+  // 配信情報
+  // =======================================================
+
+  const streaming =
+    normalizeProviders(
+      providersData.flatrate || []
+    );
+
+
+  const rental =
+    normalizeProviders(
+      providersData.rent || []
+    );
+
+
+  const purchase =
+    normalizeProviders(
+      providersData.buy || []
+    );
+
+
+  // =======================================================
+  // エピソード
+  // =======================================================
+
+  const episodes =
+    Array.isArray(
+      season.episodes
+    )
+      ? season.episodes
+          .map(
+            function(episode) {
+
+              return {
+
+                episode_number:
+                  Number(
+                    episode.episode_number || 0
+                  ),
+
+                name:
+                  episode.name ||
+                  (
+                    "第" +
+                    episode.episode_number +
+                    "話"
+                  ),
+
+                air_date:
+                  episode.air_date ||
+                  "",
+
+                overview:
+                  episode.overview ||
+                  "",
+
+                runtime:
+                  Number(
+                    episode.runtime || 0
+                  ),
+
+                still_path:
+                  episode.still_path ||
+                  null
+
+              };
+
+            }
+          )
+          .filter(
+            function(episode) {
+
+              return (
+                episode &&
+                episode.episode_number > 0
+              );
+
+            }
+          )
+      : [];
+
+
+  // =======================================================
+  // 作品タイトル
+  // =======================================================
+
+  const title =
+    tv
+      ? (
+          tv.name ||
+          tv.original_name ||
+          ""
+        )
+      : "";
+
+
+  // =======================================================
+  // 完成データ
+  // =======================================================
+
+  return {
+
+    id:
+      Number(tvId),
+
+
+    title:
+      title,
+
+
+    season_number:
+      Number(
+        season.season_number ||
+        seasonNumber
+      ),
+
+
+    season_name:
+      season.name ||
+      (
+        "シーズン" +
+        seasonNumber
+      ),
+
+
+    poster_path:
+      season.poster_path ||
+      null,
+
+
+    air_date:
+      season.air_date ||
+      "",
+
+
+    episode_count:
+      episodes.length,
+
+
+    episodes:
+      episodes,
+
+
+    // ===================================================
+    // 配信情報
+    // ===================================================
+
+    streaming:
+      streaming,
+
+
+    rental:
+      rental,
+
+
+    purchase:
+      purchase
 
   };
 
