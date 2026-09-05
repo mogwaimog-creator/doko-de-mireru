@@ -1515,35 +1515,7 @@ if(
     ? data.results
     : [];
 
-    
-
-/* -------------------------------------------------------
-   アニメの場合
-   TMDBのアニメーションジャンル(ID:16)だけ表示
-------------------------------------------------------- */
-
-if(
-  currentSearchType === "anime"
-){
-
-  movies =
-    movies.filter(
-      function(movie){
-
-        return (
-          movie &&
-          Array.isArray(
-            movie.genre_ids
-          ) &&
-          movie.genre_ids.includes(16)
-        );
-
-      }
-    );
-
-}     
-       
-       
+          
        status.innerHTML =
       "";
 
