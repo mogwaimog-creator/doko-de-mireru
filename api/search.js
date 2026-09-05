@@ -389,9 +389,30 @@ if (
   Array.isArray(data.results)
 ) {
 
+  // =================================================
+  // コレクションを除外
+  //
+  // TMDB検索結果に
+  // 「○○ シリーズ」などのコレクションが
+  // 混ざる場合があるため除外する
+  // =================================================
+
+  const movieResults =
+    data.results.filter(
+      function(movie) {
+
+        return (
+          movie &&
+          movie.media_type !== "collection"
+        );
+
+      }
+    );
+
+
   allMovies =
     allMovies.concat(
-      data.results
+      movieResults
     );
 
 
@@ -399,6 +420,16 @@ if (
   // 次のページが存在するか確認
   // ===================================================
 
+  if (
+    Number(data.page || page) <
+    Number(data.total_pages || page)
+  ) {
+
+    hasMore = true;
+
+  }
+
+}
   if (
     Number(data.page || page) <
     Number(data.total_pages || page)
@@ -464,11 +495,11 @@ movies =
     return (
       movie &&
       movie.id &&
-      movie.title
+      movie.title &&
+      movie.media_type !== "collection"
     );
 
   });
-
 
 // =====================================================
 // 完全一致を優先
