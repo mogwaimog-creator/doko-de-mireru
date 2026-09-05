@@ -633,9 +633,17 @@ font-size:13px;
   height:225px;
   object-fit:cover;
   border-radius:10px;
-  background:#e5e7eb;
-}
 
+  background:#e5e7eb;
+
+  /* 白いポスターが背景と同化しないようにする */
+  border:1px solid #d1d5db;
+  box-sizing:border-box;
+
+  box-shadow:
+    0 2px 8px
+    rgba(0,0,0,.12);
+}
 
 /* =========================================================
    作品情報
