@@ -1357,6 +1357,10 @@ currentQuery = query;
     query
   );
 
+  sessionStorage.setItem(
+  "dokoDeMireruLastSearchType",
+  currentSearchType
+);   
 
   /* -------------------------------------------------------
      空欄チェック
@@ -3046,16 +3050,55 @@ function createPopularMovieCard(movie){
    詳細画面から戻ってきた場合
 ========================================================= */
 
-const savedQuery =
+const lastQuery =
   sessionStorage.getItem(
     "dokoDeMireruLastQuery"
   );
 
+const lastSearchType =
+  sessionStorage.getItem(
+    "dokoDeMireruLastSearchType"
+  );
 
-if(savedQuery){
+
+if(lastQuery){
 
   queryInput.value =
-    savedQuery;
+    lastQuery;
+
+
+  /* -------------------------------------------------------
+     前回の検索タイプを復元
+  ------------------------------------------------------- */
+
+  if(
+    lastSearchType === "movie" ||
+    lastSearchType === "drama" ||
+    lastSearchType === "anime"
+  ){
+
+    currentSearchType =
+      lastSearchType;
+
+
+    /* 検索タイプのボタン表示も復元 */
+
+    document
+      .querySelectorAll(
+        ".search-type-button"
+      )
+      .forEach(button => {
+
+        button.classList.toggle(
+          "active",
+          button.dataset.type ===
+          currentSearchType
+        );
+
+      });
+
+  }
+
 
   searchMovies();
 
