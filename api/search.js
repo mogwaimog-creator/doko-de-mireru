@@ -583,11 +583,36 @@ const results =
 
         let purchase = [];
 
-        let detailData = null;
+```js
+// =====================================================
+// 結果整形
+// =====================================================
+//
+// TMDB映画検索APIでは上映時間が取得できないため
+// 各作品の詳細APIからruntimeと配信情報を取得する
+// =====================================================
+
+const results =
+  await Promise.all(
+
+    movies.map(
+      async function(movie) {
+
+        // =================================================
+        // 初期値
+        // =================================================
+
+        let runtime = 0;
+
+        let streaming = [];
+
+        let rental = [];
+
+        let purchase = [];
 
 
         // =================================================
-        // 映画詳細・配信情報取得
+        // 上映時間・配信情報取得
         // =================================================
 
         try {
@@ -601,38 +626,10 @@ const results =
             "&append_to_response=watch/providers";
 
 
-          detailData =
+          const detailData =
             await fetchJson(
               detailUrl
             );
-
-
-          // =================================================
-          // 詳細APIで正常な映画データが取得できない場合
-          // =================================================
-
-          if (
-            !detailData ||
-            !detailData.id ||
-            detailData.id !== movie.id
-          ) {
-
-            return null;
-
-          }
-
-
-          // =================================================
-          // タイトルが存在しない場合も除外
-          // =================================================
-
-          if (
-            !detailData.title
-          ) {
-
-            return null;
-
-          }
 
 
           // =================================================
@@ -698,25 +695,23 @@ const results =
         } catch (error) {
 
           console.error(
-            "MOVIE DETAIL ERROR:",
-            movie.id,
-            movie.title,
+            "RUNTIME / PROVIDER ERROR:",
             error
           );
 
+          runtime = 0;
 
-          // =================================================
-          // 詳細APIで映画として取得できない作品は
-          // 検索結果から除外
-          // =================================================
+          streaming = [];
 
-          return null;
+          rental = [];
+
+          purchase = [];
 
         }
 
 
         // =================================================
-        // 最終的な映画データ
+        // 検索結果
         // =================================================
 
         return {
@@ -724,82 +719,39 @@ const results =
           id:
             movie.id,
 
-
-          // =================================================
-          // タイトル
-          // =================================================
-
           title:
-            detailData.title ||
-            movie.title ||
-            "",
-
-
-          // =================================================
-          // 作品タイプ
-          // =================================================
+            movie.title || "",
 
           media_type:
             "劇場版",
 
-
-          // =================================================
-          // 上映時間
-          // =================================================
-
           runtime:
             runtime,
-
-
-          // =================================================
-          // 配信情報
-          // =================================================
 
           streaming:
             streaming,
 
-
           rental:
             rental,
-
 
           purchase:
             purchase,
 
-
-          // =================================================
-          // その他
-          // =================================================
-
           original_title:
-            detailData.original_title ||
-            movie.original_title ||
-            "",
-
+            movie.original_title || "",
 
           release_date:
-            detailData.release_date ||
-            movie.release_date ||
-            "",
-
+            movie.release_date || "",
 
           poster_path:
-            detailData.poster_path ||
-            movie.poster_path ||
-            null,
-
+            movie.poster_path || null,
 
           overview:
-            detailData.overview ||
-            movie.overview ||
-            "",
-
+            movie.overview || "",
 
           vote_average:
             Number(
-              detailData.vote_average ??
-              movie.vote_average ??
-              0
+              movie.vote_average || 0
             )
 
         };
@@ -811,41 +763,16 @@ const results =
 
 
 // =====================================================
-// null を除外
-//
-// 詳細APIで映画として確認できなかった作品を除外
-// =====================================================
-
-const validResults =
-  results.filter(
-    function(movie) {
-
-      return (
-        movie &&
-        movie.id &&
-        movie.title
-      );
-
-    }
-  );
-
-
-// =====================================================
 // JSON返却
 // =====================================================
 
 return res.status(200).json({
-
-  results:
-    validResults,
-
-  page:
-    page,
-
-  hasMore:
-    hasMore
-
+  results: results,
+  page: page,
+  hasMore: hasMore
 });
+```
+
 
 }
  
