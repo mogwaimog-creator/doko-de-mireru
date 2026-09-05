@@ -895,6 +895,130 @@ header p{
 }
 
 /* =========================================================
+   シーズン選択
+========================================================= */
+
+.season-item{
+  width:100%;
+
+  cursor:pointer;
+
+  font-family:inherit;
+
+  transition:
+    background .15s ease,
+    border-color .15s ease,
+    transform .15s ease;
+}
+
+.season-item:hover{
+  background:#eef2ff;
+
+  border-color:#c7d2fe;
+
+  transform:translateY(-2px);
+}
+
+
+/* =========================================================
+   エピソード一覧
+========================================================= */
+
+.episode-section{
+  margin-top:18px;
+
+  padding-top:18px;
+
+  border-top:1px solid #e5e7eb;
+}
+
+.episode-heading{
+  margin:0 0 12px;
+
+  color:#111827;
+
+  font-size:18px;
+
+  line-height:1.4;
+}
+
+.episode-list{
+  display:flex;
+
+  flex-direction:column;
+
+  gap:10px;
+}
+
+.episode-item{
+  display:flex;
+
+  gap:12px;
+
+  padding:12px;
+
+  background:#f8fafc;
+
+  border:1px solid #e5e7eb;
+
+  border-radius:10px;
+}
+
+.episode-number{
+  flex:0 0 45px;
+
+  display:flex;
+
+  align-items:flex-start;
+
+  justify-content:center;
+
+  color:#2563eb;
+
+  font-size:14px;
+
+  font-weight:bold;
+
+  line-height:1.5;
+}
+
+.episode-content{
+  flex:1;
+
+  min-width:0;
+}
+
+.episode-name{
+  color:#111827;
+
+  font-size:15px;
+
+  font-weight:bold;
+
+  line-height:1.5;
+}
+
+.episode-meta{
+  margin-top:3px;
+
+  color:#666;
+
+  font-size:13px;
+
+  line-height:1.5;
+}
+
+.episode-overview{
+  margin-top:6px;
+
+  color:#555;
+
+  font-size:14px;
+
+  line-height:1.6;
+}
+  
+/* =========================================================
    シリーズ作品・おすすめ作品
 ========================================================= */
 
@@ -1358,6 +1482,29 @@ header p{
     font-size:12px;
   }
 
+  .episode-item{
+  gap:8px;
+
+  padding:10px;
+}
+
+.episode-number{
+  flex:0 0 40px;
+
+  font-size:13px;
+}
+
+.episode-name{
+  font-size:14px;
+}
+
+.episode-meta{
+  font-size:12px;
+}
+
+.episode-overview{
+  font-size:13px;
+}
   
   .series-list,
   .recommendation-list{
@@ -1840,7 +1987,26 @@ Netflix、Amazon Prime Video、U-NEXT、Hulu、Disney+など、
   class="season-list"
 ></div>
 
-</section>  
+
+<div
+  id="episodeSection"
+  class="episode-section"
+  style="display:none;"
+>
+
+<h4
+  id="episodeHeading"
+  class="episode-heading"
+></h4>
+
+<div
+  id="episodeList"
+  class="episode-list"
+></div>
+
+</div>
+
+</section>
 
 <!-- =========================================================
      シリーズ作品
@@ -4592,6 +4758,10 @@ function getButtonClass(
    シーズン情報
 ========================================================= */
 
+/* =========================================================
+   シーズン情報
+========================================================= */
+
 function renderSeasons(seasons){
 
   const section =
@@ -4603,6 +4773,24 @@ function renderSeasons(seasons){
   const container =
     document.getElementById(
       "seasonList"
+    );
+
+
+  const episodeSection =
+    document.getElementById(
+      "episodeSection"
+    );
+
+
+  const episodeHeading =
+    document.getElementById(
+      "episodeHeading"
+    );
+
+
+  const episodeList =
+    document.getElementById(
+      "episodeList"
     );
 
 
@@ -4623,6 +4811,14 @@ function renderSeasons(seasons){
     "";
 
 
+  if(episodeSection){
+
+    episodeSection.style.display =
+      "none";
+
+  }
+
+
   seasons.forEach(function(season){
 
     if(
@@ -4635,10 +4831,18 @@ function renderSeasons(seasons){
     }
 
 
+    /*
+       シーズンカード
+    */
+
     const item =
       document.createElement(
-        "div"
+        "button"
       );
+
+
+    item.type =
+      "button";
 
 
     item.className =
@@ -4702,6 +4906,24 @@ function renderSeasons(seasons){
     }
 
 
+    /*
+       シーズンをクリック
+    */
+
+    item.addEventListener(
+      "click",
+      function(){
+
+        loadSeason(
+          movieId,
+          season.season_number,
+          mediaType
+        );
+
+      }
+    );
+
+
     container.appendChild(
       item
     );
@@ -4723,6 +4945,495 @@ function renderSeasons(seasons){
 
   section.style.display =
     "block";
+
+}
+
+
+/* =========================================================
+   シーズン読み込み
+========================================================= */
+
+async function loadSeason(
+  tvId,
+  seasonNumber,
+  type
+){
+
+  const episodeSection =
+    document.getElementById(
+      "episodeSection"
+    );
+
+
+  const episodeHeading =
+    document.getElementById(
+      "episodeHeading"
+    );
+
+
+  const episodeList =
+    document.getElementById(
+      "episodeList"
+    );
+
+
+  if(!episodeSection){
+
+    return;
+
+  }
+
+
+  /*
+     読み込み中
+  */
+
+  episodeSection.style.display =
+    "block";
+
+
+  if(episodeHeading){
+
+    episodeHeading.textContent =
+      "📖 シーズン" +
+      seasonNumber +
+      " のエピソード";
+
+  }
+
+
+  if(episodeList){
+
+    episodeList.innerHTML =
+      "<div style=\"padding:15px;color:#666;text-align:center;\">" +
+      "エピソードを読み込んでいます…" +
+      "</div>";
+
+  }
+
+
+  /*
+     API URL
+  */
+
+  const url =
+    API_URL +
+    "?id=" +
+    encodeURIComponent(
+      tvId
+    ) +
+    "&type=" +
+    encodeURIComponent(
+      type
+    ) +
+    "&season=" +
+    encodeURIComponent(
+      seasonNumber
+    );
+
+
+  try{
+
+    const response =
+      await fetch(
+        url,
+        {
+          method:"GET",
+
+          headers:{
+            "Accept":
+              "application/json"
+          },
+
+          cache:"no-store"
+        }
+      );
+
+
+    const text =
+      await response.text();
+
+
+    if(!response.ok){
+
+      console.error(
+        "SEASON API ERROR:",
+        response.status,
+        text
+      );
+
+      throw new Error(
+        "SEASON API ERROR " +
+        response.status
+      );
+
+    }
+
+
+    let data;
+
+
+    try{
+
+      data =
+        JSON.parse(
+          text
+        );
+
+    }catch(parseError){
+
+      console.error(
+        "SEASON JSON ERROR:",
+        text
+      );
+
+      throw new Error(
+        "エピソード情報を解析できませんでした。"
+      );
+
+    }
+
+
+    renderEpisodes(
+      data
+    );
+
+
+  }catch(error){
+
+    console.error(
+      "SEASON LOAD ERROR:",
+      error
+    );
+
+
+    if(episodeList){
+
+      episodeList.innerHTML =
+        "<div style=\"padding:15px;color:#b91c1c;\">" +
+        "エピソード情報を取得できませんでした。" +
+        "</div>";
+
+    }
+
+  }
+
+}
+
+
+/* =========================================================
+   エピソード表示
+========================================================= */
+
+function renderEpisodes(data){
+
+  const episodeSection =
+    document.getElementById(
+      "episodeSection"
+    );
+
+
+  const episodeHeading =
+    document.getElementById(
+      "episodeHeading"
+    );
+
+
+  const episodeList =
+    document.getElementById(
+      "episodeList"
+    );
+
+
+  if(!episodeSection){
+
+    return;
+
+  }
+
+
+  if(!episodeList){
+
+    return;
+
+  }
+
+
+  episodeList.innerHTML =
+    "";
+
+
+  const episodes =
+    data &&
+    Array.isArray(
+      data.episodes
+    )
+      ? data.episodes
+      : [];
+
+
+  /*
+     エピソードがない場合
+  */
+
+  if(episodes.length === 0){
+
+    if(episodeHeading){
+
+      episodeHeading.textContent =
+        data &&
+        data.season_name
+          ? "📖 " +
+            data.season_name
+          : "📖 エピソード";
+
+    }
+
+
+    episodeList.innerHTML =
+      "<div style=\"padding:15px;color:#666;\">" +
+      "エピソード情報がありません。" +
+      "</div>";
+
+
+    episodeSection.style.display =
+      "block";
+
+
+    return;
+
+  }
+
+
+  /*
+     見出し
+  */
+
+  if(episodeHeading){
+
+    episodeHeading.textContent =
+      "📖 " +
+      (
+        data.season_name ||
+        (
+          "シーズン" +
+          data.season_number
+        )
+      ) +
+      "・全" +
+      episodes.length +
+      "話";
+
+  }
+
+
+  /*
+     エピソード一覧
+  */
+
+  episodes.forEach(function(episode){
+
+    if(
+      !episode ||
+      !episode.episode_number
+    ){
+
+      return;
+
+    }
+
+
+    const item =
+      document.createElement(
+        "div"
+      );
+
+
+    item.className =
+      "episode-item";
+
+
+    /*
+       第○話
+    */
+
+    const number =
+      document.createElement(
+        "div"
+      );
+
+
+    number.className =
+      "episode-number";
+
+
+    number.textContent =
+      "第" +
+      episode.episode_number +
+      "話";
+
+
+    item.appendChild(
+      number
+    );
+
+
+    /*
+       内容
+    */
+
+    const content =
+      document.createElement(
+        "div"
+      );
+
+
+    content.className =
+      "episode-content";
+
+
+    /*
+       エピソードタイトル
+    */
+
+    const name =
+      document.createElement(
+        "div"
+      );
+
+
+    name.className =
+      "episode-name";
+
+
+    name.textContent =
+      episode.name ||
+      (
+        "第" +
+        episode.episode_number +
+        "話"
+      );
+
+
+    content.appendChild(
+      name
+    );
+
+
+    /*
+       放送日・時間
+    */
+
+    const metaParts = [];
+
+
+    if(episode.air_date){
+
+      metaParts.push(
+        "公開日：" +
+        formatDate(
+          episode.air_date
+        )
+      );
+
+    }
+
+
+    if(episode.runtime){
+
+      metaParts.push(
+        "約" +
+        formatRuntime(
+          episode.runtime
+        )
+      );
+
+    }
+
+
+    if(metaParts.length){
+
+      const meta =
+        document.createElement(
+          "div"
+        );
+
+
+      meta.className =
+        "episode-meta";
+
+
+      meta.textContent =
+        metaParts.join(
+          "　"
+        );
+
+
+      content.appendChild(
+        meta
+      );
+
+    }
+
+
+    /*
+       あらすじ
+    */
+
+    if(episode.overview){
+
+      const overview =
+        document.createElement(
+          "div"
+        );
+
+
+      overview.className =
+        "episode-overview";
+
+
+      overview.textContent =
+        episode.overview;
+
+
+      content.appendChild(
+        overview
+      );
+
+    }
+
+
+    item.appendChild(
+      content
+    );
+
+
+    episodeList.appendChild(
+      item
+    );
+
+  });
+
+
+  episodeSection.style.display =
+    "block";
+
+
+  /*
+     エピソード一覧まで移動
+  */
+
+  setTimeout(
+    function(){
+
+      episodeSection.scrollIntoView({
+        behavior:"smooth",
+        block:"start"
+      });
+
+    },
+    50
+  );
 
 }
 
