@@ -1738,7 +1738,7 @@ return {
 
 
     vote_average:
-  Number(
+    Number(
     movie.vote_average || 0
   ),
 
@@ -3714,17 +3714,17 @@ async function getProviderWorks(
                   "",
 
                 vote_average:
-  Number(
-    show.vote_average || 0
-  ),
+                 Number(
+                   show.vote_average || 0
+                ),
 
-vote_count:
-  Number(
-    show.vote_count || 0
-  ),
+              vote_count:
+               Number(
+                 show.vote_count || 0
+               ),
 
-runtime:
-  0,
+              runtime:
+               0,
 
                 media_type:
                   isAnime
