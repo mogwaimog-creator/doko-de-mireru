@@ -5584,9 +5584,12 @@ function renderSeries(series){
       */
 
       const isTv =
-        movie.content_type === "tv" ||
-        movie.media_type ===
-          "TVシリーズ";
+  movie.content_type === "tv" ||
+  movie.content_type === "tv_drama" ||
+  movie.content_type === "anime_tv" ||
+  movie.media_type === "TVシリーズ" ||
+  movie.media_type === "TV" ||
+  movie.media_type === "TVアニメ";
 
 
       /*
@@ -5882,12 +5885,25 @@ function renderRecommendations(
         "recommendation-item";
 
 
-      const detailUrl =
-        "detail.html?id=" +
-        encodeURIComponent(
-          movie.id
-        );
+      const isTv =
+  movie.content_type === "tv" ||
+  movie.content_type === "tv_drama" ||
+  movie.content_type === "anime_tv" ||
+  movie.media_type === "TVシリーズ" ||
+  movie.media_type === "TV" ||
+  movie.media_type === "TVアニメ";
 
+
+const detailUrl =
+  "detail.html?id=" +
+  encodeURIComponent(
+    movie.id
+  ) +
+  (
+    isTv
+      ? "&type=tv"
+      : ""
+  );
 
       const movieTitle =
         String(
