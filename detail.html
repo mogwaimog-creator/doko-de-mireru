@@ -2428,14 +2428,18 @@ function updateSeo(movie){
 
   if(movie.release_date){
 
-    description +=
-      "公開日は" +
-      formatDate(
-        movie.release_date
-      ) +
-      "。";
+  description +=
+    (
+      mediaType === "tv"
+        ? "放送開始日は"
+        : "公開日は"
+    ) +
+    formatDate(
+      movie.release_date
+    ) +
+    "。";
 
-  }
+}
 
 
   /*
@@ -3201,15 +3205,19 @@ function renderMovie(movie){
   );
 
 
-  setText(
-    "releaseDate",
-    movie.release_date
-      ? "公開日：" +
-        formatDate(
-          movie.release_date
-        )
-      : ""
-  );
+setText(
+  "releaseDate",
+  movie.release_date
+    ? (
+        mediaType === "tv"
+          ? "放送開始日："
+          : "公開日："
+      ) +
+      formatDate(
+        movie.release_date
+      )
+    : ""
+);
 
 
   const rating =
