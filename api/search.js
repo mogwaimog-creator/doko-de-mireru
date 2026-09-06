@@ -835,59 +835,51 @@ movies =
     return true;
   });
 // =====================================================
-// 完全一致を優先
+// 検索関連度順
 //
-// 表記ゆれも同じタイトルとして扱う
+// ・日本語タイトル
+// ・原題
+// ・表記ゆれ
+// ・完全一致
+// ・先頭一致
+// ・部分一致
+// ・人気度
+//
+// を考慮する
 // =====================================================
 
-const normalizedQuery =
-  normalizeTitle(query);
+movies.sort(
+  function(a, b) {
+
+    const aScore =
+      getTitleSearchScore(
+        a,
+        query,
+        [
+          "title",
+          "original_title"
+        ]
+      );
 
 
-movies.sort(function(a, b) {
+    const bScore =
+      getTitleSearchScore(
+        b,
+        query,
+        [
+          "title",
+          "original_title"
+        ]
+      );
 
-  const aTitle =
-    normalizeTitle(
-      a.title || ""
-    );
-
-
-  const bTitle =
-    normalizeTitle(
-      b.title || ""
-    );
-
-
-  const aExact =
-    aTitle === normalizedQuery
-      ? 0
-      : 1;
-
-
-  const bExact =
-    bTitle === normalizedQuery
-      ? 0
-      : 1;
-
-
-  if (
-    aExact !== bExact
-  ) {
 
     return (
-      aExact - bExact
+      bScore -
+      aScore
     );
 
   }
-
-
-  return (
-    Number(b.vote_average || 0) -
-    Number(a.vote_average || 0)
-  );
-
-});
-
+);
 
 // =====================================================
 // 最大20件
@@ -3272,7 +3264,25 @@ if (
 
 }
   
+// =======================================================
+// 君の名は。
+// =======================================================
 
+if (
+  normalized === "君ノ名ハ" ||
+  normalized === "君ノナハ" ||
+  normalized === "キミノナハ" ||
+  normalized === "yourname"
+) {
+
+  add("君の名は。");
+  add("君の名は");
+  add("Your Name");
+
+}
+
+
+  
   return aliases;
 
 }
@@ -3286,20 +3296,63 @@ function normalizeTitle(title) {
   let value =
     String(
       title || ""
-    )
+    );
+
+
+  // =====================================================
+  // Unicode正規化
+  //
+  // 全角英数字
+  // 半角英数字
+  // 全角記号
+  //
+  // などの違いをできるだけ統一
+  // =====================================================
+
+  try {
+
+    value =
+      value.normalize("NFKC");
+
+  } catch (error) {
+
+    // 古い環境などでnormalizeが使えない場合は
+    // そのまま続行
+
+  }
+
+
+  value =
+    value
       .toLowerCase()
+
+      // ---------------------------------------------------
+      // 空白を削除
+      // ---------------------------------------------------
+
       .replace(
         /[\s　]/g,
         ""
       )
+
+      // ---------------------------------------------------
+      // タイトル検索では意味の薄い記号を削除
+      // ---------------------------------------------------
+
       .replace(
-        /[「」『』【】（）()・:：!?！？,.，。\-]/g,
+        /[「」『』【】〔〕［］\[\]（）()〈〉《》＜＞<>・･:：;；!?！？,.，。、'"“”‘’`´\-‐-‒–—―~〜～／\/\\]/g,
         ""
       );
 
 
   // =====================================================
   // ひらがな → カタカナ
+  //
+  // 例:
+  //
+  // どらえもん
+  // ↓
+  // ドラエモン
   // =====================================================
 
   value =
@@ -3317,6 +3370,286 @@ function normalizeTitle(title) {
 
 
   return value;
+
+}
+
+// =========================================================
+// 検索候補を正規化してまとめる
+//
+// 元の検索語
+// ＋
+// 表記ゆれ
+// ＋
+// 別名
+//
+// を同じ基準で比較できるようにする
+// =========================================================
+
+function getNormalizedSearchCandidates(query) {
+
+  const candidates = [];
+
+
+  function add(value) {
+
+    const normalized =
+      normalizeTitle(
+        value
+      );
+
+
+    if (
+      normalized &&
+      !candidates.includes(
+        normalized
+      )
+    ) {
+
+      candidates.push(
+        normalized
+      );
+
+    }
+
+  }
+
+
+  // =======================================================
+  // 元の検索語
+  // =======================================================
+
+  add(query);
+
+
+  // =======================================================
+  // 登録済みの表記ゆれ
+  //
+  // ドラえもん
+  // クレヨンしんちゃん
+  // 名探偵コナン
+  // ONE PIECE
+  // など
+  // =======================================================
+
+  const aliases =
+    getTitleSearchAliases(
+      query
+    );
+
+
+  aliases.forEach(
+    function(alias) {
+
+      add(alias);
+
+    }
+  );
+
+
+  return candidates;
+
+}
+
+
+// =========================================================
+// タイトル検索関連度
+//
+// 数字が大きい作品ほど上に表示する
+// =========================================================
+
+function getTitleSearchScore(
+  item,
+  query,
+  titleKeys
+) {
+
+  if (!item) {
+    return -999999;
+  }
+
+
+  const searchCandidates =
+    getNormalizedSearchCandidates(
+      query
+    );
+
+
+  const titles = [];
+
+
+  titleKeys.forEach(
+    function(key) {
+
+      if (
+        item[key]
+      ) {
+
+        const normalized =
+          normalizeTitle(
+            item[key]
+          );
+
+
+        if (
+          normalized &&
+          !titles.includes(
+            normalized
+          )
+        ) {
+
+          titles.push(
+            normalized
+          );
+
+        }
+
+      }
+
+    }
+  );
+
+
+  let score = 0;
+
+
+  titles.forEach(
+    function(title) {
+
+      searchCandidates.forEach(
+        function(searchQuery) {
+
+          if (
+            !title ||
+            !searchQuery
+          ) {
+
+            return;
+
+          }
+
+
+          // =================================================
+          // 完全一致
+          // =================================================
+
+          if (
+            title === searchQuery
+          ) {
+
+            score =
+              Math.max(
+                score,
+                100000
+              );
+
+            return;
+
+          }
+
+
+          // =================================================
+          // タイトル先頭一致
+          //
+          // 例:
+          //
+          // コナン
+          // →
+          // コナン○○
+          // =================================================
+
+          if (
+            title.startsWith(
+              searchQuery
+            )
+          ) {
+
+            score =
+              Math.max(
+                score,
+                50000
+              );
+
+            return;
+
+          }
+
+
+          // =================================================
+          // タイトルの中に検索語
+          // =================================================
+
+          if (
+            title.includes(
+              searchQuery
+            )
+          ) {
+
+            score =
+              Math.max(
+                score,
+                30000
+              );
+
+            return;
+
+          }
+
+
+          // =================================================
+          // 検索語の中にタイトル
+          //
+          // 短すぎるタイトルは誤判定を防ぐ
+          // =================================================
+
+          if (
+            title.length >= 3 &&
+            searchQuery.includes(
+              title
+            )
+          ) {
+
+            score =
+              Math.max(
+                score,
+                15000
+              );
+
+          }
+
+        }
+      );
+
+    }
+  );
+
+
+  // =======================================================
+  // TMDB人気度
+  //
+  // 同程度に一致している作品なら
+  // 有名作品を少し優先
+  // =======================================================
+
+  score +=
+    Math.min(
+      Number(
+        item.popularity || 0
+      ),
+      500
+    );
+
+
+  // =======================================================
+  // TMDB評価
+  // =======================================================
+
+  score +=
+    Number(
+      item.vote_average || 0
+    );
+
+
+  return score;
 
 }
 
