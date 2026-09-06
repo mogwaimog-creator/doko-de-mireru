@@ -1742,6 +1742,11 @@ return {
         movie.vote_average || 0
       ),
 
+　　vote_count:
+  Number(
+    movie.vote_count || 0
+  ),
+  
 
     original_language:
       movie.original_language || "",
@@ -3713,6 +3718,11 @@ async function getProviderWorks(
                     show.vote_average || 0
                   ),
 
+　　　　　　　　vote_count:
+                Number(
+                  show.vote_count || 0
+                  ),
+                
                 runtime:
                   0,
 
