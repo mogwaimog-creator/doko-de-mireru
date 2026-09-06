@@ -278,7 +278,30 @@ if (popular === "1") {
 // =====================================================
 
 
+// =====================================================
+// 「すべて」検索用
+//
+// 映画検索はこの後の既存処理をそのまま使い、
+// TV作品だけ先に取得しておく
+// =====================================================
 
+let allTvResults =
+  null;
+
+
+if (
+  type === "all"
+) {
+
+  allTvResults =
+    await searchTvShows(
+      query,
+      apiKey,
+      page,
+      "tv"
+    );
+
+}
     
 if (
   type === "tv" ||
@@ -1088,6 +1111,40 @@ const validResults =
     }
   );
 
+// =====================================================
+// 「すべて」の場合
+//
+// 映画 +
+// ドラマ +
+// TVアニメ
+//
+// をまとめる
+//
+// 劇場版アニメは通常の映画検索にも含まれる
+// =====================================================
+
+let finalResults =
+  validResults;
+
+
+if (
+  type === "all" &&
+  allTvResults &&
+  Array.isArray(
+    allTvResults.results
+  )
+) {
+
+  finalResults =
+    []
+      .concat(
+        validResults
+      )
+      .concat(
+        allTvResults.results
+      );
+
+}    
 
 // =====================================================
 // JSON返却
@@ -1096,16 +1153,21 @@ const validResults =
 return res.status(200).json({
 
   results:
-    validResults,
+    finalResults,
 
   page:
     page,
 
   hasMore:
-    hasMore
+    Boolean(
+      hasMore ||
+      (
+        allTvResults &&
+        allTvResults.hasMore
+      )
+    )
 
 });
-
 
 
   } catch (error) {
