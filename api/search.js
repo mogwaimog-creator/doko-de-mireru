@@ -129,6 +129,24 @@ const popular =
     ? req.query.popular.trim()
     : "";
 
+// =====================================================
+// 配信サービス
+//
+// netflix
+// prime
+// unext
+// hulu
+// disney
+// =====================================================
+
+const provider =
+  req.query &&
+  typeof req.query.provider === "string"
+    ? req.query.provider
+        .trim()
+        .toLowerCase()
+    : "";
+    
     // =====================================================
 // ページ番号
 // =====================================================
