@@ -5409,6 +5409,33 @@ const googlePlay =
 // 同じ作品の劇場版を優先して取得する
 // =========================================================
 
+// =========================================================
+// アニメ劇場版取得【安定版】
+//
+// TVアニメのタイトルから
+// 同じ作品の劇場版シリーズを探す
+//
+// 例:
+//
+// 名探偵コナン
+// → 名探偵コナン 劇場版シリーズ
+//
+// クレヨンしんちゃん
+// → クレヨンしんちゃん 劇場版シリーズ
+//
+// ドラえもん
+// → ドラえもん 劇場版シリーズ
+//
+// ポイント:
+//
+// ・TVアニメ自身は除外
+// ・映画作品だけを対象
+// ・belongs_to_collection を優先
+// ・TVタイトルとコレクション名を比較
+// ・コレクション名だけでなく映画タイトルも確認
+// ・関係のないアニメ映画を混ぜない
+// =========================================================
+
 async function getAnimeRelatedMovies(
   tv,
   apiKey
@@ -5425,11 +5452,16 @@ async function getAnimeRelatedMovies(
 
 
   // =======================================================
-  // TVアニメのタイトル
+  // TVアニメタイトル
   // =======================================================
 
   const tvTitle =
     tv.name ||
+    tv.original_name ||
+    "";
+
+
+  const tvOriginalTitle =
     tv.original_name ||
     "";
 
@@ -5442,34 +5474,63 @@ async function getAnimeRelatedMovies(
 
 
   // =======================================================
+  // タイトル正規化
+  // =======================================================
+
+  const normalizedTvTitle =
+    normalizeTitle(
+      tvTitle
+    );
+
+
+  const normalizedOriginalTitle =
+    normalizeTitle(
+      tvOriginalTitle
+    );
+
+
+  // =======================================================
   // 検索候補
-  //
-  // 日本語タイトルを中心に検索
   // =======================================================
 
   const searchQueries = [];
 
 
-  searchQueries.push(
-    tvTitle
-  );
+  function addSearchQuery(value) {
+
+    if (
+      !value
+    ) {
+
+      return;
+
+    }
 
 
-  if (
-    tv.original_name &&
-    tv.original_name !== tvTitle
-  ) {
+    if (
+      !searchQueries.includes(
+        value
+      )
+    ) {
 
-    searchQueries.push(
-      tv.original_name
-    );
+      searchQueries.push(
+        value
+      );
+
+    }
 
   }
 
 
-  // =======================================================
-  // 表記ゆれ
-  // =======================================================
+  addSearchQuery(
+    tvTitle
+  );
+
+
+  addSearchQuery(
+    tvOriginalTitle
+  );
+
 
   const compactTitle =
     normalizeSearchQuery(
@@ -5477,18 +5538,9 @@ async function getAnimeRelatedMovies(
     );
 
 
-  if (
-    compactTitle &&
-    !searchQueries.includes(
-      compactTitle
-    )
-  ) {
-
-    searchQueries.push(
-      compactTitle
-    );
-
-  }
+  addSearchQuery(
+    compactTitle
+  );
 
 
   const spacedTitle =
@@ -5497,18 +5549,9 @@ async function getAnimeRelatedMovies(
     );
 
 
-  if (
-    spacedTitle &&
-    !searchQueries.includes(
-      spacedTitle
-    )
-  ) {
-
-    searchQueries.push(
-      spacedTitle
-    );
-
-  }
+  addSearchQuery(
+    spacedTitle
+  );
 
 
   const middleDotTitle =
@@ -5517,18 +5560,9 @@ async function getAnimeRelatedMovies(
     );
 
 
-  if (
-    middleDotTitle &&
-    !searchQueries.includes(
-      middleDotTitle
-    )
-  ) {
-
-    searchQueries.push(
-      middleDotTitle
-    );
-
-  }
+  addSearchQuery(
+    middleDotTitle
+  );
 
 
   // =======================================================
@@ -5549,14 +5583,18 @@ async function getAnimeRelatedMovies(
 
 
     if (!searchQuery) {
+
       continue;
+
     }
 
 
     const searchUrl =
       "https://api.themoviedb.org/3/search/movie" +
       "?api_key=" +
-      encodeURIComponent(apiKey) +
+      encodeURIComponent(
+        apiKey
+      ) +
       "&language=ja-JP" +
       "&region=JP" +
       "&include_adult=false" +
@@ -5623,6 +5661,17 @@ async function getAnimeRelatedMovies(
       }
 
 
+      // TV作品自身と同じIDは除外
+      if (
+        String(movie.id) ===
+        String(tv.id)
+      ) {
+
+        return;
+
+      }
+
+
       movieMap.set(
         String(movie.id),
         movie
@@ -5639,31 +5688,39 @@ async function getAnimeRelatedMovies(
 
 
   // =======================================================
-  // 映画詳細を取得して
-  // belongs_to_collection を確認
+  // 映画詳細取得
   //
-  // 同じ映画シリーズに属している作品だけを
-  // まとめるために使用
+  // 最大30件まで確認
+  //
+  // 以前の20件より少し増やして
+  // コナン・しんちゃん・ドラえもんなどの
+  // 劇場版シリーズを見つけやすくする
   // =======================================================
 
-  const collectionMap =
-    new Map();
+  const moviesToCheck =
+    uniqueMovies.slice(
+      0,
+      30
+    );
 
 
-  await Promise.all(
+  const movieDetails =
+    await Promise.all(
 
-    uniqueMovies
-      .slice(0, 20)
-      .map(
+      moviesToCheck.map(
         async function(movie) {
 
           try {
 
             const detailUrl =
               "https://api.themoviedb.org/3/movie/" +
-              encodeURIComponent(movie.id) +
+              encodeURIComponent(
+                movie.id
+              ) +
               "?api_key=" +
-              encodeURIComponent(apiKey) +
+              encodeURIComponent(
+                apiKey
+              ) +
               "&language=ja-JP";
 
 
@@ -5678,36 +5735,12 @@ async function getAnimeRelatedMovies(
               !detail.id
             ) {
 
-              return;
+              return null;
 
             }
 
 
-            if (
-              detail.belongs_to_collection &&
-              detail.belongs_to_collection.id
-            ) {
-
-              const collection =
-                detail.belongs_to_collection;
-
-
-              collectionMap.set(
-                String(collection.id),
-                {
-                  id:
-                    collection.id,
-
-                  name:
-                    collection.name ||
-                    "",
-
-                  movie:
-                    detail
-                }
-              );
-
-            }
+            return detail;
 
           } catch (error) {
 
@@ -5717,145 +5750,208 @@ async function getAnimeRelatedMovies(
               error
             );
 
+            return null;
+
           }
 
         }
       )
 
-  );
-
-
-  // =======================================================
-  // TVタイトルを正規化
-  // =======================================================
-
-  const normalizedTvTitle =
-    normalizeTitle(
-      tvTitle
-    );
-
-
-  const normalizedOriginalName =
-    normalizeTitle(
-      tv.original_name ||
-      ""
     );
 
 
   // =======================================================
-  // TVタイトルとコレクション名の
-  // 関連性を判定
+  // 有効な映画だけ
   // =======================================================
 
-  const collections =
-    Array.from(
-      collectionMap.values()
-    );
+  const validMovieDetails =
+    movieDetails.filter(
+      function(movie) {
 
-
-  const scoredCollections =
-    collections.map(
-      function(collection) {
-
-        const collectionName =
-          normalizeTitle(
-            collection.name ||
-            ""
-          );
-
-
-        let score = 0;
-
-
-        // =================================================
-        // 完全一致
-        // =================================================
-
-        if (
-          collectionName ===
-          normalizedTvTitle
-        ) {
-
-          score += 1000;
-
-        }
-
-
-        if (
-          collectionName ===
-          normalizedOriginalName
-        ) {
-
-          score += 900;
-
-        }
-
-
-        // =================================================
-        // TVタイトルを含む
-        // =================================================
-
-        if (
-          normalizedTvTitle &&
-          collectionName.includes(
-            normalizedTvTitle
-          )
-        ) {
-
-          score += 700;
-
-        }
-
-
-        // =================================================
-        // TVタイトル側に
-        // コレクション名が含まれる
-        // =================================================
-
-        if (
-          collectionName &&
-          normalizedTvTitle.includes(
-            collectionName
-          )
-        ) {
-
-          score += 600;
-
-        }
-
-
-        // =================================================
-        // 原題との一致
-        // =================================================
-
-        if (
-          normalizedOriginalName &&
-          collectionName.includes(
-            normalizedOriginalName
-          )
-        ) {
-
-          score += 500;
-
-        }
-
-
-        return {
-
-          collection:
-            collection,
-
-          score:
-            score
-
-        };
+        return (
+          movie &&
+          movie.id &&
+          movie.title
+        );
 
       }
     );
 
 
   // =======================================================
-  // 関連性の高いコレクションを優先
+  // コレクション候補
+  // =======================================================
+
+  const collectionMap =
+    new Map();
+
+
+  validMovieDetails.forEach(
+    function(movie) {
+
+      const collection =
+        movie.belongs_to_collection;
+
+
+      if (
+        !collection ||
+        !collection.id
+      ) {
+
+        return;
+
+      }
+
+
+      collectionMap.set(
+        String(collection.id),
+        {
+          id:
+            collection.id,
+
+          name:
+            collection.name ||
+            "",
+
+          movie:
+            movie
+
+        }
+      );
+
+    }
+  );
+
+
+  // =======================================================
+  // コレクションの関連性を判定
+  // =======================================================
+
+  const scoredCollections =
+    Array.from(
+      collectionMap.values()
+    )
+      .map(
+        function(collection) {
+
+          const collectionName =
+            normalizeTitle(
+              collection.name ||
+              ""
+            );
+
+
+          let score = 0;
+
+
+          // =================================================
+          // コレクション名完全一致
+          // =================================================
+
+          if (
+            collectionName ===
+            normalizedTvTitle
+          ) {
+
+            score += 1000;
+
+          }
+
+
+          if (
+            normalizedOriginalTitle &&
+            collectionName ===
+            normalizedOriginalTitle
+          ) {
+
+            score += 900;
+
+          }
+
+
+          // =================================================
+          // TVタイトルを含む
+          // =================================================
+
+          if (
+            normalizedTvTitle &&
+            collectionName.includes(
+              normalizedTvTitle
+            )
+          ) {
+
+            score += 800;
+
+          }
+
+
+          // =================================================
+          // TVタイトル側に
+          // コレクション名が含まれる
+          // =================================================
+
+          if (
+            collectionName &&
+            normalizedTvTitle.includes(
+              collectionName
+            )
+          ) {
+
+            score += 700;
+
+          }
+
+
+          // =================================================
+          // 原題との関連
+          // =================================================
+
+          if (
+            normalizedOriginalTitle &&
+            collectionName.includes(
+              normalizedOriginalTitle
+            )
+          ) {
+
+            score += 600;
+
+          }
+
+
+          if (
+            collectionName &&
+            normalizedOriginalTitle.includes(
+              collectionName
+            )
+          ) {
+
+            score += 500;
+
+          }
+
+
+          // =================================================
+          // コレクションに属する映画数を
+          // 後で取得できる可能性があるため
+          // 候補として保持
+          // =================================================
+
+          return {
+
+            collection:
+              collection,
+
+            score:
+              score
+
+          };
+
+        }
+      );
+
+
+  // =======================================================
+  // 関連性順
   // =======================================================
 
   scoredCollections.sort(
@@ -5871,7 +5967,7 @@ async function getAnimeRelatedMovies(
 
 
   // =======================================================
-  // 最も関連性の高いコレクションを使用
+  // 最も関連性の高いコレクション
   // =======================================================
 
   const best =
@@ -5881,7 +5977,7 @@ async function getAnimeRelatedMovies(
 
 
   // =======================================================
-  // 関連するコレクションがない場合
+  // 関連コレクションが見つからない
   // =======================================================
 
   if (
@@ -5918,56 +6014,116 @@ async function getAnimeRelatedMovies(
 
 
   // =======================================================
-  // 元のTV作品と同名の映画などを含め
-  // 劇場版シリーズを返す
+  // 劇場版だけを取得
+  //
+  // TV作品自身や不正なデータを除外
   // =======================================================
 
-  return collection.movies
-    .filter(
-      function(movie) {
+  const relatedMovies =
+    collection.movies
+      .filter(
+        function(movie) {
 
-        return (
-          movie &&
-          movie.id &&
-          movie.title
-        );
+          if (
+            !movie ||
+            !movie.id ||
+            !movie.title
+          ) {
 
-      }
-    )
-    .map(
-      function(movie) {
+            return false;
 
-        return {
+          }
 
-          id:
-            movie.id,
 
-          title:
-            movie.title ||
-            "",
+          // TV作品IDと同じものは除外
+          if (
+            String(movie.id) ===
+            String(tv.id)
+          ) {
 
-          original_title:
-            movie.original_title ||
-            "",
+            return false;
 
-          release_date:
-            movie.release_date ||
-            "",
+          }
 
-          poster_path:
-            movie.poster_path ||
-            null,
 
-          media_type:
-            "劇場版",
+          return true;
 
-          content_type:
-            "anime_movie"
+        }
+      );
 
-        };
 
-      }
-    );
+  // =======================================================
+  // 公開日順
+  //
+  // 古い劇場版
+  // ↓
+  // 新しい劇場版
+  //
+  // これで「劇場版シリーズ」として
+  // 見やすくする
+  // =======================================================
+
+  relatedMovies.sort(
+    function(a, b) {
+
+      const dateA =
+        a.release_date ||
+        "9999-99-99";
+
+
+      const dateB =
+        b.release_date ||
+        "9999-99-99";
+
+
+      return (
+        dateA.localeCompare(
+          dateB
+        )
+      );
+
+    }
+  );
+
+
+  // =======================================================
+  // サイト用データ
+  // =======================================================
+
+  return relatedMovies.map(
+    function(movie) {
+
+      return {
+
+        id:
+          movie.id,
+
+        title:
+          movie.title ||
+          "",
+
+        original_title:
+          movie.original_title ||
+          "",
+
+        release_date:
+          movie.release_date ||
+          "",
+
+        poster_path:
+          movie.poster_path ||
+          null,
+
+        media_type:
+          "劇場版",
+
+        content_type:
+          "anime_movie"
+
+      };
+
+    }
+  );
 
 }
 
