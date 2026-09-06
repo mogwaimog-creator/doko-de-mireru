@@ -154,10 +154,9 @@ const page =
 
 const type =
   req.query &&
-  typeof req.query.type === "string" &&
-  req.query.type.trim()
+  typeof req.query.type === "string"
     ? req.query.type.trim().toLowerCase()
-    : "all";
+    : "movie";
     
     // =====================================================
 // 作品詳細
@@ -278,161 +277,7 @@ if (popular === "1") {
 // をまとめて検索する
 // =====================================================
 
-if (type === "all") {
 
-  // ===================================================
-  // 映画
-  // ===================================================
-
-  const movieResults =
-    await searchMoviesForAll(
-      query,
-      apiKey,
-      page
-    );
-
-
-  // ===================================================
-  // ドラマ
-  // ===================================================
-
-  const dramaResults =
-    await searchTvShows(
-      query,
-      apiKey,
-      page,
-      "drama"
-    );
-
-
-  // ===================================================
-  // TVアニメ
-  // ===================================================
-
-  const tvAnimeResults =
-    await searchTvShows(
-      query,
-      apiKey,
-      page,
-      "anime"
-    );
-
-
-  // ===================================================
-  // 劇場版アニメ
-  // ===================================================
-
-  const animeMovieResults =
-    await searchAnimeMovies(
-      query,
-      apiKey,
-      page
-    );
-
-
-  // ===================================================
-  // 全作品を結合
-  // ===================================================
-
-  let allResults =
-    []
-      .concat(
-        movieResults.results || []
-      )
-      .concat(
-        dramaResults.results || []
-      )
-      .concat(
-        tvAnimeResults.results || []
-      )
-      .concat(
-        animeMovieResults.results || []
-      );
-
-
-  // ===================================================
-  // 重複削除
-  //
-  // movie / tv で同じIDが存在する可能性があるため
-  // content_type も含めて判定
-  // ===================================================
-
-  const resultMap =
-    new Map();
-
-
-  allResults.forEach(
-    function(item) {
-
-      if (
-        !item ||
-        !item.id
-      ) {
-
-        return;
-
-      }
-
-
-      const key =
-        String(
-          item.content_type || ""
-        ) +
-        ":" +
-        String(item.id);
-
-
-      if (
-        !resultMap.has(key)
-      ) {
-
-        resultMap.set(
-          key,
-          item
-        );
-
-      }
-
-    }
-  );
-
-
-  allResults =
-    Array.from(
-      resultMap.values()
-    );
-
-
-  // ===================================================
-  // 最大20件
-  // ===================================================
-
-  allResults =
-    allResults.slice(
-      0,
-      20
-    );
-
-
-  return res.status(200).json({
-
-    results:
-      allResults,
-
-    page:
-      page,
-
-    hasMore:
-      Boolean(
-        movieResults.hasMore ||
-        dramaResults.hasMore ||
-        tvAnimeResults.hasMore ||
-        animeMovieResults.hasMore
-      )
-
-  });
-
-}
 
     
 if (
