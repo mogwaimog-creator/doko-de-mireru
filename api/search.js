@@ -251,6 +251,33 @@ if (popular === "1") {
 
 }
 
+ // =====================================================
+// Netflix 配信作品
+// =====================================================
+
+if (provider === "netflix") {
+
+  const netflixResults =
+    await getProviderWorks(
+      apiKey,
+      8,
+      page
+    );
+
+  return res
+    .status(200)
+    .json({
+      results:
+        netflixResults.results,
+
+      page:
+        netflixResults.page,
+
+      hasMore:
+        netflixResults.hasMore
+    });
+
+}   
 
 
 
@@ -3415,6 +3442,375 @@ function createMiddleDotSearchQuery(query) {
 
 
   return value;
+
+}
+
+// =========================================================
+// 配信サービス別作品取得
+//
+// providerId
+// 8 = Netflix
+//
+// ・日本で見放題配信中の映画
+// ・日本で見放題配信中のドラマ
+// ・日本で見放題配信中のアニメ
+//
+// をまとめて取得する
+// =========================================================
+
+async function getProviderWorks(
+  apiKey,
+  providerId,
+  page
+) {
+
+  // =======================================================
+  // 映画
+  // =======================================================
+
+  const movieUrl =
+    "https://api.themoviedb.org/3/discover/movie" +
+    "?api_key=" +
+    encodeURIComponent(apiKey) +
+    "&language=ja-JP" +
+    "&region=JP" +
+    "&watch_region=JP" +
+    "&with_watch_providers=" +
+    encodeURIComponent(providerId) +
+    "&with_watch_monetization_types=flatrate" +
+    "&sort_by=popularity.desc" +
+    "&page=" +
+    encodeURIComponent(page);
+
+
+  // =======================================================
+  // TV
+  // =======================================================
+
+  const tvUrl =
+    "https://api.themoviedb.org/3/discover/tv" +
+    "?api_key=" +
+    encodeURIComponent(apiKey) +
+    "&language=ja-JP" +
+    "&watch_region=JP" +
+    "&with_watch_providers=" +
+    encodeURIComponent(providerId) +
+    "&with_watch_monetization_types=flatrate" +
+    "&sort_by=popularity.desc" +
+    "&page=" +
+    encodeURIComponent(page);
+
+
+  // =======================================================
+  // 配信サービスのロゴ・名前
+  // =======================================================
+
+  const providerUrl =
+    "https://api.themoviedb.org/3/watch/providers/movie" +
+    "?api_key=" +
+    encodeURIComponent(apiKey) +
+    "&language=ja-JP" +
+    "&watch_region=JP";
+
+
+  const [
+    movieData,
+    tvData,
+    providerData
+  ] =
+    await Promise.all([
+      fetchJson(movieUrl),
+      fetchJson(tvUrl),
+      fetchJson(providerUrl)
+    ]);
+
+
+  // =======================================================
+  // 配信サービス情報
+  // =======================================================
+
+  const providers =
+    providerData &&
+    Array.isArray(
+      providerData.results
+    )
+      ? providerData.results
+      : [];
+
+
+  const provider =
+    providers.find(
+      function(item){
+
+        return (
+          Number(item.provider_id) ===
+          Number(providerId)
+        );
+
+      }
+    );
+
+
+  const streamingProvider =
+    provider
+      ? {
+          provider_id:
+            provider.provider_id,
+
+          provider_name:
+            provider.provider_name,
+
+          logo_path:
+            provider.logo_path || null
+        }
+      : null;
+
+
+  // =======================================================
+  // 映画
+  // =======================================================
+
+  const movieResults =
+    movieData &&
+    Array.isArray(
+      movieData.results
+    )
+      ? movieData.results
+          .slice(0, 10)
+          .map(
+            function(movie){
+
+              const genreIds =
+                Array.isArray(
+                  movie.genre_ids
+                )
+                  ? movie.genre_ids
+                  : [];
+
+
+              const isAnime =
+                genreIds.includes(16);
+
+
+              return {
+
+                id:
+                  movie.id,
+
+                title:
+                  movie.title ||
+                  movie.original_title ||
+                  "",
+
+                original_title:
+                  movie.original_title ||
+                  "",
+
+                overview:
+                  movie.overview ||
+                  "",
+
+                poster_path:
+                  movie.poster_path ||
+                  null,
+
+                release_date:
+                  movie.release_date ||
+                  "",
+
+                vote_average:
+                  Number(
+                    movie.vote_average || 0
+                  ),
+
+                runtime:
+                  0,
+
+                media_type:
+                  isAnime
+                    ? "劇場版アニメ"
+                    : "劇場版",
+
+                content_type:
+                  isAnime
+                    ? "anime_movie"
+                    : "movie",
+
+                streaming:
+                  streamingProvider
+                    ? [
+                        streamingProvider
+                      ]
+                    : [],
+
+                rental:
+                  [],
+
+                purchase:
+                  []
+
+              };
+
+            }
+          )
+      : [];
+
+
+  // =======================================================
+  // TV
+  // =======================================================
+
+  const tvResults =
+    tvData &&
+    Array.isArray(
+      tvData.results
+    )
+      ? tvData.results
+          .slice(0, 10)
+          .map(
+            function(show){
+
+              const genreIds =
+                Array.isArray(
+                  show.genre_ids
+                )
+                  ? show.genre_ids
+                  : [];
+
+
+              const isAnime =
+                genreIds.includes(16);
+
+
+              return {
+
+                id:
+                  show.id,
+
+                title:
+                  show.name ||
+                  show.original_name ||
+                  "",
+
+                original_title:
+                  show.original_name ||
+                  "",
+
+                overview:
+                  show.overview ||
+                  "",
+
+                poster_path:
+                  show.poster_path ||
+                  null,
+
+                release_date:
+                  show.first_air_date ||
+                  "",
+
+                vote_average:
+                  Number(
+                    show.vote_average || 0
+                  ),
+
+                runtime:
+                  0,
+
+                media_type:
+                  isAnime
+                    ? "TVアニメ"
+                    : "TV",
+
+                content_type:
+                  isAnime
+                    ? "anime_tv"
+                    : "tv_drama",
+
+                streaming:
+                  streamingProvider
+                    ? [
+                        streamingProvider
+                      ]
+                    : [],
+
+                rental:
+                  [],
+
+                purchase:
+                  []
+
+              };
+
+            }
+          )
+      : [];
+
+
+  // =======================================================
+  // 映画 + TV
+  // =======================================================
+
+  const results =
+    []
+      .concat(
+        movieResults
+      )
+      .concat(
+        tvResults
+      );
+
+
+  // =======================================================
+  // 人気順
+  // =======================================================
+
+  results.sort(
+    function(a, b){
+
+      return (
+        Number(
+          b.vote_average || 0
+        ) -
+        Number(
+          a.vote_average || 0
+        )
+      );
+
+    }
+  );
+
+
+  // =======================================================
+  // 続きがあるか
+  // =======================================================
+
+  const movieHasMore =
+    movieData &&
+    Number(movieData.page) <
+    Number(movieData.total_pages);
+
+
+  const tvHasMore =
+    tvData &&
+    Number(tvData.page) <
+    Number(tvData.total_pages);
+
+
+  return {
+
+    results:
+      results,
+
+    page:
+      page,
+
+    hasMore:
+      Boolean(
+        movieHasMore ||
+        tvHasMore
+      )
+
+  };
 
 }
 
