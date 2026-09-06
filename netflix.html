@@ -854,6 +854,200 @@ footer{
 
 }
 
+/* =========================================================
+   Netflixの注目作品
+========================================================= */
+
+.featured-section{
+  background:#fff;
+
+  border-radius:16px;
+
+  padding:22px;
+
+  margin-bottom:25px;
+
+  box-shadow:
+    0 3px 15px
+    rgba(0,0,0,.08);
+}
+
+
+.featured-heading{
+  margin-bottom:18px;
+}
+
+
+.featured-heading h2{
+  margin:0;
+
+  color:#111827;
+
+  font-size:22px;
+
+  font-weight:800;
+}
+
+
+.featured-heading p{
+  margin:7px 0 0;
+
+  color:#6b7280;
+
+  font-size:14px;
+
+  line-height:1.6;
+}
+
+
+.featured-grid{
+  display:grid;
+
+  grid-template-columns:
+    repeat(5,minmax(0,1fr));
+
+  gap:14px;
+}
+
+
+.featured-card{
+  min-width:0;
+
+  display:block;
+
+  border-radius:12px;
+
+  overflow:hidden;
+
+  background:#f8fafc;
+
+  border:1px solid #e5e7eb;
+
+  transition:
+    transform .15s ease,
+    box-shadow .15s ease;
+}
+
+
+.featured-card:hover{
+  transform:translateY(-3px);
+
+  box-shadow:
+    0 7px 18px
+    rgba(15,23,42,.14);
+}
+
+
+.featured-poster{
+  display:block;
+
+  width:100%;
+
+  aspect-ratio:2 / 3;
+
+  object-fit:cover;
+
+  background:#e5e7eb;
+}
+
+
+.featured-poster-empty{
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  color:#6b7280;
+
+  font-size:12px;
+}
+
+
+.featured-info{
+  padding:10px;
+}
+
+
+.featured-title{
+  margin:0;
+
+  color:#111827;
+
+  font-size:14px;
+
+  font-weight:800;
+
+  line-height:1.45;
+
+  display:-webkit-box;
+
+  -webkit-box-orient:vertical;
+
+  -webkit-line-clamp:2;
+
+  overflow:hidden;
+}
+
+
+.featured-meta{
+  margin-top:6px;
+
+  color:#6b7280;
+
+  font-size:12px;
+}
+
+
+/* タブレット */
+
+@media(max-width:800px){
+
+  .featured-grid{
+    grid-template-columns:
+      repeat(3,minmax(0,1fr));
+  }
+
+}
+
+
+/* スマホ */
+
+@media(max-width:550px){
+
+  .featured-section{
+    padding:18px 14px;
+  }
+
+
+  .featured-grid{
+    display:flex;
+
+    overflow-x:auto;
+
+    gap:11px;
+
+    padding-bottom:8px;
+
+    scroll-snap-type:x proximity;
+  }
+
+
+  .featured-card{
+    flex:
+      0 0
+      145px;
+
+    scroll-snap-align:start;
+  }
+
+
+  .featured-heading h2{
+    font-size:20px;
+  }
+
+}
+  
 </style>
 
 </head>
@@ -919,6 +1113,58 @@ footer{
 
   </section>
 
+<!-- =======================================================
+     Netflixの注目作品
+======================================================== -->
+
+<section class="featured-section">
+
+  <div class="featured-heading">
+
+    <h2>
+      🔥 Netflixの注目作品
+    </h2>
+
+    <p>
+      Netflixで配信中の作品から、注目作品をピックアップ
+    </p>
+
+  </div>
+
+
+  <div
+    id="featuredWorks"
+    class="featured-grid"
+  ></div>
+
+  </section>
+
+
+  <!-- =======================================================
+       Netflixの注目作品
+  ======================================================== -->
+
+  <section class="featured-section">
+
+    <div class="featured-heading">
+
+      <h2>
+        🔥 Netflixの注目作品
+      </h2>
+
+      <p>
+        Netflixで配信中の作品から、注目作品をピックアップ
+      </p>
+
+    </div>
+
+    <div
+      id="featuredWorks"
+      class="featured-grid"
+    ></div>
+
+  </section>
+
 
   <!-- =======================================================
        作品一覧
@@ -929,7 +1175,6 @@ footer{
     <h2 class="results-heading">
       🎬 Netflixの配信作品
     </h2>
-
     <div
       id="status"
       class="status"
@@ -1002,6 +1247,10 @@ const results =
     "results"
   );
 
+const featuredWorks =
+  document.getElementById(
+    "featuredWorks"
+  );  
 
 const status =
   document.getElementById(
@@ -1363,6 +1612,152 @@ function getNetflixProvider(
 
 }
 
+// =========================================================
+// Netflix注目作品
+// =========================================================
+
+function renderFeaturedWorks(
+  works
+){
+
+  if(
+    !featuredWorks ||
+    !Array.isArray(works)
+  ){
+
+    return;
+
+  }
+
+
+  const featured =
+    works
+      .filter(
+        function(movie){
+
+          return (
+            movie &&
+            movie.id &&
+            movie.poster_path
+          );
+
+        }
+      )
+      .slice(
+        0,
+        5
+      );
+
+
+  if(
+    featured.length === 0
+  ){
+
+    featuredWorks.innerHTML =
+      '<div class="status">' +
+      '注目作品を取得できませんでした。' +
+      '</div>';
+
+    return;
+
+  }
+
+
+  featuredWorks.innerHTML =
+    featured
+      .map(
+        function(movie){
+
+          const poster =
+            "https://image.tmdb.org/t/p/w500" +
+            movie.poster_path;
+
+
+          let detailUrl =
+            "./detail.html?id=" +
+            encodeURIComponent(
+              movie.id
+            );
+
+
+          if(
+            movie.content_type ===
+              "tv_drama" ||
+            movie.content_type ===
+              "anime_tv" ||
+            movie.content_type ===
+              "tv"
+          ){
+
+            detailUrl +=
+              "&type=tv";
+
+          }
+
+
+          const year =
+            movie.release_date
+              ? String(
+                  movie.release_date
+                ).slice(
+                  0,
+                  4
+                )
+              : "";
+
+
+          return `
+
+            <a
+              class="featured-card"
+              href="${detailUrl}"
+            >
+
+              <img
+                class="featured-poster"
+                src="${poster}"
+                alt="${escapeHtml(
+                  movie.title || ""
+                )}のポスター"
+                loading="lazy"
+              >
+
+              <div class="featured-info">
+
+                <h3 class="featured-title">
+                  ${escapeHtml(
+                    movie.title || ""
+                  )}
+                </h3>
+
+                ${
+                  year
+
+                    ?
+
+                    `
+                    <div class="featured-meta">
+                      ${escapeHtml(year)}年
+                    </div>
+                    `
+
+                    :
+
+                    ""
+                }
+
+              </div>
+
+            </a>
+
+          `;
+
+        }
+      )
+      .join("");
+
+}
+  
 
 // =========================================================
 // 作品カード
@@ -1760,6 +2155,18 @@ async function loadNetflixWorks(
         ? data.results
         : [];
 
+    if(
+  !append &&
+  currentPage === 1
+){
+
+  renderFeaturedWorks(
+    works
+  );
+
+}
+
+    
 
     if(
       !append
