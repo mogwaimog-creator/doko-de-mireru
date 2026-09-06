@@ -2168,7 +2168,34 @@ const movieId =
 const mediaType =
   params.get("type") || "movie";  
 
+/* =========================================================
+   詳細ページの正規URL作成
+========================================================= */
 
+function buildCanonicalUrl(id){
+
+  let url =
+    DETAIL_URL +
+    "?id=" +
+    encodeURIComponent(
+      id
+    );
+
+
+  if(
+    mediaType === "tv"
+  ){
+
+    url +=
+      "&type=tv";
+
+  }
+
+
+  return url;
+
+}
+  
 /* =========================================================
    作品ID確認
 ========================================================= */
@@ -2189,12 +2216,9 @@ if(!movieId){
 ========================================================= */
 
 const initialCanonicalUrl =
-  DETAIL_URL +
-  "?id=" +
-  encodeURIComponent(
+  buildCanonicalUrl(
     movieId
   );
-
 
 const canonical =
   document.getElementById(
@@ -2478,12 +2502,9 @@ function updateSeo(movie){
   */
 
   const canonicalUrl =
-    DETAIL_URL +
-    "?id=" +
-    encodeURIComponent(
-      movie.id
-    );
-
+  buildCanonicalUrl(
+    movie.id
+  );
 
   if(canonical){
 
@@ -2700,13 +2721,10 @@ function updateStructuredData(movie){
      正規URL
   */
 
-  const canonicalUrl =
-    DETAIL_URL +
-    "?id=" +
-    encodeURIComponent(
-      movie.id
-    );
-
+const canonicalUrl =
+  buildCanonicalUrl(
+    movie.id
+  );
 
   /*
      ポスター
