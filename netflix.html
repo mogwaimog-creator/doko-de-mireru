@@ -993,9 +993,19 @@ footer{
 .featured-meta{
   margin-top:6px;
 
+  display:flex;
+
+  flex-wrap:wrap;
+
+  align-items:center;
+
+  gap:4px 8px;
+
   color:#6b7280;
 
   font-size:12px;
+
+  line-height:1.4;
 }
 
 
@@ -1679,6 +1689,34 @@ function renderFeaturedWorks(
                 )
               : "";
 
+          // -------------------------------------------------------
+// 作品タイプ
+// -------------------------------------------------------
+
+let mediaType = "映画";
+
+if(
+  movie.content_type === "tv_drama" ||
+  movie.content_type === "tv"
+){
+  mediaType = "ドラマ";
+}
+else if(
+  movie.content_type === "anime_tv" ||
+  movie.content_type === "anime_movie"
+){
+  mediaType = "アニメ";
+}
+
+
+// -------------------------------------------------------
+// TMDB評価
+// -------------------------------------------------------
+
+const rating =
+  Number(
+    movie.vote_average || 0
+  );
 
           return `
 
@@ -1704,21 +1742,31 @@ function renderFeaturedWorks(
                   )}
                 </h3>
 
-                ${
-                  year
+                <div class="featured-meta">
 
-                    ?
+  <span>
+    ${
+      mediaType === "映画"
+        ? "🎬 映画"
+        : mediaType === "ドラマ"
+          ? "📺 ドラマ"
+          : "🎌 アニメ"
+    }
+  </span>
 
-                    `
-                    <div class="featured-meta">
-                      ${escapeHtml(year)}年
-                    </div>
-                    `
+  ${
+    year
+      ? `<span>${escapeHtml(year)}年</span>`
+      : ""
+  }
 
-                    :
+  ${
+    rating > 0
+      ? `<span>⭐ ${rating.toFixed(1)}</span>`
+      : ""
+  }
 
-                    ""
-                }
+</div>
 
               </div>
 
