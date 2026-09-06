@@ -5803,7 +5803,32 @@ function renderRecommendations(
       "recommendations"
     );
 
+  const recommendationHeading =
+    document.getElementById(
+      "recommendationHeading"
+    );
 
+
+  if(recommendationHeading){
+
+    const currentTitle =
+      document.getElementById(
+        "title"
+      );
+
+
+    recommendationHeading.textContent =
+      "🎬 " +
+      (
+        currentTitle
+          ? currentTitle.textContent
+          : ""
+      ) +
+      "に関連するおすすめ作品";
+
+  }
+
+  
   container.innerHTML =
     "";
 
