@@ -627,7 +627,6 @@ if (
         return false;
       }
 
-      // 映画として必要な情報がないものを除外
       if (!movie.id) {
         return false;
       }
@@ -635,6 +634,27 @@ if (
       if (!movie.title) {
         return false;
       }
+
+
+      // =================================================
+      // 中国語作品を除外
+      //
+      // zh = 中国語
+      //
+      // 日本語検索時に中国語圏の類似タイトルが
+      // 混ざるのを防ぐ
+      // =================================================
+
+      if (
+        String(
+          movie.original_language || ""
+        ).toLowerCase() === "zh"
+      ) {
+
+        return false;
+
+      }
+
 
       return true;
     }
@@ -731,9 +751,21 @@ movies =
       return false;
     }
 
+
+    // 中国語作品を除外
+    if (
+      String(
+        movie.original_language || ""
+      ).toLowerCase() === "zh"
+    ) {
+
+      return false;
+
+    }
+
+
     return true;
   });
-
 // =====================================================
 // 完全一致を優先
 //
@@ -4951,6 +4983,55 @@ shows =
                 detailUrl
               );
 
+            // =================================================
+// ドラマ検索時の最終アニメ除外
+//
+// 検索APIの genre_ids が空の場合でも、
+// TV詳細APIの genres を使って再判定する
+//
+// TMDB
+// 16 = Animation
+// =================================================
+
+if (
+  type === "drama"
+) {
+
+  const detailGenres =
+    Array.isArray(
+      detailData.genres
+    )
+      ? detailData.genres
+      : [];
+
+
+  const isAnimation =
+    detailGenres.some(
+      function(genre) {
+
+        return (
+          Number(genre.id) === 16 ||
+          String(
+            genre.name || ""
+          ).toLowerCase() ===
+            "animation" ||
+          String(
+            genre.name || ""
+          ) ===
+            "アニメーション"
+        );
+
+      }
+    );
+
+
+  if (isAnimation) {
+
+    return null;
+
+  }
+
+}
 
             // =================================================
             // 1話あたりの時間
@@ -5120,11 +5201,30 @@ shows =
 
     );
 
+// =======================================================
+// nullを除外
+//
+// ドラマ検索時にアニメと判定された作品などを除外
+// =======================================================
 
+const validResults =
+  results.filter(
+    function(show) {
+
+      return (
+        show &&
+        show.id &&
+        show.title
+      );
+
+    }
+  );
+
+  
   return {
 
     results:
-      results,
+      validResults,
 
     page:
       page,
