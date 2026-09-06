@@ -315,12 +315,11 @@ header p{
 
   grid-template-columns:
     150px
-    minmax(0,1fr)
-    285px;
+    minmax(0,1fr);
 
-  align-items:stretch;
+  align-items:start;
 
-  gap:20px;
+  gap:22px;
 
   min-height:265px;
 
@@ -1527,43 +1526,6 @@ function createMovieCard(
       : "";
 
 
-  // -------------------------------------------------------
-  // Netflix
-  // -------------------------------------------------------
-
-  const netflixProvider =
-    getNetflixProvider(
-      movie
-    );
-
-
-  const availabilityHtml = `
-
-    <aside
-      class="availability-panel streaming"
-      aria-label="Netflix配信情報"
-    >
-
-      <h3
-        class="
-          availability-heading
-          availability-streaming
-        "
-      >
-        🟢 Netflixで配信中
-      </h3>
-
-      <div class="provider-list">
-
-        ${renderProvider(
-          netflixProvider
-        )}
-
-      </div>
-
-    </aside>
-
-  `;
 
 
   // -------------------------------------------------------
@@ -1719,8 +1681,6 @@ function createMovieCard(
 
       </div>
 
-
-      ${availabilityHtml}
 
 
     </article>
