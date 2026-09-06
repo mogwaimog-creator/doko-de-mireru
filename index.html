@@ -137,23 +137,119 @@ a{
    ヘッダー
 ========================================================= */
 
-header{
-  background:#111827;
+.site-hero{
+  position:relative;
+
+  background:
+    radial-gradient(
+      circle at 80% 20%,
+      rgba(37,99,235,.28),
+      transparent 35%
+    ),
+    linear-gradient(
+      135deg,
+      #0b1628 0%,
+      #10294a 55%,
+      #163d72 100%
+    );
+
   color:#fff;
-  padding:22px 15px;
+
+  padding:
+    24px 20px
+    115px;
+
+  overflow:hidden;
+}
+
+
+/* ほんのり光を入れる */
+.site-hero::after{
+  content:"";
+
+  position:absolute;
+
+  width:360px;
+  height:360px;
+
+  right:-120px;
+  top:-160px;
+
+  border-radius:50%;
+
+  background:
+    rgba(255,255,255,.05);
+
+  pointer-events:none;
+}
+
+
+.hero-inner{
+  width:min(1000px,94%);
+
+  margin:0 auto;
+
+  position:relative;
+
+  z-index:1;
+}
+
+
+/* =========================================================
+   サイト名
+========================================================= */
+
+.site-brand{
+  font-size:28px;
+
+  font-weight:800;
+
+  letter-spacing:.02em;
+
+  text-align:left;
+}
+
+
+/* =========================================================
+   メインコピー
+========================================================= */
+
+.hero-copy{
+  margin-top:54px;
+
   text-align:center;
 }
 
-header h1{
+
+.hero-copy h1{
   margin:0;
-  font-size:30px;
-  font-weight:700;
+
+  font-size:
+    clamp(
+      30px,
+      4vw,
+      46px
+    );
+
+  font-weight:800;
+
+  line-height:1.35;
+
+  letter-spacing:.02em;
 }
 
-header p{
-  margin:8px 0 0;
-  color:#d1d5db;
-  font-size:14px;
+
+.hero-copy p{
+  margin:
+    14px
+    0
+    0;
+
+  color:#dbe7f7;
+
+  font-size:17px;
+
+  line-height:1.7;
 }
 
 
@@ -163,7 +259,15 @@ header p{
 
 .container{
   width:min(1000px,94%);
-  margin:25px auto 50px;
+
+  margin:
+    -72px
+    auto
+    50px;
+
+  position:relative;
+
+  z-index:5;
 }
 
 
@@ -172,18 +276,76 @@ header p{
 ========================================================= */
 
 .search-box{
-  background:#fff;
-  border-radius:16px;
-  padding:22px;
+  background:
+    rgba(255,255,255,.98);
+
+  border:
+    1px solid
+    rgba(255,255,255,.7);
+
+  border-radius:20px;
+
+  padding:
+    26px 28px
+    24px;
+
   margin-bottom:25px;
-  box-shadow:0 3px 15px rgba(0,0,0,.08);
+
+  box-shadow:
+    0 14px 40px
+    rgba(15,23,42,.16);
 }
+
+
+/* =========================================================
+   検索見出し
+========================================================= */
+
+.search-title{
+  margin-bottom:5px;
+
+  text-align:center;
+
+  color:#111827;
+
+  font-size:21px;
+
+  font-weight:800;
+}
+
+
+.search-description{
+  margin:
+    0
+    0
+    20px;
+
+  text-align:center;
+
+  color:#6b7280;
+
+  font-size:14px;
+
+  line-height:1.6;
+}
+
+
+/* =========================================================
+   検索行
+========================================================= */
 
 .search-row{
   display:flex;
+
   gap:10px;
+
   justify-content:center;
+
   align-items:center;
+
+  max-width:780px;
+
+  margin:0 auto;
 }
 
 
@@ -192,20 +354,48 @@ header p{
 ========================================================= */
 
 #query{
-  width:520px;
-  max-width:100%;
-  height:50px;
-  padding:0 16px;
-  border:1px solid #d1d5db;
-  border-radius:10px;
-  font-size:16px;
+  flex:1;
+
+  width:auto;
+
+  min-width:0;
+
+  height:58px;
+
+  padding:
+    0
+    20px;
+
+  border:
+    2px solid
+    #dbe3ef;
+
+  border-radius:14px;
+
+  background:#fff;
+
+  color:#111827;
+
+  font-size:17px;
+
   outline:none;
+
+  transition:
+    border-color .15s ease,
+    box-shadow .15s ease;
 }
+
+
+#query::placeholder{
+  color:#9ca3af;
+}
+
 
 #query:focus{
   border-color:#2563eb;
+
   box-shadow:
-    0 0 0 3px
+    0 0 0 4px
     rgba(37,99,235,.12);
 }
 
@@ -215,107 +405,237 @@ header p{
 ========================================================= */
 
 #searchButton{
-  height:50px;
-  padding:0 25px;
+  height:58px;
+
+  min-width:118px;
+
+  padding:
+    0
+    28px;
+
   border:0;
-  border-radius:10px;
-  background:#2563eb;
+
+  border-radius:14px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #2563eb,
+      #1d4ed8
+    );
+
   color:#fff;
-  font-size:16px;
-  font-weight:bold;
+
+  font-size:17px;
+
+  font-weight:800;
+
   cursor:pointer;
+
+  box-shadow:
+    0 6px 16px
+    rgba(37,99,235,.28);
+
+  transition:
+    transform .15s ease,
+    box-shadow .15s ease,
+    background .15s ease;
 }
 
+
 #searchButton:hover{
-  background:#1d4ed8;
+  transform:
+    translateY(-1px);
+
+  box-shadow:
+    0 8px 20px
+    rgba(37,99,235,.34);
 }
+
 
 #searchButton:disabled{
   opacity:.6;
+
   cursor:wait;
+
+  transform:none;
 }
 
+
 /* =========================================================
-   検索対象切り替え
+   検索対象
 ========================================================= */
 
 .search-type-row{
   display:flex;
+
   justify-content:center;
+
   align-items:center;
-  gap:8px;
-  margin-top:14px;
+
+  gap:12px;
+
+  margin-top:20px;
+
   flex-wrap:wrap;
 }
 
+
 .search-type-button{
-  border:1px solid #d1d5db;
-  background:#fff;
-  color:#374151;
-  border-radius:8px;
-  padding:8px 18px;
-  font-size:14px;
-  font-weight:600;
+  min-width:125px;
+
+  padding:
+    11px
+    22px;
+
+  border:
+    1px solid
+    #d8e0eb;
+
+  border-radius:999px;
+
+  background:#f8fafc;
+
+  color:#334155;
+
+  font-size:15px;
+
+  font-weight:700;
+
   cursor:pointer;
+
+  box-shadow:
+    0 2px 7px
+    rgba(15,23,42,.05);
+
   transition:
     background .15s ease,
     color .15s ease,
-    border-color .15s ease;
+    border-color .15s ease,
+    transform .15s ease,
+    box-shadow .15s ease;
 }
+
 
 .search-type-button:hover{
   border-color:#2563eb;
+
   color:#2563eb;
+
+  transform:
+    translateY(-1px);
 }
 
+
 .search-type-button.active{
-  background:#2563eb;
+  background:
+    linear-gradient(
+      135deg,
+      #2563eb,
+      #1d4ed8
+    );
+
   border-color:#2563eb;
+
   color:#fff;
-}     
-
-/* =========================================================
-   検索・検索対象ボタン
-========================================================= */
-
-/* 検索ボタンだけ目立たせる */
-#searchButton{
-  background:#2563eb;
-  color:#fff;
-}
-
-#searchButton:hover{
-  background:#1d4ed8;
-}
-
-
-/* 映画・ドラマ・アニメは同じ色 */
-.search-type-button{
-  background:#263b5c;
-  color:#fff;
-  border:1px solid #3d5578;
-}
-
-
-/* ホバー */
-.search-type-button:hover{
-  background:#324b70;
-}
-
-
-/* 選択中 */
-.search-type-button.active{
-  background:#2563eb;
-  color:#fff;
-
-  border:2px solid #fff;
 
   box-shadow:
-    0 0 0 3px #2563eb;
+    0 5px 14px
+    rgba(37,99,235,.25);
+}
 
-  font-weight:800;
 
-  transform:translateY(-1px);
+/* =========================================================
+   スマホ
+========================================================= */
+
+@media(max-width:700px){
+
+  .site-hero{
+    padding:
+      20px 15px
+      100px;
+  }
+
+
+  .site-brand{
+    font-size:23px;
+
+    text-align:center;
+  }
+
+
+  .hero-copy{
+    margin-top:38px;
+  }
+
+
+  .hero-copy h1{
+    font-size:29px;
+  }
+
+
+  .hero-copy p{
+    font-size:15px;
+  }
+
+
+  .container{
+    margin-top:-58px;
+  }
+
+
+  .search-box{
+    padding:
+      20px
+      16px;
+  }
+
+
+  .search-title{
+    font-size:19px;
+  }
+
+
+  .search-row{
+    flex-direction:column;
+  }
+
+
+  #query{
+    width:100%;
+
+    height:56px;
+  }
+
+
+  #searchButton{
+    width:100%;
+
+    height:54px;
+  }
+
+
+  .search-type-row{
+    display:grid;
+
+    grid-template-columns:
+      repeat(2,1fr);
+
+    gap:10px;
+  }
+
+
+  .search-type-button{
+    min-width:0;
+
+    width:100%;
+
+    padding:
+      11px
+      8px;
+  }
+
 }
      
 /* =========================================================
@@ -1185,13 +1505,27 @@ font-size:13px;
 
 <body>
 
-<header>
+<header class="site-hero">
 
-  <h1>🎬 ドコデミレル？</h1>
+  <div class="hero-inner">
 
-  <p>
-    観たい映画・ドラマ・アニメが、どこで見られるかすぐわかる
-  </p>
+    <div class="site-brand">
+      🎬 ドコデミレル？
+    </div>
+
+    <div class="hero-copy">
+
+      <h1>
+        観たい作品、どこで観られる？
+      </h1>
+
+      <p>
+        映画・ドラマ・アニメの配信先を、まとめて検索できます
+      </p>
+
+    </div>
+
+  </div>
 
 </header>
 
@@ -1202,6 +1536,15 @@ font-size:13px;
 ====================================================== -->
 
 <section class="search-box">
+
+  <div class="search-title">
+    🔍 観たい作品を検索
+  </div>
+
+  <p class="search-description">
+    作品名を入力して、どこで見られるか調べてみましょう
+  </p>
+
 
   <div class="search-row">
 
@@ -1217,7 +1560,7 @@ font-size:13px;
       id="searchButton"
       type="button"
     >
-      🔍 検索
+      検索
     </button>
 
   </div>
@@ -1229,43 +1572,43 @@ font-size:13px;
 
   <div class="search-type-row">
 
-  <button
-    type="button"
-    class="search-type-button active"
-    data-type="all"
-    id="allSearchButton"
-  >
-    🔎 すべて
-  </button>
+    <button
+      type="button"
+      class="search-type-button active"
+      data-type="all"
+      id="allSearchButton"
+    >
+      🔎 すべて
+    </button>
 
-  <button
-    type="button"
-    class="search-type-button"
-    data-type="movie"
-    id="movieSearchButton"
-  >
-    🎬 映画
-  </button>
+    <button
+      type="button"
+      class="search-type-button"
+      data-type="movie"
+      id="movieSearchButton"
+    >
+      🎬 映画
+    </button>
 
-  <button
-    type="button"
-    class="search-type-button"
-    data-type="drama"
-    id="dramaSearchButton"
-  >
-    📺 ドラマ
-  </button>
+    <button
+      type="button"
+      class="search-type-button"
+      data-type="drama"
+      id="dramaSearchButton"
+    >
+      📺 ドラマ
+    </button>
 
-  <button
-    type="button"
-    class="search-type-button"
-    data-type="anime"
-    id="animeSearchButton"
-  >
-    🎌 アニメ
-  </button>
+    <button
+      type="button"
+      class="search-type-button"
+      data-type="anime"
+      id="animeSearchButton"
+    >
+      🎌 アニメ
+    </button>
 
-</div>
+  </div>
 
 </section>
 
