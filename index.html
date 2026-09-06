@@ -1303,7 +1303,96 @@ let isLoadingMore = false;
 let currentSearchType = "all";
 
 
+/* =========================================================
+   検索対象ボタン取得
+========================================================= */
+
+const searchTypeButtons =
+  document.querySelectorAll(
+    ".search-type-button"
+  );
+
+
 searchTypeButtons.forEach(
+  function(button){
+
+    button.addEventListener(
+      "click",
+      function(){
+
+        currentSearchType =
+          button.dataset.type;
+
+
+        searchTypeButtons.forEach(
+          function(item){
+
+            item.classList.remove(
+              "active"
+            );
+
+          }
+        );
+
+
+        button.classList.add(
+          "active"
+        );
+
+
+        /* -----------------------------------------------
+           プレースホルダー変更
+        ----------------------------------------------- */
+
+        if(
+          currentSearchType === "all"
+        ){
+
+          queryInput.placeholder =
+            "映画・ドラマ・アニメの作品名を入力してください";
+
+        }else if(
+          currentSearchType === "movie"
+        ){
+
+          queryInput.placeholder =
+            "映画名を入力してください";
+
+        }else if(
+          currentSearchType === "drama"
+        ){
+
+          queryInput.placeholder =
+            "ドラマ名を入力してください";
+
+        }else if(
+          currentSearchType === "anime"
+        ){
+
+          queryInput.placeholder =
+            "アニメ名を入力してください";
+
+        }
+
+
+        /* -----------------------------------------------
+           作品名が入力されている場合
+           → タイプボタンを押したら即検索
+        ----------------------------------------------- */
+
+        if(
+          queryInput.value.trim()
+        ){
+
+          searchMovies();
+
+        }
+
+      }
+    );
+
+  }
+);
   function(button){
 
     button.addEventListener(
