@@ -5487,6 +5487,30 @@ function renderSeries(series){
       "seriesMovies"
     );
 
+    const seriesHeading =
+    document.getElementById(
+      "seriesHeading"
+    );
+
+
+  if(seriesHeading){
+
+    const currentTitle =
+      document.getElementById(
+        "title"
+      );
+
+
+    seriesHeading.textContent =
+      "🎞️ " +
+      (
+        currentTitle
+          ? currentTitle.textContent
+          : ""
+      ) +
+      "の関連シリーズ";
+
+  }
 
   /*
      映画の場合
