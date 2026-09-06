@@ -2388,10 +2388,25 @@ function updateSeo(movie){
      Google検索向けタイトル
   */
 
-  const seoTitle =
-    title +
-    "｜どこで見れる？配信サービス・作品情報 | ドコデミレル？";
+  const contentLabel =
+  mediaType === "tv"
+    ? (
+        movie.media_type === "アニメ"
+          ? "アニメ"
+          : "ドラマ"
+      )
+    : (
+        movie.media_type === "劇場版アニメ"
+          ? "アニメ"
+          : "映画"
+      );
 
+
+const seoTitle =
+  title +
+  "｜どこで見れる？" +
+  contentLabel +
+  "配信サービス・作品情報 | ドコデミレル？";
 
   document.title =
     seoTitle;
