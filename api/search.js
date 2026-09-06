@@ -154,9 +154,10 @@ const page =
 
 const type =
   req.query &&
-  typeof req.query.type === "string"
+  typeof req.query.type === "string" &&
+  req.query.type.trim()
     ? req.query.type.trim().toLowerCase()
-    : "movie";
+    : "all";
     
     // =====================================================
 // 作品詳細
