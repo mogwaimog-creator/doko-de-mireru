@@ -1,1 +1,1978 @@
+<!DOCTYPE html>
 
+<html lang="ja">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
+
+<!-- =========================================================
+     Google Search Console 所有権確認
+========================================================= -->
+
+<meta
+  name="google-site-verification"
+  content="xl0TnMDwmY9xpeFPp8_RgJiPBxT0k04iH3LVbyL65V4"
+>
+
+
+<!-- =========================================================
+     SEO
+========================================================= -->
+
+<title>
+Netflixで見られる映画・ドラマ・アニメ｜ドコデミレル？
+</title>
+
+<meta
+  name="description"
+  content="Netflixで見られる映画・ドラマ・アニメを一覧で紹介。Netflixで現在見放題配信されている作品をドコデミレル？で探せます。"
+>
+
+<meta
+  name="robots"
+  content="index, follow"
+>
+
+<link
+  rel="canonical"
+  href="https://doko-de-mireru.vercel.app/netflix.html"
+>
+
+
+<!-- =========================================================
+     OGP
+========================================================= -->
+
+<meta
+  property="og:type"
+  content="website"
+>
+
+<meta
+  property="og:title"
+  content="Netflixで見られる映画・ドラマ・アニメ｜ドコデミレル？"
+>
+
+<meta
+  property="og:description"
+  content="Netflixで現在見放題配信されている映画・ドラマ・アニメを探せます。"
+>
+
+<meta
+  property="og:url"
+  content="https://doko-de-mireru.vercel.app/netflix.html"
+>
+
+<meta
+  property="og:site_name"
+  content="ドコデミレル？"
+>
+
+<meta
+  property="og:locale"
+  content="ja_JP"
+>
+
+
+<!-- =========================================================
+     Twitter / X
+========================================================= -->
+
+<meta
+  name="twitter:card"
+  content="summary"
+>
+
+<meta
+  name="twitter:title"
+  content="Netflixで見られる映画・ドラマ・アニメ｜ドコデミレル？"
+>
+
+<meta
+  name="twitter:description"
+  content="Netflixで現在見放題配信されている映画・ドラマ・アニメを探せます。"
+>
+
+
+<style>
+
+/* =========================================================
+   基本
+========================================================= */
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+
+  font-family:
+    Arial,
+    "Noto Sans JP",
+    sans-serif;
+
+  background:#f5f7fb;
+
+  color:#222;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+
+/* =========================================================
+   ヘッダー
+========================================================= */
+
+header{
+  background:#111827;
+
+  color:#fff;
+
+  padding:22px 15px;
+
+  text-align:center;
+}
+
+header h1{
+  margin:0;
+
+  font-size:30px;
+
+  font-weight:700;
+}
+
+header h1 a{
+  color:#fff;
+}
+
+header p{
+  margin:8px 0 0;
+
+  color:#d1d5db;
+
+  font-size:14px;
+}
+
+
+/* =========================================================
+   コンテナ
+========================================================= */
+
+.container{
+  width:min(1000px,94%);
+
+  margin:25px auto 50px;
+}
+
+
+/* =========================================================
+   パンくず
+========================================================= */
+
+.breadcrumb{
+  margin-bottom:16px;
+
+  color:#6b7280;
+
+  font-size:13px;
+}
+
+.breadcrumb a{
+  color:#2563eb;
+}
+
+.breadcrumb a:hover{
+  text-decoration:underline;
+}
+
+
+/* =========================================================
+   Netflixページ見出し
+========================================================= */
+
+.provider-header{
+  background:#fff;
+
+  border-radius:16px;
+
+  padding:24px;
+
+  margin-bottom:25px;
+
+  box-shadow:
+    0 3px 15px
+    rgba(0,0,0,.08);
+}
+
+.provider-header h1{
+  margin:0 0 10px;
+
+  color:#111827;
+
+  font-size:28px;
+
+  line-height:1.4;
+}
+
+.provider-header p{
+  margin:0;
+
+  color:#6b7280;
+
+  font-size:14px;
+
+  line-height:1.8;
+}
+
+
+/* =========================================================
+   検索結果見出し
+========================================================= */
+
+.results-heading{
+  margin:0 0 16px;
+
+  font-size:22px;
+
+  font-weight:700;
+
+  color:#111827;
+}
+
+
+/* =========================================================
+   ステータス
+========================================================= */
+
+.status{
+  text-align:center;
+
+  padding:25px;
+
+  color:#6b7280;
+}
+
+.error{
+  background:#fee2e2;
+
+  color:#b91c1c;
+
+  padding:15px;
+
+  border-radius:10px;
+
+  margin:15px 0;
+}
+
+.empty{
+  background:#fff;
+
+  border-radius:16px;
+
+  padding:35px;
+
+  text-align:center;
+
+  color:#6b7280;
+}
+
+
+/* =========================================================
+   検索結果
+========================================================= */
+
+.results{
+  display:grid;
+
+  gap:18px;
+}
+
+
+/* =========================================================
+   映画カード
+========================================================= */
+
+.movie-card{
+  background:#fff;
+
+  border:1px solid #e5e7eb;
+
+  border-radius:16px;
+
+  padding:20px;
+
+  display:grid;
+
+  grid-template-columns:
+    150px
+    minmax(0,1fr)
+    285px;
+
+  align-items:stretch;
+
+  gap:20px;
+
+  min-height:265px;
+
+  box-shadow:
+    0 4px 14px
+    rgba(0,0,0,.08);
+
+  margin-bottom:20px;
+
+  transition:
+    box-shadow .15s ease,
+    transform .15s ease;
+}
+
+.movie-card:hover{
+  box-shadow:
+    0 5px 18px
+    rgba(0,0,0,.09);
+}
+
+
+/* =========================================================
+   ポスター
+========================================================= */
+
+.movie-poster{
+  width:150px;
+
+  height:225px;
+
+  object-fit:cover;
+
+  border-radius:10px;
+
+  background:#e5e7eb;
+
+  border:1px solid #d1d5db;
+
+  box-sizing:border-box;
+
+  box-shadow:
+    0 2px 8px
+    rgba(0,0,0,.12);
+}
+
+
+/* =========================================================
+   作品情報
+========================================================= */
+
+.movie-info{
+  min-width:0;
+
+  display:flex;
+
+  flex-direction:column;
+
+  align-items:flex-start;
+}
+
+.movie-title{
+  margin:0 0 5px;
+
+  font-size:22px;
+
+  line-height:1.4;
+
+  font-weight:700;
+
+  color:#111827;
+}
+
+.original-title{
+  margin:0 0 14px;
+
+  color:#6b7280;
+
+  font-size:13px;
+}
+
+
+/* =========================================================
+   メタ情報
+========================================================= */
+
+.movie-meta-row{
+  display:flex;
+
+  flex-wrap:wrap;
+
+  align-items:center;
+
+  gap:8px 14px;
+
+  margin-bottom:14px;
+
+  color:#4b5563;
+
+  font-size:13px;
+}
+
+.movie-meta-item{
+  white-space:nowrap;
+}
+
+
+/* =========================================================
+   あらすじ
+========================================================= */
+
+.movie-overview{
+  margin:0 0 14px;
+
+  color:#374151;
+
+  font-size:14px;
+
+  line-height:1.7;
+
+  display:-webkit-box;
+
+  -webkit-box-orient:vertical;
+
+  -webkit-line-clamp:2;
+
+  overflow:hidden;
+}
+
+
+/* =========================================================
+   詳細ボタン
+========================================================= */
+
+.detail-button{
+  display:inline-block;
+
+  padding:9px 18px;
+
+  border:1px solid #2563eb;
+
+  border-radius:8px;
+
+  color:#2563eb;
+
+  background:#fff;
+
+  font-size:13px;
+
+  font-weight:600;
+
+  transition:.2s;
+}
+
+.detail-button:hover{
+  background:#2563eb;
+
+  color:#fff;
+}
+
+
+/* =========================================================
+   配信情報パネル
+========================================================= */
+
+.availability-panel{
+  min-height:225px;
+
+  height:auto;
+
+  padding:18px 16px;
+
+  border-radius:12px;
+
+  display:flex;
+
+  flex-direction:column;
+
+  justify-content:flex-start;
+
+  align-self:start;
+
+  box-sizing:border-box;
+
+  overflow:visible;
+
+  border-left:4px solid transparent;
+}
+
+
+/* =========================================================
+   Netflix配信中
+========================================================= */
+
+.availability-panel.streaming{
+  background:#f4fbf7;
+
+  border-left-color:#2e7d32;
+}
+
+.availability-heading{
+  margin:0 0 12px;
+
+  font-size:18px;
+
+  font-weight:800;
+
+  line-height:1.45;
+
+  text-align:center;
+}
+
+.availability-heading.availability-streaming{
+  color:#26733a;
+}
+
+
+/* =========================================================
+   配信サービス一覧
+========================================================= */
+
+.provider-list{
+  display:grid;
+
+  grid-template-columns:
+    repeat(3,minmax(0,1fr));
+
+  gap:12px 6px;
+
+  width:100%;
+}
+
+.provider-item{
+  min-width:0;
+
+  display:flex;
+
+  flex-direction:column;
+
+  align-items:center;
+
+  justify-content:flex-start;
+
+  text-align:center;
+
+  gap:5px;
+}
+
+
+/* =========================================================
+   配信サービスロゴ
+========================================================= */
+
+.provider-logo{
+  width:78px;
+
+  height:52px;
+
+  object-fit:contain;
+
+  display:block;
+}
+
+.provider-logo-fallback{
+  width:78px;
+
+  height:52px;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  text-align:center;
+
+  font-size:11px;
+
+  line-height:1.2;
+
+  color:#555;
+
+  background:#fff;
+
+  border-radius:6px;
+}
+
+.provider-item > span{
+  display:block;
+
+  width:100%;
+
+  font-size:12px;
+
+  line-height:1.3;
+
+  color:#374151;
+
+  white-space:nowrap;
+
+  overflow:hidden;
+
+  text-overflow:ellipsis;
+}
+
+
+/* =========================================================
+   さらに20件表示
+========================================================= */
+
+.load-more-wrapper{
+  margin-top:4px;
+}
+
+.load-more-button{
+  width:100%;
+
+  min-height:78px;
+
+  padding:16px 24px;
+
+  border:0;
+
+  border-radius:14px;
+
+  background:#2563eb;
+
+  color:#fff;
+
+  font-size:22px;
+
+  font-weight:800;
+
+  letter-spacing:.02em;
+
+  cursor:pointer;
+
+  box-shadow:
+    0 5px 14px
+    rgba(37,99,235,.22);
+
+  transition:
+    transform .15s ease,
+    background .15s ease,
+    box-shadow .15s ease;
+}
+
+.load-more-button:hover{
+  background:#1d4ed8;
+
+  transform:translateY(-1px);
+
+  box-shadow:
+    0 7px 18px
+    rgba(37,99,235,.28);
+}
+
+.load-more-button:disabled{
+  opacity:.65;
+
+  cursor:wait;
+
+  transform:none;
+}
+
+
+/* =========================================================
+   補足
+========================================================= */
+
+.provider-note{
+  margin-top:28px;
+
+  padding:18px;
+
+  background:#fff;
+
+  border-radius:12px;
+
+  color:#6b7280;
+
+  font-size:12px;
+
+  line-height:1.8;
+
+  box-shadow:
+    0 2px 10px
+    rgba(0,0,0,.05);
+}
+
+
+/* =========================================================
+   フッター
+========================================================= */
+
+footer{
+  margin-top:40px;
+
+  padding:25px 15px;
+
+  text-align:center;
+
+  color:#6b7280;
+
+  font-size:12px;
+}
+
+
+/* =========================================================
+   タブレット
+========================================================= */
+
+@media(max-width:900px){
+
+  .movie-card{
+    grid-template-columns:
+      120px
+      minmax(0,1fr);
+  }
+
+  .movie-poster{
+    width:120px;
+
+    height:180px;
+  }
+
+  .availability-panel{
+    grid-column:1 / -1;
+
+    min-height:auto;
+  }
+
+}
+
+
+/* =========================================================
+   スマホ
+========================================================= */
+
+@media(max-width:700px){
+
+  header h1{
+    font-size:26px;
+  }
+
+  .provider-header{
+    padding:18px;
+  }
+
+  .provider-header h1{
+    font-size:23px;
+  }
+
+  .movie-card{
+    grid-template-columns:
+      105px
+      minmax(0,1fr);
+
+    gap:14px;
+
+    padding:14px;
+
+    border-radius:13px;
+  }
+
+  .movie-poster{
+    width:105px;
+
+    height:158px;
+  }
+
+  .movie-title{
+    font-size:19px;
+  }
+
+  .original-title{
+    font-size:13px;
+
+    margin-bottom:8px;
+  }
+
+  .movie-meta-row{
+    gap:4px 10px;
+
+    font-size:12px;
+
+    margin-bottom:9px;
+  }
+
+  .movie-meta-item{
+    white-space:normal;
+  }
+
+  .movie-overview{
+    font-size:13px;
+
+    line-height:1.6;
+
+    -webkit-line-clamp:3;
+
+    margin-bottom:10px;
+  }
+
+  .detail-button{
+    width:100%;
+
+    padding:9px 12px;
+
+    font-size:13px;
+
+    text-align:center;
+  }
+
+  .availability-panel{
+    min-height:130px;
+
+    padding:15px;
+  }
+
+  .availability-heading{
+    font-size:18px;
+  }
+
+  .provider-item{
+    font-size:12px;
+  }
+
+  .load-more-button{
+    min-height:64px;
+
+    font-size:18px;
+  }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     ヘッダー
+========================================================= -->
+
+<header>
+
+  <h1>
+    <a href="./index.html">
+      🎬 ドコデミレル？
+    </a>
+  </h1>
+
+  <p>
+    観たい映画・ドラマ・アニメが、どこで見られるかすぐわかる
+  </p>
+
+</header>
+
+
+<main class="container">
+
+
+  <!-- =======================================================
+       パンくず
+  ======================================================== -->
+
+  <nav
+    class="breadcrumb"
+    aria-label="パンくずリスト"
+  >
+
+    <a href="./index.html">
+      ドコデミレル？
+    </a>
+
+    ＞ Netflixで見られる作品
+
+  </nav>
+
+
+  <!-- =======================================================
+       Netflixページ説明
+  ======================================================== -->
+
+  <section class="provider-header">
+
+    <h1>
+      Netflixで見られる映画・ドラマ・アニメ
+    </h1>
+
+    <p>
+      Netflixで現在見放題配信されている映画・ドラマ・アニメを紹介しています。
+      気になる作品を選ぶと、作品情報や日本国内の配信状況を確認できます。
+    </p>
+
+  </section>
+
+
+  <!-- =======================================================
+       作品一覧
+  ======================================================== -->
+
+  <section>
+
+    <h2 class="results-heading">
+      🎬 Netflixの配信作品
+    </h2>
+
+    <div
+      id="status"
+      class="status"
+    >
+      Netflixの作品を読み込んでいます...
+    </div>
+
+
+    <div
+      id="results"
+      class="results"
+    ></div>
+
+
+    <div
+      id="loadMoreWrapper"
+      class="load-more-wrapper"
+      hidden
+    >
+
+      <button
+        id="loadMoreButton"
+        class="load-more-button"
+        type="button"
+      >
+        さらに20件表示
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- =======================================================
+       補足
+  ======================================================== -->
+
+  <div class="provider-note">
+
+    配信情報は変更される場合があります。
+    最新の配信状況や料金については、各動画配信サービスの公式サイトでご確認ください。
+
+  </div>
+
+
+</main>
+
+
+<footer>
+
+  <p>
+    配信情報はTMDBおよびJustWatchの情報を参考にしています。
+  </p>
+
+  <p>
+    © ドコデミレル？
+  </p>
+
+</footer>
+
+
+<script>
+
+// =========================================================
+// Netflixページ
+// =========================================================
+
+const results =
+  document.getElementById(
+    "results"
+  );
+
+
+const status =
+  document.getElementById(
+    "status"
+  );
+
+
+const loadMoreWrapper =
+  document.getElementById(
+    "loadMoreWrapper"
+  );
+
+
+const loadMoreButton =
+  document.getElementById(
+    "loadMoreButton"
+  );
+
+
+let currentPage = 1;
+
+let hasMore = false;
+
+let loading = false;
+
+
+// =========================================================
+// HTMLエスケープ
+// =========================================================
+
+function escapeHtml(value){
+
+  return String(
+    value == null
+      ? ""
+      : value
+  )
+  .replace(
+    /&/g,
+    "&amp;"
+  )
+  .replace(
+    /</g,
+    "&lt;"
+  )
+  .replace(
+    />/g,
+    "&gt;"
+  )
+  .replace(
+    /"/g,
+    "&quot;"
+  )
+  .replace(
+    /'/g,
+    "&#039;"
+  );
+
+}
+
+
+// =========================================================
+// 公開年
+// =========================================================
+
+function formatYear(date){
+
+  const value =
+    String(
+      date || ""
+    ).trim();
+
+
+  if(
+    value.length >= 4
+  ){
+
+    return value.slice(
+      0,
+      4
+    ) + "年";
+
+  }
+
+
+  return "公開年不明";
+
+}
+
+
+// =========================================================
+// 上映時間
+// =========================================================
+
+function formatRuntime(minutes){
+
+  const value =
+    Number(
+      minutes || 0
+    );
+
+
+  if(!value){
+
+    return "";
+
+  }
+
+
+  const hours =
+    Math.floor(
+      value / 60
+    );
+
+
+  const mins =
+    value % 60;
+
+
+  if(
+    hours > 0 &&
+    mins > 0
+  ){
+
+    return (
+      hours +
+      "時間" +
+      mins +
+      "分"
+    );
+
+  }
+
+
+  if(hours > 0){
+
+    return (
+      hours +
+      "時間"
+    );
+
+  }
+
+
+  return (
+    mins +
+    "分"
+  );
+
+}
+
+
+// =========================================================
+// 短いあらすじ
+// =========================================================
+
+function createShortOverview(
+  text
+){
+
+  const source =
+    String(
+      text || ""
+    ).trim();
+
+
+  if(!source){
+
+    return "";
+
+  }
+
+
+  const sentences =
+    source
+      .split(
+        /(?<=[。！？])/
+      )
+      .map(
+        function(sentence){
+
+          return sentence.trim();
+
+        }
+      )
+      .filter(
+        function(sentence){
+
+          return (
+            sentence.length > 0
+          );
+
+        }
+      );
+
+
+  if(
+    sentences.length > 0 &&
+    sentences[0].length <= 70
+  ){
+
+    return sentences[0];
+
+  }
+
+
+  let result = "";
+
+
+  for(
+    let i = 0;
+    i < sentences.length;
+    i++
+  ){
+
+    const candidate =
+      result
+        ? result +
+          sentences[i]
+        : sentences[i];
+
+
+    if(
+      candidate.length > 75
+    ){
+
+      break;
+
+    }
+
+
+    result =
+      candidate;
+
+  }
+
+
+  if(result){
+
+    return result;
+
+  }
+
+
+  return (
+    source.slice(
+      0,
+      70
+    ) +
+    "…"
+  );
+
+}
+
+
+// =========================================================
+// Netflixロゴ表示
+// =========================================================
+
+function renderProvider(
+  provider
+){
+
+  const providerName =
+    "Netflix";
+
+
+  const logo =
+    provider &&
+    provider.logo_path
+      ? "https://image.tmdb.org/t/p/w92" +
+        provider.logo_path
+      : "";
+
+
+  if(logo){
+
+    return `
+
+      <div class="provider-item">
+
+        <img
+          class="provider-logo"
+          src="${logo}"
+          alt="Netflixのロゴ"
+          loading="lazy"
+        >
+
+        <span>
+          Netflix
+        </span>
+
+      </div>
+
+    `;
+
+  }
+
+
+  return `
+
+    <div class="provider-item">
+
+      <div class="provider-logo-fallback">
+        Netflix
+      </div>
+
+      <span>
+        Netflix
+      </span>
+
+    </div>
+
+  `;
+
+}
+
+
+// =========================================================
+// Netflix情報を取得
+// =========================================================
+
+function getNetflixProvider(
+  movie
+){
+
+  const providers =
+    Array.isArray(
+      movie.streaming
+    )
+      ? movie.streaming
+      : [];
+
+
+  const netflix =
+    providers.find(
+      function(provider){
+
+        const name =
+          String(
+            provider.provider_name ||
+            ""
+          );
+
+
+        return name.includes(
+          "Netflix"
+        );
+
+      }
+    );
+
+
+  return (
+    netflix ||
+    providers[0] ||
+    null
+  );
+
+}
+
+
+// =========================================================
+// 作品カード
+// =========================================================
+
+function createMovieCard(
+  movie
+){
+
+  // -------------------------------------------------------
+  // ポスター
+  // -------------------------------------------------------
+
+  const poster =
+    movie.poster_path
+      ? "https://image.tmdb.org/t/p/w500" +
+        movie.poster_path
+      : "";
+
+
+  // -------------------------------------------------------
+  // 公開年
+  // -------------------------------------------------------
+
+  const release =
+    movie.release_date
+      ? formatYear(
+          movie.release_date
+        )
+      : "公開年不明";
+
+
+  // -------------------------------------------------------
+  // 上映時間
+  // -------------------------------------------------------
+
+  const runtime =
+    movie.runtime
+      ? formatRuntime(
+          movie.runtime
+        )
+      : "";
+
+
+  // -------------------------------------------------------
+  // 評価
+  // -------------------------------------------------------
+
+  const rating =
+    Number(
+      movie.vote_average ||
+      0
+    ).toFixed(1);
+
+
+  // -------------------------------------------------------
+  // ID
+  // -------------------------------------------------------
+
+  const movieId =
+    String(
+      movie.id ||
+      ""
+    ).trim();
+
+
+  // -------------------------------------------------------
+  // 詳細ページURL
+  //
+  // Netflixページでは
+  // currentSearchTypeを使わず
+  // content_typeで判断する
+  // -------------------------------------------------------
+
+  let detailUrl =
+    "./detail.html?id=" +
+    encodeURIComponent(
+      movieId
+    );
+
+
+  if(
+    movie.content_type ===
+      "tv_drama" ||
+    movie.content_type ===
+      "anime_tv" ||
+    movie.content_type ===
+      "tv"
+  ){
+
+    detailUrl +=
+      "&type=tv";
+
+  }
+
+
+  // -------------------------------------------------------
+  // 作品タイプ
+  // -------------------------------------------------------
+
+  let mediaType =
+    movie.media_type ||
+    "映画";
+
+
+  if(
+    movie.content_type ===
+    "anime_tv"
+  ){
+
+    mediaType =
+      "TVアニメ";
+
+  }
+  else if(
+    movie.content_type ===
+    "anime_movie"
+  ){
+
+    mediaType =
+      "劇場版アニメ";
+
+  }
+  else if(
+    movie.content_type ===
+    "tv_drama"
+  ){
+
+    mediaType =
+      "ドラマ";
+
+  }
+
+
+  // -------------------------------------------------------
+  // あらすじ
+  // -------------------------------------------------------
+
+  const overview =
+    String(
+      movie.overview ||
+      ""
+    ).trim();
+
+
+  const shortOverview =
+    createShortOverview(
+      overview
+    );
+
+
+  const overviewHtml =
+    shortOverview
+      ? `
+        <p class="movie-overview">
+          ${escapeHtml(
+            shortOverview
+          )}
+        </p>
+      `
+      : "";
+
+
+  // -------------------------------------------------------
+  // Netflix
+  // -------------------------------------------------------
+
+  const netflixProvider =
+    getNetflixProvider(
+      movie
+    );
+
+
+  const availabilityHtml = `
+
+    <aside
+      class="availability-panel streaming"
+      aria-label="Netflix配信情報"
+    >
+
+      <h3
+        class="
+          availability-heading
+          availability-streaming
+        "
+      >
+        🟢 Netflixで配信中
+      </h3>
+
+      <div class="provider-list">
+
+        ${renderProvider(
+          netflixProvider
+        )}
+
+      </div>
+
+    </aside>
+
+  `;
+
+
+  // -------------------------------------------------------
+  // カード
+  // -------------------------------------------------------
+
+  return `
+
+    <article class="movie-card">
+
+
+      ${
+        poster
+
+          ?
+
+          `
+          <img
+            class="movie-poster"
+            src="${poster}"
+            alt="${escapeHtml(
+              movie.title ||
+              ""
+            )}のポスター"
+            loading="lazy"
+          >
+          `
+
+          :
+
+          `
+          <div
+            class="movie-poster"
+            style="
+              display:flex;
+              align-items:center;
+              justify-content:center;
+              color:#6b7280;
+            "
+            role="img"
+            aria-label="ポスター画像なし"
+          >
+            NO IMAGE
+          </div>
+          `
+      }
+
+
+      <div class="movie-info">
+
+
+        <h2 class="movie-title">
+
+          ${escapeHtml(
+            movie.title ||
+            ""
+          )}
+
+        </h2>
+
+
+        ${
+          movie.original_title
+
+            ?
+
+            `
+            <div class="original-title">
+
+              ${escapeHtml(
+                movie.original_title
+              )}
+
+            </div>
+            `
+
+            :
+
+            ""
+        }
+
+
+        <div class="movie-meta-row">
+
+
+          <span class="movie-meta-item">
+            🎬 ${escapeHtml(
+              mediaType
+            )}
+          </span>
+
+
+          <span class="movie-meta-item">
+            📅 ${escapeHtml(
+              release
+            )}
+          </span>
+
+
+          <span class="movie-meta-item">
+            ⭐ TMDB評価：${rating}
+          </span>
+
+
+          ${
+            runtime
+
+              ?
+
+              `
+              <span class="movie-meta-item">
+                🕐 ${escapeHtml(
+                  runtime
+                )}
+              </span>
+              `
+
+              :
+
+              ""
+          }
+
+
+        </div>
+
+
+        ${overviewHtml}
+
+
+        ${
+          movieId
+
+            ?
+
+            `
+            <a
+              class="detail-button"
+              href="${detailUrl}"
+              aria-label="${escapeHtml(
+                movie.title ||
+                "作品"
+              )}の詳細を見る"
+            >
+              作品詳細を見る →
+            </a>
+            `
+
+            :
+
+            ""
+        }
+
+
+      </div>
+
+
+      ${availabilityHtml}
+
+
+    </article>
+
+  `;
+
+}
+
+
+// =========================================================
+// Netflix作品取得
+// =========================================================
+
+async function loadNetflixWorks(
+  append
+){
+
+  if(loading){
+
+    return;
+
+  }
+
+
+  loading = true;
+
+
+  if(
+    !append
+  ){
+
+    status.innerHTML =
+      "Netflixの作品を読み込んでいます...";
+
+  }
+
+
+  loadMoreButton.disabled =
+    true;
+
+
+  try{
+
+
+    const response =
+      await fetch(
+
+        "/api/search" +
+        "?provider=netflix" +
+        "&page=" +
+        encodeURIComponent(
+          currentPage
+        )
+
+      );
+
+
+    if(
+      !response.ok
+    ){
+
+      throw new Error(
+        "Netflix作品の取得に失敗しました。"
+      );
+
+    }
+
+
+    const data =
+      await response.json();
+
+
+    const works =
+      Array.isArray(
+        data.results
+      )
+        ? data.results
+        : [];
+
+
+    if(
+      !append
+    ){
+
+      results.innerHTML =
+        "";
+
+    }
+
+
+    if(
+      works.length === 0 &&
+      !append
+    ){
+
+      status.innerHTML =
+        "";
+
+      results.innerHTML = `
+
+        <div class="empty">
+
+          現在表示できるNetflix作品がありません。
+
+        </div>
+
+      `;
+
+
+      loadMoreWrapper.hidden =
+        true;
+
+
+      return;
+
+    }
+
+
+    const html =
+      works
+        .map(
+          function(movie){
+
+            return createMovieCard(
+              movie
+            );
+
+          }
+        )
+        .join("");
+
+
+    results.insertAdjacentHTML(
+      "beforeend",
+      html
+    );
+
+
+    status.innerHTML =
+      "";
+
+
+    hasMore =
+      Boolean(
+        data.hasMore
+      );
+
+
+    loadMoreWrapper.hidden =
+      !hasMore;
+
+
+  }
+  catch(error){
+
+
+    console.error(
+      error
+    );
+
+
+    if(
+      !append
+    ){
+
+      results.innerHTML =
+        "";
+
+    }
+
+
+    status.innerHTML = `
+
+      <div class="error">
+
+        Netflixの作品を取得できませんでした。<br>
+
+        少し時間をおいてから、もう一度お試しください。
+
+      </div>
+
+    `;
+
+
+    loadMoreWrapper.hidden =
+      true;
+
+
+  }
+  finally{
+
+
+    loading = false;
+
+
+    loadMoreButton.disabled =
+      false;
+
+
+  }
+
+}
+
+
+// =========================================================
+// さらに20件表示
+// =========================================================
+
+loadMoreButton.addEventListener(
+  "click",
+  async function(){
+
+    if(
+      loading ||
+      !hasMore
+    ){
+
+      return;
+
+    }
+
+
+    currentPage++;
+
+
+    loadMoreButton.textContent =
+      "読み込み中...";
+
+
+    await loadNetflixWorks(
+      true
+    );
+
+
+    loadMoreButton.textContent =
+      "さらに20件表示";
+
+  }
+);
+
+
+// =========================================================
+// 初期表示
+// =========================================================
+
+loadNetflixWorks(
+  false
+);
+
+</script>
+
+
+</body>
+
+</html>
