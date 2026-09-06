@@ -3,6 +3,12 @@
 // api/sitemap.js
 //
 // 作品ページ用サイトマップ生成API
+//
+// ・映画
+// ・劇場版アニメ
+// ・ドラマ
+// ・TVアニメ
+//
 // TMDBから複数ページの人気作品を取得
 // =========================================================
 
@@ -30,139 +36,202 @@ module.exports = async function handler(req, res) {
     // =====================================================
     // 設定
     //
-    // 1ページ = 最大20作品
-    // 20ページ = 最大400作品
+    // movie 20ページ = 最大400作品
+    // tv    20ページ = 最大400作品
+    //
+    // 合計 最大約800作品
     // =====================================================
 
     const MAX_PAGES = 20;
 
 
-    const baseUrl =
-      "https://api.themoviedb.org/3/movie/popular";
-
-
     // =====================================================
-    // TMDBから複数ページ取得
+    // TMDBから人気作品を取得する関数
     // =====================================================
 
-    const requests = [];
+    async function fetchPopular(mediaType) {
+
+      const baseUrl =
+        "https://api.themoviedb.org/3/" +
+        mediaType +
+        "/popular";
 
 
-    for (
-      let page = 1;
-      page <= MAX_PAGES;
-      page++
-    ) {
-
-      const url =
-        baseUrl +
-        "?api_key=" +
-        encodeURIComponent(apiKey) +
-        "&language=ja-JP" +
-        "&region=JP" +
-        "&page=" +
-        page;
+      const requests = [];
 
 
-      requests.push(
-        fetch(url)
-      );
+      for (
+        let page = 1;
+        page <= MAX_PAGES;
+        page++
+      ) {
 
-    }
+        const url =
+          baseUrl +
+          "?api_key=" +
+          encodeURIComponent(apiKey) +
+          "&language=ja-JP" +
+          "&region=JP" +
+          "&page=" +
+          page;
 
 
-    const responses =
-      await Promise.all(requests);
-
-
-    // =====================================================
-    // APIエラー確認
-    // =====================================================
-
-    for (const response of responses) {
-
-      if (!response.ok) {
-
-        throw new Error(
-          "TMDB API ERROR: " +
-          response.status
+        requests.push(
+          fetch(url)
         );
 
       }
 
+
+      const responses =
+        await Promise.all(requests);
+
+
+      // ===================================================
+      // APIエラー確認
+      // ===================================================
+
+      for (const response of responses) {
+
+        if (!response.ok) {
+
+          throw new Error(
+            "TMDB API ERROR: " +
+            response.status
+          );
+
+        }
+
+      }
+
+
+      // ===================================================
+      // JSON取得
+      // ===================================================
+
+      const datasets =
+        await Promise.all(
+          responses.map(function(response) {
+
+            return response.json();
+
+          })
+        );
+
+
+      // ===================================================
+      // 作品一覧
+      // ===================================================
+
+      const items = [];
+
+
+      datasets.forEach(function(data) {
+
+        if (
+          data &&
+          Array.isArray(data.results)
+        ) {
+
+          data.results.forEach(function(item) {
+
+            if (
+              item &&
+              item.id
+            ) {
+
+              items.push({
+
+                id:
+                  item.id,
+
+                mediaType:
+                  mediaType
+
+              });
+
+            }
+
+          });
+
+        }
+
+      });
+
+
+      return items;
+
     }
 
 
     // =====================================================
-    // JSON取得
+    // 映画
+    //
+    // ・映画
+    // ・劇場版アニメ
     // =====================================================
 
-    const datasets =
-      await Promise.all(
-        responses.map(function(response) {
-
-          return response.json();
-
-        })
+    const movies =
+      await fetchPopular(
+        "movie"
       );
 
 
     // =====================================================
-    // 作品一覧
+    // TV
+    //
+    // ・ドラマ
+    // ・TVアニメ
     // =====================================================
 
-    const movies = [];
+    const tvShows =
+      await fetchPopular(
+        "tv"
+      );
 
 
-    datasets.forEach(function(data) {
+    // =====================================================
+    // 映画 + TV
+    // =====================================================
 
-      if (
-        data &&
-        Array.isArray(data.results)
-      ) {
-
-        data.results.forEach(function(movie) {
-
-          if (
-            movie &&
-            movie.id &&
-            movie.title
-          ) {
-
-            movies.push(movie);
-
-          }
-
-        });
-
-      }
-
-    });
+    const allItems =
+      []
+        .concat(movies)
+        .concat(tvShows);
 
 
     // =====================================================
     // 重複削除
+    //
+    // movie:123
+    // tv:123
+    //
+    // は別作品として扱う
     // =====================================================
 
     const seen =
       new Set();
 
 
-    const uniqueMovies =
-      movies.filter(function(movie) {
+    const uniqueItems =
+      allItems.filter(function(item) {
 
-        const movieId =
-          String(movie.id);
+        const key =
+          item.mediaType +
+          ":" +
+          String(item.id);
 
 
-        if (seen.has(movieId)) {
+        if (
+          seen.has(key)
+        ) {
 
           return false;
 
         }
 
 
-        seen.add(movieId);
+        seen.add(key);
 
 
         return true;
@@ -193,15 +262,39 @@ module.exports = async function handler(req, res) {
     // 作品詳細ページ
     // =====================================================
 
-    uniqueMovies.forEach(function(movie) {
+    uniqueItems.forEach(function(item) {
 
-      const movieId =
-        String(movie.id);
+      const itemId =
+        String(item.id);
 
 
-      const detailUrl =
+      let detailUrl =
         "https://doko-de-mireru.vercel.app/detail.html?id=" +
-        encodeURIComponent(movieId);
+        encodeURIComponent(itemId);
+
+
+      // ===================================================
+      // ドラマ・TVアニメ
+      //
+      // XML内では
+      //
+      // &
+      //
+      // を
+      //
+      // &amp;
+      //
+      // と書く必要がある
+      // ===================================================
+
+      if (
+        item.mediaType === "tv"
+      ) {
+
+        detailUrl +=
+          "&amp;type=tv";
+
+      }
 
 
       urls.push(`
