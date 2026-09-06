@@ -1270,6 +1270,14 @@ font-size:13px;
 
 </footer>
 
+<button
+  id="backToSearch"
+  type="button"
+  aria-label="検索欄へ戻る"
+>
+  ↑ 検索へ戻る
+</button>
+     
 <script>
 
 /* =========================================================
@@ -3347,9 +3355,164 @@ if(lastQuery){
 }
 
 loadPopularMovies();     
+
+/* =========================================================
+   検索へ戻るボタン
+========================================================= */
+
+#backToSearch{
+  position:fixed;
+
+  right:20px;
+  bottom:20px;
+
+  z-index:1000;
+
+  padding:10px 14px;
+
+  border:none;
+  border-radius:999px;
+
+  background:#2563eb;
+  color:#ffffff;
+
+  font-size:14px;
+  font-weight:600;
+
+  cursor:pointer;
+
+  box-shadow:
+    0 4px 12px rgba(0,0,0,0.18);
+
+  /* 最初は非表示 */
+  opacity:0;
+  visibility:hidden;
+
+  transform:translateY(10px);
+
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease,
+    visibility 0.2s ease;
+}
+
+
+/* =========================================================
+   スクロールしたら表示
+========================================================= */
+
+#backToSearch.show{
+  opacity:1;
+  visibility:visible;
+
+  transform:translateY(0);
+}
+
+
+/* =========================================================
+   マウスを乗せた時
+========================================================= */
+
+#backToSearch:hover{
+  opacity:0.9;
+}
+
+
+/* =========================================================
+   スマホ
+========================================================= */
+
+@media (max-width:600px){
+
+  #backToSearch{
+    right:12px;
+    bottom:12px;
+
+    padding:9px 12px;
+
+    font-size:13px;
+  }
+
+}
+
+// =========================================================
+// 検索へ戻るボタン
+// =========================================================
+
+const backToSearch =
+  document.getElementById(
+    "backToSearch"
+  );
+
+
+if(backToSearch){
+
+  // =======================================================
+  // スクロールしたらボタンを表示
+  // =======================================================
+
+  window.addEventListener(
+    "scroll",
+    function(){
+
+      if(
+        window.scrollY > 500
+      ){
+
+        backToSearch
+          .classList
+          .add(
+            "show"
+          );
+
+      }else{
+
+        backToSearch
+          .classList
+          .remove(
+            "show"
+          );
+
+      }
+
+    }
+  );
+
+
+  // =======================================================
+  // ボタンを押したら検索欄へ戻る
+  // =======================================================
+
+  backToSearch.addEventListener(
+    "click",
+    function(){
+
+      const searchBox =
+        document.querySelector(
+          ".search-box"
+        );
+
+
+      if(searchBox){
+
+        searchBox.scrollIntoView({
+          behavior:"smooth",
+          block:"start"
+        });
+
+      }
+
+    }
+  );
+
+}
+
+
      
 </script>
 
+
+     
 </body>
 
 </html>
