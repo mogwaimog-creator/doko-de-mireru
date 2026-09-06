@@ -392,14 +392,25 @@ if (
 // どの表記でもできるだけ検索できるようにする
 // =====================================================
 
-const searchQueries = [];
-
-
 // =====================================================
-// 元の検索語
+// 検索候補
+//
+// 表記ゆれ・別名を最初からすべて取得する
 // =====================================================
 
-searchQueries.push(query);
+const searchQueries =
+  getTitleSearchAliases(query);
+
+
+// 念のため元の検索語を先頭にする
+if (
+  query &&
+  !searchQueries.includes(query)
+) {
+
+  searchQueries.unshift(query);
+
+};
 
 
 // =====================================================
@@ -3096,6 +3107,28 @@ function getTitleSearchAliases(query) {
   }
 
 
+  // =======================================================
+// ONE PIECE / ワンピース
+//
+// ワンピース
+// わんぴーす
+// ONE PIECE
+// One Piece
+// =======================================================
+
+if (
+  normalized === "ワンピース" ||
+  normalized === "わんぴーす" ||
+  normalized === "onepiece"
+) {
+
+  add("ONE PIECE");
+  add("One Piece");
+  add("ワンピース");
+
+}
+  
+
   return aliases;
 
 }
@@ -3106,18 +3139,40 @@ function getTitleSearchAliases(query) {
 
 function normalizeTitle(title) {
 
-  return String(
-    title || ""
-  )
-    .toLowerCase()
-    .replace(
-      /[\s　]/g,
-      ""
+  let value =
+    String(
+      title || ""
     )
-    .replace(
-      /[「」『』【】（）()・:：!?！？,.，。]/g,
-      ""
+      .toLowerCase()
+      .replace(
+        /[\s　]/g,
+        ""
+      )
+      .replace(
+        /[「」『』【】（）()・:：!?！？,.，。\-]/g,
+        ""
+      );
+
+
+  // =====================================================
+  // ひらがな → カタカナ
+  // =====================================================
+
+  value =
+    value.replace(
+      /[\u3041-\u3096]/g,
+      function(char) {
+
+        return String.fromCharCode(
+          char.charCodeAt(0) +
+          0x60
+        );
+
+      }
     );
+
+
+  return value;
 
 }
 
@@ -3710,16 +3765,26 @@ async function searchAnimeMovies(
   // 検索候補
   // =======================================================
 
-  const searchQueries = [];
-
-
   // =======================================================
-  // 元の検索語
-  // =======================================================
+// 検索候補
+//
+// TVアニメと同じ表記ゆれ・別名処理を使用する
+// =======================================================
 
-  searchQueries.push(
+const searchQueries =
+  getTitleSearchAliases(query);
+
+
+if (
+  query &&
+  !searchQueries.includes(query)
+) {
+
+  searchQueries.unshift(
     query
   );
+
+}
 
 
   // =======================================================
