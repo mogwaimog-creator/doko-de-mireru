@@ -4585,6 +4585,119 @@ if (
       showMap.values()
     );
 
+  // =======================================================
+// 検索語と無関係な作品を除外
+//
+// TMDB検索では、検索語とあまり関係のない作品が
+// 混ざる場合があるため、
+//
+// ・日本語タイトル
+// ・原題
+//
+// のどちらかが検索候補と一致・部分一致する作品だけ残す
+// =======================================================
+
+const normalizedSearchQueries =
+  searchQueries
+    .map(function(value) {
+
+      return normalizeTitle(
+        value
+      );
+
+    })
+    .filter(Boolean);
+
+
+shows =
+  shows.filter(
+    function(show) {
+
+      if (!show) {
+        return false;
+      }
+
+
+      const titles = [
+        show.name || "",
+        show.original_name || ""
+      ]
+        .map(function(value) {
+
+          return normalizeTitle(
+            value
+          );
+
+        })
+        .filter(Boolean);
+
+
+      // =================================================
+      // 検索候補のどれかとタイトルが関連しているか
+      // =================================================
+
+      return titles.some(
+        function(title) {
+
+          return normalizedSearchQueries.some(
+            function(searchQuery) {
+
+              if (
+                !title ||
+                !searchQuery
+              ) {
+
+                return false;
+
+              }
+
+
+              // 完全一致
+              if (
+                title === searchQuery
+              ) {
+
+                return true;
+
+              }
+
+
+              // タイトルの中に検索語が入っている
+              if (
+                title.includes(
+                  searchQuery
+                )
+              ) {
+
+                return true;
+
+              }
+
+
+              // 検索語の中にタイトルが入っている
+              // 短すぎるタイトルは誤判定防止のため除外
+              if (
+                title.length >= 3 &&
+                searchQuery.includes(
+                  title
+                )
+              ) {
+
+                return true;
+
+              }
+
+
+              return false;
+
+            }
+          );
+
+        }
+      );
+
+    }
+  );
 
 // =======================================================
 // 検索関連度で並び替え
