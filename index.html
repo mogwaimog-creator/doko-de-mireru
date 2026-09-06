@@ -304,13 +304,17 @@ header p{
 
 /* 選択中 */
 .search-type-button.active{
-  background:#3d5f8f;
+  background:#2563eb;
   color:#fff;
 
-  border:2px solid #ffffff;
+  border:2px solid #fff;
 
   box-shadow:
-    0 0 0 2px rgba(61,95,143,0.5);
+    0 0 0 3px #2563eb;
+
+  font-weight:800;
+
+  transform:translateY(-1px);
 }
      
 /* =========================================================
@@ -1573,10 +1577,17 @@ results.innerHTML =
 
 
 /* -------------------------------------------------------
-   ドラマ・アニメはTV検索
+   検索対象
 ------------------------------------------------------- */
 
 if(
+  currentSearchType === "movie"
+){
+
+  apiUrl +=
+    "&type=movie";
+
+}else if(
   currentSearchType === "drama"
 ){
 
@@ -2027,10 +2038,17 @@ async function loadMoreMovies() {
 
 
 /* -------------------------------------------------------
-   ドラマ・アニメはTV検索
+   検索対象
 ------------------------------------------------------- */
 
 if(
+  currentSearchType === "movie"
+){
+
+  apiUrl +=
+    "&type=movie";
+
+}else if(
   currentSearchType === "drama"
 ){
 
