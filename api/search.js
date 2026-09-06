@@ -2943,6 +2943,107 @@ async function getRecommendations(
 }
 
 // =========================================================
+// 有名作品の検索表記ゆれ補正
+//
+// 入力ミス・カタカナ表記などを補正する
+// =========================================================
+
+function getTitleSearchAliases(query) {
+
+  const original =
+    String(query || "").trim();
+
+  const normalized =
+    normalizeTitle(original);
+
+
+  const aliases = [];
+
+
+  function add(value) {
+
+    if (
+      value &&
+      !aliases.includes(value)
+    ) {
+
+      aliases.push(value);
+
+    }
+
+  }
+
+
+  // 元の検索語
+  add(original);
+
+
+  // =======================================================
+  // ドラえもん
+  //
+  // ドラエモン
+  // どらえもん
+  // Doraemon
+  // =======================================================
+
+  if (
+    normalized === "ドラエモン" ||
+    normalized === "ドラえもん" ||
+    normalized === "どらえもん" ||
+    normalized === "doraemon"
+  ) {
+
+    add("ドラえもん");
+    add("Doraemon");
+
+  }
+
+
+  // =======================================================
+  // クレヨンしんちゃん
+  //
+  // クレヨンシンチャン
+  // くれよんしんちゃん
+  // =======================================================
+
+  if (
+    normalized === "クレヨンシンチャン" ||
+    normalized === "クレヨンしんちゃん" ||
+    normalized === "くれよんしんちゃん" ||
+    normalized === "しんちゃん"
+  ) {
+
+    add("クレヨンしんちゃん");
+    add("Crayon Shin-chan");
+
+  }
+
+
+  // =======================================================
+  // 名探偵コナン
+  //
+  // 「コナン」で検索した場合も
+  // 名探偵コナンを検索候補に追加
+  // =======================================================
+
+  if (
+    normalized === "コナン" ||
+    normalized === "名探偵コナン" ||
+    normalized === "めいたんていコナン"
+  ) {
+
+    add("名探偵コナン");
+    add("Detective Conan");
+    add("Case Closed");
+
+  }
+
+
+  return aliases;
+
+}
+
+// =========================================================
 // タイトル正規化
 // =========================================================
 
@@ -4113,16 +4214,28 @@ async function searchTvShows(
   // 検索候補
   // =======================================================
 
-  const searchQueries = [];
-
-
-  // =======================================================
-  // 元の検索語
-  // =======================================================
-
-  searchQueries.push(
+  const searchQueries =
+  getTitleSearchAliases(
     query
   );
+
+
+// =======================================================
+// 元の検索語
+//
+// getTitleSearchAliases() で
+// 表記ゆれも同時に追加する
+// =======================================================
+
+if (
+  !searchQueries.includes(query)
+) {
+
+  searchQueries.unshift(
+    query
+  );
+
+}
 
 
   // =======================================================
@@ -4319,70 +4432,206 @@ async function searchTvShows(
     );
 
 
-  // =======================================================
-  // 完全一致を優先
-  // =======================================================
+// =======================================================
+// 検索関連度で並び替え
+//
+// ・完全一致
+// ・タイトル先頭一致
+// ・タイトル部分一致
+// ・有名作品の表記ゆれ
+//
+// を考慮する
+// =======================================================
 
-  const normalizedQuery =
+const normalizedQuery =
+  normalizeTitle(
+    query
+  );
+
+
+function getSearchScore(show) {
+
+  const title =
     normalizeTitle(
-      query
+      show.name ||
+      show.original_name ||
+      ""
     );
 
 
-  shows.sort(
-    function(a, b) {
-
-      const aTitle =
-        normalizeTitle(
-          a.name ||
-          a.original_name ||
-          ""
-        );
+  const originalTitle =
+    normalizeTitle(
+      show.original_name ||
+      ""
+    );
 
 
-      const bTitle =
-        normalizeTitle(
-          b.name ||
-          b.original_name ||
-          ""
-        );
+  let score = 0;
 
 
-      const aExact =
-        aTitle === normalizedQuery
-          ? 0
-          : 1;
+  // =====================================================
+  // 通常の関連度
+  // =====================================================
+
+  if (
+    title === normalizedQuery
+  ) {
+
+    score += 10000;
+
+  }
 
 
-      const bExact =
-        bTitle === normalizedQuery
-          ? 0
-          : 1;
+  if (
+    title.startsWith(
+      normalizedQuery
+    )
+  ) {
+
+    score += 3000;
+
+  }
 
 
-      if (
-        aExact !== bExact
-      ) {
+  if (
+    title.includes(
+      normalizedQuery
+    )
+  ) {
 
-        return (
-          aExact -
-          bExact
-        );
+    score += 1500;
 
-      }
+  }
 
 
-      return (
-        Number(
-          b.vote_average || 0
-        ) -
-        Number(
-          a.vote_average || 0
-        )
-      );
+  if (
+    originalTitle.includes(
+      normalizedQuery
+    )
+  ) {
+
+    score += 500;
+
+  }
+
+
+  // =====================================================
+  // 「コナン」
+  //
+  // 一般的な検索意図として
+  // 名探偵コナンを優先
+  // =====================================================
+
+  if (
+    normalizedQuery === "コナン"
+  ) {
+
+    if (
+      title === "名探偵コナン"
+    ) {
+
+      score += 20000;
+
+    } else if (
+      title.includes(
+        "名探偵コナン"
+      )
+    ) {
+
+      score += 10000;
 
     }
-  );
+
+
+    // 未来少年コナンを削除するのではなく
+    // 順位だけ下げる
+    if (
+      title.includes(
+        "未来少年コナン"
+      )
+    ) {
+
+      score -= 5000;
+
+    }
+
+  }
+
+
+  // =====================================================
+  // ドラえもん
+  // =====================================================
+
+  if (
+    normalizedQuery === "ドラエモン" ||
+    normalizedQuery === "ドラえもん" ||
+    normalizedQuery === "どらえもん"
+  ) {
+
+    if (
+      title.includes(
+        "ドラえもん"
+      )
+    ) {
+
+      score += 10000;
+
+    }
+
+  }
+
+
+  // =====================================================
+  // クレヨンしんちゃん
+  // =====================================================
+
+  if (
+    normalizedQuery === "クレヨンシンチャン" ||
+    normalizedQuery === "クレヨンしんちゃん" ||
+    normalizedQuery === "くれよんしんちゃん" ||
+    normalizedQuery === "しんちゃん"
+  ) {
+
+    if (
+      title.includes(
+        "クレヨンしんちゃん"
+      )
+    ) {
+
+      score += 10000;
+
+    }
+
+  }
+
+
+  // =====================================================
+  // TMDB評価
+  //
+  // 同程度の関連度なら評価の高い作品を優先
+  // =====================================================
+
+  score +=
+    Number(
+      show.vote_average || 0
+    );
+
+
+  return score;
+
+}
+
+
+shows.sort(
+  function(a, b) {
+
+    return (
+      getSearchScore(b) -
+      getSearchScore(a)
+    );
+
+  }
+);
 
 
    // =======================================================
