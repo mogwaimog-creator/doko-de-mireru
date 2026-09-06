@@ -3267,7 +3267,24 @@ function renderMovie(movie){
     movie.title || "作品情報"
   );
 
+/* -------------------------------------------------------
+   配信情報見出し・説明
+------------------------------------------------------- */
 
+setText(
+  "providersHeading",
+  "📺 " +
+  (movie.title || "この作品") +
+  "はどこで見られる？"
+);
+
+setText(
+  "providersDescription",
+  (movie.title || "この作品") +
+  "が現在どの動画配信サービスで見られるかを確認できます。" +
+  "見放題・レンタル・購入などの配信情報を掲載しています。"
+);
+  
   setText(
     "originalTitle",
     movie.original_title || ""
