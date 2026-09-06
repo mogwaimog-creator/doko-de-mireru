@@ -1729,70 +1729,184 @@ if(currentSearchType === "anime"){
    ③ TMDB評価の高い順
 ----------------------------------------------------- */
 
+/* -----------------------------------------------------
+   検索結果の並び順
+
+   ① タイトル完全一致
+   ② タイトルの先頭が一致
+   ③ タイトルに検索語を含む
+   ④ 原題も確認
+   ⑤ より検索語に近いタイトル
+   ⑥ TMDB評価
+----------------------------------------------------- */
+
+const normalizeSearchTitle =
+  function(title){
+
+    return String(title || "")
+      .normalize("NFKC")
+      .toLowerCase()
+
+      /* カタカナ → ひらがな */
+      .replace(
+        /[\u30a1-\u30f6]/g,
+        function(character){
+
+          return String.fromCharCode(
+            character.charCodeAt(0) -
+            0x60
+          );
+
+        }
+      )
+
+      /* 空白・記号を除去 */
+      .replace(
+        /[\s　・･:：!！?？"'’“”\-]/g,
+        ""
+      );
+
+  };
+
+
+const normalizedQuery =
+  normalizeSearchTitle(
+    query
+  );
+
+
+const getSearchScore =
+  function(movie){
+
+    const titles = [
+      movie.title || "",
+      movie.original_title || ""
+    ]
+      .map(
+        normalizeSearchTitle
+      )
+      .filter(Boolean);
+
+
+    let score = 0;
+
+
+    titles.forEach(
+      function(title){
+
+        /* -----------------------------------------------
+           完全一致
+        ----------------------------------------------- */
+
+        if(
+          title === normalizedQuery
+        ){
+
+          score =
+            Math.max(
+              score,
+              10000
+            );
+
+          return;
+
+        }
+
+
+        /* -----------------------------------------------
+           検索語から始まる
+        ----------------------------------------------- */
+
+        if(
+          title.startsWith(
+            normalizedQuery
+          )
+        ){
+
+          score =
+            Math.max(
+              score,
+              8000
+            );
+
+          return;
+
+        }
+
+
+        /* -----------------------------------------------
+           タイトルに検索語を含む
+        ----------------------------------------------- */
+
+        if(
+          title.includes(
+            normalizedQuery
+          )
+        ){
+
+          const lengthDifference =
+            Math.abs(
+              title.length -
+              normalizedQuery.length
+            );
+
+
+          score =
+            Math.max(
+              score,
+              6000 -
+              lengthDifference * 20
+            );
+
+          return;
+
+        }
+
+
+        /* -----------------------------------------------
+           検索語の中にタイトルを含む
+        ----------------------------------------------- */
+
+        if(
+          title.length >= 3 &&
+          normalizedQuery.includes(
+            title
+          )
+        ){
+
+          score =
+            Math.max(
+              score,
+              4000
+            );
+
+        }
+
+      }
+    );
+
+
+    /* -----------------------------------------------
+       TMDB評価は最後の微調整だけ
+    ----------------------------------------------- */
+
+    score +=
+      Number(
+        movie.vote_average || 0
+      );
+
+
+    return score;
+
+  };
+
+
 movies.sort(
   function(a, b){
 
-    const normalizeTitle = function(title){
-
-      return String(title || "")
-        .trim()
-        .toLowerCase()
-        .replace(/\s+/g, "");
-
-    };
-
-
-    const titleA =
-      normalizeTitle(a.title);
-
-    const titleB =
-      normalizeTitle(b.title);
-
-    const q =
-      normalizeTitle(query);
-
-
-    /* ① タイトル完全一致 */
-
-    const exactA =
-      titleA === q;
-
-    const exactB =
-      titleB === q;
-
-
-    if(exactA && !exactB){
-      return -1;
-    }
-
-    if(exactB && !exactA){
-      return 1;
-    }
-
-
-    /* ② タイトルに検索語を含む */
-
-    const containsA =
-      titleA.includes(q);
-
-    const containsB =
-      titleB.includes(q);
-
-
-    if(containsA && !containsB){
-      return -1;
-    }
-
-    if(containsB && !containsA){
-      return 1;
-    }
-
-
-    /* ③ TMDB評価の高い順 */
-
     return (
-      Number(b.vote_average || 0) -
-      Number(a.vote_average || 0)
+      getSearchScore(b) -
+      getSearchScore(a)
     );
 
   }
