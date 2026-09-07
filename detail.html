@@ -2459,7 +2459,7 @@ function updateSeo(movie){
 
 const seoTitle =
   title +
-  "はどこで見れる？配信サービス・見放題情報 | ドコデミレル？";
+  "はどこで見れる？配信・サブスク・見放題情報 | ドコデミレル？";
   document.title =
     seoTitle;
 
@@ -2468,31 +2468,61 @@ const seoTitle =
      説明文
   */
 
-  let description =
+ let description =
   title +
-  "は" +
+  "はどこで見れる？" +
   contentLabel +
-  "作品です。どこで見られるか確認できます。";
+  "『" +
+  title +
+  "』の配信・サブスク・見放題情報を紹介。";
 
 
-  if(movie.streaming &&
-     Array.isArray(movie.streaming) &&
-     movie.streaming.length){
+if(movie.streaming &&
+   Array.isArray(movie.streaming) &&
+   movie.streaming.length){
+
+  const streamingNames =
+    normalizeProviders(movie.streaming)
+      .map(function(provider){
+        return provider.provider_name;
+      })
+      .filter(Boolean)
+      .slice(0,3);
+
+  if(streamingNames.length){
 
     description +=
-      "見放題の配信サービスを掲載。";
+      streamingNames.join("、") +
+      "などの見放題配信状況を確認できます。";
+
+  }else{
+
+    description +=
+      "見放題の配信サービスを確認できます。";
 
   }
 
+}
 
-  if(movie.rental &&
-     Array.isArray(movie.rental) &&
-     movie.rental.length){
 
-    description +=
-      "レンタル・購入情報も確認できます。";
+if(movie.rental &&
+   Array.isArray(movie.rental) &&
+   movie.rental.length){
 
-  }
+  description +=
+    "レンタル情報も掲載。";
+
+}
+
+
+if(movie.purchase &&
+   Array.isArray(movie.purchase) &&
+   movie.purchase.length){
+
+  description +=
+    "購入情報も掲載。";
+
+}
 
 
   if(movie.release_date){
@@ -3278,11 +3308,89 @@ setText(
   "はどこで見られる？"
 );
 
+const providerTitle =
+  movie.title || "この作品";
+
+const streamingProviders =
+  normalizeProviders(
+    movie.streaming
+  );
+
+const rentalProviders =
+  normalizeProviders(
+    movie.rental
+  );
+
+const purchaseProviders =
+  normalizeProviders(
+    movie.purchase
+  );
+
+let providerDescription =
+  "『" +
+  providerTitle +
+  "』の現在の配信・サブスク状況を紹介します。";
+
+
+if(streamingProviders.length){
+
+  const names =
+    streamingProviders
+      .map(function(provider){
+        return provider.provider_name;
+      })
+      .filter(Boolean)
+      .slice(0,3);
+
+  if(names.length){
+
+    providerDescription +=
+      "現在、" +
+      names.join("、") +
+      "などで見放題配信されています。";
+
+  }else{
+
+    providerDescription +=
+      "現在、見放題で配信されています。";
+
+  }
+
+}else if(rentalProviders.length){
+
+  providerDescription +=
+    "現在、見放題の配信情報は確認できませんが、レンタルできるサービスがあります。";
+
+}else if(purchaseProviders.length){
+
+  providerDescription +=
+    "現在、見放題の配信情報は確認できませんが、購入できるサービスがあります。";
+
+}else{
+
+  providerDescription +=
+    "現在確認できる配信情報はありません。";
+
+}
+
+
+if(
+  streamingProviders.length &&
+  (
+    rentalProviders.length ||
+    purchaseProviders.length
+  )
+){
+
+  providerDescription +=
+    "レンタル・購入できるサービスも確認できます。";
+
+}
+
+
 setText(
   "providersDescription",
-  (movie.title || "この作品") +
-  "が現在どの動画配信サービスで見られるかを確認できます。" +
-  "見放題・レンタル・購入などの配信情報を掲載しています。"
+  providerDescription
 );
   
   setText(
