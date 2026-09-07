@@ -4134,6 +4134,18 @@ else if(
   tvGenreQuery =
     "";
 }
+
+else if(
+  genre === "scifi"
+){
+  // 映画：SF または ファンタジー
+  movieGenreQuery =
+    "&with_genres=878%7C14";
+
+  // TV：Sci-Fi & Fantasy
+  tvGenreQuery =
+    "&with_genres=10765";
+}  
   
   // =======================================================
   // 国・地域による絞り込み
