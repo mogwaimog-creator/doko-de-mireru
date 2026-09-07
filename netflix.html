@@ -1371,6 +1371,22 @@ footer{
 
   pointer-events:none;
 }
+
+/* Netflix文字だけ赤・黒にする */
+.netflix-title-mark{
+  display:inline-block;
+
+  margin-right:4px;
+  padding:2px 7px;
+
+  background:#111;
+  color:#e50914;
+
+  border-radius:5px;
+
+  font-weight:900;
+  letter-spacing:.01em;
+}
   
 </style>
   
@@ -1429,8 +1445,8 @@ footer{
     <section class="provider-header">
 
   <h1>
-    Netflixで見られる映画・ドラマ・アニメ
-  </h1>
+  <span class="netflix-title-mark">Netflix</span>で見られる映画・ドラマ・アニメ
+</h1>
 
   <p>
     Netflixで現在見放題配信されている映画・ドラマ・アニメを紹介しています。
