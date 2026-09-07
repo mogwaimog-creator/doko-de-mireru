@@ -4045,13 +4045,91 @@ function createMiddleDotSearchQuery(query) {
 // をまとめて取得する
 // =========================================================
 
-async function getProviderWorks(
-  apiKey,
-  providerId,
-  page,
-  country,
-  genre
-) {
+  // =======================================================
+  // Netflix ジャンル絞り込み
+  //
+  // TMDBでは映画とTVで
+  // 一部ジャンルIDが異なる
+  // =======================================================
+
+  let movieGenre = "";
+  let tvGenre = "";
+
+  if (genre === "anime") {
+
+    // Animation
+    movieGenre = "16";
+    tvGenre = "16";
+
+  }
+  else if (genre === "suspense") {
+
+    // 映画: Thriller / Mystery
+    movieGenre = "53|9648";
+
+    // TV: Mystery / Crime
+    tvGenre = "9648|80";
+
+  }
+  else if (genre === "romance") {
+
+    // 映画: Romance
+    movieGenre = "10749";
+
+    // TVにはRomance専用ジャンルがないため
+    // Dramaを中心に取得
+    tvGenre = "18";
+
+  }
+  else if (genre === "action") {
+
+    // 映画: Action
+    movieGenre = "28";
+
+    // TV: Action & Adventure
+    tvGenre = "10759";
+
+  }
+  else if (genre === "comedy") {
+
+    // Comedy
+    movieGenre = "35";
+    tvGenre = "35";
+
+  }
+  else if (genre === "horror") {
+
+    // 映画: Horror
+    movieGenre = "27";
+
+    // TVにはHorror専用ジャンルがないため
+    // Mystery / Sci-Fi & Fantasy を候補にする
+    tvGenre = "9648|10765";
+
+  }
+  else if (genre === "scifi") {
+
+    // 映画: Science Fiction / Fantasy
+    movieGenre = "878|14";
+
+    // TV: Sci-Fi & Fantasy
+    tvGenre = "10765";
+
+  }
+
+
+  const movieGenreQuery =
+    movieGenre
+      ? "&with_genres=" +
+        encodeURIComponent(movieGenre)
+      : "";
+
+
+  const tvGenreQuery =
+    tvGenre
+      ? "&with_genres=" +
+        encodeURIComponent(tvGenre)
+      : "";
 
     // =======================================================
   // 国・地域による絞り込み
@@ -4098,9 +4176,9 @@ const movieUrl =
       : ""
   ) +
   countryWithoutAnimation +
-  "&page=" +
-  encodeURIComponent(page);
-
+movieGenreQuery +
+"&page=" +
+encodeURIComponent(page);
 
 // =======================================================
 // TV
@@ -4123,8 +4201,10 @@ const tvUrl =
       : ""
   ) +
   countryWithoutAnimation +
-  "&page=" +
-  encodeURIComponent(page);
+tvGenreQuery +
+"&page=" +
+encodeURIComponent(page);
+
 
   // =======================================================
   // 配信サービスのロゴ・名前
