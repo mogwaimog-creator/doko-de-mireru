@@ -1088,28 +1088,33 @@ footer{
 
 
 .country-card{
-  min-height:105px;
+  min-height:78px;
 
-  padding:18px 12px;
+  padding:12px 14px;
 
   display:flex;
 
-  flex-direction:column;
+  flex-direction:row;
 
   align-items:center;
 
   justify-content:center;
 
-  gap:9px;
+  gap:10px;
 
   text-align:center;
 
-  background:#f8fafc;
+  background:#f8fbff;
 
-  border:1px solid #e5e7eb;
+  border:1px solid #dbeafe;
 
-  border-radius:12px;
+  border-radius:10px;
 
+  transition:
+    transform .15s ease,
+    box-shadow .15s ease,
+    border-color .15s ease;
+}
   transition:
     transform .15s ease,
     box-shadow .15s ease,
@@ -1130,12 +1135,9 @@ footer{
 
 .country-icon{
   display:block;
-
-  font-size:30px;
-
+  font-size:26px;
   line-height:1;
 }
-
 
 .country-title{
   display:block;
