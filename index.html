@@ -598,22 +598,44 @@ a{
 
 
   .search-row{
-    flex-direction:column;
-  }
+  flex-direction:row;
+
+  gap:8px;
+
+  align-items:stretch;
+}
 
 
-  #query{
-    width:100%;
+#query{
+  width:auto;
 
-    height:56px;
-  }
+  min-width:0;
+
+  height:56px;
+
+  padding:
+    0
+    14px;
+
+  font-size:16px;
+}
 
 
-  #searchButton{
-    width:100%;
+#searchButton{
+  width:auto;
 
-    height:54px;
-  }
+  min-width:76px;
+
+  height:56px;
+
+  padding:
+    0
+    14px;
+
+  font-size:15px;
+
+  flex-shrink:0;
+}
 
 
   .search-type-row{
@@ -750,24 +772,34 @@ line-height:1.6;
 }
 
 .popular-grid{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:14px;
+  display:grid;
+
+  grid-template-columns:
+    repeat(5,minmax(0,1fr));
+
+  gap:14px;
 }
 
 .popular-card{
-display:block;
-background:#f5f7fb;
-border:1px solid #e5e7eb;
-border-radius:12px;
-padding:14px;
+  min-width:0;
 
-transition:
-transform .15s ease,
-box-shadow .15s ease,
-border-color .15s ease;
+  display:block;
+
+  background:#f8fafc;
+
+  border:1px solid #e5e7eb;
+
+  border-radius:12px;
+
+  padding:0;
+
+  overflow:hidden;
+
+  transition:
+    transform .15s ease,
+    box-shadow .15s ease,
+    border-color .15s ease;
 }
-
 .popular-card:hover{
 transform:translateY(-2px);
 
@@ -1111,18 +1143,19 @@ rgba(0,0,0,.08);
 ========================================================= */
 
 .popular-poster{
-width:100%;
-aspect-ratio:2 / 3;
+  width:100%;
 
-object-fit:cover;
+  aspect-ratio:2 / 3;
 
-display:block;
+  object-fit:cover;
 
-background:#e5e7eb;
+  display:block;
 
-border-radius:9px;
+  background:#e5e7eb;
 
-margin-bottom:12px;
+  border-radius:0;
+
+  margin-bottom:0;
 }
 
 .popular-poster.no-image{
@@ -1139,12 +1172,19 @@ font-size:13px;
 ========================================================= */
 
 .popular-card-title{
-color:#111827;
-font-size:16px;
-font-weight:bold;
-line-height:1.5;
+  color:#111827;
+
+  font-size:14px;
+
+  font-weight:800;
+
+  line-height:1.45;
 }
 
+.popular-card-info{
+  padding:10px;
+}
+     
 /* =========================================================
 人気作品 上映・公開状況
 ========================================================= */
@@ -1185,48 +1225,67 @@ font-weight:bold;
 
 @media(max-width:700px){
 
-.popular-section{
-padding:17px;
-}
+  .popular-section{
+    padding:17px 14px;
+  }
 
-.popular-title{
-font-size:21px;
-}
+  .popular-title{
+    font-size:20px;
+  }
 
-.popular-grid{
-grid-template-columns:1fr;
-gap:12px;
-}
+  .popular-grid{
+    display:flex;
 
-.popular-card{
-display:flex;
-align-items:center;
-padding:12px;
-}
+    overflow-x:auto;
 
-.popular-poster{
-width:105px;
-height:158px;
-aspect-ratio:auto;
-flex-shrink:0;
-margin-bottom:0;
-}
+    gap:11px;
 
-.popular-card-info{
-padding:15px;
-}
+    padding-bottom:8px;
 
-.popular-card-title{
-font-size:15px;
-}
+    scroll-snap-type:x proximity;
+  }
 
-.popular-card-status{
-font-size:13px;
-}
+  .popular-card{
+    flex:
+      0 0
+      145px;
 
-.popular-card-link{
-font-size:13px;
-}
+    display:block;
+
+    padding:0;
+
+    scroll-snap-align:start;
+  }
+
+  .popular-poster{
+    width:100%;
+
+    height:auto;
+
+    aspect-ratio:2 / 3;
+
+    margin:0;
+  }
+
+  .popular-card-info{
+    padding:10px;
+  }
+
+  .popular-card-title{
+    font-size:14px;
+  }
+
+  .popular-card-status{
+    margin-top:6px;
+
+    font-size:12px;
+  }
+
+  .popular-card-link{
+    margin-top:6px;
+
+    font-size:12px;
+  }
 
 }
 
