@@ -4208,8 +4208,7 @@ return movies
       return (
         work.id &&
         work.poster_path &&
-        work.release_date &&
-        work.release_date <= today
+        work.release_date
       );
 
     }
@@ -4232,8 +4231,6 @@ return movies
     0,
     10
   );
-}
-
 async function getProviderWorks(
   apiKey,
   providerId,
