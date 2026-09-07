@@ -4189,48 +4189,50 @@ async function getNetflixNewWorks(
                   show.vote_count || 0
                 ),
 
-              const today =
-  new Date()
-    .toISOString()
+              content_type:
+                "tv"
+            };
+
+          }
+        )
+      : [];
+
+
+  return movies
+    .concat(
+      tvShows
+    )
+    .filter(
+      function(work){
+
+        return (
+          work.id &&
+          work.poster_path &&
+          work.release_date
+        );
+
+      }
+    )
+    .sort(
+      function(a,b){
+
+        return (
+          new Date(
+            b.release_date
+          ) -
+          new Date(
+            a.release_date
+          )
+        );
+
+      }
+    )
     .slice(
       0,
       10
     );
 
-
-return movies
-  .concat(
-    tvShows
-  )
-  .filter(
-    function(work){
-
-      return (
-        work.id &&
-        work.poster_path &&
-        work.release_date
-      );
-
-    }
-  )
-  .sort(
-    function(a,b){
-
-      return (
-        new Date(
-          b.release_date
-        ) -
-        new Date(
-          a.release_date
-        )
-      );
-
-    }
-  )
-  .slice(
-    0,
-    10
-  );
+}
 async function getProviderWorks(
   apiKey,
   providerId,
