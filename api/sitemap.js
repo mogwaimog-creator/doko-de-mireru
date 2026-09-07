@@ -4,12 +4,22 @@
 //
 // 作品ページ用サイトマップ生成API
 //
-// ・映画
+// ・人気映画
 // ・劇場版アニメ
 // ・ドラマ
 // ・TVアニメ
 //
-// TMDBから複数ページの人気作品を取得
+// ＋
+//
+// ・名探偵コナン
+// ・ドラえもん
+// ・クレヨンしんちゃん
+// ・ONE PIECE
+// ・ポケモン
+//
+// など、日本で検索されやすい重要シリーズを補強
+//
+// TMDBから複数ページ取得
 // =========================================================
 
 module.exports = async function handler(req, res) {
@@ -39,14 +49,39 @@ module.exports = async function handler(req, res) {
     // movie 20ページ = 最大400作品
     // tv    20ページ = 最大400作品
     //
-    // 合計 最大約800作品
+    // ここに重要作品を追加する
     // =====================================================
 
     const MAX_PAGES = 20;
 
 
     // =====================================================
-    // TMDBから人気作品を取得する関数
+    // TMDB JSON取得
+    // =====================================================
+
+    async function fetchJson(url) {
+
+      const response =
+        await fetch(url);
+
+
+      if (!response.ok) {
+
+        throw new Error(
+          "TMDB API ERROR: " +
+          response.status
+        );
+
+      }
+
+
+      return response.json();
+
+    }
+
+
+    // =====================================================
+    // TMDB人気作品取得
     // =====================================================
 
     async function fetchPopular(mediaType) {
@@ -77,51 +112,15 @@ module.exports = async function handler(req, res) {
 
 
         requests.push(
-          fetch(url)
+          fetchJson(url)
         );
 
       }
 
-
-      const responses =
-        await Promise.all(requests);
-
-
-      // ===================================================
-      // APIエラー確認
-      // ===================================================
-
-      for (const response of responses) {
-
-        if (!response.ok) {
-
-          throw new Error(
-            "TMDB API ERROR: " +
-            response.status
-          );
-
-        }
-
-      }
-
-
-      // ===================================================
-      // JSON取得
-      // ===================================================
 
       const datasets =
-        await Promise.all(
-          responses.map(function(response) {
+        await Promise.all(requests);
 
-            return response.json();
-
-          })
-        );
-
-
-      // ===================================================
-      // 作品一覧
-      // ===================================================
 
       const items = [];
 
@@ -129,32 +128,38 @@ module.exports = async function handler(req, res) {
       datasets.forEach(function(data) {
 
         if (
-          data &&
-          Array.isArray(data.results)
+          !data ||
+          !Array.isArray(data.results)
         ) {
 
-          data.results.forEach(function(item) {
-
-            if (
-              item &&
-              item.id
-            ) {
-
-              items.push({
-
-                id:
-                  item.id,
-
-                mediaType:
-                  mediaType
-
-              });
-
-            }
-
-          });
+          return;
 
         }
+
+
+        data.results.forEach(function(item) {
+
+          if (
+            item &&
+            item.id
+          ) {
+
+            items.push({
+
+              id:
+                item.id,
+
+              mediaType:
+                mediaType,
+
+              important:
+                false
+
+            });
+
+          }
+
+        });
 
       });
 
@@ -165,10 +170,432 @@ module.exports = async function handler(req, res) {
 
 
     // =====================================================
-    // 映画
+    // タイトル正規化
     //
-    // ・映画
-    // ・劇場版アニメ
+    // ・空白
+    // ・記号
+    // ・ひらがな / カタカナ
+    //
+    // の差を少なくする
+    // =====================================================
+
+    function normalizeTitle(value) {
+
+      let text =
+        String(value || "");
+
+
+      try {
+
+        text =
+          text.normalize("NFKC");
+
+      } catch (error) {
+
+        // normalize非対応環境ではそのまま
+
+      }
+
+
+      text =
+        text
+          .toLowerCase()
+          .replace(
+            /[\s　]/g,
+            ""
+          )
+          .replace(
+            /[「」『』【】〔〕［］\[\]（）()〈〉《》＜＞<>・･:：;；!?！？,.，。、'"“”‘’`´\-‐-‒–—―~〜～／\/\\]/g,
+            ""
+          );
+
+
+      // ひらがな → カタカナ
+
+      text =
+        text.replace(
+          /[\u3041-\u3096]/g,
+          function(char) {
+
+            return String.fromCharCode(
+              char.charCodeAt(0) +
+              0x60
+            );
+
+          }
+        );
+
+
+      return text;
+
+    }
+
+
+    // =====================================================
+    // 重要映画シリーズ検索
+    //
+    // 人気400作品から漏れている劇場版を補う
+    // =====================================================
+
+    async function fetchImportantMovies() {
+
+      const seriesList = [
+
+        // =================================================
+        // 日本アニメ
+        // =================================================
+
+        {
+          queries: [
+            "名探偵コナン",
+            "Detective Conan"
+          ],
+
+          keywords: [
+            "名探偵コナン",
+            "detectiveconan"
+          ]
+        },
+
+        {
+          queries: [
+            "ドラえもん",
+            "Doraemon"
+          ],
+
+          keywords: [
+            "ドラえもん",
+            "doraemon"
+          ]
+        },
+
+        {
+          queries: [
+            "クレヨンしんちゃん",
+            "Crayon Shin-chan"
+          ],
+
+          keywords: [
+            "クレヨンしんちゃん",
+            "crayonshinchan"
+          ]
+        },
+
+        {
+          queries: [
+            "ONE PIECE",
+            "ワンピース"
+          ],
+
+          keywords: [
+            "onepiece",
+            "ワンピース"
+          ]
+        },
+
+        {
+          queries: [
+            "ポケットモンスター",
+            "Pokémon"
+          ],
+
+          keywords: [
+            "ポケットモンスター",
+            "pokemon",
+            "pokémon"
+          ]
+        }
+
+      ];
+
+
+      const importantMovies = [];
+
+
+      for (
+        const series of seriesList
+      ) {
+
+        for (
+          const query of series.queries
+        ) {
+
+          // -----------------------------------------------
+          // 3ページまで取得
+          //
+          // 古い劇場版まで拾いやすくする
+          // -----------------------------------------------
+
+          for (
+            let page = 1;
+            page <= 3;
+            page++
+          ) {
+
+            try {
+
+              const url =
+                "https://api.themoviedb.org/3/search/movie" +
+                "?api_key=" +
+                encodeURIComponent(apiKey) +
+                "&language=ja-JP" +
+                "&region=JP" +
+                "&include_adult=false" +
+                "&page=" +
+                page +
+                "&query=" +
+                encodeURIComponent(query);
+
+
+              const data =
+                await fetchJson(url);
+
+
+              if (
+                !data ||
+                !Array.isArray(data.results)
+              ) {
+
+                continue;
+
+              }
+
+
+              data.results.forEach(function(movie) {
+
+                if (
+                  !movie ||
+                  !movie.id
+                ) {
+
+                  return;
+
+                }
+
+
+                const title =
+                  normalizeTitle(
+                    movie.title || ""
+                  );
+
+
+                const originalTitle =
+                  normalizeTitle(
+                    movie.original_title || ""
+                  );
+
+
+                const matches =
+                  series.keywords.some(
+                    function(keyword) {
+
+                      const normalizedKeyword =
+                        normalizeTitle(keyword);
+
+
+                      return (
+                        title.includes(
+                          normalizedKeyword
+                        ) ||
+                        originalTitle.includes(
+                          normalizedKeyword
+                        )
+                      );
+
+                    }
+                  );
+
+
+                if (!matches) {
+
+                  return;
+
+                }
+
+
+                importantMovies.push({
+
+                  id:
+                    movie.id,
+
+                  mediaType:
+                    "movie",
+
+                  important:
+                    true
+
+                });
+
+              });
+
+
+              // 次ページが無ければ終了
+
+              if (
+                Number(data.page || page) >=
+                Number(data.total_pages || page)
+              ) {
+
+                break;
+
+              }
+
+            } catch (error) {
+
+              console.error(
+                "IMPORTANT MOVIE SEARCH ERROR:",
+                query,
+                error
+              );
+
+            }
+
+          }
+
+        }
+
+      }
+
+
+      return importantMovies;
+
+    }
+
+
+    // =====================================================
+    // 重要TV作品
+    //
+    // TVアニメ本編もサイトマップに確実に入れる
+    // =====================================================
+
+    async function fetchImportantTvShows() {
+
+      const queries = [
+
+        "名探偵コナン",
+        "ドラえもん",
+        "クレヨンしんちゃん",
+        "ONE PIECE",
+        "ポケットモンスター"
+
+      ];
+
+
+      const items = [];
+
+
+      for (
+        const query of queries
+      ) {
+
+        try {
+
+          const url =
+            "https://api.themoviedb.org/3/search/tv" +
+            "?api_key=" +
+            encodeURIComponent(apiKey) +
+            "&language=ja-JP" +
+            "&include_adult=false" +
+            "&page=1" +
+            "&query=" +
+            encodeURIComponent(query);
+
+
+          const data =
+            await fetchJson(url);
+
+
+          if (
+            !data ||
+            !Array.isArray(data.results)
+          ) {
+
+            continue;
+
+          }
+
+
+          const normalizedQuery =
+            normalizeTitle(query);
+
+
+          // -----------------------------------------------
+          // タイトルが近いものだけ追加
+          // -----------------------------------------------
+
+          data.results.forEach(function(show) {
+
+            if (
+              !show ||
+              !show.id
+            ) {
+
+              return;
+
+            }
+
+
+            const title =
+              normalizeTitle(
+                show.name || ""
+              );
+
+
+            const originalTitle =
+              normalizeTitle(
+                show.original_name || ""
+              );
+
+
+            if (
+              !title.includes(
+                normalizedQuery
+              ) &&
+              !originalTitle.includes(
+                normalizedQuery
+              )
+            ) {
+
+              return;
+
+            }
+
+
+            items.push({
+
+              id:
+                show.id,
+
+              mediaType:
+                "tv",
+
+              important:
+                true
+
+            });
+
+          });
+
+        } catch (error) {
+
+          console.error(
+            "IMPORTANT TV SEARCH ERROR:",
+            query,
+            error
+          );
+
+        }
+
+      }
+
+
+      return items;
+
+    }
+
+
+    // =====================================================
+    // 映画
     // =====================================================
 
     const movies =
@@ -179,9 +606,6 @@ module.exports = async function handler(req, res) {
 
     // =====================================================
     // TV
-    //
-    // ・ドラマ
-    // ・TVアニメ
     // =====================================================
 
     const tvShows =
@@ -191,13 +615,35 @@ module.exports = async function handler(req, res) {
 
 
     // =====================================================
-    // 映画 + TV
+    // 重要作品
+    // =====================================================
+
+    const importantMovies =
+      await fetchImportantMovies();
+
+
+    const importantTvShows =
+      await fetchImportantTvShows();
+
+
+    // =====================================================
+    // 全作品
     // =====================================================
 
     const allItems =
       []
-        .concat(movies)
-        .concat(tvShows);
+        .concat(
+          movies
+        )
+        .concat(
+          tvShows
+        )
+        .concat(
+          importantMovies
+        )
+        .concat(
+          importantTvShows
+        );
 
 
     // =====================================================
@@ -206,37 +652,74 @@ module.exports = async function handler(req, res) {
     // movie:123
     // tv:123
     //
-    // は別作品として扱う
+    // は別ページ
+    //
+    // 重要作品が重複した場合は
+    // important = true を残す
     // =====================================================
 
-    const seen =
-      new Set();
+    const itemMap =
+      new Map();
+
+
+    allItems.forEach(function(item) {
+
+      if (
+        !item ||
+        !item.id ||
+        !item.mediaType
+      ) {
+
+        return;
+
+      }
+
+
+      const key =
+        item.mediaType +
+        ":" +
+        String(item.id);
+
+
+      if (
+        !itemMap.has(key)
+      ) {
+
+        itemMap.set(
+          key,
+          item
+        );
+
+        return;
+
+      }
+
+
+      // 重要作品フラグを優先
+
+      const existing =
+        itemMap.get(key);
+
+
+      if (
+        item.important &&
+        !existing.important
+      ) {
+
+        itemMap.set(
+          key,
+          item
+        );
+
+      }
+
+    });
 
 
     const uniqueItems =
-      allItems.filter(function(item) {
-
-        const key =
-          item.mediaType +
-          ":" +
-          String(item.id);
-
-
-        if (
-          seen.has(key)
-        ) {
-
-          return false;
-
-        }
-
-
-        seen.add(key);
-
-
-        return true;
-
-      });
+      Array.from(
+        itemMap.values()
+      );
 
 
     // =====================================================
@@ -274,17 +757,7 @@ module.exports = async function handler(req, res) {
 
 
       // ===================================================
-      // ドラマ・TVアニメ
-      //
-      // XML内では
-      //
-      // &
-      //
-      // を
-      //
-      // &amp;
-      //
-      // と書く必要がある
+      // TV
       // ===================================================
 
       if (
@@ -297,11 +770,27 @@ module.exports = async function handler(req, res) {
       }
 
 
+      // ===================================================
+      // priority
+      //
+      // 重要作品 0.9
+      // 通常作品 0.8
+      //
+      // ※ 検索順位を直接上げるものではないが
+      //    サイトマップ上で整理するため
+      // ===================================================
+
+      const priority =
+        item.important
+          ? "0.9"
+          : "0.8";
+
+
       urls.push(`
   <url>
     <loc>${detailUrl}</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <priority>${priority}</priority>
   </url>`);
 
     });
@@ -329,6 +818,7 @@ ${urls.join("\n")}
 
 
     // 24時間キャッシュ
+
     res.setHeader(
       "Cache-Control",
       "public, s-maxage=86400, stale-while-revalidate=3600"
