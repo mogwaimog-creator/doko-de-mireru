@@ -4048,53 +4048,62 @@ async function getProviderWorks(
   else if (country === "kr") {
     originalLanguage = "ko";
   }
+
+　// 国・地域から探す場合はアニメを除外
+const countryWithoutAnimation =
+  country
+    ? "&without_genres=16"
+    : "";
   
-　// =======================================================
-  // 映画
-  // =======================================================
+// =======================================================
+// 映画
+// =======================================================
 
-  const movieUrl =
-    "https://api.themoviedb.org/3/discover/movie" +
-    "?api_key=" +
-    encodeURIComponent(apiKey) +
-    "&language=ja-JP" +
-    "&region=JP" +
-    "&watch_region=JP" +
-    "&with_watch_providers=" +
-    encodeURIComponent(providerId) +
-    "&with_watch_monetization_types=flatrate" +
-        "&sort_by=popularity.desc" +
-    (
-      originalLanguage
-        ? "&with_original_language=" +
-          encodeURIComponent(originalLanguage)
-        : ""
-    ) +
-    "&page=" +
-    encodeURIComponent(page);
+const movieUrl =
+  "https://api.themoviedb.org/3/discover/movie" +
+  "?api_key=" +
+  encodeURIComponent(apiKey) +
+  "&language=ja-JP" +
+  "&region=JP" +
+  "&watch_region=JP" +
+  "&with_watch_providers=" +
+  encodeURIComponent(providerId) +
+  "&with_watch_monetization_types=flatrate" +
+  "&sort_by=popularity.desc" +
+  (
+    originalLanguage
+      ? "&with_original_language=" +
+        encodeURIComponent(originalLanguage)
+      : ""
+  ) +
+  countryWithoutAnimation +
+  "&page=" +
+  encodeURIComponent(page);
 
-  // =======================================================
-  // TV
-  // =======================================================
 
-  const tvUrl =
-    "https://api.themoviedb.org/3/discover/tv" +
-    "?api_key=" +
-    encodeURIComponent(apiKey) +
-    "&language=ja-JP" +
-    "&watch_region=JP" +
-    "&with_watch_providers=" +
-    encodeURIComponent(providerId) +
-        "&with_watch_monetization_types=flatrate" +
-    "&sort_by=popularity.desc" +
-    (
-      originalLanguage
-        ? "&with_original_language=" +
-          encodeURIComponent(originalLanguage)
-        : ""
-    ) +
-    "&page=" +
-    encodeURIComponent(page);
+// =======================================================
+// TV
+// =======================================================
+
+const tvUrl =
+  "https://api.themoviedb.org/3/discover/tv" +
+  "?api_key=" +
+  encodeURIComponent(apiKey) +
+  "&language=ja-JP" +
+  "&watch_region=JP" +
+  "&with_watch_providers=" +
+  encodeURIComponent(providerId) +
+  "&with_watch_monetization_types=flatrate" +
+  "&sort_by=popularity.desc" +
+  (
+    originalLanguage
+      ? "&with_original_language=" +
+        encodeURIComponent(originalLanguage)
+      : ""
+  ) +
+  countryWithoutAnimation +
+  "&page=" +
+  encodeURIComponent(page);
 
   // =======================================================
   // 配信サービスのロゴ・名前
