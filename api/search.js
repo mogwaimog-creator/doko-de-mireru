@@ -4189,24 +4189,13 @@ async function getNetflixNewWorks(
                   show.vote_count || 0
                 ),
 
-              content_type:
-                "tv"
-            };
-
-          }
-        )
-      : [];
-
-
-  const today =
-  new Date();
-
-today.setHours(
-  23,
-  59,
-  59,
-  999
-);
+              const today =
+  new Date()
+    .toISOString()
+    .slice(
+      0,
+      10
+    );
 
 
 return movies
@@ -4216,46 +4205,33 @@ return movies
   .filter(
     function(work){
 
-      if(
-        !work.id ||
-        !work.poster_path ||
-        !work.release_date
-      ){
-        return false;
-      }
-
-
-      const releaseDate =
-        new Date(
-          work.release_date
-        );
-
-
       return (
-        releaseDate <= today
+        work.id &&
+        work.poster_path &&
+        work.release_date &&
+        work.release_date <= today
       );
 
     }
   )
-    .sort(
-      function(a,b){
+  .sort(
+    function(a,b){
 
-        return (
-          new Date(
-            b.release_date
-          ) -
-          new Date(
-            a.release_date
-          )
-        );
+      return (
+        new Date(
+          b.release_date
+        ) -
+        new Date(
+          a.release_date
+        )
+      );
 
-      }
-    )
-    .slice(
-      0,
-      10
-    );
-
+    }
+  )
+  .slice(
+    0,
+    10
+  );
 }
 
 async function getProviderWorks(
