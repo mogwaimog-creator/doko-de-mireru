@@ -4053,6 +4053,22 @@ async function getProviderWorks(
   genre
 ) {
 
+    // =======================================================
+  // Netflix ジャンル
+  //
+  // まずはアニメだけ対応
+  // TMDB genre 16 = Animation
+  // =======================================================
+
+  const movieGenreQuery =
+    genre === "anime"
+      ? "&with_genres=16"
+      : "";
+
+  const tvGenreQuery =
+    genre === "anime"
+      ? "&with_genres=16"
+      : "";
 
     // =======================================================
   // 国・地域による絞り込み
@@ -4072,8 +4088,9 @@ async function getProviderWorks(
   }
 
 　// 国・地域から探す場合はアニメを除外
+// ただし「アニメ」を選択している場合は除外しない
 const countryWithoutAnimation =
-  country
+  country && genre !== "anime"
     ? "&without_genres=16"
     : "";
   
@@ -4098,7 +4115,8 @@ const movieUrl =
         encodeURIComponent(originalLanguage)
       : ""
   ) +
-  countryWithoutAnimation +
+ countryWithoutAnimation +
+movieGenreQuery +
 "&page=" +
 encodeURIComponent(page);
 
@@ -4123,9 +4141,9 @@ const tvUrl =
       : ""
   ) +
   countryWithoutAnimation +
+tvGenreQuery +
 "&page=" +
 encodeURIComponent(page);
-
 
   // =======================================================
   // 配信サービスのロゴ・名前
