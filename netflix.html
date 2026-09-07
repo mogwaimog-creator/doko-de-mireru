@@ -1297,6 +1297,40 @@ footer{
   }
 
 }
+
+/* =========================================================
+   Netflixページ 上部アクション
+========================================================= */
+
+.provider-header-actions{
+  margin-top:14px;
+}
+
+.main-search-button{
+  display:inline-block;
+
+  padding:10px 18px;
+
+  border-radius:9px;
+
+  background:#2563eb;
+
+  color:#fff;
+
+  font-size:14px;
+
+  font-weight:800;
+
+  transition:
+    background .15s ease,
+    transform .15s ease;
+}
+
+.main-search-button:hover{
+  background:#1d4ed8;
+
+  transform:translateY(-1px);
+}
   
 </style>
   
@@ -1352,17 +1386,29 @@ footer{
 
   <section class="provider-header">
 
-    <h1>
-      Netflixで見られる映画・ドラマ・アニメ
-    </h1>
+    <section class="provider-header">
 
-    <p>
-      Netflixで現在見放題配信されている映画・ドラマ・アニメを紹介しています。
-      気になる作品を選ぶと、作品情報や日本国内の配信状況を確認できます。
-    </p>
+  <h1>
+    Netflixで見られる映画・ドラマ・アニメ
+  </h1>
 
-  </section>
+  <p>
+    Netflixで現在見放題配信されている映画・ドラマ・アニメを紹介しています。
+    気になる作品を選ぶと、作品情報や日本国内の配信状況を確認できます。
+  </p>
 
+  <div class="provider-header-actions">
+
+    <a
+      class="main-search-button"
+      href="./index.html"
+    >
+      🔍 観たい作品を検索
+    </a>
+
+  </div>
+
+</section>
 <!-- =======================================================
      Netflixの注目作品
 ======================================================== -->
