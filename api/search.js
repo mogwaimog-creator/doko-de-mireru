@@ -4238,17 +4238,18 @@ return movies
     tvShows
   )
   .filter(
-    function(work){
+  function(work){
 
-      return (
-        work.id &&
-        work.poster_path &&
-        work.release_date &&
-        work.release_date <= today
-      );
+    return (
+      work.id &&
+      work.poster_path &&
+      work.release_date &&
+      work.release_date <= today &&
+      work.release_date >= thirtyDaysAgoString
+    );
 
-    }
-  )
+  }
+)
   .sort(
   function(a,b){
 
