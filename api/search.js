@@ -129,6 +129,11 @@ const popular =
     ? req.query.popular.trim()
     : "";
 
+const netflixNew =
+  String(
+    req.query.netflixNew || ""
+  ).trim();
+    
 // =====================================================
 // 配信サービス
 //
@@ -288,7 +293,7 @@ if (popular === "1") {
 }
 
 if(
-  req.query.netflixNew === "1"
+  netflixNew === "1"
 ){
 
   const newResults =
@@ -296,10 +301,12 @@ if(
       apiKey
     );
 
-  return res.status(200).json({
-    results:
-      newResults
-  });
+  return res
+    .status(200)
+    .json({
+      results:
+        newResults
+    });
 
 }
     
