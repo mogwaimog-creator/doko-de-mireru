@@ -1232,6 +1232,69 @@ footer{
   }
 
 }
+
+/* =========================================================
+   探し方に戻るボタン
+========================================================= */
+
+#backToBrowseButton{
+  position:fixed;
+
+  right:20px;
+  bottom:20px;
+
+  z-index:1000;
+
+  padding:12px 16px;
+
+  border:0;
+  border-radius:999px;
+
+  background:#2563eb;
+  color:#fff;
+
+  font-size:14px;
+  font-weight:700;
+
+  cursor:pointer;
+
+  box-shadow:
+    0 5px 16px
+    rgba(0,0,0,.18);
+
+  opacity:0;
+  pointer-events:none;
+
+  transform:translateY(10px);
+
+  transition:
+    opacity .2s ease,
+    transform .2s ease,
+    background .2s ease;
+}
+
+#backToBrowseButton.show{
+  opacity:1;
+  pointer-events:auto;
+  transform:translateY(0);
+}
+
+#backToBrowseButton:hover{
+  background:#1d4ed8;
+}
+
+@media(max-width:550px){
+
+  #backToBrowseButton{
+    right:14px;
+    bottom:14px;
+
+    padding:11px 14px;
+
+    font-size:13px;
+  }
+
+}
   
 </style>
   
@@ -1353,7 +1416,10 @@ footer{
      国・地域から探す
 ======================================================== -->
 
-<section class="country-section">
+<section
+  id="browseSection"
+  class="country-section"
+>
 
   <div class="country-heading">
 
@@ -1457,7 +1523,7 @@ footer{
 
   </section>
 
-
+  
   <!-- =======================================================
        補足
   ======================================================== -->
@@ -1469,6 +1535,14 @@ footer{
 
   </div>
 
+<button
+  id="backToBrowseButton"
+  type="button"
+  aria-label="探し方に戻る"
+>
+  ↑ 探し方に戻る
+</button>
+  
 
 </main>
 
