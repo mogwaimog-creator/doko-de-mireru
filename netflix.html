@@ -1829,6 +1829,10 @@ const selectedCountry =
     "country"
   ) || "";
 
+const selectedGenre =
+  urlParams.get(
+    "genre"
+  ) || "";
   
 // =========================================================
 // HTMLエスケープ
@@ -2992,6 +2996,16 @@ if(
 
 }
 
+if(
+  selectedGenre
+){
+  apiUrl +=
+    "&genre=" +
+    encodeURIComponent(
+      selectedGenre
+    );
+}
+    
 
 // -------------------------------------------------------
 // Netflix作品を取得
