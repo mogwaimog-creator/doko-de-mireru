@@ -4061,16 +4061,16 @@ async function getProviderWorks(
   // =======================================================
 
   const movieGenreQuery =
-    genre === "anime"
-      ? "&with_genres=16"
-      : "";
+  genre === "anime"
+    ? "&with_genres=16&with_original_language=ja"
+    : "";
 
-  const tvGenreQuery =
-    genre === "anime"
-      ? "&with_genres=16"
-      : "";
-
-    // =======================================================
+const tvGenreQuery =
+  genre === "anime"
+    ? "&with_genres=16&with_original_language=ja"
+    : "";
+    
+  // =======================================================
   // 国・地域による絞り込み
   //
   // jp = 日本
