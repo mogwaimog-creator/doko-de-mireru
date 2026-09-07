@@ -4293,7 +4293,15 @@ encodeURIComponent(page);
       movieData.results
     )
       ? movieData.results
-          .slice(0, 10)
+          .slice(
+  0,
+  (
+    genre === "romance" ||
+    genre === "horror"
+  )
+    ? 20
+    : 10
+)
           .map(
             function(movie){
 
