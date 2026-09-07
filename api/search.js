@@ -4141,12 +4141,17 @@ async function getNetflixNewWorks(
                 ),
 
               vote_count:
-                Number(
-                  movie.vote_count || 0
-                ),
+  Number(
+    movie.vote_count || 0
+  ),
 
-              content_type:
-                "movie"
+popularity:
+  Number(
+    movie.popularity || 0
+  ),
+
+content_type:
+  "movie"
             };
 
           }
@@ -4185,12 +4190,17 @@ async function getNetflixNewWorks(
                 ),
 
               vote_count:
-                Number(
-                  show.vote_count || 0
-                ),
+  Number(
+    show.vote_count || 0
+  ),
 
-              content_type:
-                "tv"
+popularity:
+  Number(
+    show.popularity || 0
+  ),
+
+content_type:
+  "tv"
             };
 
           }
