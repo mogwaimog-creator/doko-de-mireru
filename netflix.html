@@ -1867,6 +1867,23 @@ const selectedGenre =
     "genre"
   ) || "";
 
+const newNetflixSection =
+  document.getElementById(
+    "newNetflixSection"
+  );
+
+
+if(
+  newNetflixSection &&
+  (
+    selectedCountry ||
+    selectedGenre
+  )
+){
+  newNetflixSection.style.display =
+    "none";
+}
+  
  // =========================================================
 // 国・地域 または ジャンル選択時
 // Netflixの配信作品まで自動スクロール
