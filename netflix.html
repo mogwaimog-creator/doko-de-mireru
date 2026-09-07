@@ -2999,6 +2999,40 @@ loadNetflixWorks(
 );
 
 // =========================================================
+// 国・地域を選択したとき
+// Netflix作品一覧まで自動スクロール
+// =========================================================
+
+if(
+  selectedCountry
+){
+
+  const netflixWorksSection =
+    document.getElementById(
+      "netflixWorksSection"
+    );
+
+  if(
+    netflixWorksSection
+  ){
+
+    setTimeout(
+      function(){
+
+        netflixWorksSection.scrollIntoView({
+          behavior:"smooth",
+          block:"start"
+        });
+
+      },
+      300
+    );
+
+  }
+
+}
+  
+// =========================================================
 // 探し方に戻るボタン
 // =========================================================
 
