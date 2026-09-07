@@ -2995,6 +2995,67 @@ loadNetflixTopWorks();
 loadNetflixWorks(
   false
 );
+
+// =========================================================
+// 探し方に戻るボタン
+// =========================================================
+
+const backToBrowseButton =
+  document.getElementById(
+    "backToBrowseButton"
+  );
+
+const browseSection =
+  document.getElementById(
+    "browseSection"
+  );
+
+
+// =========================================================
+// スクロールしたらボタンを表示
+// =========================================================
+
+window.addEventListener(
+  "scroll",
+  function(){
+
+    if(
+      window.scrollY > 700
+    ){
+
+      backToBrowseButton.classList.add(
+        "show"
+      );
+
+    }
+    else{
+
+      backToBrowseButton.classList.remove(
+        "show"
+      );
+
+    }
+
+  }
+);
+
+
+// =========================================================
+// 探し方まで戻る
+// =========================================================
+
+backToBrowseButton.addEventListener(
+  "click",
+  function(){
+
+    browseSection.scrollIntoView({
+      behavior:"smooth",
+      block:"start"
+    });
+
+  }
+);  
+  
 </script>
 
 
