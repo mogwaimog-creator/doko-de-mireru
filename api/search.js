@@ -805,6 +805,12 @@ movies =
       return false;
     }
 
+　　    if (
+      isUnsafeAdultContent(movie)
+    ) {
+      return false;
+    }
+    
     if (
       movie.media_type === "collection"
     ) {
@@ -3408,6 +3414,69 @@ function normalizeTitle(title) {
 }
 
 // =========================================================
+// 一般向けサイト用
+// 成人向け・性的作品の除外
+//
+// TMDBの adult=false だけでは
+// 一部の成人向け作品が残る場合があるため
+// タイトル・原題・あらすじも確認する
+// =========================================================
+
+function isUnsafeAdultContent(item) {
+
+  if (!item) {
+    return false;
+  }
+
+
+  // TMDBの成人向けフラグ
+  if (item.adult === true) {
+    return true;
+  }
+
+
+  const text =
+    [
+      item.title,
+      item.original_title,
+      item.name,
+      item.original_name,
+      item.overview
+    ]
+      .filter(Boolean)
+      .join(" ")
+      .toLowerCase();
+
+
+  const blockedWords = [
+    "porn",
+    "porno",
+    "pornography",
+    "xxx",
+    "adult video",
+    "av女優",
+    "av男優",
+    "アダルトビデオ",
+    "ポルノ",
+    "官能",
+    "sex film",
+    "erotic movie"
+  ];
+
+
+  return blockedWords.some(
+    function(word) {
+
+      return text.includes(
+        word.toLowerCase()
+      );
+
+    }
+  );
+
+}
+
+// =========================================================
 // 検索候補を正規化してまとめる
 //
 // 元の検索語
@@ -5518,6 +5587,13 @@ shows =
     function(show) {
 
       if (!show) {
+        return false;
+      }
+
+
+      if (
+        isUnsafeAdultContent(show)
+      ) {
         return false;
       }
 
