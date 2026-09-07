@@ -163,6 +163,25 @@ const country =
         .toLowerCase()
     : "";
 
+// =====================================================
+// Netflix ジャンル
+//
+// anime     = アニメ
+// suspense  = サスペンス・ミステリー
+// romance   = 恋愛・ラブコメ
+// action    = アクション
+// comedy    = コメディ
+// horror    = ホラー
+// scifi     = SF・ファンタジー
+// =====================================================
+
+const genre =
+  req.query &&
+  typeof req.query.genre === "string"
+    ? req.query.genre
+        .trim()
+        .toLowerCase()
+    : "";
     
     // =====================================================
 // ページ番号
@@ -275,12 +294,13 @@ if (popular === "1") {
 if (provider === "netflix") {
 
   const netflixResults =
-    await getProviderWorks(
-      apiKey,
-      8,
-      page,
-      country
-    );
+  await getProviderWorks(
+    apiKey,
+    8,
+    page,
+    country,
+    genre
+  );
 
   return res
     .status(200)
@@ -4029,7 +4049,8 @@ async function getProviderWorks(
   apiKey,
   providerId,
   page,
-  country
+  country,
+  genre
 ) {
 
     // =======================================================
