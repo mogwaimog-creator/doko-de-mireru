@@ -4217,6 +4217,22 @@ const today =
     );
 
 
+const thirtyDaysAgo =
+  new Date();
+
+thirtyDaysAgo.setDate(
+  thirtyDaysAgo.getDate() - 30
+);
+
+const thirtyDaysAgoString =
+  thirtyDaysAgo
+    .toISOString()
+    .slice(
+      0,
+      10
+    );
+
+
 return movies
   .concat(
     tvShows
