@@ -1833,6 +1833,43 @@ const selectedGenre =
   urlParams.get(
     "genre"
   ) || "";
+
+ // =========================================================
+// ジャンル選択時
+// Netflixの配信作品まで自動スクロール
+// =========================================================
+
+if(
+  selectedGenre
+){
+  window.addEventListener(
+    "load",
+    function(){
+
+      setTimeout(
+        function(){
+
+          const netflixWorksSection =
+            document.getElementById(
+              "netflixWorksSection"
+            );
+
+          if(
+            netflixWorksSection
+          ){
+            netflixWorksSection.scrollIntoView({
+              behavior: "smooth",
+              block: "start"
+            });
+          }
+
+        },
+        300
+      );
+
+    }
+  );
+} 
   
 // =========================================================
 // HTMLエスケープ
