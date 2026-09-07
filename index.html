@@ -3729,14 +3729,21 @@ const overviewHtml =
           ?
 
           `
-          <img
-            class="movie-poster"
-            src="${poster}"
-            alt="${escapeHtml(
-              movie.title || ""
-            )}のポスター"
-            loading="lazy"
-          >
+          <a
+  href="${detailUrl}"
+  aria-label="${escapeHtml(
+    movie.title || "作品"
+  )}の詳細を見る"
+>
+  <img
+    class="movie-poster"
+    src="${poster}"
+    alt="${escapeHtml(
+      movie.title || ""
+    )}のポスター"
+    loading="lazy"
+  >
+</a>
           `
 
           :
