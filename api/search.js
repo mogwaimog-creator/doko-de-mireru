@@ -4084,7 +4084,20 @@ else if(
   tvGenreQuery =
     "&with_genres=9648";
 }
-    
+
+else if(
+  genre === "romance"
+){
+  // 映画：恋愛
+  movieGenreQuery =
+    "&with_genres=10749";
+
+  // TVには専用のRomanceジャンルがないため
+  // 現時点では無理に絞り込まない
+  tvGenreQuery =
+    "";
+}
+  
   // =======================================================
   // 国・地域による絞り込み
   //
@@ -4173,16 +4186,21 @@ encodeURIComponent(page);
 
 
   const [
-    movieData,
-    tvData,
-    providerData
-  ] =
-    await Promise.all([
-      fetchJson(movieUrl),
-      fetchJson(tvUrl),
-      fetchJson(providerUrl)
-    ]);
+  movieData,
+  tvData,
+  providerData
+] =
+  await Promise.all([
+    fetchJson(movieUrl),
 
+    genre === "romance"
+      ? Promise.resolve({
+          results: []
+        })
+      : fetchJson(tvUrl),
+
+    fetchJson(providerUrl)
+  ]);
 
   // =======================================================
   // 配信サービス情報
