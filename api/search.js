@@ -849,6 +849,120 @@ movies =
 
     return true;
   });
+
+
+// =====================================================
+// 検索語と関係のない映画を除外
+//
+// 全作品共通
+//
+// 例:
+// あいあんまん
+// ↓
+// アイアンマン
+// アイアンマン2
+// アイアンマン3
+//
+// のような関連タイトルだけを残す
+// =====================================================
+
+const normalizedMovieSearchQueries =
+  searchQueries
+    .map(function(value) {
+
+      return normalizeTitle(
+        value
+      );
+
+    })
+    .filter(Boolean);
+
+
+movies =
+  movies.filter(
+    function(movie) {
+
+      if (!movie) {
+        return false;
+      }
+
+
+      const titles = [
+        movie.title || "",
+        movie.original_title || ""
+      ]
+        .map(function(value) {
+
+          return normalizeTitle(
+            value
+          );
+
+        })
+        .filter(Boolean);
+
+
+      return titles.some(
+        function(title) {
+
+          return normalizedMovieSearchQueries.some(
+            function(searchQuery) {
+
+              if (
+                !title ||
+                !searchQuery
+              ) {
+
+                return false;
+
+              }
+
+
+              // 完全一致
+              if (
+                title === searchQuery
+              ) {
+
+                return true;
+
+              }
+
+
+              // アイアンマン2 など
+              if (
+                title.includes(
+                  searchQuery
+                )
+              ) {
+
+                return true;
+
+              }
+
+
+              // 検索語の方が長い場合
+              if (
+                title.length >= 3 &&
+                searchQuery.includes(
+                  title
+                )
+              ) {
+
+                return true;
+
+              }
+
+
+              return false;
+
+            }
+          );
+
+        }
+      );
+
+    }
+  );
+    
 // =====================================================
 // 検索関連度順
 //
