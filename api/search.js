@@ -278,7 +278,8 @@ if (provider === "netflix") {
     await getProviderWorks(
       apiKey,
       8,
-      page
+      page,
+      country
     );
 
   return res
@@ -4027,10 +4028,12 @@ function createMiddleDotSearchQuery(query) {
 async function getProviderWorks(
   apiKey,
   providerId,
-  page
+  page,
+  country
 ) {
-
-  // =======================================================
+  
+  
+　// =======================================================
   // 映画
   // =======================================================
 
