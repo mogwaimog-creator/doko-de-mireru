@@ -1123,7 +1123,32 @@ footer{
 
   </section>
 
+<!-- =======================================================
+     評価が高い作品
+======================================================== -->
 
+<section class="featured-section">
+
+  <div class="featured-heading">
+
+    <h2>
+      ⭐ 評価が高い作品
+    </h2>
+
+    <p>
+      Netflixで配信中の作品から、TMDB評価が高い作品をピックアップ
+    </p>
+
+  </div>
+
+  <div
+    id="highRatedWorks"
+    class="featured-grid"
+  ></div>
+
+</section>
+
+  
   <!-- =======================================================
        作品一覧
   ======================================================== -->
@@ -1210,6 +1235,11 @@ const featuredWorks =
     "featuredWorks"
   );  
 
+const highRatedWorks =
+  document.getElementById(
+    "highRatedWorks"
+  );
+  
 const status =
   document.getElementById(
     "status"
@@ -1753,7 +1783,274 @@ const rating =
       .join("");
 
 }
-  
+
+// =========================================================
+// Netflix 評価が高い作品
+// =========================================================
+
+function renderHighRatedWorks(
+  works
+){
+
+  if(
+    !highRatedWorks ||
+    !Array.isArray(works)
+  ){
+
+    return;
+
+  }
+
+
+  // -------------------------------------------------------
+  // 評価のある作品を対象にする
+  // -------------------------------------------------------
+
+  let candidates =
+    works
+      .filter(
+        function(movie){
+
+          return (
+            movie &&
+            movie.id &&
+            movie.poster_path &&
+            Number(
+              movie.vote_average || 0
+            ) > 0
+          );
+
+        }
+      );
+
+
+  // -------------------------------------------------------
+  // できるだけ評価数の少なすぎる作品を除外
+  // -------------------------------------------------------
+
+  const reliableCandidates =
+    candidates.filter(
+      function(movie){
+
+        return (
+          Number(
+            movie.vote_count || 0
+          ) >= 100
+        );
+
+      }
+    );
+
+
+  // 5作品以上あればこちらを使用
+  if(
+    reliableCandidates.length >= 5
+  ){
+
+    candidates =
+      reliableCandidates;
+
+  }
+
+
+  // -------------------------------------------------------
+  // TMDB評価順
+  // 同点なら評価数の多い方を優先
+  // -------------------------------------------------------
+
+  candidates.sort(
+    function(a,b){
+
+      const ratingDiff =
+        Number(
+          b.vote_average || 0
+        ) -
+        Number(
+          a.vote_average || 0
+        );
+
+
+      if(
+        ratingDiff !== 0
+      ){
+
+        return ratingDiff;
+
+      }
+
+
+      return (
+        Number(
+          b.vote_count || 0
+        ) -
+        Number(
+          a.vote_count || 0
+        )
+      );
+
+    }
+  );
+
+
+  const highRated =
+    candidates.slice(
+      0,
+      5
+    );
+
+
+  if(
+    highRated.length === 0
+  ){
+
+    highRatedWorks.innerHTML =
+      '<div class="status">' +
+      '評価が高い作品を取得できませんでした。' +
+      '</div>';
+
+    return;
+
+  }
+
+
+  highRatedWorks.innerHTML =
+    highRated
+      .map(
+        function(movie){
+
+          const poster =
+            "https://image.tmdb.org/t/p/w500" +
+            movie.poster_path;
+
+
+          let detailUrl =
+            "./detail.html?id=" +
+            encodeURIComponent(
+              movie.id
+            );
+
+
+          if(
+            movie.content_type ===
+              "tv_drama" ||
+            movie.content_type ===
+              "anime_tv" ||
+            movie.content_type ===
+              "tv"
+          ){
+
+            detailUrl +=
+              "&type=tv";
+
+          }
+
+
+          const year =
+            movie.release_date
+              ? String(
+                  movie.release_date
+                ).slice(
+                  0,
+                  4
+                )
+              : "";
+
+
+          let mediaType =
+            "映画";
+
+
+          if(
+            movie.content_type ===
+              "tv_drama" ||
+            movie.content_type ===
+              "tv"
+          ){
+
+            mediaType =
+              "ドラマ";
+
+          }
+          else if(
+            movie.content_type ===
+              "anime_tv" ||
+            movie.content_type ===
+              "anime_movie"
+          ){
+
+            mediaType =
+              "アニメ";
+
+          }
+
+
+          const rating =
+            Number(
+              movie.vote_average || 0
+            );
+
+
+          return `
+
+            <a
+              class="featured-card"
+              href="${detailUrl}"
+            >
+
+              <img
+                class="featured-poster"
+                src="${poster}"
+                alt="${escapeHtml(
+                  movie.title || ""
+                )}のポスター"
+                loading="lazy"
+              >
+
+              <div class="featured-info">
+
+                <h3 class="featured-title">
+                  ${escapeHtml(
+                    movie.title || ""
+                  )}
+                </h3>
+
+                <div class="featured-meta">
+
+                  <span>
+                    ${
+                      mediaType === "映画"
+                        ? "🎬 映画"
+                        : mediaType === "ドラマ"
+                          ? "📺 ドラマ"
+                          : "🎌 アニメ"
+                    }
+                  </span>
+
+                  ${
+                    year
+                      ? `<span>${escapeHtml(year)}年</span>`
+                      : ""
+                  }
+
+                  ${
+                    rating > 0
+                      ? `<span>⭐ ${rating.toFixed(1)}</span>`
+                      : ""
+                  }
+
+                </div>
+
+              </div>
+
+            </a>
+
+          `;
+
+        }
+      )
+      .join("");
+
+}  
 
 // =========================================================
 // 作品カード
@@ -2157,6 +2454,10 @@ async function loadNetflixWorks(
 ){
 
   renderFeaturedWorks(
+    works
+  );
+
+  renderHighRatedWorks(
     works
   );
 
