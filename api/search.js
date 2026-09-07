@@ -4236,49 +4236,13 @@ return movies
   .sort(
   function(a,b){
 
-    const dateA =
-      new Date(
-        a.release_date
-      );
-
-    const dateB =
-      new Date(
-        b.release_date
-      );
-
-
-    const daysDiff =
-      Math.abs(
-        dateB -
-        dateA
-      ) /
-      (
-        1000 *
-        60 *
-        60 *
-        24
-      );
-
-
-    if(
-      daysDiff <= 14
-    ){
-
-      return (
-        Number(
-          b.popularity || 0
-        ) -
-        Number(
-          a.popularity || 0
-        )
-      );
-
-    }
-
-
     return (
-      dateB -
-      dateA
+      Number(
+        b.popularity || 0
+      ) -
+      Number(
+        a.popularity || 0
+      )
     );
 
   }
