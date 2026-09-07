@@ -1806,22 +1806,87 @@ function renderHighRatedWorks(
   // 評価のある作品を対象にする
   // -------------------------------------------------------
 
-  let candidates =
-    works
-      .filter(
-        function(movie){
+// -------------------------------------------------------
+// 注目作品で使ったIDを取得
+// -------------------------------------------------------
 
-          return (
-            movie &&
-            movie.id &&
-            movie.poster_path &&
-            Number(
-              movie.vote_average || 0
-            ) > 0
-          );
+const featuredIds =
+  works
+    .filter(
+      function(movie){
+
+        return (
+          movie &&
+          movie.id &&
+          movie.poster_path
+        );
+
+      }
+    )
+    .slice(
+      0,
+      5
+    )
+    .map(
+      function(movie){
+
+        return String(
+          movie.id
+        );
+
+      }
+    );
+
+
+// -------------------------------------------------------
+// 評価のある作品を対象にする
+// 注目作品と同じ作品は除外
+// -------------------------------------------------------
+
+let candidates =
+  works
+    .filter(
+      function(movie){
+
+        if(
+          !movie ||
+          !movie.id ||
+          !movie.poster_path
+        ){
+
+          return false;
 
         }
-      );
+
+
+        if(
+          Number(
+            movie.vote_average || 0
+          ) <= 0
+        ){
+
+          return false;
+
+        }
+
+
+        if(
+          featuredIds.includes(
+            String(
+              movie.id
+            )
+          )
+        ){
+
+          return false;
+
+        }
+
+
+        return true;
+
+      }
+    );
 
 
   // -------------------------------------------------------
