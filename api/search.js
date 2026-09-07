@@ -4097,6 +4097,19 @@ else if(
   tvGenreQuery =
     "";
 }
+
+else if(
+  genre === "action"
+){
+  // 映画：アクション
+  movieGenreQuery =
+    "&with_genres=28";
+
+  // TV：Action & Adventure
+  tvGenreQuery =
+    "&with_genres=10759";
+}
+
   
   // =======================================================
   // 国・地域による絞り込み
