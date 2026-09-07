@@ -4121,6 +4121,19 @@ else if(
   tvGenreQuery =
     "&with_genres=35";
 }  
+
+else if(
+  genre === "horror"
+){
+  // 映画：ホラー
+  movieGenreQuery =
+    "&with_genres=27";
+
+  // TVには専用のHorrorジャンルがないため
+  // 現時点では無理に絞り込まない
+  tvGenreQuery =
+    "";
+}
   
   // =======================================================
   // 国・地域による絞り込み
@@ -4217,11 +4230,14 @@ encodeURIComponent(page);
   await Promise.all([
     fetchJson(movieUrl),
 
-    genre === "romance"
-      ? Promise.resolve({
-          results: []
-        })
-      : fetchJson(tvUrl),
+    (
+  genre === "romance" ||
+  genre === "horror"
+)
+  ? Promise.resolve({
+      results: []
+    })
+  : fetchJson(tvUrl),
 
     fetchJson(providerUrl)
   ]);
