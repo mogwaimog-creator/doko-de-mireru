@@ -3003,6 +3003,199 @@ async function loadNetflixTopWorks(){
 }
 
 // =========================================================
+// Netflix 新着作品
+// =========================================================
+
+async function loadNetflixNewWorks(){
+
+  if(
+    !newNetflixWorks
+  ){
+    return;
+  }
+
+
+  try{
+
+    const response =
+      await fetch(
+        "/api/search?netflixNew=1"
+      );
+
+
+    const data =
+      await response.json();
+
+
+    if(
+      !response.ok
+    ){
+      throw new Error(
+        data.error ||
+        "新着作品の取得に失敗しました。"
+      );
+    }
+
+
+    const works =
+      Array.isArray(
+        data.results
+      )
+        ? data.results
+            .filter(
+              function(movie){
+
+                return (
+                  movie &&
+                  movie.id &&
+                  movie.poster_path
+                );
+
+              }
+            )
+            .slice(
+              0,
+              5
+            )
+        : [];
+
+
+    if(
+      works.length === 0
+    ){
+
+      newNetflixWorks.innerHTML =
+        '<div class="status">' +
+        '新着作品を取得できませんでした。' +
+        '</div>';
+
+      return;
+    }
+
+
+    newNetflixWorks.innerHTML =
+      works
+        .map(
+          function(movie){
+
+            const poster =
+              "https://image.tmdb.org/t/p/w500" +
+              movie.poster_path;
+
+
+            let detailUrl =
+              "./detail.html?id=" +
+              encodeURIComponent(
+                movie.id
+              );
+
+
+            if(
+              movie.content_type === "tv"
+            ){
+
+              detailUrl +=
+                "&type=tv";
+
+            }
+
+
+            const year =
+              movie.release_date
+                ? String(
+                    movie.release_date
+                  ).slice(
+                    0,
+                    4
+                  )
+                : "";
+
+
+            const mediaType =
+              movie.content_type === "tv"
+                ? "📺 ドラマ"
+                : "🎬 映画";
+
+
+            const rating =
+              Number(
+                movie.vote_average || 0
+              );
+
+
+            return `
+
+              <a
+                class="featured-card"
+                href="${detailUrl}"
+              >
+
+                <img
+                  class="featured-poster"
+                  src="${poster}"
+                  alt="${escapeHtml(
+                    movie.title || ""
+                  )}のポスター"
+                  loading="lazy"
+                >
+
+                <div class="featured-info">
+
+                  <h3 class="featured-title">
+                    ${escapeHtml(
+                      movie.title || ""
+                    )}
+                  </h3>
+
+                  <div class="featured-meta">
+
+                    <span>
+                      ${mediaType}
+                    </span>
+
+                    ${
+                      year
+                        ? `<span>${escapeHtml(year)}年</span>`
+                        : ""
+                    }
+
+                    ${
+                      rating > 0
+                        ? `<span>⭐ ${rating.toFixed(1)}</span>`
+                        : ""
+                    }
+
+                  </div>
+
+                </div>
+
+              </a>
+
+            `;
+
+          }
+        )
+        .join("");
+
+
+  }catch(error){
+
+    console.error(
+      "Netflix new works error:",
+      error
+    );
+
+
+    newNetflixWorks.innerHTML =
+      '<div class="status">' +
+      '新着作品を取得できませんでした。' +
+      '</div>';
+
+  }
+
+}
+  
+// =========================================================
 // Netflix作品取得
 // =========================================================
 
