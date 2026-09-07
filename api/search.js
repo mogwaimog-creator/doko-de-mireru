@@ -4060,15 +4060,30 @@ async function getProviderWorks(
   // TMDB genre 16 = Animation
   // =======================================================
 
-  const movieGenreQuery =
-  genre === "anime"
-    ? "&with_genres=16&with_original_language=ja"
-    : "";
+  let movieGenreQuery = "";
+let tvGenreQuery = "";
 
-const tvGenreQuery =
+if(
   genre === "anime"
-    ? "&with_genres=16&with_original_language=ja"
-    : "";
+){
+  // 日本アニメ中心
+  movieGenreQuery =
+    "&with_genres=16&with_original_language=ja";
+
+  tvGenreQuery =
+    "&with_genres=16&with_original_language=ja";
+}
+else if(
+  genre === "suspense"
+){
+  // 映画：スリラー または ミステリー
+  movieGenreQuery =
+    "&with_genres=53%7C9648";
+
+  // TV：ミステリー
+  tvGenreQuery =
+    "&with_genres=9648";
+}
     
   // =======================================================
   // 国・地域による絞り込み
