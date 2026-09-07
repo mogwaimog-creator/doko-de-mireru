@@ -1195,6 +1195,43 @@ footer{
   }
 
 }
+
+/* =========================================================
+   Netflix配信作品 ポスター一覧
+========================================================= */
+
+.netflix-works-grid{
+  display:grid;
+  grid-template-columns:
+    repeat(5,minmax(0,1fr));
+  gap:14px;
+}
+
+
+/* =========================================================
+   Netflix配信作品 スマホ
+========================================================= */
+
+@media(max-width:800px){
+
+  .netflix-works-grid{
+    grid-template-columns:
+      repeat(3,minmax(0,1fr));
+  }
+
+}
+
+
+@media(max-width:550px){
+
+  .netflix-works-grid{
+    grid-template-columns:
+      repeat(2,minmax(0,1fr));
+
+    gap:12px;
+  }
+
+}
   
 </style>
   
@@ -1397,9 +1434,9 @@ footer{
 
 
     <div
-      id="results"
-      class="results"
-    ></div>
+  id="results"
+  class="netflix-works-grid"
+></div>
 
 
     <div
@@ -2365,6 +2402,7 @@ let candidates =
 
 }  
 
+
 // =========================================================
 // 作品カード
 // =========================================================
@@ -2373,10 +2411,6 @@ function createMovieCard(
   movie
 ){
 
-  // -------------------------------------------------------
-  // ポスター
-  // -------------------------------------------------------
-
   const poster =
     movie.poster_path
       ? "https://image.tmdb.org/t/p/w500" +
@@ -2384,59 +2418,11 @@ function createMovieCard(
       : "";
 
 
-  // -------------------------------------------------------
-  // 公開年
-  // -------------------------------------------------------
-
-  const release =
-    movie.release_date
-      ? formatYear(
-          movie.release_date
-        )
-      : "公開年不明";
-
-
-  // -------------------------------------------------------
-  // 上映時間
-  // -------------------------------------------------------
-
-  const runtime =
-    movie.runtime
-      ? formatRuntime(
-          movie.runtime
-        )
-      : "";
-
-
-  // -------------------------------------------------------
-  // 評価
-  // -------------------------------------------------------
-
-  const rating =
-    Number(
-      movie.vote_average ||
-      0
-    ).toFixed(1);
-
-
-  // -------------------------------------------------------
-  // ID
-  // -------------------------------------------------------
-
   const movieId =
     String(
-      movie.id ||
-      ""
+      movie.id || ""
     ).trim();
 
-
-  // -------------------------------------------------------
-  // 詳細ページURL
-  //
-  // Netflixページでは
-  // currentSearchTypeを使わず
-  // content_typeで判断する
-  // -------------------------------------------------------
 
   let detailUrl =
     "./detail.html?id=" +
@@ -2446,12 +2432,9 @@ function createMovieCard(
 
 
   if(
-    movie.content_type ===
-      "tv_drama" ||
-    movie.content_type ===
-      "anime_tv" ||
-    movie.content_type ===
-      "tv"
+    movie.content_type === "tv_drama" ||
+    movie.content_type === "anime_tv" ||
+    movie.content_type === "tv"
   ){
 
     detailUrl +=
@@ -2460,83 +2443,53 @@ function createMovieCard(
   }
 
 
-  // -------------------------------------------------------
-  // 作品タイプ
-  // -------------------------------------------------------
+  const year =
+    movie.release_date
+      ? String(
+          movie.release_date
+        ).slice(
+          0,
+          4
+        )
+      : "";
+
 
   let mediaType =
-    movie.media_type ||
     "映画";
 
 
   if(
-    movie.content_type ===
-    "anime_tv"
-  ){
-
-    mediaType =
-      "TVアニメ";
-
-  }
-  else if(
-    movie.content_type ===
-    "anime_movie"
-  ){
-
-    mediaType =
-      "劇場版アニメ";
-
-  }
-  else if(
-    movie.content_type ===
-    "tv_drama"
+    movie.content_type === "tv_drama" ||
+    movie.content_type === "tv"
   ){
 
     mediaType =
       "ドラマ";
 
   }
+  else if(
+    movie.content_type === "anime_tv" ||
+    movie.content_type === "anime_movie"
+  ){
+
+    mediaType =
+      "アニメ";
+
+  }
 
 
-  // -------------------------------------------------------
-  // あらすじ
-  // -------------------------------------------------------
-
-  const overview =
-    String(
-      movie.overview ||
-      ""
-    ).trim();
-
-
-  const shortOverview =
-    createShortOverview(
-      overview
+  const rating =
+    Number(
+      movie.vote_average || 0
     );
 
 
-  const overviewHtml =
-    shortOverview
-      ? `
-        <p class="movie-overview">
-          ${escapeHtml(
-            shortOverview
-          )}
-        </p>
-      `
-      : "";
-
-
-
-
-  // -------------------------------------------------------
-  // カード
-  // -------------------------------------------------------
-
   return `
 
-    <article class="movie-card">
-
+    <a
+      class="featured-card"
+      href="${detailUrl}"
+    >
 
       ${
         poster
@@ -2545,11 +2498,10 @@ function createMovieCard(
 
           `
           <img
-            class="movie-poster"
+            class="featured-poster"
             src="${poster}"
             alt="${escapeHtml(
-              movie.title ||
-              ""
+              movie.title || ""
             )}のポスター"
             loading="lazy"
           >
@@ -2559,132 +2511,50 @@ function createMovieCard(
 
           `
           <div
-            class="movie-poster"
-            style="
-              display:flex;
-              align-items:center;
-              justify-content:center;
-              color:#6b7280;
-            "
-            role="img"
-            aria-label="ポスター画像なし"
+            class="featured-poster featured-poster-empty"
           >
             NO IMAGE
           </div>
           `
       }
 
+      <div class="featured-info">
 
-      <div class="movie-info">
-
-
-        <h2 class="movie-title">
-
+        <h3 class="featured-title">
           ${escapeHtml(
-            movie.title ||
-            ""
+            movie.title || ""
           )}
+        </h3>
 
-        </h2>
+        <div class="featured-meta">
 
-
-        ${
-          movie.original_title
-
-            ?
-
-            `
-            <div class="original-title">
-
-              ${escapeHtml(
-                movie.original_title
-              )}
-
-            </div>
-            `
-
-            :
-
-            ""
-        }
-
-
-        <div class="movie-meta-row">
-
-
-          <span class="movie-meta-item">
-            🎬 ${escapeHtml(
-              mediaType
-            )}
+          <span>
+            ${
+              mediaType === "映画"
+                ? "🎬 映画"
+                : mediaType === "ドラマ"
+                  ? "📺 ドラマ"
+                  : "🎌 アニメ"
+            }
           </span>
-
-
-          <span class="movie-meta-item">
-            📅 ${escapeHtml(
-              release
-            )}
-          </span>
-
-
-          <span class="movie-meta-item">
-            ⭐ TMDB評価：${rating}
-          </span>
-
 
           ${
-            runtime
-
-              ?
-
-              `
-              <span class="movie-meta-item">
-                🕐 ${escapeHtml(
-                  runtime
-                )}
-              </span>
-              `
-
-              :
-
-              ""
+            year
+              ? `<span>${escapeHtml(year)}年</span>`
+              : ""
           }
 
+          ${
+            rating > 0
+              ? `<span>⭐ ${rating.toFixed(1)}</span>`
+              : ""
+          }
 
         </div>
 
-
-        ${overviewHtml}
-
-
-        ${
-          movieId
-
-            ?
-
-            `
-            <a
-              class="detail-button"
-              href="${detailUrl}"
-              aria-label="${escapeHtml(
-                movie.title ||
-                "作品"
-              )}の詳細を見る"
-            >
-              作品詳細を見る →
-            </a>
-            `
-
-            :
-
-            ""
-        }
-
-
       </div>
 
-
-
-    </article>
+    </a>
 
   `;
 
