@@ -1826,6 +1826,260 @@ font-size:13px;
 
 }
 
+/* =========================================================
+   おすすめ作品から探す
+========================================================= */
+
+.recommend-section{
+  background:#fff;
+
+  border:
+    1px solid
+    #e5e7eb;
+
+  border-radius:18px;
+
+  padding:
+    22px
+    24px;
+
+  margin-bottom:25px;
+
+  box-shadow:
+    0 4px 18px
+    rgba(15,23,42,.07);
+}
+
+
+/* =========================================================
+   おすすめ作品 見出し
+========================================================= */
+
+.recommend-heading{
+  text-align:center;
+
+  margin-bottom:22px;
+}
+
+
+.recommend-heading h2{
+  margin:0;
+
+  color:#111827;
+
+  font-size:21px;
+
+  font-weight:800;
+}
+
+
+.recommend-heading p{
+  margin:
+    7px
+    0
+    0;
+
+  color:#6b7280;
+
+  font-size:14px;
+
+  line-height:1.6;
+}
+
+
+/* =========================================================
+   映画・ドラマ・アニメ
+========================================================= */
+
+.recommend-grid{
+  display:grid;
+
+  grid-template-columns:
+    repeat(3,minmax(0,1fr));
+
+  gap:16px;
+}
+
+
+.recommend-category{
+  padding:17px;
+
+  background:#f8fafc;
+
+  border:
+    1px solid
+    #e2e8f0;
+
+  border-radius:14px;
+}
+
+
+.recommend-category h3{
+  margin:
+    0
+    0
+    12px;
+
+  color:#111827;
+
+  font-size:17px;
+
+  font-weight:800;
+}
+
+
+/* =========================================================
+   作品リンク
+========================================================= */
+
+.recommend-links{
+  display:flex;
+
+  flex-direction:column;
+
+  gap:8px;
+}
+
+
+.recommend-links a{
+  min-height:44px;
+
+  padding:
+    10px
+    12px;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:space-between;
+
+  gap:10px;
+
+  background:#fff;
+
+  border:
+    1px solid
+    #e2e8f0;
+
+  border-radius:10px;
+
+  color:#334155;
+
+  font-size:14px;
+
+  font-weight:700;
+
+  line-height:1.4;
+
+  transition:
+    transform .15s ease,
+    border-color .15s ease,
+    color .15s ease,
+    box-shadow .15s ease;
+}
+
+
+.recommend-links a:hover{
+  transform:
+    translateY(-1px);
+
+  border-color:#2563eb;
+
+  color:#2563eb;
+
+  box-shadow:
+    0 3px 10px
+    rgba(37,99,235,.10);
+}
+
+
+.recommend-name{
+  min-width:0;
+}
+
+
+.recommend-arrow{
+  flex-shrink:0;
+
+  color:#2563eb;
+
+  font-size:21px;
+
+  font-weight:700;
+
+  line-height:1;
+}
+
+
+/* =========================================================
+   おすすめ作品 タブレット
+========================================================= */
+
+@media(max-width:850px){
+
+  .recommend-grid{
+    grid-template-columns:1fr;
+  }
+
+}
+
+
+/* =========================================================
+   おすすめ作品 スマホ
+========================================================= */
+
+@media(max-width:600px){
+
+  .recommend-section{
+    padding:
+      18px
+      14px;
+  }
+
+
+  .recommend-heading{
+    text-align:left;
+  }
+
+
+  .recommend-heading h2{
+    font-size:19px;
+  }
+
+
+  .recommend-grid{
+    gap:12px;
+  }
+
+
+  .recommend-category{
+    padding:14px;
+  }
+
+
+  .recommend-links{
+    display:grid;
+
+    grid-template-columns:
+      repeat(2,minmax(0,1fr));
+
+    gap:8px;
+  }
+
+
+  .recommend-links a{
+    min-height:48px;
+
+    padding:
+      9px
+      10px;
+
+    font-size:13px;
+  }
+
+}
+     
      
 </style>
 
@@ -1940,6 +2194,170 @@ font-size:13px;
 
 </section>
 
+<!-- =====================================================
+     おすすめ作品から探す
+====================================================== -->
+
+<section
+  class="recommend-section"
+  aria-labelledby="recommendHeading"
+>
+
+  <div class="recommend-heading">
+
+    <h2 id="recommendHeading">
+      🔥 おすすめ作品から探す
+    </h2>
+
+    <p>
+      定番の人気作品から、配信情報をすぐにチェックできます
+    </p>
+
+  </div>
+
+
+  <div class="recommend-grid">
+
+
+    <!-- =================================================
+         映画
+    ================================================== -->
+
+    <div class="recommend-category">
+
+      <h3>
+        🎬 映画
+      </h3>
+
+      <div class="recommend-links">
+
+        <a href="./detail.html?id=157336&type=movie">
+          <span class="recommend-name">
+            インターステラー
+          </span>
+          <span class="recommend-arrow">›</span>
+        </a>
+
+        <a href="./detail.html?id=671&type=movie">
+          <span class="recommend-name">
+            ハリー・ポッターと賢者の石
+          </span>
+          <span class="recommend-arrow">›</span>
+        </a>
+
+        <a href="./detail.html?id=372058&type=movie">
+          <span class="recommend-name">
+            君の名は。
+          </span>
+          <span class="recommend-arrow">›</span>
+        </a>
+
+        <a href="./detail.html?id=211672&type=movie">
+          <span class="recommend-name">
+            ミニオンズ
+          </span>
+          <span class="recommend-arrow">›</span>
+        </a>
+
+      </div>
+
+    </div>
+
+
+    <!-- =================================================
+         ドラマ
+    ================================================== -->
+
+    <div class="recommend-category">
+
+      <h3>
+        📺 ドラマ
+      </h3>
+
+      <div class="recommend-links">
+
+        <a href="./detail.html?id=218038&type=tv">
+          <span class="recommend-name">
+            VIVANT
+          </span>
+          <span class="recommend-arrow">›</span>
+        </a>
+
+        <a href="./detail.html?id=75701&type=tv">
+          <span class="recommend-name">
+            アンナチュラル
+          </span>
+          <span class="recommend-arrow">›</span>
+        </a>
+
+        <a href="./detail.html?id=55582&type=tv">
+          <span class="recommend-name">
+            孤独のグルメ
+          </span>
+          <span class="recommend-arrow">›</span>
+        </a>
+
+        <a href="./detail.html?id=210444&type=tv">
+          <span class="recommend-name">
+            silent
+          </span>
+          <span class="recommend-arrow">›</span>
+        </a>
+
+      </div>
+
+    </div>
+
+
+    <!-- =================================================
+         アニメ
+    ================================================== -->
+
+    <div class="recommend-category">
+
+      <h3>
+        🎌 アニメ
+      </h3>
+
+      <div class="recommend-links">
+
+        <a href="./detail.html?id=290025&type=tv">
+          <span class="recommend-name">
+            名探偵コナン
+          </span>
+          <span class="recommend-arrow">›</span>
+        </a>
+
+        <a href="./detail.html?id=65733&type=tv">
+          <span class="recommend-name">
+            ドラえもん
+          </span>
+          <span class="recommend-arrow">›</span>
+        </a>
+
+        <a href="./detail.html?id=30623&type=tv">
+          <span class="recommend-name">
+            クレヨンしんちゃん
+          </span>
+          <span class="recommend-arrow">›</span>
+        </a>
+
+        <a href="./detail.html?id=37854&type=tv">
+          <span class="recommend-name">
+            ONE PIECE
+          </span>
+          <span class="recommend-arrow">›</span>
+        </a>
+
+      </div>
+
+    </div>
+
+
+  </div>
+
+</section>
+     
 
 <!-- =====================================================
      配信サービスから探す
