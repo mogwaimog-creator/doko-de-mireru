@@ -1325,13 +1325,7 @@ return res.status(200).json({
     page,
 
   hasMore:
-    Boolean(
-      hasMore ||
-      (
-        allTvResults &&
-        allTvResults.hasMore
-      )
-    )
+    finalResults.length >= 20
 
 });
 
