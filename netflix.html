@@ -1031,9 +1031,173 @@ footer{
   }
 
 }
+
+/* =========================================================
+   国・地域から探す
+========================================================= */
+
+.country-section{
+  background:#fff;
+  border-radius:16px;
+  padding:22px;
+  margin-bottom:25px;
+
+  box-shadow:
+    0 3px 15px
+    rgba(0,0,0,.08);
+}
+
+
+.country-heading{
+  margin-bottom:18px;
+}
+
+
+.country-heading h2{
+  margin:0;
+
+  color:#111827;
+
+  font-size:22px;
+
+  font-weight:800;
+}
+
+
+.country-heading p{
+  margin:7px 0 0;
+
+  color:#6b7280;
+
+  font-size:14px;
+
+  line-height:1.6;
+}
+
+
+/* 3つの国・地域 */
+
+.country-grid{
+  display:grid;
+
+  grid-template-columns:
+    repeat(3,minmax(0,1fr));
+
+  gap:14px;
+}
+
+
+.country-card{
+  min-height:105px;
+
+  padding:18px 12px;
+
+  display:flex;
+
+  flex-direction:column;
+
+  align-items:center;
+
+  justify-content:center;
+
+  gap:9px;
+
+  text-align:center;
+
+  background:#f8fafc;
+
+  border:1px solid #e5e7eb;
+
+  border-radius:12px;
+
+  transition:
+    transform .15s ease,
+    box-shadow .15s ease,
+    border-color .15s ease;
+}
+
+
+.country-card:hover{
+  transform:translateY(-2px);
+
+  border-color:#93c5fd;
+
+  box-shadow:
+    0 6px 16px
+    rgba(15,23,42,.10);
+}
+
+
+.country-icon{
+  display:block;
+
+  font-size:30px;
+
+  line-height:1;
+}
+
+
+.country-title{
+  display:block;
+
+  color:#111827;
+
+  font-size:15px;
+
+  font-weight:800;
+
+  line-height:1.4;
+}
+
+
+/* =========================================================
+   国・地域から探す スマホ
+========================================================= */
+
+@media(max-width:550px){
+
+  .country-section{
+    padding:18px 14px;
+  }
+
+
+  .country-heading h2{
+    font-size:20px;
+  }
+
+
+  .country-grid{
+    grid-template-columns:1fr;
+    gap:10px;
+  }
+
+
+  .country-card{
+    min-height:74px;
+
+    flex-direction:row;
+
+    justify-content:flex-start;
+
+    padding:14px 18px;
+
+    text-align:left;
+  }
+
+
+  .country-icon{
+    font-size:26px;
+  }
+
+
+  .country-title{
+    font-size:14px;
+  }
+
+}
   
 </style>
-
+  
 </head>
 
 
@@ -1147,6 +1311,72 @@ footer{
   ></div>
 
 </section>
+
+<!-- =======================================================
+     国・地域から探す
+======================================================== -->
+
+<section class="country-section">
+
+  <div class="country-heading">
+
+    <h2>
+      🌐 国・地域から探す
+    </h2>
+
+    <p>
+      観たい作品の国・地域からNetflix作品を探せます
+    </p>
+
+  </div>
+
+  <div class="country-grid">
+
+    <a
+      class="country-card"
+      href="./netflix.html?country=other"
+    >
+      <span class="country-icon">
+        🌍
+      </span>
+
+      <span class="country-title">
+        洋画・海外ドラマ
+      </span>
+    </a>
+
+
+    <a
+      class="country-card"
+      href="./netflix.html?country=jp"
+    >
+      <span class="country-icon">
+        🇯🇵
+      </span>
+
+      <span class="country-title">
+        邦画・国内ドラマ
+      </span>
+    </a>
+
+
+    <a
+      class="country-card"
+      href="./netflix.html?country=kr"
+    >
+      <span class="country-icon">
+        🇰🇷
+      </span>
+
+      <span class="country-title">
+        韓国映画・韓国ドラマ
+      </span>
+    </a>
+
+  </div>
+
+</section>
+
 
   
   <!-- =======================================================
@@ -1264,7 +1494,25 @@ let hasMore = false;
 
 let loading = false;
 
+// =========================================================
+// 国・地域の選択
+//
+// other = 洋画・海外ドラマ
+// jp    = 邦画・国内ドラマ
+// kr    = 韓国映画・韓国ドラマ
+// =========================================================
 
+const urlParams =
+  new URLSearchParams(
+    window.location.search
+  );
+
+const selectedCountry =
+  urlParams.get(
+    "country"
+  ) || "";
+
+  
 // =========================================================
 // HTMLエスケープ
 // =========================================================
@@ -2451,6 +2699,92 @@ async function loadNetflixWorks(
   append
 ){
 
+// =========================================================
+// Netflix 注目作品・高評価作品を取得
+//
+// 国・地域の選択に関係なく
+// Netflix全体の作品を使用する
+// =========================================================
+
+async function loadNetflixTopWorks(){
+
+  try{
+
+    const response =
+      await fetch(
+        "/api/search" +
+        "?provider=netflix" +
+        "&page=1"
+      );
+
+
+    if(
+      !response.ok
+    ){
+
+      throw new Error(
+        "Netflix注目作品の取得に失敗しました。"
+      );
+
+    }
+
+
+    const data =
+      await response.json();
+
+
+    const works =
+      Array.isArray(
+        data.results
+      )
+        ? data.results
+        : [];
+
+
+    renderFeaturedWorks(
+      works
+    );
+
+
+    renderHighRatedWorks(
+      works
+    );
+
+  }
+  catch(error){
+
+    console.error(
+      error
+    );
+
+
+    if(
+      featuredWorks
+    ){
+
+      featuredWorks.innerHTML =
+        '<div class="status">' +
+        '注目作品を取得できませんでした。' +
+        '</div>';
+
+    }
+
+
+    if(
+      highRatedWorks
+    ){
+
+      highRatedWorks.innerHTML =
+        '<div class="status">' +
+        '評価が高い作品を取得できませんでした。' +
+        '</div>';
+
+    }
+
+  }
+
+}
+  
   if(loading){
 
     return;
@@ -2478,17 +2812,45 @@ async function loadNetflixWorks(
   try{
 
 
-    const response =
-      await fetch(
+    // -------------------------------------------------------
+// Netflix API URL
+// -------------------------------------------------------
 
-        "/api/search" +
-        "?provider=netflix" +
-        "&page=" +
-        encodeURIComponent(
-          currentPage
-        )
+let apiUrl =
+  "/api/search" +
+  "?provider=netflix" +
+  "&page=" +
+  encodeURIComponent(
+    currentPage
+  );
 
-      );
+
+// -------------------------------------------------------
+// 国・地域が選択されている場合
+// country をAPIへ渡す
+// -------------------------------------------------------
+
+if(
+  selectedCountry
+){
+
+  apiUrl +=
+    "&country=" +
+    encodeURIComponent(
+      selectedCountry
+    );
+
+}
+
+
+// -------------------------------------------------------
+// Netflix作品を取得
+// -------------------------------------------------------
+
+const response =
+  await fetch(
+    apiUrl
+  );
 
 
     if(
@@ -2513,20 +2875,6 @@ async function loadNetflixWorks(
         ? data.results
         : [];
 
-    if(
-  !append &&
-  currentPage === 1
-){
-
-  renderFeaturedWorks(
-    works
-  );
-
-  renderHighRatedWorks(
-    works
-  );
-
-}
 
     
 
@@ -2695,10 +3043,14 @@ loadMoreButton.addEventListener(
 // 初期表示
 // =========================================================
 
+// 注目作品・高評価作品
+loadNetflixTopWorks();
+
+
+// Netflix作品一覧
 loadNetflixWorks(
   false
 );
-
 </script>
 
 
