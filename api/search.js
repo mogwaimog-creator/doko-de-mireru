@@ -4110,6 +4110,17 @@ else if(
     "&with_genres=10759";
 }
 
+else if(
+  genre === "comedy"
+){
+  // 映画：コメディ
+  movieGenreQuery =
+    "&with_genres=35";
+
+  // TV：コメディ
+  tvGenreQuery =
+    "&with_genres=35";
+}  
   
   // =======================================================
   // 国・地域による絞り込み
