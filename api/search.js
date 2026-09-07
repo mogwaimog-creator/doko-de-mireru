@@ -4031,7 +4031,23 @@ async function getProviderWorks(
   page,
   country
 ) {
-  
+
+    // =======================================================
+  // 国・地域による絞り込み
+  //
+  // jp = 日本
+  // kr = 韓国
+  // other = 日本・韓国以外
+  // =======================================================
+
+  let originalLanguage = "";
+
+  if (country === "jp") {
+    originalLanguage = "ja";
+  }
+  else if (country === "kr") {
+    originalLanguage = "ko";
+  }
   
 　// =======================================================
   // 映画
@@ -4047,10 +4063,15 @@ async function getProviderWorks(
     "&with_watch_providers=" +
     encodeURIComponent(providerId) +
     "&with_watch_monetization_types=flatrate" +
-    "&sort_by=popularity.desc" +
+        "&sort_by=popularity.desc" +
+    (
+      originalLanguage
+        ? "&with_original_language=" +
+          encodeURIComponent(originalLanguage)
+        : ""
+    ) +
     "&page=" +
     encodeURIComponent(page);
-
 
   // =======================================================
   // TV
@@ -4064,11 +4085,16 @@ async function getProviderWorks(
     "&watch_region=JP" +
     "&with_watch_providers=" +
     encodeURIComponent(providerId) +
-    "&with_watch_monetization_types=flatrate" +
+        "&with_watch_monetization_types=flatrate" +
     "&sort_by=popularity.desc" +
+    (
+      originalLanguage
+        ? "&with_original_language=" +
+          encodeURIComponent(originalLanguage)
+        : ""
+    ) +
     "&page=" +
     encodeURIComponent(page);
-
 
   // =======================================================
   // 配信サービスのロゴ・名前
@@ -4172,12 +4198,16 @@ async function getProviderWorks(
                   "",
 
                 original_title:
-                  movie.original_title ||
-                  "",
+  movie.original_title ||
+  "",
 
-                overview:
-                  movie.overview ||
-                  "",
+original_language:
+  movie.original_language ||
+  "",
+
+overview:
+  movie.overview ||
+  "",
 
                 poster_path:
                   movie.poster_path ||
@@ -4262,12 +4292,16 @@ async function getProviderWorks(
                   "",
 
                 original_title:
-                  show.original_name ||
-                  "",
+  show.original_name ||
+  "",
 
-                overview:
-                  show.overview ||
-                  "",
+original_language:
+  show.original_language ||
+  "",
+
+overview:
+  show.overview ||
+  "",
 
                 poster_path:
                   show.poster_path ||
@@ -4324,14 +4358,37 @@ async function getProviderWorks(
   // 映画 + TV
   // =======================================================
 
-  const results =
-    []
-      .concat(
-        movieResults
-      )
-      .concat(
-        tvResults
-      );
+  let results =
+  []
+    .concat(
+      movieResults
+    )
+    .concat(
+      tvResults
+    );
+
+
+// =======================================================
+// 洋画・海外ドラマ
+//
+// 日本語作品・韓国語作品を除外
+// =======================================================
+
+if (country === "other") {
+
+  results =
+    results.filter(
+      function(item){
+
+        return (
+          item.original_language !== "ja" &&
+          item.original_language !== "ko"
+        );
+
+      }
+    );
+
+}
 
 
   // =======================================================
