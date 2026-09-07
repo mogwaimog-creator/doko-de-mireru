@@ -4198,21 +4198,45 @@ async function getNetflixNewWorks(
       : [];
 
 
-  return movies
-    .concat(
-      tvShows
-    )
-    .filter(
-      function(work){
+  const today =
+  new Date();
 
-        return (
-          work.id &&
-          work.poster_path &&
+today.setHours(
+  23,
+  59,
+  59,
+  999
+);
+
+
+return movies
+  .concat(
+    tvShows
+  )
+  .filter(
+    function(work){
+
+      if(
+        !work.id ||
+        !work.poster_path ||
+        !work.release_date
+      ){
+        return false;
+      }
+
+
+      const releaseDate =
+        new Date(
           work.release_date
         );
 
-      }
-    )
+
+      return (
+        releaseDate <= today
+      );
+
+    }
+  )
     .sort(
       function(a,b){
 
