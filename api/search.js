@@ -4913,7 +4913,58 @@ if (
       query
     );
 
+// =====================================================
+// 検索語との関連性が低い作品を除外
+//
+// 全作品共通
+//
+// 例:
+// あいあんまん
+// ↓
+// アイアンマン系の作品を残し、
+// 無関係な作品が大量に混ざるのを防ぐ
+// =====================================================
 
+const searchAliasTitles =
+  getTitleSearchAliases(query)
+    .map(function(alias) {
+
+      return normalizeTitle(alias);
+
+    })
+    .filter(Boolean);
+
+
+movies =
+  movies.filter(function(movie) {
+
+    const movieTitle =
+      normalizeTitle(
+        movie.title || ""
+      );
+
+    const originalTitle =
+      normalizeTitle(
+        movie.original_title || ""
+      );
+
+
+    return searchAliasTitles.some(
+      function(alias) {
+
+        return (
+          movieTitle.includes(alias) ||
+          alias.includes(movieTitle) ||
+          originalTitle.includes(alias) ||
+          alias.includes(originalTitle)
+        );
+
+      }
+    );
+
+  });
+
+  
   movies.sort(
     function(a, b) {
 
