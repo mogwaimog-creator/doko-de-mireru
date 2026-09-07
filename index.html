@@ -3768,14 +3768,20 @@ const overviewHtml =
 
         <!-- 作品名 -->
 
-        <h2 class="movie-title">
+<h2 class="movie-title">
 
-          ${escapeHtml(
-            movie.title || ""
-          )}
+  <a
+    href="${detailUrl}"
+    aria-label="${escapeHtml(
+      movie.title || "作品"
+    )}の詳細を見る"
+  >
+    ${escapeHtml(
+      movie.title || ""
+    )}
+  </a>
 
-        </h2>
-
+</h2>
 
         <!-- 原題 -->
 
