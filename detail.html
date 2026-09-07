@@ -3687,6 +3687,10 @@ if(movie.status){
     movie
   );
 
+  renderFaq(
+  movie
+);
+  
     renderSeasons(
     movie.seasons
   );
@@ -3846,6 +3850,379 @@ function renderCast(cast){
 
 }
 
+/* =========================================================
+   よくある質問
+========================================================= */
+
+function renderFaq(movie){
+
+  const container =
+    document.getElementById(
+      "faqList"
+    );
+
+  if(!container){
+    return;
+  }
+
+
+  container.innerHTML =
+    "";
+
+
+  const title =
+    movie.title ||
+    "この作品";
+
+
+  const streaming =
+    normalizeProviders(
+      movie.streaming
+    );
+
+  const rental =
+    normalizeProviders(
+      movie.rental
+    );
+
+  const purchase =
+    normalizeProviders(
+      movie.purchase
+    );
+
+  const free =
+    normalizeProviders(
+      movie.free
+    );
+
+
+  /* -------------------------------------------------------
+     配信サービス名一覧
+  ------------------------------------------------------- */
+
+  const streamingNames =
+    streaming
+      .map(function(provider){
+        return provider.provider_name;
+      })
+      .filter(Boolean);
+
+
+  const rentalNames =
+    rental
+      .map(function(provider){
+        return provider.provider_name;
+      })
+      .filter(Boolean);
+
+
+  const purchaseNames =
+    purchase
+      .map(function(provider){
+        return provider.provider_name;
+      })
+      .filter(Boolean);
+
+
+  const freeNames =
+    free
+      .map(function(provider){
+        return provider.provider_name;
+      })
+      .filter(Boolean);
+
+
+  /* -------------------------------------------------------
+     特定サービスが含まれているか確認
+  ------------------------------------------------------- */
+
+  function hasProvider(
+    providers,
+    keywords
+  ){
+
+    return providers.some(
+      function(provider){
+
+        const name =
+          String(
+            provider.provider_name || ""
+          ).toLowerCase();
+
+        return keywords.some(
+          function(keyword){
+
+            return name.includes(
+              keyword.toLowerCase()
+            );
+
+          }
+        );
+
+      }
+    );
+
+  }
+
+
+  const hasNetflix =
+    hasProvider(
+      streaming,
+      [
+        "netflix"
+      ]
+    );
+
+
+  const hasPrime =
+    hasProvider(
+      streaming,
+      [
+        "amazon prime",
+        "prime video"
+      ]
+    );
+
+
+  const hasDisney =
+    hasProvider(
+      streaming,
+      [
+        "disney",
+        "disney+"
+      ]
+    );
+
+
+  /* -------------------------------------------------------
+     Q1 どこで見れる？
+  ------------------------------------------------------- */
+
+  let whereAnswer =
+    "";
+
+
+  if(streamingNames.length){
+
+    whereAnswer =
+      "『" +
+      title +
+      "』は現在、" +
+      streamingNames
+        .slice(0,3)
+        .join("、") +
+      "などで見放題配信されています。";
+
+    if(
+      rentalNames.length ||
+      purchaseNames.length
+    ){
+
+      whereAnswer +=
+        "レンタル・購入できるサービスもあります。";
+
+    }
+
+  }else if(freeNames.length){
+
+    whereAnswer =
+      "『" +
+      title +
+      "』は現在、" +
+      freeNames
+        .slice(0,3)
+        .join("、") +
+      "などで無料視聴できます。";
+
+  }else if(rentalNames.length){
+
+    whereAnswer =
+      "『" +
+      title +
+      "』は現在、見放題の配信情報は確認できませんが、" +
+      rentalNames
+        .slice(0,3)
+        .join("、") +
+      "などでレンタルできます。";
+
+  }else if(purchaseNames.length){
+
+    whereAnswer =
+      "『" +
+      title +
+      "』は現在、見放題の配信情報は確認できませんが、" +
+      purchaseNames
+        .slice(0,3)
+        .join("、") +
+      "などで購入できます。";
+
+  }else{
+
+    whereAnswer =
+      "『" +
+      title +
+      "』は現在確認できる配信情報がありません。";
+
+  }
+
+
+  /* -------------------------------------------------------
+     Q2 サブスクで見れる？
+  ------------------------------------------------------- */
+
+  let subscriptionAnswer =
+    "";
+
+
+  if(streamingNames.length){
+
+    subscriptionAnswer =
+      "はい。『" +
+      title +
+      "』は現在、" +
+      streamingNames
+        .slice(0,3)
+        .join("、") +
+      "などのサブスクで見放題配信されています。";
+
+  }else{
+
+    subscriptionAnswer =
+      "現在、『" +
+      title +
+      "』の見放題サブスク配信は確認できません。";
+
+  }
+
+
+  /* -------------------------------------------------------
+     FAQ一覧
+  ------------------------------------------------------- */
+
+  const faqs = [
+
+    {
+      question:
+        title +
+        "はどこで見れる？",
+
+      answer:
+        whereAnswer
+    },
+
+    {
+      question:
+        title +
+        "はサブスクで見れる？",
+
+      answer:
+        subscriptionAnswer
+    },
+
+    {
+      question:
+        title +
+        "はNetflixで見れる？",
+
+      answer:
+        hasNetflix
+          ? "はい。『" +
+            title +
+            "』は現在Netflixで見放題配信されています。"
+          : "現在の配信情報では、『" +
+            title +
+            "』のNetflixでの見放題配信は確認できません。"
+    },
+
+    {
+      question:
+        title +
+        "はAmazon Prime Videoで見れる？",
+
+      answer:
+        hasPrime
+          ? "はい。『" +
+            title +
+            "』は現在Amazon Prime Videoで見放題配信されています。"
+          : "現在の配信情報では、『" +
+            title +
+            "』のAmazon Prime Videoでの見放題配信は確認できません。"
+    },
+
+    {
+      question:
+        title +
+        "はDisney+で見れる？",
+
+      answer:
+        hasDisney
+          ? "はい。『" +
+            title +
+            "』は現在Disney+で見放題配信されています。"
+          : "現在の配信情報では、『" +
+            title +
+            "』のDisney+での見放題配信は確認できません。"
+    }
+
+  ];
+
+
+  /* -------------------------------------------------------
+     FAQ表示
+  ------------------------------------------------------- */
+
+  faqs.forEach(
+    function(faq){
+
+      const item =
+        document.createElement(
+          "div"
+        );
+
+      item.className =
+        "faq-item";
+
+
+      const question =
+        document.createElement(
+          "h4"
+        );
+
+      question.className =
+        "faq-question";
+
+      question.textContent =
+        faq.question;
+
+
+      const answer =
+        document.createElement(
+          "p"
+        );
+
+      answer.className =
+        "faq-answer";
+
+      answer.textContent =
+        faq.answer;
+
+
+      item.appendChild(
+        question
+      );
+
+      item.appendChild(
+        answer
+      );
+
+      container.appendChild(
+        item
+      );
+
+    }
+  );
+
+}  
 
 /* =========================================================
    配信サービス
