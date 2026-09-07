@@ -4198,39 +4198,49 @@ async function getNetflixNewWorks(
       : [];
 
 
-  return movies
-    .concat(
-      tvShows
-    )
-    .filter(
-      function(work){
-
-        return (
-          work.id &&
-          work.poster_path &&
-          work.release_date
-        );
-
-      }
-    )
-    .sort(
-      function(a,b){
-
-        return (
-          new Date(
-            b.release_date
-          ) -
-          new Date(
-            a.release_date
-          )
-        );
-
-      }
-    )
+const today =
+  new Date()
+    .toISOString()
     .slice(
       0,
       10
     );
+
+
+return movies
+  .concat(
+    tvShows
+  )
+  .filter(
+    function(work){
+
+      return (
+        work.id &&
+        work.poster_path &&
+        work.release_date &&
+        work.release_date <= today
+      );
+
+    }
+  )
+  .sort(
+    function(a,b){
+
+      return (
+        new Date(
+          b.release_date
+        ) -
+        new Date(
+          a.release_date
+        )
+      );
+
+    }
+  )
+  .slice(
+    0,
+    10
+  );
 
 }
 async function getProviderWorks(
