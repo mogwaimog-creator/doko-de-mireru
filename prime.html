@@ -1474,94 +1474,142 @@ color:#fff;
 }
 
 /* =========================================================
-   配信サービス切り替え
+   パンくず ＋ 配信サービス切り替え
 ========================================================= */
 
-.provider-switcher{
-  background:#ffffff;
+.breadcrumb-provider-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
 
-  border:1px solid #e2e8f0;
-  border-radius:14px;
+  gap:14px;
 
-  padding:14px 16px;
+  width:100%;
 }
 
-.provider-switcher-title{
-  margin-bottom:10px;
 
-  font-size:13px;
-  font-weight:800;
+/* 配信サービス側 */
 
-  color:#475569;
+.provider-mini-switch{
+  display:flex;
+  align-items:center;
+
+  gap:5px;
+
+  flex-shrink:0;
 }
 
-.provider-switcher-list{
-  display:grid;
 
-  grid-template-columns:
-    repeat(5,minmax(0,1fr));
+/* 「配信サービス」の文字 */
 
-  gap:8px;
+.provider-mini-label{
+  margin-right:2px;
+
+  color:#64748b;
+
+  font-size:11px;
+  font-weight:700;
+
+  white-space:nowrap;
 }
 
-.provider-switcher-item{
+
+/* 各サービス */
+
+.provider-mini-item{
+  display:flex;
+  align-items:center;
+
+  gap:4px;
+
   min-width:0;
 
-  padding:10px 6px;
+  padding:4px 7px;
+
+  border:1px solid #e2e8f0;
+  border-radius:7px;
+
+  background:#fff;
+
+  color:#475569;
+
+  font-size:10px;
+  font-weight:700;
+
+  line-height:1;
+
+  text-decoration:none;
+
+  white-space:nowrap;
+
+  transition:
+    background .2s ease,
+    border-color .2s ease,
+    color .2s ease;
+}
+
+
+/* 小型マーク */
+
+.provider-mini-mark{
+  width:20px;
+  height:20px;
 
   display:flex;
   align-items:center;
   justify-content:center;
 
-  box-sizing:border-box;
+  flex-shrink:0;
 
-  border:1px solid #e2e8f0;
-  border-radius:10px;
+  border-radius:5px;
 
-  background:#ffffff;
+  font-size:11px;
+  font-weight:900;
+}
 
-  color:#334155;
 
-  font-size:13px;
-  font-weight:800;
+/* 元CSSの大きな文字サイズを小型版では上書き */
 
-  text-align:center;
-  text-decoration:none;
+.provider-mini-mark.netflix-mark{
+  font-size:17px;
+}
 
-  transition:
-    background .2s ease,
-    border-color .2s ease,
-    color .2s ease,
-    transform .2s ease;
+.provider-mini-mark.hulu-mark{
+  font-size:7px;
+}
+
+.provider-mini-mark.disney-mark{
+  font-size:9px;
 }
 
 
 /* Netflix */
 
-.provider-switcher-item.netflix:hover{
+.provider-mini-item.netflix-mini:hover{
   background:#fff1f2;
-  border-color:#e50914;
-  color:#b20710;
 
-  transform:translateY(-1px);
+  border-color:#e50914;
+
+  color:#b20710;
 }
 
 
-/* Prime Video */
+/* 現在のPrime Video */
 
-.provider-switcher-item.prime:hover,
-.provider-switcher-item.prime.active{
+.provider-mini-item.prime-mini.active,
+.provider-mini-item.prime-mini:hover{
   background:#dff4fb;
+
   border-color:#00a8e1;
+
   color:#006b9c;
 }
 
 
 /* 準備中 */
 
-.provider-switcher-item.coming{
-  background:#f8fafc;
-  color:#94a3b8;
+.provider-mini-item.coming{
+  opacity:.55;
 
   cursor:default;
 }
@@ -1571,16 +1619,32 @@ color:#fff;
    スマホ
 ========================================================= */
 
-@media(max-width:650px){
+@media(max-width:800px){
 
-  .provider-switcher-list{
-    grid-template-columns:
-      repeat(2,minmax(0,1fr));
+  .breadcrumb-provider-row{
+    align-items:flex-start;
+    flex-direction:column;
+
+    gap:7px;
   }
 
-  .provider-switcher-item{
-    padding:9px 5px;
-    font-size:12px;
+
+  .provider-mini-switch{
+    width:100%;
+
+    overflow-x:auto;
+
+    padding-bottom:2px;
+  }
+
+
+  .provider-mini-label{
+    display:none;
+  }
+
+
+  .provider-mini-item{
+    flex-shrink:0;
   }
 
 }
@@ -1615,9 +1679,7 @@ color:#fff;
 <main class="container">
 
 
-  <!-- =======================================================
-       パンくず
-  ======================================================== -->
+ <div class="breadcrumb-provider-row">
 
   <nav
     class="breadcrumb"
@@ -1632,49 +1694,95 @@ color:#fff;
 
   </nav>
 
-<!-- =======================================================
-     配信サービス切り替え
-======================================================== -->
 
-<div class="provider-switcher">
+  <div class="provider-mini-switch">
 
-  <div class="provider-switcher-title">
-    配信サービスを切り替える
-  </div>
+    <div
+  class="provider-mini-switch"
+  aria-label="配信サービスを切り替える"
+>
 
-  <div class="provider-switcher-list">
+  <span class="provider-mini-label">
+    配信サービス
+  </span>
 
-    <a
-      href="./netflix.html"
-      class="provider-switcher-item netflix"
-    >
+  <!-- Netflix -->
+  <a
+    href="./netflix.html"
+    class="provider-mini-item netflix-mini"
+    title="Netflix"
+  >
+    <span class="provider-mini-mark netflix-mark">
+      N
+    </span>
+
+    <span class="provider-mini-name">
       Netflix
-    </a>
+    </span>
+  </a>
 
-    <a
-      href="./prime.html"
-      class="provider-switcher-item prime active"
-    >
+
+  <!-- Prime Video -->
+  <a
+    href="./prime.html"
+    class="provider-mini-item prime-mini active"
+    title="Prime Video"
+  >
+    <span class="provider-mini-mark prime-mark">
+      ▶
+    </span>
+
+    <span class="provider-mini-name">
       Prime Video
-    </a>
+    </span>
+  </a>
 
-    <div
-      class="provider-switcher-item unext coming"
-    >
+
+  <!-- U-NEXT -->
+  <span
+    class="provider-mini-item coming"
+    title="U-NEXT 準備中"
+  >
+    <span class="provider-mini-mark unext-mark">
+      U
+    </span>
+
+    <span class="provider-mini-name">
       U-NEXT
-    </div>
+    </span>
+  </span>
 
-    <div
-      class="provider-switcher-item hulu coming"
-    >
+
+  <!-- Hulu -->
+  <span
+    class="provider-mini-item coming"
+    title="Hulu 準備中"
+  >
+    <span class="provider-mini-mark hulu-mark">
+      hulu
+    </span>
+
+    <span class="provider-mini-name">
       Hulu
-    </div>
+    </span>
+  </span>
 
-    <div
-      class="provider-switcher-item disney coming"
-    >
+
+  <!-- Disney+ -->
+  <span
+    class="provider-mini-item coming"
+    title="Disney+ 準備中"
+  >
+    <span class="provider-mini-mark disney-mark">
+      D+
+    </span>
+
+    <span class="provider-mini-name">
       Disney+
-    </div>
+    </span>
+  </span>
+
+</div>
 
   </div>
 
