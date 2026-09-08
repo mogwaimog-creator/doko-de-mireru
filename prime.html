@@ -160,6 +160,10 @@ header p{
 .container{
   width:min(1000px,94%);
   margin:14px auto 50px;
+
+  display:flex;
+  flex-direction:column;
+  gap:21px;
 }
 
 /* =========================================================
@@ -1429,58 +1433,19 @@ color:#fff;
   font-weight:900;
 }
 
-/* =========================================================
-   Netflix配信作品 見出しとポスターの間隔
-========================================================= */
-
-#netflixWorksSection .results-heading{
-  margin-bottom:10px;
-}
-
-#netflixWorksSection .status:empty{
-  display:none;
-}
-
 
 /* =========================================================
-   国・地域 → ジャンル の間隔調整
+   Prime Videoページ
+   セクション間隔を21pxで完全統一
 ========================================================= */
 
-#browseSection{
-  margin-bottom:0 !important;
-}
-
-#genreSection{
+.breadcrumb,
+.provider-header,
+.featured-section,
+.country-section,
+#netflixWorksSection{
   margin-top:0 !important;
-}
-
-/* =========================================================
-   Netflix 探し方セクションの間隔を統一
-========================================================= */
-
-.country-section{
-  margin-top: 24px;
-  margin-bottom: 0;
-}
-
-/* =========================================================
-   評価が高い作品 → 新着作品 の間隔調整
-========================================================= */
-
-#highRatedWorks{
-  margin-bottom:0;
-}
-
-#highRatedWorks{
-  padding-bottom:0;
-}
-
-.featured-section:has(#highRatedWorks){
-  margin-bottom:10px;
-}
-
-#highRatedSection{
-  margin-bottom:10px;
+  margin-bottom:0 !important;
 }
   
 </style>
@@ -1707,7 +1672,7 @@ color:#fff;
 
 </section>
 
-　<!-- =======================================================
+<!-- =======================================================
      ジャンルから探す
 ======================================================== -->
 
@@ -1811,7 +1776,7 @@ color:#fff;
 
 
   
-　<!-- =======================================================
+<!-- =======================================================
      Prime Videoの新着作品
 ======================================================== -->
 
