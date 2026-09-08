@@ -153,6 +153,25 @@ const provider =
     : "";
 
 // =====================================================
+// Netflix 作品タイプ
+//
+// movie = 映画
+// tv    = ドラマ
+// anime = アニメ
+//
+// 指定なし = 映画・ドラマ・アニメすべて
+// =====================================================
+
+const netflixType =
+  req.query &&
+  typeof req.query.type === "string"
+    ? req.query.type
+        .trim()
+        .toLowerCase()
+    : "";
+
+    
+// =====================================================
 // 国・地域
 //
 // jp    = 日本
@@ -322,7 +341,8 @@ if (provider === "netflix") {
     8,
     page,
     country,
-    genre
+    genre,
+    netflixType
   );
 
   return res
@@ -4275,7 +4295,8 @@ async function getProviderWorks(
   providerId,
   page,
   country,
-  genre
+  genre,
+  netflixType
 ) {
 
     // =======================================================
