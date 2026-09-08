@@ -4472,21 +4472,19 @@ const thirtyDaysAgoString =
     );
 
 
-  return movies
-    .concat(
-      tvShows
-    )
-    .filter(
-      function(work){
+ return movies
+  .concat(
+    tvShows
+  )
+  .filter(
+    function(work){
 
-        return (
-          work.id &&
-          work.poster_path &&
-          work.release_date &&
-          work.release_date <= today &&
-          work.release_date >= thirtyDaysAgoString
-        );
-
+      return (
+        work.id &&
+        work.poster_path &&
+        work.release_date &&
+        work.release_date <= today
+      );
       }
     )
     .sort(
