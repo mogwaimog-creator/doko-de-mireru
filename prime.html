@@ -1157,31 +1157,45 @@ footer{
   transform:
     translateY(-2px);
 
-  background:#f8fbff;
+  background:#e8f7fc;
 
-  border-color:#93c5fd;
+  border-color:#00a8e1;
 
   box-shadow:
     0 7px 18px
-    rgba(37,99,235,.10);
+    rgba(0,168,225,.12);
+}
+
+.country-card:hover .country-title{
+  color:#0073a8;
+}
+
+.country-card:hover::after{
+  color:#00a8e1;
 }
 
 /* =========================================================
    選択中のカード
 ========================================================= */
 
-.country-card.active{
-  background:#eaf4ff;
+/* 選択中 */
 
-  border-color:#3b82f6;
+.country-card.active{
+  background:#dff4fb;
+
+  border-color:#00a8e1;
 
   box-shadow:
     0 5px 14px
-    rgba(37,99,235,.12);
+    rgba(0,168,225,.15);
+}
+
+.country-card.active .country-title{
+  color:#006b9c;
 }
 
 .country-card.active::after{
-  color:#2563eb;
+  color:#00a8e1;
 }
   
 .country-icon{
