@@ -1523,10 +1523,57 @@ async function getMovieDetail(
   // タイトル
   // =======================================================
 
-  const title =
-    movie.title ||
-    movie.original_title ||
-    "";
+  let title =
+  movie.title ||
+  movie.original_title ||
+  "";
+
+// =======================================================
+// 詳細ページでも読みにくい現地語タイトルを補正
+// =======================================================
+
+if(
+  needsReadableTitle(
+    title
+  )
+){
+
+  try{
+
+    const readableTitle =
+      await getReadableProviderTitle(
+        apiKey,
+        {
+          id:
+            movie.id,
+
+          title:
+            title,
+
+          content_type:
+            "movie"
+        }
+      );
+
+    if(
+      readableTitle
+    ){
+      title =
+        readableTitle;
+    }
+
+  }
+  catch(error){
+
+    console.error(
+      "DETAIL TITLE FALLBACK ERROR:",
+      movie.id,
+      error
+    );
+
+  }
+
+}
 
   
 // =======================================================
@@ -1899,8 +1946,7 @@ return {
 
 
   title:
-    movie.title || "",
-
+  title,
 
   // ===================================================
   // 作品タイプ
