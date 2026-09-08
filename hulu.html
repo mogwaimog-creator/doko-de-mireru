@@ -115,7 +115,7 @@ body{
     "Noto Sans JP",
     sans-serif;
 
-  background:#f2f9fc;
+  background:#f7fbf9;
 
   color:#222;
 }
@@ -1887,6 +1887,92 @@ color:#fff;
   border-color:#0b9f58;
   color:#087a45;
   transform:translateY(-1px);
+}
+
+/* =========================================================
+   Hulu 最終テーマカラー
+========================================================= */
+
+/* ページ説明カードの左ライン */
+
+.provider-header{
+  border-left-color:#0b9f58;
+}
+
+
+/* 右上の装飾 */
+
+.provider-header::after{
+  background:#eaf7f0;
+}
+
+
+/* =========================================================
+   作品タイプ・国地域・ジャンル
+   マウスを乗せた時
+========================================================= */
+
+body .country-card:hover{
+  transform:translateY(-2px);
+
+  background:#f0faf5;
+  border-color:#0b9f58;
+
+  box-shadow:
+    0 7px 18px
+    rgba(11,159,88,.10);
+}
+
+body .country-card:hover .country-title{
+  color:#087a45;
+}
+
+body .country-card:hover::after{
+  color:#0b9f58;
+}
+
+
+/* =========================================================
+   選択中のカード
+========================================================= */
+
+body .country-card.active{
+  background:#e3f6ec;
+  border-color:#0b9f58;
+
+  box-shadow:
+    0 5px 14px
+    rgba(11,159,88,.13);
+}
+
+body .country-card.active .country-title{
+  color:#087a45;
+}
+
+body .country-card.active::after{
+  color:#0b9f58;
+}
+
+
+/* =========================================================
+   探し方に戻るボタン
+========================================================= */
+
+#backToBrowseButton{
+  background:#0b9f58;
+  color:#ffffff;
+
+  box-shadow:
+    0 7px 20px
+    rgba(11,159,88,.24);
+}
+
+#backToBrowseButton:hover{
+  background:#087a45;
+
+  box-shadow:
+    0 8px 22px
+    rgba(8,122,69,.28);
 }
   
 </style>
