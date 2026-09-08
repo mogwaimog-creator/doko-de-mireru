@@ -4356,43 +4356,70 @@ const thirtyDaysAgoString =
     );
 
 
-return movies
-  .concat(
-    tvShows
-  )
-  .filter(
-  function(work){
-
-    return (
-      work.id &&
-      work.poster_path &&
-      work.release_date &&
-      work.release_date <= today &&
-      work.release_date >= thirtyDaysAgoString
+const allWorks =
+  movies
+    .concat(tvShows)
+    .filter(
+      function(work){
+        return (
+          work.id &&
+          work.poster_path &&
+          work.release_date &&
+          work.release_date <= today
+        );
+      }
     );
 
-  }
-)
-  .sort(
-  function(a,b){
 
-    return (
-      Number(
-        b.popularity || 0
-      ) -
-      Number(
-        a.popularity || 0
-      )
+// まず直近30日以内の作品
+const recentWorks =
+  allWorks
+    .filter(
+      function(work){
+        return (
+          work.release_date >=
+          thirtyDaysAgoString
+        );
+      }
+    )
+    .sort(
+      function(a,b){
+        return (
+          Number(b.popularity || 0) -
+          Number(a.popularity || 0)
+        );
+      }
     );
 
-  }
-)
-  .slice(
-    0,
-    10
-  );
 
-}
+// 30日以内だけで5作品に満たない場合の候補
+const olderWorks =
+  allWorks
+    .filter(
+      function(work){
+        return (
+          work.release_date <
+          thirtyDaysAgoString
+        );
+      }
+    )
+    .sort(
+      function(a,b){
+        return String(
+          b.release_date || ""
+        ).localeCompare(
+          String(
+            a.release_date || ""
+          )
+        );
+      }
+    );
+
+
+// 新着を優先し、不足分を少し古い作品から補う
+return recentWorks
+  .concat(olderWorks)
+  .slice(0, 5);
 
 // =========================================================
 // Prime Video 新着作品
