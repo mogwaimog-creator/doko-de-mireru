@@ -99,6 +99,50 @@ Netflixで見られる映画・ドラマ・アニメ｜ドコデミレル？
   content="Netflixで現在見放題配信されている映画・ドラマ・アニメを探せます。"
 >
 
+/* =========================================================
+   Netflixページ
+   配信サービス切り替え
+========================================================= */
+
+.provider-mini-item.netflix-mini.active{
+  background:#fff1f2;
+
+  border-color:#e50914;
+
+  color:#b20710;
+
+  box-shadow:
+    0 3px 8px
+    rgba(229,9,20,.12);
+}
+
+
+/* Prime Videoは通常状態 */
+
+.provider-mini-item.prime-mini:not(.active){
+  background:#ffffff;
+
+  border-color:#cbd5e1;
+
+  color:#334155;
+}
+
+
+/* Prime Video hover */
+
+.provider-mini-item.prime-mini:hover{
+  transform:translateY(-2px);
+
+  background:#e8f7fc;
+
+  border-color:#00a8e1;
+
+  color:#0073a8;
+
+  box-shadow:
+    0 4px 9px
+    rgba(0,168,225,.12);
+}  
 
 <style>
 
@@ -1503,6 +1547,8 @@ color:#fff;
        パンくず
   ======================================================== -->
 
+<div class="breadcrumb-provider-row">
+
   <nav
     class="breadcrumb"
     aria-label="パンくずリスト"
@@ -1517,21 +1563,115 @@ color:#fff;
   </nav>
 
 
-  <!-- =======================================================
-       Netflixページ説明
-  ======================================================== -->
+  <div
+    class="provider-mini-switch"
+    aria-label="配信サービスを切り替える"
+  >
 
-  <section class="provider-header">
+    <span class="provider-mini-label">
+      配信サービスを切り替える
+    </span>
 
+
+    <!-- Netflix -->
+    <a
+      href="./netflix.html"
+      class="provider-mini-item netflix-mini active"
+      title="Netflix"
+    >
+      <span class="provider-mini-mark netflix-mark">
+        N
+      </span>
+
+      <span class="provider-mini-name">
+        Netflix
+      </span>
+    </a>
+
+
+    <!-- Prime Video -->
+    <a
+      href="./prime.html"
+      class="provider-mini-item prime-mini"
+      title="Prime Video"
+    >
+      <span class="provider-mini-mark prime-mark">
+        ▶
+      </span>
+
+      <span class="provider-mini-name">
+        Prime Video
+      </span>
+    </a>
+
+
+    <!-- U-NEXT -->
+    <span
+      class="provider-mini-item coming"
+      title="U-NEXT 準備中"
+    >
+      <span class="provider-mini-mark unext-mark">
+        U
+      </span>
+
+      <span class="provider-mini-name">
+        U-NEXT
+      </span>
+    </span>
+
+
+    <!-- Hulu -->
+    <span
+      class="provider-mini-item coming"
+      title="Hulu 準備中"
+    >
+      <span class="provider-mini-mark hulu-mark">
+        hulu
+      </span>
+
+      <span class="provider-mini-name">
+        Hulu
+      </span>
+    </span>
+
+
+    <!-- Disney+ -->
+    <span
+      class="provider-mini-item coming"
+      title="Disney+ 準備中"
+    >
+      <span class="provider-mini-mark disney-mark">
+        D+
+      </span>
+
+      <span class="provider-mini-name">
+        Disney+
+      </span>
+    </span>
+
+  </div>
+
+</div>
+
+
+<!-- =======================================================
+     Netflixページ説明
+======================================================== -->
+
+<section class="provider-header">
 
   <h1>
-  <span class="netflix-title-mark">Netflix</span>で見られる映画・ドラマ・アニメ
-</h1>
+    <span class="netflix-title-mark">
+      Netflix
+    </span>
+    で見られる映画・ドラマ・アニメ
+  </h1>
 
   <p>
     Netflixで現在見放題配信されている映画・ドラマ・アニメを紹介しています。
     気になる作品を選ぶと、作品情報や日本国内の配信状況を確認できます。
   </p>
+
 
   <div class="provider-header-actions">
 
@@ -1539,37 +1679,12 @@ color:#fff;
       class="main-search-button"
       href="./index.html"
     >
-      🔍 観たい作品を検索
+      🔍 観たい作品を探す
     </a>
 
   </div>
 
 </section>
-<!-- =======================================================
-     Netflixの注目作品
-======================================================== -->
-
-<section class="featured-section">
-
-  <div class="featured-heading">
-
-    <h2>
-      🔥 Netflixの注目作品
-    </h2>
-
-    <p>
-      Netflixで配信中の作品から、注目作品をピックアップ
-    </p>
-
-  </div>
-
-
-  <div
-    id="featuredWorks"
-    class="featured-grid"
-  ></div>
-
-  </section>
 
 
 <!-- =======================================================
