@@ -333,6 +333,28 @@ if(
     });
 
 }
+
+// =====================================================
+// Prime Video 新着作品
+// =====================================================
+
+if(
+  primeNew === "1"
+){
+
+  const newResults =
+    await getPrimeNewWorks(
+      apiKey
+    );
+
+  return res
+    .status(200)
+    .json({
+      results:
+        newResults
+    });
+
+}
     
  // =====================================================
 // Netflix 配信作品
@@ -4371,6 +4393,215 @@ return movies
   );
 
 }
+
+// =========================================================
+// Prime Video 新着作品
+// =========================================================
+
+async function getPrimeNewWorks(
+  apiKey
+){
+
+  const movieUrl =
+    "https://api.themoviedb.org/3/discover/movie" +
+    "?api_key=" +
+    encodeURIComponent(apiKey) +
+    "&language=ja-JP" +
+    "&region=JP" +
+    "&watch_region=JP" +
+    "&with_watch_providers=9" +
+    "&with_watch_monetization_types=flatrate" +
+    "&sort_by=primary_release_date.desc" +
+    "&include_adult=false" +
+    "&include_video=false" +
+    "&page=1";
+
+
+  const tvUrl =
+    "https://api.themoviedb.org/3/discover/tv" +
+    "?api_key=" +
+    encodeURIComponent(apiKey) +
+    "&language=ja-JP" +
+    "&watch_region=JP" +
+    "&with_watch_providers=9" +
+    "&with_watch_monetization_types=flatrate" +
+    "&sort_by=first_air_date.desc" +
+    "&include_adult=false" +
+    "&page=1";
+
+
+  const [
+    movieData,
+    tvData
+  ] =
+    await Promise.all([
+      fetchJson(movieUrl),
+      fetchJson(tvUrl)
+    ]);
+
+
+  const movies =
+    Array.isArray(
+      movieData &&
+      movieData.results
+    )
+      ? movieData.results.map(
+          function(movie){
+
+            return {
+              id:
+                movie.id,
+
+              title:
+                movie.title ||
+                movie.original_title ||
+                "",
+
+              poster_path:
+                movie.poster_path ||
+                null,
+
+              release_date:
+                movie.release_date ||
+                "",
+
+              vote_average:
+                Number(
+                  movie.vote_average || 0
+                ),
+
+              vote_count:
+                Number(
+                  movie.vote_count || 0
+                ),
+
+              popularity:
+                Number(
+                  movie.popularity || 0
+                ),
+
+              content_type:
+                "movie"
+            };
+
+          }
+        )
+      : [];
+
+
+  const tvShows =
+    Array.isArray(
+      tvData &&
+      tvData.results
+    )
+      ? tvData.results.map(
+          function(show){
+
+            return {
+              id:
+                show.id,
+
+              title:
+                show.name ||
+                show.original_name ||
+                "",
+
+              poster_path:
+                show.poster_path ||
+                null,
+
+              release_date:
+                show.first_air_date ||
+                "",
+
+              vote_average:
+                Number(
+                  show.vote_average || 0
+                ),
+
+              vote_count:
+                Number(
+                  show.vote_count || 0
+                ),
+
+              popularity:
+                Number(
+                  show.popularity || 0
+                ),
+
+              content_type:
+                "tv"
+            };
+
+          }
+        )
+      : [];
+
+
+  const today =
+    new Date()
+      .toISOString()
+      .slice(
+        0,
+        10
+      );
+
+
+  const thirtyDaysAgo =
+    new Date();
+
+  thirtyDaysAgo.setDate(
+    thirtyDaysAgo.getDate() - 30
+  );
+
+  const thirtyDaysAgoString =
+    thirtyDaysAgo
+      .toISOString()
+      .slice(
+        0,
+        10
+      );
+
+
+  return movies
+    .concat(
+      tvShows
+    )
+    .filter(
+      function(work){
+
+        return (
+          work.id &&
+          work.poster_path &&
+          work.release_date &&
+          work.release_date <= today &&
+          work.release_date >= thirtyDaysAgoString
+        );
+
+      }
+    )
+    .sort(
+      function(a,b){
+
+        return (
+          Number(
+            b.popularity || 0
+          ) -
+          Number(
+            a.popularity || 0
+          )
+        );
+
+      }
+    )
+    .slice(
+      0,
+      10
+    );
+
+}
+
+
 async function getProviderWorks(
   apiKey,
   providerId,
