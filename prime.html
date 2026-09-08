@@ -3079,35 +3079,8 @@ function createMovieCard(
 
 // =========================================================
 // Prime Video 注目作品・高評価作品を取得
-//
 // 国・地域の選択に関係なく
 // Prime Video全体の作品を使用する
-// =========================================================
-
-async function loadNetflixTopWorks(){
-
-  try{
-
-    const response =
-      await fetch(
-        "/api/search" +
-        "?provider=prime" +
-        "&page=1"
-      );
-
-
-    if(
-      !response.ok
-    ){
-
-      throw new Error(
-        "//
-// 国・地域の選択に関係なく
-// Prime Video全体の作品を使用する
-// =========================================================
-
-// =========================================================
-// Prime Video 注目作品・高評価作品を取得
 // =========================================================
 
 async function loadNetflixTopWorks(){
