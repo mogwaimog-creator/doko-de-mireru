@@ -4755,7 +4755,65 @@ overview:
       tvResults
     );
 
+  // =======================================================
+// Netflix 作品タイプで絞り込み
+//
+// movie = 実写映画
+// tv    = ドラマ
+// anime = アニメ映画 + TVアニメ
+// =======================================================
 
+if(
+  netflixType === "movie"
+){
+
+  results =
+    results.filter(
+      function(item){
+
+        return (
+          item.content_type === "movie"
+        );
+
+      }
+    );
+
+}
+else if(
+  netflixType === "tv"
+){
+
+  results =
+    results.filter(
+      function(item){
+
+        return (
+          item.content_type === "tv_drama"
+        );
+
+      }
+    );
+
+}
+else if(
+  netflixType === "anime"
+){
+
+  results =
+    results.filter(
+      function(item){
+
+        return (
+          item.content_type === "anime_movie" ||
+          item.content_type === "anime_tv"
+        );
+
+      }
+    );
+
+}
+
+  
 // =======================================================
 // 洋画・海外ドラマ
 //
@@ -4823,11 +4881,17 @@ if (country === "other") {
     page:
       page,
 
-    hasMore:
-      Boolean(
-        movieHasMore ||
-        tvHasMore
-      )
+   hasMore:
+  netflixType === "movie"
+    ? Boolean(movieHasMore)
+
+    : netflixType === "tv"
+      ? Boolean(tvHasMore)
+
+      : Boolean(
+          movieHasMore ||
+          tvHasMore
+        )
 
   };
 
