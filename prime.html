@@ -210,29 +210,179 @@ header p{
   line-height:1.5;
 }
 
-/* 配信サービス切り替えを少し目立たせる */
+/* =========================================================
+   配信サービス切り替えを目立たせる
+========================================================= */
 
 .provider-mini-label{
+  margin-right:5px;
+
   font-size:12px;
   font-weight:800;
-  color:#475569;
+
+  color:#334155;
+
+  white-space:nowrap;
 }
+
+
+/* 各サービスボタン */
 
 .provider-mini-item{
-  padding:5px 9px;
+  display:flex;
+  align-items:center;
+
+  gap:5px;
+
+  padding:6px 10px;
+
+  border:1px solid #cbd5e1;
+  border-radius:8px;
+
+  background:#ffffff;
+
+  color:#334155;
 
   font-size:11px;
+  font-weight:800;
 
-  border-color:#cbd5e1;
+  line-height:1;
+
+  text-decoration:none;
+
+  white-space:nowrap;
 
   box-shadow:
-    0 1px 3px
-    rgba(15,23,42,.06);
+    0 2px 5px
+    rgba(15,23,42,.08);
+
+  transition:
+    transform .2s ease,
+    box-shadow .2s ease,
+    background .2s ease,
+    border-color .2s ease,
+    color .2s ease;
 }
 
+
+/* マークを少し大きく */
+
 .provider-mini-mark{
-  width:22px;
-  height:22px;
+  width:24px;
+  height:24px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  flex-shrink:0;
+
+  border-radius:5px;
+
+  font-size:12px;
+  font-weight:900;
+}
+
+
+/* Netflix */
+
+.provider-mini-mark.netflix-mark{
+  background:transparent;
+
+  color:#e50914;
+
+  font-size:19px;
+}
+
+
+/* Prime Video */
+
+.provider-mini-mark.prime-mark{
+  background:transparent;
+
+  color:#00a8e1;
+}
+
+
+/* U-NEXT */
+
+.provider-mini-mark.unext-mark{
+  background:transparent;
+
+  color:#111827;
+}
+
+
+/* Hulu */
+
+.provider-mini-mark.hulu-mark{
+  background:transparent;
+
+  color:#0b9f58;
+
+  font-size:8px;
+}
+
+
+/* Disney+ */
+
+.provider-mini-mark.disney-mark{
+  background:transparent;
+
+  color:#172554;
+
+  font-size:10px;
+}
+
+
+/* Netflixにマウスを乗せた時 */
+
+.provider-mini-item.netflix-mini:hover{
+  transform:translateY(-2px);
+
+  background:#fff1f2;
+
+  border-color:#e50914;
+
+  color:#b20710;
+
+  box-shadow:
+    0 4px 9px
+    rgba(229,9,20,.12);
+}
+
+
+/* Prime Video
+   現在選択中 ＋ hover
+*/
+
+.provider-mini-item.prime-mini.active,
+.provider-mini-item.prime-mini:hover{
+  background:#dff4fb;
+
+  border-color:#00a8e1;
+
+  color:#006b9c;
+
+  box-shadow:
+    0 3px 8px
+    rgba(0,168,225,.15);
+}
+
+
+.provider-mini-item.prime-mini:hover{
+  transform:translateY(-2px);
+}
+
+
+/* 準備中 */
+
+.provider-mini-item.coming{
+  opacity:.55;
+
+  box-shadow:none;
+
+  cursor:default;
 }
   
   
@@ -1777,7 +1927,7 @@ color:#fff;
 >
 
   <span class="provider-mini-label">
-    配信サービス
+    配信サービスを切り替える
   </span>
 
   <!-- Netflix -->
