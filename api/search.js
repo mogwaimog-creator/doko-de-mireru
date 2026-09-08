@@ -4930,15 +4930,16 @@ async function getUnextNewWorks(
 async function getHuluNewWorks(
   apiKey
 ){
-  
+
   const today =
-  new Date()
-    .toISOString()
-    .slice(
-      0,
-      10
-    );
-  
+    new Date()
+      .toISOString()
+      .slice(
+        0,
+        10
+      );
+
+
   const movieUrl =
     "https://api.themoviedb.org/3/discover/movie" +
     "?api_key=" +
@@ -4949,9 +4950,9 @@ async function getHuluNewWorks(
     "&with_watch_providers=15" +
     "&with_watch_monetization_types=flatrate" +
     "&sort_by=primary_release_date.desc" +
-"&primary_release_date.lte=" +
-encodeURIComponent(today) +
-"&include_adult=false" +
+    "&primary_release_date.lte=" +
+    encodeURIComponent(today) +
+    "&include_adult=false" +
     "&include_video=false" +
     "&page=1";
 
@@ -4965,9 +4966,9 @@ encodeURIComponent(today) +
     "&with_watch_providers=15" +
     "&with_watch_monetization_types=flatrate" +
     "&sort_by=first_air_date.desc" +
-"&first_air_date.lte=" +
-encodeURIComponent(today) +
-"&include_adult=false" +
+    "&first_air_date.lte=" +
+    encodeURIComponent(today) +
+    "&include_adult=false" +
     "&page=1";
 
 
@@ -5079,24 +5080,6 @@ encodeURIComponent(today) +
       : [];
 
 
-
-
-  const thirtyDaysAgo =
-    new Date();
-
-  thirtyDaysAgo.setDate(
-    thirtyDaysAgo.getDate() - 30
-  );
-
-  const thirtyDaysAgoString =
-    thirtyDaysAgo
-      .toISOString()
-      .slice(
-        0,
-        10
-      );
-
-
   return movies
     .concat(
       tvShows
@@ -5108,8 +5091,7 @@ encodeURIComponent(today) +
           work.id &&
           work.poster_path &&
           work.release_date &&
-          work.release_date <= today &&
-          work.release_date >= thirtyDaysAgoString
+          work.release_date <= today
         );
 
       }
@@ -5118,11 +5100,12 @@ encodeURIComponent(today) +
       function(a,b){
 
         return (
-          Number(
-            b.popularity || 0
-          ) -
-          Number(
-            a.popularity || 0
+          String(
+            b.release_date || ""
+          ).localeCompare(
+            String(
+              a.release_date || ""
+            )
           )
         );
 
@@ -5133,7 +5116,7 @@ encodeURIComponent(today) +
       10
     );
 
-}
+}}
 
 async function getProviderWorks(
   apiKey,
