@@ -4429,8 +4429,25 @@ else if(
 
 　// 国・地域から探す場合はアニメを除外
 // ただし「アニメ」を選択している場合は除外しない
+// =======================================================
+// アニメを除外する条件
+//
+// movie = アニメ映画を除外
+// tv    = TVアニメを除外
+// anime = 除外しない
+// =======================================================
+
+const shouldExcludeAnimation =
+  netflixType === "movie" ||
+  netflixType === "tv" ||
+  (
+    country &&
+    genre !== "anime" &&
+    netflixType !== "anime"
+  );
+
 const countryWithoutAnimation =
-  country && genre !== "anime"
+  shouldExcludeAnimation
     ? "&without_genres=16"
     : "";
   
