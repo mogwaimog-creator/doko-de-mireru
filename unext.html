@@ -1504,17 +1504,18 @@ footer{
 
 /* =========================================================
    探し方に戻るボタン
+   U-NEXT
 ========================================================= */
 
 #backToBrowseButton{
   position:fixed;
 
   right:max(
-  20px,
-  calc((100vw - 1000px) / 2 + 20px)
-);
+    20px,
+    calc((100vw - 1000px) / 2 + 20px)
+  );
 
-bottom:20px;
+  bottom:20px;
   z-index:1000;
 
   padding:14px 20px;
@@ -1522,8 +1523,8 @@ bottom:20px;
   border:2px solid #ffffff;
   border-radius:999px;
 
-  background:#00a8e1;
-color:#fff;
+  background:#374151;
+  color:#ffffff;
 
   font-size:15px;
   font-weight:800;
@@ -1532,7 +1533,7 @@ color:#fff;
 
   box-shadow:
     0 7px 20px
-    rgba(37,99,235,.28);
+    rgba(55,65,81,.24);
 
   opacity:0;
   pointer-events:none;
@@ -1553,7 +1554,11 @@ color:#fff;
 }
 
 #backToBrowseButton:hover{
-  background:#0086b3;
+  background:#1f2937;
+
+  box-shadow:
+    0 8px 22px
+    rgba(31,41,55,.28);
 }
 
 @media(max-width:550px){
