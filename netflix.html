@@ -1934,7 +1934,8 @@ if(
   newNetflixSection &&
   (
     selectedCountry ||
-    selectedGenre
+    selectedGenre ||
+    selectedType
   )
 ){
   newNetflixSection.style.display =
@@ -1948,7 +1949,8 @@ if(
 
 if(
   selectedCountry ||
-  selectedGenre
+  selectedGenre ||
+  selectedType
 ){
   window.addEventListener(
     "load",
