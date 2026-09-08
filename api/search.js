@@ -5116,7 +5116,7 @@ async function getHuluNewWorks(
       10
     );
 
-}}
+}
 
 async function getProviderWorks(
   apiKey,
