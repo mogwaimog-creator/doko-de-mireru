@@ -486,7 +486,7 @@ header p{
 
 
 /* =========================================================
-   Netflix配信中
+   Prime Video配信中
 ========================================================= */
 
 .availability-panel.streaming{
@@ -831,7 +831,7 @@ footer{
 }
 
 /* =========================================================
-   Netflixの注目作品
+   Prime Videoの注目作品
 ========================================================= */
 
 .featured-section{
@@ -1250,7 +1250,7 @@ footer{
 }
 
 /* =========================================================
-   Netflix配信作品 ポスター一覧
+   Prime Video配信作品 ポスター一覧
 ========================================================= */
 
 .netflix-works-grid{
@@ -1262,7 +1262,7 @@ footer{
 
 
 /* =========================================================
-   Netflix配信作品 スマホ
+   Prime Video配信作品 スマホ
 ========================================================= */
 
 @media(max-width:800px){
@@ -1354,7 +1354,7 @@ color:#fff;
 }
 
 /* =========================================================
-   Netflixページ 上部アクション
+   Prime Videoページ 上部アクション
 ========================================================= */
 
 .provider-header-actions{
@@ -1896,7 +1896,7 @@ color:#fff;
 <script>
 
 // =========================================================
-// Netflixページ
+// Prime Videoページ
 // =========================================================
 
 const results =
@@ -2028,7 +2028,7 @@ document.querySelectorAll(
   
  // =========================================================
 // 国・地域 または ジャンル選択時
-// Netflixの配信作品まで自動スクロール
+// Prime Videoの配信作品まで自動スクロール
 // =========================================================
 
 if(
@@ -2295,7 +2295,7 @@ function createShortOverview(
 
 
 // =========================================================
-// Netflixロゴ表示
+// Prime Videoロゴ表示
 // =========================================================
 
 function renderProvider(
@@ -2303,7 +2303,7 @@ function renderProvider(
 ){
 
   const providerName =
-    "Netflix";
+    "Prime Video";
 
 
   const logo =
@@ -2323,12 +2323,12 @@ function renderProvider(
         <img
           class="provider-logo"
           src="${logo}"
-          alt="Netflixのロゴ"
+          alt="Prime Videoのロゴ"
           loading="lazy"
         >
 
         <span>
-          Netflix
+          Prime Video
         </span>
 
       </div>
@@ -2343,11 +2343,11 @@ function renderProvider(
     <div class="provider-item">
 
       <div class="provider-logo-fallback">
-        Netflix
+        Prime Video
       </div>
 
       <span>
-        Netflix
+        Prime Video
       </span>
 
     </div>
@@ -2358,7 +2358,7 @@ function renderProvider(
 
 
 // =========================================================
-// Netflix情報を取得
+// Prime Video情報を取得
 // =========================================================
 
 function getNetflixProvider(
@@ -2373,7 +2373,7 @@ function getNetflixProvider(
       : [];
 
 
-  const netflix =
+  const prime =
     providers.find(
       function(provider){
 
@@ -2383,9 +2383,9 @@ function getNetflixProvider(
             ""
           );
 
-
-        return name.includes(
-          "Netflix"
+        return (
+          name.includes("Amazon Prime Video") ||
+          name.includes("Prime Video")
         );
 
       }
@@ -2393,15 +2393,16 @@ function getNetflixProvider(
 
 
   return (
-    netflix ||
+    prime ||
     providers[0] ||
     null
   );
 
 }
 
+  
 // =========================================================
-// Netflix注目作品
+// Prime Video注目作品
 // =========================================================
 
 function renderFeaturedWorks(
@@ -2585,7 +2586,7 @@ const rating =
 }
 
 // =========================================================
-// Netflix 評価が高い作品
+// Prime Video 評価が高い作品
 // =========================================================
 
 function renderHighRatedWorks(
@@ -3077,10 +3078,10 @@ function createMovieCard(
 
 
 // =========================================================
-// Netflix 注目作品・高評価作品を取得
+// Prime Video 注目作品・高評価作品を取得
 //
 // 国・地域の選択に関係なく
-// Netflix全体の作品を使用する
+// Prime Video全体の作品を使用する
 // =========================================================
 
 async function loadNetflixTopWorks(){
@@ -3100,7 +3101,33 @@ async function loadNetflixTopWorks(){
     ){
 
       throw new Error(
-        "Netflix注目作品の取得に失敗しました。"
+        "//
+// 国・地域の選択に関係なく
+// Prime Video全体の作品を使用する
+// =========================================================
+
+// =========================================================
+// Prime Video 注目作品・高評価作品を取得
+// =========================================================
+
+async function loadNetflixTopWorks(){
+
+  try{
+
+    const response =
+      await fetch(
+        "/api/search" +
+        "?provider=prime" +
+        "&page=1"
+      );
+
+
+    if(
+      !response.ok
+    ){
+
+      throw new Error(
+        "Prime Video注目作品の取得に失敗しました。"
       );
 
     }
@@ -3163,7 +3190,7 @@ async function loadNetflixTopWorks(){
 }
 
 // =========================================================
-// Netflix 新着作品
+// Prime Video 新着作品
 // =========================================================
 
 async function loadNetflixNewWorks(){
@@ -3341,7 +3368,7 @@ async function loadNetflixNewWorks(){
   }catch(error){
 
     console.error(
-      "Netflix new works error:",
+      "Prime Video new works error:",
       error
     );
 
@@ -3356,7 +3383,7 @@ async function loadNetflixNewWorks(){
 }
   
 // =========================================================
-// Netflix作品取得
+// Prime Video作品取得
 // =========================================================
 
 async function loadNetflixWorks(
@@ -3378,7 +3405,7 @@ async function loadNetflixWorks(
   ){
 
     status.innerHTML =
-      "Netflixの作品を読み込んでいます...";
+      "Prime Videoの作品を読み込んでいます...";
 
   }
 
@@ -3447,7 +3474,7 @@ if(
 }    
 
 // -------------------------------------------------------
-// Netflix作品を取得
+// Prime Video作品を取得
 // -------------------------------------------------------
 
 const response =
@@ -3461,7 +3488,7 @@ const response =
     ){
 
       throw new Error(
-        "Netflix作品の取得に失敗しました。"
+        "Prime Video作品の取得に失敗しました。"
       );
 
     }
@@ -3503,8 +3530,7 @@ const response =
 
         <div class="empty">
 
-          現在表示できるNetflix作品がありません。
-
+          現在表示できるPrime Video作品がありません。
         </div>
 
       `;
@@ -3576,7 +3602,7 @@ const response =
 
       <div class="error">
 
-        Netflixの作品を取得できませんでした。<br>
+        Prime Videoの作品を取得できませんでした。<br>
 
         少し時間をおいてから、もう一度お試しください。
 
@@ -3653,7 +3679,7 @@ loadNetflixTopWorks();
 loadNetflixNewWorks();
   
 
-// Netflix作品一覧
+// Prime Video作品一覧
 loadNetflixWorks(
   false
 );
