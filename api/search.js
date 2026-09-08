@@ -4309,6 +4309,23 @@ async function getProviderWorks(
   let movieGenreQuery = "";
 let tvGenreQuery = "";
 
+// =======================================================
+// 作品タイプによるTMDB取得条件
+// =======================================================
+
+if(
+  netflixType === "anime"
+){
+
+  // 映画・TVともにアニメーションだけ取得
+  movieGenreQuery =
+    "&with_genres=16";
+
+  tvGenreQuery =
+    "&with_genres=16";
+
+}
+  
 if(
   genre === "anime"
 ){
