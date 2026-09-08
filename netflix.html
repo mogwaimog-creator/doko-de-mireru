@@ -1296,22 +1296,22 @@ footer{
 
   z-index:1000;
 
-  padding:12px 16px;
+  padding:14px 20px;
 
-  border:0;
+  border:2px solid #ffffff;
   border-radius:999px;
 
   background:#2563eb;
   color:#fff;
 
-  font-size:14px;
-  font-weight:700;
+  font-size:15px;
+  font-weight:800;
 
   cursor:pointer;
 
   box-shadow:
-    0 5px 16px
-    rgba(0,0,0,.18);
+    0 7px 20px
+    rgba(37,99,235,.28);
 
   opacity:0;
   pointer-events:none;
@@ -1321,7 +1321,8 @@ footer{
   transition:
     opacity .2s ease,
     transform .2s ease,
-    background .2s ease;
+    background .2s ease,
+    box-shadow .2s ease;
 }
 
 #backToBrowseButton.show{
@@ -1542,10 +1543,7 @@ footer{
      Netflixの注目作品
 ======================================================== -->
 
-<section
-  id="highRatedSection"
-  class="featured-section"
->
+<section class="featured-section">
 
   <div class="featured-heading">
 
@@ -1976,26 +1974,6 @@ const selectedType =
     "type"
   ) || "";
 
-// =========================================================
-// 絞り込み中は「評価が高い作品」を非表示
-// =========================================================
-
-const highRatedSection =
-  document.getElementById(
-    "highRatedSection"
-  );
-
-if(
-  highRatedSection &&
-  (
-    selectedType ||
-    selectedCountry ||
-    selectedGenre
-  )
-){
-  highRatedSection.style.display =
-    "none";
-}
   
 // =========================================================
 // 現在選択中のカードを強調
@@ -2050,23 +2028,6 @@ document.querySelectorAll(
   }
 );
   
-const newNetflixSection =
-  document.getElementById(
-    "newNetflixSection"
-  );
-
-
-if(
-  newNetflixSection &&
-  (
-    selectedCountry ||
-    selectedGenre ||
-    selectedType
-  )
-){
-  newNetflixSection.style.display =
-    "none";
-}
   
  // =========================================================
 // 国・地域 または ジャンル選択時
@@ -3700,41 +3661,7 @@ loadNetflixWorks(
   false
 );
 
-
   
-// =========================================================
-// 国・地域を選択したとき
-// Netflix作品一覧まで自動スクロール
-// =========================================================
-
-if(
-  selectedCountry
-){
-
-  const netflixWorksSection =
-    document.getElementById(
-      "netflixWorksSection"
-    );
-
-  if(
-    netflixWorksSection
-  ){
-
-    setTimeout(
-      function(){
-
-        netflixWorksSection.scrollIntoView({
-          behavior:"smooth",
-          block:"start"
-        });
-
-      },
-      300
-    );
-
-  }
-
-}
   
 // =========================================================
 // 探し方に戻るボタン
@@ -3747,9 +3674,8 @@ const backToBrowseButton =
 
 const browseSection =
   document.getElementById(
-    "browseSection"
+    "typeSection"
   );
-
 
 // =========================================================
 // スクロールしたらボタンを表示
