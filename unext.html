@@ -1,0 +1,4233 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
+
+<!-- =========================================================
+     Google Search Console 所有権確認
+========================================================= -->
+
+<meta
+  name="google-site-verification"
+  content="xl0TnMDwmY9xpeFPp8_RgJiPBxT0k04iH3LVbyL65V4"
+>
+
+
+<!-- =========================================================
+     SEO
+========================================================= -->
+
+<title>
+Prime Videoで見られる映画・ドラマ・アニメ｜ドコデミレル？
+</title>
+
+<meta
+  name="description"
+  content="Prime Videoで見られる映画・ドラマ・アニメを一覧で紹介。Prime Videoで現在見放題配信されている作品をドコデミレル？で探せます。"
+>
+<meta
+  name="robots"
+  content="index, follow"
+>
+
+<link
+  rel="canonical"
+  href="https://doko-de-mireru.vercel.app/prime.html"
+>
+
+
+<!-- =========================================================
+     OGP
+========================================================= -->
+
+<meta
+  property="og:type"
+  content="website"
+>
+
+<meta
+  property="og:title"
+  content="Prime Videoで見られる映画・ドラマ・アニメ｜ドコデミレル？"
+>
+
+<meta
+  property="og:description"
+  content="Prime Videoで現在見放題配信されている映画・ドラマ・アニメを探せます。"
+>
+
+<meta
+  property="og:url"
+  content="https://doko-de-mireru.vercel.app/prime.html"
+>
+
+<meta
+  property="og:site_name"
+  content="ドコデミレル？"
+>
+
+<meta
+  property="og:locale"
+  content="ja_JP"
+>
+
+
+<!-- =========================================================
+     Twitter / X
+========================================================= -->
+
+<meta
+  name="twitter:card"
+  content="summary"
+>
+
+<meta
+  name="twitter:title"
+  content="Prime Videoで見られる映画・ドラマ・アニメ｜ドコデミレル？"
+>
+
+<meta
+  name="twitter:description"
+  content="Prime Videoで現在見放題配信されている映画・ドラマ・アニメを探せます。"
+>
+
+<style>
+
+/* =========================================================
+   基本
+========================================================= */
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+
+  font-family:
+    Arial,
+    "Noto Sans JP",
+    sans-serif;
+
+  background:#f2f9fc;
+
+  color:#222;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+
+header{
+  background:#111827;
+  color:#fff;
+  padding:10px 15px;
+  text-align:center;
+}
+
+header h1{
+  margin:0;
+  font-size:25px;
+  line-height:1.25;
+  font-weight:700;
+}
+
+header h1 a{
+  color:#fff;
+}
+
+header p{
+  margin:3px 0 0;
+  color:#d1d5db;
+  font-size:12px;
+  line-height:1.35;
+}
+
+
+/* =========================================================
+   コンテナ
+========================================================= */
+
+.container{
+  width:min(1000px,94%);
+  margin:14px auto 50px;
+
+  display:flex;
+  flex-direction:column;
+  gap:21px;
+}
+
+/* =========================================================
+   パンくず
+========================================================= */
+
+.breadcrumb{
+  margin-bottom:10px;
+  color:#6b7280;
+  font-size:12px;
+}
+
+.breadcrumb a{
+  color:#2563eb;
+}
+
+.breadcrumb a:hover{
+  text-decoration:underline;
+}
+
+
+.provider-header{
+  background:#fff;
+  border-radius:12px;
+  padding:14px 18px;
+  margin-bottom:16px;
+
+  box-shadow:
+    0 2px 10px
+    rgba(0,0,0,.06);
+}
+
+.provider-header h1{
+  margin:0 0 4px;
+  color:#111827;
+  font-size:22px;
+  line-height:1.35;
+}
+
+.provider-header p{
+  margin:0;
+  color:#6b7280;
+  font-size:13px;
+  line-height:1.5;
+}
+
+/* =========================================================
+   配信サービス切り替えを目立たせる
+========================================================= */
+
+.provider-mini-label{
+  margin-right:5px;
+
+  font-size:12px;
+  font-weight:800;
+
+  color:#334155;
+
+  white-space:nowrap;
+}
+
+
+/* 各サービスボタン */
+
+.provider-mini-item{
+  display:flex;
+  align-items:center;
+
+  gap:5px;
+
+  padding:6px 10px;
+
+  border:1px solid #cbd5e1;
+  border-radius:8px;
+
+  background:#ffffff;
+
+  color:#334155;
+
+  font-size:11px;
+  font-weight:800;
+
+  line-height:1;
+
+  text-decoration:none;
+
+  white-space:nowrap;
+
+  box-shadow:
+    0 2px 5px
+    rgba(15,23,42,.08);
+
+  transition:
+    transform .2s ease,
+    box-shadow .2s ease,
+    background .2s ease,
+    border-color .2s ease,
+    color .2s ease;
+}
+
+
+/* マークを少し大きく */
+
+.provider-mini-mark{
+  width:24px;
+  height:24px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  flex-shrink:0;
+
+  border-radius:5px;
+
+  font-size:12px;
+  font-weight:900;
+}
+
+
+/* Netflix */
+
+.provider-mini-mark.netflix-mark{
+  background:transparent;
+
+  color:#e50914;
+
+  font-size:19px;
+}
+
+
+/* Prime Video */
+
+.provider-mini-mark.prime-mark{
+  background:transparent;
+
+  color:#00a8e1;
+}
+
+
+/* U-NEXT */
+
+.provider-mini-mark.unext-mark{
+  background:transparent;
+
+  color:#111827;
+}
+
+
+/* Hulu */
+
+.provider-mini-mark.hulu-mark{
+  background:transparent;
+
+  color:#0b9f58;
+
+  font-size:8px;
+}
+
+
+/* Disney+ */
+
+.provider-mini-mark.disney-mark{
+  background:transparent;
+
+  color:#172554;
+
+  font-size:10px;
+}
+
+
+/* Netflixにマウスを乗せた時 */
+
+.provider-mini-item.netflix-mini:hover{
+  transform:translateY(-2px);
+
+  background:#fff1f2;
+
+  border-color:#e50914;
+
+  color:#b20710;
+
+  box-shadow:
+    0 4px 9px
+    rgba(229,9,20,.12);
+}
+
+
+/* Prime Video
+   現在選択中 ＋ hover
+*/
+
+.provider-mini-item.prime-mini.active,
+.provider-mini-item.prime-mini:hover{
+  background:#dff4fb;
+
+  border-color:#00a8e1;
+
+  color:#006b9c;
+
+  box-shadow:
+    0 3px 8px
+    rgba(0,168,225,.15);
+}
+
+
+.provider-mini-item.prime-mini:hover{
+  transform:translateY(-2px);
+}
+
+
+/* 準備中 */
+
+.provider-mini-item.coming{
+  opacity:.55;
+
+  box-shadow:none;
+
+  cursor:default;
+}
+  
+  
+/* =========================================================
+   検索結果見出し
+========================================================= */
+
+.results-heading{
+  margin:0 0 16px;
+
+  font-size:22px;
+
+  font-weight:700;
+
+  color:#111827;
+}
+
+
+/* =========================================================
+   ステータス
+========================================================= */
+
+.status{
+  text-align:center;
+
+  padding:25px;
+
+  color:#6b7280;
+}
+
+.error{
+  background:#fee2e2;
+
+  color:#b91c1c;
+
+  padding:15px;
+
+  border-radius:10px;
+
+  margin:15px 0;
+}
+
+.empty{
+  background:#fff;
+
+  border-radius:16px;
+
+  padding:35px;
+
+  text-align:center;
+
+  color:#6b7280;
+}
+
+
+/* =========================================================
+   検索結果
+========================================================= */
+
+.results{
+  display:grid;
+
+  gap:18px;
+}
+
+
+/* =========================================================
+   映画カード
+========================================================= */
+
+.movie-card{
+  background:#fff;
+
+  border:1px solid #e5e7eb;
+
+  border-radius:16px;
+
+  padding:20px;
+
+  display:grid;
+
+  grid-template-columns:
+    150px
+    minmax(0,1fr);
+
+  align-items:start;
+
+  gap:22px;
+
+  min-height:265px;
+
+  box-shadow:
+    0 4px 14px
+    rgba(0,0,0,.08);
+
+  margin-bottom:20px;
+
+  transition:
+    box-shadow .15s ease,
+    transform .15s ease;
+}
+
+.movie-card:hover{
+  box-shadow:
+    0 5px 18px
+    rgba(0,0,0,.09);
+}
+
+
+/* =========================================================
+   ポスター
+========================================================= */
+
+.movie-poster{
+  width:150px;
+
+  height:225px;
+
+  object-fit:cover;
+
+  border-radius:10px;
+
+  background:#e5e7eb;
+
+  border:1px solid #d1d5db;
+
+  box-sizing:border-box;
+
+  box-shadow:
+    0 2px 8px
+    rgba(0,0,0,.12);
+}
+
+
+/* =========================================================
+   作品情報
+========================================================= */
+
+.movie-info{
+  min-width:0;
+
+  display:flex;
+
+  flex-direction:column;
+
+  align-items:flex-start;
+}
+
+.movie-title{
+  margin:0 0 5px;
+
+  font-size:22px;
+
+  line-height:1.4;
+
+  font-weight:700;
+
+  color:#111827;
+}
+
+.original-title{
+  margin:0 0 14px;
+
+  color:#6b7280;
+
+  font-size:13px;
+}
+
+
+/* =========================================================
+   メタ情報
+========================================================= */
+
+.movie-meta-row{
+  display:flex;
+
+  flex-wrap:wrap;
+
+  align-items:center;
+
+  gap:8px 14px;
+
+  margin-bottom:14px;
+
+  color:#4b5563;
+
+  font-size:13px;
+}
+
+.movie-meta-item{
+  white-space:nowrap;
+}
+
+
+/* =========================================================
+   あらすじ
+========================================================= */
+
+.movie-overview{
+  margin:0 0 14px;
+
+  color:#374151;
+
+  font-size:14px;
+
+  line-height:1.7;
+
+  display:-webkit-box;
+
+  -webkit-box-orient:vertical;
+
+  -webkit-line-clamp:2;
+
+  overflow:hidden;
+}
+
+
+/* =========================================================
+   詳細ボタン
+========================================================= */
+
+.detail-button{
+  display:inline-block;
+
+  padding:9px 18px;
+
+  border:1px solid #2563eb;
+
+  border-radius:8px;
+
+  color:#2563eb;
+
+  background:#fff;
+
+  font-size:13px;
+
+  font-weight:600;
+
+  transition:.2s;
+}
+
+.detail-button:hover{
+  background:#2563eb;
+
+  color:#fff;
+}
+
+
+/* =========================================================
+   配信情報パネル
+========================================================= */
+
+.availability-panel{
+  min-height:225px;
+
+  height:auto;
+
+  padding:18px 16px;
+
+  border-radius:12px;
+
+  display:flex;
+
+  flex-direction:column;
+
+  justify-content:flex-start;
+
+  align-self:start;
+
+  box-sizing:border-box;
+
+  overflow:visible;
+
+  border-left:4px solid transparent;
+}
+
+
+/* =========================================================
+   Prime Video配信中
+========================================================= */
+
+.availability-panel.streaming{
+  background:#f4fbf7;
+
+  border-left-color:#2e7d32;
+}
+
+.availability-heading{
+  margin:0 0 12px;
+
+  font-size:18px;
+
+  font-weight:800;
+
+  line-height:1.45;
+
+  text-align:center;
+}
+
+.availability-heading.availability-streaming{
+  color:#26733a;
+}
+
+
+/* =========================================================
+   配信サービス一覧
+========================================================= */
+
+.provider-list{
+  display:grid;
+
+  grid-template-columns:
+    repeat(3,minmax(0,1fr));
+
+  gap:12px 6px;
+
+  width:100%;
+}
+
+.provider-item{
+  min-width:0;
+
+  display:flex;
+
+  flex-direction:column;
+
+  align-items:center;
+
+  justify-content:flex-start;
+
+  text-align:center;
+
+  gap:5px;
+}
+
+
+/* =========================================================
+   配信サービスロゴ
+========================================================= */
+
+.provider-logo{
+  width:78px;
+
+  height:52px;
+
+  object-fit:contain;
+
+  display:block;
+}
+
+.provider-logo-fallback{
+  width:78px;
+
+  height:52px;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  text-align:center;
+
+  font-size:11px;
+
+  line-height:1.2;
+
+  color:#555;
+
+  background:#fff;
+
+  border-radius:6px;
+}
+
+.provider-item > span{
+  display:block;
+
+  width:100%;
+
+  font-size:12px;
+
+  line-height:1.3;
+
+  color:#374151;
+
+  white-space:nowrap;
+
+  overflow:hidden;
+
+  text-overflow:ellipsis;
+}
+
+
+/* =========================================================
+   さらに20件表示
+========================================================= */
+
+.load-more-wrapper{
+  margin-top:4px;
+}
+
+.load-more-button{
+  width:100%;
+
+  min-height:78px;
+
+  padding:16px 24px;
+
+  border:0;
+
+  border-radius:14px;
+
+  background:#2563eb;
+
+  color:#fff;
+
+  font-size:22px;
+
+  font-weight:800;
+
+  letter-spacing:.02em;
+
+  cursor:pointer;
+
+  box-shadow:
+    0 5px 14px
+    rgba(37,99,235,.22);
+
+  transition:
+    transform .15s ease,
+    background .15s ease,
+    box-shadow .15s ease;
+}
+
+.load-more-button:hover{
+  background:#1d4ed8;
+
+  transform:translateY(-1px);
+
+  box-shadow:
+    0 7px 18px
+    rgba(37,99,235,.28);
+}
+
+.load-more-button:disabled{
+  opacity:.65;
+
+  cursor:wait;
+
+  transform:none;
+}
+
+
+/* =========================================================
+   補足
+========================================================= */
+
+.provider-note{
+  margin-top:28px;
+
+  padding:18px;
+
+  background:#fff;
+
+  border-radius:12px;
+
+  color:#6b7280;
+
+  font-size:12px;
+
+  line-height:1.8;
+
+  box-shadow:
+    0 2px 10px
+    rgba(0,0,0,.05);
+}
+
+
+/* =========================================================
+   フッター
+========================================================= */
+
+footer{
+  margin-top:40px;
+
+  padding:25px 15px;
+
+  text-align:center;
+
+  color:#6b7280;
+
+  font-size:12px;
+}
+
+
+/* =========================================================
+   タブレット
+========================================================= */
+
+@media(max-width:900px){
+
+  .movie-card{
+    grid-template-columns:
+      120px
+      minmax(0,1fr);
+  }
+
+  .movie-poster{
+    width:120px;
+
+    height:180px;
+  }
+
+  .availability-panel{
+    grid-column:1 / -1;
+
+    min-height:auto;
+  }
+
+}
+
+
+/* =========================================================
+   スマホ
+========================================================= */
+
+@media(max-width:700px){
+
+  header h1{
+    font-size:26px;
+  }
+
+  .provider-header{
+  padding:12px 14px;
+}
+
+.provider-header h1{
+  font-size:20px;
+}
+
+  .movie-card{
+    grid-template-columns:
+      105px
+      minmax(0,1fr);
+
+    gap:14px;
+
+    padding:14px;
+
+    border-radius:13px;
+  }
+
+  .movie-poster{
+    width:105px;
+
+    height:158px;
+  }
+
+  .movie-title{
+    font-size:19px;
+  }
+
+  .original-title{
+    font-size:13px;
+
+    margin-bottom:8px;
+  }
+
+  .movie-meta-row{
+    gap:4px 10px;
+
+    font-size:12px;
+
+    margin-bottom:9px;
+  }
+
+  .movie-meta-item{
+    white-space:normal;
+  }
+
+  .movie-overview{
+    font-size:13px;
+
+    line-height:1.6;
+
+    -webkit-line-clamp:3;
+
+    margin-bottom:10px;
+  }
+
+  .detail-button{
+    width:100%;
+
+    padding:9px 12px;
+
+    font-size:13px;
+
+    text-align:center;
+  }
+
+  .availability-panel{
+    min-height:130px;
+
+    padding:15px;
+  }
+
+  .availability-heading{
+    font-size:18px;
+  }
+
+  .provider-item{
+    font-size:12px;
+  }
+
+  .load-more-button{
+    min-height:64px;
+
+    font-size:18px;
+  }
+
+}
+
+/* =========================================================
+   Prime Videoの注目作品
+========================================================= */
+
+.featured-section{
+  background:#fff;
+
+  border-radius:16px;
+
+  padding:22px;
+
+  margin-bottom:25px;
+
+  box-shadow:
+    0 3px 15px
+    rgba(0,0,0,.08);
+}
+
+
+.featured-heading{
+  margin-bottom:18px;
+}
+
+
+.featured-heading h2{
+  margin:0;
+
+  color:#111827;
+
+  font-size:22px;
+
+  font-weight:800;
+}
+
+
+.featured-heading p{
+  margin:7px 0 0;
+
+  color:#6b7280;
+
+  font-size:14px;
+
+  line-height:1.6;
+}
+
+
+.featured-grid{
+  display:grid;
+
+  grid-template-columns:
+    repeat(5,minmax(0,1fr));
+
+  gap:14px;
+}
+
+
+.featured-card{
+  min-width:0;
+
+  display:block;
+
+  border-radius:12px;
+
+  overflow:hidden;
+
+  background:#f8fafc;
+
+  border:1px solid #e5e7eb;
+
+  transition:
+    transform .15s ease,
+    box-shadow .15s ease;
+}
+
+
+.featured-card:hover{
+  transform:translateY(-3px);
+
+  box-shadow:
+    0 7px 18px
+    rgba(15,23,42,.14);
+}
+
+
+.featured-poster{
+  display:block;
+
+  width:100%;
+
+  aspect-ratio:2 / 3;
+
+  object-fit:cover;
+
+  background:#e5e7eb;
+}
+
+
+.featured-poster-empty{
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  color:#6b7280;
+
+  font-size:12px;
+}
+
+
+.featured-info{
+  padding:10px;
+}
+
+
+.featured-title{
+  margin:0;
+
+  color:#111827;
+
+  font-size:14px;
+
+  font-weight:800;
+
+  line-height:1.45;
+
+  display:-webkit-box;
+
+  -webkit-box-orient:vertical;
+
+  -webkit-line-clamp:2;
+
+  overflow:hidden;
+}
+
+
+.featured-meta{
+  margin-top:6px;
+
+  display:flex;
+
+  flex-wrap:wrap;
+
+  align-items:center;
+
+  gap:4px 8px;
+
+  color:#6b7280;
+
+  font-size:12px;
+
+  line-height:1.4;
+}
+
+
+/* タブレット */
+
+@media(max-width:800px){
+
+  .featured-grid{
+    grid-template-columns:
+      repeat(3,minmax(0,1fr));
+  }
+
+}
+
+
+/* スマホ */
+
+@media(max-width:550px){
+
+  .featured-section{
+    padding:18px 14px;
+  }
+
+
+  .featured-grid{
+    display:flex;
+
+    overflow-x:auto;
+
+    gap:11px;
+
+    padding-bottom:8px;
+
+    scroll-snap-type:x proximity;
+  }
+
+
+  .featured-card{
+    flex:
+      0 0
+      145px;
+
+    scroll-snap-align:start;
+  }
+
+
+  .featured-heading h2{
+    font-size:20px;
+  }
+
+}
+
+/* =========================================================
+   国・地域から探す
+========================================================= */
+
+.country-section{
+  background:#fff;
+  border-radius:16px;
+  padding:22px;
+  margin-bottom:14px;
+  
+  box-shadow:
+    0 3px 15px
+    rgba(0,0,0,.08);
+}
+
+
+.country-heading{
+  margin-bottom:18px;
+}
+
+
+.country-heading h2{
+  margin:0;
+
+  color:#111827;
+
+  font-size:22px;
+
+  font-weight:800;
+}
+
+
+.country-heading p{
+  margin:7px 0 0;
+
+  color:#6b7280;
+
+  font-size:14px;
+
+  line-height:1.6;
+}
+
+
+/* 3つの国・地域 */
+
+.country-grid{
+  display:grid;
+
+  grid-template-columns:
+    repeat(3,minmax(0,1fr));
+
+  gap:14px;
+}
+
+
+/* =========================================================
+   作品タイプ・国地域・ジャンル 共通カード
+   デザイン②
+========================================================= */
+
+.country-card{
+  position:relative;
+
+  min-height:58px;
+
+  padding:9px 42px 9px 14px;
+
+  display:flex;
+  flex-direction:row;
+
+  align-items:center;
+  justify-content:center;
+
+  gap:9px;
+
+  text-align:center;
+
+  background:#ffffff;
+
+  border:1px solid #dbeafe;
+
+  border-radius:12px;
+
+  box-shadow:
+    0 2px 7px
+    rgba(15,23,42,.05);
+
+  transition:
+    transform .18s ease,
+    box-shadow .18s ease,
+    border-color .18s ease,
+    background .18s ease;
+}
+
+
+/* 右側の矢印 */
+
+.country-card::after{
+  content:"›";
+
+  position:absolute;
+
+  right:15px;
+  top:50%;
+
+  transform:
+    translateY(-52%);
+
+  color:#3b82f6;
+
+  font-size:26px;
+  font-weight:500;
+
+  line-height:1;
+}
+
+
+/* マウスを乗せた時 */
+
+.country-card:hover{
+  transform:
+    translateY(-2px);
+
+  background:#e8f7fc;
+
+  border-color:#00a8e1;
+
+  box-shadow:
+    0 7px 18px
+    rgba(0,168,225,.12);
+}
+
+.country-card:hover .country-title{
+  color:#0073a8;
+}
+
+.country-card:hover::after{
+  color:#00a8e1;
+}
+
+/* =========================================================
+   選択中のカード
+========================================================= */
+
+/* 選択中 */
+
+.country-card.active{
+  background:#dff4fb;
+
+  border-color:#00a8e1;
+
+  box-shadow:
+    0 5px 14px
+    rgba(0,168,225,.15);
+}
+
+.country-card.active .country-title{
+  color:#006b9c;
+}
+
+.country-card.active::after{
+  color:#00a8e1;
+}
+  
+.country-icon{
+  display:block;
+  font-size:26px;
+  line-height:1;
+}
+
+.country-title{
+  display:block;
+
+  color:#111827;
+
+  font-size:15px;
+
+  font-weight:800;
+
+  line-height:1.4;
+}
+
+
+/* =========================================================
+   国・地域から探す スマホ
+========================================================= */
+
+@media(max-width:550px){
+
+  .country-section{
+    padding:18px 14px;
+  }
+
+
+  .country-heading h2{
+    font-size:20px;
+  }
+
+
+  .country-grid{
+    grid-template-columns:1fr;
+    gap:10px;
+  }
+
+
+  .country-card{
+    min-height:74px;
+
+    flex-direction:row;
+
+    justify-content:flex-start;
+
+    padding:14px 18px;
+
+    text-align:left;
+  }
+
+
+  .country-icon{
+    font-size:26px;
+  }
+
+
+  .country-title{
+    font-size:14px;
+  }
+
+}
+
+/* =========================================================
+   Prime Video配信作品 ポスター一覧
+========================================================= */
+
+.netflix-works-grid{
+  display:grid;
+  grid-template-columns:
+    repeat(5,minmax(0,1fr));
+  gap:14px;
+}
+
+
+/* =========================================================
+   Prime Video配信作品 スマホ
+========================================================= */
+
+@media(max-width:800px){
+
+  .netflix-works-grid{
+    grid-template-columns:
+      repeat(3,minmax(0,1fr));
+  }
+
+}
+
+
+@media(max-width:550px){
+
+  .netflix-works-grid{
+    grid-template-columns:
+      repeat(2,minmax(0,1fr));
+
+    gap:12px;
+  }
+
+}
+
+/* =========================================================
+   探し方に戻るボタン
+========================================================= */
+
+#backToBrowseButton{
+  position:fixed;
+
+  right:max(
+  20px,
+  calc((100vw - 1000px) / 2 + 20px)
+);
+
+bottom:20px;
+  z-index:1000;
+
+  padding:14px 20px;
+
+  border:2px solid #ffffff;
+  border-radius:999px;
+
+  background:#00a8e1;
+color:#fff;
+
+  font-size:15px;
+  font-weight:800;
+
+  cursor:pointer;
+
+  box-shadow:
+    0 7px 20px
+    rgba(37,99,235,.28);
+
+  opacity:0;
+  pointer-events:none;
+
+  transform:translateY(10px);
+
+  transition:
+    opacity .2s ease,
+    transform .2s ease,
+    background .2s ease,
+    box-shadow .2s ease;
+}
+
+#backToBrowseButton.show{
+  opacity:1;
+  pointer-events:auto;
+  transform:translateY(0);
+}
+
+#backToBrowseButton:hover{
+  background:#0086b3;
+}
+
+@media(max-width:550px){
+
+  #backToBrowseButton{
+    right:14px;
+    bottom:14px;
+
+    padding:11px 14px;
+
+    font-size:13px;
+  }
+
+}
+
+/* =========================================================
+   Prime Videoページ 上部アクション
+========================================================= */
+
+.provider-header-actions{
+  margin-top:14px;
+}
+
+.main-search-button{
+  display:inline-block;
+
+  padding:10px 18px;
+
+  border-radius:9px;
+
+  background:#2563eb;
+
+  color:#fff;
+
+  font-size:14px;
+
+  font-weight:800;
+
+  transition:
+    background .15s ease,
+    transform .15s ease;
+}
+
+.main-search-button:hover{
+  background:#1d4ed8;
+
+  transform:translateY(-1px);
+}
+
+/* =========================================================
+   Prime Videoページ 青のアクセント
+========================================================= */
+
+/* Prime Videoページ上部 */
+.provider-header{
+  position:relative;
+  overflow:hidden;
+
+  border-left:5px solid #00a8e1;
+}
+
+
+/* タイトルを少し引き締める */
+.provider-header h1{
+  color:#111111;
+  font-weight:800;
+}
+
+
+/* 右側にごく薄い青の光 */
+.provider-header::after{
+  content:"";
+
+  position:absolute;
+
+  width:180px;
+  height:180px;
+
+  right:-70px;
+  top:-90px;
+
+  border-radius:50%;
+
+  background:
+    rgba(0,168,225,.07);
+
+  pointer-events:none;
+}
+
+/* Prime Videoの文字だけ青にする */
+.netflix-title-mark{
+  color:#00a8e1;
+  font-weight:900;
+}
+
+/* =========================================================
+   Prime Video配信作品 見出しとポスターの間隔
+========================================================= */
+
+#netflixWorksSection .results-heading{
+  margin-bottom:10px;
+}
+
+#netflixWorksSection .status:empty{
+  display:none;
+}  
+
+/* =========================================================
+   Prime Videoページ
+   セクション間隔を21pxで完全統一
+========================================================= */
+
+.breadcrumb,
+.provider-header,
+.featured-section,
+.country-section,
+#netflixWorksSection{
+  margin-top:0 !important;
+  margin-bottom:0 !important;
+}
+
+/* =========================================================
+   パンくず ＋ 配信サービス切り替え
+========================================================= */
+
+.breadcrumb-provider-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  gap:14px;
+
+  width:100%;
+}
+
+
+/* 配信サービス側 */
+
+.provider-mini-switch{
+  display:flex;
+  align-items:center;
+
+  gap:5px;
+
+  flex-shrink:0;
+}
+
+
+/* 「配信サービス」の文字 */
+
+.provider-mini-label{
+  margin-right:2px;
+
+  color:#64748b;
+
+  font-size:11px;
+  font-weight:700;
+
+  white-space:nowrap;
+}
+
+
+/* 各サービス */
+
+.provider-mini-item{
+  display:flex;
+  align-items:center;
+
+  gap:4px;
+
+  min-width:0;
+
+  padding:4px 7px;
+
+  border:1px solid #e2e8f0;
+  border-radius:7px;
+
+  background:#fff;
+
+  color:#475569;
+
+  font-size:10px;
+  font-weight:700;
+
+  line-height:1;
+
+  text-decoration:none;
+
+  white-space:nowrap;
+
+  transition:
+    background .2s ease,
+    border-color .2s ease,
+    color .2s ease;
+}
+
+
+/* 小型マーク */
+
+.provider-mini-mark{
+  width:20px;
+  height:20px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  flex-shrink:0;
+
+  border-radius:5px;
+
+  font-size:11px;
+  font-weight:900;
+}
+
+
+/* 元CSSの大きな文字サイズを小型版では上書き */
+
+.provider-mini-mark.netflix-mark{
+  font-size:17px;
+}
+
+.provider-mini-mark.hulu-mark{
+  font-size:7px;
+}
+
+.provider-mini-mark.disney-mark{
+  font-size:9px;
+}
+
+
+/* Netflix */
+
+.provider-mini-item.netflix-mini:hover{
+  background:#fff1f2;
+
+  border-color:#e50914;
+
+  color:#b20710;
+}
+
+
+/* 現在のPrime Video */
+
+.provider-mini-item.prime-mini.active,
+.provider-mini-item.prime-mini:hover{
+  background:#dff4fb;
+
+  border-color:#00a8e1;
+
+  color:#006b9c;
+}
+
+
+/* 準備中 */
+
+.provider-mini-item.coming{
+  opacity:.55;
+
+  cursor:default;
+}
+
+
+/* =========================================================
+   スマホ
+========================================================= */
+
+@media(max-width:800px){
+
+  .breadcrumb-provider-row{
+    align-items:flex-start;
+    flex-direction:column;
+
+    gap:7px;
+  }
+
+
+  .provider-mini-switch{
+    width:100%;
+
+    overflow-x:auto;
+
+    padding-bottom:2px;
+  }
+
+
+  .provider-mini-label{
+    display:none;
+  }
+
+
+  .provider-mini-item{
+    flex-shrink:0;
+  }
+
+}
+
+/* =========================================================
+   配信サービス小型マーク
+   マークの文字だけサービスカラーにする
+========================================================= */
+
+.provider-mini-mark{
+  background:transparent;
+}
+
+
+/* Netflix */
+
+.provider-mini-mark.netflix-mark{
+  background:transparent;
+  color:#e50914;
+}
+
+
+/* Prime Video */
+
+.provider-mini-mark.prime-mark{
+  background:transparent;
+  color:#00a8e1;
+}
+
+
+/* U-NEXT */
+
+.provider-mini-mark.unext-mark{
+  background:transparent;
+  color:#111827;
+}
+
+
+/* Hulu */
+
+.provider-mini-mark.hulu-mark{
+  background:transparent;
+  color:#0b9f58;
+}
+
+
+/* Disney+ */
+
+.provider-mini-mark.disney-mark{
+  background:transparent;
+  color:#172554;
+}
+  
+</style>
+  
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     ヘッダー
+========================================================= -->
+
+<header>
+
+  <h1>
+    <a href="./index.html">
+      🎬 ドコデミレル？
+    </a>
+  </h1>
+
+  <p>
+    観たい映画・ドラマ・アニメが、どこで見られるかすぐわかる
+  </p>
+
+</header>
+
+
+<main class="container">
+
+
+ <div class="breadcrumb-provider-row">
+
+  <nav
+    class="breadcrumb"
+    aria-label="パンくずリスト"
+  >
+
+    <a href="./index.html">
+      ドコデミレル？
+    </a>
+
+    ＞ Prime Videoで見られる作品
+
+  </nav>
+
+
+  <div class="provider-mini-switch">
+
+    <div
+  class="provider-mini-switch"
+  aria-label="配信サービスを切り替える"
+>
+
+  <span class="provider-mini-label">
+    配信サービスを切り替える
+  </span>
+
+  <!-- Netflix -->
+  <a
+    href="./netflix.html"
+    class="provider-mini-item netflix-mini"
+    title="Netflix"
+  >
+    <span class="provider-mini-mark netflix-mark">
+      N
+    </span>
+
+    <span class="provider-mini-name">
+      Netflix
+    </span>
+  </a>
+
+
+  <!-- Prime Video -->
+  <a
+    href="./prime.html"
+    class="provider-mini-item prime-mini active"
+    title="Prime Video"
+  >
+    <span class="provider-mini-mark prime-mark">
+      ▶
+    </span>
+
+    <span class="provider-mini-name">
+      Prime Video
+    </span>
+  </a>
+
+
+  <!-- U-NEXT -->
+  <span
+    class="provider-mini-item coming"
+    title="U-NEXT 準備中"
+  >
+    <span class="provider-mini-mark unext-mark">
+      U
+    </span>
+
+    <span class="provider-mini-name">
+      U-NEXT
+    </span>
+  </span>
+
+
+  <!-- Hulu -->
+  <span
+    class="provider-mini-item coming"
+    title="Hulu 準備中"
+  >
+    <span class="provider-mini-mark hulu-mark">
+      hulu
+    </span>
+
+    <span class="provider-mini-name">
+      Hulu
+    </span>
+  </span>
+
+
+  <!-- Disney+ -->
+  <span
+    class="provider-mini-item coming"
+    title="Disney+ 準備中"
+  >
+    <span class="provider-mini-mark disney-mark">
+      D+
+    </span>
+
+    <span class="provider-mini-name">
+      Disney+
+    </span>
+  </span>
+
+</div>
+
+  </div>
+
+</div>
+  
+
+  <!-- =======================================================
+       Prime Videoページ説明
+  ======================================================== -->
+
+  <section class="provider-header">
+
+
+  <h1>
+    <span class="netflix-title-mark">Prime Video</span>で見られる映画・ドラマ・アニメ
+  </h1>
+
+  <p>
+    Prime Videoで現在見放題配信されている映画・ドラマ・アニメを紹介しています。
+    気になる作品を選ぶと、作品情報や日本国内の配信状況を確認できます。
+  </p>
+
+  <div class="provider-header-actions">
+
+    <a
+      class="main-search-button"
+      href="./index.html"
+    >
+      🔍 観たい作品を探す
+    </a>
+
+  </div>
+
+</section>
+<!-- =======================================================
+     Prime Videoの注目作品
+======================================================== -->
+
+<section
+  id="highRatedSection"
+  class="featured-section"
+>
+
+  <div class="featured-heading">
+
+    <h2>
+      🔥 Prime Videoの注目作品
+    </h2>
+
+    <p>
+      Prime Videoで配信中の作品から、注目作品をピックアップ
+    </p>
+
+  </div>
+
+
+  <div
+    id="featuredWorks"
+    class="featured-grid"
+  ></div>
+
+  </section>
+
+
+<!-- =======================================================
+     作品タイプから探す
+======================================================== -->
+
+<section
+  id="typeSection"
+  class="country-section"
+>
+
+  <div class="country-heading">
+
+    <h2>
+      🎞 作品タイプから探す
+    </h2>
+
+    <p>
+      映画・ドラマ・アニメからPrime Video作品を探せます
+    </p>
+
+  </div>
+
+  <div class="country-grid">
+
+    <a
+      class="country-card"
+      href="./prime.html?type=movie"
+    >
+      <span class="country-icon">🎬</span>
+      <span class="country-title">映画</span>
+    </a>
+
+    <a
+      class="country-card"
+      href="./prime.html?type=tv"
+    >
+      <span class="country-icon">📺</span>
+      <span class="country-title">ドラマ</span>
+    </a>
+
+    <a
+      class="country-card"
+      href="./prime.html?type=anime"
+    >
+      <span class="country-icon">🍭</span>
+      <span class="country-title">アニメ</span>
+    </a>
+
+  </div>
+
+</section>
+  
+<!-- =======================================================
+     国・地域から探す
+======================================================== -->
+
+<section
+  id="browseSection"
+  class="country-section"
+>
+
+  <div class="country-heading">
+
+    <h2>
+      🌐 国・地域から探す
+    </h2>
+
+    <p>
+      観たい作品の国・地域からPrime Video作品を探せます
+    </p>
+
+  </div>
+
+  <div class="country-grid">
+
+    <a
+      class="country-card"
+      href="./prime.html?country=other"
+    >
+      <span class="country-icon">
+        🌍
+      </span>
+
+      <span class="country-title">
+        洋画・海外ドラマ
+      </span>
+    </a>
+
+
+    <a
+      class="country-card"
+      href="./prime.html?country=jp"
+    >
+      <span class="country-icon">
+        🇯🇵
+      </span>
+
+      <span class="country-title">
+        邦画・国内ドラマ
+      </span>
+    </a>
+
+
+    <a
+      class="country-card"
+      href="./prime.html?country=kr"
+    >
+      <span class="country-icon">
+        🇰🇷
+      </span>
+
+      <span class="country-title">
+        韓国映画・韓国ドラマ
+      </span>
+    </a>
+
+  </div>
+
+</section>
+
+<!-- =======================================================
+     ジャンルから探す
+======================================================== -->
+
+<section
+  id="genreSection"
+  class="country-section"
+>
+
+  <div class="country-heading">
+
+    <h2>
+      🎭 ジャンルから探す
+    </h2>
+
+    <p>
+      気になるジャンルからPrime Video作品を探せます
+    </p>
+
+  </div>
+
+  <div class="country-grid">
+
+
+    <a
+      class="country-card"
+      href="./prime.html?genre=suspense"
+    >
+      <span class="country-icon">🕵️</span>
+      <span class="country-title">サスペンス・ミステリー</span>
+    </a>
+
+    <a
+      class="country-card"
+      href="./prime.html?genre=romance"
+    >
+      <span class="country-icon">💕</span>
+      <span class="country-title">恋愛・ラブコメ</span>
+    </a>
+
+    <a
+      class="country-card"
+      href="./prime.html?genre=action"
+    >
+      <span class="country-icon">💥</span>
+      <span class="country-title">アクション</span>
+    </a>
+
+    <a
+      class="country-card"
+      href="./prime.html?genre=comedy"
+    >
+      <span class="country-icon">🤣</span>
+      <span class="country-title">コメディ</span>
+    </a>
+
+    <a
+      class="country-card"
+      href="./prime.html?genre=horror"
+    >
+      <span class="country-icon">👻</span>
+      <span class="country-title">ホラー</span>
+    </a>
+
+    <a
+      class="country-card"
+      href="./prime.html?genre=scifi"
+    >
+      <span class="country-icon">🛸</span>
+      <span class="country-title">SF・ファンタジー</span>
+    </a>
+
+  </div>
+
+   
+  </section>
+
+<!-- =======================================================
+     評価が高い作品
+======================================================== -->
+
+<section class="featured-section">
+
+  <div class="featured-heading">
+
+    <h2>
+      ⭐ 評価が高い作品
+    </h2>
+
+    <p>
+      Prime Videoで配信中の作品から、TMDB評価が高い作品をピックアップ
+    </p>
+
+  </div>
+
+  <div
+    id="highRatedWorks"
+    class="featured-grid"
+  ></div>
+
+</section>
+
+
+  
+<!-- =======================================================
+     Prime Videoの新着作品
+======================================================== -->
+
+<section
+  id="newNetflixSection"
+  class="featured-section"
+>
+
+  <div class="featured-heading">
+
+    <h2>
+      🆕 Prime Videoの新着作品
+    </h2>
+
+    <p>
+      Prime Videoで配信中の作品から、新しい作品をピックアップ
+    </p>
+
+  </div>
+
+  <div
+    id="newNetflixWorks"
+    class="featured-grid"
+  ></div>
+
+</section>
+    
+  <!-- =======================================================
+       作品一覧
+  ======================================================== -->
+
+ <section id="netflixWorksSection">
+
+  <h2 class="results-heading">
+    🎬 Prime Videoの配信作品
+  </h2>
+    <div
+      id="status"
+      class="status"
+    >
+      Prime Videoの作品を読み込んでいます...
+    </div>
+
+
+    <div
+  id="results"
+  class="netflix-works-grid"
+></div>
+
+
+    <div
+      id="loadMoreWrapper"
+      class="load-more-wrapper"
+      hidden
+    >
+
+      <button
+        id="loadMoreButton"
+        class="load-more-button"
+        type="button"
+      >
+        さらに20件表示
+      </button>
+
+    </div>
+
+
+
+  
+  <!-- =======================================================
+       補足
+  ======================================================== -->
+
+  <div class="provider-note">
+
+    配信情報は変更される場合があります。
+    最新の配信状況や料金については、各動画配信サービスの公式サイトでご確認ください。
+
+  </div>
+
+<button
+  id="backToBrowseButton"
+  type="button"
+  aria-label="探し方に戻る"
+>
+  ↑ 探し方に戻る
+</button>
+  
+
+</main>
+
+
+<footer>
+
+  <p>
+    配信情報はTMDBおよびJustWatchの情報を参考にしています。
+  </p>
+
+  <p>
+    © ドコデミレル？
+  </p>
+
+</footer>
+
+
+<script>
+
+// =========================================================
+// Prime Videoページ
+// =========================================================
+
+const results =
+  document.getElementById(
+    "results"
+  );
+
+const featuredWorks =
+  document.getElementById(
+    "featuredWorks"
+  );  
+
+const highRatedWorks =
+  document.getElementById(
+    "highRatedWorks"
+  );
+  
+const newNetflixWorks =
+  document.getElementById(
+    "newNetflixWorks"
+  );
+    
+  const status =
+  document.getElementById(
+    "status"
+  );
+
+
+const loadMoreWrapper =
+  document.getElementById(
+    "loadMoreWrapper"
+  );
+
+
+const loadMoreButton =
+  document.getElementById(
+    "loadMoreButton"
+  );
+
+
+let currentPage = 1;
+
+let hasMore = false;
+
+let loading = false;
+
+// =========================================================
+// 国・地域の選択
+//
+// other = 洋画・海外ドラマ
+// jp    = 邦画・国内ドラマ
+// kr    = 韓国映画・韓国ドラマ
+// =========================================================
+
+const urlParams =
+  new URLSearchParams(
+    window.location.search
+  );
+
+const selectedCountry =
+  urlParams.get(
+    "country"
+  ) || "";
+
+const selectedGenre =
+  urlParams.get(
+    "genre"
+  ) || "";
+
+const selectedType =
+  urlParams.get(
+    "type"
+  ) || "";
+
+  
+// =========================================================
+// 現在選択中のカードを強調
+// =========================================================
+
+document.querySelectorAll(
+  ".country-card"
+).forEach(
+  function(card){
+
+    const href =
+      card.getAttribute(
+        "href"
+      ) || "";
+
+    if(
+      selectedType &&
+      href.includes(
+        "type=" +
+        selectedType
+      )
+    ){
+      card.classList.add(
+        "active"
+      );
+    }
+
+    if(
+      selectedCountry &&
+      href.includes(
+        "country=" +
+        selectedCountry
+      )
+    ){
+      card.classList.add(
+        "active"
+      );
+    }
+
+    if(
+      selectedGenre &&
+      href.includes(
+        "genre=" +
+        selectedGenre
+      )
+    ){
+      card.classList.add(
+        "active"
+      );
+    }
+
+  }
+);
+  
+  
+ // =========================================================
+// 国・地域 または ジャンル選択時
+// Prime Videoの配信作品まで自動スクロール
+// =========================================================
+
+if(
+  selectedCountry ||
+  selectedGenre ||
+  selectedType
+){
+  window.addEventListener(
+    "load",
+    function(){
+
+      setTimeout(
+        function(){
+
+          const netflixWorksSection =
+            document.getElementById(
+              "netflixWorksSection"
+            );
+
+          if(
+            netflixWorksSection
+          ){
+            netflixWorksSection.scrollIntoView({
+              behavior: "smooth",
+              block: "start"
+            });
+          }
+
+        },
+        300
+      );
+
+    }
+  );
+}
+  
+// =========================================================
+// HTMLエスケープ
+// =========================================================
+
+function escapeHtml(value){
+
+  return String(
+    value == null
+      ? ""
+      : value
+  )
+  .replace(
+    /&/g,
+    "&amp;"
+  )
+  .replace(
+    /</g,
+    "&lt;"
+  )
+  .replace(
+    />/g,
+    "&gt;"
+  )
+  .replace(
+    /"/g,
+    "&quot;"
+  )
+  .replace(
+    /'/g,
+    "&#039;"
+  );
+
+}
+
+
+// =========================================================
+// 公開年
+// =========================================================
+
+function formatYear(date){
+
+  const value =
+    String(
+      date || ""
+    ).trim();
+
+
+  if(
+    value.length >= 4
+  ){
+
+    return value.slice(
+      0,
+      4
+    ) + "年";
+
+  }
+
+
+  return "公開年不明";
+
+}
+
+
+// =========================================================
+// 上映時間
+// =========================================================
+
+function formatRuntime(minutes){
+
+  const value =
+    Number(
+      minutes || 0
+    );
+
+
+  if(!value){
+
+    return "";
+
+  }
+
+
+  const hours =
+    Math.floor(
+      value / 60
+    );
+
+
+  const mins =
+    value % 60;
+
+
+  if(
+    hours > 0 &&
+    mins > 0
+  ){
+
+    return (
+      hours +
+      "時間" +
+      mins +
+      "分"
+    );
+
+  }
+
+
+  if(hours > 0){
+
+    return (
+      hours +
+      "時間"
+    );
+
+  }
+
+
+  return (
+    mins +
+    "分"
+  );
+
+}
+
+
+// =========================================================
+// 短いあらすじ
+// =========================================================
+
+function createShortOverview(
+  text
+){
+
+  const source =
+    String(
+      text || ""
+    ).trim();
+
+
+  if(!source){
+
+    return "";
+
+  }
+
+
+  const sentences =
+    source
+      .split(
+        /(?<=[。！？])/
+      )
+      .map(
+        function(sentence){
+
+          return sentence.trim();
+
+        }
+      )
+      .filter(
+        function(sentence){
+
+          return (
+            sentence.length > 0
+          );
+
+        }
+      );
+
+
+  if(
+    sentences.length > 0 &&
+    sentences[0].length <= 70
+  ){
+
+    return sentences[0];
+
+  }
+
+
+  let result = "";
+
+
+  for(
+    let i = 0;
+    i < sentences.length;
+    i++
+  ){
+
+    const candidate =
+      result
+        ? result +
+          sentences[i]
+        : sentences[i];
+
+
+    if(
+      candidate.length > 75
+    ){
+
+      break;
+
+    }
+
+
+    result =
+      candidate;
+
+  }
+
+
+  if(result){
+
+    return result;
+
+  }
+
+
+  return (
+    source.slice(
+      0,
+      70
+    ) +
+    "…"
+  );
+
+}
+
+
+// =========================================================
+// Prime Videoロゴ表示
+// =========================================================
+
+function renderProvider(
+  provider
+){
+
+  const providerName =
+    "Prime Video";
+
+
+  const logo =
+    provider &&
+    provider.logo_path
+      ? "https://image.tmdb.org/t/p/w92" +
+        provider.logo_path
+      : "";
+
+
+  if(logo){
+
+    return `
+
+      <div class="provider-item">
+
+        <img
+          class="provider-logo"
+          src="${logo}"
+          alt="Prime Videoのロゴ"
+          loading="lazy"
+        >
+
+        <span>
+          Prime Video
+        </span>
+
+      </div>
+
+    `;
+
+  }
+
+
+  return `
+
+    <div class="provider-item">
+
+      <div class="provider-logo-fallback">
+        Prime Video
+      </div>
+
+      <span>
+        Prime Video
+      </span>
+
+    </div>
+
+  `;
+
+}
+
+
+// =========================================================
+// Prime Video情報を取得
+// =========================================================
+
+function getNetflixProvider(
+  movie
+){
+
+  const providers =
+    Array.isArray(
+      movie.streaming
+    )
+      ? movie.streaming
+      : [];
+
+
+  const prime =
+    providers.find(
+      function(provider){
+
+        const name =
+          String(
+            provider.provider_name ||
+            ""
+          );
+
+        return (
+          name.includes("Amazon Prime Video") ||
+          name.includes("Prime Video")
+        );
+
+      }
+    );
+
+
+  return (
+    prime ||
+    providers[0] ||
+    null
+  );
+
+}
+
+  
+// =========================================================
+// Prime Video注目作品
+// =========================================================
+
+function renderFeaturedWorks(
+  works
+){
+
+  if(
+    !featuredWorks ||
+    !Array.isArray(works)
+  ){
+
+    return;
+
+  }
+
+
+  const featured =
+    works
+      .filter(
+        function(movie){
+
+          return (
+            movie &&
+            movie.id &&
+            movie.poster_path
+          );
+
+        }
+      )
+      .slice(
+        0,
+        5
+      );
+
+
+  if(
+    featured.length === 0
+  ){
+
+    featuredWorks.innerHTML =
+      '<div class="status">' +
+      '注目作品を取得できませんでした。' +
+      '</div>';
+
+    return;
+
+  }
+
+
+  featuredWorks.innerHTML =
+    featured
+      .map(
+        function(movie){
+
+          const poster =
+            "https://image.tmdb.org/t/p/w500" +
+            movie.poster_path;
+
+
+          let detailUrl =
+            "./detail.html?id=" +
+            encodeURIComponent(
+              movie.id
+            );
+
+
+          if(
+            movie.content_type ===
+              "tv_drama" ||
+            movie.content_type ===
+              "anime_tv" ||
+            movie.content_type ===
+              "tv"
+          ){
+
+            detailUrl +=
+              "&type=tv";
+
+          }
+
+
+          const year =
+            movie.release_date
+              ? String(
+                  movie.release_date
+                ).slice(
+                  0,
+                  4
+                )
+              : "";
+
+          // -------------------------------------------------------
+// 作品タイプ
+// -------------------------------------------------------
+
+let mediaType = "映画";
+
+if(
+  movie.content_type === "tv_drama" ||
+  movie.content_type === "tv"
+){
+  mediaType = "ドラマ";
+}
+else if(
+  movie.content_type === "anime_tv" ||
+  movie.content_type === "anime_movie"
+){
+  mediaType = "アニメ";
+}
+
+
+// -------------------------------------------------------
+// TMDB評価
+// -------------------------------------------------------
+
+const rating =
+  Number(
+    movie.vote_average || 0
+  );
+
+          return `
+
+            <a
+              class="featured-card"
+              href="${detailUrl}"
+            >
+
+              <img
+                class="featured-poster"
+                src="${poster}"
+                alt="${escapeHtml(
+                  movie.title || ""
+                )}のポスター"
+                loading="lazy"
+              >
+
+              <div class="featured-info">
+
+                <h3 class="featured-title">
+                  ${escapeHtml(
+                    movie.title || ""
+                  )}
+                </h3>
+
+                <div class="featured-meta">
+
+  <span>
+    ${
+      mediaType === "映画"
+        ? "🎬 映画"
+        : mediaType === "ドラマ"
+          ? "📺 ドラマ"
+          : "🎌 アニメ"
+    }
+  </span>
+
+  ${
+    year
+      ? `<span>${escapeHtml(year)}年</span>`
+      : ""
+  }
+
+  ${
+    rating > 0
+      ? `<span>⭐ ${rating.toFixed(1)}</span>`
+      : ""
+  }
+
+</div>
+
+              </div>
+
+            </a>
+
+          `;
+
+        }
+      )
+      .join("");
+
+}
+
+// =========================================================
+// Prime Video 評価が高い作品
+// =========================================================
+
+function renderHighRatedWorks(
+  works
+){
+
+  if(
+    !highRatedWorks ||
+    !Array.isArray(works)
+  ){
+
+    return;
+
+  }
+
+
+  // -------------------------------------------------------
+  // 評価のある作品を対象にする
+  // -------------------------------------------------------
+
+// -------------------------------------------------------
+// 注目作品で使ったIDを取得
+// -------------------------------------------------------
+
+const featuredIds =
+  works
+    .filter(
+      function(movie){
+
+        return (
+          movie &&
+          movie.id &&
+          movie.poster_path
+        );
+
+      }
+    )
+    .slice(
+      0,
+      5
+    )
+    .map(
+      function(movie){
+
+        return String(
+          movie.id
+        );
+
+      }
+    );
+
+
+// -------------------------------------------------------
+// 評価のある作品を対象にする
+// 注目作品と同じ作品は除外
+// -------------------------------------------------------
+
+let candidates =
+  works
+    .filter(
+      function(movie){
+
+        if(
+          !movie ||
+          !movie.id ||
+          !movie.poster_path
+        ){
+
+          return false;
+
+        }
+
+
+        if(
+          Number(
+            movie.vote_average || 0
+          ) <= 0
+        ){
+
+          return false;
+
+        }
+
+
+        if(
+          featuredIds.includes(
+            String(
+              movie.id
+            )
+          )
+        ){
+
+          return false;
+
+        }
+
+
+        return true;
+
+      }
+    );
+
+
+  // -------------------------------------------------------
+  // できるだけ評価数の少なすぎる作品を除外
+  // -------------------------------------------------------
+
+  const reliableCandidates =
+    candidates.filter(
+      function(movie){
+
+        return (
+          Number(
+            movie.vote_count || 0
+          ) >= 100
+        );
+
+      }
+    );
+
+
+  // 5作品以上あればこちらを使用
+  if(
+    reliableCandidates.length >= 5
+  ){
+
+    candidates =
+      reliableCandidates;
+
+  }
+
+
+  // -------------------------------------------------------
+  // TMDB評価順
+  // 同点なら評価数の多い方を優先
+  // -------------------------------------------------------
+
+  candidates.sort(
+    function(a,b){
+
+      const ratingDiff =
+        Number(
+          b.vote_average || 0
+        ) -
+        Number(
+          a.vote_average || 0
+        );
+
+
+      if(
+        ratingDiff !== 0
+      ){
+
+        return ratingDiff;
+
+      }
+
+
+      return (
+        Number(
+          b.vote_count || 0
+        ) -
+        Number(
+          a.vote_count || 0
+        )
+      );
+
+    }
+  );
+
+
+  const highRated =
+    candidates.slice(
+      0,
+      5
+    );
+
+
+  if(
+    highRated.length === 0
+  ){
+
+    highRatedWorks.innerHTML =
+      '<div class="status">' +
+      '評価が高い作品を取得できませんでした。' +
+      '</div>';
+
+    return;
+
+  }
+
+
+  highRatedWorks.innerHTML =
+    highRated
+      .map(
+        function(movie){
+
+          const poster =
+            "https://image.tmdb.org/t/p/w500" +
+            movie.poster_path;
+
+
+          let detailUrl =
+            "./detail.html?id=" +
+            encodeURIComponent(
+              movie.id
+            );
+
+
+          if(
+            movie.content_type ===
+              "tv_drama" ||
+            movie.content_type ===
+              "anime_tv" ||
+            movie.content_type ===
+              "tv"
+          ){
+
+            detailUrl +=
+              "&type=tv";
+
+          }
+
+
+          const year =
+            movie.release_date
+              ? String(
+                  movie.release_date
+                ).slice(
+                  0,
+                  4
+                )
+              : "";
+
+
+          let mediaType =
+            "映画";
+
+
+          if(
+            movie.content_type ===
+              "tv_drama" ||
+            movie.content_type ===
+              "tv"
+          ){
+
+            mediaType =
+              "ドラマ";
+
+          }
+          else if(
+            movie.content_type ===
+              "anime_tv" ||
+            movie.content_type ===
+              "anime_movie"
+          ){
+
+            mediaType =
+              "アニメ";
+
+          }
+
+
+          const rating =
+            Number(
+              movie.vote_average || 0
+            );
+
+
+          return `
+
+            <a
+              class="featured-card"
+              href="${detailUrl}"
+            >
+
+              <img
+                class="featured-poster"
+                src="${poster}"
+                alt="${escapeHtml(
+                  movie.title || ""
+                )}のポスター"
+                loading="lazy"
+              >
+
+              <div class="featured-info">
+
+                <h3 class="featured-title">
+                  ${escapeHtml(
+                    movie.title || ""
+                  )}
+                </h3>
+
+                <div class="featured-meta">
+
+                  <span>
+                    ${
+                      mediaType === "映画"
+                        ? "🎬 映画"
+                        : mediaType === "ドラマ"
+                          ? "📺 ドラマ"
+                          : "🎌 アニメ"
+                    }
+                  </span>
+
+                  ${
+                    year
+                      ? `<span>${escapeHtml(year)}年</span>`
+                      : ""
+                  }
+
+                  ${
+                    rating > 0
+                      ? `<span>⭐ ${rating.toFixed(1)}</span>`
+                      : ""
+                  }
+
+                </div>
+
+              </div>
+
+            </a>
+
+          `;
+
+        }
+      )
+      .join("");
+
+}  
+
+
+// =========================================================
+// 作品カード
+// =========================================================
+
+function createMovieCard(
+  movie
+){
+
+  const poster =
+    movie.poster_path
+      ? "https://image.tmdb.org/t/p/w500" +
+        movie.poster_path
+      : "";
+
+
+  const movieId =
+    String(
+      movie.id || ""
+    ).trim();
+
+
+  let detailUrl =
+    "./detail.html?id=" +
+    encodeURIComponent(
+      movieId
+    );
+
+
+  if(
+    movie.content_type === "tv_drama" ||
+    movie.content_type === "anime_tv" ||
+    movie.content_type === "tv"
+  ){
+
+    detailUrl +=
+      "&type=tv";
+
+  }
+
+
+  const year =
+    movie.release_date
+      ? String(
+          movie.release_date
+        ).slice(
+          0,
+          4
+        )
+      : "";
+
+
+  let mediaType =
+    "映画";
+
+
+  if(
+    movie.content_type === "tv_drama" ||
+    movie.content_type === "tv"
+  ){
+
+    mediaType =
+      "ドラマ";
+
+  }
+  else if(
+    movie.content_type === "anime_tv" ||
+    movie.content_type === "anime_movie"
+  ){
+
+    mediaType =
+      "アニメ";
+
+  }
+
+
+  const rating =
+    Number(
+      movie.vote_average || 0
+    );
+
+
+  return `
+
+    <a
+      class="featured-card"
+      href="${detailUrl}"
+    >
+
+      ${
+        poster
+
+          ?
+
+          `
+          <img
+            class="featured-poster"
+            src="${poster}"
+            alt="${escapeHtml(
+              movie.title || ""
+            )}のポスター"
+            loading="lazy"
+          >
+          `
+
+          :
+
+          `
+          <div
+            class="featured-poster featured-poster-empty"
+          >
+            NO IMAGE
+          </div>
+          `
+      }
+
+      <div class="featured-info">
+
+        <h3 class="featured-title">
+          ${escapeHtml(
+            movie.title || ""
+          )}
+        </h3>
+
+        <div class="featured-meta">
+
+          <span>
+            ${
+              mediaType === "映画"
+                ? "🎬 映画"
+                : mediaType === "ドラマ"
+                  ? "📺 ドラマ"
+                  : "🎌 アニメ"
+            }
+          </span>
+
+          ${
+            year
+              ? `<span>${escapeHtml(year)}年</span>`
+              : ""
+          }
+
+          ${
+            rating > 0
+              ? `<span>⭐ ${rating.toFixed(1)}</span>`
+              : ""
+          }
+
+        </div>
+
+      </div>
+
+    </a>
+
+  `;
+
+}
+
+
+// =========================================================
+// Prime Video 注目作品・高評価作品を取得
+// 国・地域の選択に関係なく
+// Prime Video全体の作品を使用する
+// =========================================================
+
+async function loadNetflixTopWorks(){
+
+  try{
+
+    const response =
+      await fetch(
+        "/api/search" +
+        "?provider=prime" +
+        "&page=1"
+      );
+
+
+    if(
+      !response.ok
+    ){
+
+      throw new Error(
+        "Prime Video注目作品の取得に失敗しました。"
+      );
+
+    }
+
+
+    const data =
+      await response.json();
+
+
+    const works =
+      Array.isArray(
+        data.results
+      )
+        ? data.results
+        : [];
+
+
+    renderFeaturedWorks(
+      works
+    );
+
+
+    renderHighRatedWorks(
+      works
+    );
+
+  }
+  catch(error){
+
+    console.error(
+      error
+    );
+
+
+    if(
+      featuredWorks
+    ){
+
+      featuredWorks.innerHTML =
+        '<div class="status">' +
+        '注目作品を取得できませんでした。' +
+        '</div>';
+
+    }
+
+
+    if(
+      highRatedWorks
+    ){
+
+      highRatedWorks.innerHTML =
+        '<div class="status">' +
+        '評価が高い作品を取得できませんでした。' +
+        '</div>';
+
+    }
+
+  }
+
+}
+
+// =========================================================
+// Prime Video 新着作品
+// =========================================================
+
+async function loadNetflixNewWorks(){
+
+  if(
+    !newNetflixWorks
+  ){
+    return;
+  }
+
+
+  try{
+
+    const response =
+      await fetch(
+        "/api/search?primeNew=1"
+      );
+
+
+    const data =
+      await response.json();
+
+
+    if(
+      !response.ok
+    ){
+      throw new Error(
+        data.error ||
+        "新着作品の取得に失敗しました。"
+      );
+    }
+
+
+    const works =
+      Array.isArray(
+        data.results
+      )
+        ? data.results
+            .filter(
+              function(movie){
+
+                return (
+                  movie &&
+                  movie.id &&
+                  movie.poster_path
+                );
+
+              }
+            )
+            .slice(
+              0,
+              5
+            )
+        : [];
+
+
+    if(
+      works.length === 0
+    ){
+
+      newNetflixWorks.innerHTML =
+        '<div class="status">' +
+        '新着作品を取得できませんでした。' +
+        '</div>';
+
+      return;
+    }
+
+
+    newNetflixWorks.innerHTML =
+      works
+        .map(
+          function(movie){
+
+            const poster =
+              "https://image.tmdb.org/t/p/w500" +
+              movie.poster_path;
+
+
+            let detailUrl =
+              "./detail.html?id=" +
+              encodeURIComponent(
+                movie.id
+              );
+
+
+            if(
+              movie.content_type === "tv"
+            ){
+
+              detailUrl +=
+                "&type=tv";
+
+            }
+
+
+            const year =
+              movie.release_date
+                ? String(
+                    movie.release_date
+                  ).slice(
+                    0,
+                    4
+                  )
+                : "";
+
+
+            const mediaType =
+              movie.content_type === "tv"
+                ? "📺 ドラマ"
+                : "🎬 映画";
+
+
+            const rating =
+              Number(
+                movie.vote_average || 0
+              );
+
+
+            return `
+
+              <a
+                class="featured-card"
+                href="${detailUrl}"
+              >
+
+                <img
+                  class="featured-poster"
+                  src="${poster}"
+                  alt="${escapeHtml(
+                    movie.title || ""
+                  )}のポスター"
+                  loading="lazy"
+                >
+
+                <div class="featured-info">
+
+                  <h3 class="featured-title">
+                    ${escapeHtml(
+                      movie.title || ""
+                    )}
+                  </h3>
+
+                  <div class="featured-meta">
+
+                    <span>
+                      ${mediaType}
+                    </span>
+
+                    ${
+                      year
+                        ? `<span>${escapeHtml(year)}年</span>`
+                        : ""
+                    }
+
+                    ${
+                      rating > 0
+                        ? `<span>⭐ ${rating.toFixed(1)}</span>`
+                        : ""
+                    }
+
+                  </div>
+
+                </div>
+
+              </a>
+
+            `;
+
+          }
+        )
+        .join("");
+
+
+  }catch(error){
+
+    console.error(
+      "Prime Video new works error:",
+      error
+    );
+
+
+    newNetflixWorks.innerHTML =
+      '<div class="status">' +
+      '新着作品を取得できませんでした。' +
+      '</div>';
+
+  }
+
+}
+  
+// =========================================================
+// Prime Video作品取得
+// =========================================================
+
+async function loadNetflixWorks(
+  append
+){
+  
+  if(loading){
+
+    return;
+
+  }
+
+
+  loading = true;
+
+
+  if(
+    !append
+  ){
+
+    status.innerHTML =
+      "Prime Videoの作品を読み込んでいます...";
+
+  }
+
+
+  loadMoreButton.disabled =
+    true;
+
+
+  try{
+
+
+    // -------------------------------------------------------
+// Prime Video API URL
+// -------------------------------------------------------
+
+let apiUrl =
+  "/api/search" +
+  "?provider=prime" +
+  "&page=" +
+  encodeURIComponent(
+    currentPage
+  );
+
+
+// -------------------------------------------------------
+// 国・地域が選択されている場合
+// country をAPIへ渡す
+// -------------------------------------------------------
+
+if(
+  selectedCountry
+){
+
+  apiUrl +=
+    "&country=" +
+    encodeURIComponent(
+      selectedCountry
+    );
+
+}
+
+if(
+  selectedGenre
+){
+  apiUrl +=
+    "&genre=" +
+    encodeURIComponent(
+      selectedGenre
+    );
+}
+
+// -------------------------------------------------------
+// 作品タイプが選択されている場合
+// type をAPIへ渡す
+// -------------------------------------------------------
+
+if(
+  selectedType
+){
+
+  apiUrl +=
+    "&type=" +
+    encodeURIComponent(
+      selectedType
+    );
+}    
+
+// -------------------------------------------------------
+// Prime Video作品を取得
+// -------------------------------------------------------
+
+const response =
+  await fetch(
+    apiUrl
+  );
+
+
+    if(
+      !response.ok
+    ){
+
+      throw new Error(
+        "Prime Video作品の取得に失敗しました。"
+      );
+
+    }
+
+
+    const data =
+      await response.json();
+
+
+    const works =
+      Array.isArray(
+        data.results
+      )
+        ? data.results
+        : [];
+
+
+    
+
+    if(
+      !append
+    ){
+
+      results.innerHTML =
+        "";
+
+    }
+
+
+    if(
+      works.length === 0 &&
+      !append
+    ){
+
+      status.innerHTML =
+        "";
+
+      results.innerHTML = `
+
+        <div class="empty">
+
+          現在表示できるPrime Video作品がありません。
+        </div>
+
+      `;
+
+
+      loadMoreWrapper.hidden =
+        true;
+
+
+      return;
+
+    }
+
+
+    const html =
+      works
+        .map(
+          function(movie){
+
+            return createMovieCard(
+              movie
+            );
+
+          }
+        )
+        .join("");
+
+
+    results.insertAdjacentHTML(
+      "beforeend",
+      html
+    );
+
+
+    status.innerHTML =
+      "";
+
+
+    hasMore =
+      Boolean(
+        data.hasMore
+      );
+
+
+    loadMoreWrapper.hidden =
+      !hasMore;
+
+
+  }
+  catch(error){
+
+
+    console.error(
+      error
+    );
+
+
+    if(
+      !append
+    ){
+
+      results.innerHTML =
+        "";
+
+    }
+
+
+    status.innerHTML = `
+
+      <div class="error">
+
+        Prime Videoの作品を取得できませんでした。<br>
+
+        少し時間をおいてから、もう一度お試しください。
+
+      </div>
+
+    `;
+
+
+    loadMoreWrapper.hidden =
+      true;
+
+
+  }
+  finally{
+
+
+    loading = false;
+
+
+    loadMoreButton.disabled =
+      false;
+
+
+  }
+
+}
+
+
+// =========================================================
+// さらに20件表示
+// =========================================================
+
+loadMoreButton.addEventListener(
+  "click",
+  async function(){
+
+    if(
+      loading ||
+      !hasMore
+    ){
+
+      return;
+
+    }
+
+
+    currentPage++;
+
+
+    loadMoreButton.textContent =
+      "読み込み中...";
+
+
+    await loadNetflixWorks(
+      true
+    );
+
+
+    loadMoreButton.textContent =
+      "さらに20件表示";
+
+  }
+);
+
+
+// =========================================================
+// 初期表示
+// =========================================================
+
+// 注目作品・高評価作品
+loadNetflixTopWorks();
+
+// 新着作品
+loadNetflixNewWorks();
+  
+
+// Prime Video作品一覧
+loadNetflixWorks(
+  false
+);
+
+  
+  
+// =========================================================
+// 探し方に戻るボタン
+// =========================================================
+
+const backToBrowseButton =
+  document.getElementById(
+    "backToBrowseButton"
+  );
+
+const browseSection =
+  document.getElementById(
+    "typeSection"
+  );
+
+// =========================================================
+// スクロールしたらボタンを表示
+// =========================================================
+
+window.addEventListener(
+  "scroll",
+  function(){
+
+    if(
+      window.scrollY > 700
+    ){
+
+      backToBrowseButton.classList.add(
+        "show"
+      );
+
+    }
+    else{
+
+      backToBrowseButton.classList.remove(
+        "show"
+      );
+
+    }
+
+  }
+);
+
+
+// =========================================================
+// 探し方まで戻る
+// =========================================================
+
+backToBrowseButton.addEventListener(
+  "click",
+  function(){
+
+    browseSection.scrollIntoView({
+      behavior:"smooth",
+      block:"start"
+    });
+
+  }
+);  
+  
+</script>
+
+
+</body>
+
+</html>
