@@ -1516,6 +1516,7 @@ color:#fff;
 
 /* =========================================================
    パンくず ＋ 配信サービス切り替え
+   共通金型
 ========================================================= */
 
 .breadcrumb-provider-row{
@@ -1544,12 +1545,12 @@ color:#fff;
 /* 「配信サービスを切り替える」 */
 
 .provider-mini-label{
-  margin-right:5px;
+  margin-right:2px;
 
-  font-size:12px;
-  font-weight:800;
+  color:#64748b;
 
-  color:#334155;
+  font-size:11px;
+  font-weight:700;
 
   white-space:nowrap;
 }
@@ -1561,19 +1562,21 @@ color:#fff;
   display:flex;
   align-items:center;
 
-  gap:5px;
+  gap:4px;
 
-  padding:6px 10px;
+  min-width:0;
 
-  border:1px solid #cbd5e1;
-  border-radius:8px;
+  padding:4px 7px;
 
-  background:#ffffff;
+  border:1px solid #e2e8f0;
+  border-radius:7px;
 
-  color:#334155;
+  background:#fff;
 
-  font-size:11px;
-  font-weight:800;
+  color:#475569;
+
+  font-size:10px;
+  font-weight:700;
 
   line-height:1;
 
@@ -1581,24 +1584,19 @@ color:#fff;
 
   white-space:nowrap;
 
-  box-shadow:
-    0 2px 5px
-    rgba(15,23,42,.08);
-
   transition:
-    transform .2s ease,
-    box-shadow .2s ease,
     background .2s ease,
     border-color .2s ease,
-    color .2s ease;
+    color .2s ease,
+    transform .2s ease;
 }
 
 
 /* 小型マーク */
 
 .provider-mini-mark{
-  width:24px;
-  height:24px;
+  width:20px;
+  height:20px;
 
   display:flex;
   align-items:center;
@@ -1608,7 +1606,7 @@ color:#fff;
 
   border-radius:5px;
 
-  font-size:12px;
+  font-size:11px;
   font-weight:900;
 
   background:transparent;
@@ -1619,7 +1617,7 @@ color:#fff;
 
 .provider-mini-mark.netflix-mark{
   color:#e50914;
-  font-size:19px;
+  font-size:17px;
 }
 
 
@@ -1641,7 +1639,7 @@ color:#fff;
 
 .provider-mini-mark.hulu-mark{
   color:#0b9f58;
-  font-size:8px;
+  font-size:7px;
 }
 
 
@@ -1649,11 +1647,13 @@ color:#fff;
 
 .provider-mini-mark.disney-mark{
   color:#172554;
-  font-size:10px;
+  font-size:9px;
 }
 
 
-/* Netflix 選択中 */
+/* =========================================================
+   Netflixページ：Netflixを選択中
+========================================================= */
 
 .provider-mini-item.netflix-mini.active{
   background:#fff1f2;
@@ -1661,40 +1661,32 @@ color:#fff;
   border-color:#e50914;
 
   color:#b20710;
-
-  box-shadow:
-    0 3px 8px
-    rgba(229,9,20,.12);
 }
 
 
 /* Netflix hover */
 
 .provider-mini-item.netflix-mini:hover{
-  transform:translateY(-2px);
-
   background:#fff1f2;
 
   border-color:#e50914;
 
   color:#b20710;
+
+  transform:translateY(-1px);
 }
 
 
 /* Prime Video hover */
 
 .provider-mini-item.prime-mini:hover{
-  transform:translateY(-2px);
-
   background:#e8f7fc;
 
   border-color:#00a8e1;
 
   color:#0073a8;
 
-  box-shadow:
-    0 4px 9px
-    rgba(0,168,225,.12);
+  transform:translateY(-1px);
 }
 
 
@@ -1702,8 +1694,6 @@ color:#fff;
 
 .provider-mini-item.coming{
   opacity:.55;
-
-  box-shadow:none;
 
   cursor:default;
 }
