@@ -1919,6 +1919,11 @@ const selectedGenre =
     "genre"
   ) || "";
 
+const selectedType =
+  urlParams.get(
+    "type"
+  ) || "";
+  
 const newNetflixSection =
   document.getElementById(
     "newNetflixSection"
@@ -3338,7 +3343,22 @@ if(
       selectedGenre
     );
 }
-    
+
+// -------------------------------------------------------
+// 作品タイプが選択されている場合
+// type をAPIへ渡す
+// -------------------------------------------------------
+
+if(
+  selectedType
+){
+
+  apiUrl +=
+    "&type=" +
+    encodeURIComponent(
+      selectedType
+    );
+}    
 
 // -------------------------------------------------------
 // Netflix作品を取得
