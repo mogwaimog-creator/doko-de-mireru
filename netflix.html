@@ -1977,6 +1977,27 @@ const selectedType =
   ) || "";
 
 // =========================================================
+// 絞り込み中は「評価が高い作品」を非表示
+// =========================================================
+
+const highRatedSection =
+  document.getElementById(
+    "highRatedSection"
+  );
+
+if(
+  highRatedSection &&
+  (
+    selectedType ||
+    selectedCountry ||
+    selectedGenre
+  )
+){
+  highRatedSection.style.display =
+    "none";
+}
+  
+// =========================================================
 // 現在選択中のカードを強調
 // =========================================================
 
