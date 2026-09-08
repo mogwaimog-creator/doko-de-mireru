@@ -1828,7 +1828,11 @@ font-weight:bold;
 #backToSearch{
   position:fixed;
 
-  right:20px;
+  right:max(
+    20px,
+    calc((100vw - 1000px) / 2 + 20px)
+  );
+
   bottom:20px;
 
   z-index:1000;
@@ -1845,7 +1849,6 @@ font-weight:bold;
   font-weight:600;
 
   cursor:pointer;
-
   box-shadow:
     0 4px 12px rgba(0,0,0,0.18);
 
