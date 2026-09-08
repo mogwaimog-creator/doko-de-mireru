@@ -360,6 +360,36 @@ if (provider === "netflix") {
 
 }   
 
+    // =====================================================
+// Prime Video 配信作品
+// =====================================================
+
+if (provider === "prime") {
+
+  const primeResults =
+    await getProviderWorks(
+      apiKey,
+      9,
+      page,
+      country,
+      genre,
+      netflixType
+    );
+
+  return res
+    .status(200)
+    .json({
+      results:
+        primeResults.results,
+
+      page:
+        primeResults.page,
+
+      hasMore:
+        primeResults.hasMore
+    });
+
+}
 
 
     // =====================================================
