@@ -2856,10 +2856,12 @@ function updateStructuredData(movie){
 
   const oldIds = [
 
-    "movieStructuredData",
-    "pageStructuredData",
-    "websiteStructuredData",
-    "breadcrumbStructuredData"
+  "movieStructuredData",
+  "pageStructuredData",
+  "websiteStructuredData",
+  "breadcrumbStructuredData",
+  "faqStructuredData"
+
 
   ];
 
@@ -3303,6 +3305,93 @@ const canonicalUrl =
     breadcrumbData
   );
 
+  /*
+     ========================================================
+     FAQPage
+     ========================================================
+  */
+
+  const faqItems =
+    document.querySelectorAll(
+      "#faqList .faq-item"
+    );
+
+
+  const faqMainEntity =
+    Array.from(faqItems)
+      .map(function(item){
+
+        const question =
+          item.querySelector(
+            ".faq-question"
+          );
+
+        const answer =
+          item.querySelector(
+            ".faq-answer"
+          );
+
+
+        if(
+          !question ||
+          !answer
+        ){
+          return null;
+        }
+
+
+        return {
+
+          "@type":
+            "Question",
+
+          name:
+            question.textContent.trim(),
+
+          acceptedAnswer:{
+
+            "@type":
+              "Answer",
+
+            text:
+              answer.textContent.trim()
+
+          }
+
+        };
+
+      })
+      .filter(Boolean);
+
+
+  if(faqMainEntity.length){
+
+    const faqData = {
+
+      "@context":
+        "https://schema.org",
+
+      "@type":
+        "FAQPage",
+
+      "@id":
+        canonicalUrl +
+        "#faq",
+
+      mainEntity:
+        faqMainEntity
+
+    };
+
+
+    appendStructuredData(
+      "faqStructuredData",
+      faqData
+    );
+
+  }
+
+  
 }
 
 
