@@ -1472,6 +1472,118 @@ color:#fff;
   margin-top:0 !important;
   margin-bottom:0 !important;
 }
+
+/* =========================================================
+   配信サービス切り替え
+========================================================= */
+
+.provider-switcher{
+  background:#ffffff;
+
+  border:1px solid #e2e8f0;
+  border-radius:14px;
+
+  padding:14px 16px;
+}
+
+.provider-switcher-title{
+  margin-bottom:10px;
+
+  font-size:13px;
+  font-weight:800;
+
+  color:#475569;
+}
+
+.provider-switcher-list{
+  display:grid;
+
+  grid-template-columns:
+    repeat(5,minmax(0,1fr));
+
+  gap:8px;
+}
+
+.provider-switcher-item{
+  min-width:0;
+
+  padding:10px 6px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  box-sizing:border-box;
+
+  border:1px solid #e2e8f0;
+  border-radius:10px;
+
+  background:#ffffff;
+
+  color:#334155;
+
+  font-size:13px;
+  font-weight:800;
+
+  text-align:center;
+  text-decoration:none;
+
+  transition:
+    background .2s ease,
+    border-color .2s ease,
+    color .2s ease,
+    transform .2s ease;
+}
+
+
+/* Netflix */
+
+.provider-switcher-item.netflix:hover{
+  background:#fff1f2;
+  border-color:#e50914;
+  color:#b20710;
+
+  transform:translateY(-1px);
+}
+
+
+/* Prime Video */
+
+.provider-switcher-item.prime:hover,
+.provider-switcher-item.prime.active{
+  background:#dff4fb;
+  border-color:#00a8e1;
+  color:#006b9c;
+}
+
+
+/* 準備中 */
+
+.provider-switcher-item.coming{
+  background:#f8fafc;
+  color:#94a3b8;
+
+  cursor:default;
+}
+
+
+/* =========================================================
+   スマホ
+========================================================= */
+
+@media(max-width:650px){
+
+  .provider-switcher-list{
+    grid-template-columns:
+      repeat(2,minmax(0,1fr));
+  }
+
+  .provider-switcher-item{
+    padding:9px 5px;
+    font-size:12px;
+  }
+
+}
   
 </style>
   
@@ -1520,12 +1632,61 @@ color:#fff;
 
   </nav>
 
+<!-- =======================================================
+     配信サービス切り替え
+======================================================== -->
+
+<div class="provider-switcher">
+
+  <div class="provider-switcher-title">
+    配信サービスを切り替える
+  </div>
+
+  <div class="provider-switcher-list">
+
+    <a
+      href="./netflix.html"
+      class="provider-switcher-item netflix"
+    >
+      Netflix
+    </a>
+
+    <a
+      href="./prime.html"
+      class="provider-switcher-item prime active"
+    >
+      Prime Video
+    </a>
+
+    <div
+      class="provider-switcher-item unext coming"
+    >
+      U-NEXT
+    </div>
+
+    <div
+      class="provider-switcher-item hulu coming"
+    >
+      Hulu
+    </div>
+
+    <div
+      class="provider-switcher-item disney coming"
+    >
+      Disney+
+    </div>
+
+  </div>
+
+</div>
+  
 
   <!-- =======================================================
        Prime Videoページ説明
   ======================================================== -->
 
   <section class="provider-header">
+
 
   <h1>
     <span class="netflix-title-mark">Prime Video</span>で見られる映画・ドラマ・アニメ
