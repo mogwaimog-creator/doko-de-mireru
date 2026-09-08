@@ -4930,7 +4930,15 @@ async function getUnextNewWorks(
 async function getHuluNewWorks(
   apiKey
 ){
-
+  
+  const today =
+  new Date()
+    .toISOString()
+    .slice(
+      0,
+      10
+    );
+  
   const movieUrl =
     "https://api.themoviedb.org/3/discover/movie" +
     "?api_key=" +
@@ -4941,7 +4949,9 @@ async function getHuluNewWorks(
     "&with_watch_providers=15" +
     "&with_watch_monetization_types=flatrate" +
     "&sort_by=primary_release_date.desc" +
-    "&include_adult=false" +
+"&primary_release_date.lte=" +
+encodeURIComponent(today) +
+"&include_adult=false" +
     "&include_video=false" +
     "&page=1";
 
@@ -4955,7 +4965,9 @@ async function getHuluNewWorks(
     "&with_watch_providers=15" +
     "&with_watch_monetization_types=flatrate" +
     "&sort_by=first_air_date.desc" +
-    "&include_adult=false" +
+"&first_air_date.lte=" +
+encodeURIComponent(today) +
+"&include_adult=false" +
     "&page=1";
 
 
@@ -5067,13 +5079,6 @@ async function getHuluNewWorks(
       : [];
 
 
-  const today =
-    new Date()
-      .toISOString()
-      .slice(
-        0,
-        10
-      );
 
 
   const thirtyDaysAgo =
