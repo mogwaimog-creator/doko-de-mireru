@@ -1464,12 +1464,23 @@ color:#fff;
 }
 
 /* =========================================================
-   評価が高い作品 → Prime Video新着作品
-   間隔をそろえる
+   評価が高い作品 → 新着作品 の間隔調整
 ========================================================= */
 
-#newNetflixSection{
-  margin-top:0 !important;
+#highRatedWorks{
+  margin-bottom:0;
+}
+
+#highRatedWorks{
+  padding-bottom:0;
+}
+
+.featured-section:has(#highRatedWorks){
+  margin-bottom:10px;
+}
+
+#highRatedSection{
+  margin-bottom:10px;
 }
   
 </style>
@@ -1551,7 +1562,10 @@ color:#fff;
      Prime Videoの注目作品
 ======================================================== -->
 
-<section class="featured-section">
+<section
+  id="highRatedSection"
+  class="featured-section"
+>
 
   <div class="featured-heading">
 
