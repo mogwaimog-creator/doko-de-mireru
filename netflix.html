@@ -136,14 +136,14 @@ header{
   text-align:center;
 }
 
-header h1{
+header .site-title{
   margin:0;
   font-size:25px;
   line-height:1.25;
   font-weight:700;
 }
 
-header h1 a{
+header .site-title a{
   color:#fff;
 }
 
@@ -735,9 +735,9 @@ footer{
 
 @media(max-width:700px){
 
-  header h1{
-    font-size:26px;
-  }
+  header .site-title{
+  font-size:26px;
+}
 
   .provider-header{
   padding:12px 14px;
@@ -1745,11 +1745,11 @@ color:#fff;
 
 <header>
 
-  <h1>
+  <div class="site-title">
     <a href="./index.html">
       🎬 ドコデミレル？
     </a>
-  </h1>
+  </div>
 
   <p>
     観たい映画・ドラマ・アニメが、どこで見られるかすぐわかる
