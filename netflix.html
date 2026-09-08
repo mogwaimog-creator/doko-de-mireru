@@ -154,14 +154,17 @@ header p{
   line-height:1.35;
 }
 
-
 /* =========================================================
    コンテナ
 ========================================================= */
-
+  
 .container{
   width:min(1000px,94%);
   margin:14px auto 50px;
+
+  display:flex;
+  flex-direction:column;
+  gap:21px;
 }
 
 /* =========================================================
@@ -1453,15 +1456,17 @@ color:#fff;
   
 
 /* =========================================================
-   Netflixページを
-   各セクションの間隔を完全統一
+   Netflixページ
+   セクション間隔を21pxで完全統一
 ========================================================= */
 
+.breadcrumb,
 .provider-header,
 .featured-section,
-.country-section{
+.country-section,
+#netflixWorksSection{
   margin-top:0 !important;
-  margin-bottom:21px !important;
+  margin-bottom:0 !important;
 }
 
 </style>
