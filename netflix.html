@@ -1164,7 +1164,24 @@ footer{
     rgba(37,99,235,.10);
 }
 
+/* =========================================================
+   選択中のカード
+========================================================= */
 
+.country-card.active{
+  background:#eaf4ff;
+
+  border-color:#3b82f6;
+
+  box-shadow:
+    0 5px 14px
+    rgba(37,99,235,.12);
+}
+
+.country-card.active::after{
+  color:#2563eb;
+}
+  
 .country-icon{
   display:block;
   font-size:26px;
@@ -1952,6 +1969,59 @@ const selectedType =
   urlParams.get(
     "type"
   ) || "";
+
+// =========================================================
+// 現在選択中のカードを強調
+// =========================================================
+
+document.querySelectorAll(
+  ".country-card"
+).forEach(
+  function(card){
+
+    const href =
+      card.getAttribute(
+        "href"
+      ) || "";
+
+    if(
+      selectedType &&
+      href.includes(
+        "type=" +
+        selectedType
+      )
+    ){
+      card.classList.add(
+        "active"
+      );
+    }
+
+    if(
+      selectedCountry &&
+      href.includes(
+        "country=" +
+        selectedCountry
+      )
+    ){
+      card.classList.add(
+        "active"
+      );
+    }
+
+    if(
+      selectedGenre &&
+      href.includes(
+        "genre=" +
+        selectedGenre
+      )
+    ){
+      card.classList.add(
+        "active"
+      );
+    }
+
+  }
+);
   
 const newNetflixSection =
   document.getElementById(
