@@ -1291,9 +1291,12 @@ footer{
 #backToBrowseButton{
   position:fixed;
 
-  right:20px;
-  bottom:20px;
+  right:max(
+  20px,
+  calc((100vw - 1000px) / 2 + 20px)
+);
 
+bottom:20px;
   z-index:1000;
 
   padding:14px 20px;
