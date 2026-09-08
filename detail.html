@@ -3361,9 +3361,10 @@ function renderMovie(movie){
 
 
   setText(
-    "title",
-    movie.title || ""
-  );
+  "title",
+  (movie.title || "作品情報") +
+  "はどこで見れる？"
+);
 
 
   setText(
@@ -3379,7 +3380,7 @@ setText(
   "providersHeading",
   "📺 " +
   (movie.title || "この作品") +
-  "はどこで見られる？"
+  "はどこで見れる？"
 );
 
 const providerTitle =
