@@ -2873,8 +2873,7 @@ function renderProvider(
 ){
 
   const providerName =
-    "Prime Video";
-
+    "U-NEXT";
 
   const logo =
     provider &&
@@ -2891,15 +2890,15 @@ function renderProvider(
       <div class="provider-item">
 
         <img
-          class="provider-logo"
-          src="${logo}"
-          alt="Prime Videoのロゴ"
-          loading="lazy"
-        >
+  class="provider-logo"
+  src="${logo}"
+  alt="U-NEXTのロゴ"
+  loading="lazy"
+>
 
-        <span>
-          Prime Video
-        </span>
+<span>
+  U-NEXT
+</span>
 
       </div>
 
@@ -2912,16 +2911,15 @@ function renderProvider(
 
     <div class="provider-item">
 
-      <div class="provider-logo-fallback">
-        Prime Video
-      </div>
+  <div class="provider-logo-fallback">
+    U-NEXT
+  </div>
 
-      <span>
-        Prime Video
-      </span>
+  <span>
+    U-NEXT
+  </span>
 
-    </div>
-
+</div>
   `;
 
 }
@@ -2953,10 +2951,9 @@ function getNetflixProvider(
             ""
           );
 
-        return (
-          name.includes("Amazon Prime Video") ||
-          name.includes("Prime Video")
-        );
+       return (
+  name.includes("U-NEXT")
+);
 
       }
     );
@@ -3910,10 +3907,10 @@ async function loadNetflixNewWorks(){
 
   }catch(error){
 
-    console.error(
-      "Prime Video new works error:",
-      error
-    );
+    cconsole.error(
+  "U-NEXT new works error:",
+  error
+);
 
 
     newNetflixWorks.innerHTML =
