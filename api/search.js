@@ -4839,6 +4839,63 @@ else if(
 
 }
 
+// =======================================================
+// 読みにくい現地語タイトルを補正
+//
+// 日本語タイトル候補
+// ↓
+// 英語タイトル
+// ↓
+// 元のタイトル
+//
+// の順で使用する
+// =======================================================
+
+results =
+  await Promise.all(
+    results.map(
+      async function(item){
+
+        if(
+          !needsReadableTitle(
+            item.title
+          )
+        ){
+          return item;
+        }
+
+        try{
+
+          const readableTitle =
+            await getReadableProviderTitle(
+              apiKey,
+              item
+            );
+
+          if(
+            readableTitle
+          ){
+            item.title =
+              readableTitle;
+          }
+
+        }
+        catch(error){
+
+          console.error(
+            "TITLE FALLBACK ERROR:",
+            item.id,
+            error
+          );
+
+        }
+
+        return item;
+
+      }
+    )
+  );
+  
   
 // =======================================================
 // 洋画・海外ドラマ
@@ -4921,6 +4978,291 @@ if (country === "other") {
 
   };
 
+}
+
+// =========================================================
+// 日本人に読みにくい文字だけのタイトルか判定
+// =========================================================
+
+function needsReadableTitle(
+  title
+){
+
+  const value =
+    String(
+      title || ""
+    ).trim();
+
+  if(
+    !value
+  ){
+    return false;
+  }
+
+
+  // 日本語が入っていればそのまま
+  if(
+    /[\u3040-\u30ff\u3400-\u9fff]/.test(
+      value
+    )
+  ){
+    return false;
+  }
+
+
+  // アルファベットが入っていればそのまま
+  if(
+    /[A-Za-z]/.test(
+      value
+    )
+  ){
+    return false;
+  }
+
+
+  // それ以外の文字だけなら補正対象
+  return true;
+
+}
+
+
+// =========================================================
+// 日本語タイトル → 英語タイトルの順に探す
+// =========================================================
+
+async function getReadableProviderTitle(
+  apiKey,
+  item
+){
+
+  if(
+    !item ||
+    !item.id
+  ){
+    return "";
+  }
+
+
+  const isTv =
+    item.content_type === "tv_drama" ||
+    item.content_type === "anime_tv";
+
+
+  const mediaType =
+    isTv
+      ? "tv"
+      : "movie";
+
+
+  // =====================================================
+  // ① 日本向け別タイトル
+  // =====================================================
+
+  try{
+
+    const alternativeUrl =
+      "https://api.themoviedb.org/3/" +
+      mediaType +
+      "/" +
+      encodeURIComponent(
+        item.id
+      ) +
+      "/alternative_titles" +
+      "?api_key=" +
+      encodeURIComponent(
+        apiKey
+      );
+
+
+    const alternativeData =
+      await fetchJson(
+        alternativeUrl
+      );
+
+
+    const alternativeTitles =
+      isTv
+        ? (
+            Array.isArray(
+              alternativeData.results
+            )
+              ? alternativeData.results
+              : []
+          )
+        : (
+            Array.isArray(
+              alternativeData.titles
+            )
+              ? alternativeData.titles
+              : []
+          );
+
+
+    const japaneseTitle =
+      alternativeTitles.find(
+        function(title){
+
+          return (
+            title &&
+            title.iso_3166_1 === "JP" &&
+            (
+              title.title ||
+              title.name
+            )
+          );
+
+        }
+      );
+
+
+    if(
+      japaneseTitle
+    ){
+
+      return (
+        japaneseTitle.title ||
+        japaneseTitle.name ||
+        ""
+      );
+
+    }
+
+  }
+  catch(error){
+
+    console.error(
+      "JP TITLE ERROR:",
+      item.id,
+      error
+    );
+
+  }
+
+
+  // =====================================================
+  // ② 日本語翻訳
+  // =====================================================
+
+  try{
+
+    const translationsUrl =
+      "https://api.themoviedb.org/3/" +
+      mediaType +
+      "/" +
+      encodeURIComponent(
+        item.id
+      ) +
+      "/translations" +
+      "?api_key=" +
+      encodeURIComponent(
+        apiKey
+      );
+
+
+    const translationsData =
+      await fetchJson(
+        translationsUrl
+      );
+
+
+    const translations =
+      Array.isArray(
+        translationsData.translations
+      )
+        ? translationsData.translations
+        : [];
+
+
+    const japaneseTranslation =
+      translations.find(
+        function(translation){
+
+          return (
+            translation &&
+            translation.iso_639_1 === "ja"
+          );
+
+        }
+      );
+
+
+    if(
+      japaneseTranslation &&
+      japaneseTranslation.data
+    ){
+
+      const title =
+        japaneseTranslation.data.title ||
+        japaneseTranslation.data.name ||
+        "";
+
+      if(
+        title
+      ){
+        return title;
+      }
+
+    }
+
+  }
+  catch(error){
+
+    console.error(
+      "JP TRANSLATION ERROR:",
+      item.id,
+      error
+    );
+
+  }
+
+
+  // =====================================================
+  // ③ 日本語が無ければ英語版
+  // =====================================================
+
+  try{
+
+    const englishUrl =
+      "https://api.themoviedb.org/3/" +
+      mediaType +
+      "/" +
+      encodeURIComponent(
+        item.id
+      ) +
+      "?api_key=" +
+      encodeURIComponent(
+        apiKey
+      ) +
+      "&language=en-US";
+
+
+    const englishData =
+      await fetchJson(
+        englishUrl
+      );
+
+
+    return (
+      englishData.title ||
+      englishData.name ||
+      englishData.original_title ||
+      englishData.original_name ||
+      ""
+    );
+
+  }
+  catch(error){
+
+    console.error(
+      "EN TITLE ERROR:",
+      item.id,
+      error
+    );
+
+  }
+
+
+  return "";
 }
 
 // =========================================================
