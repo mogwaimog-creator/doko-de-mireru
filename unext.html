@@ -116,7 +116,7 @@ body{
     "Noto Sans JP",
     sans-serif;
 
-  background:#f2f9fc;
+  background:#f7f8fa;
 
   color:#222;
 }
@@ -1872,6 +1872,59 @@ color:#fff;
   background:transparent;
   color:#172554;
 }
+
+/* =========================================================
+   U-NEXTページ
+========================================================= */
+
+/* U-NEXT 選択中 */
+
+.provider-mini-item.unext-mini.active{
+  background:#f1f5f9;
+
+  border-color:#111827;
+
+  color:#111827;
+}
+
+
+/* U-NEXT hover */
+
+.provider-mini-item.unext-mini:hover{
+  background:#f1f5f9;
+
+  border-color:#111827;
+
+  color:#111827;
+
+  transform:translateY(-1px);
+}
+
+
+/* Netflix hover */
+
+.provider-mini-item.netflix-mini:hover{
+  background:#fff1f2;
+
+  border-color:#e50914;
+
+  color:#b20710;
+
+  transform:translateY(-1px);
+}
+
+
+/* Prime Video hover */
+
+.provider-mini-item.prime-mini:hover{
+  background:#e8f7fc;
+
+  border-color:#00a8e1;
+
+  color:#0073a8;
+
+  transform:translateY(-1px);
+}
   
 </style>
   
@@ -1949,7 +2002,7 @@ color:#fff;
   <!-- Prime Video -->
   <a
     href="./prime.html"
-    class="provider-mini-item prime-mini active"
+    class="provider-mini-item prime-mini "
     title="Prime Video"
   >
     <span class="provider-mini-mark prime-mark">
@@ -1963,18 +2016,19 @@ color:#fff;
 
 
   <!-- U-NEXT -->
-  <span
-    class="provider-mini-item coming"
-    title="U-NEXT 準備中"
-  >
-    <span class="provider-mini-mark unext-mark">
-      U
-    </span>
-
-    <span class="provider-mini-name">
-      U-NEXT
-    </span>
+  <a
+  href="./unext.html"
+  class="provider-mini-item unext-mini active"
+  title="U-NEXT"
+>
+  <span class="provider-mini-mark unext-mark">
+    U
   </span>
+
+  <span class="provider-mini-name">
+    U-NEXT
+  </span>
+</a>
 
 
   <!-- Hulu -->
