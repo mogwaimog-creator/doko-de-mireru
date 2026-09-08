@@ -133,6 +133,11 @@ const netflixNew =
   String(
     req.query.netflixNew || ""
   ).trim();
+
+const primeNew =
+  String(
+    req.query.primeNew || ""
+  ).trim();
     
 // =====================================================
 // 配信サービス
