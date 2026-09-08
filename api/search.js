@@ -4551,15 +4551,7 @@ encodeURIComponent(page);
       movieData.results
     )
       ? movieData.results
-          .slice(
-  0,
-  (
-    genre === "romance" ||
-    genre === "horror"
-  )
-    ? 20
-    : 10
-)
+          .slice(0, 20)
           .map(
             function(movie){
 
@@ -4653,7 +4645,7 @@ overview:
       tvData.results
     )
       ? tvData.results
-          .slice(0, 10)
+          .slice(0, 20)
           .map(
             function(show){
 
