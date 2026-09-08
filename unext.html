@@ -1326,27 +1326,54 @@ footer{
 }
 
 
-/* マウスを乗せた時 */
+/* =========================================================
+   U-NEXT
+   マウスを乗せた時
+========================================================= */
 
 .country-card:hover{
   transform:
     translateY(-2px);
 
-  background:#e8f7fc;
+  background:#f3f4f6;
 
-  border-color:#00a8e1;
+  border-color:#4b5563;
 
   box-shadow:
     0 7px 18px
-    rgba(0,168,225,.12);
+    rgba(55,65,81,.10);
 }
 
 .country-card:hover .country-title{
-  color:#0073a8;
+  color:#374151;
 }
 
 .country-card:hover::after{
-  color:#00a8e1;
+  color:#4b5563;
+}
+
+
+/* =========================================================
+   U-NEXT
+   選択中のカード
+========================================================= */
+
+.country-card.active{
+  background:#e5e7eb;
+
+  border-color:#374151;
+
+  box-shadow:
+    0 5px 14px
+    rgba(55,65,81,.13);
+}
+
+.country-card.active .country-title{
+  color:#1f2937;
+}
+
+.country-card.active::after{
+  color:#374151;
 }
 
 /* =========================================================
