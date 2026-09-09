@@ -5083,11 +5083,11 @@ movieGenreQuery +
 
 
   const thirtyDaysAgo =
-    new Date();
+  new Date();
 
-  thirtyDaysAgo.setDate(
-    thirtyDaysAgo.getDate() - 30
-  );
+thirtyDaysAgo.setDate(
+  thirtyDaysAgo.getDate() - 90
+);
 
   const thirtyDaysAgoString =
     thirtyDaysAgo
