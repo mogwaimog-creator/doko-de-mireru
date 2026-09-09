@@ -3993,9 +3993,49 @@ async function loadNetflixNewWorks(){
 
   try{
 
-    const response =
+    let apiUrl =
+  "/api/search?unextNew=1";
+
+
+// 国・地域
+if(
+  selectedCountry
+){
+  apiUrl +=
+    "&country=" +
+    encodeURIComponent(
+      selectedCountry
+    );
+}
+
+
+// ジャンル
+if(
+  selectedGenre
+){
+  apiUrl +=
+    "&genre=" +
+    encodeURIComponent(
+      selectedGenre
+    );
+}
+
+
+// 作品タイプ
+if(
+  selectedType
+){
+  apiUrl +=
+    "&type=" +
+    encodeURIComponent(
+      selectedType
+    );
+}
+
+
+const response =
   await fetch(
-    "/api/search?unextNew=1"
+    apiUrl
   );
 
 
