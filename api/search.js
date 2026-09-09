@@ -148,6 +148,11 @@ const huluNew =
   String(
     req.query.huluNew || ""
   ).trim();
+
+const disneyNew =
+  String(
+    req.query.disneyNew || ""
+  ).trim();
     
 // =====================================================
 // 配信サービス
@@ -534,6 +539,36 @@ if (provider === "hulu") {
 
 }
 
+// =====================================================
+// Disney+ 配信作品
+// =====================================================
+
+if (provider === "disney") {
+
+  const disneyResults =
+    await getProviderWorks(
+      apiKey,
+      337,
+      page,
+      country,
+      genre,
+      netflixType
+    );
+
+  return res
+    .status(200)
+    .json({
+      results:
+        disneyResults.results,
+
+      page:
+        disneyResults.page,
+
+      hasMore:
+        disneyResults.hasMore
+    });
+
+}    
     
     // =====================================================
     // 検索文字チェック
