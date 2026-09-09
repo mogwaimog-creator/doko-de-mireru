@@ -336,10 +336,14 @@ if(
 ){
 
   const newResults =
-    await getNetflixNewWorks(
-      apiKey
-    );
-
+  await getNetflixNewWorks(
+    apiKey,
+    country,
+    genre,
+    netflixType
+  );
+  
+  
   return res
     .status(200)
     .json({
@@ -4368,9 +4372,117 @@ function createMiddleDotSearchQuery(query) {
 // ========================================================
 
 async function getNetflixNewWorks(
-  apiKey
+  apiKey,
+  country,
+  genre,
+  netflixType
 ){
 
+    // =====================================================
+  // 国・地域
+  // =====================================================
+
+  let originalLanguage = "";
+
+  if(
+    country === "jp"
+  ){
+    originalLanguage =
+      "ja";
+  }
+  else if(
+    country === "kr"
+  ){
+    originalLanguage =
+      "ko";
+  }
+
+
+  // =====================================================
+  // ジャンル
+  // =====================================================
+
+  let movieGenreQuery = "";
+  let tvGenreQuery = "";
+
+
+  // 「アニメから探す」
+  if(
+    netflixType === "anime"
+  ){
+    movieGenreQuery =
+      "&with_genres=16";
+
+    tvGenreQuery =
+      "&with_genres=16";
+  }
+
+
+  // 「ジャンルから探す」
+  if(
+    genre === "anime"
+  ){
+    movieGenreQuery =
+      "&with_genres=16&with_original_language=ja";
+
+    tvGenreQuery =
+      "&with_genres=16&with_original_language=ja";
+  }
+  else if(
+    genre === "suspense"
+  ){
+    movieGenreQuery =
+      "&with_genres=53%7C9648";
+
+    tvGenreQuery =
+      "&with_genres=9648";
+  }
+  else if(
+    genre === "romance"
+  ){
+    movieGenreQuery =
+      "&with_genres=10749";
+
+    tvGenreQuery =
+      "";
+  }
+  else if(
+    genre === "action"
+  ){
+    movieGenreQuery =
+      "&with_genres=28";
+
+    tvGenreQuery =
+      "&with_genres=10759";
+  }
+  else if(
+    genre === "comedy"
+  ){
+    movieGenreQuery =
+      "&with_genres=35";
+
+    tvGenreQuery =
+      "&with_genres=35";
+  }
+  else if(
+    genre === "horror"
+  ){
+    movieGenreQuery =
+      "&with_genres=27";
+
+    tvGenreQuery =
+      "";
+  }
+  else if(
+    genre === "scifi"
+  ){
+    movieGenreQuery =
+      "&with_genres=878%7C14";
+
+    tvGenreQuery =
+      "&with_genres=10765";
+  }
+  
   const movieUrl =
     "https://api.themoviedb.org/3/discover/movie" +
     "?api_key=" +
@@ -4381,7 +4493,19 @@ async function getNetflixNewWorks(
     "&with_watch_providers=8" +
     "&with_watch_monetization_types=flatrate" +
     "&sort_by=primary_release_date.desc" +
-    "&include_adult=false" +
+
+(
+  originalLanguage
+    ? "&with_original_language=" +
+      encodeURIComponent(
+        originalLanguage
+      )
+    : ""
+) +
+
+movieGenreQuery +
+
+"&include_adult=false" +
     "&include_video=false" +
     "&page=1";
 
@@ -4395,19 +4519,38 @@ async function getNetflixNewWorks(
     "&with_watch_providers=8" +
     "&with_watch_monetization_types=flatrate" +
     "&sort_by=first_air_date.desc" +
-    "&include_adult=false" +
+
+(
+  originalLanguage
+    ? "&with_original_language=" +
+      encodeURIComponent(
+        originalLanguage
+      )
+    : ""
+) +
+
+tvGenreQuery +
+
+"&include_adult=false" +
     "&page=1";
 
 
   const [
-    movieData,
-    tvData
-  ] =
-    await Promise.all([
-      fetchJson(movieUrl),
-      fetchJson(tvUrl)
-    ]);
+  movieData,
+  tvData
+] =
+  await Promise.all([
+    fetchJson(movieUrl),
 
+    (
+      genre === "romance" ||
+      genre === "horror"
+    )
+      ? Promise.resolve({
+          results: []
+        })
+      : fetchJson(tvUrl)
+  ]);
 
   const movies =
     Array.isArray(
@@ -4520,7 +4663,7 @@ const thirtyDaysAgo =
   new Date();
 
 thirtyDaysAgo.setDate(
-  thirtyDaysAgo.getDate() - 30
+  thirtyDaysAgo.getDate() - 90
 );
 
 const thirtyDaysAgoString =
@@ -4531,20 +4674,56 @@ const thirtyDaysAgoString =
       10
     );
 
+// =====================================================
+// 作品タイプによる絞り込み
+// =====================================================
 
- return movies
-  .concat(
+let newWorks =
+  movies.concat(
     tvShows
-  )
+  );
+
+if(
+  netflixType === "movie"
+){
+  newWorks =
+    newWorks.filter(
+      function(work){
+
+        return (
+          work.content_type === "movie"
+        );
+
+      }
+    );
+}
+else if(
+  netflixType === "tv"
+){
+  newWorks =
+    newWorks.filter(
+      function(work){
+
+        return (
+          work.content_type === "tv"
+        );
+
+      }
+    );
+}
+  
+ return newWorks
   .filter(
     function(work){
 
       return (
-        work.id &&
-        work.poster_path &&
-        work.release_date &&
-        work.release_date <= today
-      );
+  work.id &&
+  work.poster_path &&
+  work.release_date &&
+  work.release_date >=
+    thirtyDaysAgoString &&
+  work.release_date <= today
+);
       }
     )
     .sort(
