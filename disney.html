@@ -2431,18 +2431,29 @@ if(
       setTimeout(
         function(){
 
-          const netflixWorksSection =
+          const highRatedSection =
             document.getElementById(
-              "netflixWorksSection"
+              "highRatedWorks"
             );
 
           if(
-            netflixWorksSection
+            highRatedSection
           ){
-            netflixWorksSection.scrollIntoView({
-              behavior: "smooth",
-              block: "start"
-            });
+
+            const section =
+              highRatedSection.closest(
+                ".featured-section"
+              );
+
+            if(
+              section
+            ){
+              section.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+              });
+            }
+
           }
 
         },
