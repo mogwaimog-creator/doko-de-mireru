@@ -6988,6 +6988,138 @@ function showError(message){
 
 </script>
 
+<script>
+// =========================================================
+// 詳細ページ 戻るリンク
+// =========================================================
+
+(function(){
+
+  const backLink =
+    document.getElementById(
+      "backLink"
+    );
+
+  if(
+    !backLink
+  ){
+    return;
+  }
+
+
+  const params =
+    new URLSearchParams(
+      window.location.search
+    );
+
+  const from =
+    params.get(
+      "from"
+    );
+
+
+  // =====================================================
+  // Netflix
+  // =====================================================
+
+  if(
+    from === "netflix"
+  ){
+    backLink.href =
+      "./netflix.html";
+
+    backLink.textContent =
+      "← Netflixに戻る";
+
+    backLink.setAttribute(
+      "aria-label",
+      "Netflixに戻る"
+    );
+  }
+
+
+  // =====================================================
+  // Prime Video
+  // =====================================================
+
+  else if(
+    from === "prime"
+  ){
+    backLink.href =
+      "./prime.html";
+
+    backLink.textContent =
+      "← Prime Videoに戻る";
+
+    backLink.setAttribute(
+      "aria-label",
+      "Prime Videoに戻る"
+    );
+  }
+
+
+  // =====================================================
+  // U-NEXT
+  // =====================================================
+
+  else if(
+    from === "unext"
+  ){
+    backLink.href =
+      "./unext.html";
+
+    backLink.textContent =
+      "← U-NEXTに戻る";
+
+    backLink.setAttribute(
+      "aria-label",
+      "U-NEXTに戻る"
+    );
+  }
+
+
+  // =====================================================
+  // Hulu
+  // =====================================================
+
+  else if(
+    from === "hulu"
+  ){
+    backLink.href =
+      "./hulu.html";
+
+    backLink.textContent =
+      "← Huluに戻る";
+
+    backLink.setAttribute(
+      "aria-label",
+      "Huluに戻る"
+    );
+  }
+
+
+  // =====================================================
+  // Disney+
+  // =====================================================
+
+  else if(
+    from === "disney"
+  ){
+    backLink.href =
+      "./disney.html";
+
+    backLink.textContent =
+      "← Disney+に戻る";
+
+    backLink.setAttribute(
+      "aria-label",
+      "Disney+に戻る"
+    );
+  }
+
+})();
+</script>
+  
 </body>
 
 </html>
