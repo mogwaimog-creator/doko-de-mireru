@@ -141,16 +141,35 @@ a{
   position:relative;
 
   background:
+    /* 左下の淡い水色の光 */
     radial-gradient(
-      circle at 80% 20%,
-      rgba(37,99,235,.28),
-      transparent 35%
+      circle at 8% 78%,
+      rgba(125,211,252,.24) 0%,
+      rgba(125,211,252,.10) 18%,
+      transparent 38%
     ),
+
+    /* 右上の淡い紫の光 */
+    radial-gradient(
+      circle at 88% 16%,
+      rgba(196,181,253,.20) 0%,
+      rgba(196,181,253,.08) 20%,
+      transparent 42%
+    ),
+
+    /* 中央付近の青い光 */
+    radial-gradient(
+      circle at 62% 58%,
+      rgba(56,189,248,.15) 0%,
+      transparent 34%
+    ),
+
+    /* ベース */
     linear-gradient(
       135deg,
-      #0b1628 0%,
-      #10294a 55%,
-      #163d72 100%
+      #081a36 0%,
+      #0c3264 52%,
+      #1557a0 100%
     );
 
   color:#fff;
@@ -169,18 +188,35 @@ a{
 
   position:absolute;
 
-  width:360px;
-  height:360px;
+  width:260px;
+  height:260px;
 
-  right:-120px;
-  top:-160px;
+  right:6%;
+  top:-75px;
 
   border-radius:50%;
 
-  
-     
-　background:
-    rgba(255,255,255,.05);
+  background:
+    radial-gradient(
+      circle at 32% 28%,
+      rgba(255,255,255,.30) 0%,
+      rgba(186,230,253,.14) 22%,
+      rgba(147,197,253,.08) 48%,
+      rgba(196,181,253,.06) 65%,
+      transparent 72%
+    );
+
+  border:
+    1px solid
+    rgba(255,255,255,.13);
+
+  box-shadow:
+    inset 18px 18px 38px
+      rgba(255,255,255,.06),
+    inset -18px -18px 38px
+      rgba(96,165,250,.06),
+    0 0 55px
+      rgba(125,211,252,.08);
 
   pointer-events:none;
 }
