@@ -2737,10 +2737,6 @@ function renderProvider(
   provider
 ){
 
-  const providerName =
-    "Disney+";
-
-
   const logo =
     provider &&
     provider.logo_path
@@ -2788,49 +2784,6 @@ function renderProvider(
     </div>
 
   `;
-
-}
-
-
-// =========================================================
-// Disney+情報を取得
-// =========================================================
-
-function getNetflixProvider(
-  movie
-){
-
-  const providers =
-    Array.isArray(
-      movie.streaming
-    )
-      ? movie.streaming
-      : [];
-
-
-  const hulu =
-    providers.find(
-      function(provider){
-
-        const name =
-          String(
-            provider.provider_name ||
-            ""
-          );
-
-        return (
-          name.includes("Disney")
-        );
-
-      }
-    );
-
-
-  return (
-  Disney+ ||
-  providers[0] ||
-  null
-);
 
 }
 
