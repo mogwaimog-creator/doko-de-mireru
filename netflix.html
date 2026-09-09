@@ -1527,6 +1527,39 @@ color:#fff;
     rgba(0,168,225,.12);
 }  
 
+/* Hulu hover */
+
+.provider-mini-item.hulu-mini:hover{
+  transform:translateY(-2px);
+
+  background:#ecfdf5;
+
+  border-color:#1ce783;
+
+  color:#0b9f58;
+
+  box-shadow:
+    0 4px 9px
+    rgba(28,231,131,.12);
+}
+
+
+/* Disney+ hover */
+
+.provider-mini-item.disney-mini:hover{
+  transform:translateY(-2px);
+
+  background:#eef2ff;
+
+  border-color:#172554;
+
+  color:#172554;
+
+  box-shadow:
+    0 4px 9px
+    rgba(23,37,84,.12);
+}
+  
 /* =========================================================
    パンくず ＋ 配信サービス切り替え
    共通金型
@@ -1850,34 +1883,35 @@ color:#fff;
 </a>
 
     <!-- Hulu -->
-    <span
-      class="provider-mini-item coming"
-      title="Hulu 準備中"
-    >
-      <span class="provider-mini-mark hulu-mark">
-        hulu
-      </span>
+<a
+  href="./hulu.html"
+  class="provider-mini-item hulu-mini"
+  title="Hulu"
+>
+  <span class="provider-mini-mark hulu-mark">
+    hulu
+  </span>
 
-      <span class="provider-mini-name">
-        Hulu
-      </span>
-    </span>
+  <span class="provider-mini-name">
+    Hulu
+  </span>
+</a>
 
 
     <!-- Disney+ -->
-    <span
-      class="provider-mini-item coming"
-      title="Disney+ 準備中"
-    >
-      <span class="provider-mini-mark disney-mark">
-        D+
-      </span>
+<a
+  href="./disney.html"
+  class="provider-mini-item disney-mini"
+  title="Disney+"
+>
+  <span class="provider-mini-mark disney-mark">
+    D+
+  </span>
 
-      <span class="provider-mini-name">
-        Disney+
-      </span>
-    </span>
-
+  <span class="provider-mini-name">
+    Disney+
+  </span>
+</a>
   </div>
 
 </div>
