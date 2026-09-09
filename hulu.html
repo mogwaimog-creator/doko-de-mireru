@@ -38,6 +38,11 @@ Huluで見られる映画・ドラマ・アニメ｜ドコデミレル？
   content="index, follow"
 >
 
+<meta
+  name="googlebot"
+  content="index, follow, max-image-preview:large"
+>
+  
 <link
   rel="canonical"
   href="https://doko-de-mireru.vercel.app/hulu.html"
@@ -84,9 +89,19 @@ Huluで見られる映画・ドラマ・アニメ｜ドコデミレル？
 
 <meta
   name="twitter:card"
-  content="summary"
+  content="summary_large_image"
 >
 
+<meta
+  property="og:image"
+  content="https://doko-de-mireru.vercel.app/og-image.png"
+>
+
+<meta
+  name="twitter:image"
+  content="https://doko-de-mireru.vercel.app/og-image.png"
+>
+  
 <meta
   name="twitter:title"
   content="Huluで見られる映画・ドラマ・アニメ｜ドコデミレル？"
@@ -294,11 +309,10 @@ header p{
 }
 
 
-/* Hulu */
+/* Prime Video */
 
 .provider-mini-mark.prime-mark{
   background:transparent;
-
   color:#00a8e1;
 }
 
@@ -351,9 +365,7 @@ header p{
 }
 
 
-/* Hulu
-   現在選択中 ＋ hover
-*/
+/* Prime Video */
 
 .provider-mini-item.prime-mini.active,
 .provider-mini-item.prime-mini:hover{
