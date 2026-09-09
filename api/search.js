@@ -5196,6 +5196,24 @@ async function getUnextNewWorks(
   let movieGenreQuery = "";
   let tvGenreQuery = "";
 
+　let movieExcludeGenreQuery = "";
+let tvExcludeGenreQuery = "";
+
+
+// 映画・ドラマではアニメを除外
+if(
+  netflixType === "movie"
+){
+  movieExcludeGenreQuery =
+    "&without_genres=16";
+}
+else if(
+  netflixType === "tv"
+){
+  tvExcludeGenreQuery =
+    "&without_genres=16";
+}
+  
   // =====================================================
   // 作品タイプがアニメの場合
   // =====================================================
@@ -5312,6 +5330,8 @@ else if(
     : ""
 ) +
 movieGenreQuery +
+movieExcludeGenreQuery +
+    
     "&include_adult=false" +
     "&include_video=false" +
     "&page=1";
@@ -5335,6 +5355,9 @@ movieGenreQuery +
       : ""
   ) +
   tvGenreQuery +
+  tvExcludeGenreQuery +
+
+  
   "&include_adult=false" +
   "&page=1";
 
