@@ -4411,6 +4411,7 @@ async function getNetflixNewWorks(
   let movieGenreQuery = "";
   let tvGenreQuery = "";
 
+  
 
   // 「アニメから探す」
   if(
@@ -5568,6 +5569,23 @@ async function getHuluNewWorks(
   let movieGenreQuery = "";
   let tvGenreQuery = "";
 
+  let movieExcludeGenreQuery = "";
+let tvExcludeGenreQuery = "";
+
+
+// 映画・ドラマではアニメを除外
+if(
+  netflixType === "movie"
+){
+  movieExcludeGenreQuery =
+    "&without_genres=16";
+}
+else if(
+  netflixType === "tv"
+){
+  tvExcludeGenreQuery =
+    "&without_genres=16";
+}
 
   // アニメから探す
   if(
@@ -5680,8 +5698,9 @@ async function getHuluNewWorks(
     ) +
 
     movieGenreQuery +
+movieExcludeGenreQuery +
 
-    "&include_adult=false" +
+"&include_adult=false" +
     "&include_video=false" +
     "&page=1";
 
@@ -5718,8 +5737,9 @@ async function getHuluNewWorks(
     ) +
 
     tvGenreQuery +
+tvExcludeGenreQuery +
 
-    "&include_adult=false" +
+"&include_adult=false" +
     "&page=1";
 
 
