@@ -2222,7 +2222,7 @@ body .country-card.active::after{
     </h2>
 
     <p>
-      映画・ドラマ・アニメからHulu作品を探せます
+      映画・ドラマ・アニメからDisney+作品を探せます
     </p>
 
   </div>
@@ -2231,7 +2231,7 @@ body .country-card.active::after{
 
     <a
       class="country-card"
-      href="./hulu.html?type=movie"
+      href="./disney.html?type=movie"
     >
       <span class="country-icon">🎬</span>
       <span class="country-title">映画</span>
@@ -2239,7 +2239,7 @@ body .country-card.active::after{
 
     <a
       class="country-card"
-      href="./hulu.html?type=tv"
+      href="./disney.html?type=tv"
     >
       <span class="country-icon">📺</span>
       <span class="country-title">ドラマ</span>
@@ -2247,7 +2247,7 @@ body .country-card.active::after{
 
     <a
       class="country-card"
-      href="./hulu.html?type=anime"
+      href="./disney.html?type=anime"
     >
       <span class="country-icon">🍭</span>
       <span class="country-title">アニメ</span>
@@ -2273,7 +2273,7 @@ body .country-card.active::after{
     </h2>
 
     <p>
-      観たい作品の国・地域からHulu作品を探せます
+      観たい作品の国・地域からDisney+作品を探せます
     </p>
 
   </div>
@@ -2282,7 +2282,7 @@ body .country-card.active::after{
 
     <a
       class="country-card"
-      href="./hulu.html?country=other"
+      href="./disney.html?country=other"
     >
       <span class="country-icon">
         🌍
@@ -2296,7 +2296,7 @@ body .country-card.active::after{
 
     <a
       class="country-card"
-      href="./hulu.html?country=jp"
+      href="./disney.html?country=jp"
     >
       <span class="country-icon">
         🇯🇵
@@ -2310,7 +2310,7 @@ body .country-card.active::after{
 
     <a
       class="country-card"
-      href="./hulu.html?country=kr"
+      href="./disney.html?country=kr"
     >
       <span class="country-icon">
         🇰🇷
@@ -2341,7 +2341,7 @@ body .country-card.active::after{
     </h2>
 
     <p>
-      気になるジャンルからHulu作品を探せます
+      気になるジャンルからDisney+作品を探せます
     </p>
 
   </div>
@@ -2351,7 +2351,7 @@ body .country-card.active::after{
 
     <a
       class="country-card"
-      href="./hulu.html?genre=suspense"
+      href="./disney.html?genre=suspense"
     >
       <span class="country-icon">🕵️</span>
       <span class="country-title">サスペンス・ミステリー</span>
@@ -2359,7 +2359,7 @@ body .country-card.active::after{
 
     <a
       class="country-card"
-      href="./hulu.html?genre=romance"
+      href="./disney.html?genre=romance"
     >
       <span class="country-icon">💕</span>
       <span class="country-title">恋愛・ラブコメ</span>
@@ -2367,7 +2367,7 @@ body .country-card.active::after{
 
     <a
       class="country-card"
-      href="./hulu.html?genre=action"
+      href="./disney.html?genre=action"
     >
       <span class="country-icon">💥</span>
       <span class="country-title">アクション</span>
@@ -2375,7 +2375,7 @@ body .country-card.active::after{
 
     <a
       class="country-card"
-      href="./hulu.html?genre=comedy"
+      href="./disney.html?genre=comedy"
     >
       <span class="country-icon">🤣</span>
       <span class="country-title">コメディ</span>
@@ -2383,7 +2383,7 @@ body .country-card.active::after{
 
     <a
       class="country-card"
-      href="./hulu.html?genre=horror"
+      href="./disney.html?genre=horror"
     >
       <span class="country-icon">👻</span>
       <span class="country-title">ホラー</span>
@@ -2391,7 +2391,7 @@ body .country-card.active::after{
 
     <a
       class="country-card"
-      href="./hulu.html?genre=scifi"
+      href="./disney.html?genre=scifi"
     >
       <span class="country-icon">🛸</span>
       <span class="country-title">SF・ファンタジー</span>
@@ -2415,7 +2415,7 @@ body .country-card.active::after{
     </h2>
 
     <p>
-      Huluで配信中の作品から、TMDB評価が高い作品をピックアップ
+      Disney+で配信中の作品から、TMDB評価が高い作品をピックアップ
     </p>
 
   </div>
@@ -2441,11 +2441,11 @@ body .country-card.active::after{
   <div class="featured-heading">
 
     <h2>
-      🆕 Huluの新着作品
+      🆕 Disney+の新着作品
     </h2>
 
     <p>
-      Huluで配信中の作品から、新しい作品をピックアップ
+      Disney+で配信中の作品から、新しい作品をピックアップ
     </p>
 
   </div>
@@ -2464,13 +2464,13 @@ body .country-card.active::after{
  <section id="netflixWorksSection">
 
   <h2 class="results-heading">
-    🎬 Huluの配信作品
+    🎬 Disney+の配信作品
   </h2>
     <div
       id="status"
       class="status"
     >
-      Huluの作品を読み込んでいます...
+      Disney+の作品を読み込んでいます...
     </div>
 
 
@@ -3731,7 +3731,7 @@ async function loadNetflixTopWorks(){
     const response =
       await fetch(
         "/api/search" +
-        "?provider=hulu" +
+        "?provider=disney" +
         "&page=1"
       );
 
@@ -3820,7 +3820,7 @@ async function loadNetflixNewWorks(){
 
     const response =
       await fetch(
-        "/api/search?huluNew=1"
+        "/api/search?disneyNew=1"
       );
 
 
@@ -4037,7 +4037,7 @@ async function loadNetflixWorks(
 
 let apiUrl =
   "/api/search" +
-  "?provider=hulu" +
+  "?provider=disney" +
   "&page=" +
   encodeURIComponent(
     currentPage
