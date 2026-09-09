@@ -2701,25 +2701,36 @@ if(
     function(){
 
       setTimeout(
-        function(){
+  function(){
 
-          const netflixWorksSection =
-            document.getElementById(
-              "netflixWorksSection"
-            );
-
-          if(
-            netflixWorksSection
-          ){
-            netflixWorksSection.scrollIntoView({
-              behavior: "smooth",
-              block: "start"
-            });
-          }
-
-        },
-        300
+    const highRatedSection =
+      document.getElementById(
+        "highRatedWorks"
       );
+
+    if(
+      highRatedSection
+    ){
+
+      const section =
+        highRatedSection.closest(
+          ".featured-section"
+        );
+
+      if(
+        section
+      ){
+        section.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+      }
+
+    }
+
+  },
+  300
+);
 
     }
   );
