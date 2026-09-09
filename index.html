@@ -142,33 +142,38 @@ a{
    ふんわりシャボン玉背景
 ========================================================= */
 
+/* =========================================================
+   ヘッダー
+   シャボン玉背景
+========================================================= */
+
 .site-hero{
   position:relative;
 
   background:
     radial-gradient(
-      circle at 12% 25%,
-      rgba(125,211,252,.26),
+      circle at 15% 20%,
+      rgba(96,165,250,.18),
+      transparent 32%
+    ),
+
+    radial-gradient(
+      circle at 82% 15%,
+      rgba(167,139,250,.16),
       transparent 30%
     ),
 
     radial-gradient(
-      circle at 82% 20%,
-      rgba(196,181,253,.22),
-      transparent 28%
-    ),
-
-    radial-gradient(
-      circle at 70% 85%,
-      rgba(56,189,248,.18),
-      transparent 32%
+      circle at 70% 75%,
+      rgba(56,189,248,.12),
+      transparent 35%
     ),
 
     linear-gradient(
       135deg,
-      #071a35 0%,
+      #081a36 0%,
       #0b3268 52%,
-      #1760aa 100%
+      #175aa4 100%
     );
 
   color:#fff;
@@ -177,53 +182,16 @@ a{
     24px 20px
     85px;
 
-  overflow:hidden;
+  /*
+    検索ボックスの裏まで
+    背景装飾を見せるため
+  */
+  overflow:visible;
 }
 
 
 /* =========================================================
-   左側の大きなシャボン玉
-========================================================= */
-
-.site-hero::before{
-  content:"";
-
-  position:absolute;
-
-  width:260px;
-  height:260px;
-
-  left:-90px;
-  bottom:-80px;
-
-  border-radius:50%;
-
-  border:
-    2px solid
-    rgba(255,255,255,.16);
-
-  background:
-    radial-gradient(
-      circle at 30% 25%,
-      rgba(255,255,255,.28),
-      rgba(125,211,252,.10) 30%,
-      rgba(196,181,253,.08) 55%,
-      transparent 72%
-    );
-
-  box-shadow:
-    inset 18px 18px 35px rgba(255,255,255,.07),
-    inset -18px -18px 35px rgba(96,165,250,.08),
-    0 0 50px rgba(125,211,252,.10);
-
-  pointer-events:none;
-
-  z-index:0;
-}
-
-
-/* =========================================================
-   右上のシャボン玉
+   青背景を検索ボックスの下まで延長
 ========================================================= */
 
 .site-hero::after{
@@ -231,37 +199,201 @@ a{
 
   position:absolute;
 
-  width:190px;
-  height:190px;
+  left:0;
+  right:0;
 
-  right:5%;
-  top:-45px;
+  bottom:-175px;
 
-  border-radius:50%;
-
-  border:
-    2px solid
-    rgba(255,255,255,.18);
+  height:180px;
 
   background:
     radial-gradient(
-      circle at 32% 25%,
-      rgba(255,255,255,.32),
-      rgba(125,211,252,.11) 32%,
-      rgba(216,180,254,.09) 58%,
-      transparent 74%
-    );
+      circle at 18% 10%,
+      rgba(125,211,252,.12),
+      transparent 32%
+    ),
 
-  box-shadow:
-    inset 14px 14px 30px rgba(255,255,255,.08),
-    inset -14px -14px 30px rgba(96,165,250,.07),
-    0 0 45px rgba(147,197,253,.10);
+    radial-gradient(
+      circle at 82% 30%,
+      rgba(196,181,253,.10),
+      transparent 34%
+    ),
+
+    linear-gradient(
+      90deg,
+      #0b3268 0%,
+      #124b8e 55%,
+      #175aa4 100%
+    );
 
   pointer-events:none;
 
   z-index:0;
 }
 
+
+/* =========================================================
+   シャボン玉レイヤー
+========================================================= */
+
+.hero-decoration{
+  position:absolute;
+
+  inset:0;
+
+  overflow:visible;
+
+  pointer-events:none;
+
+  z-index:1;
+}
+
+
+/* =========================================================
+   シャボン玉共通
+========================================================= */
+
+.bubble{
+  position:absolute;
+
+  display:block;
+
+  border-radius:50%;
+
+  border:
+    1px solid
+    rgba(255,255,255,.18);
+
+  background:
+    radial-gradient(
+      circle at 30% 25%,
+
+      rgba(255,255,255,.32) 0%,
+
+      rgba(125,211,252,.11) 25%,
+
+      rgba(196,181,253,.08) 48%,
+
+      rgba(244,114,182,.05) 63%,
+
+      transparent 74%
+    );
+
+  box-shadow:
+    inset 10px 10px 24px
+      rgba(255,255,255,.08),
+
+    inset -12px -12px 28px
+      rgba(96,165,250,.07),
+
+    0 0 32px
+      rgba(125,211,252,.09);
+}
+
+
+/* =========================================================
+   左側 大きい玉
+========================================================= */
+
+.bubble-1{
+  width:210px;
+  height:210px;
+
+  left:-85px;
+  top:55px;
+
+  opacity:.70;
+}
+
+
+/* =========================================================
+   左中央 小さい玉
+========================================================= */
+
+.bubble-2{
+  width:55px;
+  height:55px;
+
+  left:18%;
+  top:92px;
+
+  opacity:.65;
+}
+
+
+/* =========================================================
+   上中央 小さい玉
+========================================================= */
+
+.bubble-3{
+  width:34px;
+  height:34px;
+
+  left:43%;
+  top:24px;
+
+  opacity:.55;
+}
+
+
+/* =========================================================
+   右上 中くらい
+========================================================= */
+
+.bubble-4{
+  width:125px;
+  height:125px;
+
+  right:9%;
+  top:20px;
+
+  opacity:.72;
+}
+
+
+/* =========================================================
+   右側 大きい玉
+========================================================= */
+
+.bubble-5{
+  width:185px;
+  height:185px;
+
+  right:-60px;
+  top:145px;
+
+  opacity:.58;
+}
+
+
+/* =========================================================
+   検索ボックス付近 小さい玉
+========================================================= */
+
+.bubble-6{
+  width:72px;
+  height:72px;
+
+  right:22%;
+  bottom:-115px;
+
+  opacity:.45;
+}
+
+
+/* =========================================================
+   文字はシャボン玉より前
+========================================================= */
+
+.hero-inner{
+  width:min(1000px,94%);
+
+  margin:0 auto;
+
+  position:relative;
+
+  z-index:2;
+}
 
 .hero-inner{
   width:min(1000px,94%);
@@ -2219,6 +2351,54 @@ font-weight:bold;
   }
 
 }
+
+@media(max-width:700px){
+
+  .bubble-1{
+    width:150px;
+    height:150px;
+
+    left:-80px;
+    top:75px;
+  }
+
+  .bubble-2{
+    width:42px;
+    height:42px;
+
+    left:12%;
+    top:30px;
+  }
+
+  .bubble-3{
+    display:none;
+  }
+
+  .bubble-4{
+    width:90px;
+    height:90px;
+
+    right:-20px;
+    top:35px;
+  }
+
+  .bubble-5{
+    width:125px;
+    height:125px;
+
+    right:-70px;
+    top:165px;
+  }
+
+  .bubble-6{
+    width:55px;
+    height:55px;
+
+    right:18%;
+    bottom:-125px;
+  }
+
+}
      
      
 </style>
@@ -2229,8 +2409,19 @@ font-weight:bold;
 
 <header class="site-hero">
 
-  <div class="hero-inner">
+  <!-- 背景装飾 -->
+  <div class="hero-decoration" aria-hidden="true">
 
+    <span class="bubble bubble-1"></span>
+    <span class="bubble bubble-2"></span>
+    <span class="bubble bubble-3"></span>
+    <span class="bubble bubble-4"></span>
+    <span class="bubble bubble-5"></span>
+    <span class="bubble bubble-6"></span>
+
+  </div>
+
+  <div class="hero-inner">
     <div class="site-brand">
       🎬 ドコデミレル？
     </div>
