@@ -2887,6 +2887,147 @@ font-weight:bold;
   }
 
 }
+
+/* =========================================================
+   最終微調整
+   ラフ画像にもう一段近づける
+========================================================= */
+
+
+/* 1. シャボン玉の縁に薄い紫・ピンクを追加 */
+
+.bubble{
+  border:
+    1.5px solid
+    rgba(255,255,255,.30);
+
+  box-shadow:
+    inset 12px 12px 28px
+      rgba(255,255,255,.12),
+
+    inset -14px -14px 30px
+      rgba(59,130,246,.11),
+
+    0 0 0 1px
+      rgba(216,180,254,.10),
+
+    0 0 24px
+      rgba(56,189,248,.18),
+
+    0 0 44px
+      rgba(244,114,182,.08),
+
+    0 0 65px
+      rgba(129,140,248,.08);
+}
+
+
+/* 2. 左側の大玉だけ少し発光を強く */
+
+.bubble-1{
+  opacity:.88;
+
+  box-shadow:
+    inset 16px 16px 34px
+      rgba(255,255,255,.13),
+
+    inset -16px -16px 34px
+      rgba(59,130,246,.12),
+
+    0 0 28px
+      rgba(56,189,248,.22),
+
+    0 0 60px
+      rgba(244,114,182,.10);
+}
+
+
+/* 右上の玉も少しだけ発光 */
+
+.bubble-4{
+  opacity:.90;
+
+  box-shadow:
+    inset 14px 14px 30px
+      rgba(255,255,255,.14),
+
+    inset -14px -14px 30px
+      rgba(59,130,246,.12),
+
+    0 0 26px
+      rgba(56,189,248,.22),
+
+    0 0 52px
+      rgba(216,180,254,.11);
+}
+
+
+/* 3. フィルム風ラインを少し見やすく */
+
+.hero-decoration::before{
+  border-top:
+    14px solid
+    rgba(191,219,254,.16);
+
+  opacity:.72;
+}
+
+
+.hero-decoration::after{
+  border-top:
+    14px solid
+    rgba(191,219,254,.15);
+
+  opacity:.72;
+}
+
+
+/* 4. 中央〜右側に薄い青い発光を追加 */
+
+.site-hero{
+  background:
+
+    radial-gradient(
+      circle at 72% 48%,
+      rgba(56,189,248,.20) 0%,
+      rgba(59,130,246,.08) 22%,
+      transparent 42%
+    ),
+
+    radial-gradient(
+      circle at 8% 4%,
+      rgba(125,211,252,.32) 0%,
+      rgba(59,130,246,.12) 16%,
+      transparent 34%
+    ),
+
+    radial-gradient(
+      circle at 91% 10%,
+      rgba(129,140,248,.34) 0%,
+      rgba(59,130,246,.14) 20%,
+      transparent 40%
+    ),
+
+    radial-gradient(
+      circle at 7% 88%,
+      rgba(56,189,248,.25) 0%,
+      transparent 31%
+    ),
+
+    radial-gradient(
+      circle at 92% 80%,
+      rgba(99,102,241,.20) 0%,
+      transparent 34%
+    ),
+
+    linear-gradient(
+      125deg,
+      #06172f 0%,
+      #082b60 38%,
+      #0c4a91 68%,
+      #2272d4 100%
+    );
+}
      
 </style>
 
