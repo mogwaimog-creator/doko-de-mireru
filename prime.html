@@ -390,7 +390,55 @@ header p{
   transform:translateY(-2px);
 }
 
+/* U-NEXT hover */
 
+.provider-mini-item.unext-mini:hover{
+  transform:translateY(-2px);
+
+  background:#f8fafc;
+
+  border-color:#111827;
+
+  color:#111827;
+
+  box-shadow:
+    0 4px 9px
+    rgba(17,24,39,.12);
+}
+
+/* Hulu hover */
+
+.provider-mini-item.hulu-mini:hover{
+  transform:translateY(-2px);
+
+  background:#ecfdf5;
+
+  border-color:#1ce783;
+
+  color:#0b9f58;
+
+  box-shadow:
+    0 4px 9px
+    rgba(28,231,131,.12);
+}
+
+
+/* Disney+ hover */
+
+.provider-mini-item.disney-mini:hover{
+  transform:translateY(-2px);
+
+  background:#eef2ff;
+
+  border-color:#172554;
+
+  color:#172554;
+
+  box-shadow:
+    0 4px 9px
+    rgba(23,37,84,.12);
+}
+  
 /* 準備中 */
 
 .provider-mini-item.coming{
@@ -1993,34 +2041,35 @@ color:#fff;
 
 
   <!-- Hulu -->
-  <span
-    class="provider-mini-item coming"
-    title="Hulu 準備中"
-  >
-    <span class="provider-mini-mark hulu-mark">
-      hulu
-    </span>
-
-    <span class="provider-mini-name">
-      Hulu
-    </span>
+<a
+  href="./hulu.html"
+  class="provider-mini-item hulu-mini"
+  title="Hulu"
+>
+  <span class="provider-mini-mark hulu-mark">
+    hulu
   </span>
+
+  <span class="provider-mini-name">
+    Hulu
+  </span>
+</a>
 
 
   <!-- Disney+ -->
-  <span
-    class="provider-mini-item coming"
-    title="Disney+ 準備中"
-  >
-    <span class="provider-mini-mark disney-mark">
-      D+
-    </span>
-
-    <span class="provider-mini-name">
-      Disney+
-    </span>
+<a
+  href="./disney.html"
+  class="provider-mini-item disney-mini"
+  title="Disney+"
+>
+  <span class="provider-mini-mark disney-mark">
+    D+
   </span>
 
+  <span class="provider-mini-name">
+    Disney+
+  </span>
+</a>
 </div>
 
   </div>
