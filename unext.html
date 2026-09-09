@@ -1973,6 +1973,31 @@ footer{
   transform:translateY(-1px);
 }
 
+/* Hulu hover */
+
+.provider-mini-item.hulu-mini:hover{
+  background:#ecfdf5;
+
+  border-color:#1ce783;
+
+  color:#0b9f58;
+
+  transform:translateY(-1px);
+}
+
+
+/* Disney+ hover */
+
+.provider-mini-item.disney-mini:hover{
+  background:#eef2ff;
+
+  border-color:#172554;
+
+  color:#172554;
+
+  transform:translateY(-1px);
+}
+  
 /* =========================================================
    U-NEXT タイトル
 ========================================================= */
@@ -2148,33 +2173,35 @@ body .country-card.active::after{
 
 
   <!-- Hulu -->
-  <span
-    class="provider-mini-item coming"
-    title="Hulu 準備中"
-  >
-    <span class="provider-mini-mark hulu-mark">
-      hulu
-    </span>
-
-    <span class="provider-mini-name">
-      Hulu
-    </span>
+<a
+  href="./hulu.html"
+  class="provider-mini-item hulu-mini"
+  title="Hulu"
+>
+  <span class="provider-mini-mark hulu-mark">
+    hulu
   </span>
+
+  <span class="provider-mini-name">
+    Hulu
+  </span>
+</a>
 
 
   <!-- Disney+ -->
-  <span
-    class="provider-mini-item coming"
-    title="Disney+ 準備中"
-  >
-    <span class="provider-mini-mark disney-mark">
-      D+
-    </span>
-
-    <span class="provider-mini-name">
-      Disney+
-    </span>
+<a
+  href="./disney.html"
+  class="provider-mini-item disney-mini"
+  title="Disney+"
+>
+  <span class="provider-mini-mark disney-mark">
+    D+
   </span>
+
+  <span class="provider-mini-name">
+    Disney+
+  </span>
+</a>
 
 </div>
 
