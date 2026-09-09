@@ -137,39 +137,38 @@ a{
    ヘッダー
 ========================================================= */
 
+/* =========================================================
+   ヘッダー
+   ふんわりシャボン玉背景
+========================================================= */
+
 .site-hero{
   position:relative;
 
   background:
-    /* 左下の淡い水色の光 */
     radial-gradient(
-      circle at 8% 78%,
-      rgba(125,211,252,.24) 0%,
-      rgba(125,211,252,.10) 18%,
-      transparent 38%
+      circle at 12% 25%,
+      rgba(125,211,252,.26),
+      transparent 30%
     ),
 
-    /* 右上の淡い紫の光 */
     radial-gradient(
-      circle at 88% 16%,
-      rgba(196,181,253,.20) 0%,
-      rgba(196,181,253,.08) 20%,
-      transparent 42%
+      circle at 82% 20%,
+      rgba(196,181,253,.22),
+      transparent 28%
     ),
 
-    /* 中央付近の青い光 */
     radial-gradient(
-      circle at 62% 58%,
-      rgba(56,189,248,.15) 0%,
-      transparent 34%
+      circle at 70% 85%,
+      rgba(56,189,248,.18),
+      transparent 32%
     ),
 
-    /* ベース */
     linear-gradient(
       135deg,
-      #081a36 0%,
-      #0c3264 52%,
-      #1557a0 100%
+      #071a35 0%,
+      #0b3268 52%,
+      #1760aa 100%
     );
 
   color:#fff;
@@ -182,8 +181,11 @@ a{
 }
 
 
-/* ほんのり光を入れる */
-.site-hero::after{
+/* =========================================================
+   左側の大きなシャボン玉
+========================================================= */
+
+.site-hero::before{
   content:"";
 
   position:absolute;
@@ -191,34 +193,73 @@ a{
   width:260px;
   height:260px;
 
-  right:6%;
-  top:-75px;
+  left:-90px;
+  bottom:-80px;
 
   border-radius:50%;
 
+  border:
+    2px solid
+    rgba(255,255,255,.16);
+
   background:
     radial-gradient(
-      circle at 32% 28%,
-      rgba(255,255,255,.30) 0%,
-      rgba(186,230,253,.14) 22%,
-      rgba(147,197,253,.08) 48%,
-      rgba(196,181,253,.06) 65%,
+      circle at 30% 25%,
+      rgba(255,255,255,.28),
+      rgba(125,211,252,.10) 30%,
+      rgba(196,181,253,.08) 55%,
       transparent 72%
     );
 
-  border:
-    1px solid
-    rgba(255,255,255,.13);
-
   box-shadow:
-    inset 18px 18px 38px
-      rgba(255,255,255,.06),
-    inset -18px -18px 38px
-      rgba(96,165,250,.06),
-    0 0 55px
-      rgba(125,211,252,.08);
+    inset 18px 18px 35px rgba(255,255,255,.07),
+    inset -18px -18px 35px rgba(96,165,250,.08),
+    0 0 50px rgba(125,211,252,.10);
 
   pointer-events:none;
+
+  z-index:0;
+}
+
+
+/* =========================================================
+   右上のシャボン玉
+========================================================= */
+
+.site-hero::after{
+  content:"";
+
+  position:absolute;
+
+  width:190px;
+  height:190px;
+
+  right:5%;
+  top:-45px;
+
+  border-radius:50%;
+
+  border:
+    2px solid
+    rgba(255,255,255,.18);
+
+  background:
+    radial-gradient(
+      circle at 32% 25%,
+      rgba(255,255,255,.32),
+      rgba(125,211,252,.11) 32%,
+      rgba(216,180,254,.09) 58%,
+      transparent 74%
+    );
+
+  box-shadow:
+    inset 14px 14px 30px rgba(255,255,255,.08),
+    inset -14px -14px 30px rgba(96,165,250,.07),
+    0 0 45px rgba(147,197,253,.10);
+
+  pointer-events:none;
+
+  z-index:0;
 }
 
 
