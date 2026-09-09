@@ -2150,7 +2150,7 @@ body .country-card.active::after{
 
 </section>
 <!-- =======================================================
-     Prime Videoの注目作品
+     Huluの注目作品
 ======================================================== -->
 
 <section
@@ -2403,7 +2403,7 @@ body .country-card.active::after{
 
   
 <!-- =======================================================
-     Prime Videoの新着作品
+     Huluの新着作品
 ======================================================== -->
 
 <section
@@ -2511,7 +2511,7 @@ body .country-card.active::after{
 <script>
 
 // =========================================================
-// Prime Videoページ
+// Huluページ
 // =========================================================
 
 const results =
@@ -2643,7 +2643,7 @@ document.querySelectorAll(
   
  // =========================================================
 // 国・地域 または ジャンル選択時
-// Prime Videoの配信作品まで自動スクロール
+// Huluの配信作品まで自動スクロール
 // =========================================================
 
 if(
@@ -2910,7 +2910,7 @@ function createShortOverview(
 
 
 // =========================================================
-// Prime Videoロゴ表示
+// Huluロゴ表示
 // =========================================================
 
 function renderProvider(
@@ -2918,7 +2918,7 @@ function renderProvider(
 ){
 
   const providerName =
-    "Prime Video";
+    "Hulu";
 
 
   const logo =
@@ -2938,12 +2938,12 @@ function renderProvider(
         <img
           class="provider-logo"
           src="${logo}"
-          alt="Prime Videoのロゴ"
+          alt="Huluのロゴ"
           loading="lazy"
         >
 
         <span>
-          Prime Video
+          Hulu
         </span>
 
       </div>
@@ -2958,11 +2958,11 @@ function renderProvider(
     <div class="provider-item">
 
       <div class="provider-logo-fallback">
-        Prime Video
+        Hulu
       </div>
 
       <span>
-        Prime Video
+        Hulu
       </span>
 
     </div>
@@ -2973,7 +2973,7 @@ function renderProvider(
 
 
 // =========================================================
-// Prime Video情報を取得
+// Hulu情報を取得
 // =========================================================
 
 function getNetflixProvider(
@@ -2988,7 +2988,7 @@ function getNetflixProvider(
       : [];
 
 
-  const prime =
+  const hulu =
     providers.find(
       function(provider){
 
@@ -3007,16 +3007,16 @@ function getNetflixProvider(
 
 
   return (
-    prime ||
-    providers[0] ||
-    null
-  );
+  hulu ||
+  providers[0] ||
+  null
+);
 
 }
 
   
 // =========================================================
-// Prime Video注目作品
+// Hulu注目作品
 // =========================================================
 
 function renderFeaturedWorks(
@@ -3200,7 +3200,7 @@ const rating =
 }
 
 // =========================================================
-// Prime Video 評価が高い作品
+// Hulu 評価が高い作品
 // =========================================================
 
 function renderHighRatedWorks(
@@ -3692,9 +3692,9 @@ function createMovieCard(
 
 
 // =========================================================
-// Prime Video 注目作品・高評価作品を取得
+// Hulu 注目作品・高評価作品を取得
 // 国・地域の選択に関係なく
-// Prime Video全体の作品を使用する
+// Hulu全体の作品を使用する
 // =========================================================
 
 async function loadNetflixTopWorks(){
@@ -3777,7 +3777,7 @@ async function loadNetflixTopWorks(){
 }
 
 // =========================================================
-// Prime Video 新着作品
+// Hulu 新着作品
 // =========================================================
 
 async function loadNetflixNewWorks(){
@@ -3955,7 +3955,7 @@ async function loadNetflixNewWorks(){
   }catch(error){
 
     console.error(
-      "Prime Video new works error:",
+      "Hulu new works error:",
       error
     );
 
@@ -3970,7 +3970,7 @@ async function loadNetflixNewWorks(){
 }
   
 // =========================================================
-// Prime Video作品取得
+// Hulu作品取得
 // =========================================================
 
 async function loadNetflixWorks(
@@ -4005,7 +4005,7 @@ async function loadNetflixWorks(
 
 
     // -------------------------------------------------------
-// Prime Video API URL
+//　Hulu API URL
 // -------------------------------------------------------
 
 let apiUrl =
@@ -4061,7 +4061,7 @@ if(
 }    
 
 // -------------------------------------------------------
-// Prime Video作品を取得
+// Hulu作品を取得
 // -------------------------------------------------------
 
 const response =
