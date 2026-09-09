@@ -3463,9 +3463,6 @@ async function loadNetflixTopWorks(){
     );
 
 
-    renderHighRatedWorks(
-      works
-    );
 
   }
   catch(error){
@@ -3487,21 +3484,113 @@ async function loadNetflixTopWorks(){
     }
 
 
+  }
+
+}
+
+// =========================================================
+// Disney+ 選択条件に合わせた高評価作品
+// =========================================================
+
+async function loadFilteredHighRatedWorks(){
+
+  try{
+
+    let apiUrl =
+      "/api/search" +
+      "?provider=disney" +
+      "&page=1";
+
+
+    // 国・地域
+    if(
+      selectedCountry
+    ){
+      apiUrl +=
+        "&country=" +
+        encodeURIComponent(
+          selectedCountry
+        );
+    }
+
+
+    // ジャンル
+    if(
+      selectedGenre
+    ){
+      apiUrl +=
+        "&genre=" +
+        encodeURIComponent(
+          selectedGenre
+        );
+    }
+
+
+    // 作品タイプ
+    if(
+      selectedType
+    ){
+      apiUrl +=
+        "&type=" +
+        encodeURIComponent(
+          selectedType
+        );
+    }
+
+
+    const response =
+      await fetch(
+        apiUrl
+      );
+
+
+    if(
+      !response.ok
+    ){
+      throw new Error(
+        "Disney+高評価作品の取得に失敗しました。"
+      );
+    }
+
+
+    const data =
+      await response.json();
+
+
+    const works =
+      Array.isArray(
+        data.results
+      )
+        ? data.results
+        : [];
+
+
+    renderHighRatedWorks(
+      works,
+      false
+    );
+
+  }
+  catch(error){
+
+    console.error(
+      error
+    );
+
+
     if(
       highRatedWorks
     ){
-
       highRatedWorks.innerHTML =
         '<div class="status">' +
         '評価が高い作品を取得できませんでした。' +
         '</div>';
-
     }
 
   }
 
 }
-
+  
 // =========================================================
 // Disney+ 新着作品
 // =========================================================
@@ -4025,12 +4114,14 @@ loadMoreButton.addEventListener(
 // 初期表示
 // =========================================================
 
-// 注目作品・高評価作品
+// 注目作品
 loadNetflixTopWorks();
+
+// 選択条件に合わせた高評価作品
+loadFilteredHighRatedWorks();
 
 // 新着作品
 loadNetflixNewWorks();
-  
 
 // Disney+作品一覧
 loadNetflixWorks(
