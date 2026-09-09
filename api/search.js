@@ -381,7 +381,10 @@ if(
 
   const newResults =
     await getUnextNewWorks(
-      apiKey
+      apiKey,
+      country,
+      genre,
+      netflixType
     );
 
   return res
@@ -4583,7 +4586,7 @@ async function getPrimeNewWorks(
     "&watch_region=JP" +
     "&with_watch_providers=9" +
     "&with_watch_monetization_types=flatrate" +
-    "&sort_by=primary_release_date.desc" +
+    "&sort_by=first_air_date.desc" +
     "&include_adult=false" +
     "&include_video=false" +
     "&page=1";
@@ -4778,9 +4781,136 @@ async function getPrimeNewWorks(
 // =========================================================
 
 async function getUnextNewWorks(
-  apiKey
+  apiKey,
+  country,
+  genre,
+  netflixType
 ){
 
+    // =====================================================
+  // 国・地域による絞り込み
+  // =====================================================
+
+  let originalLanguage = "";
+
+  if(
+    country === "jp"
+  ){
+    originalLanguage =
+      "ja";
+  }
+  else if(
+    country === "kr"
+  ){
+    originalLanguage =
+      "ko";
+  }
+
+  
+    // =====================================================
+  // ジャンルによる絞り込み
+  // =====================================================
+
+  let movieGenreQuery = "";
+  let tvGenreQuery = "";
+
+  // =====================================================
+  // 作品タイプがアニメの場合
+  // =====================================================
+
+  if(
+    netflixType === "anime"
+  ){
+    movieGenreQuery =
+      "&with_genres=16";
+
+    tvGenreQuery =
+      "&with_genres=16";
+  }
+  
+  if(
+    genre === "anime"
+  ){
+    movieGenreQuery =
+      "&with_genres=16&with_original_language=ja";
+
+    tvGenreQuery =
+      "&with_genres=16&with_original_language=ja";
+  }
+  
+  else if(
+  genre === "suspense"
+){
+  // 映画：スリラー または ミステリー
+  movieGenreQuery =
+    "&with_genres=53%7C9648";
+
+  // TV：ミステリー
+  tvGenreQuery =
+    "&with_genres=9648";
+}
+    else if(
+    genre === "romance"
+){
+  // 映画：恋愛
+  movieGenreQuery =
+    "&with_genres=10749";
+
+  // TVには専用の恋愛ジャンルがないため
+  // TV側は絞り込まない
+  tvGenreQuery =
+    "";
+}
+
+  else if(
+  genre === "action"
+){
+  // 映画：アクション
+  movieGenreQuery =
+    "&with_genres=28";
+
+  // TV：Action & Adventure
+  tvGenreQuery =
+    "&with_genres=10759";
+}
+
+else if(
+  genre === "comedy"
+){
+  // 映画：コメディ
+  movieGenreQuery =
+    "&with_genres=35";
+
+  // TV：コメディ
+  tvGenreQuery =
+    "&with_genres=35";
+}
+
+else if(
+  genre === "horror"
+){
+  // 映画：ホラー
+  movieGenreQuery =
+    "&with_genres=27";
+
+  // TVには専用のホラージャンルがないため
+  // TV側は絞り込まない
+  tvGenreQuery =
+    "";
+}
+  
+ else if(
+  genre === "scifi"
+){
+  // 映画：SF または ファンタジー
+  movieGenreQuery =
+    "&with_genres=878%7C14";
+
+  // TV：Sci-Fi & Fantasy
+  tvGenreQuery =
+    "&with_genres=10765";
+}
+  
   const movieUrl =
     "https://api.themoviedb.org/3/discover/movie" +
     "?api_key=" +
@@ -4791,32 +4921,58 @@ async function getUnextNewWorks(
     "&with_watch_providers=84" +
     "&with_watch_monetization_types=flatrate" +
     "&sort_by=primary_release_date.desc" +
+(
+  originalLanguage
+    ? "&with_original_language=" +
+      encodeURIComponent(
+        originalLanguage
+      )
+    : ""
+) +
+movieGenreQuery +
     "&include_adult=false" +
     "&include_video=false" +
     "&page=1";
 
 
   const tvUrl =
-    "https://api.themoviedb.org/3/discover/tv" +
-    "?api_key=" +
-    encodeURIComponent(apiKey) +
-    "&language=ja-JP" +
-    "&watch_region=JP" +
-    "&with_watch_providers=84" +
-    "&with_watch_monetization_types=flatrate" +
-    "&sort_by=first_air_date.desc" +
-    "&include_adult=false" +
-    "&page=1";
+  "https://api.themoviedb.org/3/discover/tv" +
+  "?api_key=" +
+  encodeURIComponent(apiKey) +
+  "&language=ja-JP" +
+  "&watch_region=JP" +
+  "&with_watch_providers=84" +
+  "&with_watch_monetization_types=flatrate" +
+  "&sort_by=first_air_date.desc" +
+  (
+    originalLanguage
+      ? "&with_original_language=" +
+        encodeURIComponent(
+          originalLanguage
+        )
+      : ""
+  ) +
+  tvGenreQuery +
+  "&include_adult=false" +
+  "&page=1";
 
 
   const [
-    movieData,
-    tvData
-  ] =
-    await Promise.all([
-      fetchJson(movieUrl),
-      fetchJson(tvUrl)
-    ]);
+  movieData,
+  tvData
+] =
+  await Promise.all([
+    fetchJson(movieUrl),
+
+    (
+      genre === "romance" ||
+      genre === "horror"
+    )
+      ? Promise.resolve({
+          results: []
+        })
+      : fetchJson(tvUrl)
+  ]);
 
 
   const movies =
@@ -5332,11 +5488,42 @@ async function getDisneyNewWorks(
       : [];
 
 
-  return movies
-    .concat(
+  // =====================================================
+  // 作品タイプによる絞り込み
+  // =====================================================
+
+  let newWorks =
+    movies.concat(
       tvShows
-    )
-    .filter(
+    );
+
+  if(
+    netflixType === "movie"
+  ){
+    newWorks =
+      newWorks.filter(
+        function(work){
+          return (
+            work.content_type === "movie"
+          );
+        }
+      );
+  }
+  else if(
+    netflixType === "tv"
+  ){
+    newWorks =
+      newWorks.filter(
+        function(work){
+          return (
+            work.content_type === "tv"
+          );
+        }
+      );
+  }
+  
+  return newWorks
+  .filter(
       function(work){
 
         return (
@@ -5503,11 +5690,14 @@ else if(
   if (country === "jp") {
     originalLanguage = "ja";
   }
-  else if (country === "kr") {
-    originalLanguage = "ko";
-  }
-
-　// 国・地域から探す場合はアニメを除外
+  else if(
+  country === "kr"
+){
+  originalLanguage =
+    "ko";
+}
+  
+  // 国・地域から探す場合はアニメを除外
 // ただし「アニメ」を選択している場合は除外しない
 // =======================================================
 // アニメを除外する条件
