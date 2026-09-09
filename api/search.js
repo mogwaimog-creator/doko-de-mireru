@@ -412,9 +412,12 @@ if(
 ){
 
   const newResults =
-    await getHuluNewWorks(
-      apiKey
-    );
+  await getHuluNewWorks(
+    apiKey,
+    country,
+    genre,
+    netflixType
+  );
 
   return res
     .status(200)
@@ -5499,8 +5502,15 @@ thirtyDaysAgo.setDate(
 // =====================================================
 
 async function getHuluNewWorks(
-  apiKey
+  apiKey,
+  country,
+  genre,
+  netflixType
 ){
+
+  // =====================================================
+  // 今日の日付
+  // =====================================================
 
   const today =
     new Date()
@@ -5510,6 +5520,136 @@ async function getHuluNewWorks(
         10
       );
 
+
+  // =====================================================
+  // 90日前
+  // =====================================================
+
+  const ninetyDaysAgo =
+    new Date();
+
+  ninetyDaysAgo.setDate(
+    ninetyDaysAgo.getDate() - 90
+  );
+
+  const ninetyDaysAgoString =
+    ninetyDaysAgo
+      .toISOString()
+      .slice(
+        0,
+        10
+      );
+
+
+  // =====================================================
+  // 国・地域
+  // =====================================================
+
+  let originalLanguage = "";
+
+  if(
+    country === "jp"
+  ){
+    originalLanguage =
+      "ja";
+  }
+  else if(
+    country === "kr"
+  ){
+    originalLanguage =
+      "ko";
+  }
+
+
+  // =====================================================
+  // ジャンル
+  // =====================================================
+
+  let movieGenreQuery = "";
+  let tvGenreQuery = "";
+
+
+  // アニメから探す
+  if(
+    netflixType === "anime"
+  ){
+    movieGenreQuery =
+      "&with_genres=16";
+
+    tvGenreQuery =
+      "&with_genres=16";
+  }
+
+
+  // ジャンルから探す
+  if(
+    genre === "anime"
+  ){
+    movieGenreQuery =
+      "&with_genres=16&with_original_language=ja";
+
+    tvGenreQuery =
+      "&with_genres=16&with_original_language=ja";
+  }
+  else if(
+    genre === "suspense"
+  ){
+    movieGenreQuery =
+      "&with_genres=53%7C9648";
+
+    tvGenreQuery =
+      "&with_genres=9648";
+  }
+  else if(
+    genre === "romance"
+  ){
+    movieGenreQuery =
+      "&with_genres=10749";
+
+    tvGenreQuery =
+      "";
+  }
+  else if(
+    genre === "action"
+  ){
+    movieGenreQuery =
+      "&with_genres=28";
+
+    tvGenreQuery =
+      "&with_genres=10759";
+  }
+  else if(
+    genre === "comedy"
+  ){
+    movieGenreQuery =
+      "&with_genres=35";
+
+    tvGenreQuery =
+      "&with_genres=35";
+  }
+  else if(
+    genre === "horror"
+  ){
+    movieGenreQuery =
+      "&with_genres=27";
+
+    tvGenreQuery =
+      "";
+  }
+  else if(
+    genre === "scifi"
+  ){
+    movieGenreQuery =
+      "&with_genres=878%7C14";
+
+    tvGenreQuery =
+      "&with_genres=10765";
+  }
+
+
+  // =====================================================
+  // 映画
+  // =====================================================
 
   const movieUrl =
     "https://api.themoviedb.org/3/discover/movie" +
@@ -5521,12 +5661,34 @@ async function getHuluNewWorks(
     "&with_watch_providers=15" +
     "&with_watch_monetization_types=flatrate" +
     "&sort_by=primary_release_date.desc" +
+    "&primary_release_date.gte=" +
+    encodeURIComponent(
+      ninetyDaysAgoString
+    ) +
     "&primary_release_date.lte=" +
-    encodeURIComponent(today) +
+    encodeURIComponent(
+      today
+    ) +
+
+    (
+      originalLanguage
+        ? "&with_original_language=" +
+          encodeURIComponent(
+            originalLanguage
+          )
+        : ""
+    ) +
+
+    movieGenreQuery +
+
     "&include_adult=false" +
     "&include_video=false" +
     "&page=1";
 
+
+  // =====================================================
+  // ドラマ・TV
+  // =====================================================
 
   const tvUrl =
     "https://api.themoviedb.org/3/discover/tv" +
@@ -5537,11 +5699,33 @@ async function getHuluNewWorks(
     "&with_watch_providers=15" +
     "&with_watch_monetization_types=flatrate" +
     "&sort_by=first_air_date.desc" +
+    "&first_air_date.gte=" +
+    encodeURIComponent(
+      ninetyDaysAgoString
+    ) +
     "&first_air_date.lte=" +
-    encodeURIComponent(today) +
+    encodeURIComponent(
+      today
+    ) +
+
+    (
+      originalLanguage
+        ? "&with_original_language=" +
+          encodeURIComponent(
+            originalLanguage
+          )
+        : ""
+    ) +
+
+    tvGenreQuery +
+
     "&include_adult=false" +
     "&page=1";
 
+
+  // =====================================================
+  // TMDB取得
+  // =====================================================
 
   const [
     movieData,
@@ -5549,9 +5733,21 @@ async function getHuluNewWorks(
   ] =
     await Promise.all([
       fetchJson(movieUrl),
-      fetchJson(tvUrl)
+
+      (
+        genre === "romance" ||
+        genre === "horror"
+      )
+        ? Promise.resolve({
+            results: []
+          })
+        : fetchJson(tvUrl)
     ]);
 
+
+  // =====================================================
+  // 映画を整形
+  // =====================================================
 
   const movies =
     Array.isArray(
@@ -5602,6 +5798,10 @@ async function getHuluNewWorks(
       : [];
 
 
+  // =====================================================
+  // TVを整形
+  // =====================================================
+
   const tvShows =
     Array.isArray(
       tvData &&
@@ -5651,10 +5851,51 @@ async function getHuluNewWorks(
       : [];
 
 
-  return movies
-    .concat(
+  // =====================================================
+  // 作品タイプによる絞り込み
+  // =====================================================
+
+  let newWorks =
+    movies.concat(
       tvShows
-    )
+    );
+
+
+  if(
+    netflixType === "movie"
+  ){
+    newWorks =
+      newWorks.filter(
+        function(work){
+
+          return (
+            work.content_type === "movie"
+          );
+
+        }
+      );
+  }
+  else if(
+    netflixType === "tv"
+  ){
+    newWorks =
+      newWorks.filter(
+        function(work){
+
+          return (
+            work.content_type === "tv"
+          );
+
+        }
+      );
+  }
+
+
+  // =====================================================
+  // 新着作品を返す
+  // =====================================================
+
+  return newWorks
     .filter(
       function(work){
 
@@ -5662,6 +5903,8 @@ async function getHuluNewWorks(
           work.id &&
           work.poster_path &&
           work.release_date &&
+          work.release_date >=
+            ninetyDaysAgoString &&
           work.release_date <= today
         );
 
