@@ -129,8 +129,8 @@ body{
     "Noto Sans JP",
     sans-serif;
 
-  background:#f7fbf9;
-
+  background:#f6f8ff;
+  
   color:#222;
 }
 
@@ -236,64 +236,6 @@ header p{
   color:#334155;
 
   white-space:nowrap;
-}
-
-
-/* 各サービスボタン */
-
-.provider-mini-item{
-  display:flex;
-  align-items:center;
-
-  gap:5px;
-
-  padding:6px 10px;
-
-  border:1px solid #cbd5e1;
-  border-radius:8px;
-
-  background:#ffffff;
-
-  color:#334155;
-
-  font-size:11px;
-  font-weight:800;
-
-  line-height:1;
-
-  text-decoration:none;
-
-  white-space:nowrap;
-
-  box-shadow:
-    0 2px 5px
-    rgba(15,23,42,.08);
-
-  transition:
-    transform .2s ease,
-    box-shadow .2s ease,
-    background .2s ease,
-    border-color .2s ease,
-    color .2s ease;
-}
-
-
-/* マークを少し大きく */
-
-.provider-mini-mark{
-  width:24px;
-  height:24px;
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  flex-shrink:0;
-
-  border-radius:5px;
-
-  font-size:12px;
-  font-weight:900;
 }
 
 
@@ -686,13 +628,12 @@ header p{
 
 
 /* =========================================================
-   Hulu配信中
+   Disney+配信中
 ========================================================= */
 
 .availability-panel.streaming{
-  background:#f4fbf7;
-
-  border-left-color:#2e7d32;
+  background:#f3f6ff;
+  border-left-color:#172554;
 }
 
 .availability-heading{
@@ -708,7 +649,7 @@ header p{
 }
 
 .availability-heading.availability-streaming{
-  color:#26733a;
+  color:#172554;
 }
 
 
@@ -1031,7 +972,7 @@ footer{
 }
 
 /* =========================================================
-   Huluの注目作品
+   Disney+の注目作品
 ========================================================= */
 
 .featured-section{
@@ -1349,54 +1290,6 @@ footer{
 
   line-height:1;
 }
-
-
-/* マウスを乗せた時 */
-
-.country-card:hover{
-  transform:
-    translateY(-2px);
-
-  background:#e8f7fc;
-
-  border-color:#00a8e1;
-
-  box-shadow:
-    0 7px 18px
-    rgba(0,168,225,.12);
-}
-
-.country-card:hover .country-title{
-  color:#0073a8;
-}
-
-.country-card:hover::after{
-  color:#00a8e1;
-}
-
-/* =========================================================
-   選択中のカード
-========================================================= */
-
-/* 選択中 */
-
-.country-card.active{
-  background:#dff4fb;
-
-  border-color:#00a8e1;
-
-  box-shadow:
-    0 5px 14px
-    rgba(0,168,225,.15);
-}
-
-.country-card.active .country-title{
-  color:#006b9c;
-}
-
-.country-card.active::after{
-  color:#00a8e1;
-}
   
 .country-icon{
   display:block;
@@ -1464,7 +1357,7 @@ footer{
 }
 
 /* =========================================================
-   Hulu配信作品 ポスター一覧
+   Disney+配信作品 ポスター一覧
 ========================================================= */
 
 .netflix-works-grid{
@@ -1476,7 +1369,7 @@ footer{
 
 
 /* =========================================================
-   Hulu配信作品 スマホ
+   Disney+配信作品 スマホ
 ========================================================= */
 
 @media(max-width:800px){
@@ -1508,11 +1401,11 @@ footer{
   position:fixed;
 
   right:max(
-  20px,
-  calc((100vw - 1000px) / 2 + 20px)
-);
+    20px,
+    calc((100vw - 1000px) / 2 + 20px)
+  );
 
-bottom:20px;
+  bottom:20px;
   z-index:1000;
 
   padding:14px 20px;
@@ -1520,8 +1413,8 @@ bottom:20px;
   border:2px solid #ffffff;
   border-radius:999px;
 
-  background:#00a8e1;
-color:#fff;
+  background:#172554;
+  color:#fff;
 
   font-size:15px;
   font-weight:800;
@@ -1530,7 +1423,7 @@ color:#fff;
 
   box-shadow:
     0 7px 20px
-    rgba(37,99,235,.28);
+    rgba(23,37,84,.24);
 
   opacity:0;
   pointer-events:none;
@@ -1551,7 +1444,11 @@ color:#fff;
 }
 
 #backToBrowseButton:hover{
-  background:#0086b3;
+  background:#0f1b3d;
+
+  box-shadow:
+    0 8px 22px
+    rgba(15,27,61,.28);
 }
 
 @media(max-width:550px){
@@ -1568,7 +1465,7 @@ color:#fff;
 }
 
 /* =========================================================
-   Huluページ 上部アクション
+   Disney+ページ 上部アクション
 ========================================================= */
 
 .provider-header-actions{
@@ -1618,13 +1515,6 @@ color:#fff;
   transform:translateY(-1px);
 }
 
-.provider-header{
-  border-left-color:#172554;
-}
-
-.provider-header::after{
-  background:#f3f6ff;
-}
 
 body .country-card:hover{
   background:#f3f6ff;
@@ -1654,16 +1544,6 @@ body .country-card.active::after{
   color:#172554;
 }
 
-#backToBrowseButton{
-  background:#172554;
-  color:#fff;
-  box-shadow:0 7px 20px rgba(23,37,84,.24);
-}
-
-#backToBrowseButton:hover{
-  background:#0f1b3d;
-  box-shadow:0 8px 22px rgba(15,27,61,.28);
-}
 
 .netflix-title-mark{
   color:#172554;
@@ -1671,7 +1551,7 @@ body .country-card.active::after{
 }
 
 /* =========================================================
-   Hulu配信作品 見出しとポスターの間隔
+   Disney+配信作品 見出しとポスターの間隔
 ========================================================= */
 
 #netflixWorksSection .results-heading{
@@ -1683,7 +1563,7 @@ body .country-card.active::after{
 }  
 
 /* =========================================================
-   Huluページ
+   Disney+ページ
    セクション間隔を21pxで完全統一
 ========================================================= */
 
@@ -1890,7 +1770,7 @@ body .country-card.active::after{
 }
 
 
-/* Hulu */
+/* prime */
 
 .provider-mini-mark.prime-mark{
   background:transparent;
@@ -1921,90 +1801,6 @@ body .country-card.active::after{
   color:#172554;
 }
 
-
-/* 右上の装飾 */
-
-.provider-header::after{
-  background:#eaf7f0;
-}
-
-
-/* =========================================================
-   作品タイプ・国地域・ジャンル
-   マウスを乗せた時
-========================================================= */
-
-body .country-card:hover{
-  transform:translateY(-2px);
-
-  background:#f0faf5;
-  border-color:#0b9f58;
-
-  box-shadow:
-    0 7px 18px
-    rgba(11,159,88,.10);
-}
-
-body .country-card:hover .country-title{
-  color:#087a45;
-}
-
-body .country-card:hover::after{
-  color:#0b9f58;
-}
-
-
-/* =========================================================
-   選択中のカード
-========================================================= */
-
-body .country-card.active{
-  background:#e3f6ec;
-  border-color:#0b9f58;
-
-  box-shadow:
-    0 5px 14px
-    rgba(11,159,88,.13);
-}
-
-body .country-card.active .country-title{
-  color:#087a45;
-}
-
-body .country-card.active::after{
-  color:#0b9f58;
-}
-
-
-/* =========================================================
-   探し方に戻るボタン
-========================================================= */
-
-#backToBrowseButton{
-  background:#0b9f58;
-  color:#ffffff;
-
-  box-shadow:
-    0 7px 20px
-    rgba(11,159,88,.24);
-}
-
-#backToBrowseButton:hover{
-  background:#087a45;
-
-  box-shadow:
-    0 8px 22px
-    rgba(8,122,69,.28);
-}
-
-/* =========================================================
-   Hulu タイトルカラー
-========================================================= */
-
-.netflix-title-mark{
-  color:#0b9f58;
-  font-weight:900;
-}
   
 </style>
   
@@ -2934,7 +2730,7 @@ function createShortOverview(
 
 
 // =========================================================
-// Huluロゴ表示
+// Disney+ ロゴ表示
 // =========================================================
 
 function renderProvider(
@@ -2942,7 +2738,7 @@ function renderProvider(
 ){
 
   const providerName =
-    "Hulu";
+    "Disney+";
 
 
   const logo =
@@ -2962,12 +2758,12 @@ function renderProvider(
         <img
           class="provider-logo"
           src="${logo}"
-          alt="Huluのロゴ"
+          alt="Disney+のロゴ"
           loading="lazy"
         >
 
         <span>
-          Hulu
+          Disney+
         </span>
 
       </div>
@@ -2982,11 +2778,11 @@ function renderProvider(
     <div class="provider-item">
 
       <div class="provider-logo-fallback">
-        Hulu
+        Disney+
       </div>
 
       <span>
-        Hulu
+        Disney+
       </span>
 
     </div>
@@ -2997,7 +2793,7 @@ function renderProvider(
 
 
 // =========================================================
-// Hulu情報を取得
+// Disney+情報を取得
 // =========================================================
 
 function getNetflixProvider(
@@ -3031,7 +2827,7 @@ function getNetflixProvider(
 
 
   return (
-  hulu ||
+  Disney+ ||
   providers[0] ||
   null
 );
@@ -3040,7 +2836,7 @@ function getNetflixProvider(
 
   
 // =========================================================
-// Hulu注目作品
+// Disney+注目作品
 // =========================================================
 
 function renderFeaturedWorks(
@@ -3224,7 +3020,7 @@ const rating =
 }
 
 // =========================================================
-// Hulu 評価が高い作品
+// Disney+ 評価が高い作品
 // =========================================================
 
 function renderHighRatedWorks(
@@ -3716,9 +3512,9 @@ function createMovieCard(
 
 
 // =========================================================
-// Hulu 注目作品・高評価作品を取得
+// Disney+ 注目作品・高評価作品を取得
 // 国・地域の選択に関係なく
-// Hulu全体の作品を使用する
+// Disney+全体の作品を使用する
 // =========================================================
 
 async function loadNetflixTopWorks(){
@@ -3738,7 +3534,7 @@ async function loadNetflixTopWorks(){
     ){
 
       throw new Error(
-        "Hulu注目作品の取得に失敗しました。"
+        "Disney+注目作品の取得に失敗しました。"
       );
 
     }
@@ -3801,7 +3597,7 @@ async function loadNetflixTopWorks(){
 }
 
 // =========================================================
-// Hulu 新着作品
+// Disney+ 新着作品
 // =========================================================
 
 async function loadNetflixNewWorks(){
@@ -3979,7 +3775,7 @@ async function loadNetflixNewWorks(){
   }catch(error){
 
     console.error(
-      "Hulu new works error:",
+      "Disney+ new works error:",
       error
     );
 
@@ -3994,7 +3790,7 @@ async function loadNetflixNewWorks(){
 }
   
 // =========================================================
-// Hulu作品取得
+// Disney+作品取得
 // =========================================================
 
 async function loadNetflixWorks(
@@ -4029,7 +3825,7 @@ async function loadNetflixWorks(
 
 
     // -------------------------------------------------------
-//　Hulu API URL
+//　Disney+ API URL
 // -------------------------------------------------------
 
 let apiUrl =
@@ -4085,7 +3881,7 @@ if(
 }    
 
 // -------------------------------------------------------
-// Hulu作品を取得
+// Disney+作品を取得
 // -------------------------------------------------------
 
 const response =
@@ -4099,7 +3895,7 @@ const response =
     ){
 
       throw new Error(
-        "Hulu作品の取得に失敗しました。"
+        "Disney+作品の取得に失敗しました。"
       );
 
     }
@@ -4141,7 +3937,7 @@ const response =
 
         <div class="empty">
 
-          現在表示できるHulu作品がありません。
+          現在表示できるDisney+作品がありません。
         </div>
 
       `;
@@ -4290,7 +4086,7 @@ loadNetflixTopWorks();
 loadNetflixNewWorks();
   
 
-// Hulu作品一覧
+// Disney+作品一覧
 loadNetflixWorks(
   false
 );
