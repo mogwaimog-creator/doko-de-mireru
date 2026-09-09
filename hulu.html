@@ -294,7 +294,7 @@ header p{
 }
 
 
-/* Prime Video */
+/* Hulu */
 
 .provider-mini-mark.prime-mark{
   background:transparent;
@@ -351,7 +351,7 @@ header p{
 }
 
 
-/* Prime Video
+/* Hulu
    現在選択中 ＋ hover
 */
 
@@ -660,7 +660,7 @@ header p{
 
 
 /* =========================================================
-   Prime Video配信中
+   Hulu配信中
 ========================================================= */
 
 .availability-panel.streaming{
@@ -1005,7 +1005,7 @@ footer{
 }
 
 /* =========================================================
-   Prime Videoの注目作品
+   Huluの注目作品
 ========================================================= */
 
 .featured-section{
@@ -1438,7 +1438,7 @@ footer{
 }
 
 /* =========================================================
-   Prime Video配信作品 ポスター一覧
+   Hulu配信作品 ポスター一覧
 ========================================================= */
 
 .netflix-works-grid{
@@ -1450,7 +1450,7 @@ footer{
 
 
 /* =========================================================
-   Prime Video配信作品 スマホ
+   Hulu配信作品 スマホ
 ========================================================= */
 
 @media(max-width:800px){
@@ -1542,7 +1542,7 @@ color:#fff;
 }
 
 /* =========================================================
-   Prime Videoページ 上部アクション
+   Huluページ 上部アクション
 ========================================================= */
 
 .provider-header-actions{
@@ -1576,10 +1576,10 @@ color:#fff;
 }
 
 /* =========================================================
-   Prime Videoページ 青のアクセント
+   Huluページ 青のアクセント
 ========================================================= */
 
-/* Prime Videoページ上部 */
+/* Huluページ上部 */
 .provider-header{
   position:relative;
   overflow:hidden;
@@ -1615,14 +1615,14 @@ color:#fff;
   pointer-events:none;
 }
 
-/* Prime Videoの文字だけ青にする */
+/* Huluの文字だけ青にする */
 .netflix-title-mark{
   color:#00a8e1;
   font-weight:900;
 }
 
 /* =========================================================
-   Prime Video配信作品 見出しとポスターの間隔
+   Hulu配信作品 見出しとポスターの間隔
 ========================================================= */
 
 #netflixWorksSection .results-heading{
@@ -1634,7 +1634,7 @@ color:#fff;
 }  
 
 /* =========================================================
-   Prime Videoページ
+   Huluページ
    セクション間隔を21pxで完全統一
 ========================================================= */
 
@@ -1768,7 +1768,7 @@ color:#fff;
 }
 
 
-/* 現在のPrime Video */
+/* 現在のHulu */
 
 .provider-mini-item.prime-mini.active,
 .provider-mini-item.prime-mini:hover{
@@ -1841,7 +1841,7 @@ color:#fff;
 }
 
 
-/* Prime Video */
+/* Hulu */
 
 .provider-mini-mark.prime-mark{
   background:transparent;
@@ -2999,8 +2999,7 @@ function getNetflixProvider(
           );
 
         return (
-          name.includes("Amazon Prime Video") ||
-          name.includes("Prime Video")
+          name.includes("Hulu")
         );
 
       }
@@ -3705,7 +3704,7 @@ async function loadNetflixTopWorks(){
     const response =
       await fetch(
         "/api/search" +
-        "?provider=prime" +
+        "?provider=hulu" +
         "&page=1"
       );
 
@@ -3715,7 +3714,7 @@ async function loadNetflixTopWorks(){
     ){
 
       throw new Error(
-        "Prime Video注目作品の取得に失敗しました。"
+        "Hulu注目作品の取得に失敗しました。"
       );
 
     }
@@ -3993,7 +3992,7 @@ async function loadNetflixWorks(
   ){
 
     status.innerHTML =
-      "Prime Videoの作品を読み込んでいます...";
+      "Huluの作品を読み込んでいます...";
 
   }
 
@@ -4011,7 +4010,7 @@ async function loadNetflixWorks(
 
 let apiUrl =
   "/api/search" +
-  "?provider=prime" +
+  "?provider=hulu" +
   "&page=" +
   encodeURIComponent(
     currentPage
@@ -4076,7 +4075,7 @@ const response =
     ){
 
       throw new Error(
-        "Prime Video作品の取得に失敗しました。"
+        "Hulu作品の取得に失敗しました。"
       );
 
     }
@@ -4118,7 +4117,7 @@ const response =
 
         <div class="empty">
 
-          現在表示できるPrime Video作品がありません。
+          現在表示できるHulu作品がありません。
         </div>
 
       `;
@@ -4190,7 +4189,7 @@ const response =
 
       <div class="error">
 
-        Prime Videoの作品を取得できませんでした。<br>
+        Huluの作品を取得できませんでした。<br>
 
         少し時間をおいてから、もう一度お試しください。
 
@@ -4267,7 +4266,7 @@ loadNetflixTopWorks();
 loadNetflixNewWorks();
   
 
-// Prime Video作品一覧
+// Hulu作品一覧
 loadNetflixWorks(
   false
 );
