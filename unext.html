@@ -2730,9 +2730,9 @@ document.querySelectorAll(
 );
   
   
- // =========================================================
-// 国・地域 または ジャンル選択時
-// U-NEXTの配信作品まで自動スクロール
+// =========================================================
+// 国・地域・ジャンル・作品タイプ選択時
+// 評価が高い作品まで自動スクロール
 // =========================================================
 
 if(
@@ -2747,15 +2747,17 @@ if(
       setTimeout(
         function(){
 
-          const netflixWorksSection =
+          const highRatedSection =
             document.getElementById(
-              "netflixWorksSection"
+              "highRatedWorks"
             );
 
           if(
-            netflixWorksSection
+            highRatedSection
           ){
-            netflixWorksSection.scrollIntoView({
+            highRatedSection.closest(
+              ".featured-section"
+            ).scrollIntoView({
               behavior: "smooth",
               block: "start"
             });
