@@ -311,17 +311,18 @@ img{
 
 /* =========================================================
    TOPへ戻るボタン
+   PC：メイン枠の右横に表示
 ========================================================= */
 
 .page-top-button{
   position:fixed;
-  right:24px;
-  bottom:24px;
+  left:calc(50% + 520px);
+  bottom:28px;
   z-index:1000;
 
-  min-width:72px;
-  height:48px;
-  padding:0 16px;
+  min-width:88px;
+  height:56px;
+  padding:0 20px;
 
   border:0;
   border-radius:999px;
@@ -330,14 +331,14 @@ img{
   color:#fff;
 
   font:inherit;
-  font-size:14px;
+  font-size:15px;
   font-weight:800;
 
   cursor:pointer;
 
   box-shadow:
-    0 6px 18px
-    rgba(38,59,92,.28);
+    0 7px 20px
+    rgba(38,59,92,.30);
 
   transition:
     transform .15s ease,
@@ -354,15 +355,26 @@ img{
   display:none !important;
 }
 
+/* 枠の横に置く余白がない画面では右下へ */
+@media(max-width:1200px){
+
+  .page-top-button{
+    left:auto;
+    right:18px;
+  }
+
+}
+
 @media(max-width:700px){
 
   .page-top-button{
+    left:auto;
     right:14px;
     bottom:14px;
-    min-width:66px;
-    height:44px;
-    padding:0 14px;
-    font-size:13px;
+    min-width:78px;
+    height:50px;
+    padding:0 16px;
+    font-size:14px;
   }
 
 }
@@ -1222,12 +1234,22 @@ const personId =
 
 
 // =========================================================
-// 元の作品へ戻る
+// 戻るボタン
+//
+// ・作品詳細から来た場合 → 「元の作品に戻る」
+// ・メインサイトから来た場合 → 「検索画面に戻る」
+//
+// URLパラメータがなくても document.referrer から判定します。
 // =========================================================
 
 const previousWorkLink =
   document.getElementById(
     "previousWorkLink"
+  );
+
+const searchReturnLink =
+  document.getElementById(
+    "searchReturnLink"
   );
 
 const fromPage =
@@ -1242,111 +1264,111 @@ const previousMovieType =
 const previousMovieTitle =
   params.get("movieTitle");
 
-if(
-  previousWorkLink &&
-  fromPage === "detail" &&
-  previousMovieId
-){
+let referrerUrl = null;
 
-  let previousUrl =
-    "./detail.html?id=" +
-    encodeURIComponent(
-      previousMovieId
-    );
+try{
 
-  if(
-    previousMovieType &&
-    previousMovieType !== "movie"
-  ){
-    previousUrl +=
-      "&type=" +
-      encodeURIComponent(
-        previousMovieType
+  if(document.referrer){
+    referrerUrl =
+      new URL(
+        document.referrer
       );
   }
 
-  previousWorkLink.href =
-    previousUrl;
+}catch(error){
 
-  previousWorkLink.textContent =
-    "← " +
-    (previousMovieTitle || "元の作品") +
-    "に戻る";
-
-  previousWorkLink.hidden =
-    false;
-}
-
-
-// =========================================================
-// 検索画面へ戻る
-// =========================================================
-
-const searchReturnLink =
-  document.getElementById(
-    "searchReturnLink"
+  console.warn(
+    "REFERRER CHECK ERROR:",
+    error
   );
 
-if(
-  searchReturnLink &&
-  fromPage !== "detail"
-){
+}
 
-  let cameFromMainSite =
-    false;
+const sameSiteReferrer =
+  referrerUrl &&
+  referrerUrl.origin ===
+    window.location.origin;
 
-  try{
+const referrerPath =
+  sameSiteReferrer
+    ? referrerUrl.pathname
+    : "";
 
-    if(document.referrer){
+const cameFromDetail =
+  sameSiteReferrer &&
+  referrerPath.endsWith(
+    "/detail.html"
+  );
 
-      const referrerUrl =
-        new URL(
-          document.referrer
+const cameFromMainSite =
+  sameSiteReferrer &&
+  (
+    referrerPath === "/" ||
+    referrerPath.endsWith(
+      "/index.html"
+    )
+  );
+
+
+// =========================================================
+// 作品詳細から来た場合
+// =========================================================
+
+if(previousWorkLink){
+
+  let previousUrl = "";
+
+  // detail.html 側から情報を渡している場合
+  if(
+    fromPage === "detail" &&
+    previousMovieId
+  ){
+
+    previousUrl =
+      "./detail.html?id=" +
+      encodeURIComponent(
+        previousMovieId
+      );
+
+    if(
+      previousMovieType &&
+      previousMovieType !== "movie"
+    ){
+      previousUrl +=
+        "&type=" +
+        encodeURIComponent(
+          previousMovieType
         );
-
-      const sameSite =
-        referrerUrl.origin ===
-        window.location.origin;
-
-      const path =
-        referrerUrl.pathname;
-
-      cameFromMainSite =
-        sameSite &&
-        (
-          path === "/" ||
-          path.endsWith(
-            "/index.html"
-          )
-        );
-
-      if(cameFromMainSite){
-        searchReturnLink.href =
-          referrerUrl.href;
-      }
-
     }
 
-  }catch(error){
-
-    console.warn(
-      "REFERRER CHECK ERROR:",
-      error
-    );
-
+  }
+  // パラメータがなくても直前ページが作品詳細なら使う
+  else if(cameFromDetail){
+    previousUrl =
+      referrerUrl.href;
   }
 
-  if(
-    cameFromMainSite ||
-    fromPage === "index" ||
-    fromPage === "search"
-  ){
-    searchReturnLink.hidden =
+  if(previousUrl){
+
+    previousWorkLink.href =
+      previousUrl;
+
+    previousWorkLink.textContent =
+      previousMovieTitle
+        ? (
+            "← " +
+            previousMovieTitle +
+            "に戻る"
+          )
+        : "← 元の作品に戻る";
+
+    previousWorkLink.hidden =
       false;
 
-    if(cameFromMainSite){
+    // 直前ページがその作品ならスクロール位置も保って戻る
+    if(cameFromDetail){
 
-      searchReturnLink.addEventListener(
+      previousWorkLink.addEventListener(
         "click",
         function(event){
 
@@ -1355,8 +1377,47 @@ if(
 
         }
       );
+
     }
+
   }
+
+}
+
+
+// =========================================================
+// メインサイトから来た場合
+// =========================================================
+
+if(
+  searchReturnLink &&
+  (
+    cameFromMainSite ||
+    fromPage === "index" ||
+    fromPage === "search"
+  )
+){
+
+  searchReturnLink.hidden =
+    false;
+
+  if(cameFromMainSite){
+
+    searchReturnLink.href =
+      referrerUrl.href;
+
+    searchReturnLink.addEventListener(
+      "click",
+      function(event){
+
+        event.preventDefault();
+        window.history.back();
+
+      }
+    );
+
+  }
+
 }
 
 
