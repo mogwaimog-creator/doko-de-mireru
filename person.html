@@ -532,6 +532,61 @@ img{
   -webkit-line-clamp:2;
 }
 
+/* =========================================================
+   作品カード 配信状況
+========================================================= */
+
+.work-provider-status{
+  min-height:30px;
+  padding:0 8px 8px;
+  display:flex;
+  align-items:center;
+  gap:5px;
+  overflow:hidden;
+}
+
+.work-provider-status.is-loading{
+  color:#9ca3af;
+  font-size:10px;
+}
+
+.work-provider-logos{
+  display:flex;
+  align-items:center;
+  gap:5px;
+  min-width:0;
+  flex-wrap:nowrap;
+}
+
+.work-provider-logo{
+  width:25px;
+  height:25px;
+  flex:0 0 25px;
+  object-fit:contain;
+  border-radius:6px;
+  background:#fff;
+  border:1px solid #e5e7eb;
+}
+
+.work-provider-none{
+  width:100%;
+  padding:5px 6px;
+  border-radius:6px;
+  background:#f3f4f6;
+  color:#6b7280;
+  font-size:10px;
+  font-weight:700;
+  text-align:center;
+  white-space:nowrap;
+}
+
+.work-provider-more{
+  color:#6b7280;
+  font-size:10px;
+  font-weight:700;
+  white-space:nowrap;
+}
+
 .work-character{
   margin-top:5px;
   color:#6b7280;
@@ -849,7 +904,6 @@ img{
       id="searchReturnLink"
       class="person-back-button main-return"
       href="./index.html"
-      hidden
     >
       ← 検索画面に戻る
     </a>
@@ -1389,14 +1443,7 @@ if(previousWorkLink){
 // メインサイトから来た場合
 // =========================================================
 
-if(
-  searchReturnLink &&
-  (
-    cameFromMainSite ||
-    fromPage === "index" ||
-    fromPage === "search"
-  )
-){
+if(searchReturnLink){
 
   searchReturnLink.hidden =
     false;
@@ -1895,11 +1942,144 @@ function createWorkCard(work){
 
       "</div>" +
 
+      '<div class="work-provider-status is-loading" ' +
+        'data-provider-id="' + escapeHtml(String(work.id)) + '" ' +
+        'data-provider-type="' +
+          (work.content_type === "tv" ? "tv" : "movie") +
+        '">配信情報</div>' +
+
     "</a>"
   );
 
 }
 
+
+// =========================================================
+// 作品カード 配信情報
+// 画面に近づいた作品だけ取得してページを軽くする
+// =========================================================
+
+const providerCache = new Map();
+
+function renderProviderStatus(element, detail){
+
+  if(!element){
+    return;
+  }
+
+  const streaming =
+    detail && Array.isArray(detail.streaming)
+      ? detail.streaming
+      : [];
+
+  element.classList.remove("is-loading");
+
+  if(streaming.length === 0){
+    element.innerHTML =
+      '<div class="work-provider-none">現在配信なし</div>';
+    return;
+  }
+
+  const visible = streaming.slice(0,4);
+  const rest = streaming.length - visible.length;
+
+  element.innerHTML =
+    '<div class="work-provider-logos">' +
+      visible.map(function(provider){
+        if(!provider || !provider.logo_path){
+          return "";
+        }
+        return (
+          '<img class="work-provider-logo" ' +
+          'src="https://image.tmdb.org/t/p/w92' +
+          escapeHtml(provider.logo_path) +
+          '" alt="' +
+          escapeHtml(provider.provider_name || "配信サービス") +
+          '" title="' +
+          escapeHtml(provider.provider_name || "") +
+          '" loading="lazy">'
+        );
+      }).join("") +
+      (rest > 0
+        ? '<span class="work-provider-more">+' + rest + '</span>'
+        : '') +
+    '</div>';
+}
+
+async function loadProviderStatus(element){
+
+  if(!element || element.dataset.loaded === "1"){
+    return;
+  }
+
+  element.dataset.loaded = "1";
+
+  const id = element.dataset.providerId;
+  const type = element.dataset.providerType || "movie";
+  const cacheKey = type + ":" + id;
+
+  try{
+
+    let detail = providerCache.get(cacheKey);
+
+    if(!detail){
+      const url =
+        "/api/search?id=" + encodeURIComponent(id) +
+        (type === "tv" ? "&type=tv" : "");
+
+      const response = await fetch(url);
+
+      if(!response.ok){
+        throw new Error("配信情報を取得できませんでした。");
+      }
+
+      detail = await response.json();
+      providerCache.set(cacheKey, detail);
+    }
+
+    renderProviderStatus(element, detail);
+
+  }catch(error){
+    console.warn("PROVIDER STATUS ERROR:", error);
+    element.classList.remove("is-loading");
+    element.innerHTML =
+      '<div class="work-provider-none">配信情報なし</div>';
+  }
+}
+
+let providerObserver = null;
+
+function observeProviderStatuses(){
+
+  const targets =
+    document.querySelectorAll(
+      '.work-provider-status:not([data-observed="1"])'
+    );
+
+  if(!("IntersectionObserver" in window)){
+    targets.forEach(loadProviderStatus);
+    return;
+  }
+
+  if(!providerObserver){
+    providerObserver = new IntersectionObserver(
+      function(entries){
+        entries.forEach(function(entry){
+          if(entry.isIntersecting){
+            providerObserver.unobserve(entry.target);
+            loadProviderStatus(entry.target);
+          }
+        });
+      },
+      { rootMargin:"250px 0px" }
+    );
+  }
+
+  targets.forEach(function(target){
+    target.dataset.observed = "1";
+    providerObserver.observe(target);
+  });
+}
 
 // =========================================================
 // 出演作品表示
@@ -1926,6 +2106,8 @@ function renderWorks(
   moreWrapper.hidden =
     data.length <= 12 ||
     displayCount >= data.length;
+
+  observeProviderStatuses();
 }
 
 
