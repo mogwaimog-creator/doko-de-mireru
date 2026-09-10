@@ -3413,6 +3413,67 @@ font-weight:bold;
   transform:translateY(-1px);
   box-shadow:0 4px 12px rgba(37,99,235,.10);
 }     
+
+/* =========================================================
+   スマホ表示 最終調整
+   ・ジャンル 2列
+   ・人気作品 2列
+   ・検索へ戻るボタンをコンパクト化
+========================================================= */
+
+@media(max-width:600px){
+
+  /* 人気作品 */
+  .popular-grid{
+    grid-template-columns:
+      repeat(2,minmax(0,1fr));
+
+    gap:12px;
+  }
+
+  .popular-card-title{
+    font-size:14px;
+    line-height:1.45;
+
+    /* 1文字ずつ縦に折れるのを防ぐ */
+    word-break:normal;
+    overflow-wrap:break-word;
+  }
+
+  .popular-card-info{
+    padding:10px;
+  }
+
+
+  /* ジャンルから探す */
+  .genre-search-grid{
+    grid-template-columns:
+      repeat(2,minmax(0,1fr));
+
+    gap:10px;
+  }
+
+  .genre-search-card{
+    min-width:0;
+  }
+
+  .genre-search-name{
+    word-break:normal;
+    overflow-wrap:break-word;
+  }
+
+
+  /* 検索へ戻る */
+  #backToSearch{
+    right:10px;
+    bottom:10px;
+
+    padding:8px 11px;
+
+    font-size:12px;
+  }
+
+}
      
 </style>
 
