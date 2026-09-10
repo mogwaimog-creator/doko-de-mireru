@@ -6623,10 +6623,14 @@ async function getGenreBrowseWorks(
     "&include_adult=false" +
     "&sort_by=popularity.desc" +
     "&vote_count.gte=20" +
-    "&with_genres=" +
-    encodeURIComponent(
-      movieGenres
-    );
+"&page=" +
+encodeURIComponent(
+  genrePage
+) +
+"&with_genres=" +
+encodeURIComponent(
+  movieGenres
+);
 
 
   // ===================================================
@@ -6642,10 +6646,14 @@ async function getGenreBrowseWorks(
     "&language=ja-JP" +
     "&sort_by=popularity.desc" +
     "&vote_count.gte=20" +
-    "&with_genres=" +
-    encodeURIComponent(
-      tvGenres
-    );
+"&page=" +
+encodeURIComponent(
+  genrePage
+) +
+"&with_genres=" +
+encodeURIComponent(
+  tvGenres
+);
 
 
   // ===================================================
