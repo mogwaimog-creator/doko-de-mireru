@@ -284,6 +284,48 @@ const type =
   typeof req.query.type === "string"
     ? req.query.type.trim().toLowerCase()
     : "movie";
+
+// =====================================================
+// 人物名検索
+// =====================================================
+
+if (
+  personSearch
+) {
+
+  const people =
+    await searchPeople(
+      personSearch,
+      apiKey
+    );
+
+  return res
+    .status(200)
+    .json({
+      results: people
+    });
+
+}
+
+// =====================================================
+// 人物詳細
+// =====================================================
+
+if (
+  personId
+) {
+
+  const person =
+    await getPersonDetail(
+      personId,
+      apiKey
+    );
+
+  return res
+    .status(200)
+    .json(person);
+
+}
     
     // =====================================================
 // 作品詳細
@@ -2991,6 +3033,548 @@ function findProvider(
 
 }
 
+// =========================================================
+// 人物名検索
+//
+// 俳優・声優・監督などをTMDBから検索
+// =========================================================
+
+async function searchPeople(
+  query,
+  apiKey
+) {
+
+  if (!query) {
+    return [];
+  }
+
+
+  const url =
+    "https://api.themoviedb.org/3/search/person" +
+    "?api_key=" +
+    encodeURIComponent(apiKey) +
+    "&language=ja-JP" +
+    "&include_adult=false" +
+    "&page=1" +
+    "&query=" +
+    encodeURIComponent(query);
+
+
+  try {
+
+    const data =
+      await fetchJson(url);
+
+
+    const people =
+      data &&
+      Array.isArray(data.results)
+        ? data.results
+        : [];
+
+
+    return people
+      .filter(function(person) {
+
+        return (
+          person &&
+          person.id &&
+          person.name
+        );
+
+      })
+      .slice(0, 10)
+      .map(function(person) {
+
+        const knownFor =
+          Array.isArray(person.known_for)
+            ? person.known_for
+                .filter(function(work) {
+                  return (
+                    work &&
+                    work.id &&
+                    (
+                      work.media_type === "movie" ||
+                      work.media_type === "tv"
+                    )
+                  );
+                })
+                .slice(0, 3)
+                .map(function(work) {
+
+                  return {
+
+                    id:
+                      work.id,
+
+                    title:
+                      work.title ||
+                      work.name ||
+                      work.original_title ||
+                      work.original_name ||
+                      "",
+
+                    media_type:
+                      work.media_type || "",
+
+                    poster_path:
+                      work.poster_path || null
+
+                  };
+
+                })
+            : [];
+
+
+        return {
+
+          id:
+            person.id,
+
+          name:
+            person.name || "",
+
+          original_name:
+            person.original_name || "",
+
+          profile_path:
+            person.profile_path || null,
+
+          known_for_department:
+            person.known_for_department || "",
+
+          popularity:
+            Number(
+              person.popularity || 0
+            ),
+
+          known_for:
+            knownFor
+
+        };
+
+      });
+
+  } catch (error) {
+
+    console.error(
+      "PERSON SEARCH ERROR:",
+      error
+    );
+
+    return [];
+
+  }
+
+}
+
+// =========================================================
+// 人物詳細
+//
+// プロフィール
+// 出演作品
+// 監督作品
+// =========================================================
+
+async function getPersonDetail(
+  personId,
+  apiKey
+) {
+
+  if (!personId) {
+    return {
+      error: "人物IDがありません。"
+    };
+  }
+
+
+  try {
+
+    // =====================================================
+    // 人物プロフィール
+    // =====================================================
+
+    const personUrl =
+      "https://api.themoviedb.org/3/person/" +
+      encodeURIComponent(personId) +
+      "?api_key=" +
+      encodeURIComponent(apiKey) +
+      "&language=ja-JP";
+
+
+    // =====================================================
+    // 映画・TV出演歴
+    // =====================================================
+
+    const creditsUrl =
+      "https://api.themoviedb.org/3/person/" +
+      encodeURIComponent(personId) +
+      "/combined_credits" +
+      "?api_key=" +
+      encodeURIComponent(apiKey) +
+      "&language=ja-JP";
+
+
+    const results =
+      await Promise.all([
+        fetchJson(personUrl),
+        fetchJson(creditsUrl)
+      ]);
+
+
+    const person =
+      results[0] || {};
+
+    const credits =
+      results[1] || {};
+
+
+    // =====================================================
+    // 出演作品
+    // =====================================================
+
+    let castWorks =
+      Array.isArray(credits.cast)
+        ? credits.cast
+        : [];
+
+
+    castWorks =
+      castWorks
+        .filter(function(work) {
+
+          return (
+            work &&
+            work.id &&
+            (
+              work.media_type === "movie" ||
+              work.media_type === "tv"
+            )
+          );
+
+        })
+        .map(function(work) {
+
+          const isAnime =
+            Array.isArray(work.genre_ids) &&
+            work.genre_ids.includes(16);
+
+
+          return {
+
+            id:
+              work.id,
+
+            title:
+              work.title ||
+              work.name ||
+              work.original_title ||
+              work.original_name ||
+              "",
+
+            original_title:
+              work.original_title ||
+              work.original_name ||
+              "",
+
+            release_date:
+              work.release_date ||
+              work.first_air_date ||
+              "",
+
+            poster_path:
+              work.poster_path || null,
+
+            overview:
+              work.overview || "",
+
+            vote_average:
+              Number(
+                work.vote_average || 0
+              ),
+
+            popularity:
+              Number(
+                work.popularity || 0
+              ),
+
+            content_type:
+              work.media_type,
+
+            display_type:
+              isAnime
+                ? "anime"
+                : (
+                    work.media_type === "tv"
+                      ? "drama"
+                      : "movie"
+                  ),
+
+            character:
+              work.character || ""
+
+          };
+
+        });
+
+
+    // =====================================================
+    // 監督作品
+    // =====================================================
+
+    let directorWorks =
+      Array.isArray(credits.crew)
+        ? credits.crew
+        : [];
+
+
+    directorWorks =
+      directorWorks
+        .filter(function(work) {
+
+          return (
+            work &&
+            work.id &&
+            work.job === "Director" &&
+            (
+              work.media_type === "movie" ||
+              work.media_type === "tv"
+            )
+          );
+
+        })
+        .map(function(work) {
+
+          const isAnime =
+            Array.isArray(work.genre_ids) &&
+            work.genre_ids.includes(16);
+
+
+          return {
+
+            id:
+              work.id,
+
+            title:
+              work.title ||
+              work.name ||
+              work.original_title ||
+              work.original_name ||
+              "",
+
+            original_title:
+              work.original_title ||
+              work.original_name ||
+              "",
+
+            release_date:
+              work.release_date ||
+              work.first_air_date ||
+              "",
+
+            poster_path:
+              work.poster_path || null,
+
+            overview:
+              work.overview || "",
+
+            vote_average:
+              Number(
+                work.vote_average || 0
+              ),
+
+            popularity:
+              Number(
+                work.popularity || 0
+              ),
+
+            content_type:
+              work.media_type,
+
+            display_type:
+              isAnime
+                ? "anime"
+                : (
+                    work.media_type === "tv"
+                      ? "drama"
+                      : "movie"
+                  )
+
+          };
+
+        });
+
+
+    // =====================================================
+    // 重複除去
+    // =====================================================
+
+    castWorks =
+      removeDuplicatePersonWorks(
+        castWorks
+      );
+
+
+    directorWorks =
+      removeDuplicatePersonWorks(
+        directorWorks
+      );
+
+
+    // =====================================================
+    // 人気順
+    // =====================================================
+
+    castWorks.sort(
+      function(a, b) {
+
+        return (
+          Number(b.popularity || 0) -
+          Number(a.popularity || 0)
+        );
+
+      }
+    );
+
+
+    directorWorks.sort(
+      function(a, b) {
+
+        return (
+          Number(b.popularity || 0) -
+          Number(a.popularity || 0)
+        );
+
+      }
+    );
+
+
+    // =====================================================
+    // 完成データ
+    // =====================================================
+
+    return {
+
+      id:
+        person.id || personId,
+
+      name:
+        person.name || "",
+
+      original_name:
+        person.also_known_as &&
+        Array.isArray(person.also_known_as) &&
+        person.also_known_as.length > 0
+          ? person.also_known_as[0]
+          : "",
+
+      profile_path:
+        person.profile_path || null,
+
+      known_for_department:
+        person.known_for_department || "",
+
+      biography:
+        person.biography || "",
+
+      birthday:
+        person.birthday || "",
+
+      deathday:
+        person.deathday || "",
+
+      place_of_birth:
+        person.place_of_birth || "",
+
+      homepage:
+        person.homepage || "",
+
+      popularity:
+        Number(
+          person.popularity || 0
+        ),
+
+      cast:
+        castWorks,
+
+      directed:
+        directorWorks
+
+    };
+
+
+  } catch (error) {
+
+    console.error(
+      "PERSON DETAIL ERROR:",
+      personId,
+      error
+    );
+
+
+    return {
+      error:
+        "人物情報の取得に失敗しました。"
+    };
+
+  }
+
+}
+
+
+// =========================================================
+// 人物作品の重複除去
+// =========================================================
+
+function removeDuplicatePersonWorks(
+  works
+) {
+
+  const map =
+    new Map();
+
+
+  (works || []).forEach(
+    function(work) {
+
+      if (
+        !work ||
+        !work.id
+      ) {
+        return;
+      }
+
+
+      const key =
+        String(
+          work.content_type || ""
+        ) +
+        "-" +
+        String(
+          work.id
+        );
+
+
+      if (
+        !map.has(key)
+      ) {
+
+        map.set(
+          key,
+          work
+        );
+
+      }
+
+    }
+  );
+
+
+  return Array.from(
+    map.values()
+  );
+
+}
 
 // =========================================================
 // 監督
