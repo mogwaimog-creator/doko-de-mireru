@@ -5202,6 +5202,14 @@ let detailUrl =
   "./detail.html?id=" +
   encodeURIComponent(movieId);
 
+if(
+  movie.content_type === "tv"
+){
+
+  detailUrl +=
+    "&type=tv";
+
+}     
 
 /* -------------------------------------------------------
    ドラマ・アニメの場合
@@ -6311,37 +6319,38 @@ function createGenreResultCard(
 
 
   if(
-    movie.content_type === "anime"
-  ){
+  movie.display_type === "anime"
+){
 
-    typeText =
-      "🐱 アニメ";
+  typeText =
+    "🐱 アニメ";
 
-    typeClass =
-      "type-anime";
+  typeClass =
+    "type-anime";
 
+}
 
-    /*
-      アニメでもTV作品の場合は
-      詳細ページへ type=tv を渡す
-    */
+else if(
+  movie.display_type === "drama"
+){
 
-    if(
-      movie.name ||
-      movie.original_name
-    ){
+  typeText =
+    "📺 ドラマ";
 
-      detailUrl +=
-        "&type=tv";
+  typeClass =
+    "type-drama";
 
-    }
+}
 
-  }
+else{
 
-  else if(
-    movie.content_type === "tv"
-  ){
+  typeText =
+    "🎬 映画";
 
+  typeClass =
+    "type-movie";
+
+}
     typeText =
       "📺 ドラマ";
 
