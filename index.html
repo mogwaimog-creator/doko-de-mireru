@@ -6394,16 +6394,21 @@ genreLoadMoreButton.addEventListener(
   "click",
   async function(){
 
-    // -----------------------------------------------
-    // まだ取得済みの作品が残っている場合
-    // -----------------------------------------------
+    const nextDisplayCount =
+      currentGenreDisplayCount + 15;
+
+
+    // -------------------------------------------------
+    // まだ手元の作品だけで15件増やせる場合
+    // -------------------------------------------------
 
     if(
-      currentGenreDisplayCount <
+      nextDisplayCount <=
       currentGenreWorks.length
     ){
 
-      currentGenreDisplayCount += 15;
+      currentGenreDisplayCount =
+        nextDisplayCount;
 
       renderGenreWorks();
 
@@ -6411,11 +6416,25 @@ genreLoadMoreButton.addEventListener(
     }
 
 
-    // -----------------------------------------------
-    // 次のTMDBページを取得
-    // -----------------------------------------------
+    // -------------------------------------------------
+    // 手元の作品だけでは足りないので
+    // 次のAPIページを取得
+    // -------------------------------------------------
 
-    currentGenrePage += 1;
+    const activeGenreButton =
+      document.querySelector(
+        ".genre-search-card.active"
+      );
+
+    if(
+      !activeGenreButton
+    ){
+      return;
+    }
+
+    const genre =
+      activeGenreButton.dataset.genre;
+
 
     genreLoadMoreButton.disabled =
       true;
@@ -6426,25 +6445,15 @@ genreLoadMoreButton.addEventListener(
 
     try{
 
-      const activeGenreButton =
-        document.querySelector(
-          ".genre-search-card.active"
-        );
-
-      if(
-        !activeGenreButton
-      ){
-        return;
-      }
-
-      const genre =
-        activeGenreButton.dataset.genre;
+      currentGenrePage += 1;
 
 
       const response =
         await fetch(
           "/api/search?genreBrowse=1&genre=" +
-          encodeURIComponent(genre) +
+          encodeURIComponent(
+            genre
+          ) +
           "&genrePage=" +
           encodeURIComponent(
             currentGenrePage
@@ -6472,12 +6481,6 @@ genreLoadMoreButton.addEventListener(
           ? data.results
           : [];
 
-
-      // -----------------------------------------------
-      // 重複作品を除外
-      // 映画とTVで同じIDになる可能性もあるので
-      // content_type + id で判定
-      // -----------------------------------------------
 
       const existingKeys =
         new Set(
@@ -6517,13 +6520,18 @@ genreLoadMoreButton.addEventListener(
       );
 
 
-      // 15件分、表示範囲を広げる
-      currentGenreDisplayCount += 15;
+      // ここが重要
+      // 表示は必ず15件だけ増やす
+      currentGenreDisplayCount =
+        Math.min(
+          nextDisplayCount,
+          currentGenreWorks.length
+        );
+
 
       renderGenreWorks();
 
 
-      // 新しい作品が0件なら終了
       if(
         uniqueNewWorks.length === 0
       ){
