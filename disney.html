@@ -3161,6 +3161,50 @@ let candidates =
 
           }
 
+          // =====================================================
+// Disney+ページで選んでいた条件を詳細ページへ渡す
+// =====================================================
+
+// 国・地域
+if(
+  selectedCountry
+){
+
+  detailUrl +=
+    "&backCountry=" +
+    encodeURIComponent(
+      selectedCountry
+    );
+
+}
+
+
+// ジャンル
+if(
+  selectedGenre
+){
+
+  detailUrl +=
+    "&backGenre=" +
+    encodeURIComponent(
+      selectedGenre
+    );
+
+}
+
+
+// 映画・ドラマ・アニメ
+if(
+  selectedType
+){
+
+  detailUrl +=
+    "&backType=" +
+    encodeURIComponent(
+      selectedType
+    );
+
+}
 
           const year =
             movie.release_date
@@ -3309,6 +3353,50 @@ function createMovieCard(
 
   }
 
+  // =====================================================
+// Disney+ページで選んでいた条件を詳細ページへ渡す
+// =====================================================
+
+// 国・地域
+if(
+  selectedCountry
+){
+
+  detailUrl +=
+    "&backCountry=" +
+    encodeURIComponent(
+      selectedCountry
+    );
+
+}
+
+
+// ジャンル
+if(
+  selectedGenre
+){
+
+  detailUrl +=
+    "&backGenre=" +
+    encodeURIComponent(
+      selectedGenre
+    );
+
+}
+
+
+// 映画・ドラマ・アニメ
+if(
+  selectedType
+){
+
+  detailUrl +=
+    "&backType=" +
+    encodeURIComponent(
+      selectedType
+    );
+
+}
 
   const year =
     movie.release_date
@@ -3739,6 +3827,50 @@ const response =
 
             }
 
+            // =====================================================
+// Disney+ページで選んでいた条件を詳細ページへ渡す
+// =====================================================
+
+// 国・地域
+if(
+  selectedCountry
+){
+
+  detailUrl +=
+    "&backCountry=" +
+    encodeURIComponent(
+      selectedCountry
+    );
+
+}
+
+
+// ジャンル
+if(
+  selectedGenre
+){
+
+  detailUrl +=
+    "&backGenre=" +
+    encodeURIComponent(
+      selectedGenre
+    );
+
+}
+
+
+// 映画・ドラマ・アニメ
+if(
+  selectedType
+){
+
+  detailUrl +=
+    "&backType=" +
+    encodeURIComponent(
+      selectedType
+    );
+
+}
 
             const year =
               movie.release_date
