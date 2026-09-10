@@ -1556,8 +1556,8 @@ const results =
     "劇場版",
 
   content_type:
-    "movie",
-
+  "movie"
+         
           // =================================================
           // 配信情報
           // =================================================
@@ -6736,7 +6736,9 @@ async function getGenreBrowseWorks(
                 "",
 
               content_type:
-                "movie"
+  animeOnly
+    ? "anime"
+    : "movie"
             };
 
           }
@@ -6768,7 +6770,9 @@ async function getGenreBrowseWorks(
                 "",
 
               content_type:
-                "tv"
+  animeOnly
+    ? "anime"
+    : "tv"
             };
 
           }
