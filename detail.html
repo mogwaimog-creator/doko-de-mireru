@@ -7193,24 +7193,80 @@ else if(
 }
 
 
-  // =====================================================
-  // U-NEXT
-  // =====================================================
+ // =====================================================
+// U-NEXT
+// =====================================================
 
-  else if(
-    from === "unext"
+else if(
+  from === "unext"
+){
+
+  let backUrl =
+    "./unext.html";
+
+
+  const backParams =
+    new URLSearchParams();
+
+
+  // 国・地域
+  if(
+    backCountry
   ){
-    backLink.href =
-      "./unext.html";
-
-    backLink.textContent =
-      "← U-NEXTに戻る";
-
-    backLink.setAttribute(
-      "aria-label",
-      "U-NEXTに戻る"
+    backParams.set(
+      "country",
+      backCountry
     );
   }
+
+
+  // ジャンル
+  if(
+    backGenre
+  ){
+    backParams.set(
+      "genre",
+      backGenre
+    );
+  }
+
+
+  // 映画・ドラマ・アニメ
+  if(
+    backType
+  ){
+    backParams.set(
+      "type",
+      backType
+    );
+  }
+
+
+  const backQuery =
+    backParams.toString();
+
+
+  if(
+    backQuery
+  ){
+    backUrl +=
+      "?" +
+      backQuery;
+  }
+
+
+  backLink.href =
+    backUrl;
+
+  backLink.textContent =
+    "← U-NEXTに戻る";
+
+  backLink.setAttribute(
+    "aria-label",
+    "U-NEXTに戻る"
+  );
+
+}
 
 
   // =====================================================
