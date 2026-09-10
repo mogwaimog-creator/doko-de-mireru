@@ -6303,6 +6303,10 @@ function createGenreResultCard(
     ).trim();
 
 
+  /* =====================================================
+     詳細ページURL
+  ===================================================== */
+
   let detailUrl =
     "./detail.html?id=" +
     encodeURIComponent(
@@ -6310,65 +6314,49 @@ function createGenreResultCard(
     );
 
 
-  /* =====================================================
-     作品タイプ
-  ===================================================== */
-
-  let typeText = "";
-  let typeClass = "";
-
-
+  // TV作品はTV詳細ページへ
   if(
-  movie.display_type === "anime"
-){
-
-  typeText =
-    "🐱 アニメ";
-
-  typeClass =
-    "type-anime";
-
-}
-
-else if(
-  movie.display_type === "drama"
-){
-
-  typeText =
-    "📺 ドラマ";
-
-  typeClass =
-    "type-drama";
-
-}
-
-else{
-
-  typeText =
-    "🎬 映画";
-
-  typeClass =
-    "type-movie";
-
-}
-    typeText =
-      "📺 ドラマ";
-
-    typeClass =
-      "type-drama";
+    movie.content_type === "tv"
+  ){
 
     detailUrl +=
       "&type=tv";
 
   }
 
-  else{
+
+  /* =====================================================
+     カードに表示する作品タイプ
+  ===================================================== */
+
+  let typeText =
+    "🎬 映画";
+
+  let typeClass =
+    "type-movie";
+
+
+  if(
+    movie.display_type === "anime"
+  ){
 
     typeText =
-      "🎬 映画";
+      "🐱 アニメ";
 
     typeClass =
-      "type-movie";
+      "type-anime";
+
+  }
+
+  else if(
+    movie.display_type === "drama"
+  ){
+
+    typeText =
+      "📺 ドラマ";
+
+    typeClass =
+      "type-drama";
 
   }
 
@@ -6420,6 +6408,10 @@ else{
         movie.poster_path
       : "";
 
+
+  /* =====================================================
+     カードHTML
+  ===================================================== */
 
   return `
 
