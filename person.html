@@ -1,0 +1,1471 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
+
+<title>
+人物情報｜ドコデミレル？
+</title>
+
+<meta
+  name="description"
+  content="俳優・声優・監督の出演作品や監督作品を探せます。"
+>
+
+<meta
+  name="robots"
+  content="index,follow,max-image-preview:large"
+>
+
+<link
+  id="canonicalLink"
+  rel="canonical"
+  href="https://doko-de-mireru.vercel.app/person.html"
+>
+
+
+<style>
+
+/* =========================================================
+   基本
+========================================================= */
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  background:#f5f7fb;
+  color:#111827;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    "Hiragino Kaku Gothic ProN",
+    "Yu Gothic",
+    Meiryo,
+    sans-serif;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+img{
+  max-width:100%;
+}
+
+
+/* =========================================================
+   ヘッダー
+========================================================= */
+
+.site-header{
+  background:#263b5c;
+  color:#fff;
+  padding:18px 20px;
+}
+
+.site-header-inner{
+  width:min(1180px,100%);
+  margin:0 auto;
+}
+
+.site-title{
+  margin:0;
+  font-size:24px;
+  font-weight:800;
+}
+
+.site-description{
+  margin:5px 0 0;
+  font-size:13px;
+  opacity:.9;
+}
+
+
+/* =========================================================
+   メイン
+========================================================= */
+
+.container{
+  width:min(1180px,calc(100% - 32px));
+  margin:24px auto 40px;
+}
+
+.breadcrumb{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:7px;
+  margin-bottom:18px;
+  color:#6b7280;
+  font-size:13px;
+}
+
+.breadcrumb a:hover{
+  color:#2563eb;
+}
+
+
+/* =========================================================
+   読み込み
+========================================================= */
+
+.loading{
+  background:#fff;
+  border-radius:16px;
+  padding:40px 20px;
+  text-align:center;
+  box-shadow:0 3px 15px rgba(0,0,0,.08);
+  color:#6b7280;
+}
+
+
+/* =========================================================
+   人物情報
+========================================================= */
+
+.person-section{
+  display:grid;
+  grid-template-columns:220px minmax(0,1fr);
+  gap:26px;
+  background:#fff;
+  border-radius:16px;
+  padding:24px;
+  margin-bottom:25px;
+  box-shadow:0 3px 15px rgba(0,0,0,.08);
+}
+
+.person-photo{
+  width:100%;
+  aspect-ratio:2 / 3;
+  object-fit:cover;
+  border-radius:12px;
+  background:#e5e7eb;
+  display:block;
+}
+
+.person-photo-placeholder{
+  width:100%;
+  aspect-ratio:2 / 3;
+  border-radius:12px;
+  background:#e5e7eb;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#6b7280;
+  font-size:14px;
+}
+
+.person-name{
+  margin:0;
+  color:#111827;
+  font-size:30px;
+  line-height:1.35;
+}
+
+.person-original-name{
+  margin:6px 0 18px;
+  color:#6b7280;
+  font-size:14px;
+}
+
+.person-meta{
+  display:grid;
+  gap:9px;
+  margin-bottom:20px;
+  font-size:14px;
+  line-height:1.6;
+}
+
+.person-meta-row{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+}
+
+.person-meta-label{
+  flex:0 0 90px;
+  color:#6b7280;
+  font-weight:600;
+}
+
+.person-meta-value{
+  min-width:0;
+  color:#111827;
+}
+
+.person-biography-title{
+  margin:20px 0 8px;
+  font-size:17px;
+}
+
+.person-biography{
+  margin:0;
+  color:#374151;
+  font-size:14px;
+  line-height:1.8;
+  white-space:pre-line;
+}
+
+
+/* =========================================================
+   作品セクション
+========================================================= */
+
+.works-section{
+  background:#fff;
+  border-radius:16px;
+  padding:22px;
+  margin-bottom:25px;
+  box-shadow:0 3px 15px rgba(0,0,0,.08);
+}
+
+.works-title{
+  margin:0;
+  font-size:23px;
+  color:#111827;
+}
+
+.works-description{
+  margin:7px 0 18px;
+  color:#6b7280;
+  font-size:14px;
+}
+
+.works-grid{
+  display:grid;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:12px;
+}
+
+
+/* =========================================================
+   作品カード
+========================================================= */
+
+.work-card{
+  min-width:0;
+  display:block;
+  background:#f8fafc;
+  border:1px solid #e5e7eb;
+  border-radius:12px;
+  overflow:hidden;
+  transition:
+    transform .15s ease,
+    border-color .15s ease,
+    box-shadow .15s ease;
+}
+
+.work-card:hover{
+  transform:translateY(-2px);
+  border-color:#93c5fd;
+  box-shadow:0 5px 15px rgba(0,0,0,.08);
+}
+
+.work-poster{
+  display:block;
+  width:100%;
+  aspect-ratio:2 / 3;
+  object-fit:cover;
+  background:#e5e7eb;
+}
+
+.work-poster-placeholder{
+  width:100%;
+  aspect-ratio:2 / 3;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#e5e7eb;
+  color:#6b7280;
+  font-size:13px;
+}
+
+.work-info{
+  padding:8px 9px 10px;
+}
+
+.work-title{
+  color:#111827;
+  font-size:13px;
+  font-weight:700;
+  line-height:1.4;
+
+  overflow:hidden;
+  display:-webkit-box;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:2;
+}
+
+.work-character{
+  margin-top:5px;
+  color:#6b7280;
+  font-size:11px;
+  line-height:1.4;
+
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.work-meta{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:6px;
+  margin-top:7px;
+  font-size:12px;
+}
+
+.work-year{
+  color:#111827;
+  font-weight:600;
+}
+
+.work-type{
+  display:inline-flex;
+  align-items:center;
+  padding:3px 7px;
+  border-radius:999px;
+  font-weight:700;
+}
+
+.type-movie{
+  background:#fee2e2;
+  color:#dc2626;
+}
+
+.type-drama{
+  background:#dbeafe;
+  color:#2563eb;
+}
+
+.type-anime{
+  background:#dcfce7;
+  color:#16a34a;
+}
+
+.work-rating{
+  color:#111827;
+  font-weight:600;
+}
+
+
+/* =========================================================
+   もっと見る
+========================================================= */
+
+.load-more-wrapper{
+  display:flex;
+  justify-content:center;
+  margin-top:20px;
+}
+
+.load-more-button{
+  min-width:160px;
+  padding:11px 24px;
+  border:1px solid #2563eb;
+  border-radius:10px;
+  background:#fff;
+  color:#2563eb;
+  font:inherit;
+  font-size:14px;
+  font-weight:700;
+  cursor:pointer;
+  transition:
+    background .15s ease,
+    transform .15s ease,
+    box-shadow .15s ease;
+}
+
+.load-more-button:hover{
+  background:#eff6ff;
+  transform:translateY(-1px);
+  box-shadow:0 4px 12px rgba(37,99,235,.10);
+}
+
+.empty-message{
+  color:#6b7280;
+  font-size:14px;
+}
+
+
+/* =========================================================
+   フッター
+========================================================= */
+
+.footer{
+  padding:30px 20px;
+  text-align:center;
+  color:#6b7280;
+  font-size:12px;
+}
+
+
+/* =========================================================
+   タブレット
+========================================================= */
+
+@media(max-width:900px){
+
+  .works-grid{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+  }
+
+}
+
+
+/* =========================================================
+   スマホ
+========================================================= */
+
+@media(max-width:700px){
+
+  .container{
+    width:min(100% - 20px,1180px);
+    margin-top:14px;
+  }
+
+  .site-header{
+    padding:15px;
+  }
+
+  .site-title{
+    font-size:21px;
+  }
+
+  .person-section{
+    grid-template-columns:105px minmax(0,1fr);
+    gap:15px;
+    padding:15px;
+  }
+
+  .person-name{
+    font-size:22px;
+  }
+
+  .person-original-name{
+    margin-bottom:12px;
+    font-size:12px;
+  }
+
+  .person-meta{
+    font-size:12px;
+  }
+
+  .person-meta-row{
+    display:block;
+  }
+
+  .person-meta-label{
+    display:block;
+    margin-bottom:1px;
+  }
+
+  .person-biography-title,
+  .person-biography{
+    grid-column:1 / -1;
+  }
+
+  .person-biography-title{
+    margin-top:10px;
+  }
+
+  .person-biography{
+    font-size:13px;
+  }
+
+  .works-section{
+    padding:15px;
+  }
+
+  .works-title{
+    font-size:20px;
+  }
+
+  .works-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:10px;
+  }
+
+  .work-info{
+    padding:7px 8px 8px;
+  }
+
+  .work-title{
+    font-size:12px;
+  }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<header class="site-header">
+
+  <div class="site-header-inner">
+
+    <a href="index.html">
+
+      <h1 class="site-title">
+        🎬 ドコデミレル？
+      </h1>
+
+    </a>
+
+    <p class="site-description">
+      映画・ドラマ・アニメがどこで見られるか検索できます
+    </p>
+
+  </div>
+
+</header>
+
+
+<main class="container">
+
+
+  <nav class="breadcrumb">
+
+    <a href="index.html">
+      ドコデミレル？
+    </a>
+
+    <span>›</span>
+
+    <span>
+      人物情報
+    </span>
+
+  </nav>
+
+
+  <div
+    id="loading"
+    class="loading"
+  >
+    人物情報を読み込んでいます…
+  </div>
+
+
+  <div
+    id="content"
+    hidden
+  >
+
+
+    <!-- =====================================================
+         人物情報
+    ====================================================== -->
+
+    <section
+      id="personSection"
+      class="person-section"
+    >
+
+      <div id="personPhoto"></div>
+
+
+      <div>
+
+        <h2
+          id="personName"
+          class="person-name"
+        ></h2>
+
+        <div
+          id="personOriginalName"
+          class="person-original-name"
+        ></div>
+
+
+        <div
+          id="personMeta"
+          class="person-meta"
+        ></div>
+
+
+        <h3
+          id="biographyTitle"
+          class="person-biography-title"
+        >
+          プロフィール
+        </h3>
+
+        <p
+          id="personBiography"
+          class="person-biography"
+        ></p>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         出演作品
+    ====================================================== -->
+
+    <section
+      id="castSection"
+      class="works-section"
+      hidden
+    >
+
+      <h2 class="works-title">
+        🎭 出演作品
+      </h2>
+
+      <p class="works-description">
+        出演している映画・ドラマ・アニメ
+      </p>
+
+      <div
+        id="castWorks"
+        class="works-grid"
+      ></div>
+
+
+      <div
+        id="castMoreWrapper"
+        class="load-more-wrapper"
+        hidden
+      >
+
+        <button
+          id="castMoreButton"
+          class="load-more-button"
+          type="button"
+        >
+          もっと見る
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         監督作品
+    ====================================================== -->
+
+    <section
+      id="directorSection"
+      class="works-section"
+      hidden
+    >
+
+      <h2 class="works-title">
+        🎬 監督作品
+      </h2>
+
+      <p class="works-description">
+        監督を担当した作品
+      </p>
+
+      <div
+        id="directorWorks"
+        class="works-grid"
+      ></div>
+
+
+      <div
+        id="directorMoreWrapper"
+        class="load-more-wrapper"
+        hidden
+      >
+
+        <button
+          id="directorMoreButton"
+          class="load-more-button"
+          type="button"
+        >
+          もっと見る
+        </button>
+
+      </div>
+
+    </section>
+
+
+  </div>
+
+
+</main>
+
+
+<footer class="footer">
+  © ドコデミレル？
+</footer>
+
+
+<script>
+
+// =========================================================
+// URL
+// =========================================================
+
+const params =
+  new URLSearchParams(
+    window.location.search
+  );
+
+const personId =
+  params.get("id");
+
+
+// =========================================================
+// 要素
+// =========================================================
+
+const loading =
+  document.getElementById("loading");
+
+const content =
+  document.getElementById("content");
+
+const personPhoto =
+  document.getElementById("personPhoto");
+
+const personName =
+  document.getElementById("personName");
+
+const personOriginalName =
+  document.getElementById(
+    "personOriginalName"
+  );
+
+const personMeta =
+  document.getElementById("personMeta");
+
+const personBiography =
+  document.getElementById(
+    "personBiography"
+  );
+
+const biographyTitle =
+  document.getElementById(
+    "biographyTitle"
+  );
+
+
+const castSection =
+  document.getElementById("castSection");
+
+const castWorks =
+  document.getElementById("castWorks");
+
+const castMoreWrapper =
+  document.getElementById(
+    "castMoreWrapper"
+  );
+
+const castMoreButton =
+  document.getElementById(
+    "castMoreButton"
+  );
+
+
+const directorSection =
+  document.getElementById(
+    "directorSection"
+  );
+
+const directorWorks =
+  document.getElementById(
+    "directorWorks"
+  );
+
+const directorMoreWrapper =
+  document.getElementById(
+    "directorMoreWrapper"
+  );
+
+const directorMoreButton =
+  document.getElementById(
+    "directorMoreButton"
+  );
+
+
+// =========================================================
+// 表示件数
+// =========================================================
+
+let castData = [];
+
+let directorData = [];
+
+let castDisplayCount = 15;
+
+let directorDisplayCount = 15;
+
+
+// =========================================================
+// HTMLエスケープ
+// =========================================================
+
+function escapeHtml(value){
+
+  return String(
+    value ?? ""
+  )
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+// =========================================================
+// 日付
+// =========================================================
+
+function formatDate(value){
+
+  if (!value) {
+    return "";
+  }
+
+  const parts =
+    String(value).split("-");
+
+  if (parts.length !== 3) {
+    return value;
+  }
+
+  return (
+    Number(parts[0]) +
+    "年" +
+    Number(parts[1]) +
+    "月" +
+    Number(parts[2]) +
+    "日"
+  );
+
+}
+
+
+// =========================================================
+// 担当
+// =========================================================
+
+function departmentName(value){
+
+  if (value === "Acting") {
+    return "俳優・声優";
+  }
+
+  if (value === "Directing") {
+    return "監督";
+  }
+
+  if (value === "Writing") {
+    return "脚本";
+  }
+
+  if (value === "Production") {
+    return "製作";
+  }
+
+  return value || "";
+}
+
+
+// =========================================================
+// 作品カード
+// =========================================================
+
+function createWorkCard(work){
+
+  if (
+    !work ||
+    !work.id
+  ) {
+    return "";
+  }
+
+
+  const title =
+    work.title || "タイトル不明";
+
+
+  const year =
+    work.release_date
+      ? String(
+          work.release_date
+        ).slice(0,4)
+      : "";
+
+
+  let typeLabel =
+    "映画";
+
+  let typeClass =
+    "type-movie";
+
+
+  if (
+    work.display_type === "anime"
+  ) {
+
+    typeLabel =
+      "🐱 アニメ";
+
+    typeClass =
+      "type-anime";
+
+  }
+  else if (
+    work.content_type === "tv" ||
+    work.display_type === "drama"
+  ) {
+
+    typeLabel =
+      "📺 ドラマ";
+
+    typeClass =
+      "type-drama";
+
+  }
+  else {
+
+    typeLabel =
+      "🎬 映画";
+
+  }
+
+
+  let detailUrl =
+    "detail.html?id=" +
+    encodeURIComponent(
+      work.id
+    );
+
+
+  if (
+    work.content_type === "tv"
+  ) {
+
+    detailUrl +=
+      "&type=tv";
+
+  }
+
+
+  const posterHtml =
+    work.poster_path
+      ? (
+          '<img ' +
+          'class="work-poster" ' +
+          'src="https://image.tmdb.org/t/p/w500' +
+          escapeHtml(work.poster_path) +
+          '" ' +
+          'alt="' +
+          escapeHtml(title) +
+          'のポスター" ' +
+          'loading="lazy">'
+        )
+      : (
+          '<div class="work-poster-placeholder">' +
+          "画像なし" +
+          "</div>"
+        );
+
+
+  const characterHtml =
+    work.character
+      ? (
+          '<div class="work-character">' +
+          escapeHtml(work.character) +
+          "</div>"
+        )
+      : "";
+
+
+  const rating =
+    Number(
+      work.vote_average || 0
+    );
+
+
+  return (
+    '<a class="work-card" href="' +
+    detailUrl +
+    '">' +
+
+      posterHtml +
+
+      '<div class="work-info">' +
+
+        '<div class="work-title">' +
+          escapeHtml(title) +
+        "</div>" +
+
+        characterHtml +
+
+        '<div class="work-meta">' +
+
+          (
+            year
+              ? (
+                  '<span class="work-year">' +
+                  escapeHtml(year) +
+                  "</span>"
+                )
+              : ""
+          ) +
+
+          '<span class="work-type ' +
+            typeClass +
+          '">' +
+            typeLabel +
+          "</span>" +
+
+          (
+            rating > 0
+              ? (
+                  '<span class="work-rating">' +
+                  "⭐ " +
+                  rating.toFixed(1) +
+                  "</span>"
+                )
+              : ""
+          ) +
+
+        "</div>" +
+
+      "</div>" +
+
+    "</a>"
+  );
+
+}
+
+
+// =========================================================
+// 出演作品表示
+// =========================================================
+
+function renderCast(){
+
+  const visible =
+    castData.slice(
+      0,
+      castDisplayCount
+    );
+
+
+  castWorks.innerHTML =
+    visible
+      .map(createWorkCard)
+      .join("");
+
+
+  castMoreWrapper.hidden =
+    castDisplayCount >=
+    castData.length;
+
+}
+
+
+// =========================================================
+// 監督作品表示
+// =========================================================
+
+function renderDirector(){
+
+  const visible =
+    directorData.slice(
+      0,
+      directorDisplayCount
+    );
+
+
+  directorWorks.innerHTML =
+    visible
+      .map(createWorkCard)
+      .join("");
+
+
+  directorMoreWrapper.hidden =
+    directorDisplayCount >=
+    directorData.length;
+
+}
+
+
+// =========================================================
+// もっと見る
+// =========================================================
+
+castMoreButton.addEventListener(
+  "click",
+  function(){
+
+    castDisplayCount += 15;
+
+    renderCast();
+
+  }
+);
+
+
+directorMoreButton.addEventListener(
+  "click",
+  function(){
+
+    directorDisplayCount += 15;
+
+    renderDirector();
+
+  }
+);
+
+
+// =========================================================
+// 人物情報取得
+// =========================================================
+
+async function loadPerson(){
+
+  if (!personId) {
+
+    loading.textContent =
+      "人物情報が指定されていません。";
+
+    return;
+
+  }
+
+
+  try {
+
+    const response =
+      await fetch(
+        "/api/search?personId=" +
+        encodeURIComponent(
+          personId
+        )
+      );
+
+
+    if (!response.ok) {
+
+      throw new Error(
+        "人物情報の取得に失敗しました。"
+      );
+
+    }
+
+
+    const person =
+      await response.json();
+
+
+    if (
+      !person ||
+      person.error
+    ) {
+
+      throw new Error(
+        person &&
+        person.error
+          ? person.error
+          : "人物情報がありません。"
+      );
+
+    }
+
+
+    // =====================================================
+    // SEO
+    // =====================================================
+
+    document.title =
+      person.name +
+      "の出演作品・監督作品｜ドコデミレル？";
+
+
+    const canonicalUrl =
+      "https://doko-de-mireru.vercel.app/person.html?id=" +
+      encodeURIComponent(
+        person.id
+      );
+
+
+    document
+      .getElementById(
+        "canonicalLink"
+      )
+      .setAttribute(
+        "href",
+        canonicalUrl
+      );
+
+
+    // =====================================================
+    // 写真
+    // =====================================================
+
+    if (person.profile_path) {
+
+      personPhoto.innerHTML =
+        '<img ' +
+        'class="person-photo" ' +
+        'src="https://image.tmdb.org/t/p/w500' +
+        escapeHtml(
+          person.profile_path
+        ) +
+        '" ' +
+        'alt="' +
+        escapeHtml(
+          person.name
+        ) +
+        '">';
+
+    }
+    else {
+
+      personPhoto.innerHTML =
+        '<div class="person-photo-placeholder">' +
+        "写真なし" +
+        "</div>";
+
+    }
+
+
+    // =====================================================
+    // 名前
+    // =====================================================
+
+    personName.textContent =
+      person.name || "";
+
+
+    personOriginalName.textContent =
+      (
+        person.original_name &&
+        person.original_name !==
+        person.name
+      )
+        ? person.original_name
+        : "";
+
+
+    // =====================================================
+    // 基本情報
+    // =====================================================
+
+    const meta = [];
+
+
+    if (
+      person.known_for_department
+    ) {
+
+      meta.push(
+        '<div class="person-meta-row">' +
+          '<span class="person-meta-label">' +
+            "主な分野" +
+          "</span>" +
+          '<span class="person-meta-value">' +
+            escapeHtml(
+              departmentName(
+                person.known_for_department
+              )
+            ) +
+          "</span>" +
+        "</div>"
+      );
+
+    }
+
+
+    if (person.birthday) {
+
+      meta.push(
+        '<div class="person-meta-row">' +
+          '<span class="person-meta-label">' +
+            "生年月日" +
+          "</span>" +
+          '<span class="person-meta-value">' +
+            escapeHtml(
+              formatDate(
+                person.birthday
+              )
+            ) +
+          "</span>" +
+        "</div>"
+      );
+
+    }
+
+
+    if (person.deathday) {
+
+      meta.push(
+        '<div class="person-meta-row">' +
+          '<span class="person-meta-label">' +
+            "没年月日" +
+          "</span>" +
+          '<span class="person-meta-value">' +
+            escapeHtml(
+              formatDate(
+                person.deathday
+              )
+            ) +
+          "</span>" +
+        "</div>"
+      );
+
+    }
+
+
+    if (person.place_of_birth) {
+
+      meta.push(
+        '<div class="person-meta-row">' +
+          '<span class="person-meta-label">' +
+            "出生地" +
+          "</span>" +
+          '<span class="person-meta-value">' +
+            escapeHtml(
+              person.place_of_birth
+            ) +
+          "</span>" +
+        "</div>"
+      );
+
+    }
+
+
+    personMeta.innerHTML =
+      meta.join("");
+
+
+    // =====================================================
+    // 略歴
+    // =====================================================
+
+    if (person.biography) {
+
+      personBiography.textContent =
+        person.biography;
+
+    }
+    else {
+
+      biographyTitle.hidden =
+        true;
+
+      personBiography.hidden =
+        true;
+
+    }
+
+
+    // =====================================================
+    // 出演作品
+    // =====================================================
+
+    castData =
+      Array.isArray(person.cast)
+        ? person.cast
+        : [];
+
+
+    if (
+      castData.length > 0
+    ) {
+
+      castSection.hidden =
+        false;
+
+      renderCast();
+
+    }
+
+
+    // =====================================================
+    // 監督作品
+    // =====================================================
+
+    directorData =
+      Array.isArray(person.directed)
+        ? person.directed
+        : [];
+
+
+    if (
+      directorData.length > 0
+    ) {
+
+      directorSection.hidden =
+        false;
+
+      renderDirector();
+
+    }
+
+
+    // =====================================================
+    // 完了
+    // =====================================================
+
+    loading.hidden =
+      true;
+
+    content.hidden =
+      false;
+
+
+  }
+  catch(error){
+
+    console.error(
+      "PERSON PAGE ERROR:",
+      error
+    );
+
+
+    loading.textContent =
+      "人物情報を読み込めませんでした。";
+
+  }
+
+}
+
+
+// =========================================================
+// 開始
+// =========================================================
+
+loadPerson();
+
+</script>
+
+
+</body>
+</html>
