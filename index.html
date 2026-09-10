@@ -3474,6 +3474,321 @@ font-weight:bold;
   }
 
 }
+
+/* =========================================================
+   人物から探す
+========================================================= */
+
+.person-search-section{
+  background:#fff;
+
+  border-radius:16px;
+
+  padding:22px;
+
+  margin-bottom:25px;
+
+  box-shadow:
+    0 3px 15px
+    rgba(0,0,0,.08);
+}
+
+
+.person-search-heading{
+  text-align:center;
+
+  margin-bottom:18px;
+}
+
+
+.person-search-heading h2{
+  margin:0;
+
+  font-size:23px;
+
+  color:#111827;
+}
+
+
+.person-search-heading p{
+  margin:
+    8px 0 0;
+
+  color:#6b7280;
+
+  font-size:14px;
+
+  line-height:1.6;
+}
+
+
+/* =========================================================
+   人物検索欄
+========================================================= */
+
+.person-search-row{
+  display:flex;
+
+  gap:10px;
+
+  max-width:650px;
+
+  margin:0 auto;
+}
+
+
+#personSearchInput{
+  flex:1;
+
+  min-width:0;
+
+  height:52px;
+
+  padding:
+    0 16px;
+
+  border:
+    1px solid
+    #dbe3ef;
+
+  border-radius:12px;
+
+  background:#fff;
+
+  color:#111827;
+
+  font-size:16px;
+
+  outline:none;
+}
+
+
+#personSearchInput:focus{
+  border-color:#2563eb;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(37,99,235,.10);
+}
+
+
+#personSearchButton{
+  min-width:95px;
+
+  height:52px;
+
+  padding:
+    0 20px;
+
+  border:0;
+
+  border-radius:12px;
+
+  background:#2563eb;
+
+  color:#fff;
+
+  font-size:15px;
+
+  font-weight:800;
+
+  cursor:pointer;
+}
+
+
+#personSearchButton:hover{
+  background:#1d4ed8;
+}
+
+
+/* =========================================================
+   人物検索結果
+========================================================= */
+
+.person-search-status{
+  margin-top:15px;
+
+  text-align:center;
+
+  color:#6b7280;
+
+  font-size:14px;
+}
+
+
+.person-search-results{
+  display:grid;
+
+  grid-template-columns:
+    repeat(5,minmax(0,1fr));
+
+  gap:12px;
+
+  margin-top:18px;
+}
+
+
+.person-search-card{
+  display:block;
+
+  min-width:0;
+
+  padding:12px;
+
+  background:#f8fafc;
+
+  border:
+    1px solid
+    #e5e7eb;
+
+  border-radius:12px;
+
+  text-align:center;
+
+  transition:
+    transform .15s ease,
+    border-color .15s ease,
+    box-shadow .15s ease;
+}
+
+
+.person-search-card:hover{
+  transform:
+    translateY(-2px);
+
+  border-color:#93c5fd;
+
+  box-shadow:
+    0 5px 15px
+    rgba(0,0,0,.08);
+}
+
+
+.person-search-photo{
+  width:90px;
+
+  height:90px;
+
+  margin:
+    0 auto
+    10px;
+
+  display:block;
+
+  object-fit:cover;
+
+  border-radius:50%;
+
+  background:#e5e7eb;
+}
+
+
+.person-search-photo-empty{
+  width:90px;
+
+  height:90px;
+
+  margin:
+    0 auto
+    10px;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  border-radius:50%;
+
+  background:#e5e7eb;
+
+  font-size:34px;
+}
+
+
+.person-search-name{
+  color:#111827;
+
+  font-size:14px;
+
+  font-weight:800;
+
+  line-height:1.45;
+}
+
+
+.person-search-department{
+  margin-top:4px;
+
+  color:#6b7280;
+
+  font-size:12px;
+
+  line-height:1.4;
+}
+
+
+/* =========================================================
+   人物検索 スマホ
+========================================================= */
+
+@media(max-width:700px){
+
+  .person-search-section{
+    padding:
+      18px
+      14px;
+  }
+
+
+  .person-search-heading{
+    text-align:left;
+  }
+
+
+  .person-search-heading h2{
+    font-size:19px;
+  }
+
+
+  .person-search-row{
+    gap:8px;
+  }
+
+
+  #personSearchInput{
+    height:50px;
+
+    font-size:15px;
+  }
+
+
+  #personSearchButton{
+    min-width:76px;
+
+    height:50px;
+
+    padding:
+      0 12px;
+  }
+
+
+  .person-search-results{
+    grid-template-columns:
+      repeat(2,minmax(0,1fr));
+
+    gap:10px;
+  }
+
+
+  .person-search-photo,
+  .person-search-photo-empty{
+    width:78px;
+
+    height:78px;
+  }
+
+}
      
 </style>
 
@@ -4073,6 +4388,61 @@ font-weight:bold;
      
 </section>    
 
+<!-- =========================================================
+     人物から探す
+========================================================= -->
+
+<section
+  class="person-search-section"
+  aria-labelledby="personSearchHeading"
+>
+
+  <div class="person-search-heading">
+
+    <h2 id="personSearchHeading">
+      👤 人物から探す
+    </h2>
+
+    <p>
+      俳優・声優・監督の名前から作品を探せます
+    </p>
+
+  </div>
+
+
+  <div class="person-search-row">
+
+    <input
+      id="personSearchInput"
+      type="text"
+      placeholder="俳優・声優・監督の名前を入力"
+      autocomplete="off"
+      aria-label="人物名を入力"
+    >
+
+    <button
+      id="personSearchButton"
+      type="button"
+    >
+      検索
+    </button>
+
+  </div>
+
+
+  <div
+    id="personSearchStatus"
+    class="person-search-status"
+  ></div>
+
+
+  <div
+    id="personSearchResults"
+    class="person-search-results"
+  ></div>
+
+</section>
+     
 <!-- =====================================================
      人気作品
 ====================================================== -->
@@ -6754,6 +7124,324 @@ function createGenreResultCard(
     </a>
 
   `;
+
+}
+
+/* =========================================================
+   人物から探す
+========================================================= */
+
+const personSearchInput =
+  document.getElementById(
+    "personSearchInput"
+  );
+
+const personSearchButton =
+  document.getElementById(
+    "personSearchButton"
+  );
+
+const personSearchStatus =
+  document.getElementById(
+    "personSearchStatus"
+  );
+
+const personSearchResults =
+  document.getElementById(
+    "personSearchResults"
+  );
+
+
+/* =========================================================
+   人物検索
+========================================================= */
+
+async function searchPeople(){
+
+  if(
+    !personSearchInput ||
+    !personSearchButton ||
+    !personSearchResults
+  ){
+    return;
+  }
+
+
+  const query =
+    personSearchInput.value.trim();
+
+
+  if(!query){
+
+    personSearchStatus.textContent =
+      "人物名を入力してください。";
+
+    personSearchResults.innerHTML =
+      "";
+
+    return;
+
+  }
+
+
+  personSearchButton.disabled =
+    true;
+
+  personSearchStatus.textContent =
+    "人物を検索しています…";
+
+  personSearchResults.innerHTML =
+    "";
+
+
+  try{
+
+    const response =
+      await fetch(
+        "/api/search?personSearch=" +
+        encodeURIComponent(
+          query
+        )
+      );
+
+
+    const data =
+      await response.json();
+
+
+    if(
+      !response.ok
+    ){
+
+      throw new Error(
+        data.error ||
+        "人物検索に失敗しました。"
+      );
+
+    }
+
+
+    const people =
+      data &&
+      Array.isArray(
+        data.results
+      )
+        ? data.results
+        : [];
+
+
+    if(
+      people.length === 0
+    ){
+
+      personSearchStatus.textContent =
+        "該当する人物が見つかりませんでした。";
+
+      return;
+
+    }
+
+
+    personSearchStatus.textContent =
+      "「" +
+      query +
+      "」の人物検索結果";
+
+
+    personSearchResults.innerHTML =
+      people
+        .map(
+          createPersonSearchCard
+        )
+        .join("");
+
+
+  }catch(error){
+
+    console.error(
+      "Person search error:",
+      error
+    );
+
+
+    personSearchStatus.textContent =
+      "人物情報を取得できませんでした。";
+
+
+  }finally{
+
+    personSearchButton.disabled =
+      false;
+
+  }
+
+}
+
+
+/* =========================================================
+   人物カード
+========================================================= */
+
+function createPersonSearchCard(
+  person
+){
+
+  if(
+    !person ||
+    !person.id ||
+    !person.name
+  ){
+    return "";
+  }
+
+
+  const profileHtml =
+    person.profile_path
+      ? (
+          '<img' +
+          ' class="person-search-photo"' +
+          ' src="https://image.tmdb.org/t/p/w185' +
+          person.profile_path +
+          '"' +
+          ' alt="' +
+          escapeHtml(person.name) +
+          '"' +
+          ' loading="lazy"' +
+          '>'
+        )
+      : (
+          '<div class="person-search-photo-empty">' +
+          '👤' +
+          '</div>'
+        );
+
+
+  const department =
+    formatPersonDepartment(
+      person.known_for_department
+    );
+
+
+  return (
+    '<a' +
+    ' class="person-search-card"' +
+    ' href="./person.html?id=' +
+    encodeURIComponent(
+      person.id
+    ) +
+    '">' +
+
+      profileHtml +
+
+      '<div class="person-search-name">' +
+        escapeHtml(
+          person.name
+        ) +
+      '</div>' +
+
+      (
+        department
+          ? (
+              '<div class="person-search-department">' +
+                escapeHtml(
+                  department
+                ) +
+              '</div>'
+            )
+          : ""
+      ) +
+
+    '</a>'
+  );
+
+}
+
+
+/* =========================================================
+   人物の担当表記
+========================================================= */
+
+function formatPersonDepartment(
+  department
+){
+
+  const value =
+    String(
+      department || ""
+    );
+
+
+  if(
+    value === "Acting"
+  ){
+    return "俳優・声優";
+  }
+
+
+  if(
+    value === "Directing"
+  ){
+    return "監督";
+  }
+
+
+  if(
+    value === "Writing"
+  ){
+    return "脚本";
+  }
+
+
+  if(
+    value === "Production"
+  ){
+    return "制作";
+  }
+
+
+  return value;
+
+}
+
+
+/* =========================================================
+   人物検索ボタン
+========================================================= */
+
+if(
+  personSearchButton
+){
+
+  personSearchButton.addEventListener(
+    "click",
+    searchPeople
+  );
+
+}
+
+
+/* =========================================================
+   Enterでも人物検索
+========================================================= */
+
+if(
+  personSearchInput
+){
+
+  personSearchInput.addEventListener(
+    "keydown",
+    function(event){
+
+      if(
+        event.key === "Enter"
+      ){
+
+        searchPeople();
+
+      }
+
+    }
+  );
 
 }
      
