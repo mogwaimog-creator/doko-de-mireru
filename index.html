@@ -1858,6 +1858,13 @@ font-weight:bold;
     min-height:auto;
   }
 
+　.popular-grid{
+  grid-template-columns:
+    repeat(3,minmax(0,1fr));
+
+  gap:12px;
+}
+     
 }
 
 
@@ -1937,6 +1944,14 @@ font-weight:bold;
   .provider-item{
     font-size:12px;
   }
+
+.popular-grid{
+  grid-template-columns:
+    repeat(2,minmax(0,1fr));
+
+  gap:10px;
+}
+
 
 }
 /* =========================================================
@@ -5655,14 +5670,7 @@ function createPopularMovieCard(movie){
           )}
 
         </div>
-
-
-        <div class="popular-card-link">
-
-          作品詳細を見る →
-
-        </div>
-
+        
       </div>
 
     </a>
