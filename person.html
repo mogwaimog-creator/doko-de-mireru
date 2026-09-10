@@ -1299,8 +1299,8 @@ function renderWorks(
       .join("");
 
   moreWrapper.hidden =
-    displayCount >=
-    data.length;
+    data.length <= 12 ||
+    displayCount >= data.length;
 }
 
 
