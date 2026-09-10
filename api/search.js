@@ -206,7 +206,15 @@ const country =
         .trim()
         .toLowerCase()
     : "";
+// =====================================================
+// メインサイト ジャンルから探す
+// =====================================================
 
+const genreBrowse =
+  String(
+    req.query.genreBrowse || ""
+  ).trim();
+    
 // =====================================================
 // Netflix ジャンル
 //
@@ -312,6 +320,30 @@ if (id) {
   return res.status(200).json(result);
 }
 
+// =====================================================
+// メインサイト ジャンルから探す
+// =====================================================
+
+if(
+  genreBrowse === "1" &&
+  genre
+){
+
+  const genreResults =
+    await getGenreBrowseWorks(
+      apiKey,
+      genre
+    );
+
+  return res
+    .status(200)
+    .json({
+      results:
+        genreResults
+    });
+
+}
+    
 // =====================================================
 // 人気作品
 // =====================================================
@@ -6461,6 +6493,332 @@ async function getDisneyNewWorks(
     );
 
 }
+
+
+// =====================================================
+// メインサイト ジャンル作品取得
+// =====================================================
+
+async function getGenreBrowseWorks(
+  apiKey,
+  genre
+){
+
+  // ジャンルごとのTMDBジャンルID
+  let movieGenres = "";
+  let tvGenres = "";
+
+  // TVも取得するか
+  let includeTv = true;
+
+  // 日本アニメだけに絞るか
+  let animeOnly = false;
+
+
+  // ===================================================
+  // ジャンル判定
+  // ===================================================
+
+  if(
+    genre === "suspense"
+  ){
+    movieGenres =
+      "53|9648";
+
+    tvGenres =
+      "9648";
+  }
+
+  else if(
+    genre === "romance"
+  ){
+    movieGenres =
+      "10749";
+
+    // TVには専用のRomanceジャンルがないため
+    // 映画のみ
+    includeTv = false;
+  }
+
+  else if(
+    genre === "action"
+  ){
+    movieGenres =
+      "28";
+
+    tvGenres =
+      "10759";
+  }
+
+  else if(
+    genre === "comedy"
+  ){
+    movieGenres =
+      "35";
+
+    tvGenres =
+      "35";
+  }
+
+  else if(
+    genre === "horror"
+  ){
+    movieGenres =
+      "27";
+
+    // TVには専用のHorrorジャンルがないため
+    // 映画のみ
+    includeTv = false;
+  }
+
+  else if(
+    genre === "scifi"
+  ){
+    movieGenres =
+      "878|14";
+
+    tvGenres =
+      "10765";
+  }
+
+  else if(
+    genre === "anime"
+  ){
+    movieGenres =
+      "16";
+
+    tvGenres =
+      "16";
+
+    animeOnly = true;
+  }
+
+  else{
+    return [];
+  }
+
+
+  // ===================================================
+  // 映画取得URL
+  // ===================================================
+
+  let movieUrl =
+    "https://api.themoviedb.org/3/discover/movie" +
+    "?api_key=" +
+    encodeURIComponent(
+      apiKey
+    ) +
+    "&language=ja-JP" +
+    "&region=JP" +
+    "&include_adult=false" +
+    "&sort_by=popularity.desc" +
+    "&vote_count.gte=20" +
+    "&with_genres=" +
+    encodeURIComponent(
+      movieGenres
+    );
+
+
+  // ===================================================
+  // TV取得URL
+  // ===================================================
+
+  let tvUrl =
+    "https://api.themoviedb.org/3/discover/tv" +
+    "?api_key=" +
+    encodeURIComponent(
+      apiKey
+    ) +
+    "&language=ja-JP" +
+    "&sort_by=popularity.desc" +
+    "&vote_count.gte=20" +
+    "&with_genres=" +
+    encodeURIComponent(
+      tvGenres
+    );
+
+
+  // ===================================================
+  // アニメは日本作品中心
+  // ===================================================
+
+  if(
+    animeOnly
+  ){
+    movieUrl +=
+      "&with_original_language=ja";
+
+    tvUrl +=
+      "&with_original_language=ja";
+  }
+
+
+  // ===================================================
+  // TMDBから取得
+  // ===================================================
+
+  const movieResponse =
+    await fetch(
+      movieUrl
+    );
+
+
+  let tvResponse = null;
+
+  if(
+    includeTv
+  ){
+    tvResponse =
+      await fetch(
+        tvUrl
+      );
+  }
+
+
+  if(
+    !movieResponse.ok
+  ){
+    throw new Error(
+      "ジャンル映画を取得できませんでした。"
+    );
+  }
+
+
+  const movieData =
+    await movieResponse.json();
+
+
+  let tvData = {
+    results: []
+  };
+
+
+  if(
+    includeTv &&
+    tvResponse
+  ){
+
+    if(
+      !tvResponse.ok
+    ){
+      throw new Error(
+        "ジャンルTV作品を取得できませんでした。"
+      );
+    }
+
+    tvData =
+      await tvResponse.json();
+
+  }
+
+
+  // ===================================================
+  // 映画を整形
+  // ===================================================
+
+  const movies =
+    Array.isArray(
+      movieData.results
+    )
+      ? movieData.results.map(
+          function(movie){
+
+            return {
+              ...movie,
+
+              title:
+                movie.title ||
+                movie.original_title ||
+                "",
+
+              release_date:
+                movie.release_date ||
+                "",
+
+              content_type:
+                "movie"
+            };
+
+          }
+        )
+      : [];
+
+
+  // ===================================================
+  // TV作品を整形
+  // ===================================================
+
+  const tvWorks =
+    Array.isArray(
+      tvData.results
+    )
+      ? tvData.results.map(
+          function(tv){
+
+            return {
+              ...tv,
+
+              title:
+                tv.name ||
+                tv.original_name ||
+                "",
+
+              release_date:
+                tv.first_air_date ||
+                "",
+
+              content_type:
+                "tv"
+            };
+
+          }
+        )
+      : [];
+
+
+  // ===================================================
+  // 結合・並び替え
+  // ===================================================
+
+  return [
+    ...movies,
+    ...tvWorks
+  ]
+    .filter(
+      function(work){
+
+        return (
+          work.id &&
+          work.poster_path
+        );
+
+      }
+    )
+    .sort(
+      function(a,b){
+
+        return (
+          Number(
+            b.popularity || 0
+          ) -
+          Number(
+            a.popularity || 0
+          )
+        );
+
+      }
+    )
+    .slice(
+      0,
+      20
+    );
+
+}
+
+
+// =====================================================
+// 配信サービス作品取得
+// =====================================================
 
 async function getProviderWorks(
   apiKey,
