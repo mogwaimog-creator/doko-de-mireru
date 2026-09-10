@@ -1287,8 +1287,16 @@ function renderWorks(
   moreWrapper
 ){
 
+  // 実際に表示できる作品だけに絞る
+  const validData =
+    data.filter(
+      work =>
+        work &&
+        work.id
+    );
+
   const visible =
-    data.slice(
+    validData.slice(
       0,
       displayCount
     );
@@ -1298,9 +1306,10 @@ function renderWorks(
       .map(createWorkCard)
       .join("");
 
+  // まだ表示していない作品がある時だけ
+  // 「もっと見る」を表示する
   moreWrapper.hidden =
-    data.length <= 12 ||
-    displayCount >= data.length;
+    displayCount >= validData.length;
 }
 
 
