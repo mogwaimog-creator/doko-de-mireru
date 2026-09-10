@@ -7017,25 +7017,100 @@ function showError(message){
       "from"
     );
 
+// =====================================================
+// 元の配信サービスページで選んでいた条件
+// =====================================================
 
+const backCountry =
+  params.get(
+    "backCountry"
+  );
+
+const backGenre =
+  params.get(
+    "backGenre"
+  );
+
+const backType =
+  params.get(
+    "backType"
+  );
+
+  
   // =====================================================
   // Netflix
   // =====================================================
 
   if(
-    from === "netflix"
+  from === "netflix"
+){
+
+  let backUrl =
+    "./netflix.html";
+
+
+  const backParams =
+    new URLSearchParams();
+
+
+  // 国・地域
+  if(
+    backCountry
   ){
-    backLink.href =
-      "./netflix.html";
-
-    backLink.textContent =
-      "← Netflixに戻る";
-
-    backLink.setAttribute(
-      "aria-label",
-      "Netflixに戻る"
+    backParams.set(
+      "country",
+      backCountry
     );
   }
+
+
+  // ジャンル
+  if(
+    backGenre
+  ){
+    backParams.set(
+      "genre",
+      backGenre
+    );
+  }
+
+
+  // 映画・ドラマ・アニメ
+  if(
+    backType
+  ){
+    backParams.set(
+      "type",
+      backType
+    );
+  }
+
+
+  const backQuery =
+    backParams.toString();
+
+
+  if(
+    backQuery
+  ){
+    backUrl +=
+      "?" +
+      backQuery;
+  }
+
+
+  backLink.href =
+    backUrl;
+
+  backLink.textContent =
+    "← Netflixに戻る";
+
+  backLink.setAttribute(
+    "aria-label",
+    "Netflixに戻る"
+  );
+
+}
 
 
   // =====================================================
