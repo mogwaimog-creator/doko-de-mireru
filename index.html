@@ -1461,68 +1461,77 @@ font-weight:bold;
 
 @media(max-width:700px){
 
-  .popular-section{
-    padding:17px 14px;
-  }
+  .movie-card{
+  grid-template-columns:
+    92px
+    minmax(0,1fr);
 
-  .popular-title{
-    font-size:20px;
-  }
+  gap:12px;
 
-  .popular-grid{
-    display:flex;
+  padding:12px;
 
-    overflow-x:auto;
+  border-radius:13px;
+}
 
-    gap:11px;
+.movie-poster{
+  width:92px;
+  height:138px;
+}
 
-    padding-bottom:8px;
+.movie-title{
+  font-size:18px;
+  line-height:1.35;
+}
 
-    scroll-snap-type:x proximity;
-  }
+.original-title{
+  font-size:12px;
+  margin-bottom:7px;
+}
 
-  .popular-card{
-    flex:
-      0 0
-      145px;
+.movie-meta-row{
+  gap:4px 8px;
+  font-size:12px;
+  margin-bottom:8px;
+}
 
-    display:block;
+.movie-meta-item{
+  white-space:normal;
+}
 
-    padding:0;
+.movie-overview{
+  font-size:12.5px;
+  line-height:1.55;
+  -webkit-line-clamp:2;
+  margin-bottom:8px;
+}
 
-    scroll-snap-align:start;
-  }
+.detail-button{
+  width:auto;
+  padding:7px 12px;
+  font-size:12.5px;
+}
 
-  .popular-poster{
-    width:100%;
+.availability-panel{
+  min-height:auto;
+  padding:11px 10px;
+}
 
-    height:auto;
+.availability-heading{
+  font-size:17px;
+  margin-bottom:7px;
+}
 
-    aspect-ratio:2 / 3;
+.availability-panel .provider-list{
+  margin-top:0;
+}
 
-    margin:0;
-  }
+.provider-list{
+  gap:8px 4px;
+}
 
-  .popular-card-info{
-    padding:10px;
-  }
-
-  .popular-card-title{
-    font-size:14px;
-  }
-
-  .popular-card-status{
-    margin-top:6px;
-
-    font-size:12px;
-  }
-
-  .popular-card-link{
-    margin-top:6px;
-
-    font-size:12px;
-  }
-
+.provider-item{
+  font-size:11px;
+}
 }
 
 
