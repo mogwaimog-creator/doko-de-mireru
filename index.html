@@ -1871,6 +1871,11 @@ font-weight:bold;
   grid-template-columns:
     repeat(3,minmax(0,1fr));
 }
+
+.genre-results-grid{
+  grid-template-columns:
+    repeat(3,minmax(0,1fr));
+}
      
 }
 
@@ -1979,6 +1984,22 @@ font-weight:bold;
   font-size:13px;
 }     
 
+.genre-results-grid{
+  grid-template-columns:
+    repeat(2,minmax(0,1fr));
+
+  gap:10px;
+}
+
+.genre-result-info{
+  padding:
+    7px 8px 8px;
+}
+
+.genre-result-title{
+  font-size:12px;
+}
+     
 }
 /* =========================================================
    検索結果
@@ -3227,6 +3248,166 @@ font-weight:bold;
     0 4px 12px
     rgba(37,99,235,.10);
 }
+
+/* =========================================================
+   ジャンル作品一覧
+========================================================= */
+
+.genre-results-section{
+  background:#fff;
+
+  border-radius:16px;
+
+  padding:22px;
+
+  margin-bottom:25px;
+
+  box-shadow:
+    0 3px 15px
+    rgba(0,0,0,.08);
+}
+
+
+.genre-results-section[hidden]{
+  display:none;
+}
+
+
+.genre-results-header{
+  margin-bottom:18px;
+}
+
+
+.genre-results-title{
+  margin:0;
+
+  font-size:23px;
+
+  color:#111827;
+}
+
+
+.genre-results-description{
+  margin:
+    8px 0 0;
+
+  color:#6b7280;
+
+  font-size:14px;
+
+  line-height:1.6;
+}
+
+
+/* =========================================================
+   ジャンル作品グリッド
+========================================================= */
+
+.genre-results-grid{
+  display:grid;
+
+  grid-template-columns:
+    repeat(5,minmax(0,1fr));
+
+  gap:12px;
+}
+
+
+/* =========================================================
+   ジャンル作品カード
+========================================================= */
+
+.genre-result-card{
+  min-width:0;
+
+  display:block;
+
+  background:#f8fafc;
+
+  border:
+    1px solid
+    #e5e7eb;
+
+  border-radius:12px;
+
+  overflow:hidden;
+
+  color:inherit;
+
+  text-decoration:none;
+
+  transition:
+    transform .15s ease,
+    border-color .15s ease,
+    box-shadow .15s ease;
+}
+
+
+.genre-result-card:hover{
+  transform:
+    translateY(-2px);
+
+  border-color:#93c5fd;
+
+  box-shadow:
+    0 5px 15px
+    rgba(0,0,0,.08);
+}
+
+
+.genre-result-poster{
+  display:block;
+
+  width:100%;
+
+  aspect-ratio:2 / 3;
+
+  object-fit:cover;
+
+  background:#e5e7eb;
+}
+
+
+.genre-result-poster.no-image{
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  color:#6b7280;
+
+  font-size:13px;
+}
+
+
+/* =========================================================
+   ジャンル作品タイトル
+========================================================= */
+
+.genre-result-info{
+  padding:
+    8px 9px 9px;
+}
+
+
+.genre-result-title{
+  color:#111827;
+
+  font-size:13px;
+
+  font-weight:700;
+
+  line-height:1.4;
+
+  overflow:hidden;
+
+  display:-webkit-box;
+
+  -webkit-box-orient:vertical;
+
+  -webkit-line-clamp:2;
+}
      
 </style>
 
@@ -3352,6 +3533,40 @@ font-weight:bold;
 
 </section>
 
+<!-- =========================================================
+     ジャンル作品一覧
+========================================================= -->
+
+<section
+  id="genreResultsSection"
+  class="genre-results-section"
+  hidden
+>
+
+  <div class="genre-results-header">
+
+    <h2
+      id="genreResultsTitle"
+      class="genre-results-title"
+    >
+      ジャンル作品
+    </h2>
+
+    <p class="genre-results-description">
+      選んだジャンルのおすすめ作品です
+    </p>
+
+  </div>
+
+
+  <div
+    id="genreResults"
+    class="genre-results-grid"
+  >
+  </div>
+
+</section>
+     
 <!-- =====================================================
      おすすめ作品から探す
 ====================================================== -->
