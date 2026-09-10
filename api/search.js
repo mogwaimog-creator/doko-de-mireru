@@ -112,7 +112,20 @@ const id =
     ? req.query.id.trim()
     : "";
 
+// =====================================================
+// 人物検索
+// =====================================================
 
+const personSearch =
+  String(
+    req.query.personSearch || ""
+  ).trim();
+
+const personId =
+  String(
+    req.query.personId || ""
+  ).trim();
+    
 const season =
   req.query &&
   typeof req.query.season === "string"
