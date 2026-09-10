@@ -7345,24 +7345,80 @@ else if(
 }
 
 
-  // =====================================================
-  // Disney+
-  // =====================================================
+ // =====================================================
+// Disney+
+// =====================================================
 
-  else if(
-    from === "disney"
+else if(
+  from === "disney"
+){
+
+  let backUrl =
+    "./disney.html";
+
+
+  const backParams =
+    new URLSearchParams();
+
+
+  // 国・地域
+  if(
+    backCountry
   ){
-    backLink.href =
-      "./disney.html";
-
-    backLink.textContent =
-      "← Disney+に戻る";
-
-    backLink.setAttribute(
-      "aria-label",
-      "Disney+に戻る"
+    backParams.set(
+      "country",
+      backCountry
     );
   }
+
+
+  // ジャンル
+  if(
+    backGenre
+  ){
+    backParams.set(
+      "genre",
+      backGenre
+    );
+  }
+
+
+  // 映画・ドラマ・アニメ
+  if(
+    backType
+  ){
+    backParams.set(
+      "type",
+      backType
+    );
+  }
+
+
+  const backQuery =
+    backParams.toString();
+
+
+  if(
+    backQuery
+  ){
+    backUrl +=
+      "?" +
+      backQuery;
+  }
+
+
+  backLink.href =
+    backUrl;
+
+  backLink.textContent =
+    "← Disney+に戻る";
+
+  backLink.setAttribute(
+    "aria-label",
+    "Disney+に戻る"
+  );
+
+}
 
 })();
 </script>
