@@ -440,16 +440,26 @@ header p{
   gap:6px;
 }
 
-.cast-item{
-  background:#f3f4f6;
+.person-link{
+  color:#2563eb;
 
-  padding:5px 9px;
+  cursor:pointer;
 
-  border-radius:15px;
+  text-decoration:none;
 
-  font-size:14px;
+  transition:
+    color .15s ease,
+    background .15s ease;
+}
 
-  color:#444;
+.person-link:hover{
+  color:#1d4ed8;
+
+  text-decoration:underline;
+}
+
+.cast-item.person-link:hover{
+  background:#eaf2ff;
 }
 
 .overview-text{
@@ -3840,24 +3850,62 @@ if(movie.status){
   }
 
 
+if(
+  movie.director &&
+  movie.director.name
+){
+
+  const directorElement =
+    document.getElementById(
+      "director"
+    );
+
   if(
-    movie.director &&
-    movie.director.name
+    directorElement &&
+    movie.director.id
   ){
 
-    setText(
-      "director",
-      movie.director.name
+    const directorLink =
+      document.createElement(
+        "a"
+      );
+
+    directorLink.href =
+      "./person.html?id=" +
+      encodeURIComponent(
+        movie.director.id
+      );
+
+    directorLink.className =
+      "person-link";
+
+    directorLink.textContent =
+      movie.director.name;
+
+    directorElement.innerHTML =
+      "";
+
+    directorElement.appendChild(
+      directorLink
     );
 
   }else{
 
     setText(
       "director",
-      "監督情報はありません。"
+      movie.director.name
     );
 
   }
+
+}else{
+
+  setText(
+    "director",
+    "監督情報はありません。"
+  );
+
+}
 
 
   renderCast(
@@ -4018,22 +4066,40 @@ function renderCast(cast){
 
 
     const item =
-      document.createElement(
-        "div"
-      );
+  document.createElement(
+    "a"
+  );
 
 
-    item.className =
-      "cast-item";
+item.className =
+  "cast-item person-link";
 
 
-    item.textContent =
-      person.name;
+if(
+  person.id
+){
 
-
-    container.appendChild(
-      item
+  item.href =
+    "./person.html?id=" +
+    encodeURIComponent(
+      person.id
     );
+
+}else{
+
+  item.href =
+    "#";
+
+}
+
+
+item.textContent =
+  person.name;
+
+
+container.appendChild(
+  item
+);
 
   });
 
