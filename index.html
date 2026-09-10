@@ -5971,6 +5971,327 @@ searchButton.addEventListener(
 );
 
 /* =========================================================
+   ジャンルから探す
+========================================================= */
+
+const genreSearchCards =
+  document.querySelectorAll(
+    ".genre-search-card"
+  );
+
+const genreResultsSection =
+  document.getElementById(
+    "genreResultsSection"
+  );
+
+const genreResultsTitle =
+  document.getElementById(
+    "genreResultsTitle"
+  );
+
+const genreResults =
+  document.getElementById(
+    "genreResults"
+  );
+
+
+/* =========================================================
+   ジャンル名
+========================================================= */
+
+const genreNames = {
+
+  suspense:
+    "🕵️ サスペンス・ミステリー",
+
+  romance:
+    "💕 恋愛・ラブコメ",
+
+  action:
+    "💥 アクション",
+
+  comedy:
+    "🤣 コメディ",
+
+  horror:
+    "👻 ホラー",
+
+  scifi:
+    "🛸 SF・ファンタジー",
+
+  anime:
+    "🐱 アニメ"
+
+};
+
+
+/* =========================================================
+   ジャンルボタン
+========================================================= */
+
+genreSearchCards.forEach(
+  function(button){
+
+    button.addEventListener(
+      "click",
+      function(){
+
+        const genre =
+          button.dataset.genre;
+
+
+        /* -----------------------------------------------
+           選択中の色
+        ----------------------------------------------- */
+
+        genreSearchCards.forEach(
+          function(card){
+
+            card.classList.remove(
+              "active"
+            );
+
+          }
+        );
+
+
+        button.classList.add(
+          "active"
+        );
+
+
+        /* -----------------------------------------------
+           ジャンル作品取得
+        ----------------------------------------------- */
+
+        loadGenreWorks(
+          genre
+        );
+
+      }
+    );
+
+  }
+);
+
+
+/* =========================================================
+   ジャンル作品取得
+========================================================= */
+
+async function loadGenreWorks(
+  genre
+){
+
+  if(
+    !genreResultsSection ||
+    !genreResultsTitle ||
+    !genreResults
+  ){
+    return;
+  }
+
+
+  genreResultsSection.hidden =
+    false;
+
+
+  genreResultsTitle.textContent =
+    (genreNames[genre] || "ジャンル") +
+    "の作品";
+
+
+  genreResults.innerHTML =
+    `
+    <div class="empty">
+      作品を読み込んでいます…
+    </div>
+    `;
+
+
+  /* -----------------------------------------------
+     一覧までスクロール
+  ----------------------------------------------- */
+
+  genreResultsSection.scrollIntoView({
+    behavior:"smooth",
+    block:"start"
+  });
+
+
+  try{
+
+    const response =
+      await fetch(
+        "/api/search?genreBrowse=1&genre=" +
+        encodeURIComponent(
+          genre
+        )
+      );
+
+
+    const data =
+      await response.json();
+
+
+    if(
+      !response.ok ||
+      !Array.isArray(
+        data.results
+      )
+    ){
+
+      throw new Error(
+        "ジャンル作品を取得できませんでした。"
+      );
+
+    }
+
+
+    if(
+      !data.results.length
+    ){
+
+      genreResults.innerHTML =
+        `
+        <div class="empty">
+          条件に合う作品がありません。
+        </div>
+        `;
+
+      return;
+    }
+
+
+    genreResults.innerHTML =
+      data.results
+        .map(
+          createGenreResultCard
+        )
+        .join("");
+
+
+  }catch(error){
+
+    console.error(
+      "Genre works error:",
+      error
+    );
+
+
+    genreResults.innerHTML =
+      `
+      <div class="empty">
+        作品を取得できませんでした。
+      </div>
+      `;
+
+  }
+
+}
+
+
+/* =========================================================
+   ジャンル作品カード
+========================================================= */
+
+function createGenreResultCard(
+  movie
+){
+
+  const title =
+    movie.title ||
+    movie.name ||
+    movie.original_title ||
+    movie.original_name ||
+    "作品名不明";
+
+
+  const movieId =
+    String(
+      movie.id || ""
+    ).trim();
+
+
+  let detailUrl =
+    "./detail.html?id=" +
+    encodeURIComponent(
+      movieId
+    );
+
+
+  /* TV作品 */
+  if(
+    movie.content_type === "tv"
+  ){
+
+    detailUrl +=
+      "&type=tv";
+
+  }
+
+
+  const poster =
+    movie.poster_path
+      ? "https://image.tmdb.org/t/p/w500" +
+        movie.poster_path
+      : "";
+
+
+  return `
+
+    <a
+      class="genre-result-card"
+      href="${detailUrl}"
+    >
+
+      ${
+        poster
+
+        ?
+
+        `
+        <img
+          class="genre-result-poster"
+          src="${poster}"
+          alt="${escapeHtml(
+            title
+          )}のポスター"
+          loading="lazy"
+        >
+        `
+
+        :
+
+        `
+        <div
+          class="genre-result-poster no-image"
+        >
+          NO IMAGE
+        </div>
+        `
+      }
+
+
+      <div class="genre-result-info">
+
+        <div class="genre-result-title">
+
+          ${escapeHtml(
+            title
+          )}
+
+        </div>
+
+      </div>
+
+    </a>
+
+  `;
+
+}
+     
+/* =========================================================
    人気作品 自動取得
 ========================================================= */
 
