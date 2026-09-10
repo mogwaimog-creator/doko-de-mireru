@@ -6144,8 +6144,9 @@ const genreLoadMoreButton =
 
 let currentGenreWorks = [];
 let currentGenreDisplayCount = 15;
-     
+let currentGenrePage = 1;     
 
+     
 /* =========================================================
    ジャンル名
 ========================================================= */
@@ -6273,12 +6274,13 @@ async function loadGenreWorks(
   try{
 
     const response =
-      await fetch(
-        "/api/search?genreBrowse=1&genre=" +
-        encodeURIComponent(
-          genre
-        )
-      );
+  await fetch(
+    "/api/search?genreBrowse=1&genre=" +
+    encodeURIComponent(
+      genre
+    ) +
+    "&genrePage=1"
+  );
 
 
     const data =
@@ -6381,11 +6383,166 @@ function renderGenreWorks(){
 
 genreLoadMoreButton.addEventListener(
   "click",
-  function(){
+  async function(){
 
-    currentGenreDisplayCount += 15;
+    // -----------------------------------------------
+    // まだ取得済みの作品が残っている場合
+    // -----------------------------------------------
 
-    renderGenreWorks();
+    if(
+      currentGenreDisplayCount <
+      currentGenreWorks.length
+    ){
+
+      currentGenreDisplayCount += 15;
+
+      renderGenreWorks();
+
+      return;
+    }
+
+
+    // -----------------------------------------------
+    // 次のTMDBページを取得
+    // -----------------------------------------------
+
+    currentGenrePage += 1;
+
+    genreLoadMoreButton.disabled =
+      true;
+
+    genreLoadMoreButton.textContent =
+      "読み込み中…";
+
+
+    try{
+
+      const activeGenreButton =
+        document.querySelector(
+          ".genre-search-card.active"
+        );
+
+      if(
+        !activeGenreButton
+      ){
+        return;
+      }
+
+      const genre =
+        activeGenreButton.dataset.genre;
+
+
+      const response =
+        await fetch(
+          "/api/search?genreBrowse=1&genre=" +
+          encodeURIComponent(genre) +
+          "&genrePage=" +
+          encodeURIComponent(
+            currentGenrePage
+          )
+        );
+
+
+      if(
+        !response.ok
+      ){
+        throw new Error(
+          "次の作品を取得できませんでした。"
+        );
+      }
+
+
+      const data =
+        await response.json();
+
+
+      const newWorks =
+        Array.isArray(
+          data.results
+        )
+          ? data.results
+          : [];
+
+
+      // -----------------------------------------------
+      // 重複作品を除外
+      // 映画とTVで同じIDになる可能性もあるので
+      // content_type + id で判定
+      // -----------------------------------------------
+
+      const existingKeys =
+        new Set(
+          currentGenreWorks.map(
+            function(work){
+
+              return (
+                work.content_type +
+                "-" +
+                work.id
+              );
+
+            }
+          )
+        );
+
+
+      const uniqueNewWorks =
+        newWorks.filter(
+          function(work){
+
+            const key =
+              work.content_type +
+              "-" +
+              work.id;
+
+            return !existingKeys.has(
+              key
+            );
+
+          }
+        );
+
+
+      currentGenreWorks.push(
+        ...uniqueNewWorks
+      );
+
+
+      // 15件分、表示範囲を広げる
+      currentGenreDisplayCount += 15;
+
+      renderGenreWorks();
+
+
+      // 新しい作品が0件なら終了
+      if(
+        uniqueNewWorks.length === 0
+      ){
+        genreLoadMoreWrapper.hidden =
+          true;
+      }
+
+    }
+    catch(error){
+
+      console.error(error);
+
+      currentGenrePage -= 1;
+
+      alert(
+        "作品を追加で取得できませんでした。"
+      );
+
+    }
+    finally{
+
+      genreLoadMoreButton.disabled =
+        false;
+
+      genreLoadMoreButton.textContent =
+        "もっと見る";
+
+    }
 
   }
 );
