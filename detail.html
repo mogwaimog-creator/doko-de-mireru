@@ -7269,24 +7269,80 @@ else if(
 }
 
 
-  // =====================================================
-  // Hulu
-  // =====================================================
+ // =====================================================
+// Hulu
+// =====================================================
 
-  else if(
-    from === "hulu"
+else if(
+  from === "hulu"
+){
+
+  let backUrl =
+    "./hulu.html";
+
+
+  const backParams =
+    new URLSearchParams();
+
+
+  // 国・地域
+  if(
+    backCountry
   ){
-    backLink.href =
-      "./hulu.html";
-
-    backLink.textContent =
-      "← Huluに戻る";
-
-    backLink.setAttribute(
-      "aria-label",
-      "Huluに戻る"
+    backParams.set(
+      "country",
+      backCountry
     );
   }
+
+
+  // ジャンル
+  if(
+    backGenre
+  ){
+    backParams.set(
+      "genre",
+      backGenre
+    );
+  }
+
+
+  // 映画・ドラマ・アニメ
+  if(
+    backType
+  ){
+    backParams.set(
+      "type",
+      backType
+    );
+  }
+
+
+  const backQuery =
+    backParams.toString();
+
+
+  if(
+    backQuery
+  ){
+    backUrl +=
+      "?" +
+      backQuery;
+  }
+
+
+  backLink.href =
+    backUrl;
+
+  backLink.textContent =
+    "← Huluに戻る";
+
+  backLink.setAttribute(
+    "aria-label",
+    "Huluに戻る"
+  );
+
+}
 
 
   // =====================================================
