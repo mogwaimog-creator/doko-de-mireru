@@ -4448,6 +4448,13 @@ if(
   apiUrl +=
     "&type=anime";
 
+}else if(
+  currentSearchType === "all"
+){
+
+  apiUrl +=
+    "&type=all";
+
 }
     const response =
       await fetch(
