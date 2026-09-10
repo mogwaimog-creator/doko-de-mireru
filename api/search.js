@@ -6713,72 +6713,81 @@ async function getGenreBrowseWorks(
 
 
   // ===================================================
-  // 映画を整形
-  // ===================================================
+// 映画を整形
+// ===================================================
 
-  const movies =
-    Array.isArray(
-      movieData.results
-    )
-      ? movieData.results.map(
-          function(movie){
+const movies =
+  Array.isArray(
+    movieData.results
+  )
+    ? movieData.results.map(
+        function(movie){
 
-            return {
-              ...movie,
+          return {
+            ...movie,
 
-              title:
-                movie.title ||
-                movie.original_title ||
-                "",
+            title:
+              movie.title ||
+              movie.original_title ||
+              "",
 
-              release_date:
-                movie.release_date ||
-                "",
+            release_date:
+              movie.release_date ||
+              "",
 
-              content_type:
-  animeOnly
-    ? "anime"
-    : "movie"
-            };
+            // 詳細ページ遷移用
+            content_type:
+              "movie",
 
-          }
-        )
-      : [];
+            // カード表示用
+            display_type:
+              genre === "anime"
+                ? "anime"
+                : "movie"
+          };
+
+        }
+      )
+    : [];
 
 
-  // ===================================================
-  // TV作品を整形
-  // ===================================================
+// ===================================================
+// TV作品を整形
+// ===================================================
 
-  const tvWorks =
-    Array.isArray(
-      tvData.results
-    )
-      ? tvData.results.map(
-          function(tv){
+const tvWorks =
+  Array.isArray(
+    tvData.results
+  )
+    ? tvData.results.map(
+        function(tv){
 
-            return {
-              ...tv,
+          return {
+            ...tv,
 
-              title:
-                tv.name ||
-                tv.original_name ||
-                "",
+            title:
+              tv.name ||
+              tv.original_name ||
+              "",
 
-              release_date:
-                tv.first_air_date ||
-                "",
+            release_date:
+              tv.first_air_date ||
+              "",
 
-              content_type:
-  animeOnly
-    ? "anime"
-    : "tv"
-            };
+            // 詳細ページ遷移用
+            content_type:
+              "tv",
 
-          }
-        )
-      : [];
+            // カード表示用
+            display_type:
+              genre === "anime"
+                ? "anime"
+                : "drama"
+          };
 
+        }
+      )
+    : [];
 
   // ===================================================
   // 結合・並び替え
