@@ -6145,7 +6145,8 @@ const genreLoadMoreButton =
 let currentGenreWorks = [];
 let currentGenreDisplayCount = 15;
 let currentGenrePage = 1;     
-
+let currentGenreHasMore = true;
+     
      
 /* =========================================================
    ジャンル名
@@ -6236,7 +6237,8 @@ async function loadGenreWorks(
 ){
 
   currentGenrePage = 1;
-
+　currentGenreHasMore = true;
+     
   if(
     !genreResultsSection ||
     !genreResultsTitle ||
@@ -6365,27 +6367,24 @@ function renderGenreWorks(){
       .join("");
 
 
-  // -----------------------------------------------
-  // 「もっと見る」ボタン
-  //
-  // 取得済み作品が残っている場合も、
-  // 次のAPIページを取得できる場合も、
-  // ボタンを表示しておく
-  // -----------------------------------------------
+  // まだ手元に未表示作品がある
+  const hasHiddenWorks =
+    currentGenreDisplayCount <
+    currentGenreWorks.length;
 
+
+  // 未表示作品がある、
+  // またはAPIに次ページがある場合だけ表示
   if(
-    currentGenreWorks.length > 0
+    hasHiddenWorks ||
+    currentGenreHasMore
   ){
-
     genreLoadMoreWrapper.hidden =
       false;
-
   }
   else{
-
     genreLoadMoreWrapper.hidden =
       true;
-
   }
 
 }
@@ -6399,7 +6398,7 @@ genreLoadMoreButton.addEventListener(
 
 
     // -------------------------------------------------
-    // まだ手元の作品だけで15件増やせる場合
+    // まだ手元に未表示作品が十分ある場合
     // -------------------------------------------------
 
     if(
@@ -6417,7 +6416,24 @@ genreLoadMoreButton.addEventListener(
 
 
     // -------------------------------------------------
-    // 手元の作品だけでは足りないので
+    // APIにも次ページがない場合
+    // 手元に残っている作品だけ表示
+    // -------------------------------------------------
+
+    if(
+      !currentGenreHasMore
+    ){
+
+      currentGenreDisplayCount =
+        currentGenreWorks.length;
+
+      renderGenreWorks();
+
+      return;
+    }
+
+
+    // -------------------------------------------------
     // 次のAPIページを取得
     // -------------------------------------------------
 
@@ -6431,6 +6447,7 @@ genreLoadMoreButton.addEventListener(
     ){
       return;
     }
+
 
     const genre =
       activeGenreButton.dataset.genre;
@@ -6520,8 +6537,10 @@ genreLoadMoreButton.addEventListener(
       );
 
 
-      // ここが重要
-      // 表示は必ず15件だけ増やす
+      // -------------------------------------------------
+      // 1回につき15件だけ表示を増やす
+      // -------------------------------------------------
+
       currentGenreDisplayCount =
         Math.min(
           nextDisplayCount,
@@ -6529,20 +6548,35 @@ genreLoadMoreButton.addEventListener(
         );
 
 
-      renderGenreWorks();
+      // -------------------------------------------------
+      // 20件未満ならTMDBの最終ページ
+      // -------------------------------------------------
+
+      if(
+        newWorks.length < 20
+      ){
+        currentGenreHasMore =
+          false;
+      }
 
 
+      // 重複などで追加できる作品がなかった場合も終了
       if(
         uniqueNewWorks.length === 0
       ){
-        genreLoadMoreWrapper.hidden =
-          true;
+        currentGenreHasMore =
+          false;
       }
+
+
+      renderGenreWorks();
 
     }
     catch(error){
 
-      console.error(error);
+      console.error(
+        error
+      );
 
       currentGenrePage -= 1;
 
