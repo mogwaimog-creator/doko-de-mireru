@@ -3489,6 +3489,40 @@ font-weight:bold;
 
   white-space:nowrap;
 }
+
+.genre-load-more-wrapper{
+  display:flex;
+  justify-content:center;
+  margin-top:18px;
+}
+
+.genre-load-more-wrapper[hidden]{
+  display:none;
+}
+
+.genre-load-more-button{
+  min-width:160px;
+  padding:11px 24px;
+  border:1px solid #2563eb;
+  border-radius:10px;
+  background:#fff;
+  color:#2563eb;
+  font:inherit;
+  font-size:14px;
+  font-weight:700;
+  cursor:pointer;
+  transition:
+    background .15s ease,
+    color .15s ease,
+    transform .15s ease,
+    box-shadow .15s ease;
+}
+
+.genre-load-more-button:hover{
+  background:#eff6ff;
+  transform:translateY(-1px);
+  box-shadow:0 4px 12px rgba(37,99,235,.10);
+}     
      
 </style>
 
@@ -4072,6 +4106,20 @@ font-weight:bold;
   >
   </div>
 
+　<div
+  id="genreLoadMoreWrapper"
+  class="genre-load-more-wrapper"
+  hidden
+>
+  <button
+    id="genreLoadMoreButton"
+    class="genre-load-more-button"
+    type="button"
+  >
+    もっと見る
+  </button>
+</div>
+     
 </section>    
 
 <!-- =====================================================
@@ -6084,6 +6132,19 @@ const genreResults =
     "genreResults"
   );
 
+const genreLoadMoreWrapper =
+  document.getElementById(
+    "genreLoadMoreWrapper"
+  );
+
+const genreLoadMoreButton =
+  document.getElementById(
+    "genreLoadMoreButton"
+  );
+
+let currentGenreWorks = [];
+let currentGenreDisplayCount = 15;
+     
 
 /* =========================================================
    ジャンル名
@@ -6253,12 +6314,16 @@ async function loadGenreWorks(
     }
 
 
-    genreResults.innerHTML =
-      data.results
-        .map(
-          createGenreResultCard
-        )
-        .join("");
+    currentGenreWorks =
+  Array.isArray(
+    data.results
+  )
+    ? data.results
+    : [];
+
+currentGenreDisplayCount = 15;
+
+renderGenreWorks();
 
 
   }catch(error){
@@ -6280,7 +6345,51 @@ async function loadGenreWorks(
 
 }
 
+function renderGenreWorks(){
 
+  const visibleWorks =
+    currentGenreWorks.slice(
+      0,
+      currentGenreDisplayCount
+    );
+
+  genreResults.innerHTML =
+    visibleWorks
+      .map(
+        createGenreResultCard
+      )
+      .join("");
+
+
+  if(
+    currentGenreDisplayCount <
+    currentGenreWorks.length
+  ){
+
+    genreLoadMoreWrapper.hidden =
+      false;
+
+  }
+  else{
+
+    genreLoadMoreWrapper.hidden =
+      true;
+
+  }
+
+}
+
+genreLoadMoreButton.addEventListener(
+  "click",
+  function(){
+
+    currentGenreDisplayCount += 15;
+
+    renderGenreWorks();
+
+  }
+);
+     
 /* =========================================================
    ジャンル作品カード
 ========================================================= */
