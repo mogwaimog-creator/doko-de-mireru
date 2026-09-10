@@ -267,6 +267,107 @@ img{
 
 
 /* =========================================================
+   戻るボタン
+========================================================= */
+
+.person-back-actions{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:10px;
+  margin:0 0 15px;
+}
+
+.person-back-button{
+  display:inline-block;
+  padding:10px 15px;
+  background:#fff;
+  color:#111827;
+  border-radius:8px;
+  font-weight:bold;
+  font-size:16px;
+  text-decoration:none;
+  box-shadow:0 1px 4px rgba(0,0,0,.08);
+}
+
+.person-back-button:hover{
+  background:#f3f4f6;
+}
+
+.person-back-button.main-return{
+  background:#2563eb;
+  color:#fff;
+  box-shadow:0 5px 14px rgba(37,99,235,.22);
+}
+
+.person-back-button.main-return:hover{
+  background:#1d4ed8;
+  color:#fff;
+}
+
+.person-back-button[hidden]{
+  display:none !important;
+}
+
+/* =========================================================
+   TOPへ戻るボタン
+========================================================= */
+
+.page-top-button{
+  position:fixed;
+  right:24px;
+  bottom:24px;
+  z-index:1000;
+
+  min-width:72px;
+  height:48px;
+  padding:0 16px;
+
+  border:0;
+  border-radius:999px;
+
+  background:#263b5c;
+  color:#fff;
+
+  font:inherit;
+  font-size:14px;
+  font-weight:800;
+
+  cursor:pointer;
+
+  box-shadow:
+    0 6px 18px
+    rgba(38,59,92,.28);
+
+  transition:
+    transform .15s ease,
+    background .15s ease,
+    opacity .15s ease;
+}
+
+.page-top-button:hover{
+  background:#1f314e;
+  transform:translateY(-2px);
+}
+
+.page-top-button[hidden]{
+  display:none !important;
+}
+
+@media(max-width:700px){
+
+  .page-top-button{
+    right:14px;
+    bottom:14px;
+    min-width:66px;
+    height:44px;
+    padding:0 14px;
+    font-size:13px;
+  }
+
+}
+
+/* =========================================================
    セクション移動タブ
 ========================================================= */
 
@@ -717,6 +818,33 @@ img{
   </nav>
 
 
+  <!-- =====================================================
+       戻るボタン
+  ====================================================== -->
+
+  <div class="person-back-actions">
+
+    <a
+      id="previousWorkLink"
+      class="person-back-button"
+      href="#"
+      hidden
+    >
+      ← 元の作品に戻る
+    </a>
+
+    <a
+      id="searchReturnLink"
+      class="person-back-button main-return"
+      href="./index.html"
+      hidden
+    >
+      ← 検索画面に戻る
+    </a>
+
+  </div>
+
+
   <div
     id="loading"
     class="loading"
@@ -1058,6 +1186,21 @@ img{
 </main>
 
 
+<!-- =========================================================
+     TOPへ戻るボタン
+========================================================= -->
+
+<button
+  id="pageTopButton"
+  class="page-top-button"
+  type="button"
+  aria-label="ページの一番上へ戻る"
+  hidden
+>
+  ↑ TOP
+</button>
+
+
 <footer class="footer">
   © ドコデミレル？
 </footer>
@@ -1076,6 +1219,145 @@ const params =
 
 const personId =
   params.get("id");
+
+
+// =========================================================
+// 元の作品へ戻る
+// =========================================================
+
+const previousWorkLink =
+  document.getElementById(
+    "previousWorkLink"
+  );
+
+const fromPage =
+  params.get("from");
+
+const previousMovieId =
+  params.get("movieId");
+
+const previousMovieType =
+  params.get("movieType");
+
+const previousMovieTitle =
+  params.get("movieTitle");
+
+if(
+  previousWorkLink &&
+  fromPage === "detail" &&
+  previousMovieId
+){
+
+  let previousUrl =
+    "./detail.html?id=" +
+    encodeURIComponent(
+      previousMovieId
+    );
+
+  if(
+    previousMovieType &&
+    previousMovieType !== "movie"
+  ){
+    previousUrl +=
+      "&type=" +
+      encodeURIComponent(
+        previousMovieType
+      );
+  }
+
+  previousWorkLink.href =
+    previousUrl;
+
+  previousWorkLink.textContent =
+    "← " +
+    (previousMovieTitle || "元の作品") +
+    "に戻る";
+
+  previousWorkLink.hidden =
+    false;
+}
+
+
+// =========================================================
+// 検索画面へ戻る
+// =========================================================
+
+const searchReturnLink =
+  document.getElementById(
+    "searchReturnLink"
+  );
+
+if(
+  searchReturnLink &&
+  fromPage !== "detail"
+){
+
+  let cameFromMainSite =
+    false;
+
+  try{
+
+    if(document.referrer){
+
+      const referrerUrl =
+        new URL(
+          document.referrer
+        );
+
+      const sameSite =
+        referrerUrl.origin ===
+        window.location.origin;
+
+      const path =
+        referrerUrl.pathname;
+
+      cameFromMainSite =
+        sameSite &&
+        (
+          path === "/" ||
+          path.endsWith(
+            "/index.html"
+          )
+        );
+
+      if(cameFromMainSite){
+        searchReturnLink.href =
+          referrerUrl.href;
+      }
+
+    }
+
+  }catch(error){
+
+    console.warn(
+      "REFERRER CHECK ERROR:",
+      error
+    );
+
+  }
+
+  if(
+    cameFromMainSite ||
+    fromPage === "index" ||
+    fromPage === "search"
+  ){
+    searchReturnLink.hidden =
+      false;
+
+    if(cameFromMainSite){
+
+      searchReturnLink.addEventListener(
+        "click",
+        function(event){
+
+          event.preventDefault();
+          window.history.back();
+
+        }
+      );
+    }
+  }
+}
 
 
 // =========================================================
@@ -2125,6 +2407,49 @@ async function loadPerson(){
 
   }
 
+}
+
+
+// =========================================================
+// TOPへ戻るボタン
+// =========================================================
+
+const pageTopButton =
+  document.getElementById(
+    "pageTopButton"
+  );
+
+function updatePageTopButton(){
+
+  if(!pageTopButton){
+    return;
+  }
+
+  pageTopButton.hidden =
+    window.scrollY < 450;
+}
+
+if(pageTopButton){
+
+  window.addEventListener(
+    "scroll",
+    updatePageTopButton,
+    { passive:true }
+  );
+
+  pageTopButton.addEventListener(
+    "click",
+    function(){
+
+      window.scrollTo({
+        top:0,
+        behavior:"smooth"
+      });
+
+    }
+  );
+
+  updatePageTopButton();
 }
 
 
