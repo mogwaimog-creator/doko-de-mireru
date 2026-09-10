@@ -3219,7 +3219,98 @@ async function getPersonDetail(
 
 
   // =======================================================
-  // 出演作品を整理
+  // 日付判定
+  // =======================================================
+
+  const today =
+    new Date();
+
+  today.setHours(
+    0,
+    0,
+    0,
+    0
+  );
+
+
+  function getReleaseStatus(dateValue) {
+
+    if (!dateValue) {
+      return "unknown";
+    }
+
+    const date =
+      new Date(
+        dateValue +
+        "T00:00:00"
+      );
+
+    if (
+      Number.isNaN(
+        date.getTime()
+      )
+    ) {
+      return "unknown";
+    }
+
+    if (
+      date > today
+    ) {
+      return "upcoming";
+    }
+
+    return "released";
+  }
+
+
+  // =======================================================
+  // 古い年代 → 新しい年代
+  //
+  // 日付不明は最後
+  // =======================================================
+
+  function sortWorksByDate(works) {
+
+    return works.sort(
+      function(a, b) {
+
+        const aDate =
+          a.release_date || "";
+
+        const bDate =
+          b.release_date || "";
+
+
+        if (
+          !aDate &&
+          !bDate
+        ) {
+          return 0;
+        }
+
+        if (!aDate) {
+          return 1;
+        }
+
+        if (!bDate) {
+          return -1;
+        }
+
+
+        return (
+          aDate.localeCompare(
+            bDate
+          )
+        );
+
+      }
+    );
+
+  }
+
+
+  // =======================================================
+  // 出演作品を共通形式に変換
   // =======================================================
 
   const allCast =
@@ -3239,7 +3330,9 @@ async function getPersonDetail(
       .map(function(item) {
 
         const genreIds =
-          Array.isArray(item.genre_ids)
+          Array.isArray(
+            item.genre_ids
+          )
             ? item.genre_ids.map(Number)
             : [];
 
@@ -3254,16 +3347,14 @@ async function getPersonDetail(
             : "drama";
 
 
-        // アニメ
         if (
           genreIds.includes(16)
         ) {
 
-          displayType = "anime";
+          displayType =
+            "anime";
 
         }
-
-        // ドキュメンタリー
         else if (
           genreIds.includes(99)
         ) {
@@ -3272,8 +3363,6 @@ async function getPersonDetail(
             "documentary";
 
         }
-
-        // TV バラエティ・トーク・リアリティ
         else if (
           item.media_type === "tv" &&
           (
@@ -3297,6 +3386,7 @@ async function getPersonDetail(
             item.character || ""
           ).trim();
 
+
         const lowerCharacter =
           character.toLowerCase();
 
@@ -3305,10 +3395,7 @@ async function getPersonDetail(
           "regular";
 
 
-        // -----------------------------------------------
         // 声の出演
-        // -----------------------------------------------
-
         if (
           lowerCharacter.includes(
             "(voice)"
@@ -3323,12 +3410,7 @@ async function getPersonDetail(
 
         }
 
-        // -----------------------------------------------
         // カメオ・特別出演
-        //
-        // 明記されている場合だけ
-        // -----------------------------------------------
-
         else if (
           lowerCharacter.includes(
             "cameo"
@@ -3343,10 +3425,7 @@ async function getPersonDetail(
 
         }
 
-        // -----------------------------------------------
         // 本人・ゲスト出演
-        // -----------------------------------------------
-
         else if (
           lowerCharacter === "self" ||
           lowerCharacter.includes(
@@ -3375,6 +3454,12 @@ async function getPersonDetail(
         }
 
 
+        const releaseDate =
+          item.release_date ||
+          item.first_air_date ||
+          "";
+
+
         return {
 
           id:
@@ -3391,9 +3476,12 @@ async function getPersonDetail(
             "",
 
           release_date:
-            item.release_date ||
-            item.first_air_date ||
-            "",
+            releaseDate,
+
+          release_status:
+            getReleaseStatus(
+              releaseDate
+            ),
 
           poster_path:
             item.poster_path ||
@@ -3413,17 +3501,14 @@ async function getPersonDetail(
               item.popularity || 0
             ),
 
-          // detail.html へのリンク判定用
           content_type:
             item.media_type === "tv"
               ? "tv"
               : "movie",
 
-          // 表示上の作品タイプ
           display_type:
             displayType,
 
-          // 人物の出演形態
           appearance_type:
             appearanceType,
 
@@ -3443,17 +3528,24 @@ async function getPersonDetail(
 
 
   // =======================================================
-  // 出演形態ごとに分類
+  // 5つの分類
   // =======================================================
 
   let cast = [];
-  let selfGuest = [];
+
   let voice = [];
-  let cameo = [];
+
+  let documentaryTalk = [];
+
+  let other = [];
 
 
   allCast.forEach(
     function(work) {
+
+      // ===================================================
+      // 声の出演
+      // ===================================================
 
       if (
         work.appearance_type ===
@@ -3461,32 +3553,62 @@ async function getPersonDetail(
       ) {
 
         voice.push(work);
+
         return;
 
       }
 
+
+      // ===================================================
+      // ドキュメンタリー・トーク
+      //
+      // 本人出演か通常出演かに関係なく
+      // 作品自体がドキュメンタリー・
+      // トーク・リアリティならこちら
+      // ===================================================
+
+      if (
+        work.display_type ===
+          "documentary" ||
+        work.display_type ===
+          "variety"
+      ) {
+
+        documentaryTalk.push(
+          work
+        );
+
+        return;
+
+      }
+
+
+      // ===================================================
+      // その他の出演
+      //
+      // 本人出演
+      // ゲスト出演
+      // カメオ
+      // 特別出演
+      // ===================================================
 
       if (
         work.appearance_type ===
-        "cameo"
-      ) {
-
-        cameo.push(work);
-        return;
-
-      }
-
-
-      if (
+          "self" ||
         work.appearance_type ===
-        "self"
+          "cameo"
       ) {
 
-        selfGuest.push(work);
+        other.push(work);
+
         return;
 
       }
 
+
+      // ===================================================
+      // 通常出演
+      // ===================================================
 
       cast.push(work);
 
@@ -3495,7 +3617,7 @@ async function getPersonDetail(
 
 
   // =======================================================
-  // 重複除外
+  // 重複削除
   // =======================================================
 
   cast =
@@ -3503,57 +3625,45 @@ async function getPersonDetail(
       cast
     );
 
-  selfGuest =
-    removeDuplicatePersonWorks(
-      selfGuest
-    );
-
   voice =
     removeDuplicatePersonWorks(
       voice
     );
 
-  cameo =
+  documentaryTalk =
     removeDuplicatePersonWorks(
-      cameo
+      documentaryTalk
+    );
+
+  other =
+    removeDuplicatePersonWorks(
+      other
     );
 
 
   // =======================================================
-  // 人気順
+  // 古い年代 → 新しい年代
   // =======================================================
-
-  function sortWorks(works) {
-
-    return works.sort(
-      function(a, b) {
-
-        return (
-          Number(
-            b.popularity || 0
-          ) -
-          Number(
-            a.popularity || 0
-          )
-        );
-
-      }
-    );
-
-  }
-
 
   cast =
-    sortWorks(cast);
-
-  selfGuest =
-    sortWorks(selfGuest);
+    sortWorksByDate(
+      cast
+    );
 
   voice =
-    sortWorks(voice);
+    sortWorksByDate(
+      voice
+    );
 
-  cameo =
-    sortWorks(cameo);
+  documentaryTalk =
+    sortWorksByDate(
+      documentaryTalk
+    );
+
+  other =
+    sortWorksByDate(
+      other
+    );
 
 
   // =======================================================
@@ -3578,7 +3688,9 @@ async function getPersonDetail(
       .map(function(item) {
 
         const genreIds =
-          Array.isArray(item.genre_ids)
+          Array.isArray(
+            item.genre_ids
+          )
             ? item.genre_ids.map(Number)
             : [];
 
@@ -3593,10 +3705,10 @@ async function getPersonDetail(
           genreIds.includes(16)
         ) {
 
-          displayType = "anime";
+          displayType =
+            "anime";
 
         }
-
         else if (
           genreIds.includes(99)
         ) {
@@ -3605,7 +3717,6 @@ async function getPersonDetail(
             "documentary";
 
         }
-
         else if (
           item.media_type === "tv" &&
           (
@@ -3618,6 +3729,12 @@ async function getPersonDetail(
             "variety";
 
         }
+
+
+        const releaseDate =
+          item.release_date ||
+          item.first_air_date ||
+          "";
 
 
         return {
@@ -3636,9 +3753,12 @@ async function getPersonDetail(
             "",
 
           release_date:
-            item.release_date ||
-            item.first_air_date ||
-            "",
+            releaseDate,
+
+          release_status:
+            getReleaseStatus(
+              releaseDate
+            ),
 
           poster_path:
             item.poster_path ||
@@ -3676,8 +3796,9 @@ async function getPersonDetail(
       directed
     );
 
+
   directed =
-    sortWorks(
+    sortWorksByDate(
       directed
     );
 
@@ -3737,30 +3858,34 @@ async function getPersonDetail(
         person.popularity || 0
       ),
 
-    // 通常出演
+
+    // 🎭 通常出演
     cast:
       cast,
 
-    // 👤 本人・ゲスト出演
-    self_guest:
-      selfGuest,
 
     // 🎙️ 声の出演
     voice:
       voice,
 
-    // ✨ カメオ・特別出演
-    cameo:
-      cameo,
 
-    // 🎥 監督作品
+    // 🎬 監督作品
     directed:
-      directed
+      directed,
+
+
+    // 🎥 ドキュメンタリー・トーク
+    documentary_talk:
+      documentaryTalk,
+
+
+    // ⭐ その他の出演
+    other:
+      other
 
   };
 
 }
-
 
 // =========================================================
 // 人物作品の重複除去
