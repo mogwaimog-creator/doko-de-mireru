@@ -129,6 +129,8 @@ content="映画がどの動画配信サービスで見られるか検索でき�
 
 >
 
+
+     
      
 <style>
 
@@ -1864,6 +1866,11 @@ font-weight:bold;
 
   gap:12px;
 }
+
+.genre-search-grid{
+  grid-template-columns:
+    repeat(3,minmax(0,1fr));
+}
      
 }
 
@@ -1952,6 +1959,25 @@ font-weight:bold;
   gap:10px;
 }
 
+.genre-search-grid{
+  grid-template-columns:
+    repeat(2,minmax(0,1fr));
+
+  gap:10px;
+}
+
+.genre-search-card{
+  padding:
+    12px 10px;
+}
+
+.genre-search-icon{
+  font-size:21px;
+}
+
+.genre-search-name{
+  font-size:13px;
+}     
 
 }
 /* =========================================================
@@ -3066,6 +3092,125 @@ font-weight:bold;
       #2272d4 100%
     );
 }
+
+/* =========================================================
+   ジャンルから探す
+========================================================= */
+
+.genre-search-section{
+  background:#fff;
+
+  border-radius:16px;
+
+  padding:22px;
+
+  margin-bottom:25px;
+
+  box-shadow:
+    0 3px 15px
+    rgba(0,0,0,.08);
+}
+
+
+.genre-search-title{
+  margin:0;
+
+  font-size:23px;
+
+  color:#111827;
+}
+
+
+.genre-search-description{
+  margin:
+    8px 0 18px;
+
+  color:#6b7280;
+
+  font-size:14px;
+
+  line-height:1.6;
+}
+
+
+.genre-search-grid{
+  display:grid;
+
+  grid-template-columns:
+    repeat(4,minmax(0,1fr));
+
+  gap:12px;
+}
+
+
+.genre-search-card{
+  min-width:0;
+
+  display:flex;
+
+  align-items:center;
+
+  gap:10px;
+
+  width:100%;
+
+  padding:
+    14px 16px;
+
+  background:#f8fafc;
+
+  border:
+    1px solid
+    #e5e7eb;
+
+  border-radius:12px;
+
+  color:#111827;
+
+  font:inherit;
+
+  text-align:left;
+
+  cursor:pointer;
+
+  transition:
+    transform .15s ease,
+    background .15s ease,
+    border-color .15s ease,
+    box-shadow .15s ease;
+}
+
+
+.genre-search-card:hover{
+  transform:
+    translateY(-2px);
+
+  background:#f8fbff;
+
+  border-color:#93c5fd;
+
+  box-shadow:
+    0 7px 18px
+    rgba(37,99,235,.10);
+}
+
+
+.genre-search-icon{
+  flex:0 0 auto;
+
+  font-size:24px;
+}
+
+
+.genre-search-name{
+  min-width:0;
+
+  font-size:14px;
+
+  font-weight:700;
+
+  line-height:1.4;
+}
      
 </style>
 
@@ -3468,6 +3613,153 @@ font-weight:bold;
 
 </section>
 
+<!-- =========================================================
+     ジャンルから探す
+========================================================= -->
+
+<section
+  class="genre-search-section"
+  aria-labelledby="genreSearchHeading"
+>
+
+  <h2
+    id="genreSearchHeading"
+    class="genre-search-title"
+  >
+    🎭 ジャンルから探す
+  </h2>
+
+  <p class="genre-search-description">
+    気になるジャンルから作品を探せます
+  </p>
+
+
+  <div class="genre-search-grid">
+
+
+    <!-- サスペンス・ミステリー -->
+
+    <button
+      type="button"
+      class="genre-search-card"
+      data-genre="suspense"
+    >
+      <span class="genre-search-icon">
+        🕵️
+      </span>
+
+      <span class="genre-search-name">
+        サスペンス・ミステリー
+      </span>
+    </button>
+
+
+    <!-- 恋愛・ラブコメ -->
+
+    <button
+      type="button"
+      class="genre-search-card"
+      data-genre="romance"
+    >
+      <span class="genre-search-icon">
+        💕
+      </span>
+
+      <span class="genre-search-name">
+        恋愛・ラブコメ
+      </span>
+    </button>
+
+
+    <!-- アクション -->
+
+    <button
+      type="button"
+      class="genre-search-card"
+      data-genre="action"
+    >
+      <span class="genre-search-icon">
+        💥
+      </span>
+
+      <span class="genre-search-name">
+        アクション
+      </span>
+    </button>
+
+
+    <!-- コメディ -->
+
+    <button
+      type="button"
+      class="genre-search-card"
+      data-genre="comedy"
+    >
+      <span class="genre-search-icon">
+        🤣
+      </span>
+
+      <span class="genre-search-name">
+        コメディ
+      </span>
+    </button>
+
+
+    <!-- ホラー -->
+
+    <button
+      type="button"
+      class="genre-search-card"
+      data-genre="horror"
+    >
+      <span class="genre-search-icon">
+        👻
+      </span>
+
+      <span class="genre-search-name">
+        ホラー
+      </span>
+    </button>
+
+
+    <!-- SF・ファンタジー -->
+
+    <button
+      type="button"
+      class="genre-search-card"
+      data-genre="scifi"
+    >
+      <span class="genre-search-icon">
+        🛸
+      </span>
+
+      <span class="genre-search-name">
+        SF・ファンタジー
+      </span>
+    </button>
+
+
+       <!-- アニメ -->
+
+<button
+  type="button"
+  class="genre-search-card"
+  data-genre="anime"
+>
+  <span class="genre-search-icon">
+    🐱
+  </span>
+
+  <span class="genre-search-name">
+    アニメ
+  </span>
+</button>
+       
+
+  </div>
+
+</section>
+     
 
 <!-- =====================================================
      人気作品
