@@ -80,7 +80,7 @@ img{
 }
 
 .site-header-inner{
-  width:min(1180px,100%);
+  width:min(1000px,100%);
   margin:0 auto;
 }
 
@@ -102,7 +102,7 @@ img{
 ========================================================= */
 
 .container{
-  width:min(1180px,calc(100% - 32px));
+  width:min(1000px,calc(100% - 32px));
   margin:24px auto 40px;
 }
 
@@ -249,7 +249,7 @@ img{
 
 .works-grid{
   display:grid;
-  grid-template-columns:repeat(5,minmax(0,1fr));
+  grid-template-columns:repeat(6,minmax(0,1fr));
   gap:12px;
 }
 
@@ -906,10 +906,8 @@ function createWorkCard(work){
     return "";
   }
 
-
   const title =
     work.title || "タイトル不明";
-
 
   const year =
     work.release_date
@@ -918,61 +916,18 @@ function createWorkCard(work){
         ).slice(0,4)
       : "";
 
-
-  let typeLabel =
-    "映画";
-
-  let typeClass =
-    "type-movie";
-
-
-  if (
-    work.display_type === "anime"
-  ) {
-
-    typeLabel =
-      "🐱 アニメ";
-
-    typeClass =
-      "type-anime";
-
-  }
-  else if (
-    work.content_type === "tv" ||
-    work.display_type === "drama"
-  ) {
-
-    typeLabel =
-      "📺 ドラマ";
-
-    typeClass =
-      "type-drama";
-
-  }
-  else {
-
-    typeLabel =
-      "🎬 映画";
-
-  }
-
-
   let detailUrl =
     "detail.html?id=" +
     encodeURIComponent(
       work.id
     );
 
-
   if (
     work.content_type === "tv"
   ) {
-
     detailUrl +=
       "&type=tv";
-
   }
-
 
   const posterHtml =
     work.poster_path
@@ -993,23 +948,6 @@ function createWorkCard(work){
           "</div>"
         );
 
-
-  const characterHtml =
-    work.character
-      ? (
-          '<div class="work-character">' +
-          escapeHtml(work.character) +
-          "</div>"
-        )
-      : "";
-
-
-  const rating =
-    Number(
-      work.vote_average || 0
-    );
-
-
   return (
     '<a class="work-card" href="' +
     detailUrl +
@@ -1023,38 +961,15 @@ function createWorkCard(work){
           escapeHtml(title) +
         "</div>" +
 
-        characterHtml +
-
-        '<div class="work-meta">' +
-
-          (
-            year
-              ? (
-                  '<span class="work-year">' +
-                  escapeHtml(year) +
-                  "</span>"
-                )
-              : ""
-          ) +
-
-          '<span class="work-type ' +
-            typeClass +
-          '">' +
-            typeLabel +
-          "</span>" +
-
-          (
-            rating > 0
-              ? (
-                  '<span class="work-rating">' +
-                  "⭐ " +
-                  rating.toFixed(1) +
-                  "</span>"
-                )
-              : ""
-          ) +
-
-        "</div>" +
+        (
+          year
+            ? (
+                '<div class="work-year">' +
+                escapeHtml(year) +
+                "</div>"
+              )
+            : ""
+        ) +
 
       "</div>" +
 
