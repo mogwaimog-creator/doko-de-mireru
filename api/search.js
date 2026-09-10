@@ -214,6 +214,14 @@ const genreBrowse =
   String(
     req.query.genreBrowse || ""
   ).trim();
+
+const genrePage =
+  Math.max(
+    1,
+    Number(
+      req.query.genrePage || 1
+    )
+  );
     
 // =====================================================
 // Netflix ジャンル
@@ -330,10 +338,11 @@ if(
 ){
 
   const genreResults =
-    await getGenreBrowseWorks(
-      apiKey,
-      genre
-    );
+  await getGenreBrowseWorks(
+    apiKey,
+    genre,
+    genrePage
+  );
 
   return res
     .status(200)
@@ -6501,7 +6510,8 @@ async function getDisneyNewWorks(
 
 async function getGenreBrowseWorks(
   apiKey,
-  genre
+  genre,
+  genrePage = 1
 ){
 
   // ジャンルごとのTMDBジャンルID
