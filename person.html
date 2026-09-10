@@ -230,8 +230,8 @@ img{
 .works-section{
   background:#fff;
   border-radius:16px;
-  padding:22px;
-  margin-bottom:25px;
+  padding:18px;
+  margin-bottom:20px;
   box-shadow:0 3px 15px rgba(0,0,0,.08);
 }
 
@@ -242,9 +242,9 @@ img{
 }
 
 .works-description{
-  margin:7px 0 18px;
+  margin:5px 0 14px;
   color:#6b7280;
-  font-size:14px;
+  font-size:13px;
 }
 
 .works-grid{
@@ -297,14 +297,14 @@ img{
 }
 
 .work-info{
-  padding:8px 9px 10px;
+  padding:6px 8px 7px;
 }
 
 .work-title{
   color:#111827;
-  font-size:13px;
+  font-size:12px;
   font-weight:700;
-  line-height:1.4;
+  line-height:1.35;
 
   overflow:hidden;
   display:-webkit-box;
@@ -333,7 +333,9 @@ img{
 }
 
 .work-year{
-  color:#111827;
+  margin-top:3px;
+  color:#6b7280;
+  font-size:11px;
   font-weight:600;
 }
 
@@ -437,7 +439,7 @@ img{
 @media(max-width:700px){
 
   .container{
-    width:min(100% - 20px,1180px);
+    width:min(100% - 20px,1000px);
     margin-top:14px;
   }
 
@@ -637,7 +639,7 @@ img{
       </h2>
 
       <p class="works-description">
-        出演している映画・ドラマ・アニメ
+        俳優として出演している作品
       </p>
 
       <div
@@ -645,13 +647,11 @@ img{
         class="works-grid"
       ></div>
 
-
       <div
         id="castMoreWrapper"
         class="load-more-wrapper"
         hidden
       >
-
         <button
           id="castMoreButton"
           class="load-more-button"
@@ -659,7 +659,46 @@ img{
         >
           もっと見る
         </button>
+      </div>
 
+    </section>
+
+
+    <!-- =====================================================
+         声の出演
+    ====================================================== -->
+
+    <section
+      id="voiceSection"
+      class="works-section"
+      hidden
+    >
+
+      <h2 class="works-title">
+        🎙️ 声の出演
+      </h2>
+
+      <p class="works-description">
+        声で出演している作品
+      </p>
+
+      <div
+        id="voiceWorks"
+        class="works-grid"
+      ></div>
+
+      <div
+        id="voiceMoreWrapper"
+        class="load-more-wrapper"
+        hidden
+      >
+        <button
+          id="voiceMoreButton"
+          class="load-more-button"
+          type="button"
+        >
+          もっと見る
+        </button>
       </div>
 
     </section>
@@ -688,13 +727,11 @@ img{
         class="works-grid"
       ></div>
 
-
       <div
         id="directorMoreWrapper"
         class="load-more-wrapper"
         hidden
       >
-
         <button
           id="directorMoreButton"
           class="load-more-button"
@@ -702,7 +739,86 @@ img{
         >
           もっと見る
         </button>
+      </div>
 
+    </section>
+
+
+    <!-- =====================================================
+         ドキュメンタリー・トーク
+    ====================================================== -->
+
+    <section
+      id="documentaryTalkSection"
+      class="works-section"
+      hidden
+    >
+
+      <h2 class="works-title">
+        🎥 ドキュメンタリー・トーク
+      </h2>
+
+      <p class="works-description">
+        本人出演のドキュメンタリーやトーク番組
+      </p>
+
+      <div
+        id="documentaryTalkWorks"
+        class="works-grid"
+      ></div>
+
+      <div
+        id="documentaryTalkMoreWrapper"
+        class="load-more-wrapper"
+        hidden
+      >
+        <button
+          id="documentaryTalkMoreButton"
+          class="load-more-button"
+          type="button"
+        >
+          もっと見る
+        </button>
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         その他の出演
+    ====================================================== -->
+
+    <section
+      id="otherSection"
+      class="works-section"
+      hidden
+    >
+
+      <h2 class="works-title">
+        ⭐ その他の出演
+      </h2>
+
+      <p class="works-description">
+        本人出演・ゲスト出演・カメオ・特別出演など
+      </p>
+
+      <div
+        id="otherWorks"
+        class="works-grid"
+      ></div>
+
+      <div
+        id="otherMoreWrapper"
+        class="load-more-wrapper"
+        hidden
+      >
+        <button
+          id="otherMoreButton"
+          class="load-more-button"
+          type="button"
+        >
+          もっと見る
+        </button>
       </div>
 
     </section>
@@ -786,6 +902,23 @@ const castMoreButton =
   );
 
 
+const voiceSection =
+  document.getElementById("voiceSection");
+
+const voiceWorks =
+  document.getElementById("voiceWorks");
+
+const voiceMoreWrapper =
+  document.getElementById(
+    "voiceMoreWrapper"
+  );
+
+const voiceMoreButton =
+  document.getElementById(
+    "voiceMoreButton"
+  );
+
+
 const directorSection =
   document.getElementById(
     "directorSection"
@@ -807,17 +940,59 @@ const directorMoreButton =
   );
 
 
+const documentaryTalkSection =
+  document.getElementById(
+    "documentaryTalkSection"
+  );
+
+const documentaryTalkWorks =
+  document.getElementById(
+    "documentaryTalkWorks"
+  );
+
+const documentaryTalkMoreWrapper =
+  document.getElementById(
+    "documentaryTalkMoreWrapper"
+  );
+
+const documentaryTalkMoreButton =
+  document.getElementById(
+    "documentaryTalkMoreButton"
+  );
+
+
+const otherSection =
+  document.getElementById("otherSection");
+
+const otherWorks =
+  document.getElementById("otherWorks");
+
+const otherMoreWrapper =
+  document.getElementById(
+    "otherMoreWrapper"
+  );
+
+const otherMoreButton =
+  document.getElementById(
+    "otherMoreButton"
+  );
+
+
 // =========================================================
 // 表示件数
 // =========================================================
 
 let castData = [];
-
+let voiceData = [];
 let directorData = [];
+let documentaryTalkData = [];
+let otherData = [];
 
-let castDisplayCount = 15;
-
-let directorDisplayCount = 15;
+let castDisplayCount = 12;
+let voiceDisplayCount = 12;
+let directorDisplayCount = 12;
+let documentaryTalkDisplayCount = 12;
+let otherDisplayCount = 12;
 
 
 // =========================================================
@@ -916,6 +1091,17 @@ function createWorkCard(work){
         ).slice(0,4)
       : "";
 
+  let yearLabel =
+    year
+      ? year + "年"
+      : "公開年不明";
+
+  if (
+    work.release_status === "upcoming"
+  ) {
+    yearLabel += "・公開予定";
+  }
+
   let detailUrl =
     "detail.html?id=" +
     encodeURIComponent(
@@ -961,15 +1147,9 @@ function createWorkCard(work){
           escapeHtml(title) +
         "</div>" +
 
-        (
-          year
-            ? (
-                '<div class="work-year">' +
-                escapeHtml(year) +
-                "</div>"
-              )
-            : ""
-        ) +
+        '<div class="work-year">' +
+          escapeHtml(yearLabel) +
+        "</div>" +
 
       "</div>" +
 
@@ -983,51 +1163,77 @@ function createWorkCard(work){
 // 出演作品表示
 // =========================================================
 
-function renderCast(){
+function renderWorks(
+  data,
+  displayCount,
+  worksElement,
+  moreWrapper
+){
 
   const visible =
-    castData.slice(
+    data.slice(
       0,
-      castDisplayCount
+      displayCount
     );
 
-
-  castWorks.innerHTML =
+  worksElement.innerHTML =
     visible
       .map(createWorkCard)
       .join("");
 
-
-  castMoreWrapper.hidden =
-    castDisplayCount >=
-    castData.length;
-
+  moreWrapper.hidden =
+    displayCount >=
+    data.length;
 }
 
 
-// =========================================================
-// 監督作品表示
-// =========================================================
+function renderCast(){
+  renderWorks(
+    castData,
+    castDisplayCount,
+    castWorks,
+    castMoreWrapper
+  );
+}
+
+
+function renderVoice(){
+  renderWorks(
+    voiceData,
+    voiceDisplayCount,
+    voiceWorks,
+    voiceMoreWrapper
+  );
+}
+
 
 function renderDirector(){
-
-  const visible =
-    directorData.slice(
-      0,
-      directorDisplayCount
-    );
-
-
-  directorWorks.innerHTML =
-    visible
-      .map(createWorkCard)
-      .join("");
+  renderWorks(
+    directorData,
+    directorDisplayCount,
+    directorWorks,
+    directorMoreWrapper
+  );
+}
 
 
-  directorMoreWrapper.hidden =
-    directorDisplayCount >=
-    directorData.length;
+function renderDocumentaryTalk(){
+  renderWorks(
+    documentaryTalkData,
+    documentaryTalkDisplayCount,
+    documentaryTalkWorks,
+    documentaryTalkMoreWrapper
+  );
+}
 
+
+function renderOther(){
+  renderWorks(
+    otherData,
+    otherDisplayCount,
+    otherWorks,
+    otherMoreWrapper
+  );
 }
 
 
@@ -1038,23 +1244,40 @@ function renderDirector(){
 castMoreButton.addEventListener(
   "click",
   function(){
-
-    castDisplayCount += 15;
-
+    castDisplayCount += 12;
     renderCast();
-
   }
 );
 
+voiceMoreButton.addEventListener(
+  "click",
+  function(){
+    voiceDisplayCount += 12;
+    renderVoice();
+  }
+);
 
 directorMoreButton.addEventListener(
   "click",
   function(){
-
-    directorDisplayCount += 15;
-
+    directorDisplayCount += 12;
     renderDirector();
+  }
+);
 
+documentaryTalkMoreButton.addEventListener(
+  "click",
+  function(){
+    documentaryTalkDisplayCount += 12;
+    renderDocumentaryTalk();
+  }
+);
+
+otherMoreButton.addEventListener(
+  "click",
+  function(){
+    otherDisplayCount += 12;
+    renderOther();
   }
 );
 
@@ -1310,16 +1533,32 @@ async function loadPerson(){
         ? person.cast
         : [];
 
-
     if (
       castData.length > 0
     ) {
-
       castSection.hidden =
         false;
 
       renderCast();
+    }
 
+
+    // =====================================================
+    // 声の出演
+    // =====================================================
+
+    voiceData =
+      Array.isArray(person.voice)
+        ? person.voice
+        : [];
+
+    if (
+      voiceData.length > 0
+    ) {
+      voiceSection.hidden =
+        false;
+
+      renderVoice();
     }
 
 
@@ -1332,16 +1571,53 @@ async function loadPerson(){
         ? person.directed
         : [];
 
-
     if (
       directorData.length > 0
     ) {
-
       directorSection.hidden =
         false;
 
       renderDirector();
+    }
 
+
+    // =====================================================
+    // ドキュメンタリー・トーク
+    // =====================================================
+
+    documentaryTalkData =
+      Array.isArray(
+        person.documentary_talk
+      )
+        ? person.documentary_talk
+        : [];
+
+    if (
+      documentaryTalkData.length > 0
+    ) {
+      documentaryTalkSection.hidden =
+        false;
+
+      renderDocumentaryTalk();
+    }
+
+
+    // =====================================================
+    // その他の出演
+    // =====================================================
+
+    otherData =
+      Array.isArray(person.other)
+        ? person.other
+        : [];
+
+    if (
+      otherData.length > 0
+    ) {
+      otherSection.hidden =
+        false;
+
+      renderOther();
     }
 
 
