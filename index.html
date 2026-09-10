@@ -6235,6 +6235,8 @@ async function loadGenreWorks(
   genre
 ){
 
+  currentGenrePage = 1;
+
   if(
     !genreResultsSection ||
     !genreResultsTitle ||
@@ -6363,9 +6365,16 @@ function renderGenreWorks(){
       .join("");
 
 
+  // -----------------------------------------------
+  // 「もっと見る」ボタン
+  //
+  // 取得済み作品が残っている場合も、
+  // 次のAPIページを取得できる場合も、
+  // ボタンを表示しておく
+  // -----------------------------------------------
+
   if(
-    currentGenreDisplayCount <
-    currentGenreWorks.length
+    currentGenreWorks.length > 0
   ){
 
     genreLoadMoreWrapper.hidden =
