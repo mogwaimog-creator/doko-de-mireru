@@ -267,6 +267,70 @@ img{
 
 
 /* =========================================================
+   セクション移動タブ
+========================================================= */
+
+.section-nav{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  width:100%;
+  margin:0 0 20px;
+  padding:10px;
+  background:#fff;
+  border:1px solid #e5e7eb;
+  border-radius:14px;
+  box-shadow:0 3px 15px rgba(0,0,0,.07);
+  overflow-x:auto;
+  overflow-y:hidden;
+  scrollbar-width:thin;
+  -webkit-overflow-scrolling:touch;
+}
+
+.section-nav[hidden]{
+  display:none !important;
+}
+
+.section-nav-button{
+  flex:1 0 auto;
+  min-width:0;
+  padding:9px 12px;
+  border:1px solid #dbe3ef;
+  border-radius:999px;
+  background:#f8fafc;
+  color:#334155;
+  font:inherit;
+  font-size:13px;
+  font-weight:700;
+  line-height:1.3;
+  white-space:nowrap;
+  cursor:pointer;
+  transition:
+    background .15s ease,
+    color .15s ease,
+    border-color .15s ease,
+    transform .15s ease,
+    box-shadow .15s ease;
+}
+
+.section-nav-button:hover{
+  background:#eff6ff;
+  color:#2563eb;
+  border-color:#93c5fd;
+  transform:translateY(-1px);
+  box-shadow:0 3px 10px rgba(37,99,235,.09);
+}
+
+.section-nav-button[hidden]{
+  display:none !important;
+}
+
+/* スクロール先が画面上端にぴったり付きすぎないようにする */
+.works-section{
+  scroll-margin-top:18px;
+}
+
+/* =========================================================
    作品セクション
 ========================================================= */
 
@@ -424,7 +488,7 @@ img{
 .load-more-wrapper[hidden]{
   display:none !important;
 }
-    
+
 .load-more-button{
   min-width:160px;
   padding:11px 24px;
@@ -541,6 +605,18 @@ img{
 
   .person-biography{
     font-size:13px;
+  }
+
+  .section-nav{
+    gap:7px;
+    padding:8px;
+    margin-bottom:17px;
+  }
+
+  .section-nav-button{
+    flex:0 0 auto;
+    padding:8px 11px;
+    font-size:12px;
   }
 
   .works-section{
@@ -710,6 +786,70 @@ img{
       </div>
 
     </section>
+
+
+    <!-- =====================================================
+         セクション移動タブ
+    ====================================================== -->
+
+    <nav
+      id="sectionNav"
+      class="section-nav"
+      aria-label="人物作品セクションへ移動"
+      hidden
+    >
+
+      <button
+        id="castNavButton"
+        class="section-nav-button"
+        type="button"
+        data-target="castSection"
+        hidden
+      >
+        🎭 出演作品
+      </button>
+
+      <button
+        id="voiceNavButton"
+        class="section-nav-button"
+        type="button"
+        data-target="voiceSection"
+        hidden
+      >
+        🎙️ 声の出演
+      </button>
+
+      <button
+        id="directorNavButton"
+        class="section-nav-button"
+        type="button"
+        data-target="directorSection"
+        hidden
+      >
+        🎬 監督作品
+      </button>
+
+      <button
+        id="documentaryTalkNavButton"
+        class="section-nav-button"
+        type="button"
+        data-target="documentaryTalkSection"
+        hidden
+      >
+        🎥 ドキュメンタリー
+      </button>
+
+      <button
+        id="otherNavButton"
+        class="section-nav-button"
+        type="button"
+        data-target="otherSection"
+        hidden
+      >
+        ⭐ その他
+      </button>
+
+    </nav>
 
 
     <!-- =====================================================
@@ -995,6 +1135,31 @@ const otherTitle =
   document.getElementById("otherTitle");
 
 
+// =========================================================
+// セクション移動タブ
+// =========================================================
+
+const sectionNav =
+  document.getElementById("sectionNav");
+
+const castNavButton =
+  document.getElementById("castNavButton");
+
+const voiceNavButton =
+  document.getElementById("voiceNavButton");
+
+const directorNavButton =
+  document.getElementById("directorNavButton");
+
+const documentaryTalkNavButton =
+  document.getElementById(
+    "documentaryTalkNavButton"
+  );
+
+const otherNavButton =
+  document.getElementById("otherNavButton");
+
+
 const castSection =
   document.getElementById("castSection");
 
@@ -1103,6 +1268,119 @@ let voiceDisplayCount = 12;
 let directorDisplayCount = 12;
 let documentaryTalkDisplayCount = 12;
 let otherDisplayCount = 12;
+
+
+// =========================================================
+// セクション移動タブ更新
+// =========================================================
+
+function updateSectionNav(){
+
+  const items = [
+    {
+      button:castNavButton,
+      count:castData.length,
+      label:"🎭 出演作品"
+    },
+    {
+      button:voiceNavButton,
+      count:voiceData.length,
+      label:"🎙️ 声の出演"
+    },
+    {
+      button:directorNavButton,
+      count:directorData.length,
+      label:"🎬 監督作品"
+    },
+    {
+      button:documentaryTalkNavButton,
+      count:documentaryTalkData.length,
+      label:"🎥 ドキュメンタリー"
+    },
+    {
+      button:otherNavButton,
+      count:otherData.length,
+      label:"⭐ その他"
+    }
+  ];
+
+  let visibleCount = 0;
+
+  items.forEach(function(item){
+
+    if (!item.button) {
+      return;
+    }
+
+    if (item.count > 0) {
+
+      item.button.hidden = false;
+
+      item.button.textContent =
+        item.label +
+        "（" +
+        item.count +
+        "件）";
+
+      visibleCount++;
+
+    }
+    else {
+
+      item.button.hidden = true;
+
+    }
+
+  });
+
+  if (sectionNav) {
+    sectionNav.hidden =
+      visibleCount === 0;
+  }
+
+}
+
+
+// =========================================================
+// セクション移動タブ クリック
+// =========================================================
+
+if (sectionNav) {
+
+  sectionNav.addEventListener(
+    "click",
+    function(event){
+
+      const button =
+        event.target.closest(
+          ".section-nav-button"
+        );
+
+      if (!button) {
+        return;
+      }
+
+      const targetId =
+        button.dataset.target;
+
+      const target =
+        document.getElementById(
+          targetId
+        );
+
+      if (!target || target.hidden) {
+        return;
+      }
+
+      target.scrollIntoView({
+        behavior:"smooth",
+        block:"start"
+      });
+
+    }
+  );
+
+}
 
 
 // =========================================================
@@ -1291,16 +1569,8 @@ function renderWorks(
   moreWrapper
 ){
 
-  // 実際に表示できる作品だけに絞る
-  const validData =
-    data.filter(
-      work =>
-        work &&
-        work.id
-    );
-
   const visible =
-    validData.slice(
+    data.slice(
       0,
       displayCount
     );
@@ -1310,10 +1580,9 @@ function renderWorks(
       .map(createWorkCard)
       .join("");
 
-  // まだ表示していない作品がある時だけ
-  // 「もっと見る」を表示する
   moreWrapper.hidden =
-    displayCount >= validData.length;
+    data.length <= 12 ||
+    displayCount >= data.length;
 }
 
 
@@ -1822,6 +2091,13 @@ async function loadPerson(){
 
       renderOther();
     }
+
+
+    // =====================================================
+    // セクション移動タブ
+    // =====================================================
+
+    updateSectionNav();
 
 
     // =====================================================
