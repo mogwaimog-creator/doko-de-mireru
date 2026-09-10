@@ -246,6 +246,22 @@ header p{
    戻るボタン
 ========================================================= */
 
+.back-actions{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-bottom:15px;
+}
+
+.back-actions .back{
+  margin-bottom:0;
+}
+
+.back-search{
+  color:#2563eb;
+}
+
 .back{
   display:inline-block;
 
@@ -1813,14 +1829,28 @@ header p{
      戻る
 ========================================================= -->
 
-<a
-  id="backLink"
-  class="back"
-  href="index.html"
-  aria-label="検索結果に戻る"
->
-← 検索結果に戻る
-</a>
+<div class="back-actions">
+
+  <a
+    id="backLink"
+    class="back"
+    href="index.html"
+    aria-label="検索結果に戻る"
+  >
+    ← 検索結果に戻る
+  </a>
+
+  <a
+    id="searchLink"
+    class="back back-search"
+    href="index.html"
+    aria-label="作品を検索する"
+    hidden
+  >
+    🔍 作品を検索する
+  </a>
+
+</div>
 
 
   
@@ -7017,6 +7047,21 @@ function showError(message){
       "from"
     );
 
+  const searchLink =
+    document.getElementById(
+      "searchLink"
+    );
+
+  const personId =
+    params.get(
+      "personId"
+    );
+
+  const personName =
+    params.get(
+      "personName"
+    );
+
 // =====================================================
 // 元の配信サービスページで選んでいた条件
 // =====================================================
@@ -7038,10 +7083,51 @@ const backType =
 
   
   // =====================================================
-  // Netflix
+  // 人物ページ
   // =====================================================
 
   if(
+    from === "person" &&
+    personId
+  ){
+
+    backLink.href =
+      "./person.html?id=" +
+      encodeURIComponent(
+        personId
+      );
+
+    backLink.textContent =
+      "← " +
+      (
+        personName ||
+        "人物"
+      ) +
+      "の人物ページに戻る";
+
+    backLink.setAttribute(
+      "aria-label",
+      (
+        personName ||
+        "人物"
+      ) +
+      "の人物ページに戻る"
+    );
+
+    if(
+      searchLink
+    ){
+      searchLink.hidden =
+        false;
+    }
+
+  }
+
+  // =====================================================
+  // Netflix
+  // =====================================================
+
+  else if(
   from === "netflix"
 ){
 
