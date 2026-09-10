@@ -6740,10 +6740,13 @@ const movies =
               "movie",
 
             // カード表示用
-            display_type:
-              genre === "anime"
-                ? "anime"
-                : "movie"
+display_type:
+  (
+    Array.isArray(movie.genre_ids) &&
+    movie.genre_ids.includes(16)
+  )
+    ? "anime"
+    : "movie"
           };
 
         }
@@ -6779,10 +6782,13 @@ const tvWorks =
               "tv",
 
             // カード表示用
-            display_type:
-              genre === "anime"
-                ? "anime"
-                : "drama"
+display_type:
+  (
+    Array.isArray(tv.genre_ids) &&
+    tv.genre_ids.includes(16)
+  )
+    ? "anime"
+    : "drama"
           };
 
         }
