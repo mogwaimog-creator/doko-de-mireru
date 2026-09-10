@@ -3408,6 +3408,87 @@ font-weight:bold;
 
   -webkit-line-clamp:2;
 }
+
+/* =========================================================
+   ジャンル作品 メタ情報
+========================================================= */
+
+.genre-result-meta{
+  display:flex;
+
+  align-items:center;
+
+  flex-wrap:wrap;
+
+  gap:6px;
+
+  margin-top:7px;
+
+  font-size:12px;
+}
+
+
+/* 年代 */
+
+.genre-result-year{
+  color:#111827;
+
+  font-weight:600;
+}
+
+
+/* 作品タイプ共通 */
+
+.genre-result-type{
+  display:inline-flex;
+
+  align-items:center;
+
+  padding:
+    3px 7px;
+
+  border-radius:999px;
+
+  font-weight:700;
+}
+
+
+/* 映画 */
+
+.genre-result-type.type-movie{
+  background:#fee2e2;
+
+  color:#dc2626;
+}
+
+
+/* ドラマ */
+
+.genre-result-type.type-drama{
+  background:#dbeafe;
+
+  color:#2563eb;
+}
+
+
+/* アニメ */
+
+.genre-result-type.type-anime{
+  background:#dcfce7;
+
+  color:#16a34a;
+}
+
+
+/* 評価 */
+
+.genre-result-rating{
+  color:#111827;
+
+  font-weight:600;
+
+  white-space:nowrap;
+}
      
 </style>
 
@@ -6221,16 +6302,108 @@ function createGenreResultCard(
     );
 
 
-  /* TV作品 */
+  /* =====================================================
+     作品タイプ
+  ===================================================== */
+
+  let typeText = "";
+  let typeClass = "";
+
+
   if(
+    movie.content_type === "anime"
+  ){
+
+    typeText =
+      "🐱 アニメ";
+
+    typeClass =
+      "type-anime";
+
+
+    /*
+      アニメでもTV作品の場合は
+      詳細ページへ type=tv を渡す
+    */
+
+    if(
+      movie.name ||
+      movie.original_name
+    ){
+
+      detailUrl +=
+        "&type=tv";
+
+    }
+
+  }
+
+  else if(
     movie.content_type === "tv"
   ){
+
+    typeText =
+      "📺 ドラマ";
+
+    typeClass =
+      "type-drama";
 
     detailUrl +=
       "&type=tv";
 
   }
 
+  else{
+
+    typeText =
+      "🎬 映画";
+
+    typeClass =
+      "type-movie";
+
+  }
+
+
+  /* =====================================================
+     公開年
+  ===================================================== */
+
+  let year = "";
+
+  if(
+    movie.release_date
+  ){
+
+    year =
+      String(
+        movie.release_date
+      ).slice(
+        0,
+        4
+      );
+
+  }
+
+
+  /* =====================================================
+     評価
+  ===================================================== */
+
+  const rating =
+    Number(
+      movie.vote_average || 0
+    );
+
+
+  const ratingText =
+    rating > 0
+      ? rating.toFixed(1)
+      : "-";
+
+
+  /* =====================================================
+     ポスター
+  ===================================================== */
 
   const poster =
     movie.poster_path
@@ -6281,6 +6454,33 @@ function createGenreResultCard(
           ${escapeHtml(
             title
           )}
+
+        </div>
+
+
+        <div class="genre-result-meta">
+
+          ${
+            year
+              ? `
+                <span class="genre-result-year">
+                  ${escapeHtml(year)}年
+                </span>
+              `
+              : ""
+          }
+
+
+          <span
+            class="genre-result-type ${typeClass}"
+          >
+            ${typeText}
+          </span>
+
+
+          <span class="genre-result-rating">
+            ⭐ ${ratingText}
+          </span>
 
         </div>
 
