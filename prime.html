@@ -3381,7 +3381,51 @@ let candidates =
 
           }
 
+　　　　　// =====================================================
+// Prime Videoページで選んでいた条件を詳細ページへ渡す
+// =====================================================
 
+// 国・地域
+if(
+  selectedCountry
+){
+
+  detailUrl +=
+    "&backCountry=" +
+    encodeURIComponent(
+      selectedCountry
+    );
+
+}
+
+
+// ジャンル
+if(
+  selectedGenre
+){
+
+  detailUrl +=
+    "&backGenre=" +
+    encodeURIComponent(
+      selectedGenre
+    );
+
+}
+
+
+// 映画・ドラマ・アニメ
+if(
+  selectedType
+){
+
+  detailUrl +=
+    "&backType=" +
+    encodeURIComponent(
+      selectedType
+    );
+
+}
+          
           const year =
             movie.release_date
               ? String(
@@ -3529,6 +3573,50 @@ function createMovieCard(
 
   }
 
+  // =====================================================
+// Prime Videoページで選んでいた条件を詳細ページへ渡す
+// =====================================================
+
+// 国・地域
+if(
+  selectedCountry
+){
+
+  detailUrl +=
+    "&backCountry=" +
+    encodeURIComponent(
+      selectedCountry
+    );
+
+}
+
+
+// ジャンル
+if(
+  selectedGenre
+){
+
+  detailUrl +=
+    "&backGenre=" +
+    encodeURIComponent(
+      selectedGenre
+    );
+
+}
+
+
+// 映画・ドラマ・アニメ
+if(
+  selectedType
+){
+
+  detailUrl +=
+    "&backType=" +
+    encodeURIComponent(
+      selectedType
+    );
+
+}
 
   const year =
     movie.release_date
@@ -3959,6 +4047,52 @@ const response =
             }
 
 
+            // =====================================================
+// Prime Videoページで選んでいた条件を詳細ページへ渡す
+// =====================================================
+
+// 国・地域
+if(
+  selectedCountry
+){
+
+  detailUrl +=
+    "&backCountry=" +
+    encodeURIComponent(
+      selectedCountry
+    );
+
+}
+
+
+// ジャンル
+if(
+  selectedGenre
+){
+
+  detailUrl +=
+    "&backGenre=" +
+    encodeURIComponent(
+      selectedGenre
+    );
+
+}
+
+
+// 映画・ドラマ・アニメ
+if(
+  selectedType
+){
+
+  detailUrl +=
+    "&backType=" +
+    encodeURIComponent(
+      selectedType
+    );
+
+}
+           
+            
             const year =
               movie.release_date
                 ? String(
