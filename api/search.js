@@ -8180,6 +8180,24 @@ encodeURIComponent(
   tvGenres
 );
 
+  // ===================================================
+// 対象ジャンルのTV作品も
+// 日本で見放題配信中の作品を優先取得
+// ===================================================
+
+if(
+  genre === "horror" ||
+  genre === "romance" ||
+  genre === "action" ||
+  genre === "comedy" ||
+  genre === "scifi"
+){
+
+  tvUrl +=
+    "&watch_region=JP" +
+    "&with_watch_monetization_types=flatrate";
+
+}
 
   // ===================================================
   // アニメは日本作品中心
