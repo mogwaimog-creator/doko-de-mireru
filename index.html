@@ -6772,8 +6772,17 @@ let data;
 if(
   genre === "horror" ||
   genre === "romance" ||
-  genre === "action"
+  genre === "action" ||
+  genre === "comedy"
 ){
+
+  
+     currentGenreWorks =
+    await prioritizeHorrorStreamingWorks(
+      currentGenreWorks
+    );
+
+}
 
   const responses =
     await Promise.all([
@@ -6959,10 +6968,11 @@ const genreWorks =
 if(
   genre === "horror" ||
   genre === "romance" ||
-  genre === "action"
+  genre === "action" ||
+  genre === "comedy"
 ){
-
-  currentGenreWorks =
+  
+     currentGenreWorks =
     await prioritizeHorrorStreamingWorks(
       genreWorks
     );
@@ -7195,10 +7205,12 @@ genreLoadMoreButton.addEventListener(
 if(
   genre === "horror" ||
   genre === "romance" ||
-  genre === "action"
+  genre === "action" ||
+  genre === "comedy"
 ){
 
-  currentGenreWorks =
+  
+     currentGenreWorks =
     await prioritizeHorrorStreamingWorks(
       currentGenreWorks
     );
