@@ -1594,9 +1594,19 @@ footer{
 ========================================================= */
 
 .provider-header-actions{
-  margin-top:14px;
+  margin-top:16px;
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:10px;
 }
 
+.main-search-guide{
+  color:#6b7280;
+  font-size:12px;
+  line-height:1.5;
+}
+  
 .main-search-button{
   display:inline-block;
 
@@ -2231,14 +2241,18 @@ body .country-card.active::after{
 
   <div class="provider-header-actions">
 
-    <a
-      class="main-search-button"
-      href="./index.html"
-    >
-      🔍 観たい作品を探す
-    </a>
+  <a
+    class="main-search-button"
+    href="./index.html"
+  >
+    🔍 作品・人物から探す →
+  </a>
 
-  </div>
+  <span class="main-search-guide">
+    見たい作品や人物を探したい方はこちら
+  </span>
+
+</div>
 
 </section>
 <!-- =======================================================
