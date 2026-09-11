@@ -6754,19 +6754,168 @@ async function loadGenreWorks(
 
   try{
 
-    const response =
-  await fetch(
-    "/api/search?genreBrowse=1&genre=" +
-    encodeURIComponent(
-      genre
-    ) +
-    "&genrePage=1"
+    // =======================================================
+// ジャンル候補を取得
+//
+// 通常ジャンル：1ページ（最大20件）
+// ホラーだけ：2ページ（最大40件）
+// =======================================================
+
+let data;
+
+
+// -------------------------------------------------------
+// ホラー
+// 1ページ目＋2ページ目を同時取得
+// -------------------------------------------------------
+
+if(
+  genre === "horror"
+){
+
+  const responses =
+    await Promise.all([
+      fetch(
+        "/api/search?genreBrowse=1&genre=" +
+        encodeURIComponent(genre) +
+        "&genrePage=1"
+      ),
+
+      fetch(
+        "/api/search?genreBrowse=1&genre=" +
+        encodeURIComponent(genre) +
+        "&genrePage=2"
+      )
+    ]);
+
+
+  if(
+    !responses[0].ok ||
+    !responses[1].ok
+  ){
+
+    throw new Error(
+      "ホラー作品を取得できませんでした。"
+    );
+
+  }
+
+
+  const pages =
+    await Promise.all([
+      responses[0].json(),
+      responses[1].json()
+    ]);
+
+
+  const combinedWorks =
+    []
+      .concat(
+        Array.isArray(
+          pages[0].results
+        )
+          ? pages[0].results
+          : []
+      )
+      .concat(
+        Array.isArray(
+          pages[1].results
+        )
+          ? pages[1].results
+          : []
+      );
+
+
+  // -----------------------------------------------------
+  // 同じ作品が含まれた場合は重複削除
+  // -----------------------------------------------------
+
+  const workMap =
+    new Map();
+
+
+  combinedWorks.forEach(
+    function(work){
+
+      if(
+        !work ||
+        !work.id
+      ){
+        return;
+      }
+
+
+      const key =
+        String(
+          work.content_type || "movie"
+        ) +
+        "-" +
+        String(
+          work.id
+        );
+
+
+      if(
+        !workMap.has(key)
+      ){
+
+        workMap.set(
+          key,
+          work
+        );
+
+      }
+
+    }
   );
 
 
-    const data =
-      await response.json();
+  data = {
+    results:
+      Array.from(
+        workMap.values()
+      )
+  };
 
+
+  // 2ページ目まで先に取得済み
+  currentGenrePage = 2;
+
+}
+
+
+// -------------------------------------------------------
+// その他のジャンル
+// 今まで通り
+// -------------------------------------------------------
+
+else{
+
+  const response =
+    await fetch(
+      "/api/search?genreBrowse=1&genre=" +
+      encodeURIComponent(
+        genre
+      ) +
+      "&genrePage=1"
+    );
+
+
+  if(
+    !response.ok
+  ){
+
+    throw new Error(
+      "ジャンル作品を取得できませんでした。"
+    );
+
+  }
+
+
+  data =
+    await response.json();
+
+}
 
     if(
       !response.ok ||
