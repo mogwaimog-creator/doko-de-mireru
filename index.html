@@ -6918,17 +6918,14 @@ else{
 }
 
     if(
-      !response.ok ||
-      !Array.isArray(
-        data.results
-      )
-    ){
-
-      throw new Error(
-        "ジャンル作品を取得できませんでした。"
-      );
-
-    }
+  !Array.isArray(
+    data.results
+  )
+){
+  throw new Error(
+    "ジャンル作品を取得できませんでした。"
+  );
+}
 
 
     if(
