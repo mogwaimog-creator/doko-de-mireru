@@ -6838,26 +6838,8 @@ const genreWorks =
 // 配信中作品を優先
 // =======================================================
 
-if(
-  genre === "horror" ||
-  genre === "romance" ||
-  genre === "action" ||
-  genre === "comedy" ||
-  genre === "scifi"
-){
-  
-     currentGenreWorks =
-    await prioritizeHorrorStreamingWorks(
-      genreWorks
-    );
-
-}
-else{
-
-  currentGenreWorks =
-    genreWorks;
-
-}
+currentGenreWorks =
+  genreWorks;
 
 
 currentGenreDisplayCount = 15;
