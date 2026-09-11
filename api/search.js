@@ -1736,6 +1736,49 @@ if (
 }    
 
 // =====================================================
+// 「すべて」検索
+// 映画 + TV をまとめたあと
+// タイトル関連度でもう一度並び替える
+// =====================================================
+
+if (
+  type === "all"
+) {
+
+  finalResults.sort(
+    function(a, b) {
+
+      const aScore =
+        getTitleSearchScore(
+          a,
+          query,
+          [
+            "title",
+            "original_title"
+          ]
+        );
+
+      const bScore =
+        getTitleSearchScore(
+          b,
+          query,
+          [
+            "title",
+            "original_title"
+          ]
+        );
+
+      return (
+        bScore -
+        aScore
+      );
+
+    }
+  );
+
+}
+    
+// =====================================================
 // JSON返却
 // =====================================================
 
