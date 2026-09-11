@@ -8147,7 +8147,8 @@ if(
   genre === "horror" ||
   genre === "romance" ||
   genre === "action" ||
-  genre === "comedy"
+  genre === "comedy" ||
+  genre === "scifi"
 ){
 
   movieUrl +=
