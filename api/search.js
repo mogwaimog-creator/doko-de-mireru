@@ -8146,7 +8146,8 @@ encodeURIComponent(
 if(
   genre === "horror" ||
   genre === "romance" ||
-  genre === "action"
+  genre === "action" ||
+  genre === "comedy"
 ){
 
   movieUrl +=
