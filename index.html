@@ -7604,10 +7604,10 @@ async function prioritizeHorrorStreamingWorks(
   // APIへ一気にアクセスしすぎないよう
   // 同時取得は4件まで
   const workerCount =
-    Math.min(
-      4,
-      list.length
-    );
+  Math.min(
+    3,
+    list.length
+  );
 
 
   async function worker(){
@@ -7626,28 +7626,61 @@ async function prioritizeHorrorStreamingWorks(
 
       try{
 
-        const detail =
-          await getGenreWorkDetail(
-            work
-          );
+  let detail;
 
 
-        streamingFlags[index] =
-          !!(
-            detail &&
-            Array.isArray(
-              detail.streaming
-            ) &&
-            detail.streaming.length > 0
-          );
+  try{
 
+    detail =
+      await getGenreWorkDetail(
+        work
+      );
+
+  }
+  catch(firstError){
+
+    // 少し待ってから1回だけ再試行
+    await new Promise(
+      function(resolve){
+        setTimeout(
+          resolve,
+          250
+        );
       }
-      catch(error){
+    );
 
-        streamingFlags[index] =
-          false;
 
-      }
+    detail =
+      await getGenreWorkDetail(
+        work
+      );
+
+  }
+
+
+  streamingFlags[index] =
+    !!(
+      detail &&
+      Array.isArray(
+        detail.streaming
+      ) &&
+      detail.streaming.length > 0
+    );
+
+}
+catch(error){
+
+  console.warn(
+    "GENRE STREAMING CHECK ERROR:",
+    work && work.id,
+    error
+  );
+
+
+  streamingFlags[index] =
+    false;
+
+}
 
     }
 
