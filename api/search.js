@@ -4798,16 +4798,15 @@ add(katakanaQuery);
   // =======================================================
 
   if (
-    normalized === "コナン" ||
-    normalized === "名探偵コナン" ||
-    normalized === "めいたんていコナン"
-  ) {
+  normalized === "コナン" ||
+  normalized === "名探偵コナン" ||
+  normalized === "めいたんていコナン"
+) {
 
-    add("名探偵コナン");
-    add("Detective Conan");
-    add("Case Closed");
+  add("名探偵コナン");
+  add("Detective Conan");
 
-  }
+}
 
 
   // =======================================================
