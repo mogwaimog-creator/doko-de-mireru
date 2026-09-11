@@ -6764,136 +6764,34 @@ async function loadGenreWorks(
 let data;
 
 
-// -------------------------------------------------------
-// ホラー
-// 1ページ目＋2ページ目を同時取得
-// -------------------------------------------------------
+// =======================================================
+// 最初は1ページ目（最大20件）だけ取得
+//
+// 2ページ目以降は
+// 「もっと見る」を押した時に取得する
+// =======================================================
 
-if(
-  genre === "horror" ||
-  genre === "romance" ||
-  genre === "action" ||
-  genre === "comedy" ||
-  genre === "scifi"
-){
-
-  const responses =
-    await Promise.all([
-      fetch(
-        "/api/search?genreBrowse=1&genre=" +
-        encodeURIComponent(genre) +
-        "&genrePage=1"
-      ),
-
-      fetch(
-        "/api/search?genreBrowse=1&genre=" +
-        encodeURIComponent(genre) +
-        "&genrePage=2"
-      )
-    ]);;
-
-
-  if(
-    !responses[0].ok ||
-    !responses[1].ok
-  ){
-
-    throw new Error(
-      "ホラー作品を取得できませんでした。"
-    );
-
-  }
-
-
-  const pages =
-    await Promise.all([
-      responses[0].json(),
-      responses[1].json()
-    ]);
-
-
-  const combinedWorks =
-    []
-      .concat(
-        Array.isArray(
-          pages[0].results
-        )
-          ? pages[0].results
-          : []
-      )
-      .concat(
-        Array.isArray(
-          pages[1].results
-        )
-          ? pages[1].results
-          : []
-      );
-
-
-  // -----------------------------------------------------
-  // 同じ作品が含まれた場合は重複削除
-  // -----------------------------------------------------
-
-  const workMap =
-    new Map();
-
-
-  combinedWorks.forEach(
-    function(work){
-
-      if(
-        !work ||
-        !work.id
-      ){
-        return;
-      }
-
-
-      const key =
-        String(
-          work.content_type || "movie"
-        ) +
-        "-" +
-        String(
-          work.id
-        );
-
-
-      if(
-        !workMap.has(key)
-      ){
-
-        workMap.set(
-          key,
-          work
-        );
-
-      }
-
-    }
+const response =
+  await fetch(
+    "/api/search?genreBrowse=1&genre=" +
+    encodeURIComponent(
+      genre
+    ) +
+    "&genrePage=1"
   );
 
 
-  data = {
-    results:
-      Array.from(
-        workMap.values()
-      )
-  };
-
-
-  // 2ページ目まで先に取得済み
-  currentGenrePage = 2;
-
+if(
+  !response.ok
+){
+  throw new Error(
+    "ジャンル作品を取得できませんでした。"
+  );
 }
 
 
-// -------------------------------------------------------
-// その他のジャンル
-// 今まで通り
-// -------------------------------------------------------
-
-else{
+data =
+  await response.json();
 
   const response =
     await fetch(
