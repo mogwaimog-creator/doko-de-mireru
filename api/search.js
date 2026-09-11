@@ -3079,7 +3079,14 @@ function findProvider(
 // =========================================================
 // 人物名検索
 //
-// 俳優・声優・監督などをTMDBから検索
+// ・通常の人物名検索
+// ・中黒「・」なしにも対応
+// ・空白なしにも対応
+//
+// 例:
+// トム・クルーズ
+// トム クルーズ
+// トムクルーズ
 // =========================================================
 
 async function searchPeople(
@@ -3092,113 +3099,469 @@ async function searchPeople(
   }
 
 
-  const url =
-    "https://api.themoviedb.org/3/search/person" +
-    "?api_key=" +
-    encodeURIComponent(apiKey) +
-    "&language=ja-JP" +
-    "&include_adult=false" +
-    "&page=1" +
-    "&query=" +
-    encodeURIComponent(query);
+  // =======================================================
+  // 比較用に名前を正規化
+  //
+  // 「・」「空白」「.」「-」などを除去
+  // =======================================================
+
+  function normalizePersonName(
+    value
+  ) {
+
+    return String(
+      value || ""
+    )
+      .normalize("NFKC")
+      .toLowerCase()
+      .replace(
+        /[\s・･.\-_'’]/g,
+        ""
+      );
+
+  }
+
+
+  const originalQuery =
+    String(query)
+      .trim();
+
+  const normalizedQuery =
+    normalizePersonName(
+      originalQuery
+    );
+
+
+  // =======================================================
+  // TMDB人物検索
+  // =======================================================
+
+  async function fetchPeople(
+    searchQuery
+  ) {
+
+    if (!searchQuery) {
+      return [];
+    }
+
+
+    const url =
+      "https://api.themoviedb.org/3/search/person" +
+      "?api_key=" +
+      encodeURIComponent(apiKey) +
+      "&language=ja-JP" +
+      "&include_adult=false" +
+      "&page=1" +
+      "&query=" +
+      encodeURIComponent(
+        searchQuery
+      );
+
+
+    try {
+
+      const data =
+        await fetchJson(url);
+
+
+      return (
+        data &&
+        Array.isArray(
+          data.results
+        )
+      )
+        ? data.results
+        : [];
+
+    }
+    catch (error) {
+
+      console.error(
+        "PERSON SEARCH TMDB ERROR:",
+        searchQuery,
+        error
+      );
+
+      return [];
+
+    }
+
+  }
 
 
   try {
 
-    const data =
-      await fetchJson(url);
+    // =====================================================
+    // ① まず入力された名前そのままで検索
+    // =====================================================
+
+    const searchQueries =
+      new Set([
+        originalQuery
+      ]);
 
 
-    const people =
-      data &&
-      Array.isArray(data.results)
-        ? data.results
-        : [];
+    // =====================================================
+    // ② 中黒・空白などを取った名前も候補にする
+    // =====================================================
+
+    if (
+      normalizedQuery &&
+      normalizedQuery !==
+        originalQuery.toLowerCase()
+    ) {
+
+      searchQueries.add(
+        normalizedQuery
+      );
+
+    }
 
 
-    return people
-      .filter(function(person) {
+    // =====================================================
+    // ③ 区切り文字がない名前の場合
+    //
+    // 「トムクルーズ」
+    // ↓
+    // トム・クルーズ
+    // トム クルーズ
+    //
+    // のような候補を自動生成
+    // =====================================================
 
-        return (
-          person &&
-          person.id &&
-          person.name
+    const hasSeparator =
+      /[\s・･]/.test(
+        originalQuery
+      );
+
+
+    if (
+      !hasSeparator &&
+      normalizedQuery.length >= 4 &&
+      normalizedQuery.length <= 14
+    ) {
+
+      // 先頭1文字・末尾1文字だけに
+      // 分割する候補は避ける
+      for (
+        let i = 2;
+        i <= normalizedQuery.length - 2;
+        i++
+      ) {
+
+        const left =
+          normalizedQuery.slice(
+            0,
+            i
+          );
+
+        const right =
+          normalizedQuery.slice(
+            i
+          );
+
+
+        searchQueries.add(
+          left +
+          "・" +
+          right
         );
 
-      })
-      .slice(0, 10)
-      .map(function(person) {
+        searchQueries.add(
+          left +
+          " " +
+          right
+        );
 
-        const knownFor =
-          Array.isArray(person.known_for)
-            ? person.known_for
-                .filter(function(work) {
-                  return (
-                    work &&
-                    work.id &&
-                    (
-                      work.media_type === "movie" ||
-                      work.media_type === "tv"
-                    )
-                  );
-                })
-                .slice(0, 3)
-                .map(function(work) {
+      }
 
-                  return {
-
-                    id:
-                      work.id,
-
-                    title:
-                      work.title ||
-                      work.name ||
-                      work.original_title ||
-                      work.original_name ||
-                      "",
-
-                    media_type:
-                      work.media_type || "",
-
-                    poster_path:
-                      work.poster_path || null
-
-                  };
-
-                })
-            : [];
+    }
 
 
-        return {
+    // =====================================================
+    // TMDBへまとめて検索
+    // =====================================================
 
-          id:
-            person.id,
+    const searchResults =
+      await Promise.all(
+        Array.from(
+          searchQueries
+        ).map(
+          fetchPeople
+        )
+      );
 
-          name:
-            person.name || "",
 
-          original_name:
-            person.original_name || "",
+    // =====================================================
+    // 人物IDで重複除去
+    // =====================================================
 
-          profile_path:
-            person.profile_path || null,
+    const personMap =
+      new Map();
 
-          known_for_department:
-            person.known_for_department || "",
 
-          popularity:
-            Number(
-              person.popularity || 0
-            ),
+    searchResults
+      .flat()
+      .forEach(
+        function(person) {
 
-          known_for:
-            knownFor
+          if (
+            !person ||
+            !person.id ||
+            !person.name
+          ) {
+            return;
+          }
 
-        };
 
-      });
+          if (
+            !personMap.has(
+              person.id
+            )
+          ) {
 
-  } catch (error) {
+            personMap.set(
+              person.id,
+              person
+            );
+
+          }
+
+        }
+      );
+
+
+    let people =
+      Array.from(
+        personMap.values()
+      );
+
+
+    // =====================================================
+    // 入力名との一致度で並び替え
+    // =====================================================
+
+    people.sort(
+      function(a, b) {
+
+        const aName =
+          normalizePersonName(
+            a.name
+          );
+
+        const bName =
+          normalizePersonName(
+            b.name
+          );
+
+
+        const aOriginal =
+          normalizePersonName(
+            a.original_name
+          );
+
+        const bOriginal =
+          normalizePersonName(
+            b.original_name
+          );
+
+
+        let aScore = 0;
+        let bScore = 0;
+
+
+        // 完全一致
+        if (
+          aName ===
+          normalizedQuery
+        ) {
+          aScore += 100000;
+        }
+
+        if (
+          bName ===
+          normalizedQuery
+        ) {
+          bScore += 100000;
+        }
+
+
+        // 原名完全一致
+        if (
+          aOriginal ===
+          normalizedQuery
+        ) {
+          aScore += 90000;
+        }
+
+        if (
+          bOriginal ===
+          normalizedQuery
+        ) {
+          bScore += 90000;
+        }
+
+
+        // 前方一致
+        if (
+          aName.startsWith(
+            normalizedQuery
+          )
+        ) {
+          aScore += 30000;
+        }
+
+        if (
+          bName.startsWith(
+            normalizedQuery
+          )
+        ) {
+          bScore += 30000;
+        }
+
+
+        // 部分一致
+        if (
+          aName.includes(
+            normalizedQuery
+          )
+        ) {
+          aScore += 15000;
+        }
+
+        if (
+          bName.includes(
+            normalizedQuery
+          )
+        ) {
+          bScore += 15000;
+        }
+
+
+        // TMDB人気度
+        aScore +=
+          Number(
+            a.popularity || 0
+          );
+
+        bScore +=
+          Number(
+            b.popularity || 0
+          );
+
+
+        return (
+          bScore -
+          aScore
+        );
+
+      }
+    );
+
+
+    // =====================================================
+    // サイト用データへ整形
+    // =====================================================
+
+    return people
+      .slice(
+        0,
+        10
+      )
+      .map(
+        function(person) {
+
+          const knownFor =
+            Array.isArray(
+              person.known_for
+            )
+              ? person.known_for
+                  .filter(
+                    function(work) {
+
+                      return (
+                        work &&
+                        work.id &&
+                        (
+                          work.media_type ===
+                            "movie" ||
+                          work.media_type ===
+                            "tv"
+                        )
+                      );
+
+                    }
+                  )
+                  .slice(
+                    0,
+                    3
+                  )
+                  .map(
+                    function(work) {
+
+                      return {
+
+                        id:
+                          work.id,
+
+                        title:
+                          work.title ||
+                          work.name ||
+                          work.original_title ||
+                          work.original_name ||
+                          "",
+
+                        media_type:
+                          work.media_type ||
+                          "",
+
+                        poster_path:
+                          work.poster_path ||
+                          null
+
+                      };
+
+                    }
+                  )
+              : [];
+
+
+          return {
+
+            id:
+              person.id,
+
+            name:
+              person.name || "",
+
+            original_name:
+              person.original_name ||
+              "",
+
+            profile_path:
+              person.profile_path ||
+              null,
+
+            known_for_department:
+              person.known_for_department ||
+              "",
+
+            popularity:
+              Number(
+                person.popularity || 0
+              ),
+
+            known_for:
+              knownFor
+
+          };
+
+        }
+      );
+
+
+  }
+  catch (error) {
 
     console.error(
       "PERSON SEARCH ERROR:",
