@@ -10890,6 +10890,61 @@ function getSearchScore(show) {
 
   }
 
+    // =====================================================
+  // 日本語検索で同名作品が複数ある場合
+  // 日本オリジナル作品を優先
+  //
+  // 例:
+  // ドラえもん
+  // → 日本版を海外版・別地域版より上にする
+  //
+  // ドラえもん専用ではなく
+  // 日本語タイトル検索全体に適用
+  // =====================================================
+
+  const isJapaneseQuery =
+    /[ぁ-んァ-ヶ一-龠]/.test(
+      String(query || "")
+    );
+
+
+  const isExactTitleMatch =
+    title === normalizedQuery ||
+    originalTitle === normalizedQuery;
+
+
+  if (
+    isJapaneseQuery &&
+    isExactTitleMatch
+  ) {
+
+    // 日本語が原語の作品を強く優先
+    if (
+      String(
+        show.original_language || ""
+      ).toLowerCase() === "ja"
+    ) {
+
+      score += 5000;
+
+    }
+
+
+    // 日本制作作品ならさらに少し優先
+    if (
+      Array.isArray(
+        show.origin_country
+      ) &&
+      show.origin_country.includes(
+        "JP"
+      )
+    ) {
+
+      score += 2000;
+
+    }
+
+  }
 
   // =====================================================
   // TMDB評価
