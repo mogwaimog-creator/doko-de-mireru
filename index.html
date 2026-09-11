@@ -7053,25 +7053,7 @@ genreLoadMoreButton.addEventListener(
         ...uniqueNewWorks
       );
 
-　　　// -------------------------------------------------
-// ホラーは追加取得した作品も含めて
-// もう一度「配信中 → 配信なし」の順に並べる
-// -------------------------------------------------
 
-if(
-  genre === "horror" ||
-  genre === "romance" ||
-  genre === "action" ||
-  genre === "comedy" ||
-  genre === "scifi"
-){
-  
-     currentGenreWorks =
-    await prioritizeHorrorStreamingWorks(
-      currentGenreWorks
-    );
-
-}
          
       // -------------------------------------------------
       // 1回につき15件だけ表示を増やす
