@@ -11459,7 +11459,7 @@ async function getTvDetail(tvId, apiKey) {
     "?api_key=" +
     apiKey +
     "&language=ja-JP" +
-    "&append_to_response=credits,watch/providers,keywords";
+    "&append_to_response=credits,watch/providers";
 
   const tv =
     await fetchJson(url);
@@ -11651,7 +11651,7 @@ const runtime =
 
     recommendations =
   await getTvRecommendations(
-    tv,
+    tvId,
     apiKey
   );
 
