@@ -7612,10 +7612,9 @@ async function prioritizeHorrorStreamingWorks(
   // 同時取得は4件まで
   const workerCount =
   Math.min(
-    3,
+    4,
     list.length
   );
-
 
   async function worker(){
 
@@ -7650,9 +7649,9 @@ async function prioritizeHorrorStreamingWorks(
     await new Promise(
       function(resolve){
         setTimeout(
-          resolve,
-          250
-        );
+  resolve,
+  100
+);
       }
     );
 
