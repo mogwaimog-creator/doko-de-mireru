@@ -13474,14 +13474,14 @@ const japaneseAnimeUrl =
           // =================================================
 
           if (
-            recommendationIds.has(
-              itemId
-            )
-          ) {
+  recommendationIds.has(
+    itemId
+  )
+) {
 
-            score += 500;
+  score += 150;
 
-          }
+}
 
 
           // =================================================
@@ -13489,42 +13489,96 @@ const japaneseAnimeUrl =
           // =================================================
 
           if (
-            similarIds.has(
-              itemId
-            )
-          ) {
+  similarIds.has(
+    itemId
+  )
+) {
 
-            score += 200;
+  score += 80;
 
-          }
+}
 
 
           // =================================================
           // ジャンル一致
           // =================================================
 
-          let genreMatches = 0;
+         let genreMatches = 0;
+let extraGenres = 0;
 
 
-          itemGenres.forEach(
-            function(genreId) {
+itemGenres.forEach(
+  function(genreId) {
 
-              if (
-                originalGenres.includes(
-                  genreId
-                )
-              ) {
+    if (
+      originalGenres.includes(
+        genreId
+      )
+    ) {
 
-                genreMatches++;
+      genreMatches++;
 
-              }
+    }
+    else {
 
-            }
-          );
+      extraGenres++;
+
+    }
+
+  }
+);
 
 
-          score +=
-            genreMatches * 180;
+// =================================================
+// 共通ジャンル
+// =================================================
+
+score +=
+  genreMatches * 300;
+
+
+// =================================================
+// 元作品のジャンルをすべて含んでいる場合
+// 大きく加点
+// =================================================
+
+const hasAllOriginalGenres =
+  originalGenres.length > 0 &&
+  originalGenres.every(
+    function(genreId) {
+
+      return itemGenres.includes(
+        genreId
+      );
+
+    }
+  );
+
+
+if (
+  hasAllOriginalGenres
+) {
+
+  score += 500;
+
+}
+
+
+// =================================================
+// 元作品にない余計なジャンルが多い作品を減点
+//
+// 例:
+// 元作品:
+// Animation + Kids
+//
+// 候補:
+// Animation + Action + Sci-Fi
+//
+// → 少し順位を下げる
+// =================================================
+
+score -=
+  extraGenres * 180;
 
 
           // =================================================
