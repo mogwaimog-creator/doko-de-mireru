@@ -13239,19 +13239,28 @@ async function getTvRecommendations(
 
     try {
 
-      const japaneseAnimeUrl =
-        "https://api.themoviedb.org/3/discover/tv" +
-        "?api_key=" +
-        encodeURIComponent(
-          apiKey
-        ) +
-        "&language=ja-JP" +
-        "&with_genres=16" +
-        "&with_original_language=ja" +
-        "&sort_by=popularity.desc" +
-        "&vote_count.gte=30" +
-        "&include_adult=false" +
-        "&page=1";
+      const japaneseAnimeGenres =
+  originalGenres.length > 0
+    ? originalGenres.join(",")
+    : "16";
+
+
+const japaneseAnimeUrl =
+  "https://api.themoviedb.org/3/discover/tv" +
+  "?api_key=" +
+  encodeURIComponent(
+    apiKey
+  ) +
+  "&language=ja-JP" +
+  "&with_genres=" +
+  encodeURIComponent(
+    japaneseAnimeGenres
+  ) +
+  "&with_original_language=ja" +
+  "&sort_by=popularity.desc" +
+  "&vote_count.gte=20" +
+  "&include_adult=false" +
+  "&page=1";
 
 
       const data =
@@ -13581,23 +13590,23 @@ async function getTvRecommendations(
 
 
             if (
-              itemLanguage === "ja"
-            ) {
+  itemLanguage === "ja"
+) {
 
-              score += 700;
+  score += 300;
 
-            }
+}
 
 
             if (
-              itemCountries.includes(
-                "JP"
-              )
-            ) {
+  itemCountries.includes(
+    "JP"
+  )
+) {
 
-              score += 300;
+  score += 150;
 
-            }
+}
 
           }
 
