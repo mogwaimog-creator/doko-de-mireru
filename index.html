@@ -6770,19 +6770,12 @@ let data;
 // -------------------------------------------------------
 
 if(
+  if(
   genre === "horror" ||
-genre === "romance" ||
-genre === "action" ||
-genre === "comedy"
+  genre === "romance" ||
+  genre === "action" ||
+  genre === "comedy"
 ){
-
-  
-     currentGenreWorks =
-    await prioritizeHorrorStreamingWorks(
-      currentGenreWorks
-    );
-
-}
 
   const responses =
     await Promise.all([
