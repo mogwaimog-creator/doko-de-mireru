@@ -8144,7 +8144,8 @@ encodeURIComponent(
 // ===================================================
 
 if(
-  genre === "horror"
+  genre === "horror" ||
+  genre === "romance"
 ){
 
   movieUrl +=
@@ -8152,7 +8153,8 @@ if(
     "&with_watch_monetization_types=flatrate";
 
 }
-
+  
+  
   // ===================================================
   // TV取得URL
   // ===================================================
