@@ -11569,10 +11569,10 @@ const runtime =
   try {
 
     recommendations =
-      await getTvRecommendations(
-        tvId,
-        apiKey
-      );
+  await getTvRecommendations(
+    tv,
+    apiKey
+  );
 
   } catch (error) {
 
@@ -11719,7 +11719,7 @@ const googlePlay =
     providersData.link ||
     (
       "https://www.themoviedb.org/tv/" +
-      tvId +
+      tv +
       "?language=ja-JP"
     );
 
@@ -12959,21 +12959,93 @@ async function getTvRelatedSeries(
 }
 
 // =========================================================
-// TV作品 おすすめ取得
+// TV作品 おすすめ取得 Ver2
 //
 // ・TMDB recommendations
 // ・TMDB similar
+// ・日本アニメの場合は日本の人気アニメも候補に追加
 //
-// ドラマ・TVアニメ共通
+// おすすめ順位を独自スコアで決定
 // =========================================================
 
 async function getTvRecommendations(
-  tvId,
+  tv,
   apiKey
 ) {
 
+  // =======================================================
+  // 基本情報
+  // =======================================================
+
+  if (
+    !tv ||
+    !tv.id
+  ) {
+
+    return [];
+
+  }
+
+
+  const tvId =
+    tv.id;
+
+
+  const originalGenres =
+    Array.isArray(
+      tv.genres
+    )
+      ? tv.genres.map(
+          function(genre) {
+
+            return Number(
+              genre.id
+            );
+
+          }
+        )
+      : [];
+
+
+  const originalLanguage =
+    String(
+      tv.original_language ||
+      ""
+    );
+
+
+  const originalCountries =
+    Array.isArray(
+      tv.origin_country
+    )
+      ? tv.origin_country
+      : [];
+
+
+  // =======================================================
+  // アニメ判定
+  // =======================================================
+
+  const isAnime =
+    originalGenres.includes(
+      16
+    );
+
+
+  // =======================================================
+  // 日本作品判定
+  // =======================================================
+
+  const isJapanese =
+    originalLanguage === "ja" ||
+    originalCountries.includes(
+      "JP"
+    );
+
+
   let recommendations = [];
   let similar = [];
+  let japaneseAnime = [];
 
 
   // =======================================================
@@ -12984,10 +13056,14 @@ async function getTvRecommendations(
 
     const recommendationsUrl =
       "https://api.themoviedb.org/3/tv/" +
-      encodeURIComponent(tvId) +
+      encodeURIComponent(
+        tvId
+      ) +
       "/recommendations" +
       "?api_key=" +
-      encodeURIComponent(apiKey) +
+      encodeURIComponent(
+        apiKey
+      ) +
       "&language=ja-JP" +
       "&page=1";
 
@@ -13022,18 +13098,20 @@ async function getTvRecommendations(
 
   // =======================================================
   // TMDB similar
-  //
-  // recommendationsだけでは少ない作品用
   // =======================================================
 
   try {
 
     const similarUrl =
       "https://api.themoviedb.org/3/tv/" +
-      encodeURIComponent(tvId) +
+      encodeURIComponent(
+        tvId
+      ) +
       "/similar" +
       "?api_key=" +
-      encodeURIComponent(apiKey) +
+      encodeURIComponent(
+        apiKey
+      ) +
       "&language=ja-JP" +
       "&page=1";
 
@@ -13067,7 +13145,100 @@ async function getTvRecommendations(
 
 
   // =======================================================
-  // 結合
+  // 日本のTVアニメの場合
+  //
+  // TMDBおすすめだけでは海外作品が多くなる場合があるため、
+  // 日本の人気アニメも候補として追加する
+  // =======================================================
+
+  if (
+    isAnime &&
+    isJapanese
+  ) {
+
+    try {
+
+      const japaneseAnimeUrl =
+        "https://api.themoviedb.org/3/discover/tv" +
+        "?api_key=" +
+        encodeURIComponent(
+          apiKey
+        ) +
+        "&language=ja-JP" +
+        "&with_genres=16" +
+        "&with_original_language=ja" +
+        "&sort_by=popularity.desc" +
+        "&vote_count.gte=30" +
+        "&include_adult=false" +
+        "&page=1";
+
+
+      const data =
+        await fetchJson(
+          japaneseAnimeUrl
+        );
+
+
+      if (
+        data &&
+        Array.isArray(
+          data.results
+        )
+      ) {
+
+        japaneseAnime =
+          data.results;
+
+      }
+
+    } catch (error) {
+
+      console.error(
+        "JAPANESE ANIME RECOMMENDATIONS ERROR:",
+        error
+      );
+
+    }
+
+  }
+
+
+  // =======================================================
+  // recommendations / similar のIDを保存
+  //
+  // 後でおすすめ度の加点に使用
+  // =======================================================
+
+  const recommendationIds =
+    new Set(
+      recommendations.map(
+        function(item) {
+
+          return String(
+            item.id
+          );
+
+        }
+      )
+    );
+
+
+  const similarIds =
+    new Set(
+      similar.map(
+        function(item) {
+
+          return String(
+            item.id
+          );
+
+        }
+      )
+    );
+
+
+  // =======================================================
+  // 全候補を結合
   // =======================================================
 
   const combined =
@@ -13077,6 +13248,9 @@ async function getTvRecommendations(
       )
       .concat(
         similar
+      )
+      .concat(
+        japaneseAnime
       );
 
 
@@ -13084,7 +13258,7 @@ async function getTvRecommendations(
   // 重複削除
   // =======================================================
 
-  const recommendationMap =
+  const candidateMap =
     new Map();
 
 
@@ -13101,11 +13275,15 @@ async function getTvRecommendations(
       }
 
 
-      // 元作品自身を除外
+      // 元作品は除外
 
       if (
-        String(item.id) ===
-        String(tvId)
+        String(
+          item.id
+        ) ===
+        String(
+          tvId
+        )
       ) {
 
         return;
@@ -13113,7 +13291,7 @@ async function getTvRecommendations(
       }
 
 
-      // TV作品だけを対象
+      // TV作品として扱えるものだけ
 
       if (
         !(
@@ -13127,9 +13305,296 @@ async function getTvRecommendations(
       }
 
 
-      recommendationMap.set(
-        String(item.id),
-        item
+      const key =
+        String(
+          item.id
+        );
+
+
+      if (
+        !candidateMap.has(
+          key
+        )
+      ) {
+
+        candidateMap.set(
+          key,
+          item
+        );
+
+      }
+
+    }
+  );
+
+
+  // =======================================================
+  // スコアリング
+  // =======================================================
+
+  const scored =
+    Array.from(
+      candidateMap.values()
+    )
+      .map(
+        function(item) {
+
+          let score = 0;
+
+
+          const itemId =
+            String(
+              item.id
+            );
+
+
+          const itemGenres =
+            Array.isArray(
+              item.genre_ids
+            )
+              ? item.genre_ids.map(
+                  function(id) {
+
+                    return Number(
+                      id
+                    );
+
+                  }
+                )
+              : [];
+
+
+          const itemLanguage =
+            String(
+              item.original_language ||
+              ""
+            );
+
+
+          const itemCountries =
+            Array.isArray(
+              item.origin_country
+            )
+              ? item.origin_country
+              : [];
+
+
+          // =================================================
+          // TMDB recommendations に入っている
+          // =================================================
+
+          if (
+            recommendationIds.has(
+              itemId
+            )
+          ) {
+
+            score += 500;
+
+          }
+
+
+          // =================================================
+          // TMDB similar に入っている
+          // =================================================
+
+          if (
+            similarIds.has(
+              itemId
+            )
+          ) {
+
+            score += 200;
+
+          }
+
+
+          // =================================================
+          // ジャンル一致
+          // =================================================
+
+          let genreMatches = 0;
+
+
+          itemGenres.forEach(
+            function(genreId) {
+
+              if (
+                originalGenres.includes(
+                  genreId
+                )
+              ) {
+
+                genreMatches++;
+
+              }
+
+            }
+          );
+
+
+          score +=
+            genreMatches * 180;
+
+
+          // =================================================
+          // 元作品と同じ言語
+          // =================================================
+
+          if (
+            originalLanguage &&
+            itemLanguage ===
+              originalLanguage
+          ) {
+
+            score += 250;
+
+          }
+
+
+          // =================================================
+          // 元作品と同じ制作国
+          // =================================================
+
+          const sameCountry =
+            originalCountries.some(
+              function(country) {
+
+                return itemCountries.includes(
+                  country
+                );
+
+              }
+            );
+
+
+          if (
+            sameCountry
+          ) {
+
+            score += 150;
+
+          }
+
+
+          // =================================================
+          // 日本アニメの場合
+          //
+          // 日本語オリジナルのアニメを強く優先
+          // =================================================
+
+          if (
+            isAnime &&
+            isJapanese
+          ) {
+
+            if (
+              itemGenres.includes(
+                16
+              )
+            ) {
+
+              score += 300;
+
+            }
+
+
+            if (
+              itemLanguage === "ja"
+            ) {
+
+              score += 700;
+
+            }
+
+
+            if (
+              itemCountries.includes(
+                "JP"
+              )
+            ) {
+
+              score += 300;
+
+            }
+
+          }
+
+
+          // =================================================
+          // 人気度
+          // =================================================
+
+          score +=
+            Math.min(
+              Number(
+                item.popularity || 0
+              ),
+              200
+            );
+
+
+          // =================================================
+          // 評価
+          // =================================================
+
+          score +=
+            Number(
+              item.vote_average || 0
+            ) * 10;
+
+
+          // =================================================
+          // 評価数
+          //
+          // 評価数が多い有名作品を少し優先
+          // =================================================
+
+          const voteCount =
+            Number(
+              item.vote_count || 0
+            );
+
+
+          if (
+            voteCount > 0
+          ) {
+
+            score +=
+              Math.min(
+                Math.log10(
+                  voteCount + 1
+                ) * 25,
+                100
+              );
+
+          }
+
+
+          return {
+
+            item:
+              item,
+
+            score:
+              score
+
+          };
+
+        }
+      );
+
+
+  // =======================================================
+  // スコア順
+  // =======================================================
+
+  scored.sort(
+    function(a, b) {
+
+      return (
+        b.score -
+        a.score
       );
 
     }
@@ -13140,12 +13605,17 @@ async function getTvRecommendations(
   // 最大10作品
   // =======================================================
 
-  return Array.from(
-    recommendationMap.values()
-  )
-    .slice(0, 10)
+  return scored
+    .slice(
+      0,
+      10
+    )
     .map(
-      function(item) {
+      function(result) {
+
+        const item =
+          result.item;
+
 
         return {
 
