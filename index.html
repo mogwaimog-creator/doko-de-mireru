@@ -6784,46 +6784,16 @@ const response =
 if(
   !response.ok
 ){
+
   throw new Error(
     "ジャンル作品を取得できませんでした。"
   );
+
 }
 
 
 data =
   await response.json();
-
-  const response =
-    await fetch(
-      "/api/search?genreBrowse=1&genre=" +
-      encodeURIComponent(
-        genre
-      ) +
-      "&genrePage=1"
-    );
-
-
-  if(
-    !response.ok
-  ){
-
-    throw new Error(
-      "ジャンル作品を取得できませんでした。"
-    );
-
-  }
-
-
-  data =
-    await response.json();
-
-}
-
-    if(
-  !Array.isArray(
-    data.results
-  )
-){
   throw new Error(
     "ジャンル作品を取得できませんでした。"
   );
