@@ -740,6 +740,30 @@ module.exports = async function handler(req, res) {
     <priority>1.0</priority>
   </url>`);
 
+    // =====================================================
+// 配信サービス別ページ
+// =====================================================
+
+const providerPages = [
+  "netflix.html",
+  "prime.html",
+  "unext.html",
+  "hulu.html",
+  "disney.html"
+];
+
+providerPages.forEach(function(page){
+
+  urls.push(`
+  <url>
+    <loc>https://doko-de-mireru.vercel.app/${page}</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>`);
+
+});
+
+    
 
     // =====================================================
     // 作品詳細ページ
