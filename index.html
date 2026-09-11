@@ -6797,12 +6797,34 @@ async function loadGenreWorks(
     }
 
 
-    currentGenreWorks =
-  Array.isArray(
-    data.results
-  )
+const genreWorks =
+  Array.isArray(data.results)
     ? data.results
     : [];
+
+
+// =======================================================
+// まずはホラーだけ
+// 配信中作品を優先
+// =======================================================
+
+if(
+  genre === "horror"
+){
+
+  currentGenreWorks =
+    await prioritizeHorrorStreamingWorks(
+      genreWorks
+    );
+
+}
+else{
+
+  currentGenreWorks =
+    genreWorks;
+
+}
+
 
 currentGenreDisplayCount = 15;
 
@@ -7305,6 +7327,224 @@ function createGenreResultCard(
 
 const genreProviderCache = new Map();
 
+// =========================================================
+// ジャンル作品の配信情報を取得
+// =========================================================
+
+async function getGenreWorkDetail(work){
+
+  const id =
+    String(
+      work && work.id
+        ? work.id
+        : ""
+    ).trim();
+
+  const type =
+    work &&
+    work.content_type === "tv"
+      ? "tv"
+      : "movie";
+
+  const cacheKey =
+    type + ":" + id;
+
+
+  // すでに取得済みなら再利用
+  if(
+    genreProviderCache.has(
+      cacheKey
+    )
+  ){
+    return genreProviderCache.get(
+      cacheKey
+    );
+  }
+
+
+  const url =
+    "/api/search?id=" +
+    encodeURIComponent(id) +
+    (
+      type === "tv"
+        ? "&type=tv"
+        : ""
+    );
+
+
+  const response =
+    await fetch(url);
+
+
+  if(
+    !response.ok
+  ){
+    throw new Error(
+      "配信情報を取得できませんでした。"
+    );
+  }
+
+
+  const detail =
+    await response.json();
+
+
+  genreProviderCache.set(
+    cacheKey,
+    detail
+  );
+
+
+  return detail;
+}
+
+
+// =========================================================
+// ホラーのみ
+// 配信中作品を上へ並べる
+//
+// API負荷を抑えるため
+// 同時取得は4件まで
+// =========================================================
+
+async function prioritizeHorrorStreamingWorks(
+  works
+){
+
+  const list =
+    Array.isArray(works)
+      ? works.slice()
+      : [];
+
+
+  if(
+    list.length === 0
+  ){
+    return list;
+  }
+
+
+  const streamingFlags =
+    new Array(
+      list.length
+    ).fill(false);
+
+
+  let nextIndex = 0;
+
+
+  const workerCount =
+    Math.min(
+      4,
+      list.length
+    );
+
+
+  async function worker(){
+
+    while(
+      nextIndex <
+      list.length
+    ){
+
+      const index =
+        nextIndex++;
+
+      const work =
+        list[index];
+
+
+      try{
+
+        const detail =
+          await getGenreWorkDetail(
+            work
+          );
+
+
+        streamingFlags[index] =
+          !!(
+            detail &&
+            Array.isArray(
+              detail.streaming
+            ) &&
+            detail.streaming.length > 0
+          );
+
+      }
+      catch(error){
+
+        streamingFlags[index] =
+          false;
+
+      }
+
+    }
+
+  }
+
+
+  await Promise.all(
+    Array.from(
+      {
+        length:
+          workerCount
+      },
+      function(){
+        return worker();
+      }
+    )
+  );
+
+
+  return list
+    .map(
+      function(work, index){
+
+        return {
+          work:
+            work,
+
+          index:
+            index,
+
+          isStreaming:
+            streamingFlags[index]
+        };
+
+      }
+    )
+    .sort(
+      function(a, b){
+
+        // 配信中を上へ
+        if(
+          a.isStreaming !==
+          b.isStreaming
+        ){
+          return a.isStreaming
+            ? -1
+            : 1;
+        }
+
+
+        // 同じグループ内では
+        // 元の順番を維持
+        return (
+          a.index -
+          b.index
+        );
+
+      }
+    )
+    .map(
+      function(item){
+        return item.work;
+      }
+    );
+
+}
+     
 function renderGenreProviderStatus(element, detail){
 
   if(!element){
