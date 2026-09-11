@@ -7546,11 +7546,9 @@ async function getGenreWorkDetail(work){
 
 
 // =========================================================
-// ホラーのみ
+// ホラー
+// 候補作品すべての配信状況を確認して
 // 配信中作品を上へ並べる
-//
-// 候補は40件保持するが
-// 配信チェックは先頭30件だけ
 //
 // 同時取得は4件まで
 // =========================================================
@@ -7573,30 +7571,24 @@ async function prioritizeHorrorStreamingWorks(
 
 
   // =======================================================
-  // 初回の速度を軽くするため
-  // 配信確認は最大30件まで
+  // 全作品をチェック
   // =======================================================
-
-  const checkCount =
-    Math.min(
-      30,
-      list.length
-    );
-
 
   const streamingFlags =
     new Array(
-      checkCount
+      list.length
     ).fill(false);
 
 
   let nextIndex = 0;
 
 
+  // APIへ一気にアクセスしすぎないよう
+  // 同時取得は4件まで
   const workerCount =
     Math.min(
       4,
-      checkCount
+      list.length
     );
 
 
@@ -7604,7 +7596,7 @@ async function prioritizeHorrorStreamingWorks(
 
     while(
       nextIndex <
-      checkCount
+      list.length
     ){
 
       const index =
@@ -7658,75 +7650,63 @@ async function prioritizeHorrorStreamingWorks(
 
 
   // =======================================================
-  // 配信確認した先頭30件だけ並べ替え
+  // 配信中 → 配信なし の順に並べ替え
+  //
+  // 同じグループ内では
+  // 元の人気順をそのまま維持
   // =======================================================
 
-  const checkedWorks =
-    list
-      .slice(
-        0,
-        checkCount
-      )
-      .map(
-        function(work, index){
+  return list
+    .map(
+      function(work, index){
 
-          return {
-            work:
-              work,
+        return {
 
-            index:
-              index,
+          work:
+            work,
 
-            isStreaming:
-              streamingFlags[index]
-          };
+          index:
+            index,
 
-        }
-      )
-      .sort(
-        function(a, b){
+          isStreaming:
+            streamingFlags[index]
 
-          // 配信中を上へ
-          if(
-            a.isStreaming !==
-            b.isStreaming
-          ){
+        };
 
-            return a.isStreaming
-              ? -1
-              : 1;
+      }
+    )
+    .sort(
+      function(a, b){
 
-          }
+        // 配信中を上へ
+        if(
+          a.isStreaming !==
+          b.isStreaming
+        ){
 
-
-          // 同じグループ内では元の順番
-          return (
-            a.index -
-            b.index
-          );
+          return a.isStreaming
+            ? -1
+            : 1;
 
         }
-      )
-      .map(
-        function(item){
-          return item.work;
-        }
-      );
 
 
-  // =======================================================
-  // 31件目以降はそのまま後ろへ残す
-  // =======================================================
+        // 配信状況が同じなら
+        // 元の順番を維持
+        return (
+          a.index -
+          b.index
+        );
 
-  const uncheckedWorks =
-    list.slice(
-      checkCount
+      }
+    )
+    .map(
+      function(item){
+
+        return item.work;
+
+      }
     );
-
-
-  return checkedWorks.concat(
-    uncheckedWorks
-  );
 
 }
      
