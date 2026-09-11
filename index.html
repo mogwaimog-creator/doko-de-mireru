@@ -6794,29 +6794,41 @@ if(
 
 data =
   await response.json();
+
+
+if(
+  !Array.isArray(
+    data.results
+  )
+){
+
   throw new Error(
     "ジャンル作品を取得できませんでした。"
   );
+
 }
 
 
-    if(
-      !data.results.length
-    ){
+if(
+  !data.results.length
+){
 
-      genreResults.innerHTML =
-        `
-        <div class="empty">
-          条件に合う作品がありません。
-        </div>
-        `;
+  genreResults.innerHTML =
+    `
+    <div class="empty">
+      条件に合う作品がありません。
+    </div>
+    `;
 
-      return;
-    }
+  return;
+
+}
 
 
 const genreWorks =
-  Array.isArray(data.results)
+  Array.isArray(
+    data.results
+  )
     ? data.results
     : [];
 
