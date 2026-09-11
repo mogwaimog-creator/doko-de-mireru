@@ -1174,48 +1174,7 @@ header p{
   margin-top:3px;
 }
 
-/* =========================================================
-   関連シリーズ 配信状況
-========================================================= */
-
-.series-streaming-status{
-  margin-top:6px;
-
-  padding:5px 7px;
-
-  border-radius:7px;
-
-  font-size:12px;
-
-  font-weight:bold;
-
-  line-height:1.4;
-
-  text-align:center;
-}
-
-.series-streaming-status.loading{
-  background:#f3f4f6;
-  color:#6b7280;
-}
-
-.series-streaming-status.streaming{
-  background:#f0fdf4;
-  color:#166534;
-  border:1px solid #bbf7d0;
-}
-
-.series-streaming-status.rental{
-  background:#fff7ed;
-  color:#c2410c;
-  border:1px solid #fed7aa;
-}
-
-.series-streaming-status.none{
-  background:#f8fafc;
-  color:#6b7280;
-  border:1px solid #e5e7eb;
-}
+.series-streaming-status
   
 
 /* =========================================================
@@ -6672,6 +6631,7 @@ loadSeriesStreamingStatus(
 
 /* =========================================================
    関連シリーズ 配信状況取得
+   ※ 見放題のみ表示
 ========================================================= */
 
 async function loadSeriesStreamingStatus(
@@ -6726,101 +6686,125 @@ async function loadSeriesStreamingStatus(
       await response.json();
 
 
+    /* 見放題のみ取得 */
     const streaming =
       normalizeProviders(
         movie.streaming
       );
 
 
-    const free =
-      normalizeProviders(
-        movie.free
-      );
-
-
-    const rental =
-      normalizeProviders(
-        movie.rental
-      );
-
-
-    const purchase =
-      normalizeProviders(
-        movie.purchase
-      );
-
-
-    /* -------------------------------------------------------
-       見放題・無料
-    ------------------------------------------------------- */
+    /* =====================================================
+       見放題あり
+    ===================================================== */
 
     if(
-      streaming.length > 0 ||
-      free.length > 0
+      streaming.length > 0
     ){
 
       const providers =
         streaming
-          .concat(free)
-          .map(function(provider){
+          .filter(function(provider){
 
-            return provider.provider_name;
+            return (
+              provider &&
+              provider.logo_path
+            );
 
           })
-          .filter(Boolean)
-          .slice(0,2);
+          .slice(0,3);
 
 
       element.className =
         "series-streaming-status streaming";
 
 
-      element.textContent =
-        "🟢 配信中" +
-        (
-          providers.length
-            ? "・" + providers.join(" / ")
-            : ""
+      element.innerHTML =
+        "";
+
+
+      /* 配信中 */
+      const label =
+        document.createElement(
+          "div"
         );
 
+      label.className =
+        "series-streaming-label";
+
+      label.textContent =
+        "配信中";
+
+      element.appendChild(
+        label
+      );
+
+
+      /* ロゴ部分 */
+      const logos =
+        document.createElement(
+          "div"
+        );
+
+      logos.className =
+        "series-streaming-logos";
+
+
+      providers.forEach(
+        function(provider){
+
+          const img =
+            document.createElement(
+              "img"
+            );
+
+
+          img.src =
+            "https://image.tmdb.org/t/p/w92" +
+            provider.logo_path;
+
+
+          img.alt =
+            provider.provider_name ||
+            "配信サービス";
+
+
+          img.title =
+            provider.provider_name ||
+            "";
+
+
+          img.loading =
+            "lazy";
+
+
+          logos.appendChild(
+            img
+          );
+
+        }
+      );
+
+
+      element.appendChild(
+        logos
+      );
+
 
       return;
 
     }
 
 
-    /* -------------------------------------------------------
-       レンタル・購入
-    ------------------------------------------------------- */
-
-    if(
-      rental.length > 0 ||
-      purchase.length > 0
-    ){
-
-      element.className =
-        "series-streaming-status rental";
-
-
-      element.textContent =
-        "🟠 レンタル・購入";
-
-
-      return;
-
-    }
-
-
-    /* -------------------------------------------------------
-       配信情報なし
-    ------------------------------------------------------- */
+    /* =====================================================
+       見放題なし
+    ===================================================== */
 
     element.className =
       "series-streaming-status none";
 
 
     element.textContent =
-      "⚪ 配信情報なし";
+      "配信情報なし";
 
 
   }catch(error){
