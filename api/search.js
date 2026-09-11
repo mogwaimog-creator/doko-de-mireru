@@ -11459,7 +11459,7 @@ async function getTvDetail(tvId, apiKey) {
     "?api_key=" +
     apiKey +
     "&language=ja-JP" +
-    "&append_to_response=credits,watch/providers";
+    "&append_to_response=credits,watch/providers,keywords";
 
   const tv =
     await fetchJson(url);
@@ -13118,7 +13118,39 @@ async function getTvRecommendations(
       "JP"
     );
 
+    // =======================================================
+  // 元作品のキーワード
+  // =======================================================
 
+  const originalKeywords =
+    tv &&
+    tv.keywords &&
+    Array.isArray(
+      tv.keywords.results
+    )
+      ? tv.keywords.results
+          .filter(
+            function(keyword) {
+              return (
+                keyword &&
+                keyword.id
+              );
+            }
+          )
+          .slice(
+            0,
+            4
+          )
+      : [];
+
+  console.log(
+  "TV RECOMMENDATION KEYWORDS:",
+  tv.id,
+  tv.name,
+  originalKeywords
+);
+
+  
   // =======================================================
   // Animation以外の「作品の特徴ジャンル」
   //
@@ -13138,9 +13170,13 @@ async function getTvRecommendations(
 
 
   let recommendations = [];
-  let similar = [];
-  let closeGenreWorks = [];
-  let fallbackWorks = [];
+let similar = [];
+let closeGenreWorks = [];
+let fallbackWorks = [];
+let keywordWorks = [];
+
+const keywordHitCount =
+  new Map();
 
 
   // =======================================================
@@ -13373,7 +13409,112 @@ async function getTvRecommendations(
 
   }
 
+　  // =======================================================
+  // キーワードが近い作品を取得
+  //
+  // 元作品のキーワードを最大4個使い、
+  // それぞれDiscover検索する
+  // =======================================================
 
+  for (
+    let i = 0;
+    i < originalKeywords.length;
+    i++
+  ) {
+
+    const keyword =
+      originalKeywords[i];
+
+
+    try {
+
+      let url =
+        "https://api.themoviedb.org/3/discover/tv" +
+        "?api_key=" +
+        encodeURIComponent(
+          apiKey
+        ) +
+        "&language=ja-JP" +
+        "&with_keywords=" +
+        encodeURIComponent(
+          keyword.id
+        ) +
+        "&sort_by=popularity.desc" +
+        "&vote_count.gte=20" +
+        "&include_adult=false" +
+        "&page=1";
+
+
+      if (
+        isJapanese
+      ) {
+
+        url +=
+          "&with_original_language=ja";
+
+      }
+
+
+      const data =
+        await fetchJson(
+          url
+        );
+
+
+      if (
+        data &&
+        Array.isArray(
+          data.results
+        )
+      ) {
+
+        data.results.forEach(
+          function(item) {
+
+            if (
+              !item ||
+              !item.id
+            ) {
+              return;
+            }
+
+
+            keywordWorks.push(
+              item
+            );
+
+
+            const key =
+              String(
+                item.id
+              );
+
+
+            keywordHitCount.set(
+              key,
+              (
+                keywordHitCount.get(
+                  key
+                ) || 0
+              ) + 1
+            );
+
+          }
+        );
+
+      }
+
+    } catch (error) {
+
+      console.error(
+        "TV KEYWORD DISCOVER ERROR:",
+        error
+      );
+
+    }
+
+  }
+  
   // =======================================================
   // 各候補がどこから来たか記録
   // =======================================================
@@ -13419,19 +13560,22 @@ async function getTvRecommendations(
   // =======================================================
 
   const combined =
-    []
-      .concat(
-        closeGenreWorks
-      )
-      .concat(
-        recommendations
-      )
-      .concat(
-        similar
-      )
-      .concat(
-        fallbackWorks
-      );
+  []
+    .concat(
+      keywordWorks
+    )
+    .concat(
+      closeGenreWorks
+    )
+    .concat(
+      recommendations
+    )
+    .concat(
+      similar
+    )
+    .concat(
+      fallbackWorks
+    );
 
 
   const candidateMap =
@@ -13544,6 +13688,29 @@ async function getTvRecommendations(
               : [];
 
 
+                    // =================================================
+          // キーワード一致
+          //
+          // 複数の元作品キーワードで見つかった作品ほど
+          // 強く優先する
+          // =================================================
+
+          const keywordHits =
+            keywordHitCount.get(
+              itemId
+            ) || 0;
+
+
+          if (
+            keywordHits > 0
+          ) {
+
+            score +=
+              keywordHits * 900;
+
+          }
+
+          
           // =================================================
           // ① ジャンル構成が近いDiscover作品
           // =================================================
