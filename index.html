@@ -4056,6 +4056,57 @@ font-weight:bold;
 
 }
 
+/* =========================================================
+   検索後：ほかの検索方法を収納
+========================================================= */
+
+.other-search-toggle{
+  display:none;
+
+  width:100%;
+  margin:0 0 14px;
+  padding:13px 18px;
+
+  border:1px solid #dbe3ef;
+  border-radius:12px;
+
+  background:#f8fafc;
+  color:#334155;
+
+  font-size:14px;
+  font-weight:800;
+
+  cursor:pointer;
+}
+
+
+/* 検索した時だけボタンを表示 */
+
+body.search-mode .other-search-toggle{
+  display:block;
+}
+
+
+/* 検索した時は、ほかの機能を収納 */
+
+body.search-mode:not(.show-other-search) .home-feature-layout,
+body.search-mode:not(.show-other-search) .provider-search-section,
+body.search-mode:not(.show-other-search) .genre-search-section,
+body.search-mode:not(.show-other-search) .genre-results-section,
+body.search-mode:not(.show-other-search) .person-search-section,
+body.search-mode:not(.show-other-search) .popular-section{
+  display:none !important;
+}
+
+
+/* ボタン */
+
+.other-search-toggle:hover{
+  background:#eff6ff;
+  border-color:#93c5fd;
+  color:#2563eb;
+}
+     
 </style>
 
 </head>
@@ -4837,12 +4888,13 @@ font-weight:bold;
 
 
 
-
-
-
-  <!-- =====================================================
-       ステータス
-  ====================================================== -->
+　<button
+  id="otherSearchToggle"
+  class="other-search-toggle"
+  type="button"
+>
+  🔎 他の検索方法を表示
+</button>
 
   <div id="status"></div>
 
@@ -5055,6 +5107,8 @@ currentQuery = query;
 
   }
 
+　document.body.classList.add("search-mode");
+  document.body.classList.remove("show-other-search");   
 
   /* -------------------------------------------------------
    検索中
@@ -6794,6 +6848,48 @@ searchButton.addEventListener(
   searchMovies
 );
 
+/* =========================================================
+   検索後：ほかの検索方法を収納
+========================================================= */
+
+const otherSearchToggle =
+  document.getElementById(
+    "otherSearchToggle"
+  );
+
+
+if(otherSearchToggle){
+
+  otherSearchToggle.addEventListener(
+    "click",
+    function(){
+
+      document.body.classList.toggle(
+        "show-other-search"
+      );
+
+
+      if(
+        document.body.classList.contains(
+          "show-other-search"
+        )
+      ){
+
+        otherSearchToggle.textContent =
+          "▲ 他の検索方法を閉じる";
+
+      }else{
+
+        otherSearchToggle.textContent =
+          "🔎 他の検索方法を表示";
+
+      }
+
+    }
+  );
+
+}
+     
 /* =========================================================
    ジャンルから探す
 ========================================================= */
