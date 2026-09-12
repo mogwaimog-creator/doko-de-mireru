@@ -4324,10 +4324,144 @@ body.search-mode.show-other-search
     width:100%;
   }
 
+}     
+
+/* =========================================================
+   こだわり検索・条件パネル
+========================================================= */
+
+.advanced-search-panel{
+  display:none;
+
+  margin:-4px 0 12px;
+  padding:18px 20px;
+
+  background:#ffffff;
+
+  border:1px solid #dbe3ef;
+  border-radius:16px;
+
+  box-shadow:
+    0 4px 16px rgba(15,23,42,.06);
+}
+
+
+.advanced-search-panel.show{
+  display:block;
+}
+
+
+.advanced-filter-grid{
+  display:grid;
+
+  grid-template-columns:
+    repeat(3,minmax(0,1fr));
+
+  gap:14px;
+}
+
+
+.advanced-filter-item label{
+  display:block;
+
+  margin-bottom:6px;
+
+  color:#334155;
+
+  font-size:12px;
+  font-weight:800;
+}
+
+
+.advanced-filter-item select{
+  width:100%;
+
+  padding:10px 11px;
+
+  border:1px solid #cbd5e1;
+  border-radius:9px;
+
+  background:#ffffff;
+  color:#1e293b;
+
+  font-size:13px;
+}
+
+
+.advanced-search-actions{
+  display:flex;
+  justify-content:flex-end;
+  align-items:center;
+
+  gap:8px;
+
+  margin-top:16px;
+}
+
+
+.advanced-search-submit{
+  padding:10px 16px;
+
+  border:none;
+  border-radius:9px;
+
+  background:#2563eb;
+  color:#ffffff;
+
+  font-size:13px;
+  font-weight:800;
+
+  cursor:pointer;
+}
+
+
+.advanced-search-close{
+  padding:10px 14px;
+
+  border:1px solid #cbd5e1;
+  border-radius:9px;
+
+  background:#f8fafc;
+  color:#475569;
+
+  font-size:13px;
+  font-weight:700;
+
+  cursor:pointer;
+}
+
+
+@media(max-width:700px){
+
+  .advanced-filter-grid{
+    grid-template-columns:
+      repeat(2,minmax(0,1fr));
+  }
+
+}
+
+
+@media(max-width:480px){
+
+  .advanced-filter-grid{
+    grid-template-columns:1fr;
+  }
+
+  .advanced-search-actions{
+    flex-direction:column;
+  }
+
+  .advanced-search-submit,
+  .advanced-search-close{
+    width:100%;
+  }
+
 }
      
 </style>
 
+     
+     
 </head>
 
 <body>
@@ -5157,13 +5291,137 @@ body.search-mode.show-other-search
   </div>
 
   <button
-    class="advanced-search-open"
-    type="button"
-  >
-    こだわり検索を開く →
-  </button>
+  id="advancedSearchOpen"
+  class="advanced-search-open"
+  type="button"
+>
+  こだわり検索を開く →
+</button>
 
 </section>
+
+<div
+  id="advancedSearchPanel"
+  class="advanced-search-panel"
+>
+
+  <div class="advanced-filter-grid">
+
+    <div class="advanced-filter-item">
+      <label for="advancedType">
+        作品タイプ
+      </label>
+
+      <select id="advancedType">
+        <option value="">すべて</option>
+        <option value="movie">映画</option>
+        <option value="drama">ドラマ</option>
+        <option value="anime">アニメ</option>
+      </select>
+    </div>
+
+
+    <div class="advanced-filter-item">
+      <label for="advancedProvider">
+        配信サービス
+      </label>
+
+      <select id="advancedProvider">
+        <option value="">指定なし</option>
+        <option value="netflix">Netflix</option>
+        <option value="prime">Prime Video</option>
+        <option value="unext">U-NEXT</option>
+        <option value="hulu">Hulu</option>
+        <option value="disney">Disney+</option>
+      </select>
+    </div>
+
+
+    <div class="advanced-filter-item">
+      <label for="advancedGenre">
+        ジャンル
+      </label>
+
+      <select id="advancedGenre">
+        <option value="">指定なし</option>
+        <option value="horror">ホラー</option>
+        <option value="romance">恋愛</option>
+        <option value="action">アクション</option>
+        <option value="comedy">コメディ</option>
+        <option value="scifi">SF</option>
+      </select>
+    </div>
+
+
+    <div class="advanced-filter-item">
+      <label for="advancedCountry">
+        制作国
+      </label>
+
+      <select id="advancedCountry">
+        <option value="">指定なし</option>
+        <option value="JP">日本</option>
+        <option value="US">アメリカ</option>
+        <option value="KR">韓国</option>
+        <option value="GB">イギリス</option>
+      </select>
+    </div>
+
+
+    <div class="advanced-filter-item">
+      <label for="advancedYear">
+        年代
+      </label>
+
+      <select id="advancedYear">
+        <option value="">指定なし</option>
+        <option value="2020">2020年代</option>
+        <option value="2010">2010年代</option>
+        <option value="2000">2000年代</option>
+        <option value="1990">1990年代</option>
+        <option value="1980">1980年代以前</option>
+      </select>
+    </div>
+
+
+    <div class="advanced-filter-item">
+      <label for="advancedRating">
+        評価
+      </label>
+
+      <select id="advancedRating">
+        <option value="">指定なし</option>
+        <option value="8">★ 8以上</option>
+        <option value="7">★ 7以上</option>
+        <option value="6">★ 6以上</option>
+      </select>
+    </div>
+
+  </div>
+
+
+  <div class="advanced-search-actions">
+
+    <button
+      class="advanced-search-submit"
+      type="button"
+    >
+      🔎 この条件で探す
+    </button>
+
+    <button
+      id="advancedSearchClose"
+      class="advanced-search-close"
+      type="button"
+    >
+      閉じる
+    </button>
+
+  </div>
+
+</div>
+
+     
 <!-- =====================================================
      人気作品
 ====================================================== -->
@@ -9105,7 +9363,72 @@ if(
 
 </script>
 
+// =========================================================
+// こだわり検索を開く・閉じる
+// =========================================================
 
+const advancedSearchOpen =
+  document.getElementById(
+    "advancedSearchOpen"
+  );
+
+const advancedSearchPanel =
+  document.getElementById(
+    "advancedSearchPanel"
+  );
+
+const advancedSearchClose =
+  document.getElementById(
+    "advancedSearchClose"
+  );
+
+
+if(
+  advancedSearchOpen &&
+  advancedSearchPanel
+){
+
+  advancedSearchOpen.addEventListener(
+    "click",
+    function(){
+
+      advancedSearchPanel
+        .classList
+        .add("show");
+
+      advancedSearchOpen.textContent =
+        "こだわり検索を表示中";
+
+    }
+  );
+
+}
+
+
+if(
+  advancedSearchClose &&
+  advancedSearchPanel
+){
+
+  advancedSearchClose.addEventListener(
+    "click",
+    function(){
+
+      advancedSearchPanel
+        .classList
+        .remove("show");
+
+      if(advancedSearchOpen){
+
+        advancedSearchOpen.textContent =
+          "こだわり検索を開く →";
+
+      }
+
+    }
+  );
+
+}
      
 </body>
 
