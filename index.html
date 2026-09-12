@@ -5123,9 +5123,8 @@ body.search-mode.show-other-search
 <button
   id="backToSearch"
   type="button"
-  aria-label="検索欄へ戻る"
 >
-  ↑ 検索へ戻る
+  ↑ TOPへ戻る
 </button>
      
 <script>
@@ -8649,31 +8648,15 @@ if(backToSearch){
   // =======================================================
 
   backToSearch.addEventListener(
-    "click",
-    function(){
+  "click",
+  function(){
 
-      const searchBox =
-        document.querySelector(
-          ".search-box"
-        );
+    window.scrollTo({
+      top:0,
+      behavior:"smooth"
+    });
 
-
-      if(searchBox){
-
-        searchBox.scrollIntoView({
-          behavior:"smooth",
-          block:"start"
-        });
-
-      }
-
-    }
-  );
-
-}
-
-
-     
+  }     
 
 
 /* =========================================================
