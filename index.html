@@ -4139,7 +4139,7 @@ body.search-mode:not(.show-other-search) .popular-section{
 .home-section-nav{
   position:relative;
   display:grid;
-  grid-template-columns:repeat(5,minmax(0,1fr));
+  grid-template-columns:repeat(5,minmax(0,1fr)) 90px;
   gap:8px;
 
   margin:0 0 12px;
@@ -4187,32 +4187,7 @@ body.search-mode:not(.show-other-search) .popular-section{
   justify-content:center;
 
   min-height:38px;
-  padding:8px 10px;
-
-  border:1px solid #e2e8f0;
-  border-radius:999px;
-
-  background:#f1f5f9;
-  color:#64748b;
-
-  font-size:11px;
-  font-weight:700;
-
-  cursor:pointer;
-
-  transition:
-    background .2s ease,
-    color .2s ease,
-    border-color .2s ease;
-}
-
-.home-section-nav-close{
-  display:none;
-  align-items:center;
-  justify-content:center;
-
-  min-height:38px;
-  padding:8px 10px;
+  padding:8px 6px;
 
   border:1px solid #cbd5e1;
   border-radius:6px;
