@@ -4111,6 +4111,7 @@ body.search-mode .other-search-toggle{
      
 /* 検索した時は、ほかの機能を収納 */
 
+body.search-mode:not(.show-other-search) .home-section-nav,
 body.search-mode:not(.show-other-search) .home-feature-layout,
 body.search-mode:not(.show-other-search) .provider-search-section,
 body.search-mode:not(.show-other-search) .genre-search-section,
@@ -4119,7 +4120,6 @@ body.search-mode:not(.show-other-search) .person-search-section,
 body.search-mode:not(.show-other-search) .popular-section{
   display:none !important;
 }
-
 
 /* ボタン */
 
@@ -4130,6 +4130,89 @@ body.search-mode:not(.show-other-search) .popular-section{
   box-shadow:
     0 4px 12px
     rgba(37,99,235,.14);
+}
+
+/* =========================================================
+   トップページ内ナビ
+========================================================= */
+
+.home-section-nav{
+  display:grid;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:8px;
+
+  margin:0 0 12px;
+  padding:10px;
+
+  background:#fff;
+
+  border:1px solid #e5e7eb;
+  border-radius:14px;
+
+  box-shadow:
+    0 3px 12px
+    rgba(15,23,42,.06);
+}
+
+.home-section-nav a{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  min-height:38px;
+  padding:8px 10px;
+
+  border:1px solid #dbe3ef;
+  border-radius:999px;
+
+  background:#f8fafc;
+
+  color:#334155;
+  text-decoration:none;
+
+  font-size:13px;
+  font-weight:800;
+
+  transition:
+    background .2s ease,
+    border-color .2s ease,
+    color .2s ease,
+    transform .2s ease;
+}
+
+.home-section-nav a:hover{
+  background:#eff6ff;
+  border-color:#93c5fd;
+  color:#2563eb;
+
+  transform:translateY(-1px);
+}
+
+
+/* ジャンプした時に少し上に余白を作る */
+
+#recommendArea,
+#watchOrderSection,
+#providerSearchSection,
+#genreSearchSection,
+#personSearchSection{
+  scroll-margin-top:14px;
+}
+
+
+/* スマホ */
+
+@media(max-width:700px){
+
+  .home-section-nav{
+    grid-template-columns:
+      repeat(2,minmax(0,1fr));
+  }
+
+  .home-section-nav a{
+    font-size:12px;
+  }
+
 }
      
 </style>
@@ -4270,7 +4353,39 @@ body.search-mode:not(.show-other-search) .popular-section{
   </span>
 </button>
 
-<div class="home-feature-layout">
+<!-- =====================================================
+     トップページ内ナビ
+====================================================== -->
+
+<nav
+  class="home-section-nav"
+  aria-label="探し方メニュー"
+>
+  <a href="#recommendArea">
+    🔥 おすすめ
+  </a>
+
+  <a href="#watchOrderSection">
+    🎬 シリーズ
+  </a>
+
+  <a href="#providerSearchSection">
+    📺 配信
+  </a>
+
+  <a href="#genreSearchSection">
+    🎭 ジャンル
+  </a>
+
+  <a href="#personSearchSection">
+    👤 人物
+  </a>
+</nav>
+     
+<div
+  id="recommendArea"
+  class="home-feature-layout"
+>
 
 <!-- =====================================================
      おすすめ作品から探す
@@ -4441,7 +4556,10 @@ body.search-mode:not(.show-other-search) .popular-section{
      シリーズを順番に見る
 ====================================================== -->
 
-<section class="watch-order-section">
+<section
+  id="watchOrderSection"
+  class="watch-order-section"
+>
 
   <div class="watch-order-heading">
 
@@ -4531,7 +4649,9 @@ body.search-mode:not(.show-other-search) .popular-section{
      配信サービスから探す
 ====================================================== -->
 
-<section class="provider-search-section">
+<section
+  id="providerSearchSection"
+  class="provider-search-section"
 
   <div class="provider-search-heading">
 
@@ -4644,11 +4764,12 @@ body.search-mode:not(.show-other-search) .popular-section{
 ========================================================= -->
 
 <section
+  id="genreSearchSection"
   class="genre-search-section"
   aria-labelledby="genreSearchHeading"
 >
-
-  <h2
+ 
+　<h2
     id="genreSearchHeading"
     class="genre-search-title"
   >
@@ -4818,7 +4939,7 @@ body.search-mode:not(.show-other-search) .popular-section{
   >
   </div>
 
-　<div
+<div
   id="genreLoadMoreWrapper"
   class="genre-load-more-wrapper"
   hidden
@@ -4842,10 +4963,10 @@ body.search-mode:not(.show-other-search) .popular-section{
 ========================================================= -->
 
 <section
+  id="personSearchSection"
   class="person-search-section"
   aria-labelledby="personSearchHeading"
 >
-
   <div class="person-search-heading">
 
     <h2
