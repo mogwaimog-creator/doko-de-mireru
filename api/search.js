@@ -449,16 +449,23 @@ if(
   // 既存の配信サービス検索をそのまま利用
   // ---------------------------------------------------
 
-  const advancedResults =
-    await getProviderWorks(
-      apiKey,
-      providerId,
-      page,
-      "",
-      genre,
-      type
-    );
+  const advancedProviderType =
+  type === "drama"
+    ? "tv"
+    : type === "all"
+      ? ""
+      : type;
 
+
+const advancedResults =
+  await getProviderWorks(
+    apiKey,
+    providerId,
+    page,
+    "",
+    genre,
+    advancedProviderType
+  );
 
   return res
     .status(200)
