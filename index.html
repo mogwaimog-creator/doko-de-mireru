@@ -5301,6 +5301,18 @@ currentQuery = query;
 　document.body.classList.add("search-mode");
   document.body.classList.remove("show-other-search");   
 
+　if(otherSearchToggle){
+
+  otherSearchToggle.style.display =
+    "block";
+
+  otherSearchToggle.innerHTML =
+    '<span class="other-search-main">🔎 他の検索方法を表示 →</span>' +
+    '<span class="other-search-sub">おすすめ・シリーズ・配信・ジャンル・人物 など</span>';
+
+}
+     
+
   /* -------------------------------------------------------
    検索中
 ------------------------------------------------------- */
