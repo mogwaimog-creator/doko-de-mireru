@@ -10200,7 +10200,12 @@ if(advancedSearchSubmit){
           "advancedCountry"
         )?.value || "";
 
-
+　　　const year =
+  document.getElementById(
+    "advancedYear"
+  )?.value || "";
+　　　　
+         
       try{
 
         advancedSearchSubmit.disabled =
@@ -10252,6 +10257,15 @@ if(advancedSearchSubmit){
         }
 
 
+　　　　if(year){
+
+  params.set(
+    "year",
+    year
+  );
+
+}
+           
         params.set(
           "page",
           "1"
