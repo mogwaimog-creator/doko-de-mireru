@@ -765,33 +765,69 @@
 
 .universe-icon{
   flex:0 0 auto;
-  width:43px;
-  height:43px;
+  width:52px;
+  height:52px;
   display:flex;
   align-items:center;
   justify-content:center;
-  background:rgba(139,92,246,.15);
-  border:1px solid rgba(167,139,250,.28);
   border-radius:50%;
-  font-size:20px;
+  font-size:25px;
+  line-height:1;
+  color:#ffffff;
+  border:1px solid rgba(255,255,255,.32);
+  box-shadow:
+    inset 0 0 16px rgba(255,255,255,.12),
+    0 0 18px rgba(96,165,250,.20);
+}
+
+.icon-branch{
+  background:linear-gradient(135deg,#c026d3,#7c3aed);
+}
+
+.icon-film{
+  background:linear-gradient(135deg,#3b82f6,#06b6d4);
+}
+
+.icon-planet{
+  background:linear-gradient(135deg,#06b6d4,#14b8a6);
+}
+
+.icon-camera{
+  background:linear-gradient(135deg,#f472b6,#a855f7);
+}
+
+.icon-portal{
+  background:linear-gradient(135deg,#fb7185,#c026d3);
+}
+
+.icon-rocket{
+  background:linear-gradient(135deg,#2563eb,#7c3aed);
 }
 
 .universe-label{
   display:block;
   margin-bottom:4px;
   color:#a78bfa;
-  font-size:10px;
+  font-size:11px;
   font-weight:900;
 }
 
-.universe-card strong{ display:block; font-size:14px; }
+.universe-card strong{
+  display:block;
+  font-size:17px;
+  line-height:1.35;
+}
+
+.nowrap-title{
+  white-space:nowrap;
+}
 
 .universe-card small{
   display:block;
   margin-top:5px;
   color:#cbd5e1;
-  font-size:10px;
-  line-height:1.5;
+  font-size:12px;
+  line-height:1.55;
 }
 
 .marvel-center{
@@ -812,28 +848,63 @@
   justify-content:center;
   margin-bottom:18px;
   border-radius:50%;
-  background:radial-gradient(circle, rgba(139,92,246,.28) 0%, rgba(59,130,246,.10) 45%, transparent 72%);
+  background:
+    radial-gradient(ellipse at center, rgba(96,165,250,.16) 0 24%, rgba(168,85,247,.14) 38%, rgba(236,72,153,.08) 52%, transparent 72%);
 }
 
 .multiverse-orb{
   position:relative;
   z-index:4;
-  width:126px;
-  height:126px;
+  width:150px;
+  height:150px;
   display:flex;
   flex-direction:column;
   align-items:center;
   justify-content:center;
   text-align:center;
   border-radius:50%;
-  background:radial-gradient(circle at 35% 30%, #c4b5fd 0%, #7c3aed 22%, #312e81 58%, #111827 100%);
-  border:2px solid rgba(221,214,254,.75);
-  box-shadow:0 0 20px rgba(139,92,246,.65), 0 0 55px rgba(79,70,229,.36);
+  background:
+    radial-gradient(circle at 28% 24%, rgba(255,255,255,.90) 0 4%, transparent 10%),
+    radial-gradient(circle at 68% 30%, rgba(103,232,249,.72) 0 8%, transparent 24%),
+    radial-gradient(circle at 34% 72%, rgba(244,114,182,.60) 0 9%, transparent 26%),
+    radial-gradient(circle at 70% 74%, rgba(167,139,250,.55) 0 12%, transparent 30%),
+    radial-gradient(circle at 50% 50%, rgba(37,99,235,.34) 0 32%, rgba(91,33,182,.24) 54%, rgba(15,23,42,.14) 72%, rgba(15,23,42,.04) 100%);
+  border:2px solid rgba(224,231,255,.82);
+  box-shadow:
+    inset 8px 8px 18px rgba(255,255,255,.18),
+    inset -10px -10px 24px rgba(37,99,235,.18),
+    0 0 18px rgba(96,165,250,.42),
+    0 0 38px rgba(168,85,247,.35),
+    0 0 68px rgba(236,72,153,.16);
 }
 
 .orb-icon{ font-size:21px; }
-.multiverse-orb strong{ display:block; margin-top:3px; font-size:13px; letter-spacing:.8px; }
-.multiverse-orb small{ display:block; margin-top:2px; color:#ddd6fe; font-size:10px; }
+.multiverse-orb strong{
+  display:block;
+  margin-top:2px;
+  font-size:19px;
+  letter-spacing:.3px;
+}
+
+.multiverse-orb small{
+  display:block;
+  max-width:112px;
+  margin-top:8px;
+  color:#f8fafc;
+  font-size:12px;
+  font-weight:800;
+  line-height:1.45;
+}
+
+.multiverse-orb::after{
+  content:"";
+  position:absolute;
+  inset:9px;
+  border-radius:50%;
+  border:1px solid rgba(255,255,255,.18);
+  background:linear-gradient(145deg, rgba(255,255,255,.12), transparent 32%, rgba(96,165,250,.08) 66%, rgba(244,114,182,.10));
+  pointer-events:none;
+}
 
 .multiverse-orbit{
   position:absolute;
@@ -868,7 +939,14 @@
 
 .mcu-main-card span{ display:block; color:#ddd6fe; font-size:9px; font-weight:900; letter-spacing:1px; }
 .mcu-main-card strong{ display:block; margin-top:4px; font-size:22px; }
-.mcu-main-card small{ display:block; margin-top:5px; color:#ede9fe; font-size:10px; line-height:1.5; }
+.mcu-main-card small{
+  display:block;
+  margin-top:6px;
+  color:#f5f3ff;
+  font-size:11px;
+  line-height:1.55;
+  font-weight:700;
+}
 
 .marvel-universe-legend{
   position:relative;
@@ -915,7 +993,8 @@
   .marvel-side{ gap:10px; }
   .universe-card{ min-height:auto; }
   .multiverse-space{ width:190px; height:190px; }
-  .multiverse-orb{ width:115px; height:115px; }
+  .multiverse-orb{ width:138px; height:138px; }
+  .nowrap-title{ white-space:normal; }
   .marvel-universe-legend{ gap:12px; }
 }
 
@@ -1045,9 +1124,9 @@
     <span class="marvel-universe-badge">🌐 上級者編</span>
     <h2>マーベル作品のつながり図</h2>
     <p>
-      別々の世界から始まった作品が、
-      マルチバースを通じてつながっていく様子を
-      わかりやすく整理しています。
+      「マーベル＝全部MCU」ではありません。
+      MCUとは別の世界から始まったシリーズもあり、
+      マルチバースを通じてつながる可能性があります。
     </p>
   </div>
 
@@ -1070,29 +1149,29 @@
 
     <div class="marvel-side marvel-side-left">
       <div class="universe-card">
-        <div class="universe-icon">✦</div>
+        <div class="universe-icon icon-branch">⎇</div>
         <div>
           <span class="universe-label">別世界からスタート</span>
           <strong>X-MEN系</strong>
-          <small>X-MEN・ウルヴァリンなど</small>
+          <small>X-MEN・ウルヴァリン・ローガンなど</small>
         </div>
       </div>
 
       <div class="universe-card">
-        <div class="universe-icon">🎞️</div>
+        <div class="universe-icon icon-film">🎞️</div>
         <div>
           <span class="universe-label">別世界からスタート</span>
-          <strong>旧スパイダーマン系</strong>
-          <small>2000年代の映画シリーズ</small>
+          <strong class="nowrap-title">旧スパイダーマン系</strong>
+          <small>2000年代のスパイダーマン作品</small>
         </div>
       </div>
 
       <div class="universe-card">
-        <div class="universe-icon">🌀</div>
+        <div class="universe-icon icon-planet">🪐</div>
         <div>
-          <span class="universe-label">関連する別世界</span>
+          <span class="universe-label">別シリーズ</span>
           <strong>Sony系</strong>
-          <small>ヴェノムなどの関連作品</small>
+          <small>ヴェノムなど、ソニーの関連作品</small>
         </div>
       </div>
     </div>
@@ -1106,44 +1185,43 @@
         <div class="multiverse-orbit orbit-2"></div>
 
         <div class="multiverse-orb">
-          <span class="orb-icon">✨</span>
-          <strong>MULTIVERSE</strong>
-          <small>マルチバース</small>
+          <strong>マルチバース</strong>
+          <small>さまざまな世界が<br>つながる可能性</small>
         </div>
       </div>
 
       <div class="mcu-main-card">
         <span>MAIN UNIVERSE</span>
         <strong>MCU本編</strong>
-        <small>『アイアンマン』から続く中心となる物語</small>
+        <small>『アイアンマン』から始まる<br>現在のメインの世界</small>
       </div>
     </div>
 
     <div class="marvel-side marvel-side-right">
       <div class="universe-card">
-        <div class="universe-icon">🎬</div>
+        <div class="universe-icon icon-camera">🎬</div>
         <div>
           <span class="universe-label">別世界からスタート</span>
           <strong>アメイジング系</strong>
-          <small>アメイジング・スパイダーマン</small>
+          <small>アメイジング・スパイダーマンなど</small>
         </div>
       </div>
 
       <div class="universe-card">
-        <div class="universe-icon">💥</div>
+        <div class="universe-icon icon-portal">◉</div>
         <div>
-          <span class="universe-label">MCUとの関係が深まる</span>
+          <span class="universe-label">関連シリーズ</span>
           <strong>デッドプール系</strong>
-          <small>別世界から広がる関連作品</small>
+          <small>デッドプール・デッドプール2など</small>
         </div>
       </div>
 
       <div class="universe-card">
-        <div class="universe-icon">🚀</div>
+        <div class="universe-icon icon-rocket">🚀</div>
         <div>
-          <span class="universe-label">MCUの別宇宙</span>
+          <span class="universe-label">さらに広がる世界</span>
           <strong>Fantastic Four</strong>
-          <small>マルチバースを通じて広がる世界</small>
+          <small>ファンタスティック・フォー<br>次の展開でMCU本編に登場する注目シリーズ</small>
         </div>
       </div>
     </div>
@@ -1159,8 +1237,9 @@
     <span>💡</span>
     <p>
       <strong>ポイント：</strong>
-      マーベル作品はすべて最初から同じ世界の物語だったわけではありません。
-      それぞれの世界が存在し、マルチバースによって関係が広がっています。
+      これらはすべてマーベルに関係する作品ですが、
+      最初からすべて同じMCU世界として作られたわけではありません。
+      今後もさまざまな作品が、マルチバースを通じてMCUと関わっていく可能性があります。
     </p>
   </div>
 
