@@ -235,6 +235,12 @@ const year =
   typeof req.query.year === "string"
     ? req.query.year.trim()
     : "";    
+
+const rating =
+  req.query &&
+  typeof req.query.rating === "string"
+    ? req.query.rating.trim()
+    : "";
     
 // =====================================================
 // メインサイト ジャンルから探す
@@ -511,9 +517,9 @@ else{
   country,
   genre,
   advancedProviderType,
-  year
+  year,
+  rating
 );
-
         }
       )
     );
@@ -8705,7 +8711,8 @@ async function getProviderWorks(
   country,
   genre,
   netflixType,
-  year
+  year,
+  rating
 ) {
    
   
@@ -8925,6 +8932,26 @@ else if(year === "1980"){
     "&first_air_date.lte=1989-12-31";
 
 }
+
+// =======================================================
+// 評価による絞り込み
+// =======================================================
+
+let ratingQuery = "";
+
+if(
+  rating === "8" ||
+  rating === "7" ||
+  rating === "6"
+){
+
+  ratingQuery =
+    "&vote_average.gte=" +
+    encodeURIComponent(
+      rating
+    );
+
+}
   
 // =======================================================
 // 映画
@@ -8950,6 +8977,7 @@ const movieUrl =
  countryWithoutAnimation +
 movieGenreQuery +
 movieYearQuery +
+ratingQuery +
 "&page=" +
 encodeURIComponent(page);
 
@@ -8977,6 +9005,7 @@ const tvUrl =
   countryWithoutAnimation +
 tvGenreQuery +
 tvYearQuery +
+ratingQuery +
 "&page=" +
 encodeURIComponent(page);
   
