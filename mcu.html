@@ -480,6 +480,98 @@
   }
 
 }
+
+  /* =====================================================
+   MCUとは？
+===================================================== */
+
+.mcu-about{
+  display:flex;
+  gap:15px;
+  align-items:flex-start;
+
+  margin:0 0 18px;
+  padding:18px 20px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #ffffff 0%,
+      #f4f8ff 100%
+    );
+
+  border:1px solid #dbe7f7;
+  border-radius:16px;
+
+  box-shadow:
+    0 3px 12px
+    rgba(15,23,42,.05);
+}
+
+.mcu-about-icon{
+  flex:0 0 auto;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  width:42px;
+  height:42px;
+
+  background:#eaf2ff;
+  border-radius:50%;
+
+  font-size:21px;
+}
+
+.mcu-about-text h2{
+  margin:0 0 7px;
+
+  font-size:18px;
+  color:#172033;
+}
+
+.mcu-about-text p{
+  margin:0;
+
+  color:#475569;
+  font-size:14px;
+  line-height:1.75;
+}
+
+.mcu-about-note{
+  margin-top:7px !important;
+
+  color:#64748b !important;
+  font-size:13px !important;
+}
+
+.mcu-about-link{
+  margin-top:10px;
+  padding:0;
+
+  border:none;
+  background:none;
+
+  color:#2563eb;
+
+  font-size:13px;
+  font-weight:800;
+
+  cursor:pointer;
+}
+
+.mcu-about-link:hover{
+  text-decoration:underline;
+}
+
+@media(max-width:600px){
+
+  .mcu-about{
+    padding:15px;
+  }
+
+}  
     
   </style>
 </head>
@@ -531,6 +623,48 @@
 
     </header>
 
+　　<section class="mcu-about">
+
+  <div class="mcu-about-icon">
+    💡
+  </div>
+
+  <div class="mcu-about-text">
+
+    <h2>
+      そもそもMCUって？
+    </h2>
+
+    <p>
+      MCUは
+      <strong>
+        「Marvel Cinematic Universe
+        （マーベル・シネマティック・ユニバース）」
+      </strong>
+      の略です。
+      『アイアンマン』から始まる、
+      映画やドラマがひとつの世界として
+      つながっているシリーズです。
+    </p>
+
+    <p class="mcu-about-note">
+      ※ マーベル作品すべてが
+      MCUというわけではありません。
+      X-MENや旧スパイダーマンなど、
+      MCUとは別の世界から始まった作品もあります。
+    </p>
+
+    <button
+      class="mcu-about-link"
+      type="button"
+    >
+      🌐 マーベル作品のつながりを見る →
+    </button>
+
+  </div>
+
+</section>
+    
     <section class="mcu-timeline-section">
 
   <div class="mcu-timeline-heading">
