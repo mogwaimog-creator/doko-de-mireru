@@ -10099,20 +10099,81 @@ if(advancedSearchSubmit){
           await response.json();
 
 
-        console.log(
-          "こだわり検索結果",
-          data
-        );
+       // ---------------------------------------------------------
+// こだわり検索結果を表示
+// ---------------------------------------------------------
+
+const advancedMovies =
+  Array.isArray(
+    data.results
+  )
+    ? data.results
+    : [];
 
 
-        alert(
-          "検索結果を取得できました。件数：" +
-          (
-            Array.isArray(data.results)
-              ? data.results.length
-              : 0
-          )
-        );
+const searchResultsHeading =
+  document.getElementById(
+    "searchResultsHeading"
+  );
+
+
+// 検索結果モードにする
+document.body.classList.add(
+  "search-mode"
+);
+
+document.body.classList.remove(
+  "show-other-search"
+);
+
+
+// 他の検索方法ボタンを戻す
+if(otherSearchToggle){
+
+  otherSearchToggle.style.display =
+    "block";
+
+}
+
+
+// 見出し
+if(searchResultsHeading){
+
+  searchResultsHeading.textContent =
+    "🔎 こだわり検索の結果（" +
+    advancedMovies.length +
+    "件）";
+
+}
+
+
+// 結果表示
+status.innerHTML =
+  "";
+
+results.innerHTML =
+  advancedMovies.length
+    ? advancedMovies
+        .map(
+          createMovieCard
+        )
+        .join("")
+    : `
+      <div class="empty">
+        条件に合う作品が見つかりませんでした。
+      </div>
+    `;
+
+
+// 検索結果まで移動
+if(searchResultsHeading){
+
+  searchResultsHeading.scrollIntoView({
+    behavior:"smooth",
+    block:"start"
+  });
+
+}
 
       }
       catch(error){
