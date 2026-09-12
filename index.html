@@ -4138,7 +4138,12 @@ body.search-mode:not(.show-other-search) .popular-section{
 ========================================================= */
 
 .home-section-nav{
-  display:flex;
+  display:grid;
+
+  grid-template-columns:
+    repeat(6,minmax(0,1fr))
+    auto;
+
   align-items:center;
   gap:8px;
 
@@ -4227,11 +4232,10 @@ body.search-mode.show-other-search
 #watchOrderSection,
 #providerSearchSection,
 #genreSearchSection,
-#personSearchSection
+#personSearchSection,
 #advancedSearchSection{
   scroll-margin-top:14px;
 }
-
 
 /* スマホ */
 
@@ -4244,6 +4248,12 @@ body.search-mode.show-other-search
 
   .home-section-nav a{
     font-size:12px;
+  }
+
+  .home-section-nav-close{
+    grid-column:1 / -1;
+
+    width:100%;
   }
 
 }
