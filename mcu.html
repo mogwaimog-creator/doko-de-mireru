@@ -354,7 +354,87 @@
   }
 
 }
-  
+
+/* =====================================================
+   PHASE 見出し
+===================================================== */
+
+.mcu-phase-heading{
+  display:flex;
+  align-items:center;
+  gap:16px;
+
+  margin:0 0 14px;
+  padding:15px 18px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #172033 0%,
+      #111827 65%,
+      #251923 100%
+    );
+
+  border-left:4px solid #ef4444;
+  border-radius:13px;
+
+  color:#ffffff;
+
+  box-shadow:
+    0 5px 16px
+    rgba(15,23,42,.10);
+}
+
+.mcu-phase-heading-number{
+  flex:0 0 auto;
+
+  padding:8px 13px;
+
+  background:
+    rgba(239,68,68,.18);
+
+  border:
+    1px solid
+    rgba(248,113,113,.45);
+
+  border-radius:9px;
+
+  color:#fca5a5;
+
+  font-size:14px;
+  font-weight:900;
+  letter-spacing:.5px;
+}
+
+.mcu-phase-heading-text h2{
+  margin:0;
+  font-size:20px;
+}
+
+.mcu-phase-heading-text p{
+  margin:4px 0 0;
+
+  color:#cbd5e1;
+
+  font-size:13px;
+}
+
+
+/* スマホ */
+
+@media(max-width:600px){
+
+  .mcu-phase-heading{
+    align-items:flex-start;
+    padding:14px;
+  }
+
+  .mcu-phase-heading-text h2{
+    font-size:17px;
+  }
+
+}
+    
   </style>
 </head>
 
@@ -504,11 +584,28 @@
 
       <section class="mcu-list-section">
 
-        <h2>
-          🎬 MCU作品 公開順
-        </h2>
+        <div class="mcu-phase-heading">
 
-        <div class="mcu-list">
+  <div class="mcu-phase-heading-number">
+    PHASE 1
+  </div>
+
+  <div class="mcu-phase-heading-text">
+
+    <h2>
+      すべてはここから始まった
+    </h2>
+
+    <p>
+      2008–2012
+      ・MCU最初の6作品
+    </p>
+
+  </div>
+
+</div>
+
+<div class="mcu-list">
 
   <a
     href="detail.html?id=1726"
