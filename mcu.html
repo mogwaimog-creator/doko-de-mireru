@@ -883,6 +883,218 @@
   }
 
 }
+
+/* =====================================================
+   つながり図 線・矢印・凡例
+===================================================== */
+
+.marvel-map{
+  position:relative;
+}
+
+
+/* 凡例 */
+
+.marvel-map-legend{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:18px;
+
+  margin:0 0 18px;
+
+  color:#cbd5e1;
+  font-size:11px;
+}
+
+.marvel-map-legend span{
+  display:flex;
+  align-items:center;
+  gap:7px;
+}
+
+.legend-line{
+  display:inline-block;
+  width:30px;
+  height:3px;
+  border-radius:999px;
+}
+
+
+/* 直接つながる */
+
+.legend-line.direct{
+  background:#a78bfa;
+}
+
+
+/* マルチバース */
+
+.legend-line.multiverse{
+  height:0;
+  border-top:3px dashed #60a5fa;
+}
+
+
+/* 別世界 */
+
+.legend-line.separate{
+  height:0;
+  border-top:2px dotted #94a3b8;
+}
+
+
+/* 外側カードから中央方向へ伸びる線 */
+
+.marvel-map-card{
+  position:relative;
+}
+
+
+/* 左側カード */
+
+.marvel-map-card:nth-child(1)::after,
+.marvel-map-card:nth-child(3)::after,
+.marvel-map-card:nth-child(5)::after{
+  content:"";
+
+  position:absolute;
+
+  top:50%;
+  right:-13px;
+
+  width:13px;
+  height:2px;
+
+  background:#7c3aed;
+
+  opacity:.75;
+}
+
+
+/* 右側カード */
+
+.marvel-map-card:nth-child(2)::before,
+.marvel-map-card:nth-child(4)::before,
+.marvel-map-card:nth-child(6)::before{
+  content:"";
+
+  position:absolute;
+
+  top:50%;
+  left:-13px;
+
+  width:13px;
+  height:2px;
+
+  background:#7c3aed;
+
+  opacity:.75;
+}
+
+
+/* 矢印の先端 */
+
+.marvel-map-card:nth-child(1)::before,
+.marvel-map-card:nth-child(3)::before,
+.marvel-map-card:nth-child(5)::before{
+  content:"";
+
+  position:absolute;
+
+  top:calc(50% - 4px);
+  right:-14px;
+
+  border-top:4px solid transparent;
+  border-bottom:4px solid transparent;
+  border-left:6px solid #a78bfa;
+}
+
+
+.marvel-map-card:nth-child(2)::after,
+.marvel-map-card:nth-child(4)::after,
+.marvel-map-card:nth-child(6)::after{
+  content:"";
+
+  position:absolute;
+
+  top:calc(50% - 4px);
+  left:-14px;
+
+  border-top:4px solid transparent;
+  border-bottom:4px solid transparent;
+  border-right:6px solid #a78bfa;
+}
+
+
+/* マルチバース中央の光 */
+
+.marvel-multiverse{
+  position:relative;
+}
+
+.multiverse-glow{
+  position:absolute;
+
+  left:50%;
+  bottom:-10px;
+
+  width:72px;
+  height:24px;
+
+  transform:translateX(-50%);
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(139,92,246,.55) 0%,
+      rgba(139,92,246,.15) 50%,
+      transparent 75%
+    );
+
+  filter:blur(5px);
+
+  pointer-events:none;
+}
+
+
+/* MCU本編との縦線 */
+
+.marvel-multiverse::after{
+  content:"";
+
+  position:absolute;
+
+  left:50%;
+  bottom:-14px;
+
+  width:2px;
+  height:14px;
+
+  transform:translateX(-50%);
+
+  background:
+    linear-gradient(
+      #a78bfa,
+      #7c3aed
+    );
+}
+
+
+/* スマホでは線を消して見やすく */
+
+@media(max-width:700px){
+
+  .marvel-map-card::before,
+  .marvel-map-card::after{
+    display:none !important;
+  }
+
+  .marvel-map-legend{
+    gap:10px;
+  }
+
+}
     
   </style>
 </head>
@@ -1020,6 +1232,25 @@
     </p>
   </div>
 
+　<div class="marvel-map-legend">
+
+  <span>
+    <i class="legend-line direct"></i>
+    MCUと直接関係
+  </span>
+
+  <span>
+    <i class="legend-line multiverse"></i>
+    マルチバースで接点
+  </span>
+
+  <span>
+    <i class="legend-line separate"></i>
+    別世界・関連作品
+  </span>
+
+</div>
+  
   <div class="marvel-map">
 
     <div class="marvel-map-card">
@@ -1041,9 +1272,16 @@
     <div class="marvel-map-center">
 
       <div class="marvel-multiverse">
-        ✨ MULTIVERSE
-        <small>マルチバース</small>
-      </div>
+
+  <span class="multiverse-glow"></span>
+
+  ✨ MULTIVERSE
+
+  <small>
+    マルチバース
+  </small>
+
+</div>
 
       <div class="marvel-mcu">
         <span>MAIN UNIVERSE</span>
