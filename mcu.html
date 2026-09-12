@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+  <meta name="robots" content="noindex,follow">
+  
   <title>MCU・マーベルを見る順番｜ドコデミレル？</title>
 
   <meta
@@ -572,6 +573,50 @@
   }
 
 }  
+
+/* =====================================================
+   工事中のお知らせ
+===================================================== */
+
+.mcu-under-construction{
+  margin:18px 0 0;
+  padding:11px 16px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+
+  background:#fff7ed;
+  border:1px solid #fed7aa;
+  border-radius:12px;
+
+  color:#9a3412;
+
+  font-size:13px;
+}
+
+.mcu-under-construction strong{
+  white-space:nowrap;
+}
+
+.mcu-under-construction span{
+  color:#7c2d12;
+}
+
+@media(max-width:700px){
+
+  .mcu-under-construction{
+    display:block;
+    text-align:center;
+  }
+
+  .mcu-under-construction span{
+    display:block;
+    margin-top:4px;
+  }
+
+}
     
   </style>
 </head>
@@ -580,6 +625,19 @@
 
   <div class="page-wrap">
 
+ <div class="mcu-under-construction">
+
+  <strong>
+    🚧 現在このページは工事中です
+  </strong>
+
+  <span>
+    MCU・マーベルの見る順番ガイドを制作しています。
+    内容やデザインは変更される場合があります。
+  </span>
+
+</div>
+    
     <header class="mcu-header">
 
       <a
