@@ -1,1 +1,246 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <title>MCU・マーベルを見る順番｜ドコデミレル？</title>
+
+  <meta
+    name="description"
+    content="MCU・マーベル作品を見る順番を、公開順・時系列順でわかりやすく紹介します。"
+  >
+
+  <style>
+    body{
+      margin:0;
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+      background:#f6f8fb;
+      color:#1f2937;
+    }
+
+    .page-wrap{
+      width:min(1100px, calc(100% - 32px));
+      margin:0 auto;
+    }
+
+    .mcu-header{
+      padding:26px 0 18px;
+    }
+
+    .mcu-back{
+      display:inline-block;
+      margin-bottom:16px;
+      color:#2563eb;
+      text-decoration:none;
+      font-weight:700;
+    }
+
+    .mcu-hero{
+      background:#ffffff;
+      border:1px solid #e5e7eb;
+      border-radius:18px;
+      padding:24px;
+      box-shadow:0 5px 18px rgba(15,23,42,.06);
+    }
+
+    .mcu-hero h1{
+      margin:0 0 10px;
+      font-size:28px;
+    }
+
+    .mcu-hero p{
+      margin:0;
+      color:#64748b;
+      line-height:1.8;
+    }
+
+    .mcu-tabs{
+      display:flex;
+      gap:10px;
+      margin-top:18px;
+    }
+
+    .mcu-tab{
+      border:1px solid #cbd5e1;
+      background:#ffffff;
+      border-radius:999px;
+      padding:10px 18px;
+      font-weight:800;
+      cursor:pointer;
+    }
+
+    .mcu-tab.active{
+      background:#2563eb;
+      color:#ffffff;
+      border-color:#2563eb;
+    }
+
+    .mcu-list-section{
+      margin:22px 0 40px;
+    }
+
+    .mcu-list-section h2{
+      margin-bottom:14px;
+      font-size:22px;
+    }
+
+    .mcu-list{
+      display:grid;
+      gap:14px;
+    }
+
+    .mcu-card{
+      background:#ffffff;
+      border:1px solid #e5e7eb;
+      border-radius:16px;
+      padding:18px;
+      box-shadow:0 3px 12px rgba(15,23,42,.05);
+    }
+
+    .mcu-number{
+      font-size:13px;
+      font-weight:800;
+      color:#2563eb;
+      margin-bottom:6px;
+    }
+
+    .mcu-title{
+      font-size:18px;
+      font-weight:900;
+      margin-bottom:6px;
+    }
+
+    .mcu-meta{
+      color:#64748b;
+      font-size:14px;
+    }
+
+    @media(max-width:600px){
+      .mcu-hero h1{
+        font-size:23px;
+      }
+
+      .mcu-tabs{
+        flex-wrap:wrap;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="page-wrap">
+
+    <header class="mcu-header">
+
+      <a
+        href="index.html"
+        class="mcu-back"
+      >
+        ← ドコデミレル？に戻る
+      </a>
+
+      <div class="mcu-hero">
+
+        <h1>
+          🦸 MCU・マーベルを見る順番
+        </h1>
+
+        <p>
+          MCU作品を初めて見る方には、
+          まず公開順で見るのがおすすめです。
+          後から時系列順も追加していきます。
+        </p>
+
+        <div class="mcu-tabs">
+
+          <button
+            class="mcu-tab active"
+            type="button"
+          >
+            公開順
+          </button>
+
+          <button
+            class="mcu-tab"
+            type="button"
+          >
+            時系列順
+          </button>
+
+        </div>
+
+      </div>
+
+    </header>
+
+
+    <main>
+
+      <section class="mcu-list-section">
+
+        <h2>
+          🎬 MCU作品 公開順
+        </h2>
+
+        <div class="mcu-list">
+
+          <div class="mcu-card">
+            <div class="mcu-number">
+              1
+            </div>
+
+            <div class="mcu-title">
+              アイアンマン
+            </div>
+
+            <div class="mcu-meta">
+              2008年
+            </div>
+          </div>
+
+
+          <div class="mcu-card">
+            <div class="mcu-number">
+              2
+            </div>
+
+            <div class="mcu-title">
+              インクレディブル・ハルク
+            </div>
+
+            <div class="mcu-meta">
+              2008年
+            </div>
+          </div>
+
+
+          <div class="mcu-card">
+            <div class="mcu-number">
+              3
+            </div>
+
+            <div class="mcu-title">
+              アイアンマン2
+            </div>
+
+            <div class="mcu-meta">
+              2010年
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+</body>
+</html>
