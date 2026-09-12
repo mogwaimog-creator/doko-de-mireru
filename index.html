@@ -4139,8 +4139,7 @@ body.search-mode:not(.show-other-search) .popular-section{
 .home-section-nav{
   position:relative;
   display:grid;
-  grid-template-columns:repeat(6,minmax(0,1fr));
-  gap:8px;
+  grid-template-columns:repeat(5,minmax(0,1fr));
 
   margin:0 0 12px;
   padding:10px;
@@ -4206,15 +4205,34 @@ body.search-mode:not(.show-other-search) .popular-section{
     border-color .2s ease;
 }
 
+.home-section-nav-close{
+  display:none;
+
+  position:absolute;
+  top:-22px;
+  right:10px;
+
+  padding:3px 8px;
+
+  border:0;
+  background:transparent;
+
+  color:#64748b;
+
+  font-size:11px;
+  font-weight:700;
+
+  cursor:pointer;
+}
+
 body.search-mode.show-other-search
 .home-section-nav-close{
-  display:flex;
+  display:block;
 }
 
 .home-section-nav-close:hover{
-  background:#e2e8f0;
-  border-color:#cbd5e1;
-  color:#475569;
+  color:#334155;
+  text-decoration:underline;
 }
      
 .home-section-nav a:hover{
