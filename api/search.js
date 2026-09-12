@@ -219,6 +219,23 @@ const country =
         .trim()
         .toLowerCase()
     : "";
+
+// =====================================================
+// 年代
+//
+// 2020 = 2020年代
+// 2010 = 2010年代
+// 2000 = 2000年代
+// 1990 = 1990年代
+// 1980 = 1980年代以前
+// =====================================================
+
+const year =
+  req.query &&
+  typeof req.query.year === "string"
+    ? req.query.year.trim()
+    : "";    
+    
 // =====================================================
 // メインサイト ジャンルから探す
 // =====================================================
@@ -454,13 +471,14 @@ if(providerId){
 
   advancedResults =
     await getProviderWorks(
-      apiKey,
-      providerId,
-      page,
-      country,
-      genre,
-      advancedProviderType
-    );
+  apiKey,
+  providerId,
+  page,
+  country,
+  genre,
+  advancedProviderType,
+  year
+);
 
 }
 
@@ -487,13 +505,14 @@ else{
         function(id){
 
           return getProviderWorks(
-            apiKey,
-            id,
-            page,
-            country,
-            genre,
-            advancedProviderType
-          );
+  apiKey,
+  id,
+  page,
+  country,
+  genre,
+  advancedProviderType,
+  year
+);
 
         }
       )
@@ -8685,10 +8704,12 @@ async function getProviderWorks(
   page,
   country,
   genre,
-  netflixType
+  netflixType,
+  year
 ) {
-
-    // =======================================================
+   
+  
+  // =======================================================
   // Netflix ジャンル
   //
   // まずはアニメだけ対応
@@ -8842,6 +8863,68 @@ const countryWithoutAnimation =
   shouldExcludeAnimation
     ? "&without_genres=16"
     : "";
+
+// =======================================================
+// 年代による絞り込み
+// =======================================================
+
+let movieYearQuery = "";
+let tvYearQuery = "";
+
+
+if(year === "2020"){
+
+  movieYearQuery =
+    "&primary_release_date.gte=2020-01-01" +
+    "&primary_release_date.lte=2029-12-31";
+
+  tvYearQuery =
+    "&first_air_date.gte=2020-01-01" +
+    "&first_air_date.lte=2029-12-31";
+
+}
+else if(year === "2010"){
+
+  movieYearQuery =
+    "&primary_release_date.gte=2010-01-01" +
+    "&primary_release_date.lte=2019-12-31";
+
+  tvYearQuery =
+    "&first_air_date.gte=2010-01-01" +
+    "&first_air_date.lte=2019-12-31";
+
+}
+else if(year === "2000"){
+
+  movieYearQuery =
+    "&primary_release_date.gte=2000-01-01" +
+    "&primary_release_date.lte=2009-12-31";
+
+  tvYearQuery =
+    "&first_air_date.gte=2000-01-01" +
+    "&first_air_date.lte=2009-12-31";
+
+}
+else if(year === "1990"){
+
+  movieYearQuery =
+    "&primary_release_date.gte=1990-01-01" +
+    "&primary_release_date.lte=1999-12-31";
+
+  tvYearQuery =
+    "&first_air_date.gte=1990-01-01" +
+    "&first_air_date.lte=1999-12-31";
+
+}
+else if(year === "1980"){
+
+  movieYearQuery =
+    "&primary_release_date.lte=1989-12-31";
+
+  tvYearQuery =
+    "&first_air_date.lte=1989-12-31";
+
+}
   
 // =======================================================
 // 映画
@@ -8866,6 +8949,7 @@ const movieUrl =
   ) +
  countryWithoutAnimation +
 movieGenreQuery +
+movieYearQuery +
 "&page=" +
 encodeURIComponent(page);
 
@@ -8889,11 +8973,13 @@ const tvUrl =
         encodeURIComponent(originalLanguage)
       : ""
   ) +
+  
   countryWithoutAnimation +
 tvGenreQuery +
+tvYearQuery +
 "&page=" +
 encodeURIComponent(page);
-
+  
   // =======================================================
   // 配信サービスのロゴ・名前
   // =======================================================
