@@ -4180,6 +4180,36 @@ body.search-mode:not(.show-other-search) .popular-section{
     transform .2s ease;
 }
 
+.home-section-nav-close{
+  display:none;
+  align-items:center;
+  justify-content:center;
+
+  min-height:38px;
+  padding:8px 10px;
+
+  border:1px solid #e5e7eb;
+  border-radius:999px;
+
+  background:#f1f5f9;
+  color:#64748b;
+
+  font-size:12px;
+  font-weight:700;
+
+  cursor:pointer;
+}
+
+body.search-mode.show-other-search
+.home-section-nav-close{
+  display:flex;
+}
+
+.home-section-nav-close:hover{
+  background:#e2e8f0;
+  color:#334155;
+}
+     
 .home-section-nav a:hover{
   background:#eff6ff;
   border-color:#93c5fd;
@@ -4380,6 +4410,15 @@ body.search-mode:not(.show-other-search) .popular-section{
   <a href="#personSearchSection">
     👤 人物
   </a>
+
+　<button
+  id="closeOtherSearch"
+  class="home-section-nav-close"
+  type="button"
+>
+  × 閉じる
+</button>
+
 </nav>
      
 <div
@@ -7008,6 +7047,11 @@ const otherSearchToggle =
     "otherSearchToggle"
   );
 
+const closeOtherSearch =
+  document.getElementById(
+    "closeOtherSearch"
+  );
+
 
 if(otherSearchToggle){
 
@@ -7015,26 +7059,44 @@ if(otherSearchToggle){
     "click",
     function(){
 
-      document.body.classList.toggle(
+      document.body.classList.add(
         "show-other-search"
       );
 
+      /* 開いたら大きなボタンは隠す */
+      otherSearchToggle.style.display =
+        "none";
 
-      if(
-        document.body.classList.contains(
-          "show-other-search"
-        )
-      ){
+    }
+  );
 
-        otherSearchToggle.textContent =
-          "▲ 他の検索方法を閉じる";
+}
 
-      }else{
 
-     　 otherSearchToggle.innerHTML =
-  '<span class="other-search-main">🔎 他の検索方法を表示 →</span>' +
-  '<span class="other-search-sub">おすすめ・シリーズ・配信・ジャンル・人物 など</span>';
-      }
+if(closeOtherSearch){
+
+  closeOtherSearch.addEventListener(
+    "click",
+    function(){
+
+      /* 他の検索方法を閉じる */
+      document.body.classList.remove(
+        "show-other-search"
+      );
+
+      /* 「他の検索方法を表示」を戻す */
+      otherSearchToggle.style.display =
+        "block";
+
+      otherSearchToggle.innerHTML =
+        '<span class="other-search-main">🔎 他の検索方法を表示 →</span>' +
+        '<span class="other-search-sub">おすすめ・シリーズ・配信・ジャンル・人物 など</span>';
+
+      /* 検索結果の上へ戻る */
+      window.scrollTo({
+        top:0,
+        behavior:"smooth"
+      });
 
     }
   );
