@@ -10162,6 +10162,24 @@ results.innerHTML =
       </div>
     `;
 
+if(data.hasMore){
+
+  results.insertAdjacentHTML(
+    "beforeend",
+    `
+    <div class="load-more-wrapper">
+      <button
+        id="advancedLoadMoreButton"
+        type="button"
+        class="load-more-button"
+      >
+        さらに20件表示
+      </button>
+    </div>
+    `
+  );
+
+}           
 
 // 検索結果まで移動
 if(searchResultsHeading){
