@@ -4154,16 +4154,18 @@ body.search-mode:not(.show-other-search) .popular-section{
     0 3px 12px
     rgba(15,23,42,.06);
 }
+
+
 .home-section-nav a{
-  flex:1;
+  flex:1 1 0;
   min-width:0;
-     
+
   display:flex;
   align-items:center;
   justify-content:center;
-                              　
+
   min-height:38px;
-  padding:8px 10px;
+  padding:8px 8px;
 
   border:1px solid #dbe3ef;
   border-radius:999px;
@@ -4176,22 +4178,19 @@ body.search-mode:not(.show-other-search) .popular-section{
   font-size:13px;
   font-weight:800;
 
-  transition:
-    background .2s ease,
-    border-color .2s ease,
-    color .2s ease,
-    transform .2s ease;
+  white-space:nowrap;
 }
+
+
+/* 閉じるボタン */
 
 .home-section-nav-close{
   display:none;
-  align-items:center;
-  justify-content:center;
 
   flex:0 0 auto;
 
-  padding:8px 10px;
   min-height:38px;
+  padding:8px 10px;
 
   border:1px solid #cbd5e1;
   border-radius:6px;
@@ -4206,22 +4205,18 @@ body.search-mode:not(.show-other-search) .popular-section{
   cursor:pointer;
 }
 
+
+/* 検索後に「他の検索方法」を開いた時だけ表示 */
+
 body.search-mode.show-other-search
-
+.home-section-nav-close{
   display:flex;
-}
-
-.home-section-nav-close:hover{
-  background:#e5e7eb;
-  border-color:#cbd5e1;
-  color:#475569;
-}
-
-  transform:translateY(-1px);
+  align-items:center;
+  justify-content:center;
 }
 
 
-/* ジャンプした時に少し上に余白を作る */
+/* ジャンプ位置 */
 
 #recommendArea,
 #watchOrderSection,
@@ -4237,14 +4232,23 @@ body.search-mode.show-other-search
 @media(max-width:700px){
 
   .home-section-nav{
+    display:grid;
+
     grid-template-columns:
       repeat(2,minmax(0,1fr));
+
+    gap:8px;
   }
 
   .home-section-nav a{
+    width:100%;
     font-size:12px;
   }
 
+  .home-section-nav-close{
+    grid-column:1 / -1;
+    width:100%;
+  }
 
 }
 
