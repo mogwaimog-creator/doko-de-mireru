@@ -4137,13 +4137,12 @@ body.search-mode:not(.show-other-search) .popular-section{
 ========================================================= */
 
 .home-section-nav{
-  position:relative;
-  display:grid;
-  grid-template-columns:repeat(5,minmax(0,1fr)) 90px;
+  display:flex;
+  align-items:center;
   gap:8px;
 
   margin:0 0 12px;
-  padding:24px 10px 10px;
+  padding:10px;
 
   background:#fff;
 
@@ -4156,10 +4155,12 @@ body.search-mode:not(.show-other-search) .popular-section{
 }
 
 .home-section-nav a{
+  flex:1;
+     
   display:flex;
   align-items:center;
   justify-content:center;
-
+                              　
   min-height:38px;
   padding:8px 10px;
 
@@ -4186,8 +4187,10 @@ body.search-mode:not(.show-other-search) .popular-section{
   align-items:center;
   justify-content:center;
 
+  flex:0 0 auto;
+
+  padding:8px 10px;
   min-height:38px;
-  padding:8px 6px;
 
   border:1px solid #cbd5e1;
   border-radius:6px;
@@ -4198,6 +4201,7 @@ body.search-mode:not(.show-other-search) .popular-section{
   font-size:12px;
   font-weight:700;
 
+  white-space:nowrap;
   cursor:pointer;
 }
 
@@ -4210,7 +4214,6 @@ body.search-mode.show-other-search
   background:#e5e7eb;
   border-color:#cbd5e1;
   color:#475569;
-  transform:none;
 }
 
   transform:translateY(-1px);
