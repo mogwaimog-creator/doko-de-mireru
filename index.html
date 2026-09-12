@@ -4609,6 +4609,87 @@ body.search-mode.show-other-search
   }
 
 }
+
+/* =========================================================
+   選択中の条件・タグ
+========================================================= */
+
+.advanced-selected-header{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+}
+
+
+.advanced-selected-condition{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+
+  padding:8px 10px;
+
+  background:#ffffff;
+
+  border:1px solid #dbe7e2;
+  border-radius:9px;
+
+  color:#334155;
+
+  font-size:13px;
+  font-weight:700;
+}
+
+
+.advanced-selected-remove{
+  padding:0;
+
+  border:none;
+  background:transparent;
+
+  color:#64748b;
+
+  font-size:16px;
+  font-weight:700;
+
+  cursor:pointer;
+}
+
+
+.advanced-clear-all{
+  flex:0 0 auto;
+
+  padding:8px 10px;
+
+  border:1px solid #cbd5e1;
+  border-radius:8px;
+
+  background:#ffffff;
+  color:#475569;
+
+  font-size:12px;
+  font-weight:700;
+
+  cursor:pointer;
+}
+
+
+.advanced-clear-all:hover{
+  background:#f8fafc;
+}
+
+
+@media(max-width:700px){
+
+  .advanced-selected-header{
+    flex-direction:column;
+  }
+
+  .advanced-clear-all{
+    align-self:flex-end;
+  }
+
+}
      
 </style>
 
@@ -5617,14 +5698,26 @@ body.search-mode.show-other-search
       </div>
 
 
-      <div
-        id="advancedSelectedConditions"
-        class="advanced-selected-conditions"
-      >
-        <span class="advanced-selected-empty">
-          まだ条件は選択されていません
-        </span>
-      </div>
+      <div class="advanced-selected-header">
+
+  <div
+    id="advancedSelectedConditions"
+    class="advanced-selected-conditions"
+  >
+    <span class="advanced-selected-empty">
+      まだ条件は選択されていません
+    </span>
+  </div>
+
+  <button
+    id="advancedClearAll"
+    class="advanced-clear-all"
+    type="button"
+  >
+    すべてクリア
+  </button>
+
+</div>
 
     </div>
 
@@ -9658,6 +9751,253 @@ if(
   );
 
 }
+
+// =========================================================
+// こだわり検索・選択中の条件
+// =========================================================
+
+const advancedFilters = [
+  {
+    id:"advancedType",
+    label:"作品タイプ"
+  },
+  {
+    id:"advancedProvider",
+    label:"配信サービス"
+  },
+  {
+    id:"advancedGenre",
+    label:"ジャンル"
+  },
+  {
+    id:"advancedCountry",
+    label:"制作国"
+  },
+  {
+    id:"advancedYear",
+    label:"年代"
+  },
+  {
+    id:"advancedRating",
+    label:"評価"
+  }
+];
+
+
+const advancedSelectedConditions =
+  document.getElementById(
+    "advancedSelectedConditions"
+  );
+
+const advancedClearAll =
+  document.getElementById(
+    "advancedClearAll"
+  );
+
+
+function updateAdvancedSelectedConditions(){
+
+  if(!advancedSelectedConditions){
+    return;
+  }
+
+
+  const selectedItems = [];
+
+
+  advancedFilters.forEach(
+    function(filter){
+
+      const select =
+        document.getElementById(
+          filter.id
+        );
+
+      if(
+        !select ||
+        !select.value
+      ){
+        return;
+      }
+
+
+      const option =
+        select.options[
+          select.selectedIndex
+        ];
+
+
+      selectedItems.push({
+        id:filter.id,
+        text:option.text
+      });
+
+    }
+  );
+
+
+  advancedSelectedConditions.innerHTML =
+    "";
+
+
+  if(selectedItems.length === 0){
+
+    advancedSelectedConditions.innerHTML =
+      '<span class="advanced-selected-empty">' +
+      'まだ条件は選択されていません' +
+      '</span>';
+
+    if(advancedClearAll){
+      advancedClearAll.style.display =
+        "none";
+    }
+
+    return;
+
+  }
+
+
+  if(advancedClearAll){
+    advancedClearAll.style.display =
+      "";
+  }
+
+
+  selectedItems.forEach(
+    function(item){
+
+      const tag =
+        document.createElement(
+          "span"
+        );
+
+      tag.className =
+        "advanced-selected-condition";
+
+
+      const text =
+        document.createElement(
+          "span"
+        );
+
+      text.textContent =
+        item.text;
+
+
+      const remove =
+        document.createElement(
+          "button"
+        );
+
+      remove.type =
+        "button";
+
+      remove.className =
+        "advanced-selected-remove";
+
+      remove.textContent =
+        "×";
+
+
+      remove.addEventListener(
+        "click",
+        function(){
+
+          const select =
+            document.getElementById(
+              item.id
+            );
+
+          if(select){
+
+            select.value =
+              "";
+
+            updateAdvancedSelectedConditions();
+
+          }
+
+        }
+      );
+
+
+      tag.appendChild(
+        text
+      );
+
+      tag.appendChild(
+        remove
+      );
+
+      advancedSelectedConditions
+        .appendChild(
+          tag
+        );
+
+    }
+  );
+
+}
+
+
+// 各プルダウンを変更したら更新
+advancedFilters.forEach(
+  function(filter){
+
+    const select =
+      document.getElementById(
+        filter.id
+      );
+
+    if(select){
+
+      select.addEventListener(
+        "change",
+        updateAdvancedSelectedConditions
+      );
+
+    }
+
+  }
+);
+
+
+// すべてクリア
+if(advancedClearAll){
+
+  advancedClearAll.addEventListener(
+    "click",
+    function(){
+
+      advancedFilters.forEach(
+        function(filter){
+
+          const select =
+            document.getElementById(
+              filter.id
+            );
+
+          if(select){
+
+            select.value =
+              "";
+
+          }
+
+        }
+      );
+
+
+      updateAdvancedSelectedConditions();
+
+    }
+  );
+
+}
+
+
+// 初期表示
+updateAdvancedSelectedConditions();
      
 </script>
      
