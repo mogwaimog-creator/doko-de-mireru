@@ -5725,11 +5725,12 @@ body.search-mode.show-other-search
     <div class="advanced-search-actions">
 
       <button
-        class="advanced-search-submit"
-        type="button"
-      >
-        🔎 この条件で探す
-      </button>
+  id="advancedSearchSubmit"
+  class="advanced-search-submit"
+  type="button"
+>
+  🔎 この条件で探す
+</button>
 
       <button
         id="advancedSearchClose"
@@ -9998,6 +9999,148 @@ if(advancedClearAll){
 
 // 初期表示
 updateAdvancedSelectedConditions();
+
+// =========================================================
+// こだわり検索・実行
+// =========================================================
+
+const advancedSearchSubmit =
+  document.getElementById(
+    "advancedSearchSubmit"
+  );
+
+if(advancedSearchSubmit){
+
+  advancedSearchSubmit.addEventListener(
+    "click",
+    async function(){
+
+      const type =
+        document.getElementById(
+          "advancedType"
+        )?.value || "";
+
+      const provider =
+        document.getElementById(
+          "advancedProvider"
+        )?.value || "";
+
+      const genre =
+        document.getElementById(
+          "advancedGenre"
+        )?.value || "";
+
+
+      // 配信サービスは現段階では必須
+      if(!provider){
+
+        alert(
+          "配信サービスを選択してください。"
+        );
+
+        return;
+      }
+
+
+      try{
+
+        advancedSearchSubmit.disabled =
+          true;
+
+        advancedSearchSubmit.textContent =
+          "検索中…";
+
+
+        const params =
+          new URLSearchParams();
+
+        params.set(
+          "advancedSearch",
+          "1"
+        );
+
+        params.set(
+          "provider",
+          provider
+        );
+
+        if(type){
+          params.set(
+            "type",
+            type
+          );
+        }
+
+        if(genre){
+          params.set(
+            "genre",
+            genre
+          );
+        }
+
+
+        const response =
+          await fetch(
+            "/api/search?" +
+            params.toString()
+          );
+
+
+        if(!response.ok){
+
+          throw new Error(
+            "検索に失敗しました。"
+          );
+
+        }
+
+
+        const data =
+          await response.json();
+
+
+        console.log(
+          "こだわり検索結果",
+          data
+        );
+
+
+        alert(
+          "検索結果を取得できました。件数：" +
+          (
+            Array.isArray(data.results)
+              ? data.results.length
+              : 0
+          )
+        );
+
+      }
+      catch(error){
+
+        console.error(
+          "ADVANCED SEARCH ERROR:",
+          error
+        );
+
+        alert(
+          "こだわり検索でエラーが発生しました。"
+        );
+
+      }
+      finally{
+
+        advancedSearchSubmit.disabled =
+          false;
+
+        advancedSearchSubmit.textContent =
+          "🔎 この条件で探す";
+
+      }
+
+    }
+  );
+
+}
      
 </script>
      
