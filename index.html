@@ -3947,7 +3947,98 @@ font-weight:bold;
 
 }
 
+/* =========================================================
+   おすすめ作品 ＋ シリーズを順番に見る
+========================================================= */
 
+.home-feature-layout{
+  display:grid;
+  grid-template-columns:minmax(0,2fr) minmax(260px,1fr);
+  gap:12px;
+  align-items:stretch;
+  margin-bottom:12px;
+}
+
+.home-feature-layout .recommend-section{
+  margin-bottom:0;
+}
+
+
+/* =========================================================
+   シリーズを順番に見る
+========================================================= */
+
+.watch-order-section{
+  background:#fff;
+  border:1px solid #e5e7eb;
+  border-radius:18px;
+  padding:16px;
+  box-shadow:0 4px 18px rgba(15,23,42,.07);
+}
+
+.watch-order-heading{
+  margin-bottom:14px;
+}
+
+.watch-order-heading h2{
+  margin:0;
+  color:#111827;
+  font-size:20px;
+  font-weight:800;
+}
+
+.watch-order-heading p{
+  margin:7px 0 0;
+  color:#6b7280;
+  font-size:13px;
+  line-height:1.6;
+}
+
+.watch-order-list{
+  display:flex;
+  flex-direction:column;
+  gap:9px;
+}
+
+.watch-order-card{
+  padding:12px 13px;
+  background:#f8fafc;
+  border:1px solid #e2e8f0;
+  border-radius:11px;
+}
+
+.watch-order-name{
+  color:#1e293b;
+  font-size:14px;
+  font-weight:800;
+}
+
+.watch-order-note{
+  margin-top:3px;
+  color:#64748b;
+  font-size:12px;
+}
+
+.watch-order-more{
+  margin-top:13px;
+  padding-top:12px;
+  border-top:1px solid #e5e7eb;
+  color:#2563eb;
+  font-size:13px;
+  font-weight:700;
+  text-align:center;
+}
+
+
+/* タブレット・スマホでは上下に並べる */
+
+@media(max-width:850px){
+
+  .home-feature-layout{
+    grid-template-columns:1fr;
+  }
+
+}
 
 </style>
 
@@ -4073,7 +4164,7 @@ font-weight:bold;
 
 </section>
 
-
+<div class="home-feature-layout">
      
 <!-- =====================================================
      おすすめ作品から探す
@@ -4235,10 +4326,83 @@ font-weight:bold;
     </div>
 
 
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     シリーズを順番に見る
+====================================================== -->
+
+<section class="watch-order-section">
+
+  <div class="watch-order-heading">
+
+    <h2>
+      🎬 シリーズを順番に見る
+    </h2>
+
+    <p>
+      人気シリーズの見る順番をわかりやすく紹介
+    </p>
+
+  </div>
+
+
+  <div class="watch-order-list">
+
+    <div class="watch-order-card">
+      <div class="watch-order-name">
+        🦸 MCU・マーベル
+      </div>
+      <div class="watch-order-note">
+        公開順・時系列順
+      </div>
+    </div>
+
+
+    <div class="watch-order-card">
+      <div class="watch-order-name">
+        🌌 スター・ウォーズ
+      </div>
+      <div class="watch-order-note">
+        公開順・時系列順
+      </div>
+    </div>
+
+
+    <div class="watch-order-card">
+      <div class="watch-order-name">
+        🤖 エヴァンゲリオン
+      </div>
+      <div class="watch-order-note">
+        初めて見る人向け
+      </div>
+    </div>
+
+
+    <div class="watch-order-card">
+      <div class="watch-order-name">
+        🦖 ゴジラ
+      </div>
+      <div class="watch-order-note">
+        日本版・MonsterVerse
+      </div>
+    </div>
+
+  </div>
+
+
+  <div class="watch-order-more">
+    見る順番をもっと見る →
   </div>
 
 </section>
-     
+
+
+</div>
+
 
 <!-- =====================================================
      配信サービスから探す
