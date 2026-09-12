@@ -6744,25 +6744,6 @@ else if(rating === "6"){
 // =========================================================
 
 
-  if(conditionLabels.length){
-
-    const conditionDiv =
-      document.createElement("div");
-
-    conditionDiv.className =
-      "advanced-result-conditions";
-
-    conditionDiv.textContent =
-      conditionLabels.join(" / ");
-
-    searchResultsHeading.appendChild(
-      conditionDiv
-    );
-
-  }
-
-}
-
 
           advancedNextPage++;
 
@@ -10451,15 +10432,120 @@ if(advancedSearchSubmit){
         }
 
 
-        // 見出し
-        if(searchResultsHeading){
+        // ---------------------------------------------------------
+// 選択中の条件
+// ---------------------------------------------------------
 
-          searchResultsHeading.textContent =
-            "🔎 こだわり検索の結果（" +
-            advancedMovies.length +
-            "件）";
+const conditionLabels = [];
 
-        }
+if(type === "movie"){
+  conditionLabels.push("映画");
+}
+else if(type === "drama"){
+  conditionLabels.push("ドラマ");
+}
+else if(type === "anime"){
+  conditionLabels.push("アニメ");
+}
+
+if(provider === "netflix"){
+  conditionLabels.push("Netflix");
+}
+else if(provider === "prime"){
+  conditionLabels.push("Prime Video");
+}
+else if(provider === "unext"){
+  conditionLabels.push("U-NEXT");
+}
+else if(provider === "hulu"){
+  conditionLabels.push("Hulu");
+}
+else if(provider === "disney"){
+  conditionLabels.push("Disney+");
+}
+
+if(genre === "horror"){
+  conditionLabels.push("ホラー");
+}
+else if(genre === "romance"){
+  conditionLabels.push("恋愛");
+}
+else if(genre === "action"){
+  conditionLabels.push("アクション");
+}
+else if(genre === "comedy"){
+  conditionLabels.push("コメディ");
+}
+else if(genre === "scifi"){
+  conditionLabels.push("SF");
+}
+
+if(country === "jp"){
+  conditionLabels.push("日本");
+}
+else if(country === "kr"){
+  conditionLabels.push("韓国");
+}
+else if(country === "other"){
+  conditionLabels.push("日本・韓国以外");
+}
+
+if(year === "2020"){
+  conditionLabels.push("2020年代");
+}
+else if(year === "2010"){
+  conditionLabels.push("2010年代");
+}
+else if(year === "2000"){
+  conditionLabels.push("2000年代");
+}
+else if(year === "1990"){
+  conditionLabels.push("1990年代");
+}
+else if(year === "1980"){
+  conditionLabels.push("1980年代以前");
+}
+
+if(rating === "8"){
+  conditionLabels.push("評価8以上");
+}
+else if(rating === "7"){
+  conditionLabels.push("評価7以上");
+}
+else if(rating === "6"){
+  conditionLabels.push("評価6以上");
+}
+
+
+// ---------------------------------------------------------
+// 見出し
+// ---------------------------------------------------------
+
+if(searchResultsHeading){
+
+  searchResultsHeading.innerHTML =
+    "🔎 こだわり検索の結果（" +
+    advancedMovies.length +
+    "件）";
+
+  if(conditionLabels.length){
+
+    const conditionDiv =
+      document.createElement("div");
+
+    conditionDiv.className =
+      "advanced-result-conditions";
+
+    conditionDiv.textContent =
+      conditionLabels.join(" / ");
+
+    searchResultsHeading.appendChild(
+      conditionDiv
+    );
+
+  }
+
+}
 
 
         // 結果表示
