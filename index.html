@@ -10034,16 +10034,7 @@ const country =
     "advancedCountry"
   )?.value || "";
 
-      // 配信サービスは現段階では必須
-      if(!provider){
-
-        alert(
-          "配信サービスを選択してください。"
-        );
-
-        return;
-      }
-
+      
 
       try{
 
@@ -10062,19 +10053,17 @@ const country =
           "1"
         );
 
-        params.set(
+　　　　　params.set(
           "provider",
           provider
-        );
+　　　　　 );
 
-        if(type){
-          params.set(
-            "type",
-            type
-          );
-        }
-
-        if(genre){
+　　　　　params.set(
+　　　　　"type",
+　　　　　type || "all"
+     　　);
+        
+           if(genre){
           params.set(
             "genre",
             genre
