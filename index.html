@@ -4117,6 +4117,7 @@ body.search-mode:not(.show-other-search) .provider-search-section,
 body.search-mode:not(.show-other-search) .genre-search-section,
 body.search-mode:not(.show-other-search) .genre-results-section,
 body.search-mode:not(.show-other-search) .person-search-section,
+body.search-mode:not(.show-other-search) .advanced-search-section,     
 body.search-mode:not(.show-other-search) .popular-section{
   display:none !important;
 }
@@ -4242,6 +4243,85 @@ body.search-mode.show-other-search
 
   .home-section-nav a{
     font-size:12px;
+  }
+
+}
+
+/* =========================================================
+   こだわり検索
+========================================================= */
+
+.advanced-search-section{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+
+  margin:0 0 12px;
+  padding:16px 20px;
+
+  background:#ffffff;
+
+  border:1px solid #dbe3ef;
+  border-radius:16px;
+
+  box-shadow:
+    0 4px 16px rgba(15,23,42,.06);
+}
+
+
+.advanced-search-text h2{
+  margin:0;
+
+  color:#111827;
+
+  font-size:18px;
+  font-weight:800;
+}
+
+
+.advanced-search-text p{
+  margin:6px 0 0;
+
+  color:#64748b;
+
+  font-size:13px;
+  line-height:1.6;
+}
+
+
+.advanced-search-open{
+  flex:0 0 auto;
+
+  padding:10px 14px;
+
+  border:1px solid #93c5fd;
+  border-radius:10px;
+
+  background:#eff6ff;
+  color:#2563eb;
+
+  font-size:13px;
+  font-weight:800;
+
+  cursor:pointer;
+}
+
+
+.advanced-search-open:hover{
+  background:#dbeafe;
+}
+
+
+@media(max-width:700px){
+
+  .advanced-search-section{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+
+  .advanced-search-open{
+    width:100%;
   }
 
 }
@@ -5059,7 +5139,31 @@ body.search-mode.show-other-search
 
 </section>
 
+<section
+  id="advancedSearchSection"
+  class="advanced-search-section"
+>
 
+  <div class="advanced-search-text">
+
+    <h2>
+      🔎 条件を組み合わせて探す
+    </h2>
+
+    <p>
+      配信・ジャンル・作品タイプ・制作国・年代・評価などを組み合わせて検索
+    </p>
+
+  </div>
+
+  <button
+    class="advanced-search-open"
+    type="button"
+  >
+    こだわり検索を開く →
+  </button>
+
+</section>
 <!-- =====================================================
      人気作品
 ====================================================== -->
