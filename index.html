@@ -4094,7 +4094,21 @@ body.search-mode .other-search-toggle{
   display:block;
 }
 
+.other-search-main{
+  display:block;
+  font-size:15px;
+  font-weight:800;
+}
 
+.other-search-sub{
+  display:block;
+  margin-top:4px;
+  font-size:12px;
+  font-weight:600;
+  color:#64748b;
+}
+
+     
 /* 検索した時は、ほかの機能を収納 */
 
 body.search-mode:not(.show-other-search) .home-feature-layout,
@@ -4248,9 +4262,13 @@ body.search-mode:not(.show-other-search) .popular-section{
   class="other-search-toggle"
   type="button"
 >
-  ✨ ほかの方法でも探せます　　🔎 他の検索方法を表示 →
+  <span class="other-search-main">
+    🔎 他の検索方法を表示 →
+  </span>
+  <span class="other-search-sub">
+    おすすめ・シリーズ・配信・ジャンル・人物 など
+  </span>
 </button>
-
 
 <div class="home-feature-layout">
 
@@ -6892,9 +6910,9 @@ if(otherSearchToggle){
 
       }else{
 
-        otherSearchToggle.textContent =
-           "✨ ほかの方法でも探せます　　🔎 他の検索方法を表示 →";
-
+     　 otherSearchToggle.innerHTML =
+  '<span class="other-search-main">🔎 他の検索方法を表示 →</span>' +
+  '<span class="other-search-sub">おすすめ・シリーズ・配信・ジャンル・人物 など</span>';
       }
 
     }
