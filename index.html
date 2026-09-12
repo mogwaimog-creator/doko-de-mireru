@@ -9394,8 +9394,8 @@ if(
         .classList
         .add("show");
 
-      advancedSearchOpen.textContent =
-        "こだわり検索を表示中";
+      advancedSearchOpen.style.display =
+　　　　  "none";
 
     }
   );
@@ -9418,10 +9418,10 @@ if(
 
       if(advancedSearchOpen){
 
-        advancedSearchOpen.textContent =
-          "こだわり検索を開く →";
+  advancedSearchOpen.style.display =
+    "";
 
-      }
+}
 
     }
   );
