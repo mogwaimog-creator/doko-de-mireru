@@ -4208,19 +4208,19 @@ body.search-mode:not(.show-other-search) .popular-section{
 
 .home-section-nav-close{
   display:none;
+  align-items:center;
+  justify-content:center;
 
-  position:absolute;
-top:5px;
-right:12px;
+  min-height:38px;
+  padding:8px 10px;
 
-  padding:3px 8px;
+  border:1px solid #cbd5e1;
+  border-radius:6px;
 
-  border:0;
-  background:transparent;
+  background:#e5e7eb;
+  color:#475569;
 
-  color:#64748b;
-
-  font-size:11px;
+  font-size:12px;
   font-weight:700;
 
   cursor:pointer;
@@ -4228,18 +4228,15 @@ right:12px;
 
 body.search-mode.show-other-search
 .home-section-nav-close{
-  display:block;
+  display:flex;
 }
 
 .home-section-nav-close:hover{
-  color:#334155;
-  text-decoration:underline;
+  background:#e5e7eb;
+  border-color:#cbd5e1;
+  color:#475569;
+  transform:none;
 }
-     
-.home-section-nav a:hover{
-  background:#eff6ff;
-  border-color:#93c5fd;
-  color:#2563eb;
 
   transform:translateY(-1px);
 }
