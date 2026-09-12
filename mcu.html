@@ -632,388 +632,294 @@
 }
 
 /* =====================================================
-   マーベル作品 つながり図
+   宇宙マルチバース版
 ===================================================== */
 
-.marvel-map-section{
-  margin:0 0 24px;
-  padding:24px;
-
+.marvel-universe-section{
+  position:relative;
+  margin:0 0 26px;
+  padding:26px;
+  overflow:hidden;
   background:
-    linear-gradient(
-      135deg,
-      #111827 0%,
-      #172033 55%,
-      #24163d 100%
-    );
-
-  border-radius:18px;
+    radial-gradient(circle at 50% 42%, rgba(109,40,217,.22) 0%, transparent 32%),
+    radial-gradient(circle at 20% 15%, rgba(37,99,235,.12) 0%, transparent 28%),
+    linear-gradient(135deg, #08101f 0%, #111827 52%, #21143c 100%);
+  border:1px solid rgba(139,92,246,.22);
+  border-radius:20px;
   color:#ffffff;
-
-  box-shadow:
-    0 8px 24px
-    rgba(15,23,42,.15);
+  box-shadow:0 12px 32px rgba(15,23,42,.18);
 }
 
-.marvel-map-heading{
+.marvel-universe-section::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  opacity:.34;
+  background-image:radial-gradient(circle, rgba(255,255,255,.9) 0 1px, transparent 1.4px);
+  background-size:45px 45px;
+}
+
+.marvel-universe-heading{
+  position:relative;
+  z-index:2;
   text-align:center;
-  margin-bottom:20px;
+  margin-bottom:26px;
 }
 
-.marvel-map-badge{
+.marvel-universe-badge{
   display:inline-block;
   margin-bottom:8px;
-  padding:5px 11px;
-
-  background:rgba(139,92,246,.18);
-  border:1px solid rgba(196,181,253,.45);
+  padding:5px 12px;
+  background:rgba(139,92,246,.17);
+  border:1px solid rgba(196,181,253,.38);
   border-radius:999px;
-
   color:#ddd6fe;
   font-size:12px;
   font-weight:900;
 }
 
-.marvel-map-heading h2{
+.marvel-universe-heading h2{
   margin:0;
-  font-size:23px;
-}
-
-.marvel-map-heading p{
-  margin:7px auto 0;
-  max-width:650px;
-
-  color:#cbd5e1;
-  font-size:13px;
-  line-height:1.7;
-}
-
-
-/* 図本体 */
-
-.marvel-map{
-  display:grid;
-  grid-template-columns:
-    repeat(3,1fr);
-
-  gap:12px;
-  align-items:stretch;
-}
-
-
-/* 外側のシリーズ */
-
-.marvel-map-card{
-  min-height:95px;
-  padding:14px;
-
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-
-  background:
-    rgba(255,255,255,.07);
-
-  border:
-    1px solid
-    rgba(255,255,255,.14);
-
-  border-radius:13px;
-
-  text-align:center;
-}
-
-.marvel-map-card > span{
-  margin-bottom:5px;
-
-  color:#a78bfa;
-  font-size:10px;
-  font-weight:800;
-}
-
-.marvel-map-card strong{
-  font-size:15px;
-}
-
-.marvel-map-card small{
-  display:block;
-  margin-top:5px;
-
-  color:#cbd5e1;
-  font-size:11px;
-}
-
-
-/* 中央 */
-
-.marvel-map-center{
-  grid-column:2;
-  grid-row:1 / span 2;
-
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-
-  padding:15px;
-
-  background:
-    radial-gradient(
-      circle,
-      rgba(139,92,246,.20) 0%,
-      rgba(139,92,246,.05) 55%,
-      transparent 75%
-    );
-
-  border-radius:16px;
-}
-
-
-/* マルチバース */
-
-.marvel-multiverse{
-  margin-bottom:10px;
-  padding:9px;
-
-  text-align:center;
-
-  color:#ddd6fe;
-  font-size:12px;
-  font-weight:900;
-  letter-spacing:1px;
-}
-
-.marvel-multiverse small{
-  display:block;
-  margin-top:2px;
-
-  color:#a78bfa;
-  font-size:10px;
-  letter-spacing:0;
-}
-
-
-/* MCU本編 */
-
-.marvel-mcu{
-  padding:22px 12px;
-
-  text-align:center;
-
-  background:
-    linear-gradient(
-      135deg,
-      #6d28d9,
-      #7c3aed,
-      #4f46e5
-    );
-
-  border:
-    1px solid
-    rgba(221,214,254,.65);
-
-  border-radius:15px;
-
-  box-shadow:
-    0 0 28px
-    rgba(139,92,246,.28);
-}
-
-.marvel-mcu span{
-  display:block;
-
-  color:#ddd6fe;
-  font-size:9px;
-  font-weight:900;
-  letter-spacing:1px;
-}
-
-.marvel-mcu strong{
-  display:block;
-  margin-top:4px;
-
   font-size:24px;
 }
 
-.marvel-mcu small{
+.marvel-universe-heading p{
+  max-width:650px;
+  margin:7px auto 0;
+  color:#cbd5e1;
+  font-size:13px;
+  line-height:1.75;
+}
+
+.marvel-universe-map{
+  position:relative;
+  z-index:2;
+  min-height:520px;
+  display:grid;
+  grid-template-columns:1fr 1.15fr 1fr;
+  gap:44px;
+  align-items:center;
+}
+
+.marvel-universe-lines{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  z-index:0;
+}
+
+.map-line{
+  fill:none;
+  stroke-width:3;
+  stroke-linecap:round;
+}
+
+.direct-line{
+  stroke:#a78bfa;
+  filter:drop-shadow(0 0 5px rgba(167,139,250,.5));
+}
+
+.multiverse-line{
+  stroke:#60a5fa;
+  stroke-dasharray:9 9;
+}
+
+.relation-line{
+  stroke:#94a3b8;
+  stroke-dasharray:3 8;
+  opacity:.75;
+}
+
+.center-line{ stroke-width:4; }
+
+.marvel-side{
+  position:relative;
+  z-index:2;
+  display:flex;
+  flex-direction:column;
+  gap:28px;
+}
+
+.universe-card{
+  min-height:102px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:14px 15px;
+  background:linear-gradient(135deg, rgba(30,41,59,.92), rgba(30,41,59,.67));
+  border:1px solid rgba(148,163,184,.22);
+  border-radius:14px;
+  box-shadow:0 7px 18px rgba(0,0,0,.16);
+  backdrop-filter:blur(4px);
+  transition:transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+
+.universe-card:hover{
+  border-color:rgba(167,139,250,.6);
+  transform:translateY(-1px);
+  box-shadow:0 8px 20px rgba(0,0,0,.20);
+}
+
+.universe-icon{
+  flex:0 0 auto;
+  width:43px;
+  height:43px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(139,92,246,.15);
+  border:1px solid rgba(167,139,250,.28);
+  border-radius:50%;
+  font-size:20px;
+}
+
+.universe-label{
+  display:block;
+  margin-bottom:4px;
+  color:#a78bfa;
+  font-size:10px;
+  font-weight:900;
+}
+
+.universe-card strong{ display:block; font-size:14px; }
+
+.universe-card small{
   display:block;
   margin-top:5px;
+  color:#cbd5e1;
+  font-size:10px;
+  line-height:1.5;
+}
 
-  color:#ede9fe;
+.marvel-center{
+  position:relative;
+  z-index:3;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+}
+
+.multiverse-space{
+  position:relative;
+  width:220px;
+  height:220px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-bottom:18px;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(139,92,246,.28) 0%, rgba(59,130,246,.10) 45%, transparent 72%);
+}
+
+.multiverse-orb{
+  position:relative;
+  z-index:4;
+  width:126px;
+  height:126px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  border-radius:50%;
+  background:radial-gradient(circle at 35% 30%, #c4b5fd 0%, #7c3aed 22%, #312e81 58%, #111827 100%);
+  border:2px solid rgba(221,214,254,.75);
+  box-shadow:0 0 20px rgba(139,92,246,.65), 0 0 55px rgba(79,70,229,.36);
+}
+
+.orb-icon{ font-size:21px; }
+.multiverse-orb strong{ display:block; margin-top:3px; font-size:13px; letter-spacing:.8px; }
+.multiverse-orb small{ display:block; margin-top:2px; color:#ddd6fe; font-size:10px; }
+
+.multiverse-orbit{
+  position:absolute;
+  left:50%;
+  top:50%;
+  border:1px solid rgba(167,139,250,.36);
+  border-radius:50%;
+  transform:translate(-50%,-50%) rotate(-25deg);
+}
+
+.orbit-1{ width:180px; height:85px; }
+.orbit-2{ width:170px; height:120px; transform:translate(-50%,-50%) rotate(36deg); border-color:rgba(96,165,250,.28); }
+
+.space-star{
+  position:absolute;
+  color:#c4b5fd;
+  text-shadow:0 0 9px rgba(196,181,253,.8);
+}
+.star-1{ top:22px; left:32px; font-size:15px; }
+.star-2{ top:48px; right:22px; font-size:21px; }
+.star-3{ bottom:29px; left:26px; font-size:11px; }
+
+.mcu-main-card{
+  width:190px;
+  padding:18px 15px;
+  text-align:center;
+  background:linear-gradient(135deg, #6d28d9, #7c3aed 55%, #4f46e5);
+  border:1px solid rgba(221,214,254,.7);
+  border-radius:15px;
+  box-shadow:0 0 24px rgba(124,58,237,.35);
+}
+
+.mcu-main-card span{ display:block; color:#ddd6fe; font-size:9px; font-weight:900; letter-spacing:1px; }
+.mcu-main-card strong{ display:block; margin-top:4px; font-size:22px; }
+.mcu-main-card small{ display:block; margin-top:5px; color:#ede9fe; font-size:10px; line-height:1.5; }
+
+.marvel-universe-legend{
+  position:relative;
+  z-index:2;
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:22px;
+  margin-top:20px;
+  color:#cbd5e1;
   font-size:11px;
 }
 
+.marvel-universe-legend > div{ display:flex; align-items:center; gap:7px; }
+.legend-sample{ display:inline-block; width:30px; }
+.legend-sample.direct{ height:3px; background:#a78bfa; }
+.legend-sample.multiverse{ height:0; border-top:3px dashed #60a5fa; }
+.legend-sample.relation{ height:0; border-top:2px dotted #94a3b8; }
 
-/* 下の説明 */
-
-.marvel-map-note{
-  margin-top:16px;
+.marvel-universe-note{
+  position:relative;
+  z-index:2;
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+  max-width:820px;
+  margin:18px auto 0;
   padding:12px 15px;
-
-  background:
-    rgba(139,92,246,.10);
-
-  border:
-    1px solid
-    rgba(167,139,250,.25);
-
-  border-radius:11px;
-
+  background:rgba(139,92,246,.10);
+  border:1px solid rgba(167,139,250,.22);
+  border-radius:12px;
   color:#dbeafe;
   font-size:12px;
   line-height:1.7;
 }
 
+.marvel-universe-note p{ margin:0; }
 
-/* スマホ */
-
-@media(max-width:700px){
-
-  .marvel-map-section{
-    padding:18px 14px;
-  }
-
-  .marvel-map{
-    grid-template-columns:1fr;
-  }
-
-  .marvel-map-center{
-    grid-column:auto;
-    grid-row:auto;
-    order:-1;
-  }
-
-}
-
-/* =====================================================
-   つながり図 線・矢印・凡例
-===================================================== */
-
-.marvel-map{
-  position:relative;
+@media(max-width:760px){
+  .marvel-universe-section{ padding:20px 14px; }
+  .marvel-universe-map{ min-height:auto; grid-template-columns:1fr; gap:16px; }
+  .marvel-center{ order:-1; margin-bottom:8px; }
+  .marvel-universe-lines{ display:none; }
+  .marvel-side{ gap:10px; }
+  .universe-card{ min-height:auto; }
+  .multiverse-space{ width:190px; height:190px; }
+  .multiverse-orb{ width:115px; height:115px; }
+  .marvel-universe-legend{ gap:12px; }
 }
 
 
-/* 凡例 */
-
-.marvel-map-legend{
-  display:flex;
-  justify-content:center;
-  flex-wrap:wrap;
-  gap:18px;
-
-  margin:0 0 18px;
-
-  color:#cbd5e1;
-  font-size:11px;
-}
-
-.marvel-map-legend span{
-  display:flex;
-  align-items:center;
-  gap:7px;
-}
-
-.legend-line{
-  display:inline-block;
-  width:30px;
-  height:3px;
-  border-radius:999px;
-}
-
-
-/* 直接つながる */
-
-.legend-line.direct{
-  background:#a78bfa;
-}
-
-
-/* マルチバース */
-
-.legend-line.multiverse{
-  height:0;
-  border-top:3px dashed #60a5fa;
-}
-
-
-/* 別世界 */
-
-.legend-line.separate{
-  height:0;
-  border-top:2px dotted #94a3b8;
-}
-
-
-
-/* マルチバース中央の光 */
-
-.marvel-multiverse{
-  position:relative;
-}
-
-.multiverse-glow{
-  position:absolute;
-
-  left:50%;
-  bottom:-10px;
-
-  width:72px;
-  height:24px;
-
-  transform:translateX(-50%);
-
-  background:
-    radial-gradient(
-      circle,
-      rgba(139,92,246,.55) 0%,
-      rgba(139,92,246,.15) 50%,
-      transparent 75%
-    );
-
-  filter:blur(5px);
-
-  pointer-events:none;
-}
-
-
-/* MCU本編との縦線 */
-
-.marvel-multiverse::after{
-  content:"";
-
-  position:absolute;
-
-  left:50%;
-  bottom:-14px;
-
-  width:2px;
-  height:14px;
-
-  transform:translateX(-50%);
-
-  background:
-    linear-gradient(
-      #a78bfa,
-      #7c3aed
-    );
-}
-
-
-/* スマホでは線を消して見やすく */
-
-@media(max-width:700px){
-
-  .marvel-map-card::before,
-  .marvel-map-card::after{
-    display:none !important;
-  }
-
-  .marvel-map-legend{
-    gap:10px;
-  }
-
-}
-    
   </style>
 </head>
 
@@ -1133,127 +1039,133 @@
 
 </section>
 
-<section class="marvel-map-section">
+<section class="marvel-universe-section">
 
-  <div class="marvel-map-heading">
-    <span class="marvel-map-badge">
-      🌐 上級者編
-    </span>
-
-    <h2>
-      マーベル作品のつながり図
-    </h2>
-
+  <div class="marvel-universe-heading">
+    <span class="marvel-universe-badge">🌐 上級者編</span>
+    <h2>マーベル作品のつながり図</h2>
     <p>
-      「マーベル＝全部MCU」ではありません。
-      MCUとは別の世界から始まったシリーズもあります。
+      別々の世界から始まった作品が、
+      マルチバースを通じてつながっていく様子を
+      わかりやすく整理しています。
     </p>
   </div>
 
-　<div class="marvel-map-legend">
+  <div class="marvel-universe-map">
 
-  <span>
-    <i class="legend-line direct"></i>
-    MCUと直接関係
-  </span>
+    <svg
+      class="marvel-universe-lines"
+      viewBox="0 0 1000 520"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+    >
+      <path class="map-line multiverse-line" d="M 260 90 C 360 90, 380 180, 455 220" />
+      <path class="map-line multiverse-line" d="M 260 260 C 360 260, 390 245, 455 240" />
+      <path class="map-line relation-line" d="M 260 430 C 350 430, 395 300, 455 260" />
+      <path class="map-line multiverse-line" d="M 740 90 C 640 90, 620 180, 545 220" />
+      <path class="map-line direct-line" d="M 740 260 C 640 260, 610 245, 545 240" />
+      <path class="map-line multiverse-line" d="M 740 430 C 650 430, 605 300, 545 260" />
+      <path class="map-line direct-line center-line" d="M 500 285 L 500 355" />
+    </svg>
 
-  <span>
-    <i class="legend-line multiverse"></i>
-    マルチバースで接点
-  </span>
-
-  <span>
-    <i class="legend-line separate"></i>
-    別世界・関連作品
-  </span>
-
-</div>
-  
-  <div class="marvel-map">
-
-    <div class="marvel-map-card">
-      <span>別世界からスタート</span>
-      <strong>❌ X-MEN系</strong>
-      <small>
-        X-MEN・ウルヴァリンなど
-      </small>
-    </div>
-
-    <div class="marvel-map-card">
-      <span>別世界からスタート</span>
-      <strong>🕷️ 旧スパイダーマン系</strong>
-      <small>
-        2000年代のスパイダーマン作品
-      </small>
-    </div>
-
-    <div class="marvel-map-center">
-
-      <div class="marvel-multiverse">
-
-  <span class="multiverse-glow"></span>
-
-  ✨ MULTIVERSE
-
-  <small>
-    マルチバース
-  </small>
-
-</div>
-
-      <div class="marvel-mcu">
-        <span>MAIN UNIVERSE</span>
-        <strong>MCU本編</strong>
-        <small>
-          『アイアンマン』から続く中心世界
-        </small>
+    <div class="marvel-side marvel-side-left">
+      <div class="universe-card">
+        <div class="universe-icon">✦</div>
+        <div>
+          <span class="universe-label">別世界からスタート</span>
+          <strong>X-MEN系</strong>
+          <small>X-MEN・ウルヴァリンなど</small>
+        </div>
       </div>
 
+      <div class="universe-card">
+        <div class="universe-icon">🎞️</div>
+        <div>
+          <span class="universe-label">別世界からスタート</span>
+          <strong>旧スパイダーマン系</strong>
+          <small>2000年代の映画シリーズ</small>
+        </div>
+      </div>
+
+      <div class="universe-card">
+        <div class="universe-icon">🌀</div>
+        <div>
+          <span class="universe-label">関連する別世界</span>
+          <strong>Sony系</strong>
+          <small>ヴェノムなどの関連作品</small>
+        </div>
+      </div>
     </div>
 
-    <div class="marvel-map-card">
-      <span>別世界からスタート</span>
-      <strong>🕸️ アメイジング系</strong>
-      <small>
-        アメイジング・スパイダーマン
-      </small>
+    <div class="marvel-center">
+      <div class="multiverse-space">
+        <div class="space-star star-1">✦</div>
+        <div class="space-star star-2">✧</div>
+        <div class="space-star star-3">✦</div>
+        <div class="multiverse-orbit orbit-1"></div>
+        <div class="multiverse-orbit orbit-2"></div>
+
+        <div class="multiverse-orb">
+          <span class="orb-icon">✨</span>
+          <strong>MULTIVERSE</strong>
+          <small>マルチバース</small>
+        </div>
+      </div>
+
+      <div class="mcu-main-card">
+        <span>MAIN UNIVERSE</span>
+        <strong>MCU本編</strong>
+        <small>『アイアンマン』から続く中心となる物語</small>
+      </div>
     </div>
 
-    <div class="marvel-map-card">
-      <span>関連シリーズ</span>
-      <strong>🔴 デッドプール系</strong>
-      <small>
-        X-MEN世界との関係も深いシリーズ
-      </small>
-    </div>
+    <div class="marvel-side marvel-side-right">
+      <div class="universe-card">
+        <div class="universe-icon">🎬</div>
+        <div>
+          <span class="universe-label">別世界からスタート</span>
+          <strong>アメイジング系</strong>
+          <small>アメイジング・スパイダーマン</small>
+        </div>
+      </div>
 
-    <div class="marvel-map-card">
-      <span>別シリーズ</span>
-      <strong>🕷️ Sony系</strong>
-      <small>
-        ヴェノムなどの関連作品
-      </small>
-    </div>
+      <div class="universe-card">
+        <div class="universe-icon">💥</div>
+        <div>
+          <span class="universe-label">MCUとの関係が深まる</span>
+          <strong>デッドプール系</strong>
+          <small>別世界から広がる関連作品</small>
+        </div>
+      </div>
 
-    <div class="marvel-map-card">
-      <span>さらに広がる世界</span>
-      <strong>🚀 Fantastic Four</strong>
-      <small>
-        MCUとの関係もチェック
-      </small>
+      <div class="universe-card">
+        <div class="universe-icon">🚀</div>
+        <div>
+          <span class="universe-label">MCUの別宇宙</span>
+          <strong>Fantastic Four</strong>
+          <small>マルチバースを通じて広がる世界</small>
+        </div>
+      </div>
     </div>
-
   </div>
 
-  <div class="marvel-map-note">
-    💡
-    <strong>ポイント：</strong>
-    これらはすべてマーベルに関係する作品ですが、
-    最初からすべて同じMCU世界として作られたわけではありません。
+  <div class="marvel-universe-legend">
+    <div><i class="legend-sample direct"></i>MCUとの強いつながり</div>
+    <div><i class="legend-sample multiverse"></i>マルチバースによる接点</div>
+    <div><i class="legend-sample relation"></i>関連する別世界</div>
+  </div>
+
+  <div class="marvel-universe-note">
+    <span>💡</span>
+    <p>
+      <strong>ポイント：</strong>
+      マーベル作品はすべて最初から同じ世界の物語だったわけではありません。
+      それぞれの世界が存在し、マルチバースによって関係が広がっています。
+    </p>
   </div>
 
 </section>
-    
+
     <section class="mcu-timeline-section">
 
   <div class="mcu-timeline-heading">
