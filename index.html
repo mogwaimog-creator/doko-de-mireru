@@ -4138,12 +4138,7 @@ body.search-mode:not(.show-other-search) .popular-section{
 ========================================================= */
 
 .home-section-nav{
-  display:grid;
-
-  grid-template-columns:
-    repeat(6,minmax(0,1fr))
-    auto;
-
+  display:flex;
   align-items:center;
   gap:8px;
 
@@ -4159,9 +4154,9 @@ body.search-mode:not(.show-other-search) .popular-section{
     0 3px 12px
     rgba(15,23,42,.06);
 }
-
 .home-section-nav a{
   flex:1;
+  min-width:0;
      
   display:flex;
   align-items:center;
@@ -4212,7 +4207,7 @@ body.search-mode:not(.show-other-search) .popular-section{
 }
 
 body.search-mode.show-other-search
-.home-section-nav-close{
+
   display:flex;
 }
 
@@ -4250,11 +4245,6 @@ body.search-mode.show-other-search
     font-size:12px;
   }
 
-  .home-section-nav-close{
-    grid-column:1 / -1;
-
-    width:100%;
-  }
 
 }
 
