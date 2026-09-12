@@ -429,21 +429,6 @@ if(
     providerIds[provider] || null;
 
 
-  // ---------------------------------------------------
-  // 今回は配信サービス選択時のみ検索
-  // ---------------------------------------------------
-
-  if(!providerId){
-
-    return res
-      .status(400)
-      .json({
-        error:
-          "配信サービスを選択してください。"
-      });
-
-  }
-
 
   // ---------------------------------------------------
   // 既存の配信サービス検索をそのまま利用
@@ -457,32 +442,223 @@ if(
       : type;
 
 
-const advancedResults =
-  await getProviderWorks(
-    apiKey,
-    providerId,
-    page,
-    country,
-    genre,
-    advancedProviderType
+let advancedResults;
+
+
+// ---------------------------------------------------
+// 配信サービスを指定した場合
+// → 今まで通りそのサービスだけ検索
+// ---------------------------------------------------
+
+if(providerId){
+
+  advancedResults =
+    await getProviderWorks(
+      apiKey,
+      providerId,
+      page,
+      country,
+      genre,
+      advancedProviderType
+    );
+
+}
+
+
+// ---------------------------------------------------
+// 配信サービスを指定しない場合
+// → 主要5サービスをまとめて検索
+// ---------------------------------------------------
+
+else{
+
+  const providerIdList = [
+    8,    // Netflix
+    9,    // Prime Video
+    84,   // U-NEXT
+    15,   // Hulu
+    337   // Disney+
+  ];
+
+
+  const providerResults =
+    await Promise.all(
+      providerIdList.map(
+        function(id){
+
+          return getProviderWorks(
+            apiKey,
+            id,
+            page,
+            country,
+            genre,
+            advancedProviderType
+          );
+
+        }
+      )
+    );
+
+
+  const workMap =
+    new Map();
+
+
+  providerResults.forEach(
+    function(group){
+
+      const works =
+        Array.isArray(group.results)
+          ? group.results
+          : [];
+
+
+      works.forEach(
+        function(work){
+
+          const key =
+            String(
+              work.content_type || ""
+            ) +
+            ":" +
+            String(
+              work.id || ""
+            );
+
+
+          if(!workMap.has(key)){
+
+            workMap.set(
+              key,
+              {
+                ...work,
+                streaming:
+                  Array.isArray(
+                    work.streaming
+                  )
+                    ? [...work.streaming]
+                    : []
+              }
+            );
+
+            return;
+
+          }
+
+
+          const existing =
+            workMap.get(key);
+
+
+          const streaming =
+            []
+              .concat(
+                existing.streaming || []
+              )
+              .concat(
+                work.streaming || []
+              );
+
+
+          const providerMap =
+            new Map();
+
+
+          streaming.forEach(
+            function(item){
+
+              if(
+                item &&
+                item.provider_id
+              ){
+
+                providerMap.set(
+                  String(
+                    item.provider_id
+                  ),
+                  item
+                );
+
+              }
+
+            }
+          );
+
+
+          existing.streaming =
+            Array.from(
+              providerMap.values()
+            );
+
+        }
+      );
+
+    }
   );
 
-  return res
-    .status(200)
-    .json({
 
-      results:
-        advancedResults.results || [],
+  const mergedResults =
+    Array.from(
+      workMap.values()
+    )
+      .sort(
+        function(a,b){
 
-      page:
-        advancedResults.page || page,
+          return (
+            Number(
+              b.vote_average || 0
+            ) -
+            Number(
+              a.vote_average || 0
+            )
+          );
 
-      hasMore:
-        Boolean(
-          advancedResults.hasMore
-        )
+        }
+      )
+      .slice(
+        0,
+        20
+      );
 
-    });
+
+  advancedResults = {
+
+    results:
+      mergedResults,
+
+    page:
+      page,
+
+    hasMore:
+      providerResults.some(
+        function(group){
+          return Boolean(
+            group.hasMore
+          );
+        }
+      )
+
+  };
+
+}
+
+
+return res
+  .status(200)
+  .json({
+
+    results:
+      advancedResults.results || [],
+
+    page:
+      advancedResults.page || page,
+
+    hasMore:
+      Boolean(
+        advancedResults.hasMore
+      )
+
+  });
 
 }
     
