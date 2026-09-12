@@ -462,7 +462,7 @@ const advancedResults =
     apiKey,
     providerId,
     page,
-    "",
+    country,
     genre,
     advancedProviderType
   );
