@@ -5625,12 +5625,11 @@ body.search-mode.show-other-search
           </label>
 
           <select id="advancedCountry">
-            <option value="">指定なし</option>
-            <option value="JP">日本</option>
-            <option value="US">アメリカ</option>
-            <option value="KR">韓国</option>
-            <option value="GB">イギリス</option>
-          </select>
+  <option value="">指定なし</option>
+  <option value="jp">日本</option>
+  <option value="kr">韓国</option>
+  <option value="other">日本・韓国以外</option>
+</select>
 
         </div>
 
@@ -10030,6 +10029,15 @@ if(advancedSearchSubmit){
           "advancedGenre"
         )?.value || "";
 
+const country =
+  document.getElementById(
+    "advancedCountry"
+  )?.value || "";
+         
+         const country =
+  document.getElementById(
+    "advancedCountry"
+  )?.value || "";
 
       // 配信サービスは現段階では必須
       if(!provider){
@@ -10078,6 +10086,12 @@ if(advancedSearchSubmit){
           );
         }
 
+       if(country){
+  params.set(
+    "country",
+    country
+  );
+}
 
         const response =
           await fetch(
