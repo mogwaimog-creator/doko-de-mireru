@@ -10204,7 +10204,12 @@ if(advancedSearchSubmit){
   document.getElementById(
     "advancedYear"
   )?.value || "";
-　　　　
+
+      const rating =
+  document.getElementById(
+    "advancedRating"
+  )?.value || "";   
+         
          
       try{
 
@@ -10262,6 +10267,15 @@ if(advancedSearchSubmit){
   params.set(
     "year",
     year
+  );
+
+}
+
+　　　if(rating){
+
+  params.set(
+    "rating",
+    rating
   );
 
 }
