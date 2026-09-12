@@ -630,6 +630,259 @@
   background:#f5f3ff;
   border-color:#8b5cf6;
 }
+
+/* =====================================================
+   マーベル作品 つながり図
+===================================================== */
+
+.marvel-map-section{
+  margin:0 0 24px;
+  padding:24px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #111827 0%,
+      #172033 55%,
+      #24163d 100%
+    );
+
+  border-radius:18px;
+  color:#ffffff;
+
+  box-shadow:
+    0 8px 24px
+    rgba(15,23,42,.15);
+}
+
+.marvel-map-heading{
+  text-align:center;
+  margin-bottom:20px;
+}
+
+.marvel-map-badge{
+  display:inline-block;
+  margin-bottom:8px;
+  padding:5px 11px;
+
+  background:rgba(139,92,246,.18);
+  border:1px solid rgba(196,181,253,.45);
+  border-radius:999px;
+
+  color:#ddd6fe;
+  font-size:12px;
+  font-weight:900;
+}
+
+.marvel-map-heading h2{
+  margin:0;
+  font-size:23px;
+}
+
+.marvel-map-heading p{
+  margin:7px auto 0;
+  max-width:650px;
+
+  color:#cbd5e1;
+  font-size:13px;
+  line-height:1.7;
+}
+
+
+/* 図本体 */
+
+.marvel-map{
+  display:grid;
+  grid-template-columns:
+    repeat(3,1fr);
+
+  gap:12px;
+  align-items:stretch;
+}
+
+
+/* 外側のシリーズ */
+
+.marvel-map-card{
+  min-height:95px;
+  padding:14px;
+
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+
+  background:
+    rgba(255,255,255,.07);
+
+  border:
+    1px solid
+    rgba(255,255,255,.14);
+
+  border-radius:13px;
+
+  text-align:center;
+}
+
+.marvel-map-card > span{
+  margin-bottom:5px;
+
+  color:#a78bfa;
+  font-size:10px;
+  font-weight:800;
+}
+
+.marvel-map-card strong{
+  font-size:15px;
+}
+
+.marvel-map-card small{
+  display:block;
+  margin-top:5px;
+
+  color:#cbd5e1;
+  font-size:11px;
+}
+
+
+/* 中央 */
+
+.marvel-map-center{
+  grid-column:2;
+  grid-row:1 / span 2;
+
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+
+  padding:15px;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(139,92,246,.20) 0%,
+      rgba(139,92,246,.05) 55%,
+      transparent 75%
+    );
+
+  border-radius:16px;
+}
+
+
+/* マルチバース */
+
+.marvel-multiverse{
+  margin-bottom:10px;
+  padding:9px;
+
+  text-align:center;
+
+  color:#ddd6fe;
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:1px;
+}
+
+.marvel-multiverse small{
+  display:block;
+  margin-top:2px;
+
+  color:#a78bfa;
+  font-size:10px;
+  letter-spacing:0;
+}
+
+
+/* MCU本編 */
+
+.marvel-mcu{
+  padding:22px 12px;
+
+  text-align:center;
+
+  background:
+    linear-gradient(
+      135deg,
+      #6d28d9,
+      #7c3aed,
+      #4f46e5
+    );
+
+  border:
+    1px solid
+    rgba(221,214,254,.65);
+
+  border-radius:15px;
+
+  box-shadow:
+    0 0 28px
+    rgba(139,92,246,.28);
+}
+
+.marvel-mcu span{
+  display:block;
+
+  color:#ddd6fe;
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:1px;
+}
+
+.marvel-mcu strong{
+  display:block;
+  margin-top:4px;
+
+  font-size:24px;
+}
+
+.marvel-mcu small{
+  display:block;
+  margin-top:5px;
+
+  color:#ede9fe;
+  font-size:11px;
+}
+
+
+/* 下の説明 */
+
+.marvel-map-note{
+  margin-top:16px;
+  padding:12px 15px;
+
+  background:
+    rgba(139,92,246,.10);
+
+  border:
+    1px solid
+    rgba(167,139,250,.25);
+
+  border-radius:11px;
+
+  color:#dbeafe;
+  font-size:12px;
+  line-height:1.7;
+}
+
+
+/* スマホ */
+
+@media(max-width:700px){
+
+  .marvel-map-section{
+    padding:18px 14px;
+  }
+
+  .marvel-map{
+    grid-template-columns:1fr;
+  }
+
+  .marvel-map-center{
+    grid-column:auto;
+    grid-row:auto;
+    order:-1;
+  }
+
+}
     
   </style>
 </head>
@@ -746,6 +999,101 @@
       🌐 マーベル作品のつながりを見る →
     </button>
 
+  </div>
+
+</section>
+
+<section class="marvel-map-section">
+
+  <div class="marvel-map-heading">
+    <span class="marvel-map-badge">
+      🌐 上級者編
+    </span>
+
+    <h2>
+      マーベル作品のつながり図
+    </h2>
+
+    <p>
+      「マーベル＝全部MCU」ではありません。
+      MCUとは別の世界から始まったシリーズもあります。
+    </p>
+  </div>
+
+  <div class="marvel-map">
+
+    <div class="marvel-map-card">
+      <span>別世界からスタート</span>
+      <strong>❌ X-MEN系</strong>
+      <small>
+        X-MEN・ウルヴァリンなど
+      </small>
+    </div>
+
+    <div class="marvel-map-card">
+      <span>別世界からスタート</span>
+      <strong>🕷️ 旧スパイダーマン系</strong>
+      <small>
+        2000年代のスパイダーマン作品
+      </small>
+    </div>
+
+    <div class="marvel-map-center">
+
+      <div class="marvel-multiverse">
+        ✨ MULTIVERSE
+        <small>マルチバース</small>
+      </div>
+
+      <div class="marvel-mcu">
+        <span>MAIN UNIVERSE</span>
+        <strong>MCU本編</strong>
+        <small>
+          『アイアンマン』から続く中心世界
+        </small>
+      </div>
+
+    </div>
+
+    <div class="marvel-map-card">
+      <span>別世界からスタート</span>
+      <strong>🕸️ アメイジング系</strong>
+      <small>
+        アメイジング・スパイダーマン
+      </small>
+    </div>
+
+    <div class="marvel-map-card">
+      <span>関連シリーズ</span>
+      <strong>🔴 デッドプール系</strong>
+      <small>
+        X-MEN世界との関係も深いシリーズ
+      </small>
+    </div>
+
+    <div class="marvel-map-card">
+      <span>別シリーズ</span>
+      <strong>🕷️ Sony系</strong>
+      <small>
+        ヴェノムなどの関連作品
+      </small>
+    </div>
+
+    <div class="marvel-map-card">
+      <span>さらに広がる世界</span>
+      <strong>🚀 Fantastic Four</strong>
+      <small>
+        MCUとの関係もチェック
+      </small>
+    </div>
+
+  </div>
+
+  <div class="marvel-map-note">
+    💡
+    <strong>ポイント：</strong>
+    これらはすべてマーベルに関係する作品ですが、
+    最初からすべて同じMCU世界として作られたわけではありません。
   </div>
 
 </section>
