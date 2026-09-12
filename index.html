@@ -4067,18 +4067,26 @@ font-weight:bold;
   margin:0 0 14px;
   padding:13px 18px;
 
-  border:1px solid #dbe3ef;
+  border:1px solid #bfdbfe;
   border-radius:12px;
 
-  background:#f8fafc;
-  color:#334155;
+  background:#eff6ff;
+  color:#2563eb;
 
   font-size:14px;
   font-weight:800;
 
   cursor:pointer;
-}
 
+  box-shadow:
+    0 3px 10px
+    rgba(37,99,235,.08);
+
+  transition:
+    background .2s ease,
+    border-color .2s ease,
+    box-shadow .2s ease;
+}
 
 /* 検索した時だけボタンを表示 */
 
@@ -4102,9 +4110,12 @@ body.search-mode:not(.show-other-search) .popular-section{
 /* ボタン */
 
 .other-search-toggle:hover{
-  background:#eff6ff;
+  background:#dbeafe;
   border-color:#93c5fd;
-  color:#2563eb;
+
+  box-shadow:
+    0 4px 12px
+    rgba(37,99,235,.14);
 }
      
 </style>
