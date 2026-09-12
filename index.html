@@ -6532,23 +6532,188 @@ if(currentSearchType === "anime"){
       .join("");
 
 }
-if (data.hasMore) {
+if(data.hasMore){
 
   results.insertAdjacentHTML(
     "beforeend",
     `
     <div class="load-more-wrapper">
       <button
-        id="loadMoreButton"
+        id="advancedLoadMoreButton"
         type="button"
         class="load-more-button"
-        onclick="loadMoreMovies()"
       >
         さらに20件表示
       </button>
     </div>
     `
   );
+
+
+  let advancedNextPage = 2;
+
+
+  const advancedLoadMoreButton =
+    document.getElementById(
+      "advancedLoadMoreButton"
+    );
+
+
+  if(advancedLoadMoreButton){
+
+    advancedLoadMoreButton.addEventListener(
+      "click",
+      async function(){
+
+        advancedLoadMoreButton.disabled =
+          true;
+
+        advancedLoadMoreButton.textContent =
+          "読み込み中…";
+
+
+        try{
+
+          const nextParams =
+            new URLSearchParams(
+              params.toString()
+            );
+
+
+          nextParams.set(
+            "page",
+            String(
+              advancedNextPage
+            )
+          );
+
+
+          const nextResponse =
+            await fetch(
+              "/api/search?" +
+              nextParams.toString()
+            );
+
+
+          if(!nextResponse.ok){
+
+            throw new Error(
+              "追加読み込みに失敗しました。"
+            );
+
+          }
+
+
+          const nextData =
+            await nextResponse.json();
+
+
+          const nextMovies =
+            Array.isArray(
+              nextData.results
+            )
+              ? nextData.results
+              : [];
+
+
+          const loadMoreWrapper =
+            advancedLoadMoreButton
+              .closest(
+                ".load-more-wrapper"
+              );
+
+
+          if(loadMoreWrapper){
+
+            loadMoreWrapper.remove();
+
+          }
+
+
+          results.insertAdjacentHTML(
+            "beforeend",
+            nextMovies
+              .map(
+                createMovieCard
+              )
+              .join("")
+          );
+
+
+          const currentCount =
+            results.querySelectorAll(
+              ".movie-card"
+            ).length;
+
+
+          if(searchResultsHeading){
+
+            searchResultsHeading.textContent =
+              "🔎 こだわり検索の結果（" +
+              currentCount +
+              "件）";
+
+          }
+
+
+          advancedNextPage++;
+
+
+          if(nextData.hasMore){
+
+            results.insertAdjacentHTML(
+              "beforeend",
+              `
+              <div class="load-more-wrapper">
+                <button
+                  id="advancedLoadMoreButton"
+                  type="button"
+                  class="load-more-button"
+                >
+                  さらに20件表示
+                </button>
+              </div>
+              `
+            );
+
+
+            const newButton =
+              document.getElementById(
+                "advancedLoadMoreButton"
+              );
+
+
+            if(newButton){
+
+              advancedLoadMoreButton.replaceWith(
+                newButton
+              );
+
+            }
+
+          }
+
+        }
+        catch(error){
+
+          console.error(
+            "ADVANCED LOAD MORE ERROR:",
+            error
+          );
+
+
+          advancedLoadMoreButton.disabled =
+            false;
+
+          advancedLoadMoreButton.textContent =
+            "さらに20件表示";
+
+        }
+
+      }
+    );
+
+  }
 
 }
        
@@ -10008,6 +10173,7 @@ const advancedSearchSubmit =
     "advancedSearchSubmit"
   );
 
+
 if(advancedSearchSubmit){
 
   advancedSearchSubmit.addEventListener(
@@ -10025,16 +10191,15 @@ if(advancedSearchSubmit){
         )?.value || "";
 
       const genre =
-  document.getElementById(
-    "advancedGenre"
-  )?.value || "";
+        document.getElementById(
+          "advancedGenre"
+        )?.value || "";
 
-const country =
-  document.getElementById(
-    "advancedCountry"
-  )?.value || "";
+      const country =
+        document.getElementById(
+          "advancedCountry"
+        )?.value || "";
 
-      
 
       try{
 
@@ -10048,34 +10213,50 @@ const country =
         const params =
           new URLSearchParams();
 
+
         params.set(
           "advancedSearch",
           "1"
         );
 
-　　　　　params.set(
+
+        params.set(
           "provider",
           provider
-　　　　　 );
+        );
 
-　　　　　params.set(
-　　　　　"type",
-　　　　　type || "all"
-     　　);
-        
-           if(genre){
+
+        params.set(
+          "type",
+          type || "all"
+        );
+
+
+        if(genre){
+
           params.set(
             "genre",
             genre
           );
+
         }
 
-       if(country){
-  params.set(
-    "country",
-    country
-  );
-}
+
+        if(country){
+
+          params.set(
+            "country",
+            country
+          );
+
+        }
+
+
+        params.set(
+          "page",
+          "1"
+        );
+
 
         const response =
           await fetch(
@@ -10097,99 +10278,266 @@ const country =
           await response.json();
 
 
-       // ---------------------------------------------------------
-// こだわり検索結果を表示
-// ---------------------------------------------------------
+        // ---------------------------------------------------------
+        // こだわり検索結果を表示
+        // ---------------------------------------------------------
 
-const advancedMovies =
-  Array.isArray(
-    data.results
-  )
-    ? data.results
-    : [];
-
-
-const searchResultsHeading =
-  document.getElementById(
-    "searchResultsHeading"
-  );
+        const advancedMovies =
+          Array.isArray(
+            data.results
+          )
+            ? data.results
+            : [];
 
 
-// 検索結果モードにする
-document.body.classList.add(
-  "search-mode"
-);
-
-document.body.classList.remove(
-  "show-other-search"
-);
+        const searchResultsHeading =
+          document.getElementById(
+            "searchResultsHeading"
+          );
 
 
-// 他の検索方法ボタンを戻す
-if(otherSearchToggle){
+        // 検索結果モードにする
+        document.body.classList.add(
+          "search-mode"
+        );
 
-  otherSearchToggle.style.display =
-    "block";
-
-}
-
-
-// 見出し
-if(searchResultsHeading){
-
-  searchResultsHeading.textContent =
-    "🔎 こだわり検索の結果（" +
-    advancedMovies.length +
-    "件）";
-
-}
+        document.body.classList.remove(
+          "show-other-search"
+        );
 
 
-// 結果表示
-status.innerHTML =
-  "";
+        // 他の検索方法ボタンを戻す
+        if(otherSearchToggle){
 
-results.innerHTML =
-  advancedMovies.length
-    ? advancedMovies
-        .map(
-          createMovieCard
-        )
-        .join("")
-    : `
-      <div class="empty">
-        条件に合う作品が見つかりませんでした。
-      </div>
-    `;
+          otherSearchToggle.style.display =
+            "block";
 
-if(data.hasMore){
+        }
 
-  results.insertAdjacentHTML(
-    "beforeend",
-    `
-    <div class="load-more-wrapper">
-      <button
-        id="advancedLoadMoreButton"
-        type="button"
-        class="load-more-button"
-      >
-        さらに20件表示
-      </button>
-    </div>
-    `
-  );
 
-}           
+        // 見出し
+        if(searchResultsHeading){
 
-// 検索結果まで移動
-if(searchResultsHeading){
+          searchResultsHeading.textContent =
+            "🔎 こだわり検索の結果（" +
+            advancedMovies.length +
+            "件）";
 
-  searchResultsHeading.scrollIntoView({
-    behavior:"smooth",
-    block:"start"
-  });
+        }
 
-}
+
+        // 結果表示
+        status.innerHTML =
+          "";
+
+
+        results.innerHTML =
+          advancedMovies.length
+            ? advancedMovies
+                .map(
+                  createMovieCard
+                )
+                .join("")
+            : `
+              <div class="empty">
+                条件に合う作品が見つかりませんでした。
+              </div>
+            `;
+
+
+        // ---------------------------------------------------------
+        // さらに20件表示
+        // ---------------------------------------------------------
+
+        let advancedNextPage = 2;
+
+
+        function addAdvancedLoadMoreButton(){
+
+          const oldWrapper =
+            results.querySelector(
+              ".advanced-load-more-wrapper"
+            );
+
+
+          if(oldWrapper){
+
+            oldWrapper.remove();
+
+          }
+
+
+          const wrapper =
+            document.createElement(
+              "div"
+            );
+
+          wrapper.className =
+            "load-more-wrapper advanced-load-more-wrapper";
+
+
+          const button =
+            document.createElement(
+              "button"
+            );
+
+          button.type =
+            "button";
+
+          button.className =
+            "load-more-button";
+
+          button.textContent =
+            "さらに20件表示";
+
+
+          wrapper.appendChild(
+            button
+          );
+
+          results.appendChild(
+            wrapper
+          );
+
+
+          button.addEventListener(
+            "click",
+            async function(){
+
+              button.disabled =
+                true;
+
+              button.textContent =
+                "読み込み中…";
+
+
+              try{
+
+                const nextParams =
+                  new URLSearchParams(
+                    params.toString()
+                  );
+
+
+                nextParams.set(
+                  "page",
+                  String(
+                    advancedNextPage
+                  )
+                );
+
+
+                const nextResponse =
+                  await fetch(
+                    "/api/search?" +
+                    nextParams.toString()
+                  );
+
+
+                if(!nextResponse.ok){
+
+                  throw new Error(
+                    "追加読み込みに失敗しました。"
+                  );
+
+                }
+
+
+                const nextData =
+                  await nextResponse.json();
+
+
+                const nextMovies =
+                  Array.isArray(
+                    nextData.results
+                  )
+                    ? nextData.results
+                    : [];
+
+
+                // 今の「さらに20件表示」ボタンを消す
+                wrapper.remove();
+
+
+                // 次の作品を追加
+                results.insertAdjacentHTML(
+                  "beforeend",
+                  nextMovies
+                    .map(
+                      createMovieCard
+                    )
+                    .join("")
+                );
+
+
+                // 現在の表示件数
+                const currentCount =
+                  results.querySelectorAll(
+                    ".movie-card"
+                  ).length;
+
+
+                if(searchResultsHeading){
+
+                  searchResultsHeading.textContent =
+                    "🔎 こだわり検索の結果（" +
+                    currentCount +
+                    "件）";
+
+                }
+
+
+                advancedNextPage++;
+
+
+                // まだ続きがあれば
+                // 新しい「さらに20件表示」を出す
+                if(nextData.hasMore){
+
+                  addAdvancedLoadMoreButton();
+
+                }
+
+              }
+              catch(error){
+
+                console.error(
+                  "ADVANCED LOAD MORE ERROR:",
+                  error
+                );
+
+
+                button.disabled =
+                  false;
+
+                button.textContent =
+                  "さらに20件表示";
+
+              }
+
+            }
+          );
+
+        }
+
+
+        // 最初の20件より先がある場合だけ表示
+        if(data.hasMore){
+
+          addAdvancedLoadMoreButton();
+
+        }
+
+
+        // 検索結果まで移動
+        if(searchResultsHeading){
+
+          searchResultsHeading.scrollIntoView({
+            behavior:"smooth",
+            block:"start"
+          });
+
+        }
 
       }
       catch(error){
