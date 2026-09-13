@@ -1546,81 +1546,6 @@ html{
 
 }
 
-/* =====================================================
-   PHASEごとの作品カード色分け
-   ===================================================== */
-
-/* PHASE 1：赤 */
-.phase-cards-1 .mcu-card{
-  background:
-    linear-gradient(
-      135deg,
-      #ffffff 0%,
-      #fff7f8 100%
-    );
-
-  border-color:#fecdd3;
-}
-
-/* PHASE 2：オレンジ */
-.phase-cards-2 .mcu-card{
-  background:
-    linear-gradient(
-      135deg,
-      #ffffff 0%,
-      #fff8f2 100%
-    );
-
-  border-color:#fed7aa;
-}
-
-/* PHASE 3：黄色 */
-.phase-cards-3 .mcu-card{
-  background:
-    linear-gradient(
-      135deg,
-      #ffffff 0%,
-      #fffceb 100%
-    );
-
-  border-color:#fde68a;
-}
-
-/* PHASE 4：青 */
-.phase-cards-4 .mcu-card{
-  background:
-    linear-gradient(
-      135deg,
-      #ffffff 0%,
-      #f2f8ff 100%
-    );
-
-  border-color:#bfdbfe;
-}
-
-/* PHASE 5：紫 */
-.phase-cards-5 .mcu-card{
-  background:
-    linear-gradient(
-      135deg,
-      #ffffff 0%,
-      #faf5ff 100%
-    );
-
-  border-color:#ddd6fe;
-}
-
-/* PHASE 6：緑 */
-.phase-cards-6 .mcu-card{
-  background:
-    linear-gradient(
-      135deg,
-      #ffffff 0%,
-      #f0fdfa 100%
-    );
-
-  border-color:#99f6e4;
-}
 
 /* =====================================================
    PHASE BOX テスト版
@@ -1693,6 +1618,71 @@ html{
     0 3px 12px
     rgba(0,0,0,.12);
 }    
+
+/* =====================================================
+   PHASE 1 全体BOX
+===================================================== */
+
+.phase-box{
+  position:relative;
+  padding:0 14px 14px;
+  border-radius:18px;
+  overflow:hidden;
+}
+
+
+/* PHASE 1 */
+
+.phase-box-1{
+  background:
+    linear-gradient(
+      135deg,
+      #1b263a 0%,
+      #1d2739 60%,
+      #2a2029 100%
+    );
+
+  border:1px solid rgba(239,68,68,.24);
+
+  /* 左の赤ラインを上から下まで通す */
+  border-left:4px solid #ef4444;
+
+  box-shadow:
+    0 7px 20px rgba(15,23,42,.10);
+}
+
+
+/* 上の見出し */
+
+.phase-box-1 .mcu-phase-heading{
+  margin-left:-14px;
+  margin-right:-14px;
+  margin-bottom:14px;
+
+  /* 外側BOXに赤ラインがあるので
+     見出し自身の左線は消す */
+  border-left:none;
+
+  border-radius:14px 17px 0 0;
+
+  box-shadow:none;
+}
+
+
+/* 中の作品カード */
+
+.phase-box-1 .mcu-card{
+  background:#ffffff;
+
+  border:
+    1px solid
+    rgba(239,68,68,.23);
+
+  box-shadow:
+    0 3px 12px
+    rgba(0,0,0,.11);
+}
+
     
   </style>
 </head>
@@ -2059,7 +2049,7 @@ html{
 
 </div>
 
-<div class="mcu-list phase-cards-1">
+<div class="mcu-list">
 
   <a
     href="detail.html?id=1726"
