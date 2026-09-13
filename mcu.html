@@ -1621,6 +1621,74 @@ html{
 
   border-color:#99f6e4;
 }
+
+/* =====================================================
+   PHASE BOX テスト版
+   まずは PHASE 1 のみ
+===================================================== */
+
+.phase-box{
+  padding:0 14px 14px;
+
+  border-radius:18px;
+
+  overflow:hidden;
+}
+
+
+/* PHASE 1 全体 */
+
+.phase-box-1{
+  background:
+    linear-gradient(
+      135deg,
+      #172033 0%,
+      #182033 60%,
+      #241b26 100%
+    );
+
+  border:
+    1px solid
+    rgba(239,68,68,.32);
+
+  box-shadow:
+    0 7px 20px
+    rgba(15,23,42,.10);
+}
+
+
+/* 見出しを外側BOXと自然につなげる */
+
+.phase-box-1 .mcu-phase-heading{
+  margin-left:-14px;
+  margin-right:-14px;
+
+  border-radius:17px 17px 0 0;
+
+  box-shadow:none;
+}
+
+
+/* 作品一覧との間隔 */
+
+.phase-box-1 .mcu-list{
+  margin-top:14px;
+}
+
+
+/* 中の作品カードは白 */
+
+.phase-box-1 .mcu-card{
+  background:#ffffff;
+
+  border:
+    1px solid
+    rgba(239,68,68,.25);
+
+  box-shadow:
+    0 3px 12px
+    rgba(0,0,0,.12);
+}    
     
   </style>
 </head>
@@ -1964,7 +2032,7 @@ html{
 
     <main>
 
-      <section class="mcu-list-section">
+      <section class="mcu-list-section phase-box phase-box-1">
 
         <div id="phase1" class="mcu-phase-heading phase-heading-1">
 
