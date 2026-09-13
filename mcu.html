@@ -553,56 +553,58 @@ html{
 
 /* マウスを乗せた時 */
 
-.mcu-phase:hover{
-  transform:translateY(-4px) scale(1.025);
+/* マウスを乗せた時
+   位置・大きさは変えず発光だけ強くする */
 
-  filter:brightness(1.12);
+.mcu-phase:hover{
+  transform:none;
+  filter:brightness(1.08);
 }
 
-.phase-1:hover{
+ .phase-1:hover{
   box-shadow:
-    0 12px 22px rgba(15,23,42,.30),
-    0 0 15px rgba(251,113,133,.72),
-    0 9px 24px rgba(239,68,68,.34);
+    0 7px 14px rgba(15,23,42,.25),
+    0 0 16px rgba(251,113,133,.75),
+    0 0 28px rgba(239,68,68,.32);
 }
 
 .phase-2:hover{
   box-shadow:
-    0 12px 22px rgba(15,23,42,.30),
-    0 0 15px rgba(251,146,60,.72),
-    0 9px 24px rgba(249,115,22,.34);
+    0 7px 14px rgba(15,23,42,.25),
+    0 0 16px rgba(251,146,60,.75),
+    0 0 28px rgba(249,115,22,.32);
 }
 
 .phase-3:hover{
   box-shadow:
-    0 12px 22px rgba(15,23,42,.30),
-    0 0 15px rgba(250,204,21,.70),
-    0 9px 24px rgba(234,179,8,.32);
+    0 7px 14px rgba(15,23,42,.25),
+    0 0 16px rgba(250,204,21,.74),
+    0 0 28px rgba(234,179,8,.30);
 }
 
 .phase-4:hover{
   box-shadow:
-    0 12px 22px rgba(15,23,42,.30),
-    0 0 16px rgba(56,189,248,.78),
-    0 9px 25px rgba(59,130,246,.38);
+    0 7px 14px rgba(15,23,42,.25),
+    0 0 17px rgba(56,189,248,.80),
+    0 0 30px rgba(59,130,246,.34);
 }
 
 .phase-5:hover{
   box-shadow:
-    0 12px 22px rgba(15,23,42,.30),
-    0 0 16px rgba(192,132,252,.78),
-    0 9px 25px rgba(168,85,247,.38);
+    0 7px 14px rgba(15,23,42,.25),
+    0 0 17px rgba(192,132,252,.80),
+    0 0 30px rgba(168,85,247,.34);
 }
 
 .phase-6:hover{
   box-shadow:
-    0 12px 22px rgba(15,23,42,.30),
-    0 0 16px rgba(45,212,191,.78),
-    0 9px 25px rgba(20,184,166,.38);
+    0 7px 14px rgba(15,23,42,.25),
+    0 0 17px rgba(45,212,191,.80),
+    0 0 30px rgba(20,184,166,.34);
 }
 .mcu-phase:active{
-  transform:translateY(-1px) scale(.99);
-}   
+  transform:none;
+}
     
 /* 年表ライン */
 
@@ -3174,9 +3176,9 @@ html{
   ↑ TOPへ
 </button>
 
+<script>
 const backToTop =
   document.getElementById("backToTop");
-
 
 window.addEventListener(
   "scroll",
@@ -3195,7 +3197,6 @@ window.addEventListener(
   }
 );
 
-
 backToTop.addEventListener(
   "click",
   () => {
@@ -3207,6 +3208,7 @@ backToTop.addEventListener(
 
   }
 );
-  
+</script>
+
 </body>
 </html>
