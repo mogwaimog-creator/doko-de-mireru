@@ -428,7 +428,138 @@
   background:rgba(16,185,129,.25);
 }
 
+html{
+  scroll-behavior:smooth;
+}
 
+.mcu-phase{
+  position:relative;
+  z-index:2;
+
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+
+  min-width:120px;
+
+  padding:14px 16px;
+
+  border-radius:16px;
+
+  text-decoration:none;
+  color:inherit;
+
+  background:rgba(255,255,255,.96);
+
+  border:1px solid rgba(148,163,184,.28);
+
+  box-shadow:
+    0 7px 18px rgba(15,23,42,.10),
+    inset 0 1px 0 rgba(255,255,255,.85);
+
+  cursor:pointer;
+
+  transition:
+    transform .22s ease,
+    box-shadow .22s ease,
+    border-color .22s ease,
+    filter .22s ease;
+}
+
+.mcu-phase:hover{
+  transform:translateY(-4px) scale(1.03);
+
+  box-shadow:
+    0 12px 28px rgba(15,23,42,.16),
+    0 0 20px rgba(96,165,250,.18);
+
+  filter:brightness(1.03);
+}
+
+.mcu-phase:active{
+  transform:translateY(-1px) scale(.99);
+}
+
+.phase-1{
+  border-color:rgba(239,68,68,.38);
+  box-shadow:
+    0 7px 18px rgba(15,23,42,.10),
+    0 0 18px rgba(239,68,68,.12);
+}
+
+.phase-2{
+  border-color:rgba(249,115,22,.38);
+  box-shadow:
+    0 7px 18px rgba(15,23,42,.10),
+    0 0 18px rgba(249,115,22,.12);
+}
+
+.phase-3{
+  border-color:rgba(234,179,8,.38);
+  box-shadow:
+    0 7px 18px rgba(15,23,42,.10),
+    0 0 18px rgba(234,179,8,.12);
+}
+
+.phase-4{
+  border-color:rgba(59,130,246,.38);
+  box-shadow:
+    0 7px 18px rgba(15,23,42,.10),
+    0 0 18px rgba(59,130,246,.12);
+}
+
+.phase-5{
+  border-color:rgba(139,92,246,.38);
+  box-shadow:
+    0 7px 18px rgba(15,23,42,.10),
+    0 0 18px rgba(139,92,246,.12);
+}
+
+.phase-6{
+  border-color:rgba(168,85,247,.42);
+  box-shadow:
+    0 7px 18px rgba(15,23,42,.10),
+    0 0 20px rgba(168,85,247,.14);
+}
+    
+.phase-1:hover{
+  box-shadow:
+    0 12px 28px rgba(15,23,42,.15),
+    0 0 26px rgba(239,68,68,.22);
+}
+
+.phase-2:hover{
+  box-shadow:
+    0 12px 28px rgba(15,23,42,.15),
+    0 0 26px rgba(249,115,22,.22);
+}
+
+.phase-3:hover{
+  box-shadow:
+    0 12px 28px rgba(15,23,42,.15),
+    0 0 26px rgba(234,179,8,.22);
+}
+
+.phase-4:hover{
+  box-shadow:
+    0 12px 28px rgba(15,23,42,.15),
+    0 0 26px rgba(59,130,246,.22);
+}
+
+.phase-5:hover{
+  box-shadow:
+    0 12px 28px rgba(15,23,42,.15),
+    0 0 26px rgba(139,92,246,.22);
+}
+
+.phase-6:hover{
+  box-shadow:
+    0 12px 28px rgba(15,23,42,.15),
+    0 0 28px rgba(168,85,247,.24);
+}
+
+    
 /* 年表ライン */
 
 .mcu-timeline-line{
@@ -1547,36 +1678,35 @@
 
     <div class="mcu-timeline">
 
-      <div class="mcu-phase phase-1">
-        <span>PHASE 1</span>
-        <strong>2008–2012</strong>
-      </div>
+      <a href="#phase1" class="mcu-phase phase-1">
+  <span>PHASE 1</span>
+  <strong>2008–2012</strong>
+</a>
 
-      <div class="mcu-phase phase-2">
-        <span>PHASE 2</span>
-        <strong>2013–2015</strong>
-      </div>
+<a href="#phase2" class="mcu-phase phase-2">
+  <span>PHASE 2</span>
+  <strong>2013–2015</strong>
+</a>
 
-      <div class="mcu-phase phase-3">
-        <span>PHASE 3</span>
-        <strong>2016–2019</strong>
-      </div>
+<a href="#phase3" class="mcu-phase phase-3">
+  <span>PHASE 3</span>
+  <strong>2016–2019</strong>
+</a>
 
-      <div class="mcu-phase phase-4">
-        <span>PHASE 4</span>
-        <strong>2021–2022</strong>
-      </div>
+<a href="#phase4" class="mcu-phase phase-4">
+  <span>PHASE 4</span>
+  <strong>2021–2022</strong>
+</a>
 
-      <div class="mcu-phase phase-5">
-        <span>PHASE 5</span>
-        <strong>2023–2025</strong>
-      </div>
+<a href="#phase5" class="mcu-phase phase-5">
+  <span>PHASE 5</span>
+  <strong>2023–2025</strong>
+</a>
 
-      <div class="mcu-phase phase-6">
-        <span>PHASE 6</span>
-        <strong>2025–</strong>
-      </div>
-
+<a href="#phase6" class="mcu-phase phase-6">
+  <span>PHASE 6</span>
+  <strong>2025–</strong>
+</a>
 
       <div class="mcu-timeline-line">
 
@@ -1628,7 +1758,7 @@
 
       <section class="mcu-list-section">
 
-        <div class="mcu-phase-heading phase-heading-1">
+        <div id="phase1" class="mcu-phase-heading phase-heading-1">
 
   <div class="mcu-phase-heading-number">
     PHASE 1
@@ -1884,7 +2014,7 @@
      PHASE 2
 ===================================================== -->
 
-<div class="mcu-phase-heading phase-heading-2" style="margin-top:32px;">
+<div id="phase1" class="mcu-phase-heading phase-heading-2" style="margin-top:32px;">
 
   <div class="mcu-phase-heading-number">
     PHASE 2
@@ -2015,7 +2145,7 @@
      PHASE 3
 ===================================================== -->
 
-<div class="mcu-phase-heading phase-heading-3" style="margin-top:32px;">
+<div id="phase1" class="mcu-phase-heading phase-heading-3" style="margin-top:32px;">
 
   <div class="mcu-phase-heading-number">
     PHASE 3
@@ -2232,7 +2362,7 @@
      PHASE 4
 ===================================================== -->
 
-<div class="mcu-phase-heading phase-heading-4" style="margin-top:32px;">
+<div id="phase1" class="mcu-phase-heading phase-heading-4" style="margin-top:32px;">
 
   <div class="mcu-phase-heading-number">
     PHASE 4
@@ -2510,7 +2640,7 @@
      PHASE 5
 ===================================================== -->
 
-<div class="mcu-phase-heading phase-heading-5" style="margin-top:32px;">
+<div id="phase1" class="mcu-phase-heading phase-heading-5" style="margin-top:32px;">
   <div class="mcu-phase-heading-number">PHASE 5</div>
   <div class="mcu-phase-heading-text">
     <h2>新たなヒーローたちと、次の大きな物語へ</h2>
@@ -2736,7 +2866,7 @@
      PHASE 6
 ===================================================== -->
 
-<div class="mcu-phase-heading phase-heading-6" style="margin-top:32px;">
+<div id="phase1" class="mcu-phase-heading phase-heading-6" style="margin-top:32px;">
 
   <div class="mcu-phase-heading-number">
     PHASE 6
