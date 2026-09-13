@@ -1457,7 +1457,85 @@ html{
   font-weight:700;
 }
     
+/* =========================
+   TOPへ戻るボタン
+========================= */
 
+#backToTop{
+  position:fixed;
+  right:max(
+  20px,
+  calc((100vw - 1200px) / 2 + 20px)
+);
+  bottom:28px;
+
+  z-index:9999;
+
+  border:none;
+  border-radius:999px;
+
+  padding:12px 18px;
+
+  font-size:14px;
+  font-weight:800;
+  color:#fff;
+
+  cursor:pointer;
+
+  background:
+    linear-gradient(
+      135deg,
+      #4f72ff,
+      #7c5cff
+    );
+
+  box-shadow:
+    0 0 12px rgba(91,108,255,.45),
+    0 6px 18px rgba(20,30,80,.20);
+
+  opacity:0;
+  visibility:hidden;
+
+  transition:
+    opacity .25s ease,
+    visibility .25s ease,
+    box-shadow .25s ease;
+}
+
+
+/* 表示中 */
+
+#backToTop.show{
+  opacity:1;
+  visibility:visible;
+}
+
+
+/* マウスを乗せた時
+   ※浮かせず発光だけ強くする */
+
+#backToTop:hover{
+  box-shadow:
+    0 0 18px rgba(91,108,255,.75),
+    0 0 30px rgba(124,92,255,.40),
+    0 6px 18px rgba(20,30,80,.20);
+}
+
+
+/* スマホ */
+
+@media (max-width:600px){
+
+  #backToTop{
+    right:16px;
+    bottom:18px;
+
+    padding:10px 15px;
+    font-size:13px;
+  }
+
+}
+    
   </style>
 </head>
 
@@ -3092,5 +3170,43 @@ html{
 
   </div>
 
+<button id="backToTop" aria-label="ページ上部へ戻る">
+  ↑ TOPへ
+</button>
+
+const backToTop =
+  document.getElementById("backToTop");
+
+
+window.addEventListener(
+  "scroll",
+  () => {
+
+    if(window.scrollY > 500){
+
+      backToTop.classList.add("show");
+
+    }else{
+
+      backToTop.classList.remove("show");
+
+    }
+
+  }
+);
+
+
+backToTop.addEventListener(
+  "click",
+  () => {
+
+    window.scrollTo({
+      top:0,
+      behavior:"smooth"
+    });
+
+  }
+);
+  
 </body>
 </html>
