@@ -1715,31 +1715,33 @@ html{
   flex-direction:column;
 }
 
-/* =====================================================
-   MCU 全作品タイトル統一
-===================================================== */
-
+/* タイトルは基本2行分を確保 */
 .phase-box .mcu-card .mcu-title{
   min-height:46px;
   margin-bottom:5px;
-
   font-size:17px;
   line-height:1.35;
-  font-weight:900;
-
   display:-webkit-box;
   -webkit-box-orient:vertical;
   -webkit-line-clamp:2;
-
   overflow:hidden;
 }
 
-/* 長いタイトルだけ少し小さくする */
-.phase-box .mcu-card .mcu-title-long{
-  font-size:14px;
-  line-height:1.4;
-  letter-spacing:-0.35px;
+/*
+  PHASE 4は現在の表示を維持。
+  全作品タイトルの最終統一時に、この例外も一緒に整理する。
+*/
+.phase-box-4 .mcu-card .mcu-title{
+  display:block;
+  overflow:visible;
 }
+
+/* PHASE 1で既に使っている長いタイトル用 */
+.phase-box-1 .mcu-title-long{
+  font-size:14px;
+  letter-spacing:-0.4px;
+}
+
 .phase-box .mcu-card .mcu-card-meta-row{
   display:flex;
   align-items:center;
@@ -2260,8 +2262,12 @@ a.mcu-tab{
 </div>
 
 <div
+  
+ 
+
   class="mcu-logo-test mcu-provider-logos"
   data-id="1726"
+  data-type="movie"
 ></div>
 
 <div class="mcu-detail-link">作品詳細を見る →</div>
@@ -2272,8 +2278,7 @@ a.mcu-tab{
   </a>
 
 
-  <a
-    <a href="detail.html?id=1724" class="mcu-card mcu-card-test">
+  <a href="detail.html?id=1724" class="mcu-card mcu-card-test">
 
   <div class="mcu-number">2</div>
 
@@ -2296,7 +2301,11 @@ a.mcu-tab{
         <span class="mcu-type mcu-type-movie">🎬 映画</span>
       </div>
 
-      <div class="mcu-logo-test">
+      <div 
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="1724"
+  data-type="movie"
+>
         <span></span><span></span><span></span>
         <span></span><span></span><span></span>
       </div>
@@ -2335,7 +2344,11 @@ a.mcu-tab{
         <span class="mcu-type mcu-type-movie">🎬 映画</span>
       </div>
 
-      <div class="mcu-logo-test">
+      <div 
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="10138"
+  data-type="movie"
+>
         <span></span><span></span><span></span>
         <span></span><span></span><span></span>
       </div>
@@ -2374,7 +2387,11 @@ a.mcu-tab{
         <span class="mcu-type mcu-type-movie">🎬 映画</span>
       </div>
 
-      <div class="mcu-logo-test">
+      <div 
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="10195"
+  data-type="movie"
+>
         <span></span><span></span><span></span>
         <span></span><span></span><span></span>
       </div>
@@ -2413,7 +2430,11 @@ a.mcu-tab{
         <span class="mcu-type mcu-type-movie">🎬 映画</span>
       </div>
 
-      <div class="mcu-logo-test">
+      <div 
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="1771"
+  data-type="movie"
+>
         <span></span><span></span><span></span>
         <span></span><span></span><span></span>
       </div>
@@ -2452,7 +2473,11 @@ a.mcu-tab{
         <span class="mcu-type mcu-type-movie">🎬 映画</span>
       </div>
 
-      <div class="mcu-logo-test">
+      <div 
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="24428"
+  data-type="movie"
+>
         <span></span><span></span><span></span>
         <span></span><span></span><span></span>
       </div>
@@ -2526,7 +2551,11 @@ a.mcu-tab{
           <span class="mcu-type mcu-type-movie">🎬 映画</span>
         </div>
 
-        <div class="mcu-logo-test">
+        <div 
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="68721"
+  data-type="movie"
+>
           <span></span><span></span><span></span>
           <span></span><span></span><span></span>
         </div>
@@ -2561,7 +2590,11 @@ a.mcu-tab{
           <span class="mcu-type mcu-type-movie">🎬 映画</span>
         </div>
 
-        <div class="mcu-logo-test">
+        <div 
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="76338"
+  data-type="movie"
+>
           <span></span><span></span><span></span>
           <span></span><span></span><span></span>
         </div>
@@ -2596,7 +2629,11 @@ a.mcu-tab{
           <span class="mcu-type mcu-type-movie">🎬 映画</span>
         </div>
 
-        <div class="mcu-logo-test">
+        <div 
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="100402"
+  data-type="movie"
+>
           <span></span><span></span><span></span>
           <span></span><span></span><span></span>
         </div>
@@ -2631,7 +2668,11 @@ a.mcu-tab{
           <span class="mcu-type mcu-type-movie">🎬 映画</span>
         </div>
 
-        <div class="mcu-logo-test">
+        <div 
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="118340"
+  data-type="movie"
+>
           <span></span><span></span><span></span>
           <span></span><span></span><span></span>
         </div>
@@ -2666,7 +2707,11 @@ a.mcu-tab{
           <span class="mcu-type mcu-type-movie">🎬 映画</span>
         </div>
 
-        <div class="mcu-logo-test">
+        <div 
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="99861"
+  data-type="movie"
+>
           <span></span><span></span><span></span>
           <span></span><span></span><span></span>
         </div>
@@ -2701,7 +2746,11 @@ a.mcu-tab{
           <span class="mcu-type mcu-type-movie">🎬 映画</span>
         </div>
 
-        <div class="mcu-logo-test">
+        <div 
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="102899"
+  data-type="movie"
+>
           <span></span><span></span><span></span>
           <span></span><span></span><span></span>
         </div>
@@ -2766,7 +2815,11 @@ a.mcu-tab{
           <span class="mcu-type mcu-type-movie">🎬 映画</span>
         </div>
 
-        <div class="mcu-logo-test">
+        <div 
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="271110"
+  data-type="movie"
+>
           <span></span><span></span><span></span>
           <span></span><span></span><span></span>
         </div>
@@ -2793,7 +2846,11 @@ a.mcu-tab{
           <span class="mcu-type mcu-type-movie">🎬 映画</span>
         </div>
 
-        <div class="mcu-logo-test">
+        <div 
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="284052"
+  data-type="movie"
+>
           <span></span><span></span><span></span>
           <span></span><span></span><span></span>
         </div>
@@ -2820,7 +2877,11 @@ a.mcu-tab{
           <span class="mcu-type mcu-type-movie">🎬 映画</span>
         </div>
 
-        <div class="mcu-logo-test">
+        <div 
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="283995"
+  data-type="movie"
+>
           <span></span><span></span><span></span>
           <span></span><span></span><span></span>
         </div>
@@ -2847,7 +2908,11 @@ a.mcu-tab{
           <span class="mcu-type mcu-type-movie">🎬 映画</span>
         </div>
 
-        <div class="mcu-logo-test">
+        <div 
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="315635"
+  data-type="movie"
+>
           <span></span><span></span><span></span>
           <span></span><span></span><span></span>
         </div>
@@ -2874,7 +2939,11 @@ a.mcu-tab{
           <span class="mcu-type mcu-type-movie">🎬 映画</span>
         </div>
 
-        <div class="mcu-logo-test">
+        <div 
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="284053"
+  data-type="movie"
+>
           <span></span><span></span><span></span>
           <span></span><span></span><span></span>
         </div>
@@ -2901,7 +2970,11 @@ a.mcu-tab{
           <span class="mcu-type mcu-type-movie">🎬 映画</span>
         </div>
 
-        <div class="mcu-logo-test">
+        <div 
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="284054"
+  data-type="movie"
+>
           <span></span><span></span><span></span>
           <span></span><span></span><span></span>
         </div>
@@ -2928,7 +3001,11 @@ a.mcu-tab{
           <span class="mcu-type mcu-type-movie">🎬 映画</span>
         </div>
 
-        <div class="mcu-logo-test">
+        <div 
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="299536"
+  data-type="movie"
+>
           <span></span><span></span><span></span>
           <span></span><span></span><span></span>
         </div>
@@ -2955,7 +3032,11 @@ a.mcu-tab{
           <span class="mcu-type mcu-type-movie">🎬 映画</span>
         </div>
 
-        <div class="mcu-logo-test">
+        <div 
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="363088"
+  data-type="movie"
+>
           <span></span><span></span><span></span>
           <span></span><span></span><span></span>
         </div>
@@ -2982,7 +3063,11 @@ a.mcu-tab{
           <span class="mcu-type mcu-type-movie">🎬 映画</span>
         </div>
 
-        <div class="mcu-logo-test">
+        <div 
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="299537"
+  data-type="movie"
+>
           <span></span><span></span><span></span>
           <span></span><span></span><span></span>
         </div>
@@ -3009,7 +3094,11 @@ a.mcu-tab{
           <span class="mcu-type mcu-type-movie">🎬 映画</span>
         </div>
 
-        <div class="mcu-logo-test">
+        <div 
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="299534"
+  data-type="movie"
+>
           <span></span><span></span><span></span>
           <span></span><span></span><span></span>
         </div>
@@ -3036,7 +3125,11 @@ a.mcu-tab{
           <span class="mcu-type mcu-type-movie">🎬 映画</span>
         </div>
 
-        <div class="mcu-logo-test">
+        <div 
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="429617"
+  data-type="movie"
+>
           <span></span><span></span><span></span>
           <span></span><span></span><span></span>
         </div>
@@ -3097,7 +3190,11 @@ a.mcu-tab{
           <span class="mcu-type mcu-type-drama">📺 ドラマ</span>
         </div>
 
-        <div class="mcu-logo-test">
+        <div 
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="85271"
+  data-type="tv"
+>
           <span></span><span></span><span></span>
           <span></span><span></span><span></span>
         </div>
@@ -3124,7 +3221,11 @@ a.mcu-tab{
           <span class="mcu-type mcu-type-drama">📺 ドラマ</span>
         </div>
 
-        <div class="mcu-logo-test">
+        <div 
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="88396"
+  data-type="tv"
+>
           <span></span><span></span><span></span>
           <span></span><span></span><span></span>
         </div>
@@ -3151,7 +3252,11 @@ a.mcu-tab{
           <span class="mcu-type mcu-type-drama">📺 ドラマ</span>
         </div>
 
-        <div class="mcu-logo-test">
+        <div 
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="84958"
+  data-type="tv"
+>
           <span></span><span></span><span></span>
           <span></span><span></span><span></span>
         </div>
@@ -3178,7 +3283,11 @@ a.mcu-tab{
           <span class="mcu-type mcu-type-movie">🎬 映画</span>
         </div>
 
-        <div class="mcu-logo-test">
+        <div 
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="497698"
+  data-type="movie"
+>
           <span></span><span></span><span></span>
           <span></span><span></span><span></span>
         </div>
@@ -3205,7 +3314,11 @@ a.mcu-tab{
           <span class="mcu-type mcu-type-anime">🎞️ アニメ</span>
         </div>
 
-        <div class="mcu-logo-test">
+        <div 
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="91363"
+  data-type="tv"
+>
           <span></span><span></span><span></span>
           <span></span><span></span><span></span>
         </div>
@@ -3232,7 +3345,11 @@ a.mcu-tab{
           <span class="mcu-type mcu-type-movie">🎬 映画</span>
         </div>
 
-        <div class="mcu-logo-test">
+        <div 
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="566525"
+  data-type="movie"
+>
           <span></span><span></span><span></span>
           <span></span><span></span><span></span>
         </div>
@@ -3259,7 +3376,11 @@ a.mcu-tab{
           <span class="mcu-type mcu-type-movie">🎬 映画</span>
         </div>
 
-        <div class="mcu-logo-test">
+        <div 
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="524434"
+  data-type="movie"
+>
           <span></span><span></span><span></span>
           <span></span><span></span><span></span>
         </div>
@@ -3286,7 +3407,11 @@ a.mcu-tab{
           <span class="mcu-type mcu-type-drama">📺 ドラマ</span>
         </div>
 
-        <div class="mcu-logo-test">
+        <div 
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="88329"
+  data-type="tv"
+>
           <span></span><span></span><span></span>
           <span></span><span></span><span></span>
         </div>
@@ -3313,7 +3438,11 @@ a.mcu-tab{
           <span class="mcu-type mcu-type-movie">🎬 映画</span>
         </div>
 
-        <div class="mcu-logo-test">
+        <div 
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="634649"
+  data-type="movie"
+>
           <span></span><span></span><span></span>
           <span></span><span></span><span></span>
         </div>
@@ -3340,7 +3469,11 @@ a.mcu-tab{
           <span class="mcu-type mcu-type-drama">📺 ドラマ</span>
         </div>
 
-        <div class="mcu-logo-test">
+        <div 
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="92749"
+  data-type="tv"
+>
           <span></span><span></span><span></span>
           <span></span><span></span><span></span>
         </div>
@@ -3367,7 +3500,11 @@ a.mcu-tab{
           <span class="mcu-type mcu-type-movie">🎬 映画</span>
         </div>
 
-        <div class="mcu-logo-test">
+        <div 
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="453395"
+  data-type="movie"
+>
           <span></span><span></span><span></span>
           <span></span><span></span><span></span>
         </div>
@@ -3394,7 +3531,11 @@ a.mcu-tab{
           <span class="mcu-type mcu-type-drama">📺 ドラマ</span>
         </div>
 
-        <div class="mcu-logo-test">
+        <div 
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="92782"
+  data-type="tv"
+>
           <span></span><span></span><span></span>
           <span></span><span></span><span></span>
         </div>
@@ -3421,7 +3562,11 @@ a.mcu-tab{
           <span class="mcu-type mcu-type-movie">🎬 映画</span>
         </div>
 
-        <div class="mcu-logo-test">
+        <div 
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="616037"
+  data-type="movie"
+>
           <span></span><span></span><span></span>
           <span></span><span></span><span></span>
         </div>
@@ -3448,7 +3593,11 @@ a.mcu-tab{
           <span class="mcu-type mcu-type-anime">🎞️ アニメ短編</span>
         </div>
 
-        <div class="mcu-logo-test">
+        <div 
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="232125"
+  data-type="tv"
+>
           <span></span><span></span><span></span>
           <span></span><span></span><span></span>
         </div>
@@ -3475,7 +3624,11 @@ a.mcu-tab{
           <span class="mcu-type mcu-type-drama">📺 ドラマ</span>
         </div>
 
-        <div class="mcu-logo-test">
+        <div 
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="92783"
+  data-type="tv"
+>
           <span></span><span></span><span></span>
           <span></span><span></span><span></span>
         </div>
@@ -3502,7 +3655,11 @@ a.mcu-tab{
           <span class="mcu-type mcu-type-special">🌙 スペシャル</span>
         </div>
 
-        <div class="mcu-logo-test">
+        <div 
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="894205"
+  data-type="movie"
+>
           <span></span><span></span><span></span>
           <span></span><span></span><span></span>
         </div>
@@ -3529,7 +3686,11 @@ a.mcu-tab{
           <span class="mcu-type mcu-type-movie">🎬 映画</span>
         </div>
 
-        <div class="mcu-logo-test">
+        <div 
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="505642"
+  data-type="movie"
+>
           <span></span><span></span><span></span>
           <span></span><span></span><span></span>
         </div>
@@ -3556,7 +3717,11 @@ a.mcu-tab{
           <span class="mcu-type mcu-type-special">🎄 スペシャル</span>
         </div>
 
-        <div class="mcu-logo-test">
+        <div 
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="774752"
+  data-type="movie"
+>
           <span></span><span></span><span></span>
           <span></span><span></span><span></span>
         </div>
@@ -3610,7 +3775,11 @@ a.mcu-tab{
           <span class="mcu-type mcu-type-movie">🎬 映画</span>
         </div>
 
-        <div class="mcu-logo-test">
+        <div 
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="640146"
+  data-type="movie"
+>
           <span></span><span></span><span></span>
           <span></span><span></span><span></span>
         </div>
@@ -3637,7 +3806,11 @@ a.mcu-tab{
           <span class="mcu-type mcu-type-movie">🎬 映画</span>
         </div>
 
-        <div class="mcu-logo-test">
+        <div 
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="447365"
+  data-type="movie"
+>
           <span></span><span></span><span></span>
           <span></span><span></span><span></span>
         </div>
@@ -3664,7 +3837,11 @@ a.mcu-tab{
           <span class="mcu-type mcu-type-drama">📺 ドラマ</span>
         </div>
 
-        <div class="mcu-logo-test">
+        <div 
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="114472"
+  data-type="tv"
+>
           <span></span><span></span><span></span>
           <span></span><span></span><span></span>
         </div>
@@ -3691,7 +3868,11 @@ a.mcu-tab{
           <span class="mcu-type mcu-type-anime">🎞️ アニメ短編</span>
         </div>
 
-        <div class="mcu-logo-test">
+        <div 
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="232125"
+  data-type="tv"
+>
           <span></span><span></span><span></span>
           <span></span><span></span><span></span>
         </div>
@@ -3718,7 +3899,11 @@ a.mcu-tab{
           <span class="mcu-type mcu-type-drama">📺 ドラマ</span>
         </div>
 
-        <div class="mcu-logo-test">
+        <div 
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="84958"
+  data-type="tv"
+>
           <span></span><span></span><span></span>
           <span></span><span></span><span></span>
         </div>
@@ -3745,7 +3930,11 @@ a.mcu-tab{
           <span class="mcu-type mcu-type-movie">🎬 映画</span>
         </div>
 
-        <div class="mcu-logo-test">
+        <div 
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="609681"
+  data-type="movie"
+>
           <span></span><span></span><span></span>
           <span></span><span></span><span></span>
         </div>
@@ -3772,7 +3961,11 @@ a.mcu-tab{
           <span class="mcu-type mcu-type-anime">🎞️ アニメ</span>
         </div>
 
-        <div class="mcu-logo-test">
+        <div 
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="91363"
+  data-type="tv"
+>
           <span></span><span></span><span></span>
           <span></span><span></span><span></span>
         </div>
@@ -3799,7 +3992,11 @@ a.mcu-tab{
           <span class="mcu-type mcu-type-drama">📺 ドラマ</span>
         </div>
 
-        <div class="mcu-logo-test">
+        <div 
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="122226"
+  data-type="tv"
+>
           <span></span><span></span><span></span>
           <span></span><span></span><span></span>
         </div>
@@ -3826,7 +4023,11 @@ a.mcu-tab{
           <span class="mcu-type mcu-type-movie">🎬 映画</span>
         </div>
 
-        <div class="mcu-logo-test">
+        <div 
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="533535"
+  data-type="movie"
+>
           <span></span><span></span><span></span>
           <span></span><span></span><span></span>
         </div>
@@ -3853,7 +4054,11 @@ a.mcu-tab{
           <span class="mcu-type mcu-type-drama">📺 ドラマ</span>
         </div>
 
-        <div class="mcu-logo-test">
+        <div 
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="138501"
+  data-type="tv"
+>
           <span></span><span></span><span></span>
           <span></span><span></span><span></span>
         </div>
@@ -3880,7 +4085,11 @@ a.mcu-tab{
           <span class="mcu-type mcu-type-anime">🎞️ アニメ</span>
         </div>
 
-        <div class="mcu-logo-test">
+        <div 
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="91363"
+  data-type="tv"
+>
           <span></span><span></span><span></span>
           <span></span><span></span><span></span>
         </div>
@@ -3907,7 +4116,11 @@ a.mcu-tab{
           <span class="mcu-type mcu-type-movie">🎬 映画</span>
         </div>
 
-        <div class="mcu-logo-test">
+        <div 
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="822119"
+  data-type="movie"
+>
           <span></span><span></span><span></span>
           <span></span><span></span><span></span>
         </div>
@@ -3934,7 +4147,11 @@ a.mcu-tab{
           <span class="mcu-type mcu-type-drama">📺 ドラマ</span>
         </div>
 
-        <div class="mcu-logo-test">
+        <div 
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="202555"
+  data-type="tv"
+>
           <span></span><span></span><span></span>
           <span></span><span></span><span></span>
         </div>
@@ -3961,7 +4178,11 @@ a.mcu-tab{
           <span class="mcu-type mcu-type-movie">🎬 映画</span>
         </div>
 
-        <div class="mcu-logo-test">
+        <div 
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="986056"
+  data-type="movie"
+>
           <span></span><span></span><span></span>
           <span></span><span></span><span></span>
         </div>
@@ -3988,7 +4209,11 @@ a.mcu-tab{
           <span class="mcu-type mcu-type-drama">📺 ドラマ</span>
         </div>
 
-        <div class="mcu-logo-test">
+        <div 
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="114471"
+  data-type="tv"
+>
           <span></span><span></span><span></span>
           <span></span><span></span><span></span>
         </div>
@@ -4060,7 +4285,11 @@ a.mcu-tab{
             </span>
           </div>
 
-          <div class="mcu-logo-test">
+          <div 
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="617126"
+  data-type="movie"
+>
             <span></span>
             <span></span>
             <span></span>
@@ -4106,7 +4335,11 @@ a.mcu-tab{
             </span>
           </div>
 
-          <div class="mcu-logo-test">
+          <div 
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="969681"
+  data-type="movie"
+>
             <span></span>
             <span></span>
             <span></span>
@@ -4216,96 +4449,214 @@ a.mcu-tab{
   </div>
 
 <script>
-async function loadMcuProviders(){
+/* =====================================================
+   MCU 全作品 配信ロゴ読み込み
+   ・映画／ドラマに対応
+   ・同じ作品IDはキャッシュ
+   ・画面付近に来たカードだけ取得
+===================================================== */
 
-  const box =
-    document.querySelector(
-      '.mcu-provider-logos[data-id="1726"]'
-    );
+const mcuProviderCache = new Map();
 
-  if(!box) return;
+async function fetchMcuProviders(id, type){
 
-  try{
+  const key = id + ':' + type;
 
-    const response =
-      await fetch(
-        '/api/search?id=1726&type=movie'
+  if(mcuProviderCache.has(key)){
+    return mcuProviderCache.get(key);
+  }
+
+  const request = (async () => {
+
+    try{
+
+      const response =
+        await fetch(
+          '/api/search?id=' +
+          encodeURIComponent(id) +
+          '&type=' +
+          encodeURIComponent(type)
+        );
+
+      if(!response.ok){
+        throw new Error(
+          '配信情報を取得できませんでした'
+        );
+      }
+
+      const data =
+        await response.json();
+
+      const providers =
+        Array.isArray(data.streaming)
+          ? data.streaming
+          : [];
+
+      const unique = [];
+
+      for(const provider of providers){
+
+        if(
+          !provider ||
+          !provider.logo_path
+        ){
+          continue;
+        }
+
+        if(
+          unique.some(
+            item =>
+              item.provider_id ===
+              provider.provider_id
+          )
+        ){
+          continue;
+        }
+
+        unique.push(provider);
+
+        if(unique.length >= 6){
+          break;
+        }
+      }
+
+      return unique;
+
+    }catch(error){
+
+      console.error(
+        'MCU配信ロゴ取得エラー:',
+        id,
+        type,
+        error
       );
 
-    if(!response.ok){
-      throw new Error('配信情報を取得できませんでした');
+      return [];
     }
 
-    const data =
-      await response.json();
+  })();
 
-    const providers =
-  Array.isArray(data.streaming)
-    ? data.streaming
-    : [];
+  mcuProviderCache.set(key, request);
 
-    const unique = [];
+  return request;
+}
 
-    for(const provider of providers){
 
-      if(
-        !provider ||
-        !provider.logo_path
-      ){
-        continue;
-      }
+async function loadMcuProviderBox(box){
 
-      if(
-        unique.some(
-          item =>
-            item.provider_id === provider.provider_id
-        )
-      ){
-        continue;
-      }
+  if(
+    !box ||
+    box.dataset.loaded === '1' ||
+    box.dataset.loading === '1'
+  ){
+    return;
+  }
 
-      unique.push(provider);
+  const id =
+    box.dataset.id;
 
-      if(unique.length >= 6){
-        break;
-      }
-    }
+  const type =
+    box.dataset.type || 'movie';
 
-    if(unique.length === 0){
-      return;
-    }
+  if(!id){
+    return;
+  }
 
-    box.innerHTML = '';
+  box.dataset.loading = '1';
 
-    for(const provider of unique){
-
-      const img =
-        document.createElement('img');
-
-      img.src =
-        'https://image.tmdb.org/t/p/w92' +
-        provider.logo_path;
-
-      img.alt =
-        provider.provider_name || '配信サービス';
-
-      img.loading = 'lazy';
-
-      box.appendChild(img);
-    }
-
-  }catch(error){
-
-    console.error(
-      'MCU配信ロゴ取得エラー:',
-      error
+  const providers =
+    await fetchMcuProviders(
+      id,
+      type
     );
+
+  delete box.dataset.loading;
+
+  if(providers.length === 0){
+    box.dataset.loaded = '1';
+    return;
+  }
+
+  box.innerHTML = '';
+
+  for(const provider of providers){
+
+    const img =
+      document.createElement('img');
+
+    img.src =
+      'https://image.tmdb.org/t/p/w92' +
+      provider.logo_path;
+
+    img.alt =
+      provider.provider_name ||
+      '配信サービス';
+
+    img.loading = 'lazy';
+
+    box.appendChild(img);
+  }
+
+  box.dataset.loaded = '1';
+}
+
+
+function startMcuProviderLoading(){
+
+  const boxes =
+    document.querySelectorAll(
+      '.mcu-provider-logos[data-id]'
+    );
+
+  if(!boxes.length){
+    return;
+  }
+
+  if(
+    'IntersectionObserver' in window
+  ){
+
+    const observer =
+      new IntersectionObserver(
+        entries => {
+
+          entries.forEach(entry => {
+
+            if(!entry.isIntersecting){
+              return;
+            }
+
+            observer.unobserve(
+              entry.target
+            );
+
+            loadMcuProviderBox(
+              entry.target
+            );
+
+          });
+
+        },
+        {
+          rootMargin:'500px 0px'
+        }
+      );
+
+    boxes.forEach(box => {
+      observer.observe(box);
+    });
+
+  }else{
+
+    boxes.forEach(box => {
+      loadMcuProviderBox(box);
+    });
 
   }
 
 }
 
-loadMcuProviders();
+startMcuProviderLoading();
 </script>
 
 
@@ -4426,26 +4777,6 @@ document
     );
 
   });
-
-/* =====================================================
-   長い作品タイトルを自動で少し小さくする
-===================================================== */
-
-document.querySelectorAll(
-  '.phase-box .mcu-title'
-).forEach(title => {
-
-  const text =
-    title.textContent.trim();
-
-  if(text.length >= 18){
-    title.classList.add(
-      'mcu-title-long'
-    );
-  }
-
-});
-
 
 </script>
 
