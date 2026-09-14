@@ -3,14 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="robots" content="noindex,follow">
+  <meta name="robots" content="index,follow">
   
   <title>MCU・マーベルを見る順番｜ドコデミレル？</title>
 
   <meta
-    name="description"
-    content="MCU・マーベル作品を見る順番を、公開順・時系列順でわかりやすく紹介します。"
-  >
+  name="description"
+  content="MCU・マーベル作品を見る順番を公開順でわかりやすく紹介。映画・ドラマをPHASEごとに整理し、配信サービスや作品同士のつながりも確認できます。"
+>
+
+<link
+  rel="canonical"
+  href="https://doko-de-mireru.vercel.app/mcu.html"
+>
 
   <style>
     body{
@@ -1874,8 +1879,15 @@ a.mcu-tab{
 
   <div class="page-wrap">
 
- <div class="mcu-under-construction">
+     
+    <header class="mcu-header">
 
+      
+    <div
+  id="mcuUnderConstruction"
+  class="mcu-under-construction"
+  style="display:none;"
+>
   <strong>
     🚧 現在このページは工事中です
   </strong>
@@ -1883,10 +1895,8 @@ a.mcu-tab{
     MCU・マーベルの見る順番ガイドを制作しています。
     内容やデザインは変更される場合があります。
   </span>
-
 </div>
-    
-    <header class="mcu-header">
+
 
       <a
         href="index.html"
@@ -1920,29 +1930,37 @@ a.mcu-tab{
   🎬 公開順
 </a>
 
-  <a
+<a
   href="mcu.html?view=timeline"
   class="mcu-tab"
 >
   🕐 時系列順
 </a>
 
-  <a
+<a
   href="mcu.html?view=short"
   class="mcu-tab"
 >
   ⚡ 最短ルート
 </a>
 
-  <button
-    class="mcu-tab mcu-tab-advanced"
-    type="button"
-  >
-    🌐 MCU外・関連作品
-  </button>
+<button
+  class="mcu-tab mcu-tab-advanced"
+  type="button"
+>
+  🌐 MCU外・関連作品
+</button>
+
+<a
+  href="mcu.html?view=connections"
+  class="mcu-tab"
+>
+  🔗 つながり図
+</a>
 
 </div>
 
+  
       </div>
 
     </header>
@@ -1975,21 +1993,24 @@ a.mcu-tab{
       ※ マーベル作品すべてが
       MCUというわけではありません。
       X-MENや旧スパイダーマンなど、
-      MCUとは別の世界から始まった作品もあります。19:40 2026/09/14
+      MCUとは別の世界から始まった作品もあります。
     </p>
 
-    <button
-      class="mcu-about-link"
-      type="button"
-    >
-      🌐 マーベル作品のつながりを見る →
-    </button>
+    <a
+  href="mcu.html?view=connections"
+  class="mcu-about-link"
+>
+  🔗 マーベル作品のつながりを見る →
+</a>
 
   </div>
 
 </section>
 
-<section class="marvel-universe-section">
+<section
+  id="connectionsView"
+  class="marvel-universe-section"
+>
 
   <div class="marvel-universe-heading">
     <span class="marvel-universe-badge">🌐 上級者編</span>
@@ -2116,7 +2137,11 @@ a.mcu-tab{
 
 </section>
 
-    <section class="mcu-timeline-section">
+    <section
+  id="timelineSection"
+  class="mcu-timeline-section"
+>
+
 
   <div class="mcu-timeline-heading">
 
@@ -2210,7 +2235,7 @@ a.mcu-tab{
 
 </section>
 
-    <main>
+    <main id="releaseView">
 
       <section class="mcu-list-section phase-box phase-box-1">
 
@@ -4700,7 +4725,7 @@ backToTop.addEventListener(
 
 <script>
 /* =====================================================
-   MCU 表示モードの選択状態
+   MCU 表示モード
 ===================================================== */
 
 const mcuView =
@@ -4714,6 +4739,35 @@ const mcuViewDescription =
     "mcuViewDescription"
   );
 
+const mcuUnderConstruction =
+  document.getElementById(
+    "mcuUnderConstruction"
+  );
+
+const releaseView =
+  document.getElementById(
+    "releaseView"
+  );
+
+const connectionsView =
+  document.getElementById(
+    "connectionsView"
+  );
+
+const timelineSection =
+  document.getElementById(
+    "timelineSection"
+  );
+
+const mcuAbout =
+  document.querySelector(
+    ".mcu-about"
+  );
+
+
+/* =====================================================
+   上部説明文
+===================================================== */
 
 const viewInfo = {
 
@@ -4733,6 +4787,12 @@ const viewInfo = {
     title: "⚡ 短く楽しむなら",
     text:
       "重要作品を中心に、MCUの大きな流れを効率よく楽しめます。"
+  },
+
+  connections: {
+    title: "🔗 マーベル作品のつながり",
+    text:
+      "MCUと、別の世界から始まったマーベル作品との関係を整理して見られます。"
   }
 
 };
@@ -4754,7 +4814,9 @@ if(mcuViewDescription){
 }
 
 
-/* 選択中のボタンだけ色を付ける */
+/* =====================================================
+   選択中のタブ
+===================================================== */
 
 document
   .querySelectorAll(
@@ -4778,7 +4840,82 @@ document
 
   });
 
-</script>
 
+/* =====================================================
+   最初に全部隠す
+===================================================== */
+
+if(releaseView){
+  releaseView.style.display = "none";
+}
+
+if(connectionsView){
+  connectionsView.style.display = "none";
+}
+
+if(timelineSection){
+  timelineSection.style.display = "none";
+}
+
+if(mcuUnderConstruction){
+  mcuUnderConstruction.style.display = "none";
+}
+
+if(mcuAbout){
+  mcuAbout.style.display = "none";
+}
+
+
+/* =====================================================
+   公開順
+===================================================== */
+
+if(mcuView === "release"){
+
+  if(releaseView){
+    releaseView.style.display = "";
+  }
+
+  if(timelineSection){
+    timelineSection.style.display = "";
+  }
+
+  if(mcuAbout){
+    mcuAbout.style.display = "";
+  }
+
+}
+
+
+/* =====================================================
+   つながり図
+===================================================== */
+
+if(mcuView === "connections"){
+
+  if(connectionsView){
+    connectionsView.style.display = "";
+  }
+
+}
+
+
+/* =====================================================
+   時系列順・最短ルート
+   現在は工事中だけ表示
+===================================================== */
+
+if(
+  mcuView === "timeline" ||
+  mcuView === "short"
+){
+
+  if(mcuUnderConstruction){
+    mcuUnderConstruction.style.display = "";
+  }
+
+}
+
+</script>
 </body>
 </html>
