@@ -242,10 +242,10 @@
 }
 
     .mcu-title{
-      font-size:18px;
-      font-weight:900;
-      margin-bottom:6px;
-    }
+  font-size:18px;
+  font-weight:900;
+  margin-bottom:6px;
+}
 
     .mcu-meta{
       color:#64748b;
@@ -304,24 +304,11 @@
   display:flex;
   gap:12px;
   align-items:flex-start;
-
   padding-top:30px;
-}
-
-  .mcu-poster{
-  width:88px;
-  border-radius:10px;
-  flex:0 0 auto;
 }
 
 .mcu-card-info{
   min-width:0;
-}
-
-.mcu-watch{
-  margin-top:10px;
-  font-size:14px;
-  color:#475569;
 }
 
 .mcu-detail-link{
@@ -331,11 +318,39 @@
   color:#2563eb;
 }
 
+.mcu-watch{
+  margin-top:10px;
+  font-size:14px;
+  color:#475569;
+}
+
+
 .mcu-card:hover{
   transform:translateY(-1px);
   box-shadow:0 7px 18px rgba(15,23,42,.08);
 }
-  
+
+.mcu-poster{
+  width:88px;
+  border-radius:10px;
+  flex:0 0 auto;
+}
+
+.phase-box-1 .mcu-poster{
+  width:104px;
+}
+
+.phase-box-1 .mcu-title{
+  font-size:17px;
+  line-height:1.35;
+
+  display:-webkit-box;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:2;
+  overflow:hidden;
+}
+
+
 /* =====================================================
    MCU 公開年表
 ===================================================== */
@@ -1407,15 +1422,18 @@ html{
 ===================================================== */
 
 .mcu-phase-heading.phase-heading-6{
-  border-left-color:#a855f7;
+  border-left:none;
 }
 
 .mcu-phase-heading.phase-heading-6 .mcu-phase-heading-number{
-  background:rgba(168,85,247,.18);
-  border-color:rgba(192,132,252,.45);
-  color:#d8b4fe;
-}
+  background:rgba(13,148,136,.45);
+  border-color:#2dd4bf;
+  color:#ffffff;
 
+  box-shadow:
+    0 0 12px
+    rgba(45,212,191,.22);
+}
 
 /* 公開予定 */
 
@@ -1566,12 +1584,12 @@ html{
   background:
     linear-gradient(
       135deg,
-      #1b263a 0%,
-      #1d2739 60%,
-      #2a2029 100%
+      #edf2f7 0%,
+      #e9eff6 60%,
+      #f3ecee 100%
     );
-
-  border:1px solid rgba(239,68,68,.24);
+  
+border:1px solid rgba(239,68,68,.24);
 
   /* 左の赤ラインを上から下まで通す */
   border-left:4px solid #ef4444;
@@ -1579,6 +1597,7 @@ html{
   box-shadow:
     0 7px 20px rgba(15,23,42,.10);
 }
+
 
 
 /* 上の見出し */
@@ -1604,16 +1623,545 @@ html{
   background:#ffffff;
 
   border:
-    1px solid
-    rgba(239,68,68,.23);
+　　1px solid
+    rgba(226,232,240,.85);
 
   box-shadow:
     0 3px 12px
     rgba(0,0,0,.11);
 }
 
-    
-  </style>
+
+/* =====================================================
+   PHASE 2 全体BOX
+===================================================== */
+
+.phase-box-2{
+  
+  background:
+    linear-gradient(
+      135deg,
+      #edf2f7 0%,
+      #e9eff6 60%,
+      #f5eee9 100%
+    );
+
+  border:1px solid rgba(249,115,22,.24);
+
+  /* 左のオレンジラインを上から下まで通す */
+  border-left:4px solid #f97316;
+
+  box-shadow:
+    0 7px 20px rgba(15,23,42,.10);
+}
+
+
+/* PHASE 2 上の見出し */
+
+.phase-box-2 .mcu-phase-heading{
+  margin-left:-14px;
+  margin-right:-14px;
+  margin-bottom:14px;
+
+  border-left:none;
+
+  border-radius:14px 17px 0 0;
+
+  box-shadow:none;
+}
+
+
+/* PHASE 2 中の作品カード */
+
+.phase-box-2 .mcu-card{
+  background:#ffffff;
+
+  border:
+    1px solid
+    rgba(226,232,240,.85);
+
+  box-shadow:
+    0 3px 12px
+    rgba(0,0,0,.11);
+}
+ 
+/* =====================================================
+   PHASE 3 全体BOX
+===================================================== */
+
+.phase-box-3{
+  margin-top:24px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #edf2f7 0%,
+      #e9eff6 60%,
+      #f6f3e7 100%
+    );
+
+  border:1px solid rgba(234,179,8,.24);
+
+  /* 左の黄色ライン */
+  border-left:4px solid #eab308;
+
+  box-shadow:
+    0 7px 20px rgba(15,23,42,.10);
+}
+
+
+/* PHASE 3 上の見出し */
+
+.phase-box-3 .mcu-phase-heading{
+  margin-left:-14px;
+  margin-right:-14px;
+  margin-bottom:14px;
+
+  border-left:none;
+
+  border-radius:14px 17px 0 0;
+
+  box-shadow:none;
+}
+
+
+/* PHASE 3 中の作品カード */
+
+.phase-box-3 .mcu-card{
+  background:#ffffff;
+
+  border:
+    1px solid
+    rgba(226,232,240,.85);
+
+  box-shadow:
+    0 3px 12px
+    rgba(0,0,0,.11);
+}
+  
+/* =====================================================
+   PHASE 4 全体BOX
+===================================================== */
+
+.phase-box-4{
+  margin-top:24px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #edf2f7 0%,
+      #e9eff6 60%,
+      #edf3fa 100%
+    );
+
+  border:1px solid rgba(59,130,246,.24);
+
+  /* 左の青ライン */
+  border-left:4px solid #3b82f6;
+
+  box-shadow:
+    0 7px 20px rgba(15,23,42,.10);
+}
+
+
+/* PHASE 4 上の見出し */
+
+.phase-box-4 .mcu-phase-heading{
+  margin-left:-14px;
+  margin-right:-14px;
+  margin-bottom:14px;
+
+  border-left:none;
+
+  border-radius:14px 17px 0 0;
+
+  box-shadow:none;
+}
+
+
+/* PHASE 4 中の作品カード */
+
+.phase-box-4 .mcu-card{
+  background:#ffffff;
+
+  border:
+    1px solid
+    rgba(226,232,240,.85);
+
+  box-shadow:
+    0 3px 12px
+    rgba(0,0,0,.11);
+}
+
+/* =====================================================
+   PHASE 5 全体BOX
+===================================================== */
+
+.phase-box-5{
+  margin-top:24px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #edf2f7 0%,
+      #e9eff6 60%,
+      #f3eef8 100%
+    );
+
+  border:1px solid rgba(139,92,246,.24);
+
+  /* 左の紫ライン */
+  border-left:4px solid #8b5cf6;
+
+  box-shadow:
+    0 7px 20px rgba(15,23,42,.10);
+}
+
+
+/* PHASE 5 上の見出し */
+
+.phase-box-5 .mcu-phase-heading{
+  margin-left:-14px;
+  margin-right:-14px;
+  margin-bottom:14px;
+
+  border-left:none;
+
+  border-radius:14px 17px 0 0;
+
+  box-shadow:none;
+}
+
+
+/* PHASE 5 中の作品カード */
+
+.phase-box-5 .mcu-card{
+  background:#ffffff;
+
+  border:
+    1px solid
+    rgba(226,232,240,.85);
+
+  box-shadow:
+    0 3px 12px
+    rgba(0,0,0,.11);
+}
+
+/* =====================================================
+   PHASE 6 全体BOX
+===================================================== */
+
+.phase-box-6{
+  margin-top:24px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #edf2f7 0%,
+      #e9eff6 60%,
+      #e8f7f6 100%
+    );
+
+  border:1px solid rgba(20,184,166,.26);
+
+  /* 左のターコイズライン */
+  border-left:4px solid #14b8a6;
+
+  box-shadow:
+    0 7px 20px rgba(15,23,42,.10);
+}
+
+.phase-box-6 .mcu-phase-heading{
+  margin-left:-18px;
+  margin-right:-14px;
+  margin-bottom:14px;
+
+  border-left:none;
+
+  border-radius:14px 17px 0 0;
+
+  box-shadow:none;
+}
+
+
+/* PHASE 6 中の作品カード */
+
+.phase-box-6 .mcu-card{
+  background:#ffffff;
+
+  border:
+    1px solid
+    rgba(226,232,240,.85);
+
+  box-shadow:
+    0 3px 12px
+    rgba(0,0,0,.11);
+}
+
+.mcu-list-section.phase-box{
+  margin:0 0 24px;
+}
+ 
+/* PHASE同士の縦間隔調整 */
+.phase-box-1{
+  margin-bottom:-24px;
+}
+
+/* PHASE1 カード完成形テスト：アイアンマンだけ */
+
+.phase-box-1 .mcu-card-test .mcu-poster{
+  width:104px;
+}
+
+.phase-box-1 .mcu-card-test .mcu-card-info{
+  display:flex;
+  flex-direction:column;
+  min-height:156px;
+  flex:1;
+}
+
+.phase-box-1 .mcu-card-test .mcu-title{
+  font-size:17px;
+  line-height:1.35;
+  display:-webkit-box;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:2;
+  overflow:hidden;
+}
+
+.phase-box-1 .mcu-card-test .mcu-card-meta-row{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-top:6px;
+  font-size:14px;
+  line-height:1;
+  color:#64748b;
+}
+
+.phase-box-1 .mcu-card-test .mcu-type{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  height:20px;
+  padding:0 7px;
+  border-radius:6px;
+  background:#eef2f7;
+  color:#334155;
+  font-size:12px;
+  font-weight:700;
+}
+.phase-box-1 .mcu-card-test .mcu-type{
+  padding:2px 7px;
+  border-radius:6px;
+  background:#eef2f7;
+  color:#334155;
+  font-weight:700;
+}
+
+.phase-box-1 .mcu-card-test .mcu-logo-test{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:5px;
+  margin-top:10px;
+  min-height:50px;
+}
+
+.phase-box-1 .mcu-card-test .mcu-logo-test span{
+  height:22px;
+  border-radius:5px;
+  background:#9ca3af;
+}
+
+.phase-box-1 .mcu-card-test .mcu-detail-link{
+  margin-top:auto;
+  padding-top:8px;
+}
+
+.phase-box-1 .phase-description{
+  display:block;
+  margin-top:4px;
+  font-size:13px;
+  font-weight:500;
+  opacity:.85;
+}
+
+/* =====================================================
+   PHASE 1 カード最終配置
+   104pxポスター / タイトル2行 / 下部位置統一
+===================================================== */
+
+.phase-box-1 .mcu-card-test .mcu-card-main{
+  display:flex;
+  align-items:stretch;
+  gap:12px;
+  min-height:156px;
+}
+
+.phase-box-1 .mcu-card-test .mcu-poster{
+  width:104px;
+  height:156px;
+  object-fit:cover;
+  flex:0 0 104px;
+}
+
+.phase-box-1 .mcu-card-test .mcu-card-info{
+  min-width:0;
+  flex:1;
+
+  display:flex;
+  flex-direction:column;
+}
+
+/* タイトルは最大2行 */
+.phase-box-1 .mcu-card-test .mcu-title{
+  font-size:17px;
+  line-height:1.35;
+
+  display:-webkit-box;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:2;
+
+  overflow:hidden;
+
+  min-height:46px;
+  margin-bottom:5px;
+}
+
+/* 公開年＋作品タイプ */
+.phase-box-1 .mcu-card-test .mcu-card-meta-row{
+  display:flex;
+  align-items:center;
+  gap:8px;
+
+  font-size:13px;
+  color:#64748b;
+}
+
+/* 映画バッジ */
+.phase-box-1 .mcu-card-test .mcu-type{
+  display:inline-flex;
+  align-items:center;
+
+  padding:2px 7px;
+  border-radius:999px;
+
+  font-size:11px;
+  font-weight:800;
+
+  background:#eef2ff;
+  color:#475569;
+}
+
+/* 配信ロゴ2段分を下側へ */
+.phase-box-1 .mcu-card-test .mcu-logo-test{
+  margin-top:auto;
+
+  display:grid;
+  grid-template-columns:repeat(3, 37px);
+  gap:6px;
+}
+
+/* 現在の仮ロゴ */
+.phase-box-1 .mcu-card-test .mcu-logo-test span{
+  display:block;
+
+  width:37px;
+  height:22px;
+
+  border-radius:5px;
+  background:#9ca3af;
+}
+
+/* 詳細リンクを一番下に揃える */
+.phase-box-1 .mcu-card-test .mcu-detail-link{
+  margin-top:8px;
+
+  font-size:14px;
+  font-weight:800;
+  color:#2563eb;
+}
+
+/* 長い作品名だけ2行に収まりやすくする */
+.phase-box-1 .mcu-card-test .mcu-title-long{
+  font-size:14px;
+  letter-spacing:-0.4px;
+}
+
+
+.phase-box-1
+.mcu-card-test
+.mcu-provider-logos img{
+  width:40px;
+  height:24px;
+
+  object-fit:contain;
+
+  border-radius:5px;
+}
+
+/* MCU上部タブのリンク下線を消す */
+a.mcu-tab{
+  text-decoration:none;
+}
+
+
+/* =====================================================
+   MCU 表示モード説明・1列版
+===================================================== */
+
+.mcu-view-description-line{
+  margin:14px 0 16px;
+
+  display:flex;
+  align-items:center;
+  gap:9px;
+
+  font-size:14px;
+  line-height:1.6;
+
+  color:#cbd5e1;
+}
+
+.mcu-view-description-line strong{
+  flex:0 0 auto;
+
+  color:#ffffff;
+  font-weight:900;
+}
+
+.mcu-view-description-line span{
+  color:#cbd5e1;
+}
+
+@media(max-width:700px){
+
+  .mcu-view-description-line{
+    display:block;
+  }
+
+  .mcu-view-description-line strong{
+    display:block;
+    margin-bottom:3px;
+  }
+
+}
+
+.mcu-view-description-line{
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  gap:8px;
+  flex-wrap:wrap;
+  width:100%;
+  margin-left:0;
+}
+.mcu-view-description-line strong,
+.mcu-view-description-line span{
+  display:inline;
+}
+
+ </style>
 </head>
 
 <body>
@@ -1625,7 +2173,6 @@ html{
   <strong>
     🚧 現在このページは工事中です
   </strong>
-
   <span>
     MCU・マーベルの見る順番ガイドを制作しています。
     内容やデザインは変更される場合があります。
@@ -1648,34 +2195,38 @@ html{
           🦸 MCU・マーベルを見る順番
         </h1>
 
-        <p>
-          MCU作品を初めて見る方には、
-          まず公開順で見るのがおすすめです。
-          後から時系列順も追加していきます。
-        </p>
+        <p
+       id="mcuViewDescription"
+       class="mcu-view-description-line"
+       >
+       <strong>💡 初めて見るなら</strong>
+      <span>
+       公開された順番に見ることで、MCUの広がりを自然に楽しめます。
+      </span>
+      </p> 
 
         <div class="mcu-tabs">
 
-  <button
-    class="mcu-tab active"
-    type="button"
-  >
-    🎬 公開順
-  </button>
+  <a
+  href="mcu.html?view=release"
+  class="mcu-tab"
+>
+  🎬 公開順
+</a>
 
-  <button
-    class="mcu-tab"
-    type="button"
-  >
-    ⚡ 最短ルート
-  </button>
+  <a
+  href="mcu.html?view=timeline"
+  class="mcu-tab"
+>
+  🕐 時系列順
+</a>
 
-  <button
-    class="mcu-tab"
-    type="button"
-  >
-    🕐 時系列順
-  </button>
+  <a
+  href="mcu.html?view=short"
+  class="mcu-tab"
+>
+  ⚡ 最短ルート
+</a>
 
   <button
     class="mcu-tab mcu-tab-advanced"
@@ -1865,6 +2416,7 @@ html{
 
     <div>
       <h2>MCU公開年表</h2>
+
       <p>
         MCUの歩みをPHASEごとに見てみよう
       </p>
@@ -1872,10 +2424,9 @@ html{
 
   </div>
 
-
   <div class="mcu-timeline-scroll">
 
-    <div class="mcu-timeline">
+  <div class="mcu-timeline">
 
       <a href="#phase1" class="mcu-phase phase-1">
   <span>PHASE 1</span>
@@ -1969,10 +2520,13 @@ html{
       すべてはここから始まった
     </h2>
 
-    <p>
-      2008–2012
-      ・MCU最初の6作品
-    </p>
+   <p>
+  2008–2012
+  ・MCU最初の6作品
+  <span class="phase-description">
+    ヒーローたちが集結し、アベンジャーズ誕生へ向かうフェーズ。
+  </span>
+</p>
 
   </div>
 
@@ -1980,10 +2534,8 @@ html{
 
 <div class="mcu-list">
 
-  <a
-    href="detail.html?id=1726"
-    class="mcu-card"
-  >
+  <a href="detail.html?id=1726" class="mcu-card mcu-card-test">
+    
     <div class="mcu-number">1</div>
 
     <div class="mcu-card-main">
@@ -1996,21 +2548,19 @@ html{
 
       <div class="mcu-card-info">
 
-        <div class="mcu-title">
-          アイアンマン
-        </div>
+        <div class="mcu-title">アイアンマン</div>
 
-        <div class="mcu-meta">
-          2008年
-        </div>
+<div class="mcu-card-meta-row">
+  <span>2008年</span>
+  <span class="mcu-type">映画</span>
+</div>
 
-        <div class="mcu-watch">
-          📺 配信情報は作品詳細で確認
-        </div>
+<div
+  class="mcu-logo-test mcu-provider-logos"
+  data-id="1726"
+></div>
 
-        <div class="mcu-detail-link">
-          作品詳細を見る →
-        </div>
+<div class="mcu-detail-link">作品詳細を見る →</div>
 
       </div>
 
@@ -2019,206 +2569,213 @@ html{
 
 
   <a
-    href="detail.html?id=1724"
-    class="mcu-card"
-  >
-    <div class="mcu-number">2</div>
+    <a href="detail.html?id=1724" class="mcu-card mcu-card-test">
 
-    <div class="mcu-card-main">
+  <div class="mcu-number">2</div>
 
-      <img
-        src="https://image.tmdb.org/t/p/w300/gKzYx79y0AQTL4UAk1cBQJ3nvrm.jpg"
-        alt="インクレディブル・ハルク"
-        class="mcu-poster"
-      >
+  <div class="mcu-card-main">
 
-      <div class="mcu-card-info">
+    <img
+      src="https://image.tmdb.org/t/p/w300/gKzYx79y0AQTL4UAk1cBQJ3nvrm.jpg"
+      alt="インクレディブル・ハルク"
+      class="mcu-poster"
+    >
 
-        <div class="mcu-title">
-          インクレディブル・ハルク
-        </div>
+    <div class="mcu-card-info">
 
-        <div class="mcu-meta">
-          2008年
-        </div>
+      <div class="mcu-title">
+        インクレディブル・ハルク
+      </div>
 
-        <div class="mcu-watch">
-          📺 配信情報は作品詳細で確認
-        </div>
+      <div class="mcu-card-meta-row">
+        <span>2008年</span>
+        <span class="mcu-type">映画</span>
+      </div>
 
-        <div class="mcu-detail-link">
-          作品詳細を見る →
-        </div>
+      <div class="mcu-logo-test">
+        <span></span><span></span><span></span>
+        <span></span><span></span><span></span>
+      </div>
 
+      <div class="mcu-detail-link">
+        作品詳細を見る →
       </div>
 
     </div>
-  </a>
+
+  </div>
+
+</a>
 
 
-  <a
-    href="detail.html?id=10138"
-    class="mcu-card"
-  >
-    <div class="mcu-number">3</div>
+  <a href="detail.html?id=10138" class="mcu-card mcu-card-test">
 
-    <div class="mcu-card-main">
+  <div class="mcu-number">3</div>
 
-      <img
-        src="https://image.tmdb.org/t/p/w300/6WBeq4fCfn7AN0o21W9qNcRF2l9.jpg"
-        alt="アイアンマン2"
-        class="mcu-poster"
-      >
+  <div class="mcu-card-main">
 
-      <div class="mcu-card-info">
+    <img
+      src="https://image.tmdb.org/t/p/w300/6WBeq4fCfn7AN0o21W9qNcRF2l9.jpg"
+      alt="アイアンマン2"
+      class="mcu-poster"
+    >
 
-        <div class="mcu-title">
-          アイアンマン2
-        </div>
+    <div class="mcu-card-info">
 
-        <div class="mcu-meta">
-          2010年
-        </div>
+      <div class="mcu-title">
+        アイアンマン2
+      </div>
 
-        <div class="mcu-watch">
-          📺 配信情報は作品詳細で確認
-        </div>
+      <div class="mcu-card-meta-row">
+        <span>2010年</span>
+        <span class="mcu-type">映画</span>
+      </div>
 
-        <div class="mcu-detail-link">
-          作品詳細を見る →
-        </div>
+      <div class="mcu-logo-test">
+        <span></span><span></span><span></span>
+        <span></span><span></span><span></span>
+      </div>
 
+      <div class="mcu-detail-link">
+        作品詳細を見る →
       </div>
 
     </div>
-  </a>
+
+  </div>
+
+</a>
 
 
-  <a
-    href="detail.html?id=10195"
-    class="mcu-card"
-  >
-    <div class="mcu-number">4</div>
+  <a href="detail.html?id=10195" class="mcu-card mcu-card-test">
 
-    <div class="mcu-card-main">
+  <div class="mcu-number">4</div>
 
-      <img
-        src="https://image.tmdb.org/t/p/w300/prSfAi1xGrhLQNxVSUFh61xQ4Qy.jpg"
-        alt="マイティ・ソー"
-        class="mcu-poster"
-      >
+  <div class="mcu-card-main">
 
-      <div class="mcu-card-info">
+    <img
+      src="https://image.tmdb.org/t/p/w300/prSfAi1xGrhLQNxVSUFh61xQ4Qy.jpg"
+      alt="マイティ・ソー"
+      class="mcu-poster"
+    >
 
-        <div class="mcu-title">
-          マイティ・ソー
-        </div>
+    <div class="mcu-card-info">
 
-        <div class="mcu-meta">
-          2011年
-        </div>
+      <div class="mcu-title">
+        マイティ・ソー
+      </div>
 
-        <div class="mcu-watch">
-          📺 配信情報は作品詳細で確認
-        </div>
+      <div class="mcu-card-meta-row">
+        <span>2011年</span>
+        <span class="mcu-type">映画</span>
+      </div>
 
-        <div class="mcu-detail-link">
-          作品詳細を見る →
-        </div>
+      <div class="mcu-logo-test">
+        <span></span><span></span><span></span>
+        <span></span><span></span><span></span>
+      </div>
 
+      <div class="mcu-detail-link">
+        作品詳細を見る →
       </div>
 
     </div>
-  </a>
+
+  </div>
+
+</a>
 
 
-  <a
-    href="detail.html?id=1771"
-    class="mcu-card"
-  >
-    <div class="mcu-number">5</div>
+  <a href="detail.html?id=1771" class="mcu-card mcu-card-test">
 
-    <div class="mcu-card-main">
+  <div class="mcu-number">5</div>
 
-      <img
-        src="https://image.tmdb.org/t/p/w300/vSNxAJTlD0r02V9sPYpOjqDZXUK.jpg"
-        alt="キャプテン・アメリカ／ザ・ファースト・アベンジャー"
-        class="mcu-poster"
-      >
+  <div class="mcu-card-main">
 
-      <div class="mcu-card-info">
+    <img
+      src="https://image.tmdb.org/t/p/w300/vSNxAJTlD0r02V9sPYpOjqDZXUK.jpg"
+      alt="キャプテン・アメリカ／ザ・ファースト・アベンジャー"
+      class="mcu-poster"
+    >
 
-        <div class="mcu-title">
-          キャプテン・アメリカ／ザ・ファースト・アベンジャー
-        </div>
+    <div class="mcu-card-info">
 
-        <div class="mcu-meta">
-          2011年
-        </div>
+      <div class="mcu-title mcu-title-long">
+        キャプテン・アメリカ／ザ・ファースト・アベンジャー
+      </div>
 
-        <div class="mcu-watch">
-          📺 配信情報は作品詳細で確認
-        </div>
+      <div class="mcu-card-meta-row">
+        <span>2011年</span>
+        <span class="mcu-type">映画</span>
+      </div>
 
-        <div class="mcu-detail-link">
-          作品詳細を見る →
-        </div>
+      <div class="mcu-logo-test">
+        <span></span><span></span><span></span>
+        <span></span><span></span><span></span>
+      </div>
 
+      <div class="mcu-detail-link">
+        作品詳細を見る →
       </div>
 
     </div>
-  </a>
+
+  </div>
+
+</a>
 
 
-  <a
-    href="detail.html?id=24428"
-    class="mcu-card"
-  >
-    <div class="mcu-number">6</div>
+  <a href="detail.html?id=24428" class="mcu-card mcu-card-test">
 
-    <div class="mcu-card-main">
+  <div class="mcu-number">6</div>
 
-      <img
-        src="https://image.tmdb.org/t/p/w300/RYMX2wcKCBAr24UyPD7xwmjaTn.jpg"
-        alt="アベンジャーズ"
-        class="mcu-poster"
-      >
+  <div class="mcu-card-main">
 
-      <div class="mcu-card-info">
+    <img
+      src="https://image.tmdb.org/t/p/w300/RYMX2wcKCBAr24UyPD7xwmjaTn.jpg"
+      alt="アベンジャーズ"
+      class="mcu-poster"
+    >
 
-        <div class="mcu-title">
-          アベンジャーズ
-        </div>
+    <div class="mcu-card-info">
 
-        <div class="mcu-meta">
-          2012年
-        </div>
+      <div class="mcu-title">
+        アベンジャーズ
+      </div>
 
-        <div class="mcu-watch">
-          📺 配信情報は作品詳細で確認
-        </div>
+      <div class="mcu-card-meta-row">
+        <span>2012年</span>
+        <span class="mcu-type">映画</span>
+      </div>
 
-        <div class="mcu-detail-link">
-          作品詳細を見る →
-        </div>
+      <div class="mcu-logo-test">
+        <span></span><span></span><span></span>
+        <span></span><span></span><span></span>
+      </div>
 
+      <div class="mcu-detail-link">
+        作品詳細を見る →
       </div>
 
     </div>
-   </a>
+
+  </div>
+
+</a>
 
 </div>
 
 </section>
 
-<section class="mcu-list-section">
+<section class="mcu-list-section phase-box phase-box-2">
+
 
 <!-- =====================================================
      PHASE 2
 ===================================================== -->
 
-<div id="phase2" class="mcu-phase-heading phase-heading-2" style="margin-top:32px;">
-
+<div id="phase2" class="mcu-phase-heading phase-heading-2">
+  
   <div class="mcu-phase-heading-number">
     PHASE 2
   </div>
@@ -2234,7 +2791,7 @@ html{
       ・MCU第2章の6作品
     </p>
 
-  </div>
+ </div>
 
 </div>
 
@@ -2341,15 +2898,19 @@ html{
         <div class="mcu-detail-link">作品詳細を見る →</div>
       </div>
     </div>
-  </a>
+     </a>
 
 </div>
+
+</section>
 
 <!-- =====================================================
      PHASE 3
 ===================================================== -->
 
-<div id="phase3" class="mcu-phase-heading phase-heading-3" style="margin-top:32px;">
+<div class="phase-box phase-box-3">
+
+<div id="phase3" class="mcu-phase-heading phase-heading-3">
 
   <div class="mcu-phase-heading-number">
     PHASE 3
@@ -2561,13 +3122,16 @@ html{
 
 </div>
 
+</div>
 
 <!-- =====================================================
      PHASE 4
 ===================================================== -->
 
-<div id="phase4" class="mcu-phase-heading phase-heading-4" style="margin-top:32px;">
+<div class="phase-box phase-box-4">
 
+<div id="phase4" class="mcu-phase-heading phase-heading-4">
+  
   <div class="mcu-phase-heading-number">
     PHASE 4
   </div>
@@ -2840,11 +3404,16 @@ html{
 
 </div>
 
+</div>
+
 <!-- =====================================================
      PHASE 5
 ===================================================== -->
 
-<div id="phase5" class="mcu-phase-heading phase-heading-5" style="margin-top:32px;">
+<div class="phase-box phase-box-5">
+
+<div id="phase5" class="mcu-phase-heading phase-heading-5">  
+
   <div class="mcu-phase-heading-number">PHASE 5</div>
   <div class="mcu-phase-heading-text">
     <h2>新たなヒーローたちと、次の大きな物語へ</h2>
@@ -3066,11 +3635,15 @@ html{
 
 </div>
 
+</div>
+
 <!-- =====================================================
      PHASE 6
 ===================================================== -->
 
-<div id="phase6" class="mcu-phase-heading phase-heading-6" style="margin-top:32px;">
+<div class="phase-box phase-box-6">
+
+<div id="phase6" class="mcu-phase-heading phase-heading-6">
 
   <div class="mcu-phase-heading-number">
     PHASE 6
@@ -3244,15 +3817,110 @@ html{
 
 </a>
 
- </div> 
-  
-</section>
-        
+</div>
+
+</div>
+   
+</section>        
 
       
     </main>
 
   </div>
+
+<script>
+async function loadMcuProviders(){
+
+  const box =
+    document.querySelector(
+      '.mcu-provider-logos[data-id="1726"]'
+    );
+
+  if(!box) return;
+
+  try{
+
+    const response =
+      await fetch(
+        '/api/search?id=1726&type=movie'
+      );
+
+    if(!response.ok){
+      throw new Error('配信情報を取得できませんでした');
+    }
+
+    const data =
+      await response.json();
+
+    const providers =
+  Array.isArray(data.streaming)
+    ? data.streaming
+    : [];
+
+    const unique = [];
+
+    for(const provider of providers){
+
+      if(
+        !provider ||
+        !provider.logo_path
+      ){
+        continue;
+      }
+
+      if(
+        unique.some(
+          item =>
+            item.provider_id === provider.provider_id
+        )
+      ){
+        continue;
+      }
+
+      unique.push(provider);
+
+      if(unique.length >= 6){
+        break;
+      }
+    }
+
+    if(unique.length === 0){
+      return;
+    }
+
+    box.innerHTML = '';
+
+    for(const provider of unique){
+
+      const img =
+        document.createElement('img');
+
+      img.src =
+        'https://image.tmdb.org/t/p/w92' +
+        provider.logo_path;
+
+      img.alt =
+        provider.provider_name || '配信サービス';
+
+      img.loading = 'lazy';
+
+      box.appendChild(img);
+    }
+
+  }catch(error){
+
+    console.error(
+      'MCU配信ロゴ取得エラー:',
+      error
+    );
+
+  }
+
+}
+
+loadMcuProviders();
+</script>
+
 
 <button id="backToTop" aria-label="ページ上部へ戻る">
   ↑ TOPへ
@@ -3290,6 +3958,88 @@ backToTop.addEventListener(
 
   }
 );
+</script>
+
+<script>
+/* =====================================================
+   MCU 表示モードの選択状態
+===================================================== */
+
+const mcuView =
+  new URLSearchParams(
+    window.location.search
+  ).get("view") || "release";
+
+
+const mcuViewDescription =
+  document.getElementById(
+    "mcuViewDescription"
+  );
+
+
+const viewInfo = {
+
+  release: {
+    title: "💡 初めて見るなら",
+    text:
+      "公開された順番に見ることで、MCUの広がりを自然に楽しめます。"
+  },
+
+  timeline: {
+    title: "🕐 物語の流れを追うなら",
+    text:
+      "MCU世界の出来事を、物語上の時系列に沿って楽しめます。"
+  },
+
+  short: {
+    title: "⚡ 短く楽しむなら",
+    text:
+      "重要作品を中心に、MCUの大きな流れを効率よく楽しめます。"
+  }
+
+};
+
+
+if(mcuViewDescription){
+
+  const info =
+    viewInfo[mcuView] ||
+    viewInfo.release;
+
+  mcuViewDescription.innerHTML =
+    '<strong class="mcu-view-description-title">' +
+      info.title +
+    '</strong>' +
+    '<span>' +
+      info.text +
+    '</span>';
+}
+
+
+/* 選択中のボタンだけ色を付ける */
+
+document
+  .querySelectorAll(
+    '.mcu-tabs a.mcu-tab'
+  )
+  .forEach(tab => {
+
+    const url =
+      new URL(
+        tab.href,
+        window.location.href
+      );
+
+    const tabView =
+      url.searchParams.get("view");
+
+    tab.classList.toggle(
+      "active",
+      tabView === mcuView
+    );
+
+  });
+
 </script>
 
 </body>
