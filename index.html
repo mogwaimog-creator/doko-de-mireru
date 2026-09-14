@@ -3968,11 +3968,49 @@ padding:
 ========================================================= */
 
 .watch-order-section{
-  background:#fff;
-  border:1px solid #e5e7eb;
+  position:relative;
+  overflow:hidden;
+
+  background:
+  linear-gradient(
+    135deg,
+    #ffffff 0%,
+    #f8f6ff 50%,
+    #f1f5ff 100%
+  );
+
+  border:1px solid #ddd6fe;
   border-radius:18px;
-  padding:16px;
-  box-shadow:0 4px 18px rgba(15,23,42,.07);
+
+  padding:18px;
+
+  box-shadow:
+    0 8px 24px
+    rgba(91,33,182,.12);
+}
+
+.watch-order-section::before{
+  content:"";
+  position:absolute;
+  inset:0;
+
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(139,92,246,.12),
+      transparent 38%
+    );
+
+  pointer-events:none;
+}
+
+.watch-order-heading{
+  position:relative;
+  z-index:1;
+}
+
+.watch-order-heading h2{
+  color:#312e81;
 }
 
 .watch-order-heading{
@@ -4000,14 +4038,59 @@ padding:
 }
 
 .watch-order-card{
+  display:block;
+  position:relative;
   padding:12px 13px;
   background:#f8fafc;
   border:1px solid #e2e8f0;
   border-radius:11px;
+  text-decoration:none;
 }
 
-.watch-order-card{
-  position:relative;
+/* 完成済みのMCUだけ少し特別に */
+
+a.watch-order-card{
+  background:
+    linear-gradient(
+      135deg,
+      #ffffff 0%,
+      #f2edff 100%
+    );
+
+  border-color:#a78bfa;
+
+  box-shadow:
+    0 5px 16px
+    rgba(124,58,237,.16);
+}
+}
+
+a.watch-order-card .watch-order-name{
+  color:#312e81;
+}
+
+
+/* カード同士の間隔 */
+.watch-order-card + .watch-order-card{
+  margin-top:9px;
+}
+
+/* クリックできるカードだけ反応 */
+a.watch-order-card{
+  cursor:pointer;
+  transition:
+    transform .18s ease,
+    background .18s ease,
+    border-color .18s ease,
+    box-shadow .18s ease;
+}
+
+/* MCUにマウスを乗せた時 */
+a.watch-order-card:hover{
+  transform:translateY(-2px);
+  background:#f8fbff;
+  border-color:#93c5fd;
+  box-shadow:0 7px 18px rgba(37,99,235,.10);
 }
 
 .watch-order-coming{
@@ -4138,52 +4221,105 @@ body.search-mode:not(.show-other-search) .popular-section{
 ========================================================= */
 
 .home-section-nav{
-  display:flex;
-  align-items:center;
-  gap:8px;
+  display:grid;
+  grid-template-columns:
+    repeat(3,minmax(0,1fr));
 
-  margin:0 0 12px;
-  padding:10px;
+  gap:10px;
+
+  margin:0 0 14px;
+  padding:14px;
 
   background:
-  linear-gradient(
-    135deg,
-    #f8fbff 0%,
-    #edf5ff 50%,
-    #e1efff 100%
-  );
+    linear-gradient(
+      135deg,
+      #f8fbff 0%,
+      #edf5ff 50%,
+      #e1efff 100%
+    );
+
   border:1px solid #e5e7eb;
-  border-radius:14px;
+  border-radius:16px;
 
   box-shadow:
-    0 3px 12px
-    rgba(15,23,42,.06);
+    0 4px 14px
+    rgba(15,23,42,.07);
 }
 
 
 .home-section-nav a{
-  flex:1 1 0;
   min-width:0;
 
   display:flex;
   align-items:center;
-  justify-content:center;
 
-  min-height:38px;
-  padding:8px 8px;
+  gap:10px;
+
+  min-height:78px;
+  padding:14px 16px;
 
   border:1px solid #dbe3ef;
-  border-radius:999px;
+  border-radius:13px;
 
-  background:#f8fafc;
+  background:#ffffff;
 
   color:#334155;
   text-decoration:none;
 
-  font-size:13px;
-  font-weight:800;
+  transition:
+    transform .18s ease,
+    border-color .18s ease,
+    box-shadow .18s ease,
+    background .18s ease;
+}
 
-  white-space:nowrap;
+
+.home-section-nav a:hover{
+  transform:translateY(-2px);
+
+  background:#f8fbff;
+
+  border-color:#93c5fd;
+
+  box-shadow:
+    0 7px 18px
+    rgba(37,99,235,.10);
+}
+
+
+.home-nav-icon{
+  flex:0 0 auto;
+
+  font-size:28px;
+  line-height:1;
+}
+
+
+.home-nav-text{
+  display:flex;
+  flex-direction:column;
+
+  min-width:0;
+}
+
+
+.home-nav-text strong{
+  color:#1e293b;
+
+  font-size:15px;
+  font-weight:900;
+
+  line-height:1.35;
+}
+
+
+.home-nav-text small{
+  margin-top:3px;
+
+  color:#64748b;
+
+  font-size:11px;
+  line-height:1.45;
 }
 
 
@@ -4192,13 +4328,13 @@ body.search-mode:not(.show-other-search) .popular-section{
 .home-section-nav-close{
   display:none;
 
-  flex:0 0 auto;
+  grid-column:1 / -1;
 
   min-height:38px;
   padding:8px 10px;
 
   border:1px solid #cbd5e1;
-  border-radius:6px;
+  border-radius:8px;
 
   background:#e5e7eb;
   color:#475569;
@@ -4208,6 +4344,73 @@ body.search-mode:not(.show-other-search) .popular-section{
 
   white-space:nowrap;
   cursor:pointer;
+}
+
+
+/* 検索後に「他の検索方法」を開いた時だけ表示 */
+
+body.search-mode.show-other-search
+.home-section-nav-close{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+
+/* ジャンプ位置 */
+
+#recommendArea,
+#watchOrderSection,
+#providerSearchSection,
+#genreSearchSection,
+#personSearchSection,
+#advancedSearchSection{
+  scroll-margin-top:14px;
+}
+
+
+/* スマホ */
+
+@media(max-width:700px){
+
+  .home-section-nav{
+    grid-template-columns:
+      repeat(2,minmax(0,1fr));
+
+    gap:8px;
+
+    padding:10px;
+  }
+
+
+  .home-section-nav a{
+    min-height:72px;
+
+    padding:10px;
+  }
+
+
+  .home-nav-icon{
+    font-size:21px;
+  }
+
+
+  .home-nav-text strong{
+    font-size:13px;
+  }
+
+
+  .home-nav-text small{
+    font-size:10px;
+  }
+
+
+  .home-section-nav-close{
+    grid-column:1 / -1;
+
+    width:100%;
+  }
+
 }
 
 
@@ -4712,7 +4915,47 @@ body.search-mode.show-other-search
 .home-section-nav a[href="#advancedSearchSection"]{
   margin-left:0 !important;
 }
-     
+ 
+/* =========================================================
+   探し方ナビ 6項目の色分け
+========================================================= */
+
+/* おすすめ */
+.home-section-nav a:nth-of-type(1){
+  background:#fff7f7;
+  border-color:#f5dada;
+}
+
+/* シリーズ */
+.home-section-nav a:nth-of-type(2){
+  background:#f8f7ff;
+  border-color:#e5e1f7;
+}
+
+/* 配信サービス */
+.home-section-nav a:nth-of-type(3){
+  background:#f4faff;
+  border-color:#d7eaf7;
+}
+
+/* ジャンル */
+.home-section-nav a:nth-of-type(4){
+  background:#fffbf3;
+  border-color:#f3e4bf;
+}
+
+/* 人物 */
+.home-section-nav a:nth-of-type(5){
+  background:#f3fbf8;
+  border-color:#d1ebe2;
+}
+
+/* こだわり */
+.home-section-nav a:nth-of-type(6){
+  background:#fff7fb;
+  border-color:#f1dce7;
+}
+    
 </style>
 
      
@@ -4853,6 +5096,8 @@ body.search-mode.show-other-search
   </span>
 </button>
 
+
+
 <!-- =====================================================
      トップページ内ナビ
 ====================================================== -->
@@ -4861,41 +5106,76 @@ body.search-mode.show-other-search
   class="home-section-nav"
   aria-label="探し方メニュー"
 >
+
   <a href="#recommendArea">
-    🔥 おすすめ
+    <span class="home-nav-icon">🔥</span>
+
+    <span class="home-nav-text">
+      <strong>おすすめ</strong>
+      <small>いま注目の作品から探す</small>
+    </span>
   </a>
+
 
   <a href="#watchOrderSection">
-    🎬 シリーズ
+    <span class="home-nav-icon">🎬</span>
+
+    <span class="home-nav-text">
+      <strong>シリーズ</strong>
+      <small>MCUなどを順番から探す</small>
+    </span>
   </a>
+
 
   <a href="#providerSearchSection">
-    📺 配信
+    <span class="home-nav-icon">📺</span>
+
+    <span class="home-nav-text">
+      <strong>配信サービス</strong>
+      <small>利用中のサービスから探す</small>
+    </span>
   </a>
+
 
   <a href="#genreSearchSection">
-    🎭 ジャンル
+    <span class="home-nav-icon">🎭</span>
+
+    <span class="home-nav-text">
+      <strong>ジャンル</strong>
+      <small>好きなジャンルから探す</small>
+    </span>
   </a>
+
 
   <a href="#personSearchSection">
-    👤 人物
+    <span class="home-nav-icon">👤</span>
+
+    <span class="home-nav-text">
+      <strong>人物</strong>
+      <small>俳優・女優・監督から探す</small>
+    </span>
   </a>
 
+
   <a href="#advancedSearchSection">
-  🔎 こだわり
-</a>
+    <span class="home-nav-icon">🔎</span>
 
-     
-　<button
-  id="closeOtherSearch"
-  class="home-section-nav-close"
-  type="button"
->
-  × 閉じる
-</button>
+    <span class="home-nav-text">
+      <strong>こだわり</strong>
+      <small>条件を指定して詳しく探す</small>
+    </span>
+  </a>
 
-</nav>
-     
+
+  <button
+    id="closeOtherSearch"
+    class="home-section-nav-close"
+    type="button"
+  >
+    × 閉じる
+  </button>
+
+</nav>     
 <div
   id="recommendArea"
   class="home-feature-layout"
@@ -5092,7 +5372,6 @@ body.search-mode.show-other-search
   href="mcu.html"
   class="watch-order-card"
 >
-
  
    <div class="watch-order-name">
     🦸 MCU・マーベル
@@ -5165,10 +5444,9 @@ body.search-mode.show-other-search
 <section
   id="providerSearchSection"
   class="provider-search-section"
+>
 
-  <div class="provider-search-heading">
-
-    <h2>
+  <div class="provider-search-heading">    <h2>
       📺 配信サービスから探す
     </h2>
 
