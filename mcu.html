@@ -2956,6 +2956,28 @@ a.mcu-tab{
 }
 </style>
 
+
+<style>
+/* 本番修正：時系列・ストーリー順の配信ロゴサイズだけ固定 */
+#timelineView .mcu-provider-logos{
+  display:grid !important;
+  grid-template-columns:repeat(3, 40px) !important;
+  gap:6px !important;
+  align-items:center !important;
+  justify-content:start !important;
+  min-height:50px !important;
+}
+#timelineView .mcu-provider-logos img{
+  display:block !important;
+  width:40px !important;
+  height:24px !important;
+  max-width:40px !important;
+  max-height:24px !important;
+  object-fit:contain !important;
+  border-radius:5px !important;
+}
+</style>
+
 </head>
 <body>
 <div class="page-wrap">
