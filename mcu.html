@@ -1,23 +1,14 @@
 <!DOCTYPE html>
+
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="robots" content="index,follow">
-  
-  <title>MCU・マーベルを見る順番｜ドコデミレル？</title>
-
-  <meta
-  name="description"
-  content="MCU・マーベル作品を見る順番を公開順でわかりやすく紹介。映画・ドラマをPHASEごとに整理し、配信サービスや作品同士のつながりも確認できます。"
->
-
-<link
-  rel="canonical"
-  href="https://doko-de-mireru.vercel.app/mcu.html"
->
-
-  <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="index,follow" name="robots"/>
+<title>MCU・マーベルを見る順番｜ドコデミレル？</title>
+<meta content="MCU・マーベル作品を見る順番を公開順でわかりやすく紹介。映画・ドラマをPHASEごとに整理し、配信サービスや作品同士のつながりも確認できます。" name="description"/>
+<link href="https://doko-de-mireru.vercel.app/mcu.html" rel="canonical"/>
+<style>
     body{
       margin:0;
       font-family:
@@ -1691,10 +1682,14 @@ html{
 .phase-box .mcu-card{
   display:flex;
   flex-direction:column;
+
+  min-height:242px;
+
   background:#ffffff;
   border:1px solid rgba(226,232,240,.85);
   box-shadow:0 3px 12px rgba(0,0,0,.11);
 }
+
 
 .phase-box .mcu-card .mcu-card-main{
   display:flex;
@@ -1720,28 +1715,23 @@ html{
   flex-direction:column;
 }
 
-/* タイトルは基本2行分を確保 */
+/* =====================================================
+   MCU作品タイトル 共通ルール
+   全PHASE共通・最大3行
+===================================================== */
+
 .phase-box .mcu-card .mcu-title{
-  min-height:46px;
   margin-bottom:5px;
   font-size:17px;
   line-height:1.35;
+
   display:-webkit-box;
   -webkit-box-orient:vertical;
-  -webkit-line-clamp:2;
+  -webkit-line-clamp:3;
   overflow:hidden;
 }
 
-/*
-  PHASE 4は現在の表示を維持。
-  全作品タイトルの最終統一時に、この例外も一緒に整理する。
-*/
-.phase-box-4 .mcu-card .mcu-title{
-  display:block;
-  overflow:visible;
-}
-
-/* PHASE 1で既に使っている長いタイトル用 */
+/* PHASE 1の特に長いタイトル用 */
 .phase-box-1 .mcu-title-long{
   font-size:14px;
   letter-spacing:-0.4px;
@@ -1777,6 +1767,15 @@ html{
   min-height:50px;
 }
 
+/* 時系列も公開順と同じ配信ロゴ配置 */
+#timelineView .mcu-card .mcu-logo-test{
+  margin-top:auto;
+  display:grid;
+  grid-template-columns:repeat(3, 37px);
+  gap:6px;
+  min-height:50px;
+}
+
 .phase-box .mcu-card .mcu-logo-test span{
   display:block;
   width:37px;
@@ -1785,17 +1784,20 @@ html{
   background:#9ca3af;
 }
 
-/* 実際の配信ロゴ */
-.phase-box .mcu-provider-logos img{
+* 実際の配信ロゴ
+   公開順・時系列 共通 */
+.phase-box .mcu-provider-logos img,
+#timelineView .mcu-provider-logos img{
   width:40px;
   height:24px;
   object-fit:contain;
   border-radius:5px;
 }
 
+
 /* 詳細リンクをカード下部に統一 */
 .phase-box .mcu-card .mcu-detail-link{
-  margin-top:auto;
+  margin-top:0;
   padding-top:8px;
   font-size:14px;
   font-weight:800;
@@ -1872,112 +1874,1142 @@ a.mcu-tab{
   }
 }
 
+/* =========================================================
+   MCU 時系列・ストーリー順
+========================================================= */
+
+#timelineView{
+  margin-top:22px;
+}
+
+
+/* 時代ごとの箱 */
+
+.mcu-story-section{
+  padding:18px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #0f1d33 0%,
+      #14233d 100%
+    );
+
+  border:1px solid #60a5fa;
+  border-radius:18px;
+
+  box-shadow:
+    0 8px 24px
+    rgba(15,23,42,.18);
+}
+
+
+/* 見出し */
+
+.mcu-story-heading{
+  display:flex;
+  align-items:center;
+
+  gap:12px;
+
+  margin-bottom:16px;
+}
+
+
+.mcu-story-number{
+  flex:0 0 auto;
+
+  width:42px;
+  height:42px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  border-radius:50%;
+
+  background:#dbeafe;
+  color:#1e3a8a;
+
+  font-size:20px;
+  font-weight:900;
+}
+
+
+.mcu-story-heading-text h2{
+  margin:0;
+
+  color:#ffffff;
+
+  font-size:22px;
+}
+
+
+.mcu-story-heading-text p{
+  margin:5px 0 0;
+
+  color:#bfdbfe;
+
+  font-size:13px;
+}
+
+
+.mcu-story-heading-text p span{
+  margin-left:10px;
+
+  color:#94a3b8;
+}
+
+
+/* カード＋一口メモ */
+
+.mcu-story-layout{
+  display:grid;
+
+  grid-template-columns:
+    minmax(0,2fr)
+    minmax(260px,1fr);
+
+  gap:16px;
+
+  align-items:stretch;
+}
+
+
+/* 一口メモ */
+
+.mcu-story-note{
+  padding:17px 18px;
+
+  border:1px solid #facc15;
+  border-radius:14px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(30,41,59,.96),
+      rgba(15,23,42,.96)
+    );
+
+  color:#e2e8f0;
+}
+
+
+.mcu-story-note-title{
+  margin-bottom:10px;
+
+  color:#fde047;
+
+  font-size:16px;
+  font-weight:900;
+}
+
+
+.mcu-story-note p{
+  margin:0 0 9px;
+
+  font-size:13px;
+  line-height:1.8;
+}
+
+
+.mcu-story-note p:last-child{
+  margin-bottom:0;
+}
+
+
+/* スマホ */
+
+@media(max-width:700px){
+
+  .mcu-story-section{
+    padding:13px;
+  }
+
+
+  .mcu-story-layout{
+    grid-template-columns:1fr;
+  }
+
+
+  .mcu-story-heading{
+    align-items:flex-start;
+  }
+
+
+  .mcu-story-heading-text h2{
+    font-size:18px;
+  }
+
+
+  .mcu-story-heading-text p span{
+    display:block;
+    margin:3px 0 0;
+  }
+
+}
+
+/* =========================================================
+   時系列カードだけ横幅を調整
+========================================================= */
+
+/* 左の作品エリアを広め、右の一口メモを少し細め */
+#timelineView .mcu-story-layout{
+  grid-template-columns:
+    minmax(0, 2.6fr)
+    minmax(250px, .9fr);
+}
+
+
+/* 時系列のカード2枚を横並びに */
+#timelineView .mcu-list{
+  display:grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  gap:14px;
+}
+
+
+/* 時系列カードも公開順と同じ高さを基準にする */
+#timelineView .mcu-card{
+  min-width:0;
+  min-height:242px;
+}
+
+
+
+/* ポスターは公開順と同じ大きさ */
+#timelineView .mcu-poster{
+  width:104px;
+  height:156px;
+  object-fit:cover;
+}
+
+
+
+/* 時系列の年代表示 */
+#timelineView .mcu-card-meta-row > span:first-child{
+  white-space:nowrap;
+}
+
+
+/* 一口メモを少しコンパクトに */
+#timelineView .mcu-story-note{
+  min-height:0;
+  padding:16px;
+}
+
+
+/* スマホ */
+@media(max-width:700px){
+
+  #timelineView .mcu-story-layout{
+    grid-template-columns:1fr;
+  }
+
+  #timelineView .mcu-list{
+    grid-template-columns:1fr;
+  }
+
+}
+
+/* =====================================================
+   時系列：物語の年代を強調
+===================================================== */
+
+#timelineView .mcu-story-era{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+
+  margin-top:8px;
+  padding:7px 10px;
+
+  background:#f3f0ff;
+  border:1px solid #c4b5fd;
+  border-radius:9px;
+
+  font-size:12px;
+  line-height:1.3;
+}
+
+#timelineView .mcu-story-era-label{
+  color:#6d5bd0;
+  font-weight:800;
+  white-space:nowrap;
+}
+
+#timelineView .mcu-story-era strong{
+  color:#4338ca;
+  font-size:14px;
+  font-weight:900;
+  white-space:nowrap;
+}
+
+
+/* =====================================================
+   時系列60作品版：カード共通調整
+   ※公開順には影響しません
+===================================================== */
+#timelineView .mcu-story-section + .mcu-story-section{margin-top:24px;}
+#timelineView .mcu-card{display:flex;flex-direction:column;}
+#timelineView .mcu-card .mcu-card-main{display:flex;align-items:stretch;gap:12px;min-height:156px;padding-top:30px;flex:1;}
+#timelineView .mcu-card .mcu-card-info{min-width:0;min-height:156px;flex:1;display:flex;flex-direction:column;}
+#timelineView .mcu-card .mcu-title{margin-bottom:5px;font-size:17px;line-height:1.35;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;}
+#timelineView .mcu-card .mcu-title-long{font-size:14px;letter-spacing:-0.4px;}
+#timelineView .mcu-card .mcu-card-meta-row{display:flex;align-items:center;gap:10px;margin-top:0;font-size:13px;line-height:1.35;color:#64748b;}
+#timelineView .mcu-card .mcu-detail-link{margin-top:0;padding-top:8px;font-size:14px;font-weight:800;color:#2563eb;}
+#timelineView .mcu-card .mcu-logo-test span{display:block;width:37px;height:22px;border-radius:5px;background:#9ca3af;}
+#timelineView .mcu-upcoming-badge{align-self:flex-start;margin-top:8px;padding:3px 8px;border-radius:999px;font-size:11px;font-weight:900;color:#7c3aed;background:#ede9fe;border:1px solid #ddd6fe;}
+
+
+/* =====================================================
+   時系列確認版V2
+   ジャンプナビ＋3列配置＋ナビへ戻る
+   ※ #timelineView 内だけに適用
+===================================================== */
+
+#timelineJumpNav{
+  margin:0 0 22px;
+  padding:18px;
+  background:linear-gradient(135deg,#0f172a,#172554);
+  border:1px solid #60a5fa;
+  border-radius:16px;
+  box-shadow:0 7px 20px rgba(15,23,42,.14);
+}
+
+#timelineJumpNav .mcu-timeline-jump-title{
+  color:#ffffff;
+  font-size:18px;
+  font-weight:900;
+}
+
+#timelineJumpNav p{
+  margin:5px 0 13px;
+  color:#bfdbfe;
+  font-size:13px;
+}
+
+#timelineJumpNav .mcu-timeline-jump-links{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:8px;
+}
+
+#timelineJumpNav .mcu-timeline-jump-links a{
+  display:flex;
+  align-items:center;
+  min-height:42px;
+  padding:8px 10px;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(147,197,253,.28);
+  border-radius:10px;
+  color:#e0f2fe;
+  text-decoration:none;
+  font-size:12px;
+  font-weight:800;
+  line-height:1.4;
+}
+
+#timelineJumpNav .mcu-timeline-jump-links a:hover{
+  background:rgba(96,165,250,.18);
+  border-color:#60a5fa;
+}
+
+#timelineView .mcu-story-layout{
+  display:block;
+}
+
+#timelineView .mcu-story-layout > .mcu-list{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px;
+}
+
+/* 一口メモは1段目の右端＝3番目 */
+#timelineView .mcu-story-layout > .mcu-list > .mcu-story-note{
+  min-width:0;
+  min-height:242px;
+  box-sizing:border-box;
+}
+
+/* 各区分の下からジャンプナビへ戻る */
+#timelineView .mcu-timeline-back{
+  display:block;
+  width:max-content;
+  margin:14px 2px 0 auto;
+  color:#bfdbfe;
+  text-decoration:none;
+  font-size:13px;
+  font-weight:800;
+}
+
+#timelineView .mcu-timeline-back:hover{
+  color:#ffffff;
+  text-decoration:underline;
+}
+
+@media(max-width:850px){
+  #timelineJumpNav .mcu-timeline-jump-links{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+
+  #timelineView .mcu-story-layout > .mcu-list{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+
+  /* 2列時はメモを横幅いっぱいに */
+  #timelineView .mcu-story-layout > .mcu-list > .mcu-story-note{
+    grid-column:1 / -1;
+    min-height:0;
+  }
+}
+
+@media(max-width:560px){
+  #timelineJumpNav .mcu-timeline-jump-links{
+    grid-template-columns:1fr;
+  }
+
+  #timelineView .mcu-story-layout > .mcu-list{
+    grid-template-columns:1fr;
+  }
+
+  #timelineView .mcu-story-layout > .mcu-list > .mcu-story-note{
+    grid-column:auto;
+  }
+}
+
+/* =====================================================
+   時系列確認版V3
+   年代2段＋色分け＋年表ジャンプナビ
+   ※ #timelineView 内だけに適用
+===================================================== */
+
+/* 年代欄：全カード2段・高さ統一 */
+#timelineView .mcu-story-era{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  justify-content:center;
+  gap:4px;
+  box-sizing:border-box;
+  min-height:58px;
+  margin-top:8px;
+  padding:7px 10px;
+}
+
+#timelineView .mcu-story-era-label{
+  display:block;
+  width:100%;
+  white-space:nowrap;
+}
+
+#timelineView .mcu-story-era strong{
+  display:block;
+  width:100%;
+  white-space:normal;
+  line-height:1.35;
+}
+
+/* 通常年代：従来の紫 */
+#timelineView .mcu-story-era:not(.mcu-era-time):not(.mcu-era-multiverse):not(.mcu-era-universe):not(.mcu-era-future){
+  background:#f3f0ff;
+  border-color:#c4b5fd;
+}
+
+/* 時間軸外：ブルー */
+#timelineView .mcu-story-era.mcu-era-time{
+  background:#eaf5ff;
+  border-color:#93c5fd;
+}
+#timelineView .mcu-era-time .mcu-story-era-label,
+#timelineView .mcu-era-time strong{
+  color:#1d4ed8;
+}
+
+/* 別世界・マルチバース：ピンク紫 */
+#timelineView .mcu-story-era.mcu-era-multiverse{
+  background:#fdf2f8;
+  border-color:#f0abfc;
+}
+#timelineView .mcu-era-multiverse .mcu-story-era-label,
+#timelineView .mcu-era-multiverse strong{
+  color:#a21caf;
+}
+
+/* 別宇宙：ターコイズ */
+#timelineView .mcu-story-era.mcu-era-universe{
+  background:#ecfeff;
+  border-color:#67e8f9;
+}
+#timelineView .mcu-era-universe .mcu-story-era-label,
+#timelineView .mcu-era-universe strong{
+  color:#0f766e;
+}
+
+/* 未来：少しゴールド */
+#timelineView .mcu-story-era.mcu-era-future{
+  background:#fffbeb;
+  border-color:#fde68a;
+}
+#timelineView .mcu-era-future .mcu-story-era-label,
+#timelineView .mcu-era-future strong{
+  color:#a16207;
+}
+
+/* ジャンプナビを年表風に */
+#timelineJumpNav{
+  position:relative;
+  overflow:hidden;
+  padding:24px 22px 28px;
+  background:
+    radial-gradient(circle at 15% 20%,rgba(59,130,246,.24),transparent 27%),
+    radial-gradient(circle at 85% 75%,rgba(168,85,247,.22),transparent 30%),
+    linear-gradient(135deg,#07152d 0%,#102653 52%,#24124c 100%);
+  border:1px solid rgba(147,197,253,.42);
+  box-shadow:
+    0 10px 28px rgba(15,23,42,.20),
+    inset 0 1px 0 rgba(255,255,255,.07);
+}
+
+#timelineJumpNav::before{
+  content:"";
+  position:absolute;
+  left:7%;
+  right:7%;
+  top:132px;
+  height:4px;
+  border-radius:999px;
+  background:linear-gradient(90deg,#38bdf8,#60a5fa,#818cf8,#c084fc);
+  box-shadow:0 0 14px rgba(96,165,250,.55);
+}
+
+#timelineJumpNav .mcu-timeline-jump-title{
+  position:relative;
+  z-index:2;
+  text-align:center;
+  font-size:22px;
+  letter-spacing:.06em;
+}
+
+#timelineJumpNav p{
+  position:relative;
+  z-index:2;
+  text-align:center;
+  margin:6px 0 26px;
+}
+
+#timelineJumpNav .mcu-timeline-jump-links{
+  position:relative;
+  z-index:2;
+  display:grid;
+  grid-template-columns:repeat(7,minmax(0,1fr));
+  gap:9px;
+}
+
+#timelineJumpNav .mcu-timeline-jump-links a{
+  position:relative;
+  min-height:76px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:10px 7px;
+  background:rgba(15,23,42,.88);
+  border:1px solid rgba(147,197,253,.48);
+  border-radius:12px;
+  box-shadow:
+    0 6px 14px rgba(0,0,0,.18),
+    0 0 10px rgba(96,165,250,.12);
+  transition:filter .18s ease,box-shadow .18s ease,border-color .18s ease;
+}
+
+#timelineJumpNav .mcu-timeline-jump-links a::before{
+  content:"";
+  position:absolute;
+  top:-20px;
+  left:50%;
+  width:12px;
+  height:12px;
+  transform:translateX(-50%);
+  border-radius:50%;
+  background:#ffffff;
+  border:3px solid #60a5fa;
+  box-shadow:0 0 13px rgba(96,165,250,.9);
+}
+
+#timelineJumpNav .mcu-timeline-jump-links a:hover{
+  transform:none;
+  filter:brightness(1.13);
+  border-color:#c4b5fd;
+  box-shadow:
+    0 6px 14px rgba(0,0,0,.20),
+    0 0 20px rgba(129,140,248,.45);
+}
+
+#timelineJumpNav .mcu-timeline-jump-links strong{
+  color:#ffffff;
+  font-size:12px;
+  line-height:1.4;
+}
+
+#timelineJumpNav .mcu-timeline-jump-links small{
+  display:block;
+  margin-top:5px;
+  color:#93c5fd;
+  font-size:10px;
+  font-weight:800;
+}
+
+@media(max-width:850px){
+  #timelineJumpNav::before{
+    display:none;
+  }
+  #timelineJumpNav .mcu-timeline-jump-links{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  #timelineJumpNav .mcu-timeline-jump-links a::before{
+    display:none;
+  }
+}
+
+@media(max-width:560px){
+  #timelineJumpNav{
+    padding:19px 14px;
+  }
+  #timelineJumpNav .mcu-timeline-jump-title{
+    font-size:18px;
+  }
+  #timelineJumpNav .mcu-timeline-jump-links{
+    grid-template-columns:1fr;
+  }
+  #timelineJumpNav .mcu-timeline-jump-links a{
+    min-height:54px;
+  }
+}
+
+/* =====================================================
+   時系列確認版V4
+   年代位置統一＋マルチバース初心者向け説明
+   ※ #timelineView 内だけに適用
+===================================================== */
+
+/* タイトル領域の高さを固定して、その下の情報位置を揃える */
+#timelineView .mcu-card .mcu-title{
+  min-height:69px;
+  margin-bottom:5px;
+}
+
+/* 長いタイトルも同じ3行分の領域を確保 */
+#timelineView .mcu-card .mcu-title-long{
+  min-height:69px;
+}
+
+/* 公開年・種別の行も高さを統一 */
+#timelineView .mcu-card .mcu-card-meta-row{
+  min-height:24px;
+  flex-wrap:wrap;
+  align-content:flex-start;
+}
+
+/* 物語の年代はカード内で同じ位置・同じ高さに */
+#timelineView .mcu-card .mcu-story-era{
+  min-height:62px;
+  height:62px;
+  flex:0 0 62px;
+  overflow:hidden;
+}
+
+/* 長い年代文字も2行以内で収める */
+#timelineView .mcu-card .mcu-story-era strong{
+  display:-webkit-box;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:2;
+  overflow:hidden;
+}
+
+/* =========================================================
+   V5 完成形候補：初心者向け MCU STORY TIMELINE
+   ※ #timelineView のみ。公開順には影響しません。
+========================================================= */
+#timelineView .mcu-story-map{margin-bottom:24px;}
+#timelineView .mcu-story-map .mcu-timeline-jump-links{
+  grid-template-columns:repeat(4,minmax(0,1fr));
+}
+#timelineView .mcu-story-map .mcu-timeline-jump-links a{
+  min-height:76px;
+}
+
+/* カード内の縦位置を統一 */
+#timelineView .mcu-card{position:relative;}
+#timelineView .mcu-card .mcu-title{
+  height:69px !important;
+  min-height:69px !important;
+  flex:0 0 69px;
+  line-height:1.35;
+}
+#timelineView .mcu-card .mcu-title-long{
+  height:69px !important;
+  min-height:69px !important;
+  line-height:1.35;
+}
+#timelineView .mcu-card .mcu-card-meta-row{
+  height:24px;
+  min-height:24px;
+  flex:0 0 24px;
+  flex-wrap:nowrap;
+}
+#timelineView .mcu-card .mcu-story-era{
+  box-sizing:border-box;
+  height:50px !important;
+  min-height:50px !important;
+  flex:0 0 50px !important;
+  margin-top:5px;
+  padding:4px 7px !important;
+  gap:1px !important;
+  overflow:hidden;
+}
+#timelineView .mcu-card .mcu-story-era-label{
+  font-size:10px;
+  line-height:1.1;
+}
+#timelineView .mcu-card .mcu-story-era strong{
+  display:block;
+  width:100%;
+  font-size:12px !important;
+  line-height:1.2 !important;
+  white-space:nowrap !important;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+#timelineView .mcu-card .mcu-logo-test{
+  margin-top:auto;
+  padding-top:7px;
+}
+
+/* NEWヒーロー／NEWチーム：番号の横だけに小さく表示 */
+#timelineView .mcu-new-badge{
+  position:absolute;
+  top:8px;
+  left:42px;
+  z-index:3;
+  display:inline-flex;
+  align-items:center;
+  min-height:20px;
+  padding:2px 7px;
+  border-radius:999px;
+  border:1px solid #fde68a;
+  background:#fff7d6;
+  color:#92400e;
+  font-size:10px;
+  line-height:1.1;
+  font-weight:900;
+  box-shadow:0 2px 6px rgba(15,23,42,.08);
+}
+#timelineView .mcu-new-badge-team{
+  border-color:#bae6fd; background:#e0f2fe; color:#075985;
+}
+#timelineView .mcu-new-badge-magic{
+  border-color:#ddd6fe; background:#ede9fe; color:#6d28d9;
+}
+#timelineView .mcu-new-badge-universe{
+  border-color:#99f6e4; background:#ccfbf1; color:#0f766e;
+}
+
+/* 物語の転換点：映画の次章予告のような横長帯 */
+#timelineView .mcu-turning-point{
+  grid-column:1 / -1;
+  display:flex;
+  align-items:center;
+  gap:13px;
+  margin:5px 2px 3px;
+  padding:13px 16px;
+  border-left:4px solid #60a5fa;
+  border-radius:0 13px 13px 0;
+  background:linear-gradient(90deg,rgba(219,234,254,.92),rgba(255,255,255,.92));
+  box-shadow:0 3px 12px rgba(15,23,42,.07);
+}
+#timelineView .mcu-turning-icon{
+  flex:0 0 auto;
+  width:36px; height:36px;
+  display:flex; align-items:center; justify-content:center;
+  border-radius:50%;
+  background:#fff;
+  font-size:19px;
+  box-shadow:0 2px 8px rgba(15,23,42,.10);
+}
+#timelineView .mcu-turning-point strong{
+  display:block;
+  color:#0f172a;
+  font-size:15px;
+  line-height:1.35;
+}
+#timelineView .mcu-turning-point p{
+  margin:3px 0 2px;
+  color:#475569;
+  font-size:12px;
+  line-height:1.45;
+}
+#timelineView .mcu-turning-point b{
+  color:#1d4ed8;
+  font-size:12px;
+}
+#timelineView .mcu-turning-11{border-left-color:#38bdf8;}
+#timelineView .mcu-turning-17{border-left-color:#ef4444;}
+#timelineView .mcu-turning-21{border-left-color:#8b5cf6;}
+#timelineView .mcu-turning-24{border-left-color:#eab308;}
+#timelineView .mcu-turning-26{border-left-color:#22c55e;}
+#timelineView .mcu-turning-51{border-left-color:#a855f7;}
+#timelineView .mcu-turning-59{border-left-color:#f59e0b;}
+
+/* 一口メモ */
+#timelineView .mcu-story-note-title{font-weight:900;}
+#timelineView .mcu-story-note p{line-height:1.75;}
+
+/* 新しい8章構成 */
+#timelineView .mcu-story-section + .mcu-story-section{margin-top:26px;}
+
+@media(max-width:850px){
+  #timelineView .mcu-story-map .mcu-timeline-jump-links{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+}
+@media(max-width:560px){
+  #timelineView .mcu-story-map .mcu-timeline-jump-links{
+    grid-template-columns:1fr;
+  }
+  #timelineView .mcu-turning-point{padding:11px 12px;}
+  #timelineView .mcu-new-badge{left:40px;font-size:9px;}
+}
+
+/* V6: 読みやすさ・人物案内・色整理（時系列内のみ） */
+#timelineView .mcu-story-map>p{font-size:15px!important;line-height:1.7!important}
+#timelineView .mcu-story-map .mcu-timeline-jump-links a strong{font-size:15px!important}
+#timelineView .mcu-story-map .mcu-timeline-jump-links a small{font-size:13px!important;line-height:1.45!important}
+#timelineView .mcu-story-heading-text p{font-size:14px!important;line-height:1.55!important}
+#timelineView .mcu-story-note p{font-size:14px!important;line-height:1.75!important}
+#timelineView .mcu-turning-point strong{font-size:16px!important}
+#timelineView .mcu-turning-point p,#timelineView .mcu-turning-point b,#timelineView .mcu-timeline-back{font-size:14px!important}
+#timelineView .mcu-card .mcu-story-era{height:52px!important;min-height:52px!important;flex:0 0 52px!important;padding:4px 8px!important;gap:2px!important}
+#timelineView .mcu-card .mcu-story-era-label{font-size:11px!important;line-height:1.15!important}
+#timelineView .mcu-card .mcu-story-era strong{font-size:13px!important;line-height:1.2!important}
+#timelineView .mcu-person-guide{position:absolute;top:7px;left:42px;right:7px;z-index:3;display:flex;align-items:center;gap:6px;min-width:0;pointer-events:none}
+#timelineView .mcu-person-guide-tag{flex:0 0 auto;display:inline-flex;align-items:center;min-height:22px;padding:3px 8px;border:1px solid #cbd5e1;border-radius:999px;background:#f8fafc;color:#334155;font-size:11px;line-height:1.15;font-weight:900;box-shadow:0 2px 6px rgba(15,23,42,.06)}
+#timelineView .mcu-person-guide-sub{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#64748b;font-size:11px;line-height:1.2;font-weight:700}
+#timelineView .mcu-turning-point{background:linear-gradient(90deg,rgba(248,250,252,.98),rgba(255,255,255,.98))!important}
+#timelineView .mcu-card .mcu-card-main{padding-top:32px!important}
+@media(max-width:700px){
+ #timelineView .mcu-story-map>p{font-size:14px!important}
+ #timelineView .mcu-person-guide{position:static;margin:4px 8px 0 42px;flex-wrap:wrap}
+ #timelineView .mcu-person-guide-sub{white-space:normal;font-size:12px}
+ #timelineView .mcu-card .mcu-card-main{padding-top:8px!important}
+}
+
+/* =========================================================
+   V6.1 微調整
+   1) 人物案内を薄い黄色で見つけやすく
+   2) 長い「物語の年代」を省略せず枠内に収める
+========================================================= */
+
+/* 人物案内：派手すぎない薄い黄色 */
+#timelineView .mcu-person-guide-tag{
+  background:#fff8d9 !important;
+  border-color:#f3df91 !important;
+  color:#5f4b16 !important;
+  box-shadow:0 2px 6px rgba(120,90,20,.08) !important;
+}
+
+/* 年代欄：通常は1行、長いものだけ文字を少し詰める */
+#timelineView .mcu-card .mcu-story-era strong{
+  overflow:visible !important;
+  text-overflow:clip !important;
+}
+
+#timelineView .mcu-card .mcu-story-era-long strong{
+  font-size:11.5px !important;
+  letter-spacing:-0.35px;
+}
+
+#timelineView .mcu-card .mcu-story-era-xlong strong{
+  font-size:10.5px !important;
+  letter-spacing:-0.55px;
+}
+
+/* それでも横幅が厳しい場合は、年代の値だけ最大2行まで許可。
+   年代欄全体の高さは変えない。 */
+#timelineView .mcu-card .mcu-story-era-xlong strong{
+  white-space:normal !important;
+  display:-webkit-box !important;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:2;
+  line-height:1.08 !important;
+  overflow:hidden !important;
+}
+
+/* =========================================================
+   V6.2 確定調整
+   ・上部タイムラインは①〜⑧で順番を明示
+   ・意味の曖昧な横線／点は非表示
+   ・白い光はナビ項目の発光として再利用
+   ・人物案内の横補足は廃止
+========================================================= */
+
+/* 上部タイムラインの装飾線・点を消す */
+#timelineView .mcu-story-map .mcu-timeline-jump-links::before,
+#timelineView .mcu-story-map .mcu-timeline-jump-links::after,
+#timelineView .mcu-story-map .mcu-timeline-jump-links a::before,
+#timelineView .mcu-story-map .mcu-timeline-jump-links a::after{
+  display:none !important;
+  content:none !important;
+}
+
+/* もし旧タイムライン専用の線／点要素があっても上部ナビ内では非表示 */
+#timelineView .mcu-story-map .mcu-timeline-line,
+#timelineView .mcu-story-map .mcu-timeline-dot,
+#timelineView .mcu-story-map .timeline-line,
+#timelineView .mcu-story-map .timeline-dot{
+  display:none !important;
+}
+
+/* 白い光を①〜⑧の項目へ移す */
+#timelineView .mcu-story-map .mcu-timeline-jump-links a{
+  position:relative;
+  border:1px solid rgba(255,255,255,.16) !important;
+  box-shadow:
+    0 0 10px rgba(255,255,255,.10),
+    0 0 20px rgba(147,197,253,.08) !important;
+  transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease !important;
+}
+#timelineView .mcu-story-map .mcu-timeline-jump-links a:hover{
+  transform:translateY(-2px);
+  border-color:rgba(255,255,255,.38) !important;
+  box-shadow:
+    0 0 12px rgba(255,255,255,.25),
+    0 0 26px rgba(147,197,253,.18) !important;
+}
+
+/* 人物案内は短いラベルだけにして切れを防ぐ */
+#timelineView .mcu-person-guide{
+  right:auto !important;
+  max-width:calc(100% - 52px);
+}
+#timelineView .mcu-person-guide-tag{
+  max-width:100%;
+  white-space:normal;
+  text-align:left;
+}
+
+/* 21番の長めラベルはカード内に収まるよう少しだけ小さく */
+#timelineView .mcu-card .mcu-person-guide-tag{
+  line-height:1.25 !important;
+}
 </style>
+
+<style>
+/* =========================================================
+   V6.3-safe
+   上部ストーリーナビだけの安全な上書き
+========================================================= */
+
+/* 旧タイムラインの横線と光る点を消す */
+#timelineJumpNav::before,
+#timelineJumpNav .mcu-timeline-jump-links a::before{
+  display:none !important;
+  content:none !important;
+}
+
+/* 4×2段を明示 */
+#timelineJumpNav .mcu-timeline-jump-links{
+  grid-template-columns:repeat(4,minmax(0,1fr)) !important;
+  gap:10px !important;
+}
+
+/* 各項目：45px番号＋文字 */
+#timelineJumpNav .mcu-timeline-jump-links a{
+  display:grid !important;
+  grid-template-columns:45px minmax(0,1fr) !important;
+  grid-template-rows:auto auto !important;
+  column-gap:10px !important;
+  align-items:center !important;
+  min-height:82px !important;
+  padding:10px 12px !important;
+  text-align:left !important;
+}
+
+/* 白い光を番号へ移動 */
+#timelineJumpNav .mcu-nav-step-number{
+  grid-column:1 !important;
+  grid-row:1 / 3 !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  width:45px !important;
+  height:45px !important;
+  border-radius:50% !important;
+  background:#eef6ff !important;
+  border:1px solid rgba(255,255,255,.92) !important;
+  color:#1d4ed8 !important;
+  font-size:21px !important;
+  line-height:1 !important;
+  font-weight:900 !important;
+  box-shadow:
+    0 0 8px rgba(255,255,255,.60),
+    0 0 17px rgba(147,197,253,.30) !important;
+}
+
+#timelineJumpNav .mcu-timeline-jump-links strong{
+  grid-column:2 !important;
+  grid-row:1 !important;
+  margin:0 !important;
+  font-size:14px !important;
+}
+
+#timelineJumpNav .mcu-timeline-jump-links small{
+  grid-column:2 !important;
+  grid-row:2 !important;
+  margin:2px 0 0 !important;
+  font-size:12px !important;
+}
+
+#timelineJumpNav .mcu-timeline-jump-links a:hover .mcu-nav-step-number{
+  box-shadow:
+    0 0 11px rgba(255,255,255,.85),
+    0 0 23px rgba(147,197,253,.48) !important;
+}
+
+@media(max-width:850px){
+  #timelineJumpNav .mcu-timeline-jump-links{
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  }
+}
+
+@media(max-width:560px){
+  #timelineJumpNav .mcu-timeline-jump-links{
+    grid-template-columns:1fr !important;
+  }
+  #timelineJumpNav .mcu-timeline-jump-links a{
+    grid-template-columns:42px minmax(0,1fr) !important;
+  }
+  #timelineJumpNav .mcu-nav-step-number{
+    width:42px !important;
+    height:42px !important;
+    font-size:20px !important;
+  }
+}
+</style>
+
+
+<style>
+/* V6.4：今回の2点だけ */
+@media(min-width:851px){
+  #timelineJumpNav > p,
+  #timelineJumpNav .mcu-story-map > p{
+    font-size:14px !important;
+    line-height:1.55 !important;
+    letter-spacing:-0.15px !important;
+    white-space:nowrap !important;
+  }
+}
+</style>
+
+
+<style>
+/* V6.5：MCU STORY TIMELINE 説明文をバランスよく2行に */
+@media(min-width:851px){
+  #timelineJumpNav > p,
+  #timelineJumpNav .mcu-story-map > p{
+    max-width:980px !important;
+    margin-left:auto !important;
+    margin-right:auto !important;
+    text-align:center !important;
+    white-space:normal !important;
+    font-size:15px !important;
+    line-height:1.75 !important;
+    letter-spacing:0 !important;
+    text-wrap:balance;
+  }
+}
+</style>
+
+
+<style>
+/* V6.6：上部タイムライン番号を40pxに微調整 */
+#timelineJumpNav .mcu-timeline-jump-links a{
+  grid-template-columns:40px minmax(0,1fr) !important;
+}
+#timelineJumpNav .mcu-nav-step-number{
+  width:40px !important;
+  height:40px !important;
+  font-size:19px !important;
+}
+@media(max-width:560px){
+  #timelineJumpNav .mcu-timeline-jump-links a{
+    grid-template-columns:40px minmax(0,1fr) !important;
+  }
+  #timelineJumpNav .mcu-nav-step-number{
+    width:40px !important;
+    height:40px !important;
+    font-size:19px !important;
+  }
+}
+</style>
+
 </head>
-
 <body>
-
-  <div class="page-wrap">
-
-     
-    <header class="mcu-header">
-
-      
-    <div
-  id="mcuUnderConstruction"
-  class="mcu-under-construction"
-  style="display:none;"
->
-  <strong>
+<div class="page-wrap">
+<header class="mcu-header">
+<div class="mcu-under-construction" id="mcuUnderConstruction" style="display:none;">
+<strong>
     🚧 現在このページは工事中です
   </strong>
-  <span>
+<span>
     MCU・マーベルの見る順番ガイドを制作しています。
     内容やデザインは変更される場合があります。
   </span>
 </div>
-
-
-      <a
-        href="index.html"
-        class="mcu-back"
-      >
+<a class="mcu-back" href="index.html">
         ← ドコデミレル？に戻る
       </a>
-
-      <div class="mcu-hero">
-
-        <h1>
+<div class="mcu-hero">
+<h1>
           🦸 MCU・マーベルを見る順番
         </h1>
-
-        <p
-       id="mcuViewDescription"
-       class="mcu-view-description-line"
-       >
-       <strong>💡 初めて見るなら</strong>
-      <span>
+<p class="mcu-view-description-line" id="mcuViewDescription">
+<strong>💡 初めて見るなら</strong>
+<span>
        公開された順番に見ることで、MCUの広がりを自然に楽しめます。
       </span>
-      </p> 
-
-        <div class="mcu-tabs">
-
-  <a
-  href="mcu.html?view=release"
-  class="mcu-tab"
->
+</p>
+<div class="mcu-tabs">
+<a class="mcu-tab" href="mcu.html?view=release">
   🎬 公開順
 </a>
-
-<a
-  href="mcu.html?view=timeline"
-  class="mcu-tab"
->
-  🕐 時系列順
+<a class="mcu-tab" href="mcu.html?view=timeline">
+  🕐 時系列・ストーリー順
 </a>
-
-<a
-  href="mcu.html?view=short"
-  class="mcu-tab"
->
+<a class="mcu-tab" href="mcu.html?view=short">
   ⚡ 最短ルート
 </a>
-
-<button
-  class="mcu-tab mcu-tab-advanced"
-  type="button"
->
+<button class="mcu-tab mcu-tab-advanced" type="button">
   🌐 MCU外・関連作品
 </button>
-
-<a
-  href="mcu.html?view=connections"
-  class="mcu-tab"
->
+<a class="mcu-tab" href="mcu.html?view=connections">
   🔗 つながり図
 </a>
-
 </div>
-
-  
-      </div>
-
-    </header>
-
-  <section class="mcu-about">
-
-  <div class="mcu-about-icon">
+</div>
+</header>
+<section class="mcu-about">
+<div class="mcu-about-icon">
     💡
   </div>
-
-  <div class="mcu-about-text">
-
-    <h2>
+<div class="mcu-about-text">
+<h2>
       そもそもMCUって？
     </h2>
-
-    <p>
+<p>
       MCUは
       <strong>
         「Marvel Cinematic Universe
@@ -1988,2491 +3020,1681 @@ a.mcu-tab{
       映画やドラマがひとつの世界として
       つながっているシリーズです。
     </p>
-
-    <p class="mcu-about-note">
+<p class="mcu-about-note">
       ※ マーベル作品すべてが
       MCUというわけではありません。
       X-MENや旧スパイダーマンなど、
       MCUとは別の世界から始まった作品もあります。
     </p>
-
-    <a
-  href="mcu.html?view=connections"
-  class="mcu-about-link"
->
+<a class="mcu-about-link" href="mcu.html?view=connections">
   🔗 マーベル作品のつながりを見る →
 </a>
-
-  </div>
-
+</div>
 </section>
-
-<section
-  id="connectionsView"
-  class="marvel-universe-section"
->
-
-  <div class="marvel-universe-heading">
-    <span class="marvel-universe-badge">🌐 上級者編</span>
-    <h2>マーベル作品のつながり図</h2>
-    <p>
+<section class="marvel-universe-section" id="connectionsView">
+<div class="marvel-universe-heading">
+<span class="marvel-universe-badge">🌐 上級者編</span>
+<h2>マーベル作品のつながり図</h2>
+<p>
       「マーベル＝全部MCU」ではありません。
       MCUとは別の世界から始まったシリーズもあり、
       マルチバースを通じてつながる可能性があります。
     </p>
-  </div>
-
-  <div class="marvel-universe-map">
-
-    <svg
-      class="marvel-universe-lines"
-      viewBox="0 0 1000 520"
-      preserveAspectRatio="none"
-      aria-hidden="true"
-    >
-      <path class="map-line multiverse-line" d="M 260 90 C 360 90, 380 180, 455 220" />
-      <path class="map-line multiverse-line" d="M 260 260 C 360 260, 390 245, 455 240" />
-      <path class="map-line relation-line" d="M 260 430 C 350 430, 395 300, 455 260" />
-      <path class="map-line multiverse-line" d="M 740 90 C 640 90, 620 180, 545 220" />
-      <path class="map-line direct-line" d="M 740 260 C 640 260, 610 245, 545 240" />
-      <path class="map-line multiverse-line" d="M 740 430 C 650 430, 605 300, 545 260" />
-      <path class="map-line direct-line center-line" d="M 500 285 L 500 355" />
-    </svg>
-
-    <div class="marvel-side marvel-side-left">
-      <div class="universe-card">
-        <div class="universe-icon icon-branch">⎇</div>
-        <div>
-          <span class="universe-label">別世界からスタート</span>
-          <strong>X-MEN系</strong>
-          <small>X-MEN・ウルヴァリン・ローガンなど</small>
-        </div>
-      </div>
-
-      <div class="universe-card">
-        <div class="universe-icon icon-film">🎞️</div>
-        <div>
-          <span class="universe-label">別世界からスタート</span>
-          <strong class="nowrap-title">旧スパイダーマン系</strong>
-          <small>2000年代のスパイダーマン作品</small>
-        </div>
-      </div>
-
-      <div class="universe-card">
-        <div class="universe-icon icon-planet">🪐</div>
-        <div>
-          <span class="universe-label">別シリーズ</span>
-          <strong>Sony系</strong>
-          <small>ヴェノムなど、ソニーの関連作品</small>
-        </div>
-      </div>
-    </div>
-
-    <div class="marvel-center">
-      <div class="multiverse-space">
-        <div class="space-star star-1">✦</div>
-        <div class="space-star star-2">✧</div>
-        <div class="space-star star-3">✦</div>
-        <div class="multiverse-orbit orbit-1"></div>
-        <div class="multiverse-orbit orbit-2"></div>
-
-        <div class="multiverse-orb">
-          <strong>マルチバース</strong>
-          <small>さまざまな世界が<br>つながる可能性</small>
-        </div>
-      </div>
-
-      <div class="mcu-main-card">
-        <span>MAIN UNIVERSE</span>
-        <strong>MCU本編</strong>
-        <small>『アイアンマン』から始まる<br>現在のメインの世界</small>
-      </div>
-    </div>
-
-    <div class="marvel-side marvel-side-right">
-      <div class="universe-card">
-        <div class="universe-icon icon-camera">🎬</div>
-        <div>
-          <span class="universe-label">別世界からスタート</span>
-          <strong>アメイジング系</strong>
-          <small>アメイジング・スパイダーマンなど</small>
-        </div>
-      </div>
-
-      <div class="universe-card">
-        <div class="universe-icon icon-portal">◉</div>
-        <div>
-          <span class="universe-label">関連シリーズ</span>
-          <strong>デッドプール系</strong>
-          <small>デッドプール・デッドプール2など</small>
-        </div>
-      </div>
-
-      <div class="universe-card">
-        <div class="universe-icon icon-rocket">🚀</div>
-        <div>
-          <span class="universe-label">さらに広がる世界</span>
-          <strong>Fantastic Four</strong>
-          <small>ファンタスティック・フォー<br>次の展開でMCU本編に登場する注目シリーズ</small>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="marvel-universe-legend">
-    <div><i class="legend-sample direct"></i>MCUとの強いつながり</div>
-    <div><i class="legend-sample multiverse"></i>マルチバースによる接点</div>
-    <div><i class="legend-sample relation"></i>関連する別世界</div>
-  </div>
-
-  <div class="marvel-universe-note">
-    <span>💡</span>
-    <p>
-      <strong>ポイント：</strong>
+</div>
+<div class="marvel-universe-map">
+<svg aria-hidden="true" class="marvel-universe-lines" preserveaspectratio="none" viewbox="0 0 1000 520">
+<path class="map-line multiverse-line" d="M 260 90 C 360 90, 380 180, 455 220"></path>
+<path class="map-line multiverse-line" d="M 260 260 C 360 260, 390 245, 455 240"></path>
+<path class="map-line relation-line" d="M 260 430 C 350 430, 395 300, 455 260"></path>
+<path class="map-line multiverse-line" d="M 740 90 C 640 90, 620 180, 545 220"></path>
+<path class="map-line direct-line" d="M 740 260 C 640 260, 610 245, 545 240"></path>
+<path class="map-line multiverse-line" d="M 740 430 C 650 430, 605 300, 545 260"></path>
+<path class="map-line direct-line center-line" d="M 500 285 L 500 355"></path>
+</svg>
+<div class="marvel-side marvel-side-left">
+<div class="universe-card">
+<div class="universe-icon icon-branch">⎇</div>
+<div>
+<span class="universe-label">別世界からスタート</span>
+<strong>X-MEN系</strong>
+<small>X-MEN・ウルヴァリン・ローガンなど</small>
+</div>
+</div>
+<div class="universe-card">
+<div class="universe-icon icon-film">🎞️</div>
+<div>
+<span class="universe-label">別世界からスタート</span>
+<strong class="nowrap-title">旧スパイダーマン系</strong>
+<small>2000年代のスパイダーマン作品</small>
+</div>
+</div>
+<div class="universe-card">
+<div class="universe-icon icon-planet">🪐</div>
+<div>
+<span class="universe-label">別シリーズ</span>
+<strong>Sony系</strong>
+<small>ヴェノムなど、ソニーの関連作品</small>
+</div>
+</div>
+</div>
+<div class="marvel-center">
+<div class="multiverse-space">
+<div class="space-star star-1">✦</div>
+<div class="space-star star-2">✧</div>
+<div class="space-star star-3">✦</div>
+<div class="multiverse-orbit orbit-1"></div>
+<div class="multiverse-orbit orbit-2"></div>
+<div class="multiverse-orb">
+<strong>マルチバース</strong>
+<small>さまざまな世界が<br/>つながる可能性</small>
+</div>
+</div>
+<div class="mcu-main-card">
+<span>MAIN UNIVERSE</span>
+<strong>MCU本編</strong>
+<small>『アイアンマン』から始まる<br/>現在のメインの世界</small>
+</div>
+</div>
+<div class="marvel-side marvel-side-right">
+<div class="universe-card">
+<div class="universe-icon icon-camera">🎬</div>
+<div>
+<span class="universe-label">別世界からスタート</span>
+<strong>アメイジング系</strong>
+<small>アメイジング・スパイダーマンなど</small>
+</div>
+</div>
+<div class="universe-card">
+<div class="universe-icon icon-portal">◉</div>
+<div>
+<span class="universe-label">関連シリーズ</span>
+<strong>デッドプール系</strong>
+<small>デッドプール・デッドプール2など</small>
+</div>
+</div>
+<div class="universe-card">
+<div class="universe-icon icon-rocket">🚀</div>
+<div>
+<span class="universe-label">さらに広がる世界</span>
+<strong>Fantastic Four</strong>
+<small>ファンタスティック・フォー<br/>次の展開でMCU本編に登場する注目シリーズ</small>
+</div>
+</div>
+</div>
+</div>
+<div class="marvel-universe-legend">
+<div><i class="legend-sample direct"></i>MCUとの強いつながり</div>
+<div><i class="legend-sample multiverse"></i>マルチバースによる接点</div>
+<div><i class="legend-sample relation"></i>関連する別世界</div>
+</div>
+<div class="marvel-universe-note">
+<span>💡</span>
+<p>
+<strong>ポイント：</strong>
       これらはすべてマーベルに関係する作品ですが、
       最初からすべて同じMCU世界として作られたわけではありません。
       今後もさまざまな作品が、マルチバースを通じてMCUと関わっていく可能性があります。
     </p>
-  </div>
-
+</div>
 </section>
-
-    <section
-  id="timelineSection"
-  class="mcu-timeline-section"
->
-
-
-  <div class="mcu-timeline-heading">
-
-    <div>
-      <h2>MCU公開年表</h2>
-
-      <p>
+<section class="mcu-timeline-section" id="timelineSection">
+<div class="mcu-timeline-heading">
+<div>
+<h2>MCU公開年表</h2>
+<p>
         MCUの歩みをPHASEごとに見てみよう
       </p>
-    </div>
-
-  </div>
-
-  <div class="mcu-timeline-scroll">
-
-  <div class="mcu-timeline">
-
-      <a href="#phase1" class="mcu-phase phase-1">
-  <span>PHASE 1</span>
-  <strong>2008–2012</strong>
+</div>
+</div>
+<div class="mcu-timeline-scroll">
+<div class="mcu-timeline">
+<a class="mcu-phase phase-1" href="#phase1">
+<span>PHASE 1</span>
+<strong>2008–2012</strong>
 </a>
-
-<a href="#phase2" class="mcu-phase phase-2">
-  <span>PHASE 2</span>
-  <strong>2013–2015</strong>
+<a class="mcu-phase phase-2" href="#phase2">
+<span>PHASE 2</span>
+<strong>2013–2015</strong>
 </a>
-
-<a href="#phase3" class="mcu-phase phase-3">
-  <span>PHASE 3</span>
-  <strong>2016–2019</strong>
+<a class="mcu-phase phase-3" href="#phase3">
+<span>PHASE 3</span>
+<strong>2016–2019</strong>
 </a>
-
-<a href="#phase4" class="mcu-phase phase-4">
-  <span>PHASE 4</span>
-  <strong>2021–2022</strong>
+<a class="mcu-phase phase-4" href="#phase4">
+<span>PHASE 4</span>
+<strong>2021–2022</strong>
 </a>
-
-<a href="#phase5" class="mcu-phase phase-5">
-  <span>PHASE 5</span>
-  <strong>2023–2025</strong>
+<a class="mcu-phase phase-5" href="#phase5">
+<span>PHASE 5</span>
+<strong>2023–2025</strong>
 </a>
-
-<a href="#phase6" class="mcu-phase phase-6">
-  <span>PHASE 6</span>
-  <strong>2025–</strong>
+<a class="mcu-phase phase-6" href="#phase6">
+<span>PHASE 6</span>
+<strong>2025–</strong>
 </a>
-
-      <div class="mcu-timeline-line">
-
-        <div class="timeline-point">
-          <span></span>
-          <strong>2008</strong>
-          <small>アイアンマン</small>
-        </div>
-
-        <div class="timeline-point">
-          <span></span>
-          <strong>2012</strong>
-          <small>アベンジャーズ</small>
-        </div>
-
-        <div class="timeline-point">
-          <span></span>
-          <strong>2015</strong>
-          <small>エイジ・オブ・ウルトロン</small>
-        </div>
-
-        <div class="timeline-point">
-          <span></span>
-          <strong>2019</strong>
-          <small>エンドゲーム</small>
-        </div>
-
-        <div class="timeline-point">
-          <span></span>
-          <strong>2022</strong>
-          <small>PHASE 4</small>
-        </div>
-
-        <div class="timeline-point">
-          <span></span>
-          <strong>2025</strong>
-          <small>PHASE 6へ</small>
-        </div>
-
-      </div>
-
-    </div>
-
-  </div>
-
+<div class="mcu-timeline-line">
+<div class="timeline-point">
+<span></span>
+<strong>2008</strong>
+<small>アイアンマン</small>
+</div>
+<div class="timeline-point">
+<span></span>
+<strong>2012</strong>
+<small>アベンジャーズ</small>
+</div>
+<div class="timeline-point">
+<span></span>
+<strong>2015</strong>
+<small>エイジ・オブ・ウルトロン</small>
+</div>
+<div class="timeline-point">
+<span></span>
+<strong>2019</strong>
+<small>エンドゲーム</small>
+</div>
+<div class="timeline-point">
+<span></span>
+<strong>2022</strong>
+<small>PHASE 4</small>
+</div>
+<div class="timeline-point">
+<span></span>
+<strong>2025</strong>
+<small>PHASE 6へ</small>
+</div>
+</div>
+</div>
+</div>
 </section>
-
-    <main id="releaseView">
-
-      <section class="mcu-list-section phase-box phase-box-1">
-
-        <div id="phase1" class="mcu-phase-heading phase-heading-1">
-
-  <div class="mcu-phase-heading-number">
+<main id="timelineView" style="display:block;">
+<nav class="mcu-timeline-jump-nav mcu-story-map" id="timelineJumpNav">
+<div class="mcu-timeline-jump-title">🕐 MCU STORY TIMELINE</div>
+<p>物語の年代順に、ヒーローの登場や作品同士のつながりも一緒に紹介。「この人だれ？」「前にも出ていた？」も分かる、初心者・久しぶりにMCUを見る人向けの順番です。</p>
+<div class="mcu-timeline-jump-links">
+<a href="#timeline-section-1"><span class="mcu-nav-step-number">1</span><strong>🌱 原点</strong><small>過去から現代へ</small></a>
+<a href="#timeline-section-2"><span class="mcu-nav-step-number">2</span><strong>🅰️ アベンジャーズ</strong><small>地球側が集結</small></a>
+<a href="#timeline-section-3"><span class="mcu-nav-step-number">3</span><strong>🚀 ガーディアンズ</strong><small>宇宙側のチーム</small></a>
+<a href="#timeline-section-4"><span class="mcu-nav-step-number">4</span><strong>⚔️ 仲間割れ・分裂</strong><small>シビル・ウォー</small></a>
+<a href="#timeline-section-5"><span class="mcu-nav-step-number">5</span><strong>💎 サノス決戦</strong><small>物語が大きく交わる</small></a>
+<a href="#timeline-section-6"><span class="mcu-nav-step-number">6</span><strong>🌅 新時代</strong><small>再びそれぞれの物語へ</small></a>
+<a href="#timeline-section-7"><span class="mcu-nav-step-number">7</span><strong>🌀 マルチバース</strong><small>時間軸・別世界・別宇宙</small></a>
+<a href="#timeline-section-8"><span class="mcu-nav-step-number">8</span><strong>⚠️ 次の大集結へ</strong><small>再びアベンジャーズの名が</small></a>
+</div></nav>
+<section class="mcu-story-section" id="timeline-section-1">
+<div class="mcu-story-heading">
+<div class="mcu-story-number">1</div>
+<div class="mcu-story-heading-text"><h2>🌱 MCUの原点</h2><p>1940年代 ～ 1990年代 <span>物語の昔にも、すでにヒーローは存在していた。</span></p></div>
+</div>
+<div class="mcu-story-layout"><div class="mcu-list">
+<a class="mcu-card" href="detail.html?id=1771"><div class="mcu-number">1</div><span class="mcu-person-guide"><span class="mcu-person-guide-tag">✨ 新ヒーロー登場</span></span><div class="mcu-card-main"><img alt="キャプテン・アメリカ／ザ・ファースト・アベンジャー" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/vSNxAJTlD0r02V9sPYpOjqDZXUK.jpg"/><div class="mcu-card-info"><div class="mcu-title mcu-title-long">キャプテン・アメリカ／ザ・ファースト・アベンジャー</div><div class="mcu-card-meta-row"><span>2011年公開</span><span class="mcu-type mcu-type-movie">🎬 映画</span></div><div class="mcu-story-era"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>1940年代</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="1771" data-type="movie"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+<a class="mcu-card" href="detail.html?id=299537"><div class="mcu-number">2</div><span class="mcu-person-guide"><span class="mcu-person-guide-tag">✨ 新ヒーロー登場</span></span><div class="mcu-card-main"><img alt="キャプテン・マーベル" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/AtsgWhDnHTq68L0lLsUrCnM7TjG.jpg"/><div class="mcu-card-info"><div class="mcu-title">キャプテン・マーベル</div><div class="mcu-card-meta-row"><span>2019年公開</span><span class="mcu-type mcu-type-movie">🎬 映画</span></div><div class="mcu-story-era"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>1995年</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="299537" data-type="movie"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+<aside class="mcu-story-note"><div class="mcu-story-note-title">💡 初心者向け一口メモ</div><p>MCUを時系列でたどる出発点。キャプテン・アメリカからキャプテン・マーベルへ、現代より前のヒーローたちを見ます。</p></aside>
+</div></div>
+<a class="mcu-timeline-back" href="#timelineJumpNav">↑ STORY TIMELINEへ戻る</a>
+</section>
+<section class="mcu-story-section" id="timeline-section-2">
+<div class="mcu-story-heading">
+<div class="mcu-story-number">2</div>
+<div class="mcu-story-heading-text"><h2>🌍 現代ヒーローとアベンジャーズ</h2><p>2010年代前半 <span>現代のヒーローが次々登場し、地球側のチームへ。</span></p></div>
+</div>
+<div class="mcu-story-layout"><div class="mcu-list">
+<a class="mcu-card" href="detail.html?id=1726"><div class="mcu-number">3</div><span class="mcu-person-guide"><span class="mcu-person-guide-tag">✨ 新ヒーロー登場</span></span><div class="mcu-card-main"><img alt="アイアンマン" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/78lPtwv72eTNqFW9COBYI0dWDJa.jpg"/><div class="mcu-card-info"><div class="mcu-title">アイアンマン</div><div class="mcu-card-meta-row"><span>2008年公開</span><span class="mcu-type mcu-type-movie">🎬 映画</span></div><div class="mcu-story-era"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>2010年ごろ</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="1726" data-type="movie"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+<a class="mcu-card" href="detail.html?id=10138"><div class="mcu-number">4</div><div class="mcu-card-main"><img alt="アイアンマン2" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/6WBeq4fCfn7AN0o21W9qNcRF2l9.jpg"/><div class="mcu-card-info"><div class="mcu-title">アイアンマン2</div><div class="mcu-card-meta-row"><span>2010年公開</span><span class="mcu-type mcu-type-movie">🎬 映画</span></div><div class="mcu-story-era"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>2011年ごろ</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="10138" data-type="movie"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+<aside class="mcu-story-note"><div class="mcu-story-note-title">💡 初心者向け一口メモ</div><p>アイアンマンを中心に現代のヒーローたちが登場。⑦で地球側のヒーローチーム「アベンジャーズ」が結成されます。</p></aside>
+<a class="mcu-card" href="detail.html?id=1724"><div class="mcu-number">5</div><span class="mcu-person-guide"><span class="mcu-person-guide-tag">✨ 新ヒーロー登場</span></span><div class="mcu-card-main"><img alt="インクレディブル・ハルク" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/gKzYx79y0AQTL4UAk1cBQJ3nvrm.jpg"/><div class="mcu-card-info"><div class="mcu-title">インクレディブル・ハルク</div><div class="mcu-card-meta-row"><span>2008年公開</span><span class="mcu-type mcu-type-movie">🎬 映画</span></div><div class="mcu-story-era"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>2011年ごろ</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="1724" data-type="movie"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+<a class="mcu-card" href="detail.html?id=10195"><div class="mcu-number">6</div><span class="mcu-person-guide"><span class="mcu-person-guide-tag">✨ 新ヒーロー登場</span></span><div class="mcu-card-main"><img alt="マイティ・ソー" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/prSfAi1xGrhLQNxVSUFh61xQ4Qy.jpg"/><div class="mcu-card-info"><div class="mcu-title">マイティ・ソー</div><div class="mcu-card-meta-row"><span>2011年公開</span><span class="mcu-type mcu-type-movie">🎬 映画</span></div><div class="mcu-story-era"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>2011年ごろ</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="10195" data-type="movie"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+<div class="mcu-turning-point mcu-turning-7">
+<div class="mcu-turning-icon">🅰️</div>
+<div><strong>ここでヒーローたちが集まる！</strong><p>それぞれ活動していた地球側のヒーローが、ひとつのチームへ。</p><b>⑦ アベンジャーズ結成！</b></div>
+</div>
+<a class="mcu-card" href="detail.html?id=24428"><div class="mcu-number">7</div><div class="mcu-card-main"><img alt="アベンジャーズ" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/RYMX2wcKCBAr24UyPD7xwmjaTn.jpg"/><div class="mcu-card-info"><div class="mcu-title">アベンジャーズ</div><div class="mcu-card-meta-row"><span>2012年公開</span><span class="mcu-type mcu-type-movie">🎬 映画</span></div><div class="mcu-story-era"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>2012年</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="24428" data-type="movie"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+<a class="mcu-card" href="detail.html?id=76338"><div class="mcu-number">8</div><div class="mcu-card-main"><img alt="マイティ・ソー／ダーク・ワールド" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/wp6OxE4poJ4G7c0U2ZIXasTSMR7.jpg"/><div class="mcu-card-info"><div class="mcu-title">マイティ・ソー／ダーク・ワールド</div><div class="mcu-card-meta-row"><span>2013年公開</span><span class="mcu-type mcu-type-movie">🎬 映画</span></div><div class="mcu-story-era"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>アベンジャーズ結成後</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="76338" data-type="movie"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+<a class="mcu-card" href="detail.html?id=68721"><div class="mcu-number">9</div><div class="mcu-card-main"><img alt="アイアンマン3" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/qhPtAc1TKbMPqNvcdXSOn9Bn7hZ.jpg"/><div class="mcu-card-info"><div class="mcu-title">アイアンマン3</div><div class="mcu-card-meta-row"><span>2013年公開</span><span class="mcu-type mcu-type-movie">🎬 映画</span></div><div class="mcu-story-era"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>アベンジャーズ結成後</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="68721" data-type="movie"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+<a class="mcu-card" href="detail.html?id=100402"><div class="mcu-number">10</div><div class="mcu-card-main"><img alt="キャプテン・アメリカ／ウィンター・ソルジャー" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/tVFRpFw3xTedgPGqxW0AOI8Qhh0.jpg"/><div class="mcu-card-info"><div class="mcu-title">キャプテン・アメリカ／ウィンター・ソルジャー</div><div class="mcu-card-meta-row"><span>2014年公開</span><span class="mcu-type mcu-type-movie">🎬 映画</span></div><div class="mcu-story-era"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>2014年ごろ</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="100402" data-type="movie"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+</div></div>
+<a class="mcu-timeline-back" href="#timelineJumpNav">↑ STORY TIMELINEへ戻る</a>
+</section>
+<section class="mcu-story-section" id="timeline-section-3">
+<div class="mcu-story-heading">
+<div class="mcu-story-number">3</div>
+<div class="mcu-story-heading-text"><h2>🚀 宇宙のヒーローたち</h2><p>2014年ごろ <span>地球とは別に進んでいた宇宙側の物語</span></p></div>
+</div>
+<div class="mcu-story-layout"><div class="mcu-list">
+<div class="mcu-turning-point mcu-turning-11">
+<div class="mcu-turning-icon">🚀</div>
+<div><strong>一方そのころ、宇宙では――</strong><p>地球とは別の場所で、新たなヒーローチームが誕生。</p><b>⑪ ガーディアンズ登場！</b></div>
+</div>
+<a class="mcu-card" href="detail.html?id=118340"><div class="mcu-number">11</div><span class="mcu-person-guide"><span class="mcu-person-guide-tag">👥 新たなヒーローたち</span></span><div class="mcu-card-main"><img alt="ガーディアンズ・オブ・ギャラクシー" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/r7vmZjiyZw9rpJMQJdXpjgiCOk9.jpg"/><div class="mcu-card-info"><div class="mcu-title">ガーディアンズ・オブ・ギャラクシー</div><div class="mcu-card-meta-row"><span>2014年公開</span><span class="mcu-type mcu-type-movie">🎬 映画</span></div><div class="mcu-story-era"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>2014年ごろ</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="118340" data-type="movie"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+<a class="mcu-card" href="detail.html?id=283995"><div class="mcu-number">12</div><div class="mcu-card-main"><img alt="ガーディアンズ・オブ・ギャラクシー：リミックス" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/y4MBh0EjBlMuOzv9axM4qJlmhzz.jpg"/><div class="mcu-card-info"><div class="mcu-title">ガーディアンズ・オブ・ギャラクシー：リミックス</div><div class="mcu-card-meta-row"><span>2017年公開</span><span class="mcu-type mcu-type-movie">🎬 映画</span></div><div class="mcu-story-era"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>前作⑪の直後</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="283995" data-type="movie"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+<aside class="mcu-story-note"><div class="mcu-story-note-title">💡 初心者向け一口メモ</div><p>ガーディアンズはアベンジャーズとは別の、主に宇宙で活躍するヒーローチーム。この先、地球側の物語とも大きくつながっていきます。</p></aside>
+<a class="mcu-card" href="detail.html?id=232125&amp;type=tv"><div class="mcu-number">13</div><div class="mcu-card-main"><img alt="アイ・アム・グルート シーズン1" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/lYwFSsP4KsoRhOLhJvBFp3GEGEm.jpg"/><div class="mcu-card-info"><div class="mcu-title">アイ・アム・グルート シーズン1</div><div class="mcu-card-meta-row"><span>2022年公開</span><span class="mcu-type mcu-type-anime">🎞️ アニメ短編</span></div><div class="mcu-story-era"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>ガーディアンズ初期</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="232125" data-type="tv"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+<a class="mcu-card" href="detail.html?id=232125&amp;type=tv&amp;season=2"><div class="mcu-number">14</div><div class="mcu-card-main"><img alt="アイ・アム・グルート シーズン2" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/lYwFSsP4KsoRhOLhJvBFp3GEGEm.jpg"/><div class="mcu-card-info"><div class="mcu-title">アイ・アム・グルート シーズン2</div><div class="mcu-card-meta-row"><span>2023年公開</span><span class="mcu-type mcu-type-anime">🎞️ アニメ短編</span></div><div class="mcu-story-era"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>ガーディアンズ初期</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="232125" data-type="tv"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+</div></div>
+<a class="mcu-timeline-back" href="#timelineJumpNav">↑ STORY TIMELINEへ戻る</a>
+</section>
+<section class="mcu-story-section" id="timeline-section-4">
+<div class="mcu-story-heading">
+<div class="mcu-story-number">4</div>
+<div class="mcu-story-heading-text"><h2>⚔️ ヒーロー拡大、そして仲間割れ</h2><p>2015年 ～ 2018年ごろ <span>仲間が増える一方、アベンジャーズには大きな亀裂が。</span></p></div>
+</div>
+<div class="mcu-story-layout"><div class="mcu-list">
+<a class="mcu-card" href="detail.html?id=99861"><div class="mcu-number">15</div><div class="mcu-card-main"><img alt="アベンジャーズ／エイジ・オブ・ウルトロン" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/4ssDuvEDkSArWEdyBl2X5EHvYKU.jpg"/><div class="mcu-card-info"><div class="mcu-title">アベンジャーズ／エイジ・オブ・ウルトロン</div><div class="mcu-card-meta-row"><span>2015年公開</span><span class="mcu-type mcu-type-movie">🎬 映画</span></div><div class="mcu-story-era"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>2015年ごろ</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="99861" data-type="movie"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+<a class="mcu-card" href="detail.html?id=102899"><div class="mcu-number">16</div><span class="mcu-person-guide"><span class="mcu-person-guide-tag">✨ 新ヒーロー登場</span></span><div class="mcu-card-main"><img alt="アントマン" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/rQRnQfUl3kfp78nCWq8Ks04vnq1.jpg"/><div class="mcu-card-info"><div class="mcu-title">アントマン</div><div class="mcu-card-meta-row"><span>2015年公開</span><span class="mcu-type mcu-type-movie">🎬 映画</span></div><div class="mcu-story-era"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>2015年ごろ</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="102899" data-type="movie"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+<aside class="mcu-story-note"><div class="mcu-story-note-title">💡 初心者向け一口メモ</div><p>シビル・ウォーで分裂したヒーローたちは、すぐには和解できないまま、それぞれの物語へ。しばらく別々に行動することになります。</p></aside>
+<div class="mcu-turning-point mcu-turning-17">
+<div class="mcu-turning-icon">⚔️</div>
+<div><strong>ここから物語が大きく動く！</strong><p>仲間だったアベンジャーズに亀裂が……。</p><b>⑰ シビル・ウォーへ</b></div>
+</div>
+<a class="mcu-card" href="detail.html?id=271110"><div class="mcu-number">17</div><div class="mcu-card-main"><img alt="シビル・ウォー／キャプテン・アメリカ" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/rAGiXaUfPzY7CDEyNKUofk3Kw2e.jpg"/><div class="mcu-card-info"><div class="mcu-title">シビル・ウォー／キャプテン・アメリカ</div><div class="mcu-card-meta-row"><span>2016年公開</span><span class="mcu-type mcu-type-movie">🎬 映画</span></div><div class="mcu-story-era"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>2016年ごろ</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="271110" data-type="movie"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+<a class="mcu-card" href="detail.html?id=497698"><div class="mcu-number">18</div><span class="mcu-person-guide"><span class="mcu-person-guide-tag">👤 あの人物が主役に</span></span><div class="mcu-card-main"><img alt="ブラック・ウィドウ" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/qAZ0pzat24kLdO3o8ejmbLxyOac.jpg"/><div class="mcu-card-info"><div class="mcu-title">ブラック・ウィドウ</div><div class="mcu-card-meta-row"><span>2021年公開</span><span class="mcu-type mcu-type-movie">🎬 映画</span></div><div class="mcu-story-era"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>シビル・ウォー直後</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="497698" data-type="movie"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+<a class="mcu-card" href="detail.html?id=284054"><div class="mcu-number">19</div><div class="mcu-card-main"><img alt="ブラックパンサー" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/uxzzxijgPIY7slzFvMotPv8wjKA.jpg"/><div class="mcu-card-info"><div class="mcu-title">ブラックパンサー</div><div class="mcu-card-meta-row"><span>2018年公開</span><span class="mcu-type mcu-type-movie">🎬 映画</span></div><div class="mcu-story-era"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>シビル・ウォー後</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="284054" data-type="movie"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+<a class="mcu-card" href="detail.html?id=315635"><div class="mcu-number">20</div><div class="mcu-card-main"><img alt="スパイダーマン：ホームカミング" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/c24sv2weTHPsmDa7jEMN0m2P3RT.jpg"/><div class="mcu-card-info"><div class="mcu-title">スパイダーマン：ホームカミング</div><div class="mcu-card-meta-row"><span>2017年公開</span><span class="mcu-type mcu-type-movie">🎬 映画</span></div><div class="mcu-story-era"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>シビル・ウォー後</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="315635" data-type="movie"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+<div class="mcu-turning-point mcu-turning-21">
+<div class="mcu-turning-icon">🪄</div>
+<div><strong>さらに、魔術の世界へ――</strong><p>地球・宇宙だけではない、新しい領域のヒーローが登場。</p><b>㉑ ドクター・ストレンジへ</b></div>
+</div>
+<a class="mcu-card" href="detail.html?id=284052"><div class="mcu-number">21</div><span class="mcu-person-guide"><span class="mcu-person-guide-tag">🪄 新たな魔術の世界からのヒーロー</span></span><div class="mcu-card-main"><img alt="ドクター・ストレンジ" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/uGBVj3bEbCoZbDjjl9wTxcygko1.jpg"/><div class="mcu-card-info"><div class="mcu-title">ドクター・ストレンジ</div><div class="mcu-card-meta-row"><span>2016年公開</span><span class="mcu-type mcu-type-movie">🎬 映画</span></div><div class="mcu-story-era"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>2016～2017年ごろ</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="284052" data-type="movie"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+<a class="mcu-card" href="detail.html?id=284053"><div class="mcu-number">22</div><div class="mcu-card-main"><img alt="マイティ・ソー バトルロイヤル" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/rzRwTcFvttcN1ZpX2xv4j3tSdJu.jpg"/><div class="mcu-card-info"><div class="mcu-title">マイティ・ソー バトルロイヤル</div><div class="mcu-card-meta-row"><span>2017年公開</span><span class="mcu-type mcu-type-movie">🎬 映画</span></div><div class="mcu-story-era mcu-story-era-long"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>インフィニティ・ウォー直前</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="284053" data-type="movie"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+<a class="mcu-card" href="detail.html?id=363088"><div class="mcu-number">23</div><div class="mcu-card-main"><img alt="アントマン＆ワスプ" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/cFQEO687n1K6umXbInzocxcnAQz.jpg"/><div class="mcu-card-info"><div class="mcu-title">アントマン＆ワスプ</div><div class="mcu-card-meta-row"><span>2018年公開</span><span class="mcu-type mcu-type-movie">🎬 映画</span></div><div class="mcu-story-era mcu-story-era-long"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>インフィニティ・ウォー前後</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="363088" data-type="movie"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+</div></div>
+<a class="mcu-timeline-back" href="#timelineJumpNav">↑ STORY TIMELINEへ戻る</a>
+</section>
+<section class="mcu-story-section" id="timeline-section-5">
+<div class="mcu-story-heading">
+<div class="mcu-story-number">5</div>
+<div class="mcu-story-heading-text"><h2>💎 サノスとの大決戦</h2><p>2018年 ～ 2023年 <span>別々に進んできた地球・宇宙の物語が、大きく交わる。</span></p></div>
+</div>
+<div class="mcu-story-layout"><div class="mcu-list">
+<div class="mcu-turning-point mcu-turning-24">
+<div class="mcu-turning-icon">💎</div>
+<div><strong>別々だった物語が、ついに交わる――</strong><p>地球・宇宙・魔術の世界。それぞれで動いていたヒーローたちが、同じ大きな脅威へ――。</p><b>㉔ インフィニティ・ウォーへ</b></div>
+</div>
+<a class="mcu-card" href="detail.html?id=299536"><div class="mcu-number">24</div><div class="mcu-card-main"><img alt="アベンジャーズ／インフィニティ・ウォー" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg"/><div class="mcu-card-info"><div class="mcu-title">アベンジャーズ／インフィニティ・ウォー</div><div class="mcu-card-meta-row"><span>2018年公開</span><span class="mcu-type mcu-type-movie">🎬 映画</span></div><div class="mcu-story-era"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>2018年</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="299536" data-type="movie"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+<a class="mcu-card" href="detail.html?id=299534"><div class="mcu-number">25</div><div class="mcu-card-main"><img alt="アベンジャーズ／エンドゲーム" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/or06FN3Dka5tukK1e9sl16pB3iy.jpg"/><div class="mcu-card-info"><div class="mcu-title">アベンジャーズ／エンドゲーム</div><div class="mcu-card-meta-row"><span>2019年公開</span><span class="mcu-type mcu-type-movie">🎬 映画</span></div><div class="mcu-story-era"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>2018年・2023年</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="299534" data-type="movie"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+<aside class="mcu-story-note"><div class="mcu-story-note-title">💡 初心者向け一口メモ</div><p>早い時期から影が見えていたサノスが最大の脅威として前面へ。地球側・宇宙側・魔術側など、それまで別々だった物語が大きな戦いへ集まっていきます。</p></aside>
+</div></div>
+<a class="mcu-timeline-back" href="#timelineJumpNav">↑ STORY TIMELINEへ戻る</a>
+</section>
+<section class="mcu-story-section" id="timeline-section-6">
+<div class="mcu-story-heading">
+<div class="mcu-story-number">6</div>
+<div class="mcu-story-heading-text"><h2>🌅 大決戦後、それぞれの物語へ</h2><p>2023年以降のメイン世界 <span>既存ヒーローのその後、新ヒーロー、新しい事件へ再び枝分かれ。</span></p></div>
+</div>
+<div class="mcu-story-layout"><div class="mcu-list">
+<div class="mcu-turning-point mcu-turning-26">
+<div class="mcu-turning-icon">🌅</div>
+<div><strong>大決戦のあと、新しい時代へ――</strong><p>物語は再び枝分かれ。ヒーローたちのその後と、新しい主人公たちへ。</p><b>㉖ エンドゲーム後の世界へ</b></div>
+</div>
+<a class="mcu-card" href="detail.html?id=85271&amp;type=tv"><div class="mcu-number">26</div><span class="mcu-person-guide"><span class="mcu-person-guide-tag">👥 あの人物たちが主役に</span></span><div class="mcu-card-main"><img alt="ワンダヴィジョン" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/glKDfE6btIRcVB5zrjspRIs4r52.jpg"/><div class="mcu-card-info"><div class="mcu-title">ワンダヴィジョン</div><div class="mcu-card-meta-row"><span>2021年公開</span><span class="mcu-type mcu-type-drama">📺 ドラマ</span></div><div class="mcu-story-era"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>エンドゲーム直後</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="85271" data-type="tv"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+<a class="mcu-card" href="detail.html?id=566525"><div class="mcu-number">27</div><span class="mcu-person-guide"><span class="mcu-person-guide-tag">✨ 新ヒーロー登場</span></span><div class="mcu-card-main"><img alt="シャン・チー／テン・リングスの伝説" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/1BIoJGKbXjdFDAqUEiA2VHqkK1Z.jpg"/><div class="mcu-card-info"><div class="mcu-title">シャン・チー／テン・リングスの伝説</div><div class="mcu-card-meta-row"><span>2021年公開</span><span class="mcu-type mcu-type-movie">🎬 映画</span></div><div class="mcu-story-era"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>エンドゲーム後</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="566525" data-type="movie"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+<aside class="mcu-story-note"><div class="mcu-story-note-title">💡 初心者向け一口メモ</div><p>大きな戦いが一区切りし、物語は再び枝分かれ。残ったヒーローのその後や新しい主人公たちが描かれ、次の大きな物語の種も少しずつ生まれます。</p></aside>
+<a class="mcu-card" href="detail.html?id=88396&amp;type=tv"><div class="mcu-number">28</div><div class="mcu-card-main"><img alt="ファルコン＆ウィンター・ソルジャー" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/6kbAMLteGO8yyewYau6bJ683sw7.jpg"/><div class="mcu-card-info"><div class="mcu-title">ファルコン＆ウィンター・ソルジャー</div><div class="mcu-card-meta-row"><span>2021年公開</span><span class="mcu-type mcu-type-drama">📺 ドラマ</span></div><div class="mcu-story-era"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>エンドゲーム後</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="88396" data-type="tv"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+<a class="mcu-card" href="detail.html?id=429617"><div class="mcu-number">29</div><div class="mcu-card-main"><img alt="スパイダーマン：ファー・フロム・ホーム" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/4q2NNj4S5dG2RLF9CpXsej7yXl.jpg"/><div class="mcu-card-info"><div class="mcu-title">スパイダーマン：ファー・フロム・ホーム</div><div class="mcu-card-meta-row"><span>2019年公開</span><span class="mcu-type mcu-type-movie">🎬 映画</span></div><div class="mcu-story-era"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>エンドゲーム後</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="429617" data-type="movie"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+<a class="mcu-card" href="detail.html?id=524434"><div class="mcu-number">30</div><span class="mcu-person-guide"><span class="mcu-person-guide-tag">👥 新たなヒーローたち</span></span><div class="mcu-card-main"><img alt="エターナルズ" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/lFByFSLV5WDJEv3KabbdAF959F2.jpg"/><div class="mcu-card-info"><div class="mcu-title">エターナルズ</div><div class="mcu-card-meta-row"><span>2021年公開</span><span class="mcu-type mcu-type-movie">🎬 映画</span></div><div class="mcu-story-era"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>エンドゲーム後</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="524434" data-type="movie"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+<a class="mcu-card" href="detail.html?id=634649"><div class="mcu-number">31</div><div class="mcu-card-main"><img alt="スパイダーマン：ノー・ウェイ・ホーム" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg"/><div class="mcu-card-info"><div class="mcu-title">スパイダーマン：ノー・ウェイ・ホーム</div><div class="mcu-card-meta-row"><span>2021年公開</span><span class="mcu-type mcu-type-movie">🎬 映画</span></div><div class="mcu-story-era mcu-story-era-long"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>㉙ ファー・フロム・ホームの後</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="634649" data-type="movie"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+<a class="mcu-card" href="detail.html?id=453395"><div class="mcu-number">32</div><div class="mcu-card-main"><img alt="ドクター・ストレンジ／マルチバース・オブ・マッドネス" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/9Gtg2DzBhmYamXBS1hKAhiwbBKS.jpg"/><div class="mcu-card-info"><div class="mcu-title mcu-title-long">ドクター・ストレンジ／マルチバース・オブ・マッドネス</div><div class="mcu-card-meta-row"><span>2022年公開</span><span class="mcu-type mcu-type-movie">🎬 映画</span></div><div class="mcu-story-era mcu-story-era-long"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>㉛ ノー・ウェイ・ホームの後</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="453395" data-type="movie"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+<a class="mcu-card" href="detail.html?id=88329&amp;type=tv"><div class="mcu-number">33</div><div class="mcu-card-main"><img alt="ホークアイ" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/ct5pNE5dDHryHLDnxyZPYcqO1sz.jpg"/><div class="mcu-card-info"><div class="mcu-title">ホークアイ</div><div class="mcu-card-meta-row"><span>2021年公開</span><span class="mcu-type mcu-type-drama">📺 ドラマ</span></div><div class="mcu-story-era mcu-story-era-long"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>エンドゲーム後・クリスマス</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="88329" data-type="tv"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+<a class="mcu-card" href="detail.html?id=92749&amp;type=tv"><div class="mcu-number">34</div><span class="mcu-person-guide"><span class="mcu-person-guide-tag">✨ 新ヒーロー登場</span></span><div class="mcu-card-main"><img alt="ムーンナイト" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/YksR65as1ppF2N48TJAh2PLamX.jpg"/><div class="mcu-card-info"><div class="mcu-title">ムーンナイト</div><div class="mcu-card-meta-row"><span>2022年公開</span><span class="mcu-type mcu-type-drama">📺 ドラマ</span></div><div class="mcu-story-era"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>エンドゲーム後</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="92749" data-type="tv"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+<a class="mcu-card" href="detail.html?id=505642"><div class="mcu-number">35</div><div class="mcu-card-main"><img alt="ブラックパンサー／ワカンダ・フォーエバー" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/sv1xJUazXeYqALzczSZ3O6nkH75.jpg"/><div class="mcu-card-info"><div class="mcu-title">ブラックパンサー／ワカンダ・フォーエバー</div><div class="mcu-card-meta-row"><span>2022年公開</span><span class="mcu-type mcu-type-movie">🎬 映画</span></div><div class="mcu-story-era"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>エンドゲーム後</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="505642" data-type="movie"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+<a class="mcu-card" href="detail.html?id=122226&amp;type=tv"><div class="mcu-number">36</div><span class="mcu-person-guide"><span class="mcu-person-guide-tag">👤 あの人物が主役に</span></span><div class="mcu-card-main"><img alt="エコー" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/vFyJH630cF68LohVYjQW49074Sy.jpg"/><div class="mcu-card-info"><div class="mcu-title">エコー</div><div class="mcu-card-meta-row"><span>2024年公開</span><span class="mcu-type mcu-type-drama">📺 ドラマ</span></div><div class="mcu-story-era"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>㉝ ホークアイの後</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="122226" data-type="tv"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+<a class="mcu-card" href="detail.html?id=92783&amp;type=tv"><div class="mcu-number">37</div><span class="mcu-person-guide"><span class="mcu-person-guide-tag">✨ 新ヒーロー登場</span></span><div class="mcu-card-main"><img alt="シー・ハルク：ザ・アトーニー" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/hJfI6AGrmr4uSHRccfJuSsapvOb.jpg"/><div class="mcu-card-info"><div class="mcu-title">シー・ハルク：ザ・アトーニー</div><div class="mcu-card-meta-row"><span>2022年公開</span><span class="mcu-type mcu-type-drama">📺 ドラマ</span></div><div class="mcu-story-era"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>エンドゲーム後</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="92783" data-type="tv"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+<a class="mcu-card" href="detail.html?id=92782&amp;type=tv"><div class="mcu-number">38</div><span class="mcu-person-guide"><span class="mcu-person-guide-tag">✨ 新ヒーロー登場</span></span><div class="mcu-card-main"><img alt="ミズ・マーベル" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/cdkyMYdu8ao26XOBvilNzLneUg1.jpg"/><div class="mcu-card-info"><div class="mcu-title">ミズ・マーベル</div><div class="mcu-card-meta-row"><span>2022年公開</span><span class="mcu-type mcu-type-drama">📺 ドラマ</span></div><div class="mcu-story-era"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>エンドゲーム後</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="92782" data-type="tv"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+<a class="mcu-card" href="detail.html?id=616037"><div class="mcu-number">39</div><div class="mcu-card-main"><img alt="ソー：ラブ＆サンダー" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/pIkRyD18kl4FhoCNQuWxWu5cBLM.jpg"/><div class="mcu-card-info"><div class="mcu-title">ソー：ラブ＆サンダー</div><div class="mcu-card-meta-row"><span>2022年公開</span><span class="mcu-type mcu-type-movie">🎬 映画</span></div><div class="mcu-story-era"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>㊳ ミズ・マーベルの後</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="616037" data-type="movie"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+<a class="mcu-card" href="detail.html?id=894205"><div class="mcu-number">40</div><div class="mcu-card-main"><img alt="ウェアウルフ・バイ・ナイト" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/jmv7EbqBuEk4V1U7OoSBaxkwawO.jpg"/><div class="mcu-card-info"><div class="mcu-title">ウェアウルフ・バイ・ナイト</div><div class="mcu-card-meta-row"><span>2022年公開</span><span class="mcu-type mcu-type-special">🌙 スペシャル</span></div><div class="mcu-story-era"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>㊴ ラブ＆サンダー後</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="894205" data-type="movie"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+<a class="mcu-card" href="detail.html?id=774752"><div class="mcu-number">41</div><div class="mcu-card-main"><img alt="ガーディアンズ・オブ・ギャラクシー ホリデー・スペシャル" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/8dqXyslZ2hv49Oiob9UjlGSHSTR.jpg"/><div class="mcu-card-info"><div class="mcu-title mcu-title-long">ガーディアンズ・オブ・ギャラクシー ホリデー・スペシャル</div><div class="mcu-card-meta-row"><span>2022年公開</span><span class="mcu-type mcu-type-special">🎄 スペシャル</span></div><div class="mcu-story-era"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>エンドゲーム後</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="774752" data-type="movie"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+<a class="mcu-card" href="detail.html?id=640146"><div class="mcu-number">42</div><div class="mcu-card-main"><img alt="アントマン＆ワスプ：クアントマニア" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/ngl2FKBlU4fhbdsrtdom9LVLBXw.jpg"/><div class="mcu-card-info"><div class="mcu-title">アントマン＆ワスプ：クアントマニア</div><div class="mcu-card-meta-row"><span>2023年公開</span><span class="mcu-type mcu-type-movie">🎬 映画</span></div><div class="mcu-story-era"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>エンドゲーム後</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="640146" data-type="movie"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+<a class="mcu-card" href="detail.html?id=447365"><div class="mcu-number">43</div><div class="mcu-card-main"><img alt="ガーディアンズ・オブ・ギャラクシー：VOLUME 3" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/r2J02Z2OpNTctfOSN1Ydgii51I3.jpg"/><div class="mcu-card-info"><div class="mcu-title mcu-title-long">ガーディアンズ・オブ・ギャラクシー：VOLUME 3</div><div class="mcu-card-meta-row"><span>2023年公開</span><span class="mcu-type mcu-type-movie">🎬 映画</span></div><div class="mcu-story-era"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>ホリデーSP後</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="447365" data-type="movie"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+<a class="mcu-card" href="detail.html?id=114472&amp;type=tv"><div class="mcu-number">44</div><div class="mcu-card-main"><img alt="シークレット・インベージョン" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/f5ZMzzCvt2IzVDxr54gHPv9jlC9.jpg"/><div class="mcu-card-info"><div class="mcu-title">シークレット・インベージョン</div><div class="mcu-card-meta-row"><span>2023年公開</span><span class="mcu-type mcu-type-drama">📺 ドラマ</span></div><div class="mcu-story-era"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>エンドゲーム後</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="114472" data-type="tv"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+<a class="mcu-card" href="detail.html?id=609681"><div class="mcu-number">45</div><div class="mcu-card-main"><img alt="マーベルズ" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/3b8VyzOHZKBTnbLGR7PriCV1C06.jpg"/><div class="mcu-card-info"><div class="mcu-title">マーベルズ</div><div class="mcu-card-meta-row"><span>2023年公開</span><span class="mcu-type mcu-type-movie">🎬 映画</span></div><div class="mcu-story-era"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>ミズ・マーベル後</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="609681" data-type="movie"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+<a class="mcu-card" href="detail.html?id=138501&amp;type=tv"><div class="mcu-number">46</div><span class="mcu-person-guide"><span class="mcu-person-guide-tag">👤 あの人物が主役に</span></span><div class="mcu-card-main"><img alt="アガサ・オール・アロング" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/1tfCj5h0FEQ5xg8hzVjQgcuGlgN.jpg"/><div class="mcu-card-info"><div class="mcu-title">アガサ・オール・アロング</div><div class="mcu-card-meta-row"><span>2024年公開</span><span class="mcu-type mcu-type-drama">📺 ドラマ</span></div><div class="mcu-story-era"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>㉖ ワンダヴィジョンの後</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="138501" data-type="tv"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+<a class="mcu-card" href="detail.html?id=114471&amp;type=tv"><div class="mcu-number">47</div><span class="mcu-person-guide"><span class="mcu-person-guide-tag">👤 あの人物が主役に</span></span><div class="mcu-card-main"><img alt="アイアンハート" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/dtpiECNwAeLnGJSU3HTWhcQGHk1.jpg"/><div class="mcu-card-info"><div class="mcu-title">アイアンハート</div><div class="mcu-card-meta-row"><span>2025年公開</span><span class="mcu-type mcu-type-drama">📺 ドラマ</span></div><div class="mcu-story-era mcu-story-era-long"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>㉟ ワカンダ・フォーエバーの後</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="114471" data-type="tv"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+<a class="mcu-card" href="detail.html?id=822119"><div class="mcu-number">48</div><div class="mcu-card-main"><img alt="キャプテン・アメリカ：ブレイブ・ニュー・ワールド" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/pzIddUEMWhWzfvLI3TwxUG2wGoi.jpg"/><div class="mcu-card-info"><div class="mcu-title mcu-title-long">キャプテン・アメリカ：ブレイブ・ニュー・ワールド</div><div class="mcu-card-meta-row"><span>2025年公開</span><span class="mcu-type mcu-type-movie">🎬 映画</span></div><div class="mcu-story-era"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>エンドゲーム後</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="822119" data-type="movie"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+<a class="mcu-card" href="detail.html?id=202555&amp;type=tv"><div class="mcu-number">49</div><div class="mcu-card-main"><img alt="デアデビル：ボーン・アゲイン シーズン1" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/9lLuhV703HGCbnz6FxnqCwIwzAZ.jpg"/><div class="mcu-card-info"><div class="mcu-title">デアデビル：ボーン・アゲイン シーズン1</div><div class="mcu-card-meta-row"><span>2025年公開</span><span class="mcu-type mcu-type-drama">📺 ドラマ</span></div><div class="mcu-story-era"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>エンドゲーム後</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="202555" data-type="tv"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+<a class="mcu-card" href="detail.html?id=986056"><div class="mcu-number">50</div><div class="mcu-card-main"><img alt="サンダーボルツ*" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/hqcexYHbiTBfDIdDWxrxPtVndBX.jpg"/><div class="mcu-card-info"><div class="mcu-title">サンダーボルツ*</div><div class="mcu-card-meta-row"><span>2025年公開</span><span class="mcu-type mcu-type-movie">🎬 映画</span></div><div class="mcu-story-era"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>エンドゲーム後</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="986056" data-type="movie"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+</div></div>
+<a class="mcu-timeline-back" href="#timelineJumpNav">↑ STORY TIMELINEへ戻る</a>
+</section>
+<section class="mcu-story-section" id="timeline-section-7">
+<div class="mcu-story-heading">
+<div class="mcu-story-number">7</div>
+<div class="mcu-story-heading-text"><h2>🌀 時間軸・マルチバースへ</h2><p>別の時間軸・世界・宇宙 <span>今度は『遠い場所』ではなく、世界そのものが広がっていく。</span></p></div>
+</div>
+<div class="mcu-story-layout"><div class="mcu-list">
+<div class="mcu-turning-point mcu-turning-51">
+<div class="mcu-turning-icon">🌀</div>
+<div><strong>物語は、別の時間軸・宇宙へ――</strong><p>今度は場所だけでなく、世界そのものが広がっていく。</p><b>51 マルチバースの領域へ</b></div>
+</div>
+<a class="mcu-card" href="detail.html?id=84958&amp;type=tv"><div class="mcu-number">51</div><div class="mcu-card-main"><img alt="ロキ シーズン1" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/voHUmluYmKyleFkTu3lOXQG702u.jpg"/><div class="mcu-card-info"><div class="mcu-title">ロキ シーズン1</div><div class="mcu-card-meta-row"><span>2021年公開</span><span class="mcu-type mcu-type-drama">📺 ドラマ</span></div><div class="mcu-story-era mcu-era-time"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>🌀 時間軸外</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="84958" data-type="tv"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+<a class="mcu-card" href="detail.html?id=91363&amp;type=tv"><div class="mcu-number">52</div><div class="mcu-card-main"><img alt="ホワット・イフ...？ シーズン1" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/lztz5XBMG1x6Y5ubz7CxfPFsAcW.jpg"/><div class="mcu-card-info"><div class="mcu-title">ホワット・イフ...？ シーズン1</div><div class="mcu-card-meta-row"><span>2021年公開</span><span class="mcu-type mcu-type-anime">🎞️ アニメ</span></div><div class="mcu-story-era mcu-era-multiverse"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>🌌 別世界・マルチバース</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="91363" data-type="tv"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+<aside class="mcu-story-note"><div class="mcu-story-note-title">💡 初心者向け一口メモ</div><p>マルチバースとは、これまで見てきた世界とは別に、異なる歴史や出来事をたどる世界・宇宙が存在するという考え方。ガーディアンズのような『同じ宇宙の遠い場所』とは少し違います。</p></aside>
+<a class="mcu-card" href="detail.html?id=84958&amp;type=tv&amp;season=2"><div class="mcu-number">53</div><div class="mcu-card-main"><img alt="ロキ シーズン2" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/voHUmluYmKyleFkTu3lOXQG702u.jpg"/><div class="mcu-card-info"><div class="mcu-title">ロキ シーズン2</div><div class="mcu-card-meta-row"><span>2023年公開</span><span class="mcu-type mcu-type-drama">📺 ドラマ</span></div><div class="mcu-story-era mcu-era-time"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>🌀 時間軸外</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="84958" data-type="tv"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+<a class="mcu-card" href="detail.html?id=91363&amp;type=tv&amp;season=2"><div class="mcu-number">54</div><div class="mcu-card-main"><img alt="ホワット・イフ...？ シーズン2" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/lztz5XBMG1x6Y5ubz7CxfPFsAcW.jpg"/><div class="mcu-card-info"><div class="mcu-title">ホワット・イフ...？ シーズン2</div><div class="mcu-card-meta-row"><span>2023年公開</span><span class="mcu-type mcu-type-anime">🎞️ アニメ</span></div><div class="mcu-story-era mcu-era-multiverse"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>🌌 別世界・マルチバース</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="91363" data-type="tv"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+<a class="mcu-card" href="detail.html?id=533535"><div class="mcu-number">55</div><div class="mcu-card-main"><img alt="デッドプール＆ウルヴァリン" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/8cdWjvZQUExUUTzyp4t6EDMubfO.jpg"/><div class="mcu-card-info"><div class="mcu-title">デッドプール＆ウルヴァリン</div><div class="mcu-card-meta-row"><span>2024年公開</span><span class="mcu-type mcu-type-movie">🎬 映画</span></div><div class="mcu-story-era mcu-era-multiverse"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>🌌 別世界・マルチバース</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="533535" data-type="movie"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+<a class="mcu-card" href="detail.html?id=91363&amp;type=tv&amp;season=3"><div class="mcu-number">56</div><div class="mcu-card-main"><img alt="ホワット・イフ...？ シーズン3" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/lztz5XBMG1x6Y5ubz7CxfPFsAcW.jpg"/><div class="mcu-card-info"><div class="mcu-title">ホワット・イフ...？ シーズン3</div><div class="mcu-card-meta-row"><span>2024年公開</span><span class="mcu-type mcu-type-anime">🎞️ アニメ</span></div><div class="mcu-story-era mcu-era-multiverse"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>🌌 別世界・マルチバース</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="91363" data-type="tv"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+<a class="mcu-card" href="detail.html?id=617126"><div class="mcu-number">57</div><span class="mcu-person-guide"><span class="mcu-person-guide-tag">👥 新たなヒーローたち</span></span><div class="mcu-card-main"><img alt="ファンタスティック4：ファースト・ステップ" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/nf5qaSEvyYSNeFH0YhSs5EsBLX9.jpg"/><div class="mcu-card-info"><div class="mcu-title">ファンタスティック4：ファースト・ステップ</div><div class="mcu-card-meta-row"><span>2025年公開</span><span class="mcu-type mcu-type-movie">🎬 映画</span></div><div class="mcu-story-era mcu-era-universe mcu-story-era-long"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>🌐 別宇宙・1960年代風</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="617126" data-type="movie"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+</div></div>
+<a class="mcu-timeline-back" href="#timelineJumpNav">↑ STORY TIMELINEへ戻る</a>
+</section>
+<section class="mcu-story-section" id="timeline-section-8">
+<div class="mcu-story-heading">
+<div class="mcu-story-number">8</div>
+<div class="mcu-story-heading-text"><h2>🔮 地球の新章、そして次の大集結へ</h2><p>2026年 ～ <span>スパイダーマンの新章から、再びアベンジャーズの名へ。</span></p></div>
+</div>
+<div class="mcu-story-layout"><div class="mcu-list">
+<a class="mcu-card" href="detail.html?id=969681"><div class="mcu-number">58</div><div class="mcu-card-main"><img alt="スパイダーマン：ブランド・ニュー・デイ" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/9JCQtDCSpPR2ld55yNlEg1VwcQo.jpg"/><div class="mcu-card-info"><div class="mcu-title">スパイダーマン：ブランド・ニュー・デイ</div><div class="mcu-card-meta-row"><span>2026年公開</span><span class="mcu-type mcu-type-movie">🎬 映画</span></div><div class="mcu-story-era"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>ノー・ウェイ・ホーム後</strong></div><div class="mcu-logo-test mcu-provider-logos" data-id="969681" data-type="movie"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+<div class="mcu-turning-point mcu-turning-59">
+<div class="mcu-turning-icon">⚠️</div>
+<div><strong>そして再び、アベンジャーズの名が――</strong><p>ヒーローたちが再び集まるほどの、大きな出来事が迫る……？</p><b>59・60 次の大集結へ</b></div>
+</div>
+<a class="mcu-card" href="detail.html?id=1003596"><div class="mcu-number">59</div><div class="mcu-card-main"><img alt="アベンジャーズ／ドゥームズデイ" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/cWXtJhrlruF8CeYuaBGE8vdj3Q9.jpg"/><div class="mcu-card-info"><div class="mcu-title">アベンジャーズ／ドゥームズデイ</div><div class="mcu-card-meta-row"><span>2026年12月18日公開</span><span class="mcu-type mcu-type-movie">🎬 映画</span></div><div class="mcu-story-era mcu-era-future"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>🔮 今後の物語</strong></div><div class="mcu-upcoming-badge">公開予定</div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+<aside class="mcu-story-note"><div class="mcu-story-note-title">💡 初心者向け一口メモ</div><p>58では地球側の物語も続きます。そして59・60では再び『アベンジャーズ』の名が。どんな大事件へつながるのか、今後の展開に注目です。</p></aside>
+<a class="mcu-card" href="detail.html?id=1003598"><div class="mcu-number">60</div><div class="mcu-card-main"><div class="mcu-poster mcu-poster-placeholder">NO IMAGE</div><div class="mcu-card-info"><div class="mcu-title">アベンジャーズ／シークレット・ウォーズ</div><div class="mcu-card-meta-row"><span>2027年12月17日公開</span><span class="mcu-type mcu-type-movie">🎬 映画</span></div><div class="mcu-story-era mcu-era-future"><span class="mcu-story-era-label">🕐 物語の年代</span><strong>🔮 今後の物語</strong></div><div class="mcu-upcoming-badge">公開予定</div><div class="mcu-detail-link">作品詳細を見る →</div></div></div></a>
+</div></div>
+<a class="mcu-timeline-back" href="#timelineJumpNav">↑ STORY TIMELINEへ戻る</a>
+</section>
+</main>
+<main id="releaseView">
+<section class="mcu-list-section phase-box phase-box-1">
+<div class="mcu-phase-heading phase-heading-1" id="phase1">
+<div class="mcu-phase-heading-number">
     PHASE 1
   </div>
-
-  <div class="mcu-phase-heading-text">
-
-    <h2>
+<div class="mcu-phase-heading-text">
+<h2>
       すべてはここから始まった
     </h2>
-
-   <p>
+<p>
   2008–2012
   ・MCU最初の6作品
   <span class="phase-description">
     ヒーローたちが集結し、アベンジャーズ誕生へ向かうフェーズ。
   </span>
 </p>
-
-  </div>
-
 </div>
-
+</div>
 <div class="mcu-list">
-
-  <a href="detail.html?id=1726" class="mcu-card mcu-card-test">
-    
-    <div class="mcu-number">1</div>
-
-    <div class="mcu-card-main">
-
-      <img
-        src="https://image.tmdb.org/t/p/w300/78lPtwv72eTNqFW9COBYI0dWDJa.jpg"
-        alt="アイアンマン"
-        class="mcu-poster"
-      >
-
-      <div class="mcu-card-info">
-
-        <div class="mcu-title">アイアンマン</div>
-
+<a class="mcu-card mcu-card-test" href="detail.html?id=1726">
+<div class="mcu-number">1</div>
+<div class="mcu-card-main">
+<img alt="アイアンマン" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/78lPtwv72eTNqFW9COBYI0dWDJa.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">アイアンマン</div>
 <div class="mcu-card-meta-row">
-  <span>2008年</span>
-  <span class="mcu-type mcu-type-movie">🎬 映画</span>
+<span>2008年</span>
+<span class="mcu-type mcu-type-movie">🎬 映画</span>
 </div>
-
-<div
-  
- 
-
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="1726"
-  data-type="movie"
-></div>
-
+<div class="mcu-logo-test mcu-provider-logos" data-id="1726" data-type="movie"></div>
 <div class="mcu-detail-link">作品詳細を見る →</div>
-
-      </div>
-
-    </div>
-  </a>
-
-
-  <a href="detail.html?id=1724" class="mcu-card mcu-card-test">
-
-  <div class="mcu-number">2</div>
-
-  <div class="mcu-card-main">
-
-    <img
-      src="https://image.tmdb.org/t/p/w300/gKzYx79y0AQTL4UAk1cBQJ3nvrm.jpg"
-      alt="インクレディブル・ハルク"
-      class="mcu-poster"
-    >
-
-    <div class="mcu-card-info">
-
-      <div class="mcu-title">
+</div>
+</div>
+</a>
+<a class="mcu-card mcu-card-test" href="detail.html?id=1724">
+<div class="mcu-number">2</div>
+<div class="mcu-card-main">
+<img alt="インクレディブル・ハルク" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/gKzYx79y0AQTL4UAk1cBQJ3nvrm.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">
         インクレディブル・ハルク
       </div>
-
-      <div class="mcu-card-meta-row">
-        <span>2008年</span>
-        <span class="mcu-type mcu-type-movie">🎬 映画</span>
-      </div>
-
-      <div 
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="1724"
-  data-type="movie"
->
-        <span></span><span></span><span></span>
-        <span></span><span></span><span></span>
-      </div>
-
-      <div class="mcu-detail-link">
+<div class="mcu-card-meta-row">
+<span>2008年</span>
+<span class="mcu-type mcu-type-movie">🎬 映画</span>
+</div>
+<div class="mcu-logo-test mcu-provider-logos" data-id="1724" data-type="movie">
+<span></span><span></span><span></span>
+<span></span><span></span><span></span>
+</div>
+<div class="mcu-detail-link">
         作品詳細を見る →
       </div>
-
-    </div>
-
-  </div>
-
+</div>
+</div>
 </a>
-
-
-  <a href="detail.html?id=10138" class="mcu-card mcu-card-test">
-
-  <div class="mcu-number">3</div>
-
-  <div class="mcu-card-main">
-
-    <img
-      src="https://image.tmdb.org/t/p/w300/6WBeq4fCfn7AN0o21W9qNcRF2l9.jpg"
-      alt="アイアンマン2"
-      class="mcu-poster"
-    >
-
-    <div class="mcu-card-info">
-
-      <div class="mcu-title">
+<a class="mcu-card mcu-card-test" href="detail.html?id=10138">
+<div class="mcu-number">3</div>
+<div class="mcu-card-main">
+<img alt="アイアンマン2" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/6WBeq4fCfn7AN0o21W9qNcRF2l9.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">
         アイアンマン2
       </div>
-
-      <div class="mcu-card-meta-row">
-        <span>2010年</span>
-        <span class="mcu-type mcu-type-movie">🎬 映画</span>
-      </div>
-
-      <div 
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="10138"
-  data-type="movie"
->
-        <span></span><span></span><span></span>
-        <span></span><span></span><span></span>
-      </div>
-
-      <div class="mcu-detail-link">
+<div class="mcu-card-meta-row">
+<span>2010年</span>
+<span class="mcu-type mcu-type-movie">🎬 映画</span>
+</div>
+<div class="mcu-logo-test mcu-provider-logos" data-id="10138" data-type="movie">
+<span></span><span></span><span></span>
+<span></span><span></span><span></span>
+</div>
+<div class="mcu-detail-link">
         作品詳細を見る →
       </div>
-
-    </div>
-
-  </div>
-
+</div>
+</div>
 </a>
-
-
-  <a href="detail.html?id=10195" class="mcu-card mcu-card-test">
-
-  <div class="mcu-number">4</div>
-
-  <div class="mcu-card-main">
-
-    <img
-      src="https://image.tmdb.org/t/p/w300/prSfAi1xGrhLQNxVSUFh61xQ4Qy.jpg"
-      alt="マイティ・ソー"
-      class="mcu-poster"
-    >
-
-    <div class="mcu-card-info">
-
-      <div class="mcu-title">
+<a class="mcu-card mcu-card-test" href="detail.html?id=10195">
+<div class="mcu-number">4</div>
+<div class="mcu-card-main">
+<img alt="マイティ・ソー" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/prSfAi1xGrhLQNxVSUFh61xQ4Qy.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">
         マイティ・ソー
       </div>
-
-      <div class="mcu-card-meta-row">
-        <span>2011年</span>
-        <span class="mcu-type mcu-type-movie">🎬 映画</span>
-      </div>
-
-      <div 
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="10195"
-  data-type="movie"
->
-        <span></span><span></span><span></span>
-        <span></span><span></span><span></span>
-      </div>
-
-      <div class="mcu-detail-link">
+<div class="mcu-card-meta-row">
+<span>2011年</span>
+<span class="mcu-type mcu-type-movie">🎬 映画</span>
+</div>
+<div class="mcu-logo-test mcu-provider-logos" data-id="10195" data-type="movie">
+<span></span><span></span><span></span>
+<span></span><span></span><span></span>
+</div>
+<div class="mcu-detail-link">
         作品詳細を見る →
       </div>
-
-    </div>
-
-  </div>
-
+</div>
+</div>
 </a>
-
-
-  <a href="detail.html?id=1771" class="mcu-card mcu-card-test">
-
-  <div class="mcu-number">5</div>
-
-  <div class="mcu-card-main">
-
-    <img
-      src="https://image.tmdb.org/t/p/w300/vSNxAJTlD0r02V9sPYpOjqDZXUK.jpg"
-      alt="キャプテン・アメリカ／ザ・ファースト・アベンジャー"
-      class="mcu-poster"
-    >
-
-    <div class="mcu-card-info">
-
-      <div class="mcu-title mcu-title-long">
+<a class="mcu-card mcu-card-test" href="detail.html?id=1771">
+<div class="mcu-number">5</div>
+<div class="mcu-card-main">
+<img alt="キャプテン・アメリカ／ザ・ファースト・アベンジャー" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/vSNxAJTlD0r02V9sPYpOjqDZXUK.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title mcu-title-long">
         キャプテン・アメリカ／ザ・ファースト・アベンジャー
       </div>
-
-      <div class="mcu-card-meta-row">
-        <span>2011年</span>
-        <span class="mcu-type mcu-type-movie">🎬 映画</span>
-      </div>
-
-      <div 
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="1771"
-  data-type="movie"
->
-        <span></span><span></span><span></span>
-        <span></span><span></span><span></span>
-      </div>
-
-      <div class="mcu-detail-link">
+<div class="mcu-card-meta-row">
+<span>2011年</span>
+<span class="mcu-type mcu-type-movie">🎬 映画</span>
+</div>
+<div class="mcu-logo-test mcu-provider-logos" data-id="1771" data-type="movie">
+<span></span><span></span><span></span>
+<span></span><span></span><span></span>
+</div>
+<div class="mcu-detail-link">
         作品詳細を見る →
       </div>
-
-    </div>
-
-  </div>
-
+</div>
+</div>
 </a>
-
-
-  <a href="detail.html?id=24428" class="mcu-card mcu-card-test">
-
-  <div class="mcu-number">6</div>
-
-  <div class="mcu-card-main">
-
-    <img
-      src="https://image.tmdb.org/t/p/w300/RYMX2wcKCBAr24UyPD7xwmjaTn.jpg"
-      alt="アベンジャーズ"
-      class="mcu-poster"
-    >
-
-    <div class="mcu-card-info">
-
-      <div class="mcu-title">
+<a class="mcu-card mcu-card-test" href="detail.html?id=24428">
+<div class="mcu-number">6</div>
+<div class="mcu-card-main">
+<img alt="アベンジャーズ" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/RYMX2wcKCBAr24UyPD7xwmjaTn.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">
         アベンジャーズ
       </div>
-
-      <div class="mcu-card-meta-row">
-        <span>2012年</span>
-        <span class="mcu-type mcu-type-movie">🎬 映画</span>
-      </div>
-
-      <div 
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="24428"
-  data-type="movie"
->
-        <span></span><span></span><span></span>
-        <span></span><span></span><span></span>
-      </div>
-
-      <div class="mcu-detail-link">
+<div class="mcu-card-meta-row">
+<span>2012年</span>
+<span class="mcu-type mcu-type-movie">🎬 映画</span>
+</div>
+<div class="mcu-logo-test mcu-provider-logos" data-id="24428" data-type="movie">
+<span></span><span></span><span></span>
+<span></span><span></span><span></span>
+</div>
+<div class="mcu-detail-link">
         作品詳細を見る →
       </div>
-
-    </div>
-
-  </div>
-
-</a>
-
 </div>
-
+</div>
+</a>
+</div>
 </section>
-
 <section class="mcu-list-section phase-box phase-box-2">
-
-
 <!-- =====================================================
      PHASE 2
 ===================================================== -->
-
-<div id="phase2" class="mcu-phase-heading phase-heading-2">
-  
-  <div class="mcu-phase-heading-number">
+<div class="mcu-phase-heading phase-heading-2" id="phase2">
+<div class="mcu-phase-heading-number">
     PHASE 2
   </div>
-
-  <div class="mcu-phase-heading-text">
-
-    <h2>
+<div class="mcu-phase-heading-text">
+<h2>
       世界がさらに広がっていく
     </h2>
-
-    <p>
+<p>
       2013–2015
       ・MCU第2章の6作品
     </p>
-
-    <span class="phase-description">
+<span class="phase-description">
      新たな仲間と脅威が登場し、MCUの世界がさらに広がっていくフェーズ。
     </span>
-
- </div>
-
 </div>
-
+</div>
 <div class="mcu-list phase-cards-2">
-
-  <a href="detail.html?id=68721" class="mcu-card">
-    <div class="mcu-number">7</div>
-    <div class="mcu-card-main">
-
-      <img
-        src="https://image.tmdb.org/t/p/w300/qhPtAc1TKbMPqNvcdXSOn9Bn7hZ.jpg"
-        alt="アイアンマン3"
-        class="mcu-poster"
-      >
-
-      <div class="mcu-card-info">
-
-        <div class="mcu-title">
+<a class="mcu-card" href="detail.html?id=68721">
+<div class="mcu-number">7</div>
+<div class="mcu-card-main">
+<img alt="アイアンマン3" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/qhPtAc1TKbMPqNvcdXSOn9Bn7hZ.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">
           アイアンマン3
         </div>
-
-        <div class="mcu-card-meta-row">
-          <span>2013年</span>
-          <span class="mcu-type mcu-type-movie">🎬 映画</span>
-        </div>
-
-        <div 
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="68721"
-  data-type="movie"
->
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-        </div>
-
-        <div class="mcu-detail-link">
+<div class="mcu-card-meta-row">
+<span>2013年</span>
+<span class="mcu-type mcu-type-movie">🎬 映画</span>
+</div>
+<div class="mcu-logo-test mcu-provider-logos" data-id="68721" data-type="movie">
+<span></span><span></span><span></span>
+<span></span><span></span><span></span>
+</div>
+<div class="mcu-detail-link">
           作品詳細を見る →
         </div>
-
-      </div>
-    </div>
-  </a>
-
-
-  <a href="detail.html?id=76338" class="mcu-card">
-    <div class="mcu-number">8</div>
-    <div class="mcu-card-main">
-
-      <img
-        src="https://image.tmdb.org/t/p/w300/wp6OxE4poJ4G7c0U2ZIXasTSMR7.jpg"
-        alt="マイティ・ソー／ダーク・ワールド"
-        class="mcu-poster"
-      >
-
-      <div class="mcu-card-info">
-
-        <div class="mcu-title">
+</div>
+</div>
+</a>
+<a class="mcu-card" href="detail.html?id=76338">
+<div class="mcu-number">8</div>
+<div class="mcu-card-main">
+<img alt="マイティ・ソー／ダーク・ワールド" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/wp6OxE4poJ4G7c0U2ZIXasTSMR7.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">
           マイティ・ソー／ダーク・ワールド
         </div>
-
-        <div class="mcu-card-meta-row">
-          <span>2013年</span>
-          <span class="mcu-type mcu-type-movie">🎬 映画</span>
-        </div>
-
-        <div 
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="76338"
-  data-type="movie"
->
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-        </div>
-
-        <div class="mcu-detail-link">
+<div class="mcu-card-meta-row">
+<span>2013年</span>
+<span class="mcu-type mcu-type-movie">🎬 映画</span>
+</div>
+<div class="mcu-logo-test mcu-provider-logos" data-id="76338" data-type="movie">
+<span></span><span></span><span></span>
+<span></span><span></span><span></span>
+</div>
+<div class="mcu-detail-link">
           作品詳細を見る →
         </div>
-
-      </div>
-    </div>
-  </a>
-
-
-  <a href="detail.html?id=100402" class="mcu-card">
-    <div class="mcu-number">9</div>
-    <div class="mcu-card-main">
-
-      <img
-        src="https://image.tmdb.org/t/p/w300/tVFRpFw3xTedgPGqxW0AOI8Qhh0.jpg"
-        alt="キャプテン・アメリカ／ウィンター・ソルジャー"
-        class="mcu-poster"
-      >
-
-      <div class="mcu-card-info">
-
-        <div class="mcu-title">
+</div>
+</div>
+</a>
+<a class="mcu-card" href="detail.html?id=100402">
+<div class="mcu-number">9</div>
+<div class="mcu-card-main">
+<img alt="キャプテン・アメリカ／ウィンター・ソルジャー" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/tVFRpFw3xTedgPGqxW0AOI8Qhh0.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">
           キャプテン・アメリカ／ウィンター・ソルジャー
         </div>
-
-        <div class="mcu-card-meta-row">
-          <span>2014年</span>
-          <span class="mcu-type mcu-type-movie">🎬 映画</span>
-        </div>
-
-        <div 
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="100402"
-  data-type="movie"
->
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-        </div>
-
-        <div class="mcu-detail-link">
+<div class="mcu-card-meta-row">
+<span>2014年</span>
+<span class="mcu-type mcu-type-movie">🎬 映画</span>
+</div>
+<div class="mcu-logo-test mcu-provider-logos" data-id="100402" data-type="movie">
+<span></span><span></span><span></span>
+<span></span><span></span><span></span>
+</div>
+<div class="mcu-detail-link">
           作品詳細を見る →
         </div>
-
-      </div>
-    </div>
-  </a>
-
-
-  <a href="detail.html?id=118340" class="mcu-card">
-    <div class="mcu-number">10</div>
-    <div class="mcu-card-main">
-
-      <img
-        src="https://image.tmdb.org/t/p/w300/r7vmZjiyZw9rpJMQJdXpjgiCOk9.jpg"
-        alt="ガーディアンズ・オブ・ギャラクシー"
-        class="mcu-poster"
-      >
-
-      <div class="mcu-card-info">
-
-        <div class="mcu-title">
+</div>
+</div>
+</a>
+<a class="mcu-card" href="detail.html?id=118340">
+<div class="mcu-number">10</div>
+<div class="mcu-card-main">
+<img alt="ガーディアンズ・オブ・ギャラクシー" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/r7vmZjiyZw9rpJMQJdXpjgiCOk9.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">
           ガーディアンズ・オブ・ギャラクシー
         </div>
-
-        <div class="mcu-card-meta-row">
-          <span>2014年</span>
-          <span class="mcu-type mcu-type-movie">🎬 映画</span>
-        </div>
-
-        <div 
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="118340"
-  data-type="movie"
->
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-        </div>
-
-        <div class="mcu-detail-link">
+<div class="mcu-card-meta-row">
+<span>2014年</span>
+<span class="mcu-type mcu-type-movie">🎬 映画</span>
+</div>
+<div class="mcu-logo-test mcu-provider-logos" data-id="118340" data-type="movie">
+<span></span><span></span><span></span>
+<span></span><span></span><span></span>
+</div>
+<div class="mcu-detail-link">
           作品詳細を見る →
         </div>
-
-      </div>
-    </div>
-  </a>
-
-
-  <a href="detail.html?id=99861" class="mcu-card">
-    <div class="mcu-number">11</div>
-    <div class="mcu-card-main">
-
-      <img
-        src="https://image.tmdb.org/t/p/w300/4ssDuvEDkSArWEdyBl2X5EHvYKU.jpg"
-        alt="アベンジャーズ／エイジ・オブ・ウルトロン"
-        class="mcu-poster"
-      >
-
-      <div class="mcu-card-info">
-
-        <div class="mcu-title">
+</div>
+</div>
+</a>
+<a class="mcu-card" href="detail.html?id=99861">
+<div class="mcu-number">11</div>
+<div class="mcu-card-main">
+<img alt="アベンジャーズ／エイジ・オブ・ウルトロン" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/4ssDuvEDkSArWEdyBl2X5EHvYKU.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">
           アベンジャーズ／エイジ・オブ・ウルトロン
         </div>
-
-        <div class="mcu-card-meta-row">
-          <span>2015年</span>
-          <span class="mcu-type mcu-type-movie">🎬 映画</span>
-        </div>
-
-        <div 
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="99861"
-  data-type="movie"
->
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-        </div>
-
-        <div class="mcu-detail-link">
+<div class="mcu-card-meta-row">
+<span>2015年</span>
+<span class="mcu-type mcu-type-movie">🎬 映画</span>
+</div>
+<div class="mcu-logo-test mcu-provider-logos" data-id="99861" data-type="movie">
+<span></span><span></span><span></span>
+<span></span><span></span><span></span>
+</div>
+<div class="mcu-detail-link">
           作品詳細を見る →
         </div>
-
-      </div>
-    </div>
-  </a>
-
-
-  <a href="detail.html?id=102899" class="mcu-card">
-    <div class="mcu-number">12</div>
-    <div class="mcu-card-main">
-
-      <img
-        src="https://image.tmdb.org/t/p/w300/rQRnQfUl3kfp78nCWq8Ks04vnq1.jpg"
-        alt="アントマン"
-        class="mcu-poster"
-      >
-
-      <div class="mcu-card-info">
-
-        <div class="mcu-title">
+</div>
+</div>
+</a>
+<a class="mcu-card" href="detail.html?id=102899">
+<div class="mcu-number">12</div>
+<div class="mcu-card-main">
+<img alt="アントマン" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/rQRnQfUl3kfp78nCWq8Ks04vnq1.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">
           アントマン
         </div>
-
-        <div class="mcu-card-meta-row">
-          <span>2015年</span>
-          <span class="mcu-type mcu-type-movie">🎬 映画</span>
-        </div>
-
-        <div 
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="102899"
-  data-type="movie"
->
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-        </div>
-
-        <div class="mcu-detail-link">
+<div class="mcu-card-meta-row">
+<span>2015年</span>
+<span class="mcu-type mcu-type-movie">🎬 映画</span>
+</div>
+<div class="mcu-logo-test mcu-provider-logos" data-id="102899" data-type="movie">
+<span></span><span></span><span></span>
+<span></span><span></span><span></span>
+</div>
+<div class="mcu-detail-link">
           作品詳細を見る →
         </div>
-
-      </div>
-    </div>
-  </a>
-
+</div>
+</div>
+</a>
 </div>
 </section>
-
 <!-- =====================================================
      PHASE 3
 ===================================================== -->
-
 <div class="phase-box phase-box-3">
-
-<div id="phase3" class="mcu-phase-heading phase-heading-3">
-
-  <div class="mcu-phase-heading-number">
+<div class="mcu-phase-heading phase-heading-3" id="phase3">
+<div class="mcu-phase-heading-number">
     PHASE 3
   </div>
-
-  <div class="mcu-phase-heading-text">
-
-    <h2>
+<div class="mcu-phase-heading-text">
+<h2>
     物語は、最大のクライマックスへ
     </h2>
-
-    <p>
+<p>
     2016–2019
    ・MCU第3章の11作品
     </p>
-
-    <span class="phase-description">
+<span class="phase-description">
     ヒーローたちの物語が交差し、サノスとの最終決戦へ向かうフェーズ。
     </span>
-
-  </div>
-
 </div>
-
+</div>
 <div class="mcu-list phase-cards-3">
-
-  <a href="detail.html?id=271110" class="mcu-card">
-    <div class="mcu-number">13</div>
-    <div class="mcu-card-main">
-      <img
-        src="https://image.tmdb.org/t/p/w300/rAGiXaUfPzY7CDEyNKUofk3Kw2e.jpg"
-        alt="シビル・ウォー／キャプテン・アメリカ"
-        class="mcu-poster"
-      >
-      <div class="mcu-card-info">
-        <div class="mcu-title">シビル・ウォー／キャプテン・アメリカ</div>
-
-        <div class="mcu-card-meta-row">
-          <span>2016年</span>
-          <span class="mcu-type mcu-type-movie">🎬 映画</span>
-        </div>
-
-        <div 
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="271110"
-  data-type="movie"
->
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-        </div>
-
-        <div class="mcu-detail-link">作品詳細を見る →</div>
-      </div>
-    </div>
-  </a>
-
-
-  <a href="detail.html?id=284052" class="mcu-card">
-    <div class="mcu-number">14</div>
-    <div class="mcu-card-main">
-      <img
-        src="https://image.tmdb.org/t/p/w300/uGBVj3bEbCoZbDjjl9wTxcygko1.jpg"
-        alt="ドクター・ストレンジ"
-        class="mcu-poster"
-      >
-      <div class="mcu-card-info">
-        <div class="mcu-title">ドクター・ストレンジ</div>
-
-        <div class="mcu-card-meta-row">
-          <span>2016年</span>
-          <span class="mcu-type mcu-type-movie">🎬 映画</span>
-        </div>
-
-        <div 
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="284052"
-  data-type="movie"
->
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-        </div>
-
-        <div class="mcu-detail-link">作品詳細を見る →</div>
-      </div>
-    </div>
-  </a>
-
-
-  <a href="detail.html?id=283995" class="mcu-card">
-    <div class="mcu-number">15</div>
-    <div class="mcu-card-main">
-      <img
-        src="https://image.tmdb.org/t/p/w300/y4MBh0EjBlMuOzv9axM4qJlmhzz.jpg"
-        alt="ガーディアンズ・オブ・ギャラクシー：リミックス"
-        class="mcu-poster"
-      >
-      <div class="mcu-card-info">
-        <div class="mcu-title">ガーディアンズ・オブ・ギャラクシー：リミックス</div>
-
-        <div class="mcu-card-meta-row">
-          <span>2017年</span>
-          <span class="mcu-type mcu-type-movie">🎬 映画</span>
-        </div>
-
-        <div 
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="283995"
-  data-type="movie"
->
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-        </div>
-
-        <div class="mcu-detail-link">作品詳細を見る →</div>
-      </div>
-    </div>
-  </a>
-
-
-  <a href="detail.html?id=315635" class="mcu-card">
-    <div class="mcu-number">16</div>
-    <div class="mcu-card-main">
-      <img
-        src="https://image.tmdb.org/t/p/w300/c24sv2weTHPsmDa7jEMN0m2P3RT.jpg"
-        alt="スパイダーマン：ホームカミング"
-        class="mcu-poster"
-      >
-      <div class="mcu-card-info">
-        <div class="mcu-title">スパイダーマン：ホームカミング</div>
-
-        <div class="mcu-card-meta-row">
-          <span>2017年</span>
-          <span class="mcu-type mcu-type-movie">🎬 映画</span>
-        </div>
-
-        <div 
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="315635"
-  data-type="movie"
->
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-        </div>
-
-        <div class="mcu-detail-link">作品詳細を見る →</div>
-      </div>
-    </div>
-  </a>
-
-
-  <a href="detail.html?id=284053" class="mcu-card">
-    <div class="mcu-number">17</div>
-    <div class="mcu-card-main">
-      <img
-        src="https://image.tmdb.org/t/p/w300/rzRwTcFvttcN1ZpX2xv4j3tSdJu.jpg"
-        alt="マイティ・ソー バトルロイヤル"
-        class="mcu-poster"
-      >
-      <div class="mcu-card-info">
-        <div class="mcu-title">マイティ・ソー バトルロイヤル</div>
-
-        <div class="mcu-card-meta-row">
-          <span>2017年</span>
-          <span class="mcu-type mcu-type-movie">🎬 映画</span>
-        </div>
-
-        <div 
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="284053"
-  data-type="movie"
->
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-        </div>
-
-        <div class="mcu-detail-link">作品詳細を見る →</div>
-      </div>
-    </div>
-  </a>
-
-
-  <a href="detail.html?id=284054" class="mcu-card">
-    <div class="mcu-number">18</div>
-    <div class="mcu-card-main">
-      <img
-        src="https://image.tmdb.org/t/p/w300/uxzzxijgPIY7slzFvMotPv8wjKA.jpg"
-        alt="ブラックパンサー"
-        class="mcu-poster"
-      >
-      <div class="mcu-card-info">
-        <div class="mcu-title">ブラックパンサー</div>
-
-        <div class="mcu-card-meta-row">
-          <span>2018年</span>
-          <span class="mcu-type mcu-type-movie">🎬 映画</span>
-        </div>
-
-        <div 
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="284054"
-  data-type="movie"
->
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-        </div>
-
-        <div class="mcu-detail-link">作品詳細を見る →</div>
-      </div>
-    </div>
-  </a>
-
-
-  <a href="detail.html?id=299536" class="mcu-card">
-    <div class="mcu-number">19</div>
-    <div class="mcu-card-main">
-      <img
-        src="https://image.tmdb.org/t/p/w300/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg"
-        alt="アベンジャーズ／インフィニティ・ウォー"
-        class="mcu-poster"
-      >
-      <div class="mcu-card-info">
-        <div class="mcu-title">アベンジャーズ／インフィニティ・ウォー</div>
-
-        <div class="mcu-card-meta-row">
-          <span>2018年</span>
-          <span class="mcu-type mcu-type-movie">🎬 映画</span>
-        </div>
-
-        <div 
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="299536"
-  data-type="movie"
->
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-        </div>
-
-        <div class="mcu-detail-link">作品詳細を見る →</div>
-      </div>
-    </div>
-  </a>
-
-
-  <a href="detail.html?id=363088" class="mcu-card">
-    <div class="mcu-number">20</div>
-    <div class="mcu-card-main">
-      <img
-        src="https://image.tmdb.org/t/p/w300/cFQEO687n1K6umXbInzocxcnAQz.jpg"
-        alt="アントマン＆ワスプ"
-        class="mcu-poster"
-      >
-      <div class="mcu-card-info">
-        <div class="mcu-title">アントマン＆ワスプ</div>
-
-        <div class="mcu-card-meta-row">
-          <span>2018年</span>
-          <span class="mcu-type mcu-type-movie">🎬 映画</span>
-        </div>
-
-        <div 
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="363088"
-  data-type="movie"
->
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-        </div>
-
-        <div class="mcu-detail-link">作品詳細を見る →</div>
-      </div>
-    </div>
-  </a>
-
-
-  <a href="detail.html?id=299537" class="mcu-card">
-    <div class="mcu-number">21</div>
-    <div class="mcu-card-main">
-      <img
-        src="https://image.tmdb.org/t/p/w300/AtsgWhDnHTq68L0lLsUrCnM7TjG.jpg"
-        alt="キャプテン・マーベル"
-        class="mcu-poster"
-      >
-      <div class="mcu-card-info">
-        <div class="mcu-title">キャプテン・マーベル</div>
-
-        <div class="mcu-card-meta-row">
-          <span>2019年</span>
-          <span class="mcu-type mcu-type-movie">🎬 映画</span>
-        </div>
-
-        <div 
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="299537"
-  data-type="movie"
->
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-        </div>
-
-        <div class="mcu-detail-link">作品詳細を見る →</div>
-      </div>
-    </div>
-  </a>
-
-
-  <a href="detail.html?id=299534" class="mcu-card">
-    <div class="mcu-number">22</div>
-    <div class="mcu-card-main">
-      <img
-        src="https://image.tmdb.org/t/p/w300/or06FN3Dka5tukK1e9sl16pB3iy.jpg"
-        alt="アベンジャーズ／エンドゲーム"
-        class="mcu-poster"
-      >
-      <div class="mcu-card-info">
-        <div class="mcu-title">アベンジャーズ／エンドゲーム</div>
-
-        <div class="mcu-card-meta-row">
-          <span>2019年</span>
-          <span class="mcu-type mcu-type-movie">🎬 映画</span>
-        </div>
-
-        <div 
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="299534"
-  data-type="movie"
->
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-        </div>
-
-        <div class="mcu-detail-link">作品詳細を見る →</div>
-      </div>
-    </div>
-  </a>
-
-
-  <a href="detail.html?id=429617" class="mcu-card">
-    <div class="mcu-number">23</div>
-    <div class="mcu-card-main">
-      <img
-        src="https://image.tmdb.org/t/p/w300/4q2NNj4S5dG2RLF9CpXsej7yXl.jpg"
-        alt="スパイダーマン：ファー・フロム・ホーム"
-        class="mcu-poster"
-      >
-      <div class="mcu-card-info">
-        <div class="mcu-title">スパイダーマン：ファー・フロム・ホーム</div>
-
-        <div class="mcu-card-meta-row">
-          <span>2019年</span>
-          <span class="mcu-type mcu-type-movie">🎬 映画</span>
-        </div>
-
-        <div 
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="429617"
-  data-type="movie"
->
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-        </div>
-
-        <div class="mcu-detail-link">作品詳細を見る →</div>
-      </div>
-    </div>
-  </a>
-
+<a class="mcu-card" href="detail.html?id=271110">
+<div class="mcu-number">13</div>
+<div class="mcu-card-main">
+<img alt="シビル・ウォー／キャプテン・アメリカ" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/rAGiXaUfPzY7CDEyNKUofk3Kw2e.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">シビル・ウォー／キャプテン・アメリカ</div>
+<div class="mcu-card-meta-row">
+<span>2016年</span>
+<span class="mcu-type mcu-type-movie">🎬 映画</span>
+</div>
+<div class="mcu-logo-test mcu-provider-logos" data-id="271110" data-type="movie">
+<span></span><span></span><span></span>
+<span></span><span></span><span></span>
+</div>
+<div class="mcu-detail-link">作品詳細を見る →</div>
+</div>
+</div>
+</a>
+<a class="mcu-card" href="detail.html?id=284052">
+<div class="mcu-number">14</div>
+<div class="mcu-card-main">
+<img alt="ドクター・ストレンジ" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/uGBVj3bEbCoZbDjjl9wTxcygko1.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">ドクター・ストレンジ</div>
+<div class="mcu-card-meta-row">
+<span>2016年</span>
+<span class="mcu-type mcu-type-movie">🎬 映画</span>
+</div>
+<div class="mcu-logo-test mcu-provider-logos" data-id="284052" data-type="movie">
+<span></span><span></span><span></span>
+<span></span><span></span><span></span>
+</div>
+<div class="mcu-detail-link">作品詳細を見る →</div>
+</div>
+</div>
+</a>
+<a class="mcu-card" href="detail.html?id=283995">
+<div class="mcu-number">15</div>
+<div class="mcu-card-main">
+<img alt="ガーディアンズ・オブ・ギャラクシー：リミックス" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/y4MBh0EjBlMuOzv9axM4qJlmhzz.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">ガーディアンズ・オブ・ギャラクシー：リミックス</div>
+<div class="mcu-card-meta-row">
+<span>2017年</span>
+<span class="mcu-type mcu-type-movie">🎬 映画</span>
+</div>
+<div class="mcu-logo-test mcu-provider-logos" data-id="283995" data-type="movie">
+<span></span><span></span><span></span>
+<span></span><span></span><span></span>
+</div>
+<div class="mcu-detail-link">作品詳細を見る →</div>
+</div>
+</div>
+</a>
+<a class="mcu-card" href="detail.html?id=315635">
+<div class="mcu-number">16</div>
+<div class="mcu-card-main">
+<img alt="スパイダーマン：ホームカミング" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/c24sv2weTHPsmDa7jEMN0m2P3RT.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">スパイダーマン：ホームカミング</div>
+<div class="mcu-card-meta-row">
+<span>2017年</span>
+<span class="mcu-type mcu-type-movie">🎬 映画</span>
+</div>
+<div class="mcu-logo-test mcu-provider-logos" data-id="315635" data-type="movie">
+<span></span><span></span><span></span>
+<span></span><span></span><span></span>
+</div>
+<div class="mcu-detail-link">作品詳細を見る →</div>
+</div>
+</div>
+</a>
+<a class="mcu-card" href="detail.html?id=284053">
+<div class="mcu-number">17</div>
+<div class="mcu-card-main">
+<img alt="マイティ・ソー バトルロイヤル" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/rzRwTcFvttcN1ZpX2xv4j3tSdJu.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">マイティ・ソー バトルロイヤル</div>
+<div class="mcu-card-meta-row">
+<span>2017年</span>
+<span class="mcu-type mcu-type-movie">🎬 映画</span>
+</div>
+<div class="mcu-logo-test mcu-provider-logos" data-id="284053" data-type="movie">
+<span></span><span></span><span></span>
+<span></span><span></span><span></span>
+</div>
+<div class="mcu-detail-link">作品詳細を見る →</div>
+</div>
+</div>
+</a>
+<a class="mcu-card" href="detail.html?id=284054">
+<div class="mcu-number">18</div>
+<div class="mcu-card-main">
+<img alt="ブラックパンサー" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/uxzzxijgPIY7slzFvMotPv8wjKA.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">ブラックパンサー</div>
+<div class="mcu-card-meta-row">
+<span>2018年</span>
+<span class="mcu-type mcu-type-movie">🎬 映画</span>
+</div>
+<div class="mcu-logo-test mcu-provider-logos" data-id="284054" data-type="movie">
+<span></span><span></span><span></span>
+<span></span><span></span><span></span>
+</div>
+<div class="mcu-detail-link">作品詳細を見る →</div>
+</div>
+</div>
+</a>
+<a class="mcu-card" href="detail.html?id=299536">
+<div class="mcu-number">19</div>
+<div class="mcu-card-main">
+<img alt="アベンジャーズ／インフィニティ・ウォー" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">アベンジャーズ／インフィニティ・ウォー</div>
+<div class="mcu-card-meta-row">
+<span>2018年</span>
+<span class="mcu-type mcu-type-movie">🎬 映画</span>
+</div>
+<div class="mcu-logo-test mcu-provider-logos" data-id="299536" data-type="movie">
+<span></span><span></span><span></span>
+<span></span><span></span><span></span>
+</div>
+<div class="mcu-detail-link">作品詳細を見る →</div>
+</div>
+</div>
+</a>
+<a class="mcu-card" href="detail.html?id=363088">
+<div class="mcu-number">20</div>
+<div class="mcu-card-main">
+<img alt="アントマン＆ワスプ" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/cFQEO687n1K6umXbInzocxcnAQz.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">アントマン＆ワスプ</div>
+<div class="mcu-card-meta-row">
+<span>2018年</span>
+<span class="mcu-type mcu-type-movie">🎬 映画</span>
+</div>
+<div class="mcu-logo-test mcu-provider-logos" data-id="363088" data-type="movie">
+<span></span><span></span><span></span>
+<span></span><span></span><span></span>
+</div>
+<div class="mcu-detail-link">作品詳細を見る →</div>
+</div>
+</div>
+</a>
+<a class="mcu-card" href="detail.html?id=299537">
+<div class="mcu-number">21</div>
+<div class="mcu-card-main">
+<img alt="キャプテン・マーベル" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/AtsgWhDnHTq68L0lLsUrCnM7TjG.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">キャプテン・マーベル</div>
+<div class="mcu-card-meta-row">
+<span>2019年</span>
+<span class="mcu-type mcu-type-movie">🎬 映画</span>
 </div>
 
+　　　　<div class="mcu-story-era">
+<span class="mcu-story-era-label">🕐 物語の年代</span>
+<strong>1995年</strong>
 </div>
-
+<div class="mcu-logo-test mcu-provider-logos" data-id="299537" data-type="movie">
+<span></span><span></span><span></span>
+<span></span><span></span><span></span>
+</div>
+<div class="mcu-detail-link">作品詳細を見る →</div>
+</div>
+</div>
+</a>
+<a class="mcu-card" href="detail.html?id=299534">
+<div class="mcu-number">22</div>
+<div class="mcu-card-main">
+<img alt="アベンジャーズ／エンドゲーム" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/or06FN3Dka5tukK1e9sl16pB3iy.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">アベンジャーズ／エンドゲーム</div>
+<div class="mcu-card-meta-row">
+<span>2019年</span>
+<span class="mcu-type mcu-type-movie">🎬 映画</span>
+</div>
+<div class="mcu-logo-test mcu-provider-logos" data-id="299534" data-type="movie">
+<span></span><span></span><span></span>
+<span></span><span></span><span></span>
+</div>
+<div class="mcu-detail-link">作品詳細を見る →</div>
+</div>
+</div>
+</a>
+<a class="mcu-card" href="detail.html?id=429617">
+<div class="mcu-number">23</div>
+<div class="mcu-card-main">
+<img alt="スパイダーマン：ファー・フロム・ホーム" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/4q2NNj4S5dG2RLF9CpXsej7yXl.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">スパイダーマン：ファー・フロム・ホーム</div>
+<div class="mcu-card-meta-row">
+<span>2019年</span>
+<span class="mcu-type mcu-type-movie">🎬 映画</span>
+</div>
+<div class="mcu-logo-test mcu-provider-logos" data-id="429617" data-type="movie">
+<span></span><span></span><span></span>
+<span></span><span></span><span></span>
+</div>
+<div class="mcu-detail-link">作品詳細を見る →</div>
+</div>
+</div>
+</a>
+</div>
+</div>
 <!-- =====================================================
      PHASE 4
 ===================================================== -->
-
 <div class="phase-box phase-box-4">
-
-<div id="phase4" class="mcu-phase-heading phase-heading-4">
-  
-  <div class="mcu-phase-heading-number">
+<div class="mcu-phase-heading phase-heading-4" id="phase4">
+<div class="mcu-phase-heading-number">
     PHASE 4
   </div>
-
-  <div class="mcu-phase-heading-text">
-    <h2>
+<div class="mcu-phase-heading-text">
+<h2>
     映画からドラマへ、MCUの世界がさらに広がる
     </h2>
-
-   <p>
+<p>
     2021–2022
   ・映画／ドラマ／アニメ／スペシャルを公開順に掲載
    </p>
-
-   <span class="phase-description">
+<span class="phase-description">
    映画だけでなくドラマやアニメにも物語が広がり、新たなヒーローたちが登場するフェーズ。
    </span>
-   </div>
-
 </div>
-
+</div>
 <div class="mcu-list phase-cards-4">
-
-  <a href="detail.html?id=85271&type=tv" class="mcu-card">
-    <div class="mcu-number">24</div>
-    <div class="mcu-card-main">
-      <img
-        src="https://image.tmdb.org/t/p/w300/glKDfE6btIRcVB5zrjspRIs4r52.jpg"
-        alt="ワンダヴィジョン"
-        class="mcu-poster"
-      >
-      <div class="mcu-card-info">
-        <div class="mcu-title">ワンダヴィジョン</div>
-
-        <div class="mcu-card-meta-row">
-          <span>2021年</span>
-          <span class="mcu-type mcu-type-drama">📺 ドラマ</span>
-        </div>
-
-        <div 
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="85271"
-  data-type="tv"
->
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-        </div>
-
-        <div class="mcu-detail-link">作品詳細を見る →</div>
-      </div>
-    </div>
-  </a>
-
-
-  <a href="detail.html?id=88396&type=tv" class="mcu-card">
-    <div class="mcu-number">25</div>
-    <div class="mcu-card-main">
-      <img
-        src="https://image.tmdb.org/t/p/w300/6kbAMLteGO8yyewYau6bJ683sw7.jpg"
-        alt="ファルコン＆ウィンター・ソルジャー"
-        class="mcu-poster"
-      >
-      <div class="mcu-card-info">
-        <div class="mcu-title">ファルコン＆ウィンター・ソルジャー</div>
-
-        <div class="mcu-card-meta-row">
-          <span>2021年</span>
-          <span class="mcu-type mcu-type-drama">📺 ドラマ</span>
-        </div>
-
-        <div 
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="88396"
-  data-type="tv"
->
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-        </div>
-
-        <div class="mcu-detail-link">作品詳細を見る →</div>
-      </div>
-    </div>
-  </a>
-
-
-  <a href="detail.html?id=84958&type=tv" class="mcu-card">
-    <div class="mcu-number">26</div>
-    <div class="mcu-card-main">
-      <img
-        src="https://image.tmdb.org/t/p/w300/voHUmluYmKyleFkTu3lOXQG702u.jpg"
-        alt="ロキ"
-        class="mcu-poster"
-      >
-      <div class="mcu-card-info">
-        <div class="mcu-title">ロキ シーズン1</div>
-
-        <div class="mcu-card-meta-row">
-          <span>2021年</span>
-          <span class="mcu-type mcu-type-drama">📺 ドラマ</span>
-        </div>
-
-        <div 
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="84958"
-  data-type="tv"
->
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-        </div>
-
-        <div class="mcu-detail-link">作品詳細を見る →</div>
-      </div>
-    </div>
-  </a>
-
-
-  <a href="detail.html?id=497698" class="mcu-card">
-    <div class="mcu-number">27</div>
-    <div class="mcu-card-main">
-      <img
-        src="https://image.tmdb.org/t/p/w300/qAZ0pzat24kLdO3o8ejmbLxyOac.jpg"
-        alt="ブラック・ウィドウ"
-        class="mcu-poster"
-      >
-      <div class="mcu-card-info">
-        <div class="mcu-title">ブラック・ウィドウ</div>
-
-        <div class="mcu-card-meta-row">
-          <span>2021年</span>
-          <span class="mcu-type mcu-type-movie">🎬 映画</span>
-        </div>
-
-        <div 
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="497698"
-  data-type="movie"
->
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-        </div>
-
-        <div class="mcu-detail-link">作品詳細を見る →</div>
-      </div>
-    </div>
-  </a>
-
-
-  <a href="detail.html?id=91363&type=tv" class="mcu-card">
-    <div class="mcu-number">28</div>
-    <div class="mcu-card-main">
-      <img
-        src="https://image.tmdb.org/t/p/w300/lztz5XBMG1x6Y5ubz7CxfPFsAcW.jpg"
-        alt="ホワット・イフ...？"
-        class="mcu-poster"
-      >
-      <div class="mcu-card-info">
-        <div class="mcu-title">ホワット・イフ...？ シーズン1</div>
-
-        <div class="mcu-card-meta-row">
-          <span>2021年</span>
-          <span class="mcu-type mcu-type-anime">🎞️ アニメ</span>
-        </div>
-
-        <div 
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="91363"
-  data-type="tv"
->
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-        </div>
-
-        <div class="mcu-detail-link">作品詳細を見る →</div>
-      </div>
-    </div>
-  </a>
-
-
-  <a href="detail.html?id=566525" class="mcu-card">
-    <div class="mcu-number">29</div>
-    <div class="mcu-card-main">
-      <img
-        src="https://image.tmdb.org/t/p/w300/1BIoJGKbXjdFDAqUEiA2VHqkK1Z.jpg"
-        alt="シャン・チー／テン・リングスの伝説"
-        class="mcu-poster"
-      >
-      <div class="mcu-card-info">
-        <div class="mcu-title">シャン・チー／テン・リングスの伝説</div>
-
-        <div class="mcu-card-meta-row">
-          <span>2021年</span>
-          <span class="mcu-type mcu-type-movie">🎬 映画</span>
-        </div>
-
-        <div 
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="566525"
-  data-type="movie"
->
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-        </div>
-
-        <div class="mcu-detail-link">作品詳細を見る →</div>
-      </div>
-    </div>
-  </a>
-
-
-  <a href="detail.html?id=524434" class="mcu-card">
-    <div class="mcu-number">30</div>
-    <div class="mcu-card-main">
-      <img
-        src="https://image.tmdb.org/t/p/w300/lFByFSLV5WDJEv3KabbdAF959F2.jpg"
-        alt="エターナルズ"
-        class="mcu-poster"
-      >
-      <div class="mcu-card-info">
-        <div class="mcu-title">エターナルズ</div>
-
-        <div class="mcu-card-meta-row">
-          <span>2021年</span>
-          <span class="mcu-type mcu-type-movie">🎬 映画</span>
-        </div>
-
-        <div 
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="524434"
-  data-type="movie"
->
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-        </div>
-
-        <div class="mcu-detail-link">作品詳細を見る →</div>
-      </div>
-    </div>
-  </a>
-
-
-  <a href="detail.html?id=88329&type=tv" class="mcu-card">
-    <div class="mcu-number">31</div>
-    <div class="mcu-card-main">
-      <img
-        src="https://image.tmdb.org/t/p/w300/ct5pNE5dDHryHLDnxyZPYcqO1sz.jpg"
-        alt="ホークアイ"
-        class="mcu-poster"
-      >
-      <div class="mcu-card-info">
-        <div class="mcu-title">ホークアイ</div>
-
-        <div class="mcu-card-meta-row">
-          <span>2021年</span>
-          <span class="mcu-type mcu-type-drama">📺 ドラマ</span>
-        </div>
-
-        <div 
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="88329"
-  data-type="tv"
->
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-        </div>
-
-        <div class="mcu-detail-link">作品詳細を見る →</div>
-      </div>
-    </div>
-  </a>
-
-
-  <a href="detail.html?id=634649" class="mcu-card">
-    <div class="mcu-number">32</div>
-    <div class="mcu-card-main">
-      <img
-        src="https://image.tmdb.org/t/p/w300/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg"
-        alt="スパイダーマン：ノー・ウェイ・ホーム"
-        class="mcu-poster"
-      >
-      <div class="mcu-card-info">
-        <div class="mcu-title">スパイダーマン：ノー・ウェイ・ホーム</div>
-
-        <div class="mcu-card-meta-row">
-          <span>2021年</span>
-          <span class="mcu-type mcu-type-movie">🎬 映画</span>
-        </div>
-
-        <div 
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="634649"
-  data-type="movie"
->
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-        </div>
-
-        <div class="mcu-detail-link">作品詳細を見る →</div>
-      </div>
-    </div>
-  </a>
-
-
-  <a href="detail.html?id=92749&type=tv" class="mcu-card">
-    <div class="mcu-number">33</div>
-    <div class="mcu-card-main">
-      <img
-        src="https://image.tmdb.org/t/p/w300/YksR65as1ppF2N48TJAh2PLamX.jpg"
-        alt="ムーンナイト"
-        class="mcu-poster"
-      >
-      <div class="mcu-card-info">
-        <div class="mcu-title">ムーンナイト</div>
-
-        <div class="mcu-card-meta-row">
-          <span>2022年</span>
-          <span class="mcu-type mcu-type-drama">📺 ドラマ</span>
-        </div>
-
-        <div 
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="92749"
-  data-type="tv"
->
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-        </div>
-
-        <div class="mcu-detail-link">作品詳細を見る →</div>
-      </div>
-    </div>
-  </a>
-
-
-  <a href="detail.html?id=453395" class="mcu-card">
-    <div class="mcu-number">34</div>
-    <div class="mcu-card-main">
-      <img
-        src="https://image.tmdb.org/t/p/w300/9Gtg2DzBhmYamXBS1hKAhiwbBKS.jpg"
-        alt="ドクター・ストレンジ／マルチバース・オブ・マッドネス"
-        class="mcu-poster"
-      >
-      <div class="mcu-card-info">
-        <div class="mcu-title">ドクター・ストレンジ／マルチバース・オブ・マッドネス</div>
-
-        <div class="mcu-card-meta-row">
-          <span>2022年</span>
-          <span class="mcu-type mcu-type-movie">🎬 映画</span>
-        </div>
-
-        <div 
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="453395"
-  data-type="movie"
->
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-        </div>
-
-        <div class="mcu-detail-link">作品詳細を見る →</div>
-      </div>
-    </div>
-  </a>
-
-
-  <a href="detail.html?id=92782&type=tv" class="mcu-card">
-    <div class="mcu-number">35</div>
-    <div class="mcu-card-main">
-      <img
-        src="https://image.tmdb.org/t/p/w300/cdkyMYdu8ao26XOBvilNzLneUg1.jpg"
-        alt="ミズ・マーベル"
-        class="mcu-poster"
-      >
-      <div class="mcu-card-info">
-        <div class="mcu-title">ミズ・マーベル</div>
-
-        <div class="mcu-card-meta-row">
-          <span>2022年</span>
-          <span class="mcu-type mcu-type-drama">📺 ドラマ</span>
-        </div>
-
-        <div 
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="92782"
-  data-type="tv"
->
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-        </div>
-
-        <div class="mcu-detail-link">作品詳細を見る →</div>
-      </div>
-    </div>
-  </a>
-
-
-  <a href="detail.html?id=616037" class="mcu-card">
-    <div class="mcu-number">36</div>
-    <div class="mcu-card-main">
-      <img
-        src="https://image.tmdb.org/t/p/w300/pIkRyD18kl4FhoCNQuWxWu5cBLM.jpg"
-        alt="ソー：ラブ＆サンダー"
-        class="mcu-poster"
-      >
-      <div class="mcu-card-info">
-        <div class="mcu-title">ソー：ラブ＆サンダー</div>
-
-        <div class="mcu-card-meta-row">
-          <span>2022年</span>
-          <span class="mcu-type mcu-type-movie">🎬 映画</span>
-        </div>
-
-        <div 
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="616037"
-  data-type="movie"
->
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-        </div>
-
-        <div class="mcu-detail-link">作品詳細を見る →</div>
-      </div>
-    </div>
-  </a>
-
-
-  <a href="detail.html?id=232125&type=tv" class="mcu-card">
-    <div class="mcu-number">37</div>
-    <div class="mcu-card-main">
-      <img
-        src="https://image.tmdb.org/t/p/w300/lYwFSsP4KsoRhOLhJvBFp3GEGEm.jpg"
-        alt="アイ・アム・グルート シーズン1"
-        class="mcu-poster"
-      >
-      <div class="mcu-card-info">
-        <div class="mcu-title">アイ・アム・グルート シーズン1</div>
-
-        <div class="mcu-card-meta-row">
-          <span>2022年</span>
-          <span class="mcu-type mcu-type-anime">🎞️ アニメ短編</span>
-        </div>
-
-        <div 
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="232125"
-  data-type="tv"
->
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-        </div>
-
-        <div class="mcu-detail-link">作品詳細を見る →</div>
-      </div>
-    </div>
-  </a>
-
-
-  <a href="detail.html?id=92783&type=tv" class="mcu-card">
-    <div class="mcu-number">38</div>
-    <div class="mcu-card-main">
-      <img
-        src="https://image.tmdb.org/t/p/w300/hJfI6AGrmr4uSHRccfJuSsapvOb.jpg"
-        alt="シー・ハルク：ザ・アトーニー"
-        class="mcu-poster"
-      >
-      <div class="mcu-card-info">
-        <div class="mcu-title">シー・ハルク：ザ・アトーニー</div>
-
-        <div class="mcu-card-meta-row">
-          <span>2022年</span>
-          <span class="mcu-type mcu-type-drama">📺 ドラマ</span>
-        </div>
-
-        <div 
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="92783"
-  data-type="tv"
->
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-        </div>
-
-        <div class="mcu-detail-link">作品詳細を見る →</div>
-      </div>
-    </div>
-  </a>
-
-
-  <a href="detail.html?id=894205" class="mcu-card">
-    <div class="mcu-number">39</div>
-    <div class="mcu-card-main">
-      <img
-        src="https://image.tmdb.org/t/p/w300/jmv7EbqBuEk4V1U7OoSBaxkwawO.jpg"
-        alt="ウェアウルフ・バイ・ナイト"
-        class="mcu-poster"
-      >
-      <div class="mcu-card-info">
-        <div class="mcu-title">ウェアウルフ・バイ・ナイト</div>
-
-        <div class="mcu-card-meta-row">
-          <span>2022年</span>
-          <span class="mcu-type mcu-type-special">🌙 スペシャル</span>
-        </div>
-
-        <div 
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="894205"
-  data-type="movie"
->
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-        </div>
-
-        <div class="mcu-detail-link">作品詳細を見る →</div>
-      </div>
-    </div>
-  </a>
-
-
-  <a href="detail.html?id=505642" class="mcu-card">
-    <div class="mcu-number">40</div>
-    <div class="mcu-card-main">
-      <img
-        src="https://image.tmdb.org/t/p/w300/sv1xJUazXeYqALzczSZ3O6nkH75.jpg"
-        alt="ブラックパンサー／ワカンダ・フォーエバー"
-        class="mcu-poster"
-      >
-      <div class="mcu-card-info">
-        <div class="mcu-title">ブラックパンサー／ワカンダ・フォーエバー</div>
-
-        <div class="mcu-card-meta-row">
-          <span>2022年</span>
-          <span class="mcu-type mcu-type-movie">🎬 映画</span>
-        </div>
-
-        <div 
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="505642"
-  data-type="movie"
->
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-        </div>
-
-        <div class="mcu-detail-link">作品詳細を見る →</div>
-      </div>
-    </div>
-  </a>
-
-
-  <a href="detail.html?id=774752" class="mcu-card">
-    <div class="mcu-number">41</div>
-    <div class="mcu-card-main">
-      <img
-        src="https://image.tmdb.org/t/p/w300/8dqXyslZ2hv49Oiob9UjlGSHSTR.jpg"
-        alt="ガーディアンズ・オブ・ギャラクシー ホリデー・スペシャル"
-        class="mcu-poster"
-      >
-      <div class="mcu-card-info">
-        <div class="mcu-title">ガーディアンズ・オブ・ギャラクシー ホリデー・スペシャル</div>
-
-        <div class="mcu-card-meta-row">
-          <span>2022年</span>
-          <span class="mcu-type mcu-type-special">🎄 スペシャル</span>
-        </div>
-
-        <div 
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="774752"
-  data-type="movie"
->
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-        </div>
-
-        <div class="mcu-detail-link">作品詳細を見る →</div>
-      </div>
-    </div>
-  </a>
-
+<a class="mcu-card" href="detail.html?id=85271&amp;type=tv">
+<div class="mcu-number">24</div>
+<div class="mcu-card-main">
+<img alt="ワンダヴィジョン" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/glKDfE6btIRcVB5zrjspRIs4r52.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">ワンダヴィジョン</div>
+<div class="mcu-card-meta-row">
+<span>2021年</span>
+<span class="mcu-type mcu-type-drama">📺 ドラマ</span>
+</div>
+<div class="mcu-logo-test mcu-provider-logos" data-id="85271" data-type="tv">
+<span></span><span></span><span></span>
+<span></span><span></span><span></span>
+</div>
+<div class="mcu-detail-link">作品詳細を見る →</div>
 </div>
 </div>
-
+</a>
+<a class="mcu-card" href="detail.html?id=88396&amp;type=tv">
+<div class="mcu-number">25</div>
+<div class="mcu-card-main">
+<img alt="ファルコン＆ウィンター・ソルジャー" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/6kbAMLteGO8yyewYau6bJ683sw7.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">ファルコン＆ウィンター・ソルジャー</div>
+<div class="mcu-card-meta-row">
+<span>2021年</span>
+<span class="mcu-type mcu-type-drama">📺 ドラマ</span>
+</div>
+<div class="mcu-logo-test mcu-provider-logos" data-id="88396" data-type="tv">
+<span></span><span></span><span></span>
+<span></span><span></span><span></span>
+</div>
+<div class="mcu-detail-link">作品詳細を見る →</div>
+</div>
+</div>
+</a>
+<a class="mcu-card" href="detail.html?id=84958&amp;type=tv">
+<div class="mcu-number">26</div>
+<div class="mcu-card-main">
+<img alt="ロキ" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/voHUmluYmKyleFkTu3lOXQG702u.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">ロキ シーズン1</div>
+<div class="mcu-card-meta-row">
+<span>2021年</span>
+<span class="mcu-type mcu-type-drama">📺 ドラマ</span>
+</div>
+<div class="mcu-logo-test mcu-provider-logos" data-id="84958" data-type="tv">
+<span></span><span></span><span></span>
+<span></span><span></span><span></span>
+</div>
+<div class="mcu-detail-link">作品詳細を見る →</div>
+</div>
+</div>
+</a>
+<a class="mcu-card" href="detail.html?id=497698">
+<div class="mcu-number">27</div>
+<div class="mcu-card-main">
+<img alt="ブラック・ウィドウ" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/qAZ0pzat24kLdO3o8ejmbLxyOac.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">ブラック・ウィドウ</div>
+<div class="mcu-card-meta-row">
+<span>2021年</span>
+<span class="mcu-type mcu-type-movie">🎬 映画</span>
+</div>
+<div class="mcu-logo-test mcu-provider-logos" data-id="497698" data-type="movie">
+<span></span><span></span><span></span>
+<span></span><span></span><span></span>
+</div>
+<div class="mcu-detail-link">作品詳細を見る →</div>
+</div>
+</div>
+</a>
+<a class="mcu-card" href="detail.html?id=91363&amp;type=tv">
+<div class="mcu-number">28</div>
+<div class="mcu-card-main">
+<img alt="ホワット・イフ...？" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/lztz5XBMG1x6Y5ubz7CxfPFsAcW.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">ホワット・イフ...？ シーズン1</div>
+<div class="mcu-card-meta-row">
+<span>2021年</span>
+<span class="mcu-type mcu-type-anime">🎞️ アニメ</span>
+</div>
+<div class="mcu-logo-test mcu-provider-logos" data-id="91363" data-type="tv">
+<span></span><span></span><span></span>
+<span></span><span></span><span></span>
+</div>
+<div class="mcu-detail-link">作品詳細を見る →</div>
+</div>
+</div>
+</a>
+<a class="mcu-card" href="detail.html?id=566525">
+<div class="mcu-number">29</div>
+<div class="mcu-card-main">
+<img alt="シャン・チー／テン・リングスの伝説" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/1BIoJGKbXjdFDAqUEiA2VHqkK1Z.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">シャン・チー／テン・リングスの伝説</div>
+<div class="mcu-card-meta-row">
+<span>2021年</span>
+<span class="mcu-type mcu-type-movie">🎬 映画</span>
+</div>
+<div class="mcu-logo-test mcu-provider-logos" data-id="566525" data-type="movie">
+<span></span><span></span><span></span>
+<span></span><span></span><span></span>
+</div>
+<div class="mcu-detail-link">作品詳細を見る →</div>
+</div>
+</div>
+</a>
+<a class="mcu-card" href="detail.html?id=524434">
+<div class="mcu-number">30</div>
+<div class="mcu-card-main">
+<img alt="エターナルズ" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/lFByFSLV5WDJEv3KabbdAF959F2.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">エターナルズ</div>
+<div class="mcu-card-meta-row">
+<span>2021年</span>
+<span class="mcu-type mcu-type-movie">🎬 映画</span>
+</div>
+<div class="mcu-logo-test mcu-provider-logos" data-id="524434" data-type="movie">
+<span></span><span></span><span></span>
+<span></span><span></span><span></span>
+</div>
+<div class="mcu-detail-link">作品詳細を見る →</div>
+</div>
+</div>
+</a>
+<a class="mcu-card" href="detail.html?id=88329&amp;type=tv">
+<div class="mcu-number">31</div>
+<div class="mcu-card-main">
+<img alt="ホークアイ" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/ct5pNE5dDHryHLDnxyZPYcqO1sz.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">ホークアイ</div>
+<div class="mcu-card-meta-row">
+<span>2021年</span>
+<span class="mcu-type mcu-type-drama">📺 ドラマ</span>
+</div>
+<div class="mcu-logo-test mcu-provider-logos" data-id="88329" data-type="tv">
+<span></span><span></span><span></span>
+<span></span><span></span><span></span>
+</div>
+<div class="mcu-detail-link">作品詳細を見る →</div>
+</div>
+</div>
+</a>
+<a class="mcu-card" href="detail.html?id=634649">
+<div class="mcu-number">32</div>
+<div class="mcu-card-main">
+<img alt="スパイダーマン：ノー・ウェイ・ホーム" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">スパイダーマン：ノー・ウェイ・ホーム</div>
+<div class="mcu-card-meta-row">
+<span>2021年</span>
+<span class="mcu-type mcu-type-movie">🎬 映画</span>
+</div>
+<div class="mcu-logo-test mcu-provider-logos" data-id="634649" data-type="movie">
+<span></span><span></span><span></span>
+<span></span><span></span><span></span>
+</div>
+<div class="mcu-detail-link">作品詳細を見る →</div>
+</div>
+</div>
+</a>
+<a class="mcu-card" href="detail.html?id=92749&amp;type=tv">
+<div class="mcu-number">33</div>
+<div class="mcu-card-main">
+<img alt="ムーンナイト" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/YksR65as1ppF2N48TJAh2PLamX.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">ムーンナイト</div>
+<div class="mcu-card-meta-row">
+<span>2022年</span>
+<span class="mcu-type mcu-type-drama">📺 ドラマ</span>
+</div>
+<div class="mcu-logo-test mcu-provider-logos" data-id="92749" data-type="tv">
+<span></span><span></span><span></span>
+<span></span><span></span><span></span>
+</div>
+<div class="mcu-detail-link">作品詳細を見る →</div>
+</div>
+</div>
+</a>
+<a class="mcu-card" href="detail.html?id=453395">
+<div class="mcu-number">34</div>
+<div class="mcu-card-main">
+<img alt="ドクター・ストレンジ／マルチバース・オブ・マッドネス" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/9Gtg2DzBhmYamXBS1hKAhiwbBKS.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">ドクター・ストレンジ／マルチバース・オブ・マッドネス</div>
+<div class="mcu-card-meta-row">
+<span>2022年</span>
+<span class="mcu-type mcu-type-movie">🎬 映画</span>
+</div>
+<div class="mcu-logo-test mcu-provider-logos" data-id="453395" data-type="movie">
+<span></span><span></span><span></span>
+<span></span><span></span><span></span>
+</div>
+<div class="mcu-detail-link">作品詳細を見る →</div>
+</div>
+</div>
+</a>
+<a class="mcu-card" href="detail.html?id=92782&amp;type=tv">
+<div class="mcu-number">35</div>
+<div class="mcu-card-main">
+<img alt="ミズ・マーベル" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/cdkyMYdu8ao26XOBvilNzLneUg1.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">ミズ・マーベル</div>
+<div class="mcu-card-meta-row">
+<span>2022年</span>
+<span class="mcu-type mcu-type-drama">📺 ドラマ</span>
+</div>
+<div class="mcu-logo-test mcu-provider-logos" data-id="92782" data-type="tv">
+<span></span><span></span><span></span>
+<span></span><span></span><span></span>
+</div>
+<div class="mcu-detail-link">作品詳細を見る →</div>
+</div>
+</div>
+</a>
+<a class="mcu-card" href="detail.html?id=616037">
+<div class="mcu-number">36</div>
+<div class="mcu-card-main">
+<img alt="ソー：ラブ＆サンダー" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/pIkRyD18kl4FhoCNQuWxWu5cBLM.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">ソー：ラブ＆サンダー</div>
+<div class="mcu-card-meta-row">
+<span>2022年</span>
+<span class="mcu-type mcu-type-movie">🎬 映画</span>
+</div>
+<div class="mcu-logo-test mcu-provider-logos" data-id="616037" data-type="movie">
+<span></span><span></span><span></span>
+<span></span><span></span><span></span>
+</div>
+<div class="mcu-detail-link">作品詳細を見る →</div>
+</div>
+</div>
+</a>
+<a class="mcu-card" href="detail.html?id=232125&amp;type=tv">
+<div class="mcu-number">37</div>
+<div class="mcu-card-main">
+<img alt="アイ・アム・グルート シーズン1" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/lYwFSsP4KsoRhOLhJvBFp3GEGEm.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">アイ・アム・グルート シーズン1</div>
+<div class="mcu-card-meta-row">
+<span>2022年</span>
+<span class="mcu-type mcu-type-anime">🎞️ アニメ短編</span>
+</div>
+<div class="mcu-logo-test mcu-provider-logos" data-id="232125" data-type="tv">
+<span></span><span></span><span></span>
+<span></span><span></span><span></span>
+</div>
+<div class="mcu-detail-link">作品詳細を見る →</div>
+</div>
+</div>
+</a>
+<a class="mcu-card" href="detail.html?id=92783&amp;type=tv">
+<div class="mcu-number">38</div>
+<div class="mcu-card-main">
+<img alt="シー・ハルク：ザ・アトーニー" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/hJfI6AGrmr4uSHRccfJuSsapvOb.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">シー・ハルク：ザ・アトーニー</div>
+<div class="mcu-card-meta-row">
+<span>2022年</span>
+<span class="mcu-type mcu-type-drama">📺 ドラマ</span>
+</div>
+<div class="mcu-logo-test mcu-provider-logos" data-id="92783" data-type="tv">
+<span></span><span></span><span></span>
+<span></span><span></span><span></span>
+</div>
+<div class="mcu-detail-link">作品詳細を見る →</div>
+</div>
+</div>
+</a>
+<a class="mcu-card" href="detail.html?id=894205">
+<div class="mcu-number">39</div>
+<div class="mcu-card-main">
+<img alt="ウェアウルフ・バイ・ナイト" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/jmv7EbqBuEk4V1U7OoSBaxkwawO.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">ウェアウルフ・バイ・ナイト</div>
+<div class="mcu-card-meta-row">
+<span>2022年</span>
+<span class="mcu-type mcu-type-special">🌙 スペシャル</span>
+</div>
+<div class="mcu-logo-test mcu-provider-logos" data-id="894205" data-type="movie">
+<span></span><span></span><span></span>
+<span></span><span></span><span></span>
+</div>
+<div class="mcu-detail-link">作品詳細を見る →</div>
+</div>
+</div>
+</a>
+<a class="mcu-card" href="detail.html?id=505642">
+<div class="mcu-number">40</div>
+<div class="mcu-card-main">
+<img alt="ブラックパンサー／ワカンダ・フォーエバー" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/sv1xJUazXeYqALzczSZ3O6nkH75.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">ブラックパンサー／ワカンダ・フォーエバー</div>
+<div class="mcu-card-meta-row">
+<span>2022年</span>
+<span class="mcu-type mcu-type-movie">🎬 映画</span>
+</div>
+<div class="mcu-logo-test mcu-provider-logos" data-id="505642" data-type="movie">
+<span></span><span></span><span></span>
+<span></span><span></span><span></span>
+</div>
+<div class="mcu-detail-link">作品詳細を見る →</div>
+</div>
+</div>
+</a>
+<a class="mcu-card" href="detail.html?id=774752">
+<div class="mcu-number">41</div>
+<div class="mcu-card-main">
+<img alt="ガーディアンズ・オブ・ギャラクシー ホリデー・スペシャル" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/8dqXyslZ2hv49Oiob9UjlGSHSTR.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">ガーディアンズ・オブ・ギャラクシー ホリデー・スペシャル</div>
+<div class="mcu-card-meta-row">
+<span>2022年</span>
+<span class="mcu-type mcu-type-special">🎄 スペシャル</span>
+</div>
+<div class="mcu-logo-test mcu-provider-logos" data-id="774752" data-type="movie">
+<span></span><span></span><span></span>
+<span></span><span></span><span></span>
+</div>
+<div class="mcu-detail-link">作品詳細を見る →</div>
+</div>
+</div>
+</a>
+</div>
+</div>
 <!-- =====================================================
      PHASE 5
 ===================================================== -->
-
 <div class="phase-box phase-box-5">
-
-<div id="phase5" class="mcu-phase-heading phase-heading-5">  
-
-  <div class="mcu-phase-heading-number">PHASE 5</div>
-  <div class="mcu-phase-heading-text">
-    <h2>新たなヒーローたちと、次の大きな物語へ</h2>
-
-    <p>
+<div class="mcu-phase-heading phase-heading-5" id="phase5">
+<div class="mcu-phase-heading-number">PHASE 5</div>
+<div class="mcu-phase-heading-text">
+<h2>新たなヒーローたちと、次の大きな物語へ</h2>
+<p>
      2023–2025
     ・映画／ドラマ／アニメを公開順に掲載
     </p>
-
-    <span class="phase-description">
+<span class="phase-description">
     新たなヒーローやチームが動き出し、物語が次の大きな戦いへつながっていくフェーズ。
     </span>
-  </div>
 </div>
-
+</div>
 <div class="mcu-list phase-cards-5">
-
-  <a href="detail.html?id=640146" class="mcu-card">
-    <div class="mcu-number">42</div>
-    <div class="mcu-card-main">
-      <img
-        src="https://image.tmdb.org/t/p/w300/ngl2FKBlU4fhbdsrtdom9LVLBXw.jpg"
-        alt="アントマン＆ワスプ：クアントマニア"
-        class="mcu-poster"
-      >
-      <div class="mcu-card-info">
-        <div class="mcu-title">アントマン＆ワスプ：クアントマニア</div>
-
-        <div class="mcu-card-meta-row">
-          <span>2023年</span>
-          <span class="mcu-type mcu-type-movie">🎬 映画</span>
-        </div>
-
-        <div 
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="640146"
-  data-type="movie"
->
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-        </div>
-
-        <div class="mcu-detail-link">作品詳細を見る →</div>
-      </div>
-    </div>
-  </a>
-
-
-  <a href="detail.html?id=447365" class="mcu-card">
-    <div class="mcu-number">43</div>
-    <div class="mcu-card-main">
-      <img
-        src="https://image.tmdb.org/t/p/w300/r2J02Z2OpNTctfOSN1Ydgii51I3.jpg"
-        alt="ガーディアンズ・オブ・ギャラクシー：VOLUME 3"
-        class="mcu-poster"
-      >
-      <div class="mcu-card-info">
-        <div class="mcu-title">ガーディアンズ・オブ・ギャラクシー：VOLUME 3</div>
-
-        <div class="mcu-card-meta-row">
-          <span>2023年</span>
-          <span class="mcu-type mcu-type-movie">🎬 映画</span>
-        </div>
-
-        <div 
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="447365"
-  data-type="movie"
->
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-        </div>
-
-        <div class="mcu-detail-link">作品詳細を見る →</div>
-      </div>
-    </div>
-  </a>
-
-
-  <a href="detail.html?id=114472&type=tv" class="mcu-card">
-    <div class="mcu-number">44</div>
-    <div class="mcu-card-main">
-      <img
-        src="https://image.tmdb.org/t/p/w300/f5ZMzzCvt2IzVDxr54gHPv9jlC9.jpg"
-        alt="シークレット・インベージョン"
-        class="mcu-poster"
-      >
-      <div class="mcu-card-info">
-        <div class="mcu-title">シークレット・インベージョン</div>
-
-        <div class="mcu-card-meta-row">
-          <span>2023年</span>
-          <span class="mcu-type mcu-type-drama">📺 ドラマ</span>
-        </div>
-
-        <div 
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="114472"
-  data-type="tv"
->
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-        </div>
-
-        <div class="mcu-detail-link">作品詳細を見る →</div>
-      </div>
-    </div>
-  </a>
-
-
-  <a href="detail.html?id=232125&type=tv&season=2" class="mcu-card">
-    <div class="mcu-number">45</div>
-    <div class="mcu-card-main">
-      <img
-        src="https://image.tmdb.org/t/p/w300/lYwFSsP4KsoRhOLhJvBFp3GEGEm.jpg"
-        alt="アイ・アム・グルート シーズン2"
-        class="mcu-poster"
-      >
-      <div class="mcu-card-info">
-        <div class="mcu-title">アイ・アム・グルート シーズン2</div>
-
-        <div class="mcu-card-meta-row">
-          <span>2023年</span>
-          <span class="mcu-type mcu-type-anime">🎞️ アニメ短編</span>
-        </div>
-
-        <div 
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="232125"
-  data-type="tv"
->
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-        </div>
-
-        <div class="mcu-detail-link">作品詳細を見る →</div>
-      </div>
-    </div>
-  </a>
-
-
-  <a href="detail.html?id=84958&type=tv&season=2" class="mcu-card">
-    <div class="mcu-number">46</div>
-    <div class="mcu-card-main">
-      <img
-        src="https://image.tmdb.org/t/p/w300/voHUmluYmKyleFkTu3lOXQG702u.jpg"
-        alt="ロキ シーズン2"
-        class="mcu-poster"
-      >
-      <div class="mcu-card-info">
-        <div class="mcu-title">ロキ シーズン2</div>
-
-        <div class="mcu-card-meta-row">
-          <span>2023年</span>
-          <span class="mcu-type mcu-type-drama">📺 ドラマ</span>
-        </div>
-
-        <div 
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="84958"
-  data-type="tv"
->
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-        </div>
-
-        <div class="mcu-detail-link">作品詳細を見る →</div>
-      </div>
-    </div>
-  </a>
-
-
-  <a href="detail.html?id=609681" class="mcu-card">
-    <div class="mcu-number">47</div>
-    <div class="mcu-card-main">
-      <img
-        src="https://image.tmdb.org/t/p/w300/3b8VyzOHZKBTnbLGR7PriCV1C06.jpg"
-        alt="マーベルズ"
-        class="mcu-poster"
-      >
-      <div class="mcu-card-info">
-        <div class="mcu-title">マーベルズ</div>
-
-        <div class="mcu-card-meta-row">
-          <span>2023年</span>
-          <span class="mcu-type mcu-type-movie">🎬 映画</span>
-        </div>
-
-        <div 
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="609681"
-  data-type="movie"
->
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-        </div>
-
-        <div class="mcu-detail-link">作品詳細を見る →</div>
-      </div>
-    </div>
-  </a>
-
-
-  <a href="detail.html?id=91363&type=tv&season=2" class="mcu-card">
-    <div class="mcu-number">48</div>
-    <div class="mcu-card-main">
-      <img
-        src="https://image.tmdb.org/t/p/w300/lztz5XBMG1x6Y5ubz7CxfPFsAcW.jpg"
-        alt="ホワット・イフ...？ シーズン2"
-        class="mcu-poster"
-      >
-      <div class="mcu-card-info">
-        <div class="mcu-title">ホワット・イフ...？ シーズン2</div>
-
-        <div class="mcu-card-meta-row">
-          <span>2023年</span>
-          <span class="mcu-type mcu-type-anime">🎞️ アニメ</span>
-        </div>
-
-        <div 
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="91363"
-  data-type="tv"
->
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-        </div>
-
-        <div class="mcu-detail-link">作品詳細を見る →</div>
-      </div>
-    </div>
-  </a>
-
-
-  <a href="detail.html?id=122226&type=tv" class="mcu-card">
-    <div class="mcu-number">49</div>
-    <div class="mcu-card-main">
-      <img
-        src="https://image.tmdb.org/t/p/w300/vFyJH630cF68LohVYjQW49074Sy.jpg"
-        alt="エコー"
-        class="mcu-poster"
-      >
-      <div class="mcu-card-info">
-        <div class="mcu-title">エコー</div>
-
-        <div class="mcu-card-meta-row">
-          <span>2024年</span>
-          <span class="mcu-type mcu-type-drama">📺 ドラマ</span>
-        </div>
-
-        <div 
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="122226"
-  data-type="tv"
->
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-        </div>
-
-        <div class="mcu-detail-link">作品詳細を見る →</div>
-      </div>
-    </div>
-  </a>
-
-
-  <a href="detail.html?id=533535" class="mcu-card">
-    <div class="mcu-number">50</div>
-    <div class="mcu-card-main">
-      <img
-        src="https://image.tmdb.org/t/p/w300/8cdWjvZQUExUUTzyp4t6EDMubfO.jpg"
-        alt="デッドプール＆ウルヴァリン"
-        class="mcu-poster"
-      >
-      <div class="mcu-card-info">
-        <div class="mcu-title">デッドプール＆ウルヴァリン</div>
-
-        <div class="mcu-card-meta-row">
-          <span>2024年</span>
-          <span class="mcu-type mcu-type-movie">🎬 映画</span>
-        </div>
-
-        <div 
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="533535"
-  data-type="movie"
->
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-        </div>
-
-        <div class="mcu-detail-link">作品詳細を見る →</div>
-      </div>
-    </div>
-  </a>
-
-
-  <a href="detail.html?id=138501&type=tv" class="mcu-card">
-    <div class="mcu-number">51</div>
-    <div class="mcu-card-main">
-      <img
-        src="https://image.tmdb.org/t/p/w300/1tfCj5h0FEQ5xg8hzVjQgcuGlgN.jpg"
-        alt="アガサ・オール・アロング"
-        class="mcu-poster"
-      >
-      <div class="mcu-card-info">
-        <div class="mcu-title">アガサ・オール・アロング</div>
-
-        <div class="mcu-card-meta-row">
-          <span>2024年</span>
-          <span class="mcu-type mcu-type-drama">📺 ドラマ</span>
-        </div>
-
-        <div 
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="138501"
-  data-type="tv"
->
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-        </div>
-
-        <div class="mcu-detail-link">作品詳細を見る →</div>
-      </div>
-    </div>
-  </a>
-
-
-  <a href="detail.html?id=91363&type=tv&season=3" class="mcu-card">
-    <div class="mcu-number">52</div>
-    <div class="mcu-card-main">
-      <img
-        src="https://image.tmdb.org/t/p/w300/lztz5XBMG1x6Y5ubz7CxfPFsAcW.jpg"
-        alt="ホワット・イフ...？ シーズン3"
-        class="mcu-poster"
-      >
-      <div class="mcu-card-info">
-        <div class="mcu-title">ホワット・イフ...？ シーズン3</div>
-
-        <div class="mcu-card-meta-row">
-          <span>2024年</span>
-          <span class="mcu-type mcu-type-anime">🎞️ アニメ</span>
-        </div>
-
-        <div 
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="91363"
-  data-type="tv"
->
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-        </div>
-
-        <div class="mcu-detail-link">作品詳細を見る →</div>
-      </div>
-    </div>
-  </a>
-
-
-  <a href="detail.html?id=822119" class="mcu-card">
-    <div class="mcu-number">53</div>
-    <div class="mcu-card-main">
-      <img
-        src="https://image.tmdb.org/t/p/w300/pzIddUEMWhWzfvLI3TwxUG2wGoi.jpg"
-        alt="キャプテン・アメリカ：ブレイブ・ニュー・ワールド"
-        class="mcu-poster"
-      >
-      <div class="mcu-card-info">
-        <div class="mcu-title">キャプテン・アメリカ：ブレイブ・ニュー・ワールド</div>
-
-        <div class="mcu-card-meta-row">
-          <span>2025年</span>
-          <span class="mcu-type mcu-type-movie">🎬 映画</span>
-        </div>
-
-        <div 
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="822119"
-  data-type="movie"
->
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-        </div>
-
-        <div class="mcu-detail-link">作品詳細を見る →</div>
-      </div>
-    </div>
-  </a>
-
-
-  <a href="detail.html?id=202555&type=tv" class="mcu-card">
-    <div class="mcu-number">54</div>
-    <div class="mcu-card-main">
-      <img
-        src="https://image.tmdb.org/t/p/w300/9lLuhV703HGCbnz6FxnqCwIwzAZ.jpg"
-        alt="デアデビル：ボーン・アゲイン シーズン1"
-        class="mcu-poster"
-      >
-      <div class="mcu-card-info">
-        <div class="mcu-title">デアデビル：ボーン・アゲイン シーズン1</div>
-
-        <div class="mcu-card-meta-row">
-          <span>2025年</span>
-          <span class="mcu-type mcu-type-drama">📺 ドラマ</span>
-        </div>
-
-        <div 
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="202555"
-  data-type="tv"
->
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-        </div>
-
-        <div class="mcu-detail-link">作品詳細を見る →</div>
-      </div>
-    </div>
-  </a>
-
-
-  <a href="detail.html?id=986056" class="mcu-card">
-    <div class="mcu-number">55</div>
-    <div class="mcu-card-main">
-      <img
-        src="https://image.tmdb.org/t/p/w300/hqcexYHbiTBfDIdDWxrxPtVndBX.jpg"
-        alt="サンダーボルツ*"
-        class="mcu-poster"
-      >
-      <div class="mcu-card-info">
-        <div class="mcu-title">サンダーボルツ*</div>
-
-        <div class="mcu-card-meta-row">
-          <span>2025年</span>
-          <span class="mcu-type mcu-type-movie">🎬 映画</span>
-        </div>
-
-        <div 
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="986056"
-  data-type="movie"
->
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-        </div>
-
-        <div class="mcu-detail-link">作品詳細を見る →</div>
-      </div>
-    </div>
-  </a>
-
-
-  <a href="detail.html?id=114471&type=tv" class="mcu-card">
-    <div class="mcu-number">56</div>
-    <div class="mcu-card-main">
-      <img
-        src="https://image.tmdb.org/t/p/w300/dtpiECNwAeLnGJSU3HTWhcQGHk1.jpg"
-        alt="アイアンハート"
-        class="mcu-poster"
-      >
-      <div class="mcu-card-info">
-        <div class="mcu-title">アイアンハート</div>
-
-        <div class="mcu-card-meta-row">
-          <span>2025年</span>
-          <span class="mcu-type mcu-type-drama">📺 ドラマ</span>
-        </div>
-
-        <div 
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="114471"
-  data-type="tv"
->
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-        </div>
-
-        <div class="mcu-detail-link">作品詳細を見る →</div>
-      </div>
-    </div>
-  </a>
-
+<a class="mcu-card" href="detail.html?id=640146">
+<div class="mcu-number">42</div>
+<div class="mcu-card-main">
+<img alt="アントマン＆ワスプ：クアントマニア" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/ngl2FKBlU4fhbdsrtdom9LVLBXw.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">アントマン＆ワスプ：クアントマニア</div>
+<div class="mcu-card-meta-row">
+<span>2023年</span>
+<span class="mcu-type mcu-type-movie">🎬 映画</span>
+</div>
+<div class="mcu-logo-test mcu-provider-logos" data-id="640146" data-type="movie">
+<span></span><span></span><span></span>
+<span></span><span></span><span></span>
+</div>
+<div class="mcu-detail-link">作品詳細を見る →</div>
 </div>
 </div>
-
+</a>
+<a class="mcu-card" href="detail.html?id=447365">
+<div class="mcu-number">43</div>
+<div class="mcu-card-main">
+<img alt="ガーディアンズ・オブ・ギャラクシー：VOLUME 3" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/r2J02Z2OpNTctfOSN1Ydgii51I3.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">ガーディアンズ・オブ・ギャラクシー：VOLUME 3</div>
+<div class="mcu-card-meta-row">
+<span>2023年</span>
+<span class="mcu-type mcu-type-movie">🎬 映画</span>
+</div>
+<div class="mcu-logo-test mcu-provider-logos" data-id="447365" data-type="movie">
+<span></span><span></span><span></span>
+<span></span><span></span><span></span>
+</div>
+<div class="mcu-detail-link">作品詳細を見る →</div>
+</div>
+</div>
+</a>
+<a class="mcu-card" href="detail.html?id=114472&amp;type=tv">
+<div class="mcu-number">44</div>
+<div class="mcu-card-main">
+<img alt="シークレット・インベージョン" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/f5ZMzzCvt2IzVDxr54gHPv9jlC9.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">シークレット・インベージョン</div>
+<div class="mcu-card-meta-row">
+<span>2023年</span>
+<span class="mcu-type mcu-type-drama">📺 ドラマ</span>
+</div>
+<div class="mcu-logo-test mcu-provider-logos" data-id="114472" data-type="tv">
+<span></span><span></span><span></span>
+<span></span><span></span><span></span>
+</div>
+<div class="mcu-detail-link">作品詳細を見る →</div>
+</div>
+</div>
+</a>
+<a class="mcu-card" href="detail.html?id=232125&amp;type=tv&amp;season=2">
+<div class="mcu-number">45</div>
+<div class="mcu-card-main">
+<img alt="アイ・アム・グルート シーズン2" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/lYwFSsP4KsoRhOLhJvBFp3GEGEm.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">アイ・アム・グルート シーズン2</div>
+<div class="mcu-card-meta-row">
+<span>2023年</span>
+<span class="mcu-type mcu-type-anime">🎞️ アニメ短編</span>
+</div>
+<div class="mcu-logo-test mcu-provider-logos" data-id="232125" data-type="tv">
+<span></span><span></span><span></span>
+<span></span><span></span><span></span>
+</div>
+<div class="mcu-detail-link">作品詳細を見る →</div>
+</div>
+</div>
+</a>
+<a class="mcu-card" href="detail.html?id=84958&amp;type=tv&amp;season=2">
+<div class="mcu-number">46</div>
+<div class="mcu-card-main">
+<img alt="ロキ シーズン2" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/voHUmluYmKyleFkTu3lOXQG702u.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">ロキ シーズン2</div>
+<div class="mcu-card-meta-row">
+<span>2023年</span>
+<span class="mcu-type mcu-type-drama">📺 ドラマ</span>
+</div>
+<div class="mcu-logo-test mcu-provider-logos" data-id="84958" data-type="tv">
+<span></span><span></span><span></span>
+<span></span><span></span><span></span>
+</div>
+<div class="mcu-detail-link">作品詳細を見る →</div>
+</div>
+</div>
+</a>
+<a class="mcu-card" href="detail.html?id=609681">
+<div class="mcu-number">47</div>
+<div class="mcu-card-main">
+<img alt="マーベルズ" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/3b8VyzOHZKBTnbLGR7PriCV1C06.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">マーベルズ</div>
+<div class="mcu-card-meta-row">
+<span>2023年</span>
+<span class="mcu-type mcu-type-movie">🎬 映画</span>
+</div>
+<div class="mcu-logo-test mcu-provider-logos" data-id="609681" data-type="movie">
+<span></span><span></span><span></span>
+<span></span><span></span><span></span>
+</div>
+<div class="mcu-detail-link">作品詳細を見る →</div>
+</div>
+</div>
+</a>
+<a class="mcu-card" href="detail.html?id=91363&amp;type=tv&amp;season=2">
+<div class="mcu-number">48</div>
+<div class="mcu-card-main">
+<img alt="ホワット・イフ...？ シーズン2" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/lztz5XBMG1x6Y5ubz7CxfPFsAcW.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">ホワット・イフ...？ シーズン2</div>
+<div class="mcu-card-meta-row">
+<span>2023年</span>
+<span class="mcu-type mcu-type-anime">🎞️ アニメ</span>
+</div>
+<div class="mcu-logo-test mcu-provider-logos" data-id="91363" data-type="tv">
+<span></span><span></span><span></span>
+<span></span><span></span><span></span>
+</div>
+<div class="mcu-detail-link">作品詳細を見る →</div>
+</div>
+</div>
+</a>
+<a class="mcu-card" href="detail.html?id=122226&amp;type=tv">
+<div class="mcu-number">49</div>
+<div class="mcu-card-main">
+<img alt="エコー" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/vFyJH630cF68LohVYjQW49074Sy.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">エコー</div>
+<div class="mcu-card-meta-row">
+<span>2024年</span>
+<span class="mcu-type mcu-type-drama">📺 ドラマ</span>
+</div>
+<div class="mcu-logo-test mcu-provider-logos" data-id="122226" data-type="tv">
+<span></span><span></span><span></span>
+<span></span><span></span><span></span>
+</div>
+<div class="mcu-detail-link">作品詳細を見る →</div>
+</div>
+</div>
+</a>
+<a class="mcu-card" href="detail.html?id=533535">
+<div class="mcu-number">50</div>
+<div class="mcu-card-main">
+<img alt="デッドプール＆ウルヴァリン" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/8cdWjvZQUExUUTzyp4t6EDMubfO.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">デッドプール＆ウルヴァリン</div>
+<div class="mcu-card-meta-row">
+<span>2024年</span>
+<span class="mcu-type mcu-type-movie">🎬 映画</span>
+</div>
+<div class="mcu-logo-test mcu-provider-logos" data-id="533535" data-type="movie">
+<span></span><span></span><span></span>
+<span></span><span></span><span></span>
+</div>
+<div class="mcu-detail-link">作品詳細を見る →</div>
+</div>
+</div>
+</a>
+<a class="mcu-card" href="detail.html?id=138501&amp;type=tv">
+<div class="mcu-number">51</div>
+<div class="mcu-card-main">
+<img alt="アガサ・オール・アロング" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/1tfCj5h0FEQ5xg8hzVjQgcuGlgN.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">アガサ・オール・アロング</div>
+<div class="mcu-card-meta-row">
+<span>2024年</span>
+<span class="mcu-type mcu-type-drama">📺 ドラマ</span>
+</div>
+<div class="mcu-logo-test mcu-provider-logos" data-id="138501" data-type="tv">
+<span></span><span></span><span></span>
+<span></span><span></span><span></span>
+</div>
+<div class="mcu-detail-link">作品詳細を見る →</div>
+</div>
+</div>
+</a>
+<a class="mcu-card" href="detail.html?id=91363&amp;type=tv&amp;season=3">
+<div class="mcu-number">52</div>
+<div class="mcu-card-main">
+<img alt="ホワット・イフ...？ シーズン3" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/lztz5XBMG1x6Y5ubz7CxfPFsAcW.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">ホワット・イフ...？ シーズン3</div>
+<div class="mcu-card-meta-row">
+<span>2024年</span>
+<span class="mcu-type mcu-type-anime">🎞️ アニメ</span>
+</div>
+<div class="mcu-logo-test mcu-provider-logos" data-id="91363" data-type="tv">
+<span></span><span></span><span></span>
+<span></span><span></span><span></span>
+</div>
+<div class="mcu-detail-link">作品詳細を見る →</div>
+</div>
+</div>
+</a>
+<a class="mcu-card" href="detail.html?id=822119">
+<div class="mcu-number">53</div>
+<div class="mcu-card-main">
+<img alt="キャプテン・アメリカ：ブレイブ・ニュー・ワールド" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/pzIddUEMWhWzfvLI3TwxUG2wGoi.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">キャプテン・アメリカ：ブレイブ・ニュー・ワールド</div>
+<div class="mcu-card-meta-row">
+<span>2025年</span>
+<span class="mcu-type mcu-type-movie">🎬 映画</span>
+</div>
+<div class="mcu-logo-test mcu-provider-logos" data-id="822119" data-type="movie">
+<span></span><span></span><span></span>
+<span></span><span></span><span></span>
+</div>
+<div class="mcu-detail-link">作品詳細を見る →</div>
+</div>
+</div>
+</a>
+<a class="mcu-card" href="detail.html?id=202555&amp;type=tv">
+<div class="mcu-number">54</div>
+<div class="mcu-card-main">
+<img alt="デアデビル：ボーン・アゲイン シーズン1" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/9lLuhV703HGCbnz6FxnqCwIwzAZ.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">デアデビル：ボーン・アゲイン シーズン1</div>
+<div class="mcu-card-meta-row">
+<span>2025年</span>
+<span class="mcu-type mcu-type-drama">📺 ドラマ</span>
+</div>
+<div class="mcu-logo-test mcu-provider-logos" data-id="202555" data-type="tv">
+<span></span><span></span><span></span>
+<span></span><span></span><span></span>
+</div>
+<div class="mcu-detail-link">作品詳細を見る →</div>
+</div>
+</div>
+</a>
+<a class="mcu-card" href="detail.html?id=986056">
+<div class="mcu-number">55</div>
+<div class="mcu-card-main">
+<img alt="サンダーボルツ*" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/hqcexYHbiTBfDIdDWxrxPtVndBX.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">サンダーボルツ*</div>
+<div class="mcu-card-meta-row">
+<span>2025年</span>
+<span class="mcu-type mcu-type-movie">🎬 映画</span>
+</div>
+<div class="mcu-logo-test mcu-provider-logos" data-id="986056" data-type="movie">
+<span></span><span></span><span></span>
+<span></span><span></span><span></span>
+</div>
+<div class="mcu-detail-link">作品詳細を見る →</div>
+</div>
+</div>
+</a>
+<a class="mcu-card" href="detail.html?id=114471&amp;type=tv">
+<div class="mcu-number">56</div>
+<div class="mcu-card-main">
+<img alt="アイアンハート" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/dtpiECNwAeLnGJSU3HTWhcQGHk1.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">アイアンハート</div>
+<div class="mcu-card-meta-row">
+<span>2025年</span>
+<span class="mcu-type mcu-type-drama">📺 ドラマ</span>
+</div>
+<div class="mcu-logo-test mcu-provider-logos" data-id="114471" data-type="tv">
+<span></span><span></span><span></span>
+<span></span><span></span><span></span>
+</div>
+<div class="mcu-detail-link">作品詳細を見る →</div>
+</div>
+</div>
+</a>
+</div>
+</div>
 <!-- =====================================================
      PHASE 6
 ===================================================== -->
-
 <div class="phase-box phase-box-6">
-
-  <div id="phase6" class="mcu-phase-heading phase-heading-6">
-
-    <div class="mcu-phase-heading-number">
+<div class="mcu-phase-heading phase-heading-6" id="phase6">
+<div class="mcu-phase-heading-number">
       PHASE 6
     </div>
-
-    <div class="mcu-phase-heading-text">
-
-      <h2>
+<div class="mcu-phase-heading-text">
+<h2>
         マルチバース・サーガ、最大のクライマックスへ
       </h2>
-
-      <p>
+<p>
         2025–・公開済み作品と今後の公開予定作品
       </p>
-
-      <span class="phase-description">
+<span class="phase-description">
         新たな物語が集まり、MCUの次の大きなクライマックスへ向かうフェーズ。
       </span>
-
-    </div>
-
-  </div>
-
-
-  <div class="mcu-list phase-cards-6">
-
-    <!-- 57 -->
-    <a href="detail.html?id=617126" class="mcu-card">
-
-      <div class="mcu-number">57</div>
-
-      <div class="mcu-card-main">
-
-        <img
-          src="https://image.tmdb.org/t/p/w300/nf5qaSEvyYSNeFH0YhSs5EsBLX9.jpg"
-          alt="ファンタスティック4：ファースト・ステップ"
-          class="mcu-poster"
-        >
-
-        <div class="mcu-card-info">
-
-          <div class="mcu-title">
+</div>
+</div>
+<div class="mcu-list phase-cards-6">
+<!-- 57 -->
+<a class="mcu-card" href="detail.html?id=617126">
+<div class="mcu-number">57</div>
+<div class="mcu-card-main">
+<img alt="ファンタスティック4：ファースト・ステップ" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/nf5qaSEvyYSNeFH0YhSs5EsBLX9.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">
             ファンタスティック4：ファースト・ステップ
           </div>
-
-          <div class="mcu-card-meta-row">
-            <span>2025年</span>
-            <span class="mcu-type mcu-type-movie">
+<div class="mcu-card-meta-row">
+<span>2025年</span>
+<span class="mcu-type mcu-type-movie">
               🎬 映画
             </span>
-          </div>
-
-          <div 
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="617126"
-  data-type="movie"
->
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
-
-          <div class="mcu-detail-link">
+</div>
+<div class="mcu-logo-test mcu-provider-logos" data-id="617126" data-type="movie">
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+</div>
+<div class="mcu-detail-link">
             作品詳細を見る →
           </div>
-
-        </div>
-
-      </div>
-
-    </a>
-
-
-    <!-- 58 -->
-    <a href="detail.html?id=969681" class="mcu-card">
-
-      <div class="mcu-number">58</div>
-
-      <div class="mcu-card-main">
-
-        <img
-          src="https://image.tmdb.org/t/p/w300/9JCQtDCSpPR2ld55yNlEg1VwcQo.jpg"
-          alt="スパイダーマン：ブランド・ニュー・デイ"
-          class="mcu-poster"
-        >
-
-        <div class="mcu-card-info">
-
-          <div class="mcu-title">
+</div>
+</div>
+</a>
+<!-- 58 -->
+<a class="mcu-card" href="detail.html?id=969681">
+<div class="mcu-number">58</div>
+<div class="mcu-card-main">
+<img alt="スパイダーマン：ブランド・ニュー・デイ" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/9JCQtDCSpPR2ld55yNlEg1VwcQo.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">
             スパイダーマン：ブランド・ニュー・デイ
           </div>
-
-          <div class="mcu-card-meta-row">
-            <span>2026年</span>
-            <span class="mcu-type mcu-type-movie">
+<div class="mcu-card-meta-row">
+<span>2026年</span>
+<span class="mcu-type mcu-type-movie">
               🎬 映画
             </span>
-          </div>
-
-          <div 
-  class="mcu-logo-test mcu-provider-logos"
-  data-id="969681"
-  data-type="movie"
->
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
-
-          <div class="mcu-detail-link">
+</div>
+<div class="mcu-logo-test mcu-provider-logos" data-id="969681" data-type="movie">
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+</div>
+<div class="mcu-detail-link">
             作品詳細を見る →
           </div>
-
-        </div>
-
-      </div>
-
-    </a>
-
-
-    <!-- 59 -->
-    <a href="detail.html?id=1003596" class="mcu-card">
-
-      <div class="mcu-number">59</div>
-
-      <div class="mcu-card-main">
-
-        <img
-          src="https://image.tmdb.org/t/p/w300/cWXtJhrlruF8CeYuaBGE8vdj3Q9.jpg"
-          alt="アベンジャーズ／ドゥームズデイ"
-          class="mcu-poster"
-        >
-
-        <div class="mcu-card-info">
-
-          <div class="mcu-title">
+</div>
+</div>
+</a>
+<!-- 59 -->
+<a class="mcu-card" href="detail.html?id=1003596">
+<div class="mcu-number">59</div>
+<div class="mcu-card-main">
+<img alt="アベンジャーズ／ドゥームズデイ" class="mcu-poster" src="https://image.tmdb.org/t/p/w300/cWXtJhrlruF8CeYuaBGE8vdj3Q9.jpg"/>
+<div class="mcu-card-info">
+<div class="mcu-title">
             アベンジャーズ／ドゥームズデイ
           </div>
-
-          <div class="mcu-card-meta-row">
-            <span>2026年12月18日</span>
-            <span class="mcu-type mcu-type-movie">
+<div class="mcu-card-meta-row">
+<span>2026年12月18日</span>
+<span class="mcu-type mcu-type-movie">
               🎬 映画
             </span>
-          </div>
-
-          <div class="mcu-upcoming-badge">
+</div>
+<div class="mcu-upcoming-badge">
             公開予定
           </div>
-
-          <div class="mcu-detail-link">
+<div class="mcu-detail-link">
             作品詳細を見る →
           </div>
-
-        </div>
-
-      </div>
-
-    </a>
-
-
-    <!-- 60 -->
-    <a href="detail.html?id=1003598" class="mcu-card">
-
-      <div class="mcu-number">60</div>
-
-      <div class="mcu-card-main">
-
-        <div class="mcu-poster mcu-poster-placeholder">
+</div>
+</div>
+</a>
+<!-- 60 -->
+<a class="mcu-card" href="detail.html?id=1003598">
+<div class="mcu-number">60</div>
+<div class="mcu-card-main">
+<div class="mcu-poster mcu-poster-placeholder">
           NO IMAGE
         </div>
-
-        <div class="mcu-card-info">
-
-          <div class="mcu-title">
+<div class="mcu-card-info">
+<div class="mcu-title">
             アベンジャーズ／シークレット・ウォーズ
           </div>
-
-          <div class="mcu-card-meta-row">
-            <span>2027年12月17日</span>
-            <span class="mcu-type mcu-type-movie">
+<div class="mcu-card-meta-row">
+<span>2027年12月17日</span>
+<span class="mcu-type mcu-type-movie">
               🎬 映画
             </span>
-          </div>
-
-          <div class="mcu-upcoming-badge">
+</div>
+<div class="mcu-upcoming-badge">
             公開予定
           </div>
-
-          <div class="mcu-detail-link">
+<div class="mcu-detail-link">
             作品詳細を見る →
           </div>
-
-        </div>
-
-      </div>
-
-    </a>
-
-  </div>
-
 </div>
-
-</section>
-      
-    </main>
-
-  </div>
-
+</div>
+</a>
+</div>
+</div>
+</main>
+</div>
 <script>
 /* =====================================================
    MCU 全作品 配信ロゴ読み込み
@@ -4683,12 +4905,9 @@ function startMcuProviderLoading(){
 
 startMcuProviderLoading();
 </script>
-
-
-<button id="backToTop" aria-label="ページ上部へ戻る">
+<button aria-label="ページ上部へ戻る" id="backToTop">
   ↑ TOPへ
 </button>
-
 <script>
 const backToTop =
   document.getElementById("backToTop");
@@ -4722,16 +4941,12 @@ backToTop.addEventListener(
   }
 );
 </script>
-
 <script>
 /* =====================================================
    MCU 表示モード
 ===================================================== */
 
-const mcuView =
-  new URLSearchParams(
-    window.location.search
-  ).get("view") || "release";
+const mcuView = "timeline";
 
 
 const mcuViewDescription =
@@ -4747,6 +4962,11 @@ const mcuUnderConstruction =
 const releaseView =
   document.getElementById(
     "releaseView"
+  );
+
+ const timelineView =
+  document.getElementById(
+    "timelineView"
   );
 
 const connectionsView =
@@ -4849,6 +5069,10 @@ if(releaseView){
   releaseView.style.display = "none";
 }
 
+if(timelineView){
+  timelineView.style.display = "none";
+}
+
 if(connectionsView){
   connectionsView.style.display = "none";
 }
@@ -4901,14 +5125,24 @@ if(mcuView === "connections"){
 
 
 /* =====================================================
-   時系列順・最短ルート
-   現在は工事中だけ表示
+   時系列・ストーリー順
 ===================================================== */
 
-if(
-  mcuView === "timeline" ||
-  mcuView === "short"
-){
+if(mcuView === "timeline"){
+
+  if(timelineView){
+    timelineView.style.display = "";
+  }
+
+}
+
+
+/* =====================================================
+   最短ルート
+   現在は工事中
+===================================================== */
+
+if(mcuView === "short"){
 
   if(mcuUnderConstruction){
     mcuUnderConstruction.style.display = "";
