@@ -4946,7 +4946,8 @@ backToTop.addEventListener(
    MCU 表示モード
 ===================================================== */
 
-const mcuView = "timeline";
+const mcuParams = new URLSearchParams(window.location.search);
+const mcuView = mcuParams.get("view") || "release";
 
 
 const mcuViewDescription =
