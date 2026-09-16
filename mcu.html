@@ -3307,6 +3307,99 @@ a.mcu-tab{
   margin-right:0 !important;
   text-align:left !important;
 }
+
+/* =====================================================
+   最短ルート・作品カード
+===================================================== */
+
+#shortView .short-route-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:13px;
+  margin-top:24px;
+}
+
+#shortView .short-route-card{
+  position:relative;
+  padding:14px;
+  border:1px solid #e5e7eb;
+  border-left:4px solid #f59e0b;
+  border-radius:15px;
+  background:#ffffff;
+  box-shadow:0 3px 12px rgba(15,23,42,.07);
+}
+
+#shortView .short-route-num{
+  position:absolute;
+  top:10px;
+  left:12px;
+  color:#b45309;
+  font-size:13px;
+  font-weight:900;
+}
+
+#shortView .short-route-main{
+  display:flex;
+  gap:12px;
+  align-items:stretch;
+  padding-top:24px;
+}
+
+#shortView .short-route-poster{
+  width:88px;
+  height:132px;
+  object-fit:cover;
+  flex:0 0 88px;
+  border-radius:9px;
+  background:#e5e7eb;
+}
+
+#shortView .short-route-info{
+  display:flex;
+  min-width:0;
+  flex:1;
+  flex-direction:column;
+}
+
+#shortView .short-route-info h3{
+  margin:0;
+  color:#172033;
+  font-size:16px;
+  line-height:1.35;
+}
+
+#shortView .short-route-line{
+  margin:7px 0 8px;
+  color:#475569;
+  font-size:13px;
+  line-height:1.6;
+}
+
+#shortView .short-route-detail{
+  display:inline-block;
+  margin-top:6px;
+  color:#2563eb;
+  font-size:13px;
+  font-weight:800;
+  text-decoration:none;
+}
+
+@media(max-width:700px){
+
+  #shortView .short-route-grid{
+    grid-template-columns:1fr;
+  }
+
+  #shortView .short-route-card{
+    padding:13px;
+  }
+
+  #shortView .short-route-poster{
+    width:82px;
+    height:123px;
+    flex-basis:82px;
+  }
+}
     
 </style>
 
@@ -4050,6 +4143,144 @@ a.mcu-tab{
 
   </section>
 
+  <div class="short-route-grid">
+
+    <!-- 1：アイアンマン -->
+    <article class="short-route-card">
+
+      <div class="short-route-num">
+        ⚡ 1
+      </div>
+
+      <div class="short-route-main">
+
+        <img
+          class="short-route-poster"
+          src="https://image.tmdb.org/t/p/w300/78lPtwv72eTNqFW9COBYI0dWDJa.jpg"
+          alt="アイアンマン"
+          loading="lazy"
+        />
+
+        <div class="short-route-info">
+
+          <h3>
+            アイアンマン
+          </h3>
+
+          <p class="short-route-line">
+            すべてはここから！MCUの出発点
+          </p>
+
+          <div
+            class="mcu-provider-logos"
+            data-id="1726"
+            data-type="movie">
+          </div>
+
+          <a
+            class="short-route-detail"
+            href="detail.html?id=1726">
+            作品詳細を見る →
+          </a>
+
+        </div>
+
+      </div>
+
+    </article>
+
+
+    <!-- 2：キャプテン・アメリカ -->
+    <article class="short-route-card">
+
+      <div class="short-route-num">
+        ⚡ 2
+      </div>
+
+      <div class="short-route-main">
+
+        <img
+          class="short-route-poster"
+          src="https://image.tmdb.org/t/p/w300/vSNxAJTlD0r02V9sPYpOjqDZXUK.jpg"
+          alt="キャプテン・アメリカ／ザ・ファースト・アベンジャー"
+          loading="lazy"
+        />
+
+        <div class="short-route-info">
+
+          <h3>
+            キャプテン・アメリカ／ザ・ファースト・アベンジャー
+          </h3>
+
+          <p class="short-route-line">
+            キャプテン・アメリカの始まりを知ろう
+          </p>
+
+          <div
+            class="mcu-provider-logos"
+            data-id="1771"
+            data-type="movie">
+          </div>
+
+          <a
+            class="short-route-detail"
+            href="detail.html?id=1771">
+            作品詳細を見る →
+          </a>
+
+        </div>
+
+      </div>
+
+    </article>
+
+
+    <!-- 3：マイティ・ソー -->
+    <article class="short-route-card">
+
+      <div class="short-route-num">
+        ⚡ 3
+      </div>
+
+      <div class="short-route-main">
+
+        <img
+          class="short-route-poster"
+          src="https://image.tmdb.org/t/p/w300/prSfAi1xGrhLQNxVSUFh61xQ4Qy.jpg"
+          alt="マイティ・ソー"
+          loading="lazy"
+        />
+
+        <div class="short-route-info">
+
+          <h3>
+            マイティ・ソー
+          </h3>
+
+          <p class="short-route-line">
+            神々とアスガルドの世界へ
+          </p>
+
+          <div
+            class="mcu-provider-logos"
+            data-id="10195"
+            data-type="movie">
+          </div>
+
+          <a
+            class="short-route-detail"
+            href="detail.html?id=10195">
+            作品詳細を見る →
+          </a>
+
+        </div>
+
+      </div>
+
+    </article>
+
+  </div>
+    
 </main>
 
 
