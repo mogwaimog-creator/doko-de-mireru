@@ -906,22 +906,24 @@ html{
   gap:15px;
   align-items:flex-start;
 
-  margin:0 0 18px;
-  padding:18px 20px;
+  margin:0 0 20px;
+  padding:15px 17px;
 
   background:
     linear-gradient(
       135deg,
-      #ffffff 0%,
-      #f4f8ff 100%
+      rgba(255,255,255,.075),
+      rgba(96,165,250,.055)
     );
 
-  border:1px solid #dbe7f7;
-  border-radius:16px;
+  border:1px solid rgba(191,219,254,.18);
+  border-left:3px solid rgba(96,165,250,.75);
+  border-radius:13px;
 
-  box-shadow:
-    0 3px 12px
-    rgba(15,23,42,.05);
+  box-shadow:none;
+
+  position:relative;
+  z-index:1;
 }
 
 .mcu-about-icon{
@@ -989,6 +991,29 @@ html{
 
 }  
 
+.mcu-hero .mcu-about-icon{
+  background:rgba(96,165,250,.14);
+}
+
+.mcu-hero .mcu-about-text h2{
+  color:#ffffff;
+  font-size:16px;
+}
+
+.mcu-hero .mcu-about-text p{
+  color:#cbd5e1;
+  font-size:13px;
+}
+
+.mcu-hero .mcu-about-note{
+  color:#94a3b8 !important;
+}
+
+.mcu-hero .mcu-about-link{
+  color:#93c5fd;
+}
+
+    
 /* =====================================================
    工事中のお知らせ
 ===================================================== */
@@ -3144,6 +3169,42 @@ a.mcu-tab{
   </p>
 
 </div>
+
+<section class="mcu-about">
+  <div class="mcu-about-icon">
+    💡
+  </div>
+
+  <div class="mcu-about-text">
+    <h2>
+      そもそもMCUって？
+    </h2>
+
+    <p>
+      MCUは
+      <strong>
+        「Marvel Cinematic Universe
+        （マーベル・シネマティック・ユニバース）」
+      </strong>
+      の略です。
+      『アイアンマン』から始まる、
+      映画やドラマがひとつの世界として
+      つながっているシリーズです。
+    </p>
+
+    <p class="mcu-about-note">
+      ※ マーベル作品すべてが
+      MCUというわけではありません。
+      X-MENや旧スパイダーマンなど、
+      MCUとは別の世界から始まった作品もあります。
+    </p>
+
+    <a class="mcu-about-link" href="mcu.html?view=connections">
+      🔗 マーベル作品のつながりを見る →
+    </a>
+  </div>
+</section>    
+    
 <div class="mcu-tabs">
 <a class="mcu-tab" href="mcu.html?view=release">
   🎬 公開順
@@ -3168,31 +3229,7 @@ a.mcu-tab{
     💡
   </div>
 <div class="mcu-about-text">
-<h2>
-      そもそもMCUって？
-    </h2>
-<p>
-      MCUは
-      <strong>
-        「Marvel Cinematic Universe
-        （マーベル・シネマティック・ユニバース）」
-      </strong>
-      の略です。
-      『アイアンマン』から始まる、
-      映画やドラマがひとつの世界として
-      つながっているシリーズです。
-    </p>
-<p class="mcu-about-note">
-      ※ マーベル作品すべてが
-      MCUというわけではありません。
-      X-MENや旧スパイダーマンなど、
-      MCUとは別の世界から始まった作品もあります。
-    </p>
-<a class="mcu-about-link" href="mcu.html?view=connections">
-  🔗 マーベル作品のつながりを見る →
-</a>
-</div>
-</section>
+
 <section class="marvel-universe-section" id="connectionsView">
 <div class="marvel-universe-heading">
 <span class="marvel-universe-badge">🌐 上級者編</span>
