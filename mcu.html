@@ -1058,17 +1058,103 @@ html{
 
 }
 
+/* =====================================================
+   MCU 上部・3つの基本ルート
+===================================================== */
+
+/* 公開順：ブルー */
+.mcu-tab[href*="view=release"]{
+  background:
+    linear-gradient(
+      135deg,
+      rgba(37,99,235,.72),
+      rgba(79,70,229,.72)
+    );
+
+  border-color:#60a5fa;
+
+  color:#ffffff;
+
+  box-shadow:
+    0 0 9px rgba(96,165,250,.42),
+    0 5px 14px rgba(37,99,235,.20);
+}
+
+
+/* 時系列：パープル */
+.mcu-tab[href*="view=timeline"]{
+  background:
+    linear-gradient(
+      135deg,
+      rgba(109,40,217,.68),
+      rgba(124,58,237,.68)
+    );
+
+  border-color:#a78bfa;
+
+  color:#ffffff;
+
+  box-shadow:
+    0 0 9px rgba(167,139,250,.40),
+    0 5px 14px rgba(124,58,237,.18);
+}
+
+
+/* 最短ルート：レッド～オレンジ */
+.mcu-tab[href*="view=short"]{
+  background:
+    linear-gradient(
+      135deg,
+      rgba(220,38,38,.68),
+      rgba(234,88,12,.68)
+    );
+
+  border-color:#fb923c;
+
+  color:#ffffff;
+
+  box-shadow:
+    0 0 9px rgba(251,146,60,.40),
+    0 5px 14px rgba(234,88,12,.18);
+}
+
+
+/* 3つの基本ルート：マウスを乗せた時 */
+.mcu-tab[href*="view=release"]:hover,
+.mcu-tab[href*="view=timeline"]:hover,
+.mcu-tab[href*="view=short"]:hover{
+  transform:none;
+  filter:brightness(1.10);
+}
+    
 /* MCU外・関連作品だけ少し特別にする */
 
 .mcu-tab-advanced{
-  border-color:#c4b5fd;
-  background:#faf8ff;
-  color:#6d28d9;
+  border-color:rgba(167,139,250,.55);
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(37,99,235,.28),
+      rgba(124,58,237,.34)
+    );
+
+  color:#e9d5ff;
+
+  box-shadow:none;
 }
 
 .mcu-tab-advanced:hover{
-  background:#f5f3ff;
-  border-color:#8b5cf6;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(37,99,235,.36),
+      rgba(124,58,237,.42)
+    );
+
+  border-color:#a78bfa;
+
+  box-shadow:none;
 }
 
 /* =====================================================
