@@ -659,7 +659,124 @@
   color:#64748b;
   font-size:13px;
 }   
-    
+
+/* =====================================================
+   NEW ERA
+===================================================== */
+
+#shortView .short-new-era{
+  margin-top:24px;
+  padding:20px;
+
+  border:1px solid #bbf7d0;
+  border-radius:20px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #f0fdf4,
+      #f8fafc 55%,
+      #eff6ff
+    );
+}
+
+#shortView .short-new-era-heading{
+  margin-bottom:16px;
+  text-align:center;
+}
+
+#shortView .short-new-era-heading > span{
+  color:#15803d;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.12em;
+}
+
+#shortView .short-new-era-heading h2{
+  margin:4px 0 6px;
+
+  color:#14532d;
+  font-size:23px;
+}
+
+#shortView .short-new-era-heading p{
+  margin:0;
+
+  color:#475569;
+  font-size:14px;
+  line-height:1.7;
+}
+
+
+/* ⭐ できれば見てほしい */
+
+#shortView .short-star-card{
+  max-width:650px;
+
+  margin:0 auto 16px;
+  padding:15px;
+
+  border:2px solid #facc15;
+  border-radius:16px;
+
+  background:#fffef4;
+
+  box-shadow:
+    0 4px 14px
+    rgba(15,23,42,.07);
+}
+
+#shortView .short-star-label{
+  color:#a16207;
+  font-size:12px;
+  font-weight:900;
+}
+
+#shortView .short-seed-main{
+  display:flex;
+  gap:12px;
+  align-items:stretch;
+  padding-top:9px;
+}
+
+#shortView .short-seed-poster{
+  width:88px;
+  height:132px;
+
+  object-fit:cover;
+  flex:0 0 88px;
+
+  border-radius:9px;
+  background:#e5e7eb;
+}
+
+#shortView .short-seed-info{
+  display:flex;
+  min-width:0;
+  flex:1;
+  flex-direction:column;
+}
+
+#shortView .short-seed-info p{
+  margin:7px 0 8px;
+
+  color:#475569;
+  font-size:13px;
+  line-height:1.6;
+}
+
+@media(max-width:700px){
+
+  #shortView .short-new-era{
+    padding:15px 12px;
+  }
+
+  #shortView .short-seed-poster{
+    width:82px;
+    height:123px;
+    flex-basis:82px;
+  }
+}    
 /* =====================================================
    PHASE ジャンプボタン
 ===================================================== */
@@ -4955,6 +5072,80 @@ a.mcu-tab{
     </article>
 
   </div>  
+
+<!-- =====================================================
+     NEW ERA
+===================================================== -->
+
+<section class="short-new-era">
+
+  <div class="short-new-era-heading">
+
+    <span>
+      🌱 NEW ERA
+    </span>
+
+    <h2>
+      ここからは、新しい世界へ
+    </h2>
+
+    <p>
+      MCUの世界は、ここからさらに広がっていきます。
+      <br>
+      <strong>
+        全部を見る必要はありません。気になったヒーローや世界を選んでOK！
+      </strong>
+    </p>
+
+  </div>
+
+
+  <!-- できれば見てほしい -->
+  <article class="short-star-card">
+
+    <div class="short-star-label">
+      ⭐ できれば見てほしい
+    </div>
+
+    <div class="short-seed-main">
+
+      <img
+        class="short-seed-poster"
+        src="https://image.tmdb.org/t/p/w300/9Gtg2DzBhmYamXBS1hKAhiwbBKS.jpg"
+        alt="ドクター・ストレンジ／マルチバース・オブ・マッドネス"
+        loading="lazy"
+      />
+
+      <div class="short-seed-info">
+
+        <h3>
+          ドクター・ストレンジ／マルチバース・オブ・マッドネス
+        </h3>
+
+        <p>
+          新しい時代をもっと理解したい人には、
+          できれば見てほしい1本。
+        </p>
+
+        <div
+          class="mcu-provider-logos"
+          data-id="453395"
+          data-type="movie">
+        </div>
+
+        <a
+          class="short-route-detail"
+          href="detail.html?id=453395">
+          作品詳細を見る →
+        </a>
+
+      </div>
+
+    </div>
+
+  </article>
+
+</section>
     
 </main>
 
