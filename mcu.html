@@ -777,6 +777,99 @@
     flex-basis:82px;
   }
 }    
+
+ /* =====================================================
+   あのヒーローをもっと追いかけたい？
+===================================================== */
+
+#shortView .short-follow-section{
+  margin-top:24px;
+}
+
+#shortView .short-follow-grid{
+  display:grid;
+  grid-template-columns:
+    repeat(2,minmax(0,1fr));
+
+  gap:10px;
+}
+
+#shortView .short-follow-grid details{
+  margin:0;
+
+  border:1px solid #e2e8f0;
+  border-radius:10px;
+
+  background:#fff;
+}
+
+#shortView .short-follow-grid summary{
+  padding:10px 12px;
+
+  color:#475569;
+  font-size:13px;
+  font-weight:900;
+
+  cursor:pointer;
+}
+
+#shortView .short-follow-grid details > div{
+  padding:0 12px 12px;
+
+  color:#475569;
+  font-size:12px;
+  line-height:1.7;
+}
+
+
+/* =====================================================
+   最短ルート完走
+===================================================== */
+
+#shortView .short-finish{
+  margin-top:24px;
+  padding:25px 18px;
+
+  text-align:center;
+
+  border-radius:18px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #172033,
+      #1e3a5f
+    );
+
+  color:#fff;
+}
+
+#shortView .short-finish > span{
+  font-size:28px;
+}
+
+#shortView .short-finish h2{
+  margin:4px 0 6px;
+
+  color:#fff;
+  font-size:22px;
+}
+
+#shortView .short-finish p{
+  margin:0;
+
+  color:#dbeafe;
+  font-size:14px;
+}
+
+
+@media(max-width:700px){
+
+  #shortView .short-follow-grid{
+    grid-template-columns:1fr;
+  }
+}   
+    
 /* =====================================================
    PHASE ジャンプボタン
 ===================================================== */
@@ -5760,6 +5853,113 @@ a.mcu-tab{
 
 
   </div>
+
+</section>
+
+<!-- =====================================================
+     あのヒーローをもっと追いかけたい？
+===================================================== -->
+
+<section class="short-follow-section">
+
+  <div class="short-route-heading">
+
+    <span>
+      💡
+    </span>
+
+    <div>
+
+      <h2>
+        あのヒーローをもっと追いかけたい？
+      </h2>
+
+      <p>
+        本線で気に入ったヒーローがいたら、
+        その後の物語へ。
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <div class="short-follow-grid">
+
+    <details>
+
+      <summary>
+        🕷️ ブラック・ウィドウをもっと知る
+      </summary>
+
+      <div>
+        『ブラック・ウィドウ』
+      </div>
+
+    </details>
+
+
+    <details>
+
+      <summary>
+        ⚡ ソーの続きを見る
+      </summary>
+
+      <div>
+        『ソー：ラブ＆サンダー』
+      </div>
+
+    </details>
+
+
+    <details>
+
+      <summary>
+        🐾 ワカンダの続きを見る
+      </summary>
+
+      <div>
+        『ブラックパンサー／ワカンダ・フォーエバー』
+      </div>
+
+    </details>
+
+
+    <details>
+
+      <summary>
+        🚀 ガーディアンズの続きを見る
+      </summary>
+
+      <div>
+        『ガーディアンズ・オブ・ギャラクシー：VOLUME 3』
+      </div>
+
+    </details>
+
+  </div>
+
+</section>
+
+
+<!-- =====================================================
+     最短ルート完走
+===================================================== -->
+
+<section class="short-finish">
+
+  <span>
+    🎉
+  </span>
+
+  <h2>
+    最短ルート完走！
+  </h2>
+
+  <p>
+    ここからは、気になったヒーローや世界を
+    自由に追いかけてみよう。
+  </p>
 
 </section>
     
