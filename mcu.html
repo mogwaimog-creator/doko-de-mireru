@@ -1874,6 +1874,84 @@ a.mcu-tab{
   }
 }
 
+/* =====================================================
+   MCU 上部・はじめての方向け案内
+===================================================== */
+
+.mcu-guide-intro{
+  width:100%;
+  box-sizing:border-box;
+
+  margin:16px 0 18px;
+  padding:16px 18px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255,255,255,.10),
+      rgba(255,255,255,.04)
+    );
+
+  border:1px solid rgba(255,255,255,.16);
+  border-left:4px solid #ef4444;
+
+  border-radius:14px;
+
+  color:#e2e8f0;
+}
+
+.mcu-guide-intro-title{
+  margin-bottom:8px;
+
+  color:#ffffff;
+
+  font-size:18px;
+  font-weight:900;
+}
+
+.mcu-guide-intro p{
+  margin:4px 0;
+
+  font-size:14px;
+  line-height:1.7;
+}
+
+.mcu-guide-intro strong{
+  color:#ffffff;
+  font-weight:800;
+}
+
+.mcu-guide-intro-choice{
+  margin-top:7px !important;
+}
+
+.mcu-guide-intro-note{
+  margin-top:7px !important;
+
+  color:#cbd5e1;
+
+  font-size:13px !important;
+}
+
+
+/* スマホ */
+
+@media(max-width:700px){
+
+  .mcu-guide-intro{
+    padding:14px;
+  }
+
+  .mcu-guide-intro-title{
+    font-size:16px;
+  }
+
+  .mcu-guide-intro p{
+    font-size:13px;
+  }
+
+}
+    
 /* =========================================================
    MCU 時系列・ストーリー順
 ========================================================= */
@@ -3042,12 +3120,30 @@ a.mcu-tab{
 <h1>
           🦸 MCU・マーベルを見る順番
         </h1>
-<p class="mcu-view-description-line" id="mcuViewDescription">
-<strong>💡 初めて見るなら</strong>
-<span>
-       公開された順番に見ることで、MCUの広がりを自然に楽しめます。
-      </span>
-</p>
+<div class="mcu-guide-intro">
+
+  <div class="mcu-guide-intro-title">
+    🎬 MCU、どこから見ればいい？
+  </div>
+
+  <p>
+    MCUを初めて見る方にも、もう一度順番に楽しみたい方にも
+    分かりやすいように、作品を
+    <strong>「公開順」「時系列」「最短ルート」</strong>
+    の3つの見方に整理しています。
+  </p>
+
+  <p class="mcu-guide-intro-choice">
+    <strong>じっくり楽しむなら公開順</strong>、
+    <strong>物語の流れを追うなら時系列</strong>、
+    <strong>まず主要ストーリーを楽しむなら最短ルート。</strong>
+  </p>
+
+  <p class="mcu-guide-intro-note">
+    気になる作品に寄り道しながら楽しむのもおすすめです。
+  </p>
+
+</div>
 <div class="mcu-tabs">
 <a class="mcu-tab" href="mcu.html?view=release">
   🎬 公開順
@@ -5084,21 +5180,6 @@ const viewInfo = {
 
 };
 
-
-if(mcuViewDescription){
-
-  const info =
-    viewInfo[mcuView] ||
-    viewInfo.release;
-
-  mcuViewDescription.innerHTML =
-    '<strong class="mcu-view-description-title">' +
-      info.title +
-    '</strong>' +
-    '<span>' +
-      info.text +
-    '</span>';
-}
 
 
 /* =====================================================
