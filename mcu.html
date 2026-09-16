@@ -3794,6 +3794,104 @@ a.mcu-tab{
   color:#b45309;
   font-size:10px;
 }    
+
+/* =====================================================
+   最短ルートカード 新デザイン試作
+   まずはアイアンマンだけ
+===================================================== */
+
+#shortView .short-route-card-test .short-route-main{
+  gap:16px;
+  padding-top:24px;
+}
+
+
+/* ポスターを少し大きく */
+
+#shortView .short-route-card-test .short-route-poster{
+  width:105px;
+  height:158px;
+  flex:0 0 105px;
+}
+
+
+/* 右側 */
+
+#shortView .short-route-card-test .short-route-info{
+  display:flex;
+  flex-direction:column;
+  min-width:0;
+}
+
+
+/* 作品名 */
+
+#shortView .short-route-card-test .short-route-info h3{
+  margin:0 0 5px;
+  font-size:17px;
+}
+
+
+/* 公開年・上映時間 */
+
+#shortView .short-route-card-test .short-route-meta{
+  margin-bottom:9px;
+
+  color:#64748b;
+
+  font-size:12px;
+  font-weight:700;
+}
+
+
+/* 配信サービスを横一列 */
+
+#shortView .short-route-card-test .mcu-provider-logos{
+  display:flex;
+  flex-wrap:nowrap;
+  align-items:center;
+  gap:6px;
+
+  margin:0 0 10px;
+}
+
+
+/* 配信ロゴ */
+
+#shortView .short-route-card-test .mcu-provider-logos img{
+  width:52px;
+  height:36px;
+
+  object-fit:contain;
+
+  border-radius:5px;
+}
+
+
+/* 見どころを色付きで強調 */
+
+#shortView .short-route-card-test .short-route-point{
+  margin:0 0 10px;
+  padding:7px 9px;
+
+  border-left:3px solid #f59e0b;
+  border-radius:7px;
+
+  background:#fff7ed;
+
+  color:#9a5800;
+
+  font-size:12px;
+  font-weight:800;
+  line-height:1.5;
+}
+
+
+/* 詳細リンクを下へ */
+
+#shortView .short-route-card-test .short-route-detail{
+  margin-top:auto;
+}
     
 </style>
 
@@ -4151,7 +4249,7 @@ a.mcu-tab{
 <div class="mcu-main-card">
 <span>MAIN UNIVERSE</span>
 <strong>MCU本編</strong>
-<small>『アイアンマン』から始まる<br/>現在のメインの世界</small>
+<small>『』から始まる<br/>現在のメインの世界</small>
 </div>
 </div>
 <div class="marvel-side marvel-side-right">
@@ -4540,49 +4638,52 @@ a.mcu-tab{
   <div class="short-route-grid">
 
     <!-- 1：アイアンマン -->
-    <article class="short-route-card">
+<article class="short-route-card short-route-card-test">
 
-      <div class="short-route-num">
-        ⚡ 1
+  <div class="short-route-num">
+    ⚡ 1
+  </div>
+
+  <div class="short-route-main">
+
+    <img
+      class="short-route-poster"
+      src="https://image.tmdb.org/t/p/w300/78lPtwv72eTNqFW9COBYI0dWDJa.jpg"
+      alt="アイアンマン"
+      loading="lazy"
+    />
+
+    <div class="short-route-info">
+
+      <h3>
+        アイアンマン
+      </h3>
+
+      <div class="short-route-meta">
+        2008年公開　｜　126分
       </div>
 
-      <div class="short-route-main">
-
-        <img
-          class="short-route-poster"
-          src="https://image.tmdb.org/t/p/w300/78lPtwv72eTNqFW9COBYI0dWDJa.jpg"
-          alt="アイアンマン"
-          loading="lazy"
-        />
-
-        <div class="short-route-info">
-
-          <h3>
-            アイアンマン
-          </h3>
-
-          <p class="short-route-line">
-            すべてはここから！MCUの出発点
-          </p>
-
-          <div
-            class="mcu-provider-logos"
-            data-id="1726"
-            data-type="movie">
-          </div>
-
-          <a
-            class="short-route-detail"
-            href="detail.html?id=1726">
-            作品詳細を見る →
-          </a>
-
-        </div>
-
+      <div
+        class="mcu-provider-logos"
+        data-id="1726"
+        data-type="movie">
       </div>
 
-    </article>
+      <div class="short-route-point">
+        ⚡ すべてはここから！MCUの出発点
+      </div>
 
+      <a
+        class="short-route-detail"
+        href="detail.html?id=1726">
+        作品詳細を見る →
+      </a>
+
+    </div>
+
+  </div>
+
+</article>
 
     <!-- 2：キャプテン・アメリカ -->
     <article class="short-route-card">
