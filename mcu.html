@@ -5482,16 +5482,20 @@ const releaseView =
     "releaseView"
   );
 
- const timelineView =
+const timelineView =
   document.getElementById(
     "timelineView"
+  );
+
+const shortView =
+  document.getElementById(
+    "shortView"
   );
 
 const connectionsView =
   document.getElementById(
     "connectionsView"
   );
-
 const timelineSection =
   document.getElementById(
     "timelineSection"
@@ -5572,6 +5576,9 @@ if(releaseView){
   releaseView.style.display = "none";
 }
 
+if(shortView){
+  shortView.style.display = "none";
+}
 if(timelineView){
   timelineView.style.display = "none";
 }
@@ -5636,16 +5643,14 @@ if(mcuView === "timeline"){
 
 /* =====================================================
    最短ルート
-   現在は工事中
 ===================================================== */
 
 if(mcuView === "short"){
-
-  if(mcuUnderConstruction){
-    mcuUnderConstruction.style.display = "";
+  if(shortView){
+    shortView.style.display = "";
   }
-
 }
+
 
 </script>
 </body>
