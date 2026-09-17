@@ -26,7 +26,7 @@
     }
 
     .mcu-header{
-      padding:26px 0 18px;
+      padding:26px 0 24px;
     }
 
     .mcu-back{
@@ -482,11 +482,10 @@
 
 #shortView{
   max-width:1100px;
-  margin:24px auto 60px;
+  margin:0 auto 60px;
   padding:0;
   box-sizing:border-box;
 }
-
 
 /* 最短ルート説明ボックス */
 
@@ -619,6 +618,12 @@
 
 }
 
+/* =====================================================
+   最短ルート 本筋エリア
+   メインテーマカラー
+===================================================== */
+
+
  /* =====================================================
    最短ルート・大決戦後の区切り
 ===================================================== */
@@ -626,41 +631,98 @@
 #shortView .short-break{
   grid-column:1 / -1;
 
-  padding:18px 20px;
+  position:relative;
 
-  border:1px solid #c7d2fe;
-  border-radius:14px;
+  padding:22px 20px;
 
-  background:#eef2ff;
+  border:1px solid #a5b4fc;
+  border-radius:12px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #eef2ff 0%,
+      #f5f3ff 50%,
+      #eef2ff 100%
+    );
 
   text-align:center;
+
+  box-shadow:
+    0 4px 12px rgba(79,70,229,.08);
+
+  overflow:hidden;
 }
 
+
+/* 上下の細いアクセントライン */
+#shortView .short-break::before,
+#shortView .short-break::after{
+  content:"";
+  position:absolute;
+
+  left:12%;
+  right:12%;
+
+  height:2px;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      #818cf8,
+      #a78bfa,
+      #818cf8,
+      transparent
+    );
+}
+
+#shortView .short-break::before{
+  top:0;
+}
+
+#shortView .short-break::after{
+  bottom:0;
+}
+
+
+/* 🎉 大決戦を終えて―― */
 #shortView .short-break span{
   display:block;
 
-  margin-bottom:5px;
+  margin-bottom:7px;
 
   color:#4f46e5;
   font-size:14px;
-  font-weight:800;
+  line-height:1.45;
+  font-weight:900;
+
+  letter-spacing:.03em;
 }
 
+
+/* メインメッセージ */
 #shortView .short-break strong{
   display:block;
 
-  color:#1e293b;
-  font-size:17px;
+  color:#172554;
+  font-size:18px;
+  line-height:1.5;
+  font-weight:900;
 }
 
+
+/* 次の物語への一言 */
 #shortView .short-break p{
-  margin:5px 0 0;
+  margin:7px 0 0;
 
-  color:#64748b;
-  font-size:13px;
-}   
+  color:#475569;
+  font-size:15px;
+  line-height:1.5;
+  font-weight:700;
+}/*
 
-/* =====================================================
+ =====================================================
    最短ルートはただいま改良中です
 ===================================================== */
     
@@ -688,7 +750,7 @@
 ===================================================== */
 
 #shortView .short-new-era{
-  margin-top:24px;
+  margin:24px 0 0;
   padding:20px;
   border:1px solid #bbf7d0;
   border-radius:20px;
@@ -711,7 +773,7 @@
 
 #shortView .short-new-era-heading > span{
   color:#15803d;
-  font-size:11px;
+  font-size:14px;
   font-weight:900;
   letter-spacing:.12em;
 }
@@ -729,6 +791,75 @@
   line-height:1.7;
 }
 
+
+#shortView .short-main-story{
+  grid-column:1 / -1;
+
+  display:grid;
+  grid-template-columns:repeat(2, minmax(0, 1fr));
+  gap:13px;
+
+  width:100%;
+  box-sizing:border-box;
+
+  padding:20px;
+
+  border:2px solid #263b5c;
+  border-radius:20px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #f8faff,
+      #f2f6fc 55%,
+      #edf3fb
+    );
+}
+
+#shortView .short-main-story-label{
+  grid-column:1 / -1;
+
+  margin:0 0 6px;
+  padding:0 2px;
+
+  color:#263b5c;
+  font-size:19px;
+  font-weight:900;
+  letter-spacing:.04em;
+}
+
+#shortView .short-main-story-label span{
+  margin-left:8px;
+
+  color:#64748b;
+  font-size:14px;
+  font-weight:800;
+  letter-spacing:0;
+}
+
+@media(max-width:700px){
+
+  #shortView .short-main-story-label{
+    font-size:16px;
+  }
+
+  #shortView .short-main-story-label span{
+    font-size:14px;
+  }
+
+}
+
+/* 公開年・上映時間
+   本筋カードと同じ表示 */
+
+#shortView .short-seed-meta{
+  margin-bottom:9px;
+
+  color:#64748b;
+
+  font-size:12px;
+  font-weight:700;
+}
 
 /* =====================================================
    ⭐ できれば見てほしい
@@ -753,7 +884,7 @@
 
 #shortView .short-star-label{
   color:#a16207;
-  font-size:12px;
+  font-size:14px;
   font-weight:900;
 }
 
@@ -810,6 +941,13 @@
 
   object-fit:contain !important;
 }
+
+#shortView .short-new-era .short-seed-info h3{
+  margin:0 0 5px;
+  font-size:17px;
+  line-height:1.4;
+}
+
 
 
 /* =====================================================
@@ -868,9 +1006,6 @@
    あのヒーローをもっと追いかけたい？
 ===================================================== */
 
-#shortView .short-follow-section{
-  margin-top:24px;
-}
 
 #shortView .short-follow-grid{
   display:grid;
@@ -907,6 +1042,29 @@
   line-height:1.7;
 }
 
+
+#shortView .short-follow-section{
+  grid-column:1 / -1;
+  width:100%;
+  box-sizing:border-box;
+
+  margin-top:24px;
+  padding:20px;
+
+  border:1px solid #cbd5e1;
+  border-radius:16px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #f8fafc,
+      #eef2f7
+    );
+
+  box-shadow:
+    0 3px 12px
+    rgba(15,23,42,.05);
+}
 
 /* =====================================================
    最短ルート完走
@@ -955,7 +1113,15 @@
     grid-template-columns:1fr;
   }
 }   
-    
+ 
+/* =====================================================
+   時系列：上部ナビとの間隔を24pxに統一
+===================================================== */
+
+#timelineView{
+  margin-top:0 !important;
+}
+   
 /* =====================================================
    PHASE ジャンプボタン
 ===================================================== */
@@ -1006,7 +1172,7 @@ html{
 
   margin-top:4px;
 
-  font-size:11px;
+  font-size:14px;
   font-weight:700;
 
   color:#e2e8f0;
@@ -3776,6 +3942,245 @@ a.mcu-tab{
   font-size:13px;
 }
 
+/* =========================================================
+   SHORT ROUTE
+   やっぱり気になるなら
+========================================================= */
+
+#shortView .short-detour{
+  grid-column:1 / -1;
+
+  width:100%;
+  box-sizing:border-box;
+
+  margin:0;
+
+  border:1px solid #c4b5fd;
+  border-left:4px solid #8b5cf6;
+
+  border-radius:10px;
+
+  background:#faf8ff;
+
+  overflow:hidden;
+
+  box-shadow:
+    0 3px 10px
+    rgba(109,40,217,.06);
+}
+
+/* 見出し */
+
+#shortView .short-detour > summary{
+  display:block;
+
+  padding:9px 12px;
+
+  color:#4c1d95;
+  font-size:14px;
+  line-height:1.45;
+  font-weight:800;
+
+  cursor:pointer;
+  list-style:none;
+}
+
+#shortView .short-detour > summary::-webkit-details-marker{
+  display:none;
+}
+
+#shortView .short-detour > summary::after{
+  content:"＋";
+  float:right;
+
+  color:#475569;
+  font-weight:900;
+}
+
+#shortView .short-detour[open] > summary::after{
+  content:"−";
+}
+
+
+/* 開いた中身 */
+
+#shortView .short-detour-content{
+  padding:2px 12px 12px;
+}
+
+
+/* 説明 */
+
+#shortView .short-detour-intro{
+  margin:0 0 10px;
+  color:#475569;
+  font-size:14px;
+  line-height:1.6;
+  font-weight:600;
+}
+
+/* 2作品 */
+
+#shortView .short-detour-grid{
+  display:grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0,1fr));
+
+  gap:10px;
+}
+
+
+/* 作品カード */
+
+#shortView .short-detour-card{
+  display:flex;
+  align-items:center;
+
+  gap:10px;
+
+  padding:8px;
+
+  border:1px solid #e2e8f0;
+  border-radius:9px;
+
+  background:#fff;
+
+  color:#1e293b;
+  text-decoration:none;
+}
+
+
+/* ポスター */
+
+#shortView .short-detour-card img{
+  width:58px;
+  height:87px;
+
+  flex:0 0 58px;
+
+  object-fit:cover;
+
+  border-radius:6px;
+
+  border:1px solid #e2e8f0;
+}
+
+
+/* 作品情報 */
+
+#shortView .short-detour-info{
+  min-width:0;
+}
+
+
+/* 作品名 */
+
+#shortView .short-detour-info strong{
+  display:block;
+  color:#1e293b;
+  font-size:15px;
+  line-height:1.45;
+  font-weight:800;
+}
+
+
+/* ○○が気になるなら */
+
+#shortView .short-detour-info span{
+  display:block;
+  margin-top:5px;
+  color:#64748b;
+  font-size:14px;
+  line-height:1.5;
+  font-weight:600;
+}
+
+/* マウスを乗せた時 */
+
+#shortView .short-detour-card:hover{
+  border-color:#94a3b8;
+  background:#f8fafc;
+}
+
+
+/* スマホ */
+
+@media(max-width:600px){
+
+  #shortView .short-detour-grid{
+    grid-template-columns:1fr;
+  }
+
+}
+
+/* =========================================================
+   MCU最短ルート 完走
+========================================================= */
+
+#shortView .short-route-finish{
+  grid-column:1 / -1;
+  width:100%;
+  box-sizing:border-box;
+
+  margin:24px 0 0;
+
+  padding:20px 22px;
+
+  border:1px solid #93c5fd;
+  border-left:5px solid #1e3a8a;
+  border-radius:15px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #f8fbff 0%,
+      #eef6ff 55%,
+      #e7f1ff 100%
+    );
+
+  box-shadow:
+    0 4px 14px
+    rgba(30,58,138,.08);
+}
+
+
+#shortView .short-route-finish-title{
+  margin-bottom:10px;
+
+  color:#1e3a8a;
+  font-size:18px;
+  line-height:1.45;
+  font-weight:900;
+}
+
+
+#shortView .short-route-finish p{
+  margin:0;
+
+  color:#334155;
+  font-size:15px;
+  line-height:1.7;
+  font-weight:600;
+}
+
+
+#shortView .short-route-finish p + p{
+  margin-top:8px;
+}
+
+
+#shortView .short-route-finish-next{
+  color:#172554 !important;
+  font-weight:900 !important;
+}
+
+/* 完走 → NEW ERA の間隔を統一 */
+#shortView .short-route-finish + .short-new-era{
+  margin-top:24px;
+}
+
+
 /* =====================================================
    NEW ERA・選択作品
 ===================================================== */
@@ -3803,16 +4208,14 @@ a.mcu-tab{
 }
 
 #shortView .short-seed-label{
-  min-height:34px;
-
   color:#15803d;
-  font-size:12px;
+  font-size:14px;
   line-height:1.45;
   font-weight:900;
 }
 
 #shortView .short-seed-card .short-seed-main{
-  padding-top:7px;
+  padding-top:9px;
 }
 
 @media(max-width:700px){
@@ -3826,36 +4229,6 @@ a.mcu-tab{
   }
 }
 
-/* =====================================================
-   NEW ERA・もっと知りたい
-===================================================== */
-
-#shortView .short-more{
-  margin-top:7px;
-
-  border:1px solid #e2e8f0;
-  border-radius:10px;
-
-  background:#f8fafc;
-}
-
-#shortView .short-more summary{
-  padding:8px 10px;
-
-  color:#475569;
-  font-size:12px;
-  font-weight:900;
-
-  cursor:pointer;
-}
-
-#shortView .short-more > div{
-  padding:0 10px 10px;
-
-  color:#475569;
-  font-size:12px;
-  line-height:1.7;
-}
 
 /* サンダーボルツ* 補足 */
 
@@ -4007,6 +4380,334 @@ a.mcu-tab{
   grid-column:1 / -1;
   width:100%;
   box-sizing:border-box;
+}
+
+/* =========================================================
+   SHORT ROUTE
+   もっと知りたい
+========================================================= */
+
+#shortView .short-more{
+  margin-top:6px;
+  margin-bottom:8px;
+
+  border:1px solid #bfdbfe;
+  border-radius:8px;
+
+  background:#eff6ff;
+
+  overflow:hidden;
+}
+
+
+/* 見出し */
+
+#shortView .short-more summary{
+  display:block;
+
+  padding:6px 9px;
+
+  color:#1e3a5f;
+  font-size:14px;
+  line-height:1.45;
+  font-weight:800;
+
+  cursor:pointer;
+  list-style:none;
+}
+
+
+/* 標準の三角マークを消す */
+
+#shortView .short-more summary::-webkit-details-marker{
+  display:none;
+}
+
+
+/* ＋ */
+
+#shortView .short-more summary::after{
+  content:"＋";
+
+  float:right;
+
+  font-size:15px;
+  font-weight:900;
+}
+
+
+/* 開いたら − */
+
+#shortView .short-more[open] summary::after{
+  content:"−";
+}
+
+
+/* 開いた中身 */
+
+#shortView .short-more-content{
+  margin:0;
+
+  padding:3px 9px 7px;
+
+  background:transparent;
+  border:0;
+  border-radius:0;
+
+  color:#334155;
+  font-size:14px;
+  line-height:1.6;
+  font-weight:600;
+}
+
+
+/* 今後、別項目を追加するときの区切り線 */
+
+#shortView .short-more-section{
+  margin-top:7px;
+  padding-top:7px;
+
+  border-top:1px solid #bfdbfe;
+}
+
+/* =========================================================
+   気になったヒーローの、その後
+========================================================= */
+
+#shortView .short-follow-section{
+  grid-column:1 / -1;
+  width:100%;
+  box-sizing:border-box;
+
+  margin-top:24px;
+  padding:20px;
+
+  border:1px solid #93c5fd;
+  border-radius:16px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #f8fbff 0%,
+      #eef6ff 100%
+    );
+
+  box-shadow:
+    0 4px 14px
+    rgba(30,58,138,.06);
+}
+
+
+/* 見出し */
+#shortView .short-follow-section .short-route-heading{
+  margin:0 0 16px;
+}
+
+#shortView .short-follow-section .short-route-heading h2{
+  margin:0 0 8px;
+
+  color:#1e3a8a;
+  font-size:21px;
+  line-height:1.45;
+  font-weight:900;
+}
+
+#shortView .short-follow-section .short-route-heading p{
+  margin:0;
+
+  color:#475569;
+  font-size:15px;
+  line-height:1.7;
+  font-weight:600;
+}
+
+
+/* 4つの選択肢 */
+#shortView .short-follow-grid{
+  display:grid;
+  grid-template-columns:repeat(2, minmax(0,1fr));
+  gap:10px;
+}
+
+
+/* 開閉BOX */
+#shortView .short-follow-grid details{
+  overflow:hidden;
+
+  border:1px solid #cbd5e1;
+  border-radius:10px;
+
+  background:#ffffff;
+}
+
+
+/* 閉じている時の文字 */
+#shortView .short-follow-grid summary{
+  padding:11px 13px;
+
+  color:#263b5c;
+  font-size:14px;
+  line-height:1.5;
+  font-weight:800;
+
+  cursor:pointer;
+}
+
+
+/* 開いた時に出る作品名 */
+#shortView .short-follow-grid details > div{
+  padding:0 13px 12px;
+
+  color:#475569;
+  font-size:14px;
+  line-height:1.6;
+  font-weight:600;
+}
+
+
+/* スマホ */
+@media(max-width:600px){
+
+  #shortView .short-follow-section{
+    padding:16px;
+  }
+
+  #shortView .short-follow-grid{
+    grid-template-columns:1fr;
+  }
+
+}
+
+/* =========================================================
+   そして、MCUはこの先へ
+========================================================= */
+
+#shortView .short-future{
+  grid-column:1 / -1;
+  width:100%;
+  box-sizing:border-box;
+
+  margin-top:24px;
+  padding:22px;
+
+  border:1px solid #334e73;
+  border-radius:18px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #17233a 0%,
+      #203a5f 100%
+    );
+
+  box-shadow:
+    0 5px 16px
+    rgba(15,23,42,.10);
+}
+
+
+#shortView .short-future-heading{
+  text-align:center;
+}
+
+
+#shortView .short-future-heading > span{
+  display:block;
+
+  color:#bfdbfe;
+  font-size:14px;
+  font-weight:900;
+  letter-spacing:.10em;
+}
+
+
+#shortView .short-future-heading h2{
+  margin:5px 0 8px;
+
+  color:#ffffff;
+  font-size:22px;
+  line-height:1.45;
+  font-weight:900;
+}
+
+
+#shortView .short-future-heading p{
+  margin:0;
+
+  color:#e2e8f0;
+  font-size:15px;
+  line-height:1.7;
+  font-weight:600;
+}
+
+
+/* 公開予定作品 */
+
+#shortView .short-future-movies{
+  display:grid;
+  grid-template-columns:repeat(2, minmax(0,1fr));
+  gap:10px;
+
+  margin-top:18px;
+}
+
+
+#shortView .short-future-movie{
+  padding:13px 15px;
+
+  border:1px solid
+    rgba(255,255,255,.18);
+
+  border-radius:11px;
+
+  background:
+    rgba(255,255,255,.08);
+}
+
+
+#shortView .short-future-movie strong{
+  display:block;
+
+  color:#ffffff;
+  font-size:16px;
+  line-height:1.5;
+  font-weight:800;
+}
+
+
+#shortView .short-future-movie span{
+  display:block;
+  margin-top:4px;
+
+  color:#dbeafe;
+  font-size:14px;
+  line-height:1.5;
+  font-weight:600;
+}
+
+
+/* 注意書き */
+
+#shortView .short-future-note{
+  margin:12px 0 0;
+
+  color:#cbd5e1;
+  font-size:14px;
+  line-height:1.5;
+  text-align:center;
+}
+
+
+@media(max-width:600px){
+
+  #shortView .short-future{
+    padding:18px 16px;
+  }
+
+  #shortView .short-future-movies{
+    grid-template-columns:1fr;
+  }
+
 }
 
 
@@ -4752,11 +5453,15 @@ a.mcu-tab{
 
   </section>
 
-<div class="short-update-notice">
-  🔧 最短ルートはただいま改良中です
-</div>
     
   <div class="short-route-grid">
+
+  <div class="short-main-story">
+
+    <div class="short-main-story-label">
+      ⚡ MAIN STORY <span>全14作品</span>
+    </div>
+
 
     <!-- 1：アイアンマン -->
 <article class="short-route-card">
@@ -4933,6 +5638,83 @@ a.mcu-tab{
 
     </aside>
 
+    <!-- =========================================================
+     アベンジャーズ前の寄り道
+========================================================= -->
+
+<details class="short-detour">
+
+  <summary>
+    👀 寄り道ポイント｜アベンジャーズの前に
+  </summary>
+
+  <div class="short-detour-content">
+
+    <p class="short-detour-intro">
+  最短ルートでは省いた作品です。<br>
+  気になる作品があれば、ここでちょっと寄り道。飛ばしてそのまま進んでもOK！
+</p>
+
+    <div class="short-detour-grid">
+
+
+      <!-- インクレディブル・ハルク -->
+      <a
+        class="short-detour-card"
+        href="detail.html?id=1724">
+
+        <img
+          src="https://image.tmdb.org/t/p/w300/gKzYx79y0AQTL4UAk1cBQJ3nvrm.jpg"
+          alt="インクレディブル・ハルク"
+          loading="lazy"
+        >
+
+        <div class="short-detour-info">
+
+          <strong>
+            インクレディブル・ハルク
+          </strong>
+
+          <span>
+            💚 ハルクが気になるなら
+          </span>
+
+        </div>
+
+      </a>
+
+
+      <!-- アイアンマン2 -->
+      <a
+        class="short-detour-card"
+        href="detail.html?id=10138">
+
+        <img
+          src="https://image.tmdb.org/t/p/w300/6WBeq4fCfn7AN0o21W9qNcRF2l9.jpg"
+          alt="アイアンマン2"
+          loading="lazy"
+        >
+
+        <div class="short-detour-info">
+
+          <strong>
+            アイアンマン2
+          </strong>
+
+          <span>
+            🕷️ ブラック・ウィドウが気になるなら
+          </span>
+
+        </div>
+
+      </a>
+
+
+    </div>
+
+  </div>
+
+</details>
 
     <!-- 4：アベンジャーズ -->
 <article class="short-route-card">
@@ -5125,6 +5907,108 @@ a.mcu-tab{
 
 </article>
 
+<!-- =========================================================
+     寄り道ポイント｜シビル・ウォーの前に
+========================================================= -->
+
+<details class="short-detour">
+
+  <summary>
+    👀 寄り道ポイント｜シビル・ウォーの前に
+  </summary>
+
+  <div class="short-detour-content">
+
+    <p class="short-detour-intro">
+      最短ルートでは省いた作品です。<br>
+      気になる作品があれば、ここでちょっと寄り道。飛ばしてそのまま進んでもOK！
+    </p>
+
+    <div class="short-detour-grid">
+
+      <!-- アイアンマン3 -->
+      <a
+        class="short-detour-card"
+        href="detail.html?id=68721">
+
+        <img
+          src="https://image.tmdb.org/t/p/w300/qhPtAc1TKbMPqNvcdXSOn9Bn7hZ.jpg"
+          alt="アイアンマン3"
+          loading="lazy"
+        >
+
+        <div class="short-detour-info">
+
+          <strong>
+            アイアンマン3
+          </strong>
+
+          <span>
+            🤖 アイアンマンのその後が気になるなら
+          </span>
+
+        </div>
+
+      </a>
+
+
+      <!-- マイティ・ソー／ダーク・ワールド -->
+      <a
+        class="short-detour-card"
+        href="detail.html?id=76338">
+
+        <img
+          src="https://image.tmdb.org/t/p/w300/wp6OxE4poJ4G7c0U2ZIXasTSMR7.jpg"
+          alt="マイティ・ソー／ダーク・ワールド"
+          loading="lazy"
+        >
+
+        <div class="short-detour-info">
+
+          <strong>
+            マイティ・ソー／ダーク・ワールド
+          </strong>
+
+          <span>
+            🔨 ソーのその後が気になるなら
+          </span>
+
+        </div>
+
+      </a>
+
+
+      <!-- アントマン -->
+      <a
+        class="short-detour-card"
+        href="detail.html?id=102899">
+
+        <img
+          src="https://image.tmdb.org/t/p/w300/rQRnQfUl3kfp78nCWq8Ks04vnq1.jpg"
+          alt="アントマン"
+          loading="lazy"
+        >
+
+        <div class="short-detour-info">
+
+          <strong>
+            アントマン
+          </strong>
+
+          <span>
+            🐜 シビル・ウォーの前に新しいヒーローを知りたいなら
+          </span>
+
+        </div>
+
+      </a>
+
+    </div>
+
+  </div>
+
+</details>
+
     <!-- 8：シビル・ウォー -->
 <article class="short-route-card">
 
@@ -5269,6 +6153,108 @@ a.mcu-tab{
 
 </article>
 
+<!-- =========================================================
+     寄り道ポイント｜インフィニティ・ウォーの前に
+========================================================= -->
+
+<details class="short-detour">
+
+  <summary>
+    👀 寄り道ポイント｜インフィニティ・ウォーの前に
+  </summary>
+
+  <div class="short-detour-content">
+
+    <p class="short-detour-intro">
+      最短ルートでは省いた作品です。<br>
+      気になる作品があれば、ここでちょっと寄り道。飛ばしてそのまま進んでもOK！
+    </p>
+
+    <div class="short-detour-grid">
+
+      <!-- ガーディアンズ・オブ・ギャラクシー：リミックス -->
+      <a
+        class="short-detour-card"
+        href="detail.html?id=283995">
+
+        <img
+          src="https://image.tmdb.org/t/p/w300/y4MBh0EjBlMuOzv9axM4qJlmhzz.jpg"
+          alt="ガーディアンズ・オブ・ギャラクシー：リミックス"
+          loading="lazy"
+        >
+
+        <div class="short-detour-info">
+
+          <strong>
+            ガーディアンズ・オブ・ギャラクシー：リミックス
+          </strong>
+
+          <span>
+            🚀 ガーディアンズの続きが気になるなら
+          </span>
+
+        </div>
+
+      </a>
+
+
+      <!-- スパイダーマン：ホームカミング -->
+      <a
+        class="short-detour-card"
+        href="detail.html?id=315635">
+
+        <img
+          src="https://image.tmdb.org/t/p/w300/c24sv2weTHPsmDa7jEMN0m2P3RT.jpg"
+          alt="スパイダーマン：ホームカミング"
+          loading="lazy"
+        >
+
+        <div class="short-detour-info">
+
+          <strong>
+            スパイダーマン：ホームカミング
+          </strong>
+
+          <span>
+            🕷️ スパイダーマンの物語を見ておきたいなら
+          </span>
+
+        </div>
+
+      </a>
+
+
+      <!-- ブラックパンサー -->
+      <a
+        class="short-detour-card"
+        href="detail.html?id=284054">
+
+        <img
+          src="https://image.tmdb.org/t/p/w300/uxzzxijgPIY7slzFvMotPv8wjKA.jpg"
+          alt="ブラックパンサー"
+          loading="lazy"
+        >
+
+        <div class="short-detour-info">
+
+          <strong>
+            ブラックパンサー
+          </strong>
+
+          <span>
+            🐾 ワカンダをもっと知っておきたいなら
+          </span>
+
+        </div>
+
+      </a>
+
+    </div>
+
+  </div>
+
+</details>
+
 
     <!-- インフィニティ・ウォー前の補足 -->
     <aside class="short-note">
@@ -5376,6 +6362,82 @@ a.mcu-tab{
 
     </aside>
 
+<!-- =========================================================
+     寄り道ポイント｜エンドゲームの前に
+========================================================= -->
+
+<details class="short-detour">
+
+  <summary>
+    👀 寄り道ポイント｜エンドゲームの前に
+  </summary>
+
+  <div class="short-detour-content">
+
+    <p class="short-detour-intro">
+      最短ルートでは省いた作品です。<br>
+      気になる作品があれば、ここでちょっと寄り道。飛ばしてそのまま進んでもOK！
+    </p>
+
+    <div class="short-detour-grid">
+
+      <!-- アントマン＆ワスプ -->
+      <a
+        class="short-detour-card"
+        href="detail.html?id=363088">
+
+        <img
+          src="https://image.tmdb.org/t/p/w300/cFQEO687n1K6umXbInzocxcnAQz.jpg"
+          alt="アントマン＆ワスプ"
+          loading="lazy"
+        >
+
+        <div class="short-detour-info">
+
+          <strong>
+            アントマン＆ワスプ
+          </strong>
+
+          <span>
+            🐜 アントマンのその後が気になるなら
+          </span>
+
+        </div>
+
+      </a>
+
+
+      <!-- キャプテン・マーベル -->
+      <a
+        class="short-detour-card"
+        href="detail.html?id=299537">
+
+        <img
+          src="https://image.tmdb.org/t/p/w300/AtsgWhDnHTq68L0lLsUrCnM7TjG.jpg"
+          alt="キャプテン・マーベル"
+          loading="lazy"
+        >
+
+        <div class="short-detour-info">
+
+          <strong>
+            キャプテン・マーベル
+          </strong>
+
+          <span>
+            ⭐ エンドゲーム前に新しいヒーローを知りたいなら
+          </span>
+
+        </div>
+
+      </a>
+
+    </div>
+
+  </div>
+
+</details>
+
 
 <!-- 12：アベンジャーズ／エンドゲーム -->
 <article class="short-route-card">
@@ -5426,21 +6488,21 @@ a.mcu-tab{
 </article>
 
       <!-- 大決戦後の区切り -->
-    <div class="short-break">
+<div class="short-break">
 
-      <span>
-        🎉 大決戦を終えて――
-      </span>
+  <span>
+    🎉 大決戦を終えて
+  </span>
 
-      <strong>
-        ここでMCUの大きな物語が、ひと区切り。
-      </strong>
+  <strong>
+    ここでMCUの大きな物語が、ひと区切り。
+  </strong>
 
-      <p>
-        でも、物語はもう少し続きます。
-      </p>
+  <p>
+    でも、MCUの物語はまだ続きます。
+  </p>
 
-    </div>
+</div>
 
 
     <!-- 13：スパイダーマン：ファー・フロム・ホーム -->
@@ -5491,6 +6553,107 @@ a.mcu-tab{
 
 </article>
 
+<!-- =========================================================
+     寄り道ポイント｜ノー・ウェイ・ホームの前に
+========================================================= -->
+
+<details class="short-detour">
+
+  <summary>
+    👀 寄り道ポイント｜ノー・ウェイ・ホームの前に
+  </summary>
+
+  <div class="short-detour-content">
+
+    <p class="short-detour-intro">
+      最短ルートでは省いた作品です。<br>
+      気になる作品があれば、ここでちょっと寄り道。飛ばしてそのまま進んでもOK！
+    </p>
+
+    <div class="short-detour-grid">
+
+      <!-- ブラック・ウィドウ -->
+      <a
+        class="short-detour-card"
+        href="detail.html?id=497698">
+
+        <img
+          src="https://image.tmdb.org/t/p/w300/qAZ0pzat24kLdO3o8ejmbLxyOac.jpg"
+          alt="ブラック・ウィドウ"
+          loading="lazy"
+        >
+
+        <div class="short-detour-info">
+
+          <strong>
+            ブラック・ウィドウ
+          </strong>
+
+          <span>
+            🕷️ ブラック・ウィドウの物語をもっと知りたいなら
+          </span>
+
+        </div>
+
+      </a>
+
+
+      <!-- シャン・チー／テン・リングスの伝説 -->
+      <a
+        class="short-detour-card"
+        href="detail.html?id=566525">
+
+        <img
+          src="https://image.tmdb.org/t/p/w300/1BIoJGKbXjdFDAqUEiA2VHqkK1Z.jpg"
+          alt="シャン・チー／テン・リングスの伝説"
+          loading="lazy"
+        >
+
+        <div class="short-detour-info">
+
+          <strong>
+            シャン・チー／テン・リングスの伝説
+          </strong>
+
+          <span>
+            🐉 新しいヒーローの物語を見てみたいなら
+          </span>
+
+        </div>
+
+      </a>
+
+
+      <!-- エターナルズ -->
+      <a
+        class="short-detour-card"
+        href="detail.html?id=524434">
+
+        <img
+          src="https://image.tmdb.org/t/p/w300/lFByFSLV5WDJEv3KabbdAF959F2.jpg"
+          alt="エターナルズ"
+          loading="lazy"
+        >
+
+        <div class="short-detour-info">
+
+          <strong>
+            エターナルズ
+          </strong>
+
+          <span>
+            🌌 MCUの新しい世界をのぞいてみたいなら
+          </span>
+
+        </div>
+
+      </a>
+
+    </div>
+
+  </div>
+
+</details>
 
    <!-- 14：スパイダーマン：ノー・ウェイ・ホーム -->
 <article class="short-route-card">
@@ -5539,12 +6702,42 @@ a.mcu-tab{
   </div>
 
 </article>
+
+</div><!-- /.short-main-story -->
+
+
+<!-- =====================================================
+     MCU最短ルート 完走
+===================================================== -->
+
+<div class="short-route-finish">
+
+  <div class="short-route-finish-title">
+    🏁 MCU最短ルート、完走！
+  </div>
+
+  <p>
+    『スパイダーマン：ノー・ウェイ・ホーム』までたどり着いたら、
+    最短ルートはいったんここでゴール。
+  </p>
+
+  <p class="short-route-finish-next">
+    でも、MCUの物語はまだまだ続きます。
+  </p>
+
+  <p>
+    新しい物語が動き出すまで、
+    気になったヒーローや世界をもう少し見て回ってみませんか？
+  </p>
+
+</div>
+
+
 <!-- =====================================================
      NEW ERA
 ===================================================== -->
 
 <section class="short-new-era">
-
   <div class="short-new-era-heading">
 
     <span>
@@ -5570,7 +6763,7 @@ a.mcu-tab{
 <article class="short-star-card short-star-card-new">
 
   <div class="short-star-label">
-    ⭐ できれば見てほしい
+    ⭐（1）できれば見てほしい
   </div>
 
   <div class="short-seed-main">
@@ -5634,7 +6827,7 @@ a.mcu-tab{
 <article class="short-seed-card">
 
   <div class="short-seed-label">
-    🌱 新しいヒーローに会いたいなら
+    🌱（2）新しいヒーローに会いたいなら
   </div>
 
   <div class="short-seed-main">
@@ -5691,489 +6884,775 @@ a.mcu-tab{
 </article>
 
     <!-- エターナルズ -->
-    <article class="short-seed-card">
+<article class="short-seed-card">
 
-      <div class="short-seed-label">
-        🌱 MCUの知られざる歴史をのぞいてみたいなら
+  <div class="short-seed-label">
+    🌱（3）MCUの知られざる歴史をのぞいてみたいなら
+  </div>
+
+  <div class="short-seed-main">
+
+    <img
+      class="short-seed-poster"
+      src="https://image.tmdb.org/t/p/w300/lFByFSLV5WDJEv3KabbdAF959F2.jpg"
+      alt="エターナルズ"
+      loading="lazy"
+    />
+
+    <div class="short-seed-info">
+
+      <h3>
+        エターナルズ
+      </h3>
+
+      <div class="short-seed-meta">
+        2021年公開　｜　156分
       </div>
 
-      <div class="short-seed-main">
+      <div
+        class="mcu-provider-logos"
+        data-id="524434"
+        data-type="movie">
+      </div>
 
-        <img
-          class="short-seed-poster"
-          src="https://image.tmdb.org/t/p/w300/lFByFSLV5WDJEv3KabbdAF959F2.jpg"
-          alt="エターナルズ"
-          loading="lazy"
-        />
+      <div class="short-seed-points">
 
-        <div class="short-seed-info">
+        <div>
+          🌱 MCUのはるか昔から続く歴史が描かれる
+        </div>
 
-          <h3>
-            エターナルズ
-          </h3>
+        <div>
+          🌱 地球を見守ってきた「エターナルズ」の物語
+        </div>
 
-          <p>
-            はるか昔から地球に存在してきた
-            「エターナルズ」と呼ばれる一団の物語。
-            MCUの歴史を、これまでとは違う視点から描きます。
-          </p>
-
-          <div
-            class="mcu-provider-logos"
-            data-id="524434"
-            data-type="movie">
-          </div>
-
-          <a
-            class="short-route-detail"
-            href="detail.html?id=524434">
-            作品詳細を見る →
-          </a>
-
+        <div>
+          🌱 MCUの世界をこれまでとは違う視点から楽しめる1本
         </div>
 
       </div>
 
-    </article>
+      <a
+        class="short-route-detail"
+        href="detail.html?id=524434">
+        作品詳細を見る →
+      </a>
+
+    </div>
+
+  </div>
+
+</article>
 
 
       <!-- アントマン＆ワスプ：クアントマニア -->
-    <article class="short-seed-card">
+<article class="short-seed-card">
 
-      <div class="short-seed-label">
-        🌱 “量子世界”をもっとのぞいてみたいなら
+  <div class="short-seed-label">
+    🌱（4）“量子世界”をもっとのぞいてみたいなら
+  </div>
+
+  <div class="short-seed-main">
+
+    <img
+      class="short-seed-poster"
+      src="https://image.tmdb.org/t/p/w300/ngl2FKBlU4fhbdsrtdom9LVLBXw.jpg"
+      alt="アントマン＆ワスプ：クアントマニア"
+      loading="lazy"
+    />
+
+    <div class="short-seed-info">
+
+      <h3>
+        アントマン＆ワスプ：クアントマニア
+      </h3>
+
+      <div class="short-seed-meta">
+        2023年公開　｜　125分
       </div>
 
-      <div class="short-seed-main">
+      <div
+        class="mcu-provider-logos"
+        data-id="640146"
+        data-type="movie">
+      </div>
 
-        <img
-          class="short-seed-poster"
-          src="https://image.tmdb.org/t/p/w300/ngl2FKBlU4fhbdsrtdom9LVLBXw.jpg"
-          alt="アントマン＆ワスプ：クアントマニア"
-          loading="lazy"
-        />
+      <div class="short-seed-points">
 
-        <div class="short-seed-info">
+        <div>
+          🌱 アントマンとその家族が「量子世界」へ
+        </div>
 
-          <h3>
-            アントマン＆ワスプ：クアントマニア
-          </h3>
+        <div>
+          🌱 MCUの謎に満ちた量子世界を本格的に楽しめる
+        </div>
 
-          <p>
-            アントマンとその家族が、
-            謎の多い「量子世界」へ。
-            MCUの新しい世界をのぞいてみたい人はこちら。
-          </p>
-
-          <details class="short-more">
-
-            <summary>
-              💡 アントマンをもっと知りたい
-            </summary>
-
-            <div>
-              『アントマン』
-              →
-              『アントマン＆ワスプ』
-            </div>
-
-          </details>
-
-          <div
-            class="mcu-provider-logos"
-            data-id="640146"
-            data-type="movie">
-          </div>
-
-          <a
-            class="short-route-detail"
-            href="detail.html?id=640146">
-            作品詳細を見る →
-          </a>
-
+        <div>
+          🌱 NEW ERAのさらに広がった世界をのぞいてみたい人におすすめ
         </div>
 
       </div>
 
-    </article>
+      <!-- もっと知りたい：必要な作品だけ使用 -->
+      <details class="short-more">
+
+        <summary>
+          💡 アントマンをもっと知りたい
+        </summary>
+
+        <div class="short-more-content">
+
+  <span class="short-more-guide">
+    見るならこの順番：
+  </span>
+
+  <a href="detail.html?id=102899">
+    『アントマン』
+  </a>
+
+  <span class="short-more-arrow">
+    →
+  </span>
+
+  <a href="detail.html?id=363088">
+    『アントマン＆ワスプ』
+  </a>
+
+</div>
+
+      </details>
+
+      <a
+        class="short-route-detail"
+        href="detail.html?id=640146">
+        作品詳細を見る →
+      </a>
+
+    </div>
+
+  </div>
+
+</article>
 
 
     <!-- マーベルズ -->
-    <article class="short-seed-card">
+<article class="short-seed-card">
 
-      <div class="short-seed-label">
-        🌱 3人のヒーローが初めてチームに！
+  <div class="short-seed-label">
+    🌱（5）3人のヒーローが初めてチームに！
+  </div>
+
+  <div class="short-seed-main">
+
+    <img
+      class="short-seed-poster"
+      src="https://image.tmdb.org/t/p/w300/3b8VyzOHZKBTnbLGR7PriCV1C06.jpg"
+      alt="マーベルズ"
+      loading="lazy"
+    />
+
+    <div class="short-seed-info">
+
+      <h3>
+        マーベルズ
+      </h3>
+
+      <div class="short-seed-meta">
+        2023年公開　｜　105分
       </div>
 
-      <div class="short-seed-main">
+      <div
+        class="mcu-provider-logos"
+        data-id="609681"
+        data-type="movie">
+      </div>
 
-        <img
-          class="short-seed-poster"
-          src="https://image.tmdb.org/t/p/w300/3b8VyzOHZKBTnbLGR7PriCV1C06.jpg"
-          alt="マーベルズ"
-          loading="lazy"
-        />
+      <div class="short-seed-points">
 
-        <div class="short-seed-info">
+        <div>
+          🌱 キャプテン・マーベルたち3人のヒーローが合流
+        </div>
 
-          <h3>
-            マーベルズ
-          </h3>
+        <div>
+          🌱 それぞれの力がつながる新しいチームアップ
+        </div>
 
-          <p>
-            キャプテン・マーベルと、
-            彼女につながる2人の人物が合流。
-            3人が力を合わせる、新しいチームアップの物語。
-          </p>
-
-          <details class="short-more">
-
-            <summary>
-              💡 3人の過去作品を見てみる
-            </summary>
-
-            <div>
-
-              <strong>
-                キャプテン・マーベル
-              </strong>
-              → 『キャプテン・マーベル』
-
-              <br>
-
-              <strong>
-                モニカ・ランボー
-              </strong>
-              → 『ワンダヴィジョン』
-
-              <br>
-
-              <strong>
-                カマラ・カーン
-              </strong>
-              → 『ミズ・マーベル』
-
-              <br>
-
-              <small>
-                ※過去作品を全部見なくても
-                『マーベルズ』へ進んでOK！
-              </small>
-
-            </div>
-
-          </details>
-
-          <div
-            class="mcu-provider-logos"
-            data-id="609681"
-            data-type="movie">
-          </div>
-
-          <a
-            class="short-route-detail"
-            href="detail.html?id=609681">
-            作品詳細を見る →
-          </a>
-
+        <div>
+          🌱 過去作品を全部見ていなくても、そのまま進んでOK
         </div>
 
       </div>
 
-    </article>
+      <details class="short-more">
+
+        <summary>
+          💡 3人の過去作品を見てみる
+        </summary>
+
+        <div class="short-more-content">
+
+          <strong>
+            キャプテン・マーベル
+          </strong>
+          →
+          <a href="detail.html?id=299537">
+            『キャプテン・マーベル』
+          </a>
+
+          <br>
+
+          <strong>
+            モニカ・ランボー
+          </strong>
+          →
+          <a href="detail.html?id=85271&type=tv">
+            『ワンダヴィジョン』
+          </a>
+
+          <br>
+
+          <strong>
+            カマラ・カーン
+          </strong>
+          →
+          <a href="detail.html?id=92782&type=tv">
+            『ミズ・マーベル』
+          </a>
+
+        </div>
+
+      </details>
+
+      <a
+        class="short-route-detail"
+        href="detail.html?id=609681">
+        作品詳細を見る →
+      </a>
+
+    </div>
+
+  </div>
+
+</article>
 
 
       <!-- デッドプール＆ウルヴァリン -->
-    <article class="short-seed-card">
+<article class="short-seed-card">
 
-      <div class="short-seed-label">
-        🌱 MCUの“外側”にも世界を広げてみたいなら
+  <div class="short-seed-label">
+    🌱（6）MCUの“外側”にも世界を広げてみたいなら
+  </div>
+
+  <div class="short-seed-main">
+
+    <img
+      class="short-seed-poster"
+      src="https://image.tmdb.org/t/p/w300/8cdWjvZQUExUUTzyp4t6EDMubfO.jpg"
+      alt="デッドプール＆ウルヴァリン"
+      loading="lazy"
+    />
+
+    <div class="short-seed-info">
+
+      <h3>
+        デッドプール＆ウルヴァリン
+      </h3>
+
+      <div class="short-seed-meta">
+        2024年公開　｜　128分
       </div>
 
-      <div class="short-seed-main">
+      <div
+        class="mcu-provider-logos"
+        data-id="533535"
+        data-type="movie">
+      </div>
 
-        <img
-          class="short-seed-poster"
-          src="https://image.tmdb.org/t/p/w300/8cdWjvZQUExUUTzyp4t6EDMubfO.jpg"
-          alt="デッドプール＆ウルヴァリン"
-          loading="lazy"
-        />
+      <div class="short-seed-points">
 
-        <div class="short-seed-info">
+        <div>
+          🌱 デッドプールとウルヴァリンがMCUに登場
+        </div>
 
-          <h3>
-            デッドプール＆ウルヴァリン
-          </h3>
+        <div>
+          🌱 MCUの外に広がるマーベル作品とのつながりを楽しめる
+        </div>
 
-          <p>
-            別の映画シリーズで活躍してきた2人が登場。
-            MCUの外に広がるマーベル作品とのつながりを楽しめます。
-          </p>
-
-          <details class="short-more">
-
-            <summary>
-              💡 2人の過去作品を見てみる
-            </summary>
-
-            <div>
-              デッドプールが気になったら
-              『デッドプール』シリーズへ。
-              <br>
-              ウルヴァリンが気になったら
-              『X-MEN』シリーズへ。
-            </div>
-
-          </details>
-
-          <div
-            class="mcu-provider-logos"
-            data-id="533535"
-            data-type="movie">
-          </div>
-
-          <a
-            class="short-route-detail"
-            href="detail.html?id=533535">
-            作品詳細を見る →
-          </a>
-
+        <div>
+          🌱 X-MENなど別シリーズにも興味が広がる1本
         </div>
 
       </div>
 
-    </article>
+      <details class="short-more">
+
+        <summary>
+          💡 2人の過去作品を見てみる
+        </summary>
+
+        <div class="short-more-content">
+
+          <strong>
+            デッドプールが気になったら
+          </strong>
+          →
+          <a href="detail.html?id=293660">
+            『デッドプール』
+          </a>
+
+          <br>
+
+          <strong>
+            ウルヴァリンが気になったら
+          </strong>
+          →
+          <a href="detail.html?id=36657">
+            『X-MEN』
+          </a>
+
+        </div>
+
+      </details>
+
+      <a
+        class="short-route-detail"
+        href="detail.html?id=533535">
+        作品詳細を見る →
+      </a>
+
+    </div>
+
+  </div>
+
+</article>
 
 
     <!-- キャプテン・アメリカ：ブレイブ・ニュー・ワールド -->
-    <article class="short-seed-card">
+<article class="short-seed-card">
 
-      <div class="short-seed-label">
-        🌱 新しいキャプテン・アメリカが気になるなら
+  <div class="short-seed-label">
+    🌱（7）新しいキャプテン・アメリカが気になるなら
+  </div>
+
+  <div class="short-seed-main">
+
+    <img
+      class="short-seed-poster"
+      src="https://image.tmdb.org/t/p/w300/pzIddUEMWhWzfvLI3TwxUG2wGoi.jpg"
+      alt="キャプテン・アメリカ：ブレイブ・ニュー・ワールド"
+      loading="lazy"
+    />
+
+    <div class="short-seed-info">
+
+      <h3>
+        キャプテン・アメリカ：ブレイブ・ニュー・ワールド
+      </h3>
+
+      <div class="short-seed-meta">
+        2025年公開　｜　119分
       </div>
 
-      <div class="short-seed-main">
+      <div
+        class="mcu-provider-logos"
+        data-id="822119"
+        data-type="movie">
+      </div>
 
-        <img
-          class="short-seed-poster"
-          src="https://image.tmdb.org/t/p/w300/pzIddUEMWhWzfvLI3TwxUG2wGoi.jpg"
-          alt="キャプテン・アメリカ：ブレイブ・ニュー・ワールド"
-          loading="lazy"
-        />
+      <div class="short-seed-points">
 
-        <div class="short-seed-info">
+        <div>
+          🌱 サム・ウィルソンが新たなキャプテン・アメリカとして活躍
+        </div>
 
-          <h3>
-            キャプテン・アメリカ：ブレイブ・ニュー・ワールド
-          </h3>
+        <div>
+          🌱 スティーブ・ロジャースから受け継がれた意志のその先を描く
+        </div>
 
-          <p>
-            スティーブ・ロジャースから意志を受け継いだ、
-            サム・ウィルソンの新たな物語。
-          </p>
-
-          <details class="short-more">
-
-            <summary>
-              💡 キャプテン・アメリカをもっと知る
-            </summary>
-
-            <div>
-
-              <strong>
-                サムがキャプテン・アメリカになるまで
-              </strong>
-
-              <br>
-              📺『ファルコン＆ウィンター・ソルジャー』
-
-              <br><br>
-
-              <strong>
-                スティーブ・ロジャースの時代
-              </strong>
-
-              <br>
-              🎬『ザ・ファースト・アベンジャー』
-              →
-              🎬『ウィンター・ソルジャー』
-              →
-              🎬『シビル・ウォー』
-
-            </div>
-
-          </details>
-
-          <div
-            class="mcu-provider-logos"
-            data-id="822119"
-            data-type="movie">
-          </div>
-
-          <a
-            class="short-route-detail"
-            href="detail.html?id=822119">
-            作品詳細を見る →
-          </a>
-
+        <div>
+          🌱 NEW ERAのキャプテン・アメリカを追いたい人におすすめ
         </div>
 
       </div>
 
-    </article>
+      <details class="short-more">
+
+        <summary>
+          💡 キャプテン・アメリカをもっと知る
+        </summary>
+
+        <div class="short-more-content">
+
+          <strong>
+            サムがキャプテン・アメリカになるまで
+          </strong>
+
+          <br>
+
+          <a href="detail.html?id=88396&type=tv">
+            『ファルコン＆ウィンター・ソルジャー』
+          </a>
+
+          <div class="short-more-section">
+
+            <strong>
+              スティーブ・ロジャースの時代
+            </strong>
+
+            <br>
+
+            <a href="detail.html?id=1771">
+              『キャプテン・アメリカ／ザ・ファースト・アベンジャー』
+            </a>
+
+            →
+
+            <a href="detail.html?id=100402">
+              『キャプテン・アメリカ／ウィンター・ソルジャー』
+            </a>
+
+            →
+
+            <a href="detail.html?id=271110">
+              『シビル・ウォー／キャプテン・アメリカ』
+            </a>
+
+          </div>
+
+        </div>
+
+      </details>
+
+      <a
+        class="short-route-detail"
+        href="detail.html?id=822119">
+        作品詳細を見る →
+      </a>
+
+    </div>
+
+  </div>
+
+</article>
 
 
       <!-- サンダーボルツ* -->
-    <article class="short-seed-card">
+<article class="short-seed-card">
 
-      <div class="short-seed-label">
-        🌱 ちょっと異色のチームが気になるなら
+  <div class="short-seed-label">
+    🌱（8）ちょっと異色のチームが気になるなら
+  </div>
+
+  <div class="short-seed-main">
+
+    <img
+      class="short-seed-poster"
+      src="https://image.tmdb.org/t/p/w300/hqcexYHbiTBfDIdDWxrxPtVndBX.jpg"
+      alt="サンダーボルツ*"
+      loading="lazy"
+    />
+
+    <div class="short-seed-info">
+
+      <h3>
+        サンダーボルツ*
+      </h3>
+
+      <div class="short-seed-meta">
+        2025年公開　｜　127分
       </div>
 
-      <div class="short-seed-main">
+      <div
+        class="mcu-provider-logos"
+        data-id="986056"
+        data-type="movie">
+      </div>
 
-        <img
-          class="short-seed-poster"
-          src="https://image.tmdb.org/t/p/w300/hqcexYHbiTBfDIdDWxrxPtVndBX.jpg"
-          alt="サンダーボルツ*"
-          loading="lazy"
-        />
+      <div class="short-seed-points">
 
-        <div class="short-seed-info">
+        <div>
+          🌱 これまで別々に登場してきた、ひとクセある人物たちが集結
+        </div>
 
-          <h3>
-            サンダーボルツ*
-          </h3>
+        <div>
+          🌱 見覚えのあるキャラクターたちが新たなチームに
+        </div>
 
-          <p>
-            これまで別々の場所で登場してきた、
-            ひとクセある人物たちが集まる物語。
-          </p>
-
-          <div class="short-seed-callout">
-            👀 見覚えのある、あのキャラクターもチームに！
-          </div>
-
-          <details class="short-more">
-
-            <summary>
-              💡 メンバーの過去作品を見る
-              <span>
-                ⚠️ メンバー情報を含みます
-              </span>
-            </summary>
-
-            <div>
-              気になるメンバーがいたら、
-              その人物が登場した過去作品へ戻って楽しめます。
-            </div>
-
-          </details>
-
-          <div
-            class="mcu-provider-logos"
-            data-id="986056"
-            data-type="movie">
-          </div>
-
-          <a
-            class="short-route-detail"
-            href="detail.html?id=986056">
-            作品詳細を見る →
-          </a>
-
+        <div>
+          🌱 NEW ERAの新しいヒーローチームを見てみたい人におすすめ
         </div>
 
       </div>
 
-    </article>
+      <details class="short-more">
+
+        <summary>
+          💡 メンバーの過去作品を見る
+          <span>
+            ⚠️ メンバー情報を含みます
+          </span>
+        </summary>
+
+        <div class="short-more-content">
+
+  <div class="short-member-list">
+
+    <!-- エレーナ -->
+    <details class="short-member">
+
+      <summary>
+        エレーナ・ベロワ
+      </summary>
+
+      <div class="short-member-content">
+        <a href="detail.html?id=497698">
+          『ブラック・ウィドウ』
+        </a>
+
+        <br>
+
+        <a href="detail.html?id=88329&type=tv">
+          『ホークアイ』
+        </a>
+      </div>
+
+    </details>
+
+
+    <!-- バッキー -->
+    <details class="short-member">
+
+      <summary>
+        バッキー・バーンズ
+      </summary>
+
+      <div class="short-member-content">
+        <a href="detail.html?id=100402">
+          『キャプテン・アメリカ／ウィンター・ソルジャー』
+        </a>
+
+        <br>
+
+        <a href="detail.html?id=88396&type=tv">
+          『ファルコン＆ウィンター・ソルジャー』
+        </a>
+      </div>
+
+    </details>
+
+
+    <!-- レッド・ガーディアン -->
+    <details class="short-member">
+
+      <summary>
+        レッド・ガーディアン
+      </summary>
+
+      <div class="short-member-content">
+        <a href="detail.html?id=497698">
+          『ブラック・ウィドウ』
+        </a>
+      </div>
+
+    </details>
+
+
+    <!-- USエージェント -->
+    <details class="short-member">
+
+      <summary>
+        USエージェント
+      </summary>
+
+      <div class="short-member-content">
+        <a href="detail.html?id=88396&type=tv">
+          『ファルコン＆ウィンター・ソルジャー』
+        </a>
+      </div>
+
+    </details>
+
+    <!-- ゴースト -->
+<details class="short-member">
+
+  <summary>
+    ゴースト
+  </summary>
+
+  <div class="short-member-content">
+    <a href="detail.html?id=363088">
+      『アントマン＆ワスプ』
+    </a>
+  </div>
+
+</details>
+
+
+<!-- タスクマスター -->
+<details class="short-member">
+
+  <summary>
+    タスクマスター
+  </summary>
+
+  <div class="short-member-content">
+    <a href="detail.html?id=497698">
+      『ブラック・ウィドウ』
+    </a>
+  </div>
+
+</details>
+
+  </div>
+
+</div>
+
+      </details>
+
+     
+
+       <a
+        class="short-route-detail"
+        href="detail.html?id=986056">
+        作品詳細を見る →
+      </a>
+
+    </div>
+
+  </div>
+
+</article>
 
 
     <!-- ファンタスティック4：ファースト・ステップ -->
-    <article class="short-seed-card">
+<article class="short-seed-card">
 
-      <div class="short-seed-label">
-        🌱 新しいヒーローチームの世界を見てみたいなら
+  <div class="short-seed-label">
+    🌱（9）新しいヒーローチームの世界を見てみたいなら
+  </div>
+
+  <div class="short-seed-main">
+
+    <img
+      class="short-seed-poster"
+      src="https://image.tmdb.org/t/p/w300/nf5qaSEvyYSNeFH0YhSs5EsBLX9.jpg"
+      alt="ファンタスティック4：ファースト・ステップ"
+      loading="lazy"
+    />
+
+    <div class="short-seed-info">
+
+      <h3>
+        ファンタスティック4：ファースト・ステップ
+      </h3>
+
+      <div class="short-seed-meta">
+        2025年公開　｜　115分
       </div>
 
-      <div class="short-seed-main">
+      <div
+        class="mcu-provider-logos"
+        data-id="617126"
+        data-type="movie">
+      </div>
 
-        <img
-          class="short-seed-poster"
-          src="https://image.tmdb.org/t/p/w300/nf5qaSEvyYSNeFH0YhSs5EsBLX9.jpg"
-          alt="ファンタスティック4：ファースト・ステップ"
-          loading="lazy"
-        />
+      <div class="short-seed-points">
 
-        <div class="short-seed-info">
+        <div>
+          🌱 特別な能力を持つ4人を中心に描く、新しいチームの物語
+        </div>
 
-          <h3>
-            ファンタスティック4：ファースト・ステップ
-          </h3>
+        <div>
+          🌱 MCUに新しく加わるファンタスティック4の世界を楽しめる
+        </div>
 
-          <p>
-            特別な能力を持つ4人を中心に描く、
-            新しいチームの物語。
-            過去作品を見ていなくても、ここからでOK！
-          </p>
-
-          <details class="short-more">
-
-            <summary>
-              💡 昔のファンタスティック4も見てみたいなら
-            </summary>
-
-            <div>
-              過去に制作された
-              『ファンタスティック・フォー』映画シリーズもあります。
-            </div>
-
-          </details>
-
-          <div
-            class="mcu-provider-logos"
-            data-id="617126"
-            data-type="movie">
-          </div>
-
-          <a
-            class="short-route-detail"
-            href="detail.html?id=617126">
-            作品詳細を見る →
-          </a>
-
+        <div>
+          🌱 過去のファンタスティック4作品を見ていなくても、ここからでOK
         </div>
 
       </div>
 
-    </article>
+      <details class="short-more">
+
+        <summary>
+          💡 昔のファンタスティック4も見てみたいなら
+        </summary>
+
+        <div class="short-more-content">
+
+  <strong>
+    2005年からのシリーズ
+  </strong>
+
+  <br>
+
+  <a href="detail.html?id=9738">
+    『ファンタスティック・フォー［超能力ユニット］』
+  </a>
+
+  <br>
+
+  ↓
+
+  <br>
+
+  <a href="detail.html?id=1979">
+    『ファンタスティック・フォー：銀河の危機』
+  </a>
+
+
+  <div class="short-more-section">
+
+    <strong>
+      2015年の新シリーズ
+    </strong>
+
+    <br>
+
+    <a href="detail.html?id=166424">
+      『ファンタスティック・フォー』
+    </a>
+
+  </div>
+
+</div>
+
+      </details>
+
+      <a
+        class="short-route-detail"
+        href="detail.html?id=617126">
+        作品詳細を見る →
+      </a>
+
+    </div>
+
+  </div>
+
+</article>
 
 
   </div>
 
 </section>
 
-<!-- =====================================================
-     あのヒーローをもっと追いかけたい？
-===================================================== -->
+<!-- =========================================================
+     MCU最短ルート完走 ＋ その後の物語
+========================================================= -->
 
 <section class="short-follow-section">
 
-  <div class="short-route-heading">
 
-    <span>
-      💡
-    </span>
+  <!-- 気になったヒーローを追いかける -->
+  <div class="short-route-heading">
 
     <div>
 
       <h2>
-        あのヒーローをもっと追いかけたい？
+        💡 あのヒーローをもっと追いかけたい？
       </h2>
 
       <p>
-        本線で気に入ったヒーローがいたら、
-        その後の物語へ。
+        気になったヒーローの、その後の物語をのぞいてみよう。
       </p>
 
     </div>
@@ -6183,83 +7662,127 @@ a.mcu-tab{
 
   <div class="short-follow-grid">
 
-    <details>
+  <details>
 
-      <summary>
-        🕷️ ブラック・ウィドウをもっと知る
-      </summary>
+    <summary>
+      🕷️ ブラック・ウィドウをもっと知る
+    </summary>
 
-      <div>
+    <div>
+      <a href="detail.html?id=497698">
         『ブラック・ウィドウ』
-      </div>
+      </a>
+    </div>
 
-    </details>
+  </details>
 
 
-    <details>
+  <details>
 
-      <summary>
-        ⚡ ソーの続きを見る
-      </summary>
+    <summary>
+      ⚡ ソーの続きを見る
+    </summary>
 
-      <div>
+    <div>
+      <a href="detail.html?id=616037">
         『ソー：ラブ＆サンダー』
-      </div>
+      </a>
+    </div>
 
-    </details>
+  </details>
 
 
-    <details>
+  <details>
 
-      <summary>
-        🐾 ワカンダの続きを見る
-      </summary>
+    <summary>
+      🐾 ワカンダの続きを見る
+    </summary>
 
-      <div>
+    <div>
+      <a href="detail.html?id=505642">
         『ブラックパンサー／ワカンダ・フォーエバー』
-      </div>
+      </a>
+    </div>
 
-    </details>
+  </details>
 
 
-    <details>
+  <details>
 
-      <summary>
-        🚀 ガーディアンズの続きを見る
-      </summary>
+    <summary>
+      🚀 ガーディアンズの続きを見る
+    </summary>
 
-      <div>
+    <div>
+      <a href="detail.html?id=447365">
         『ガーディアンズ・オブ・ギャラクシー：VOLUME 3』
-      </div>
+      </a>
+    </div>
 
-    </details>
+  </details>
+
+</div>
+
+<!-- =====================================================
+     そして、MCUはこの先へ
+===================================================== -->
+
+<section class="short-future">
+
+  <div class="short-future-heading">
+
+    <span>
+      🚀 NEXT
+    </span>
+
+    <h2>
+      そして、MCUはこの先へ
+    </h2>
+
+    <p>
+      新しい物語は、すでに動き始めています。
+      <br>
+      これから待っているMCUの物語も、お楽しみに！
+    </p>
 
   </div>
 
-</section>
+
+  <div class="short-future-movies">
+
+    <div class="short-future-movie">
+
+      <strong>
+        Avengers: Doomsday
+      </strong>
+
+      <span>
+        2026年12月18日 公開予定
+      </span>
+
+    </div>
 
 
-<!-- =====================================================
-     最短ルート完走
-===================================================== -->
+    <div class="short-future-movie">
 
-<section class="short-finish">
+      <strong>
+        Avengers: Secret Wars
+      </strong>
 
-  <span>
-    🎉
-  </span>
+      <span>
+        2027年12月17日 公開予定
+      </span>
 
-  <h2>
-    最短ルート完走！
-  </h2>
+    </div>
 
-  <p>
-    ここからは、気になったヒーローや世界を
-    自由に追いかけてみよう。
+  </div>
+
+
+  <p class="short-future-note">
+    ※公開予定は変更される場合があります。
   </p>
 
-</section>
-    
+</section>    
 </main>
 
 
