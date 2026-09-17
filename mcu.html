@@ -667,10 +667,8 @@
 #shortView .short-new-era{
   margin-top:24px;
   padding:20px;
-
   border:1px solid #bbf7d0;
   border-radius:20px;
-
   background:
     linear-gradient(
       135deg,
@@ -679,6 +677,9 @@
       #eff6ff
     );
 }
+
+
+/* NEW ERA 見出し */
 
 #shortView .short-new-era-heading{
   margin-bottom:16px;
@@ -694,26 +695,28 @@
 
 #shortView .short-new-era-heading h2{
   margin:4px 0 6px;
-
   color:#14532d;
   font-size:23px;
 }
 
 #shortView .short-new-era-heading p{
   margin:0;
-
   color:#475569;
   font-size:14px;
   line-height:1.7;
 }
 
 
-/* ⭐ できれば見てほしい */
+/* =====================================================
+   ⭐ できれば見てほしい
+   本筋カードと同じ横幅
+===================================================== */
 
 #shortView .short-star-card{
-  max-width:760px;
+  width:calc((100% - 13px) / 2);
   margin:0 auto 16px;
   padding:14px;
+  box-sizing:border-box;
 
   border:1px solid #facc15;
   border-left:4px solid #facc15;
@@ -731,20 +734,27 @@
   font-weight:900;
 }
 
+
+/* =====================================================
+   NEW ERA カード内部
+===================================================== */
+
 #shortView .short-seed-main{
   display:flex;
-  gap:12px;
+  gap:16px;
   align-items:stretch;
   padding-top:9px;
 }
 
+
+/* 本筋と同じポスターサイズ */
+
 #shortView .short-seed-poster{
-  width:88px;
-  height:132px;
+  width:105px;
+  height:158px;
+  flex:0 0 105px;
 
   object-fit:cover;
-  flex:0 0 88px;
-
   border-radius:9px;
   background:#e5e7eb;
 }
@@ -756,28 +766,8 @@
   flex-direction:column;
 }
 
-#shortView .short-seed-info p{
-  margin:7px 0 8px;
 
-  color:#475569;
-  font-size:13px;
-  line-height:1.6;
-}
-
-@media(max-width:700px){
-
-  #shortView .short-new-era{
-    padding:15px 12px;
-  }
-
-  #shortView .short-seed-poster{
-    width:82px;
-    height:123px;
-    flex-basis:82px;
-  }
-}    
-
-/* NEW ERA 星カード 最終上書き */
+/* 配信ロゴ */
 
 #shortView .short-star-card-new .mcu-provider-logos{
   display:flex !important;
@@ -794,58 +784,14 @@
   height:32px !important;
   max-width:46px !important;
   max-height:32px !important;
+
   object-fit:contain !important;
 }
 
-#shortView .short-star-card-new .short-seed-point{
-  display:block !important;
-
-  margin:6px 0 12px !important;
-  padding:9px 11px !important;
-
-  border-left:3px solid #22c55e !important;
-  border-radius:8px !important;
-
-  background:#f0fdf4 !important;
-  color:#166534 !important;
-
-  font-size:13px !important;
-  font-weight:800 !important;
-  line-height:1.6 !important;
-}
 
 /* =====================================================
-   NEW ERA 映画カードサイズ統一
-   本筋カードと同じ2列サイズ
-===================================================== */
-
-#shortView .short-star-card{
-  width:auto;
-  max-width:none;
-  margin:0 auto 16px;
-  box-sizing:border-box;
-}
-
-
-/* ⭐カードは本筋カード1枚分の横幅 */
-
-#shortView .short-new-era > .short-star-card{
-  width:calc((100% - 13px) / 2);
-}
-
-
-/* スマホでは1列 */
-
-@media(max-width:700px){
-
-  #shortView .short-new-era > .short-star-card{
-    width:100%;
-  }
-
-}
-
-/* =====================================================
-   NEW ERA 見るポイント 複数表示
+   NEW ERA 見るポイント
+   1つのBOX内に複数項目
 ===================================================== */
 
 #shortView .short-star-card-new .short-seed-points{
@@ -869,6 +815,29 @@
 
 #shortView .short-star-card-new .short-seed-points > div:last-child{
   margin-bottom:0;
+}
+
+
+/* =====================================================
+   スマホ
+===================================================== */
+
+@media(max-width:700px){
+
+  #shortView .short-new-era{
+    padding:15px 12px;
+  }
+
+  #shortView .short-star-card{
+    width:100%;
+  }
+
+  #shortView .short-seed-poster{
+    width:105px;
+    height:158px;
+    flex:0 0 105px;
+  }
+
 }
 
     
