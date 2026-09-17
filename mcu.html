@@ -4720,6 +4720,45 @@ a.mcu-tab{
 
 }
 
+/* =====================================================
+   最短ルート MAIN STORY
+   スマホ横はみ出し防止
+===================================================== */
+
+@media(max-width:700px){
+
+  #shortView .short-route-card{
+    min-width:0;
+    overflow:hidden;
+  }
+
+  #shortView .short-route-card .short-route-main{
+    gap:12px;
+    min-width:0;
+  }
+
+  #shortView .short-route-card .short-route-poster{
+    width:82px;
+    height:123px;
+    flex:0 0 82px;
+  }
+
+  #shortView .short-route-card .short-route-info{
+    min-width:0;
+    width:100%;
+  }
+
+  #shortView .short-route-card .mcu-provider-logos{
+    flex-wrap:wrap;
+    max-width:100%;
+  }
+
+  #shortView .short-route-card .short-route-point{
+    max-width:100%;
+    box-sizing:border-box;
+  }
+
+}    
 
 </style>
 
