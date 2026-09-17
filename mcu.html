@@ -813,6 +813,36 @@
   font-weight:800 !important;
   line-height:1.6 !important;
 }
+
+/* =====================================================
+   NEW ERA 映画カードサイズ統一
+   本筋カードと同じ2列サイズ
+===================================================== */
+
+#shortView .short-star-card{
+  width:auto;
+  max-width:none;
+  margin:0 auto 16px;
+  box-sizing:border-box;
+}
+
+
+/* ⭐カードは本筋カード1枚分の横幅 */
+
+#shortView .short-new-era > .short-star-card{
+  width:calc((100% - 13px) / 2);
+}
+
+
+/* スマホでは1列 */
+
+@media(max-width:700px){
+
+  #shortView .short-new-era > .short-star-card{
+    width:100%;
+  }
+
+}
     
  /* =====================================================
    あのヒーローをもっと追いかけたい？
