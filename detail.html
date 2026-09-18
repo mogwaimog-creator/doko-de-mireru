@@ -5437,24 +5437,13 @@ function getProviderLink(
 
 
   /*
-     Disney+
-  */
-
-  if(
-    name.includes("disney")
-  ){
-
-    return (
-      movie.disney_url ||
-      (
-        "https://www.disneyplus.com/ja-jp/search/" +
-        encodeURIComponent(
-          movie.title || ""
-        )
-      )
-    );
-
-  }
+   Disney+
+*/
+if(
+  name.includes("disney")
+){
+  return "https://www.disneyplus.com/ja-jp";
+}
 
 
   /*
