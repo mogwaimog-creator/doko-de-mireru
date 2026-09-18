@@ -5081,6 +5081,149 @@ a.mcu-tab{
 #timelineView .mcu-watch-warning span{
   display:block;
 }
+
+/* =====================================================
+   MCU よくある質問
+   ページ下部・コンパクト版
+===================================================== */
+
+.mcu-faq{
+  width:100%;
+  box-sizing:border-box;
+  margin:24px 0 0;
+  padding:18px 20px;
+
+  border:1px solid #dbe3ee;
+  border-radius:14px;
+
+  background:#f8fafc;
+}
+
+
+/* 見出し */
+
+.mcu-faq-heading{
+  margin-bottom:12px;
+}
+
+.mcu-faq-heading > span{
+  display:block;
+  margin-bottom:3px;
+
+  color:#64748b;
+  font-size:13px;
+  line-height:1.4;
+  font-weight:800;
+}
+
+.mcu-faq-heading h2{
+  margin:0;
+
+  color:#1e293b;
+  font-size:18px;
+  line-height:1.45;
+  font-weight:900;
+}
+
+.mcu-faq-heading p{
+  margin:5px 0 0;
+
+  color:#64748b;
+  font-size:13px;
+  line-height:1.6;
+}
+
+
+/* 質問一覧 */
+
+.mcu-faq-list{
+  border-top:1px solid #e2e8f0;
+}
+
+.mcu-faq-item{
+  border-bottom:1px solid #e2e8f0;
+}
+
+
+/* 質問 */
+
+.mcu-faq-item > summary{
+  display:block;
+  position:relative;
+
+  padding:10px 34px 10px 2px;
+
+  color:#334155;
+  font-size:14px;
+  line-height:1.5;
+  font-weight:800;
+
+  cursor:pointer;
+  list-style:none;
+}
+
+.mcu-faq-item > summary::-webkit-details-marker{
+  display:none;
+}
+
+
+/* ＋ − */
+
+.mcu-faq-item > summary::after{
+  content:"＋";
+
+  position:absolute;
+  top:50%;
+  right:4px;
+
+  color:#64748b;
+  font-size:16px;
+  font-weight:900;
+
+  transform:translateY(-50%);
+}
+
+.mcu-faq-item[open] > summary::after{
+  content:"−";
+}
+
+
+/* 回答 */
+
+.mcu-faq-answer{
+  padding:0 34px 11px 2px;
+}
+
+.mcu-faq-answer p{
+  margin:0;
+
+  color:#475569;
+  font-size:13px;
+  line-height:1.7;
+  font-weight:500;
+}
+
+.mcu-faq-answer strong{
+  color:#263b5c;
+  font-weight:800;
+}
+
+
+/* スマホ */
+
+@media(max-width:600px){
+
+  .mcu-faq{
+    padding:16px 14px;
+  }
+
+  .mcu-faq-heading h2{
+    font-size:17px;
+  }
+
+}
+
+
 </style>
 
 </head>
