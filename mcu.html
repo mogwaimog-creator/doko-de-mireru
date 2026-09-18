@@ -3606,6 +3606,323 @@ a.mcu-tab{
 }
 
 /* =====================================================
+   MCU外・関連作品
+   シリーズジャンプナビ
+   CINEMATIC VERSION
+===================================================== */
+
+.related-jump-nav{
+  position:relative;
+  z-index:2;
+
+  width:100%;
+  box-sizing:border-box;
+
+  margin:32px auto 8px;
+  padding:20px;
+
+  border:2px solid rgba(96,165,250,.72);
+  border-radius:16px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(30,64,175,.18),
+      rgba(15,23,42,.78) 48%,
+      rgba(30,58,138,.16)
+    );
+
+  box-shadow:
+    0 0 0 1px rgba(147,197,253,.08),
+    0 0 22px rgba(59,130,246,.16),
+    inset 0 1px 0 rgba(255,255,255,.06);
+}
+
+
+/* =====================================================
+   見出し
+===================================================== */
+
+.related-jump-title{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  gap:9px;
+
+  margin-bottom:17px;
+
+  color:#fff;
+
+  font-size:18px;
+  line-height:1.5;
+  font-weight:900;
+
+  letter-spacing:.02em;
+}
+
+.related-jump-title span{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  width:31px;
+  height:31px;
+
+  border:1px solid rgba(125,211,252,.35);
+  border-radius:50%;
+
+  background:rgba(56,189,248,.12);
+
+  box-shadow:
+    0 0 12px rgba(56,189,248,.16);
+}
+
+
+/* =====================================================
+   ボタン配置
+===================================================== */
+
+.related-jump-buttons{
+  display:grid;
+
+  grid-template-columns:
+    repeat(3,minmax(0,1fr));
+
+  gap:10px;
+}
+
+
+/* =====================================================
+   共通ボタン
+===================================================== */
+
+.related-jump-buttons a{
+  position:relative;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  min-height:48px;
+
+  padding:10px 30px 10px 12px;
+
+  border:1px solid rgba(148,163,184,.28);
+  border-radius:10px;
+
+  color:#fff;
+
+  font-size:16px;
+  line-height:1.45;
+  font-weight:900;
+
+  text-align:center;
+  text-decoration:none;
+
+  overflow:hidden;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.06);
+
+  transition:
+    transform .15s ease,
+    border-color .15s ease,
+    box-shadow .15s ease,
+    filter .15s ease;
+}
+
+
+/* 右矢印 */
+
+.related-jump-buttons a::after{
+  content:"›";
+
+  position:absolute;
+
+  top:50%;
+  right:12px;
+
+  transform:translateY(-52%);
+
+  color:rgba(255,255,255,.82);
+
+  font-size:24px;
+  line-height:1;
+  font-weight:500;
+}
+
+
+/* =====================================================
+   それぞれの色
+===================================================== */
+
+
+/* スパイダーマン */
+
+.related-jump-buttons a:nth-child(1){
+  background:
+    linear-gradient(
+      135deg,
+      rgba(190,24,93,.70),
+      rgba(76,29,149,.52)
+    );
+
+  border-color:rgba(244,63,94,.68);
+}
+
+
+/* X-MEN */
+
+.related-jump-buttons a:nth-child(2){
+  background:
+    linear-gradient(
+      135deg,
+      rgba(30,64,175,.72),
+      rgba(3,105,161,.48)
+    );
+
+  border-color:rgba(56,189,248,.62);
+}
+
+
+/* デッドプール */
+
+.related-jump-buttons a:nth-child(3){
+  background:
+    linear-gradient(
+      135deg,
+      rgba(185,28,28,.76),
+      rgba(136,19,55,.56)
+    );
+
+  border-color:rgba(248,113,113,.68);
+}
+
+
+/* ファンタスティック4 */
+
+.related-jump-buttons a:nth-child(4){
+  background:
+    linear-gradient(
+      135deg,
+      rgba(3,105,161,.74),
+      rgba(30,64,175,.54)
+    );
+
+  border-color:rgba(56,189,248,.68);
+}
+
+
+/* ソニー関連 */
+
+.related-jump-buttons a:nth-child(5){
+  background:
+    linear-gradient(
+      135deg,
+      rgba(109,40,217,.72),
+      rgba(126,34,206,.50)
+    );
+
+  border-color:rgba(192,132,252,.66);
+}
+
+
+/* その他のマーベル */
+
+.related-jump-buttons a:nth-child(6){
+  background:
+    linear-gradient(
+      135deg,
+      rgba(161,98,7,.72),
+      rgba(113,63,18,.54)
+    );
+
+  border-color:rgba(251,191,36,.66);
+}
+
+
+/* =====================================================
+   hover
+===================================================== */
+
+.related-jump-buttons a:hover{
+  transform:translateY(-2px);
+
+  filter:brightness(1.12);
+
+  box-shadow:
+    0 6px 16px rgba(0,0,0,.20),
+    0 0 13px rgba(96,165,250,.12);
+}
+
+
+/* =====================================================
+   ジャンプ位置
+===================================================== */
+
+#related-spider,
+#related-xmen,
+#related-deadpool,
+#related-fantastic,
+#related-sony,
+#related-classic{
+  scroll-margin-top:24px;
+}
+
+
+/* =====================================================
+   スマホ
+===================================================== */
+
+@media(max-width:700px){
+
+  .related-jump-nav{
+    margin-top:24px;
+
+    padding:15px 12px;
+
+    border-radius:13px;
+  }
+
+  .related-jump-title{
+    margin-bottom:13px;
+
+    font-size:16px;
+  }
+
+  .related-jump-title span{
+    width:28px;
+    height:28px;
+  }
+
+  .related-jump-buttons{
+    grid-template-columns:
+      repeat(2,minmax(0,1fr));
+
+    gap:8px;
+  }
+
+  .related-jump-buttons a{
+    min-height:48px;
+
+    padding:
+      8px 25px
+      8px 7px;
+
+    font-size:15px;
+  }
+
+  .related-jump-buttons a::after{
+    right:8px;
+
+    font-size:21px;
+  }
+
+}
+
+
+/* =====================================================
    時系列確認版V4
    年代位置統一＋マルチバース初心者向け説明
    ※ #timelineView 内だけに適用
@@ -4886,6 +5203,8 @@ a.mcu-tab{
 
 }    
 
+
+
 </style>
 
 <style>
@@ -5255,8 +5574,2371 @@ a.mcu-tab{
 
 }
 
+/* =====================================================
+   あれ？ バットマンやスーパーマンは？
+   MARVEL / DC 初心者ガイド
+===================================================== */
+
+.marvel-dc-guide{
+  position:relative;
+  z-index:2;
+
+  max-width:900px;
+  margin:28px auto 0;
+  padding:22px;
+
+  border:1px solid rgba(147,197,253,.28);
+  border-radius:16px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(15,23,42,.82),
+      rgba(30,41,59,.78)
+    );
+
+  box-shadow:
+    0 6px 20px rgba(0,0,0,.12);
+}
+
+.marvel-dc-guide-heading{
+  text-align:center;
+}
+
+.marvel-dc-guide-heading > span{
+  display:inline-block;
+
+  margin-bottom:7px;
+  padding:4px 10px;
+
+  border-radius:999px;
+
+  background:rgba(96,165,250,.14);
+
+  color:#bfdbfe;
+
+  font-size:14px;
+  font-weight:900;
+}
+
+.marvel-dc-guide-heading h3{
+  margin:0 0 8px;
+
+  color:#ffffff;
+
+  font-size:21px;
+  line-height:1.45;
+}
+
+.marvel-dc-guide-heading p{
+  max-width:680px;
+  margin:0 auto;
+
+  color:#cbd5e1;
+
+  font-size:15px;
+  line-height:1.75;
+}
+
+.marvel-dc-guide-heading strong{
+  color:#ffffff;
+}
+
+.marvel-dc-compare{
+  display:grid;
+
+  grid-template-columns:
+    minmax(0,1fr)
+    auto
+    minmax(0,1fr);
+
+  gap:14px;
+  align-items:stretch;
+
+  margin-top:20px;
+}
+
+.marvel-dc-card{
+  padding:17px;
+
+  border-radius:13px;
+
+  background:rgba(255,255,255,.07);
+}
+
+.marvel-side-card{
+  border:1px solid rgba(248,113,113,.35);
+}
+
+.dc-side-card{
+  border:1px solid rgba(96,165,250,.38);
+}
+
+.marvel-dc-name{
+  color:#ffffff;
+
+  font-size:20px;
+  font-weight:900;
+  text-align:center;
+}
+
+.marvel-dc-name small{
+  display:block;
+
+  margin-top:2px;
+
+  color:#cbd5e1;
+
+  font-size:14px;
+  font-weight:700;
+}
+
+.marvel-dc-examples{
+  margin:12px 0 0;
+
+  color:#e2e8f0;
+
+  font-size:15px;
+  line-height:1.8;
+  font-weight:700;
+
+  text-align:center;
+}
+
+.marvel-dc-now,
+.marvel-dc-other{
+  margin-top:12px;
+
+  color:#cbd5e1;
+
+  font-size:14px;
+  line-height:1.5;
+  font-weight:800;
+
+  text-align:center;
+}
+
+.marvel-dc-vs{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  color:#94a3b8;
+
+  font-size:14px;
+  font-weight:900;
+}
+
+.marvel-dc-note{
+  margin:16px 0 0;
+
+  color:#cbd5e1;
+
+  font-size:15px;
+  line-height:1.7;
+
+  text-align:center;
+}
 
 
+/* スマホ */
+
+@media(max-width:700px){
+
+  .marvel-dc-guide{
+    margin-top:20px;
+    padding:17px 13px;
+  }
+
+  .marvel-dc-guide-heading h3{
+    font-size:19px;
+  }
+
+  .marvel-dc-compare{
+    grid-template-columns:1fr;
+    gap:10px;
+  }
+
+  .marvel-dc-vs{
+    padding:1px 0;
+  }
+
+  .marvel-dc-examples{
+    font-size:14px;
+  }
+
+}
+
+/* =====================================================
+   スパイダーマンの世界
+===================================================== */
+
+.spider-world{
+  position:relative;
+  z-index:2;
+
+  max-width:900px;
+  margin:34px auto 0;
+  padding-top:30px;
+
+  border-top:1px solid rgba(148,163,184,.22);
+}
+
+
+/* 見出し */
+
+.spider-world-heading{
+  text-align:center;
+}
+
+.spider-world-badge{
+  display:inline-block;
+
+  margin-bottom:8px;
+  padding:5px 11px;
+
+  border-radius:999px;
+
+  background:rgba(239,68,68,.14);
+  border:1px solid rgba(248,113,113,.25);
+
+  color:#fecaca;
+
+  font-size:14px;
+  font-weight:900;
+}
+
+.spider-world-heading h2{
+  margin:0;
+
+  color:#ffffff;
+
+  font-size:26px;
+  line-height:1.4;
+}
+
+.spider-world-heading p{
+  max-width:680px;
+
+  margin:10px auto 0;
+
+  color:#cbd5e1;
+
+  font-size:15px;
+  line-height:1.75;
+}
+
+.spider-world-heading strong{
+  color:#ffffff;
+}
+
+
+/* 3シリーズ */
+
+.spider-series-list{
+  display:grid;
+  gap:16px;
+
+  margin-top:24px;
+}
+
+.spider-series{
+  position:relative;
+
+  padding:19px 20px;
+
+  border:1px solid rgba(148,163,184,.25);
+  border-radius:14px;
+
+  background:rgba(255,255,255,.055);
+}
+
+
+/* 左上の番号 */
+
+.spider-series-number{
+  position:absolute;
+
+  top:15px;
+  right:17px;
+
+  color:rgba(255,255,255,.20);
+
+  font-size:25px;
+  line-height:1;
+  font-weight:900;
+}
+
+
+/* シリーズ名 */
+
+.spider-series-title > span{
+  display:block;
+
+  margin-bottom:3px;
+
+  color:#fca5a5;
+
+  font-size:14px;
+  line-height:1.4;
+  font-weight:900;
+}
+
+.spider-series-title h3{
+  margin:0;
+
+  color:#ffffff;
+
+  font-size:20px;
+  line-height:1.45;
+}
+
+.spider-series-sub{
+  margin:3px 0 0;
+
+  color:#94a3b8;
+
+  font-size:14px;
+  line-height:1.5;
+  font-weight:700;
+}
+
+
+/* 説明 */
+
+.spider-series-info{
+  margin-top:12px;
+}
+
+.spider-series-info > p{
+  margin:0;
+
+  color:#dbeafe;
+
+  font-size:15px;
+  line-height:1.7;
+}
+
+
+/* 補足タグ */
+
+.spider-series-tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+
+  margin-top:11px;
+}
+
+.spider-series-tags span{
+  display:inline-flex;
+  align-items:center;
+
+  padding:6px 9px;
+
+  border-radius:8px;
+
+  background:rgba(15,23,42,.55);
+  border:1px solid rgba(148,163,184,.20);
+
+  color:#cbd5e1;
+
+  font-size:14px;
+  line-height:1.4;
+  font-weight:700;
+}
+
+
+/* 3シリーズを少しだけ色分け */
+
+.spider-series-tobey{
+  border-left:4px solid #ef4444;
+}
+
+.spider-series-andrew{
+  border-left:4px solid #3b82f6;
+}
+
+.spider-series-tom{
+  border-left:4px solid #8b5cf6;
+}
+
+
+/* 後で作品カードを入れる場所 */
+
+.spider-movies{
+  margin-top:0;
+}
+
+/* =====================================================
+   スパイダーマン　作品カード
+===================================================== */
+
+.spider-movies{
+  display:grid;
+  grid-template-columns:repeat(3, minmax(0,1fr));
+  gap:12px;
+
+  margin-top:17px;
+}
+
+.spider-movie-card{
+  display:flex;
+  align-items:center;
+  gap:11px;
+
+  min-width:0;
+  padding:9px;
+
+  border:1px solid rgba(148,163,184,.22);
+  border-radius:10px;
+
+  background:rgba(15,23,42,.48);
+
+  color:#ffffff;
+  text-decoration:none;
+
+  transition:
+    transform .15s ease,
+    border-color .15s ease,
+    background .15s ease;
+}
+
+.spider-movie-card:hover{
+  transform:translateY(-2px);
+
+  border-color:rgba(248,113,113,.55);
+  background:rgba(30,41,59,.78);
+}
+
+.spider-movie-card img{
+  width:64px;
+  height:96px;
+  flex:0 0 64px;
+
+  object-fit:cover;
+
+  border-radius:7px;
+  border:1px solid rgba(255,255,255,.12);
+}
+
+.spider-movie-info{
+  min-width:0;
+}
+
+.spider-movie-info strong{
+  display:block;
+
+  color:#ffffff;
+
+  font-size:15px;
+  line-height:1.45;
+  font-weight:900;
+}
+
+.spider-movie-info span{
+  display:block;
+
+  margin-top:4px;
+
+  color:#94a3b8;
+
+  font-size:14px;
+  line-height:1.4;
+  font-weight:700;
+}
+
+.spider-movie-info small{
+  display:block;
+
+  margin-top:9px;
+
+  color:#bfdbfe;
+
+  font-size:14px;
+  line-height:1.4;
+  font-weight:800;
+}
+
+
+/* スマホ */
+
+@media(max-width:700px){
+
+  .spider-movies{
+    grid-template-columns:1fr;
+    gap:9px;
+  }
+
+  .spider-movie-card img{
+    width:70px;
+    height:105px;
+    flex-basis:70px;
+  }
+
+}
+
+/* =====================================================
+   X-MENの世界
+===================================================== */
+
+.xmen-world{
+  position:relative;
+  z-index:2;
+
+  max-width:900px;
+  margin:34px auto 0;
+  padding-top:30px;
+
+  border-top:1px solid rgba(148,163,184,.22);
+}
+
+
+/* 見出し */
+
+.xmen-world-heading{
+  text-align:center;
+}
+
+.xmen-world-badge{
+  display:inline-block;
+
+  margin-bottom:8px;
+  padding:5px 11px;
+
+  border-radius:999px;
+
+  background:rgba(59,130,246,.14);
+  border:1px solid rgba(96,165,250,.25);
+
+  color:#bfdbfe;
+
+  font-size:14px;
+  font-weight:900;
+}
+
+.xmen-world-heading h2{
+  margin:0;
+
+  color:#ffffff;
+
+  font-size:26px;
+  line-height:1.4;
+}
+
+.xmen-world-heading p{
+  max-width:680px;
+  margin:10px auto 0;
+
+  color:#cbd5e1;
+
+  font-size:15px;
+  line-height:1.75;
+}
+
+
+/* シリーズ枠 */
+
+.xmen-series{
+  position:relative;
+
+  margin-top:24px;
+  padding:19px 20px;
+
+  border:1px solid rgba(96,165,250,.28);
+  border-left:4px solid #3b82f6;
+  border-radius:14px;
+
+  background:rgba(255,255,255,.055);
+}
+
+.xmen-series-number{
+  position:absolute;
+
+  top:15px;
+  right:17px;
+
+  color:rgba(255,255,255,.20);
+
+  font-size:25px;
+  line-height:1;
+  font-weight:900;
+}
+
+
+/* シリーズタイトル */
+
+.xmen-series-title > span{
+  display:block;
+
+  margin-bottom:3px;
+
+  color:#93c5fd;
+
+  font-size:14px;
+  line-height:1.4;
+  font-weight:900;
+}
+
+.xmen-series-title h3{
+  margin:0;
+
+  color:#ffffff;
+
+  font-size:20px;
+  line-height:1.45;
+}
+
+.xmen-series-sub{
+  margin:3px 0 0;
+
+  color:#94a3b8;
+
+  font-size:14px;
+  line-height:1.5;
+  font-weight:700;
+}
+
+
+/* 説明 */
+
+.xmen-series-info{
+  margin-top:12px;
+}
+
+.xmen-series-info > p{
+  margin:0;
+
+  color:#dbeafe;
+
+  font-size:15px;
+  line-height:1.7;
+}
+
+
+/* タグ */
+
+.xmen-series-tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+
+  margin-top:11px;
+}
+
+.xmen-series-tags span{
+  display:inline-flex;
+  align-items:center;
+
+  padding:6px 9px;
+
+  border-radius:8px;
+
+  background:rgba(15,23,42,.55);
+  border:1px solid rgba(148,163,184,.20);
+
+  color:#cbd5e1;
+
+  font-size:14px;
+  line-height:1.4;
+  font-weight:700;
+}
+
+
+/* =====================================================
+   X-MEN 作品カード
+===================================================== */
+
+.xmen-movies{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px;
+
+  margin-top:17px;
+}
+
+.xmen-movie-card{
+  display:flex;
+  align-items:center;
+  gap:11px;
+
+  min-width:0;
+  padding:9px;
+
+  border:1px solid rgba(148,163,184,.22);
+  border-radius:10px;
+
+  background:rgba(15,23,42,.48);
+
+  color:#ffffff;
+  text-decoration:none;
+
+  transition:
+    transform .15s ease,
+    border-color .15s ease,
+    background .15s ease;
+}
+
+.xmen-movie-card:hover{
+  transform:translateY(-2px);
+
+  border-color:rgba(96,165,250,.55);
+  background:rgba(30,41,59,.78);
+}
+
+.xmen-movie-card img{
+  width:64px;
+  height:96px;
+  flex:0 0 64px;
+
+  object-fit:cover;
+
+  border-radius:7px;
+  border:1px solid rgba(255,255,255,.12);
+}
+
+.xmen-movie-info{
+  min-width:0;
+}
+
+.xmen-movie-info strong{
+  display:block;
+
+  color:#ffffff;
+
+  font-size:15px;
+  line-height:1.45;
+  font-weight:900;
+}
+
+.xmen-movie-info span{
+  display:block;
+
+  margin-top:4px;
+
+  color:#94a3b8;
+
+  font-size:14px;
+  line-height:1.4;
+  font-weight:700;
+}
+
+.xmen-movie-info small{
+  display:block;
+
+  margin-top:9px;
+
+  color:#bfdbfe;
+
+  font-size:14px;
+  line-height:1.4;
+  font-weight:800;
+}
+
+
+/* スマホ */
+
+@media(max-width:700px){
+
+  .xmen-world{
+    margin-top:26px;
+    padding-top:24px;
+  }
+
+  .xmen-world-heading h2{
+    font-size:22px;
+  }
+
+  .xmen-series{
+    padding:17px 14px;
+  }
+
+  .xmen-series-number{
+    top:14px;
+    right:13px;
+
+    font-size:22px;
+  }
+
+  .xmen-series-title h3{
+    padding-right:35px;
+
+    font-size:18px;
+  }
+
+  .xmen-series-tags{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .xmen-movies{
+    grid-template-columns:1fr;
+    gap:9px;
+  }
+
+  .xmen-movie-card img{
+    width:70px;
+    height:105px;
+    flex-basis:70px;
+  }
+
+}
+
+/* 2つの世代がつながる説明 */
+
+.xmen-bridge-note{
+  display:inline-block;
+
+  margin-top:14px;
+  padding:8px 11px;
+
+  border:1px solid rgba(56,189,248,.30);
+  border-radius:8px;
+
+  background:rgba(56,189,248,.10);
+
+  color:#bae6fd;
+
+  font-size:14px;
+  line-height:1.55;
+  font-weight:800;
+}
+
+
+/* =====================================================
+   X-MEN 03 ウルヴァリン
+===================================================== */
+
+.xmen-series-wolverine{
+  border-left-color:#64748b;
+}
+
+.xmen-series-wolverine
+.xmen-series-title > span{
+  color:#cbd5e1;
+}
+
+
+/* =====================================================
+   デッドプールの世界
+===================================================== */
+
+.deadpool-world{
+  position:relative;
+  z-index:2;
+
+  max-width:900px;
+  margin:34px auto 0;
+  padding-top:30px;
+
+  border-top:1px solid rgba(148,163,184,.22);
+}
+
+
+/* 見出し */
+
+.deadpool-world-heading{
+  text-align:center;
+}
+
+.deadpool-world-badge{
+  display:inline-block;
+
+  margin-bottom:8px;
+  padding:5px 11px;
+
+  border-radius:999px;
+
+  background:rgba(239,68,68,.14);
+  border:1px solid rgba(248,113,113,.25);
+
+  color:#fecaca;
+
+  font-size:14px;
+  font-weight:900;
+}
+
+.deadpool-world-heading h2{
+  margin:0;
+
+  color:#ffffff;
+
+  font-size:26px;
+  line-height:1.4;
+}
+
+.deadpool-world-heading p{
+  max-width:680px;
+  margin:10px auto 0;
+
+  color:#cbd5e1;
+
+  font-size:15px;
+  line-height:1.75;
+}
+
+
+/* シリーズ */
+
+.deadpool-series{
+  position:relative;
+
+  margin-top:24px;
+  padding:19px 20px;
+
+  border:1px solid rgba(248,113,113,.26);
+  border-left:4px solid #ef4444;
+  border-radius:14px;
+
+  background:rgba(255,255,255,.055);
+}
+
+.deadpool-series-number{
+  position:absolute;
+
+  top:15px;
+  right:17px;
+
+  color:rgba(255,255,255,.20);
+
+  font-size:25px;
+  line-height:1;
+  font-weight:900;
+}
+
+
+/* タイトル */
+
+.deadpool-series-title > span{
+  display:block;
+
+  margin-bottom:3px;
+
+  color:#fca5a5;
+
+  font-size:14px;
+  line-height:1.4;
+  font-weight:900;
+}
+
+.deadpool-series-title h3{
+  margin:0;
+
+  color:#ffffff;
+
+  font-size:20px;
+  line-height:1.45;
+}
+
+.deadpool-series-sub{
+  margin:3px 0 0;
+
+  color:#94a3b8;
+
+  font-size:14px;
+  line-height:1.5;
+  font-weight:700;
+}
+
+
+/* 説明 */
+
+.deadpool-series-info{
+  margin-top:12px;
+}
+
+.deadpool-series-info > p{
+  margin:0;
+
+  color:#dbeafe;
+
+  font-size:15px;
+  line-height:1.7;
+}
+
+
+/* タグ */
+
+.deadpool-series-tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+
+  margin-top:11px;
+}
+
+.deadpool-series-tags span{
+  display:inline-flex;
+  align-items:center;
+
+  padding:6px 9px;
+
+  border-radius:8px;
+
+  background:rgba(15,23,42,.55);
+  border:1px solid rgba(148,163,184,.20);
+
+  color:#cbd5e1;
+
+  font-size:14px;
+  line-height:1.4;
+  font-weight:700;
+}
+
+
+/* 作品 */
+
+.deadpool-movies{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px;
+
+  margin-top:17px;
+}
+
+.deadpool-movie-card{
+  display:flex;
+  align-items:center;
+  gap:11px;
+
+  min-width:0;
+  padding:9px;
+
+  border:1px solid rgba(148,163,184,.22);
+  border-radius:10px;
+
+  background:rgba(15,23,42,.48);
+
+  color:#ffffff;
+  text-decoration:none;
+
+  transition:
+    transform .15s ease,
+    border-color .15s ease,
+    background .15s ease;
+}
+
+.deadpool-movie-card:hover{
+  transform:translateY(-2px);
+
+  border-color:rgba(248,113,113,.55);
+  background:rgba(30,41,59,.78);
+}
+
+.deadpool-movie-card img{
+  width:64px;
+  height:96px;
+  flex:0 0 64px;
+
+  object-fit:cover;
+
+  border-radius:7px;
+  border:1px solid rgba(255,255,255,.12);
+}
+
+.deadpool-movie-info{
+  min-width:0;
+}
+
+.deadpool-movie-info strong{
+  display:block;
+
+  color:#ffffff;
+
+  font-size:15px;
+  line-height:1.45;
+  font-weight:900;
+}
+
+.deadpool-movie-info span{
+  display:block;
+
+  margin-top:4px;
+
+  color:#94a3b8;
+
+  font-size:14px;
+  line-height:1.4;
+  font-weight:700;
+}
+
+.deadpool-movie-info small{
+  display:block;
+
+  margin-top:9px;
+
+  color:#fecaca;
+
+  font-size:14px;
+  line-height:1.4;
+  font-weight:800;
+}
+
+
+/* MCUへつながる2段目 */
+
+.deadpool-series-mcu{
+  border-left-color:#8b5cf6;
+}
+
+.deadpool-series-mcu
+.deadpool-series-title > span{
+  color:#c4b5fd;
+}
+
+
+/* スマホ */
+
+@media(max-width:700px){
+
+  .deadpool-world{
+    margin-top:26px;
+    padding-top:24px;
+  }
+
+  .deadpool-world-heading h2{
+    font-size:22px;
+  }
+
+  .deadpool-series{
+    padding:17px 14px;
+  }
+
+  .deadpool-series-number{
+    top:14px;
+    right:13px;
+
+    font-size:22px;
+  }
+
+  .deadpool-series-title h3{
+    padding-right:35px;
+
+    font-size:18px;
+  }
+
+  .deadpool-series-tags{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .deadpool-movies{
+    grid-template-columns:1fr;
+    gap:9px;
+  }
+
+  .deadpool-movie-card img{
+    width:70px;
+    height:105px;
+    flex-basis:70px;
+  }
+
+}
+
+/* =====================================================
+   FANTASTIC FOUR WORLD
+===================================================== */
+
+.fantastic-world{
+  position:relative;
+  z-index:2;
+  width:100%;
+  max-width:none;
+  box-sizing:border-box;
+  margin:34px auto 0;
+  padding-top:30px;
+  border-top:1px solid rgba(148,163,184,.22);
+}
+
+
+/* ---------- 見出し ---------- */
+
+.fantastic-world-heading{
+  text-align:center;
+}
+
+.fantastic-world-badge{
+  display:inline-block;
+  margin-bottom:8px;
+  padding:5px 11px;
+  border-radius:999px;
+
+  background:rgba(56,189,248,.14);
+  border:1px solid rgba(56,189,248,.25);
+
+  color:#bae6fd;
+
+  font-size:14px;
+  font-weight:900;
+}
+
+.fantastic-world-heading h2{
+  margin:0;
+
+  color:#fff;
+
+  font-size:26px;
+  line-height:1.4;
+}
+
+.fantastic-world-heading p{
+  max-width:680px;
+  margin:10px auto 0;
+
+  color:#cbd5e1;
+
+  font-size:15px;
+  line-height:1.75;
+}
+
+.fantastic-world-heading strong{
+  color:#fff;
+}
+
+
+/* ---------- シリーズ ---------- */
+
+.fantastic-series{
+  position:relative;
+
+  margin-top:24px;
+  padding:19px 20px;
+
+  border:1px solid rgba(56,189,248,.26);
+  border-left:4px solid #38bdf8;
+  border-radius:14px;
+
+  background:rgba(255,255,255,.055);
+}
+
+.fantastic-series-number{
+  position:absolute;
+  top:15px;
+  right:17px;
+
+  color:rgba(255,255,255,.20);
+
+  font-size:25px;
+  line-height:1;
+  font-weight:900;
+}
+
+.fantastic-series-title > span{
+  display:block;
+
+  margin-bottom:3px;
+
+  color:#7dd3fc;
+
+  font-size:14px;
+  line-height:1.4;
+  font-weight:900;
+}
+
+.fantastic-series-title h3{
+  margin:0;
+
+  color:#fff;
+
+  font-size:20px;
+  line-height:1.45;
+}
+
+.fantastic-series-sub{
+  margin:3px 0 0;
+
+  color:#94a3b8;
+
+  font-size:14px;
+  line-height:1.5;
+  font-weight:700;
+}
+
+
+/* ---------- 説明 ---------- */
+
+.fantastic-series-info{
+  margin-top:12px;
+}
+
+.fantastic-series-info > p{
+  margin:0;
+
+  color:#dbeafe;
+
+  font-size:15px;
+  line-height:1.7;
+}
+
+.fantastic-series-tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+
+  margin-top:11px;
+}
+
+.fantastic-series-tags span{
+  display:inline-flex;
+  align-items:center;
+
+  padding:6px 9px;
+
+  border-radius:8px;
+
+  background:rgba(15,23,42,.55);
+  border:1px solid rgba(148,163,184,.20);
+
+  color:#cbd5e1;
+
+  font-size:14px;
+  line-height:1.4;
+  font-weight:700;
+}
+
+
+/* ---------- 映画カード ---------- */
+
+.fantastic-movies{
+  display:grid;
+
+  grid-template-columns:
+    repeat(3,minmax(0,1fr));
+
+  gap:12px;
+
+  margin-top:17px;
+}
+
+.fantastic-movie-card{
+  display:flex;
+  align-items:center;
+
+  gap:11px;
+
+  min-width:0;
+
+  padding:9px;
+
+  border:1px solid rgba(148,163,184,.22);
+  border-radius:10px;
+
+  background:rgba(15,23,42,.48);
+
+  color:#fff;
+  text-decoration:none;
+
+  transition:
+    transform .15s ease,
+    border-color .15s ease,
+    background .15s ease;
+}
+
+.fantastic-movie-card:hover{
+  transform:translateY(-2px);
+
+  border-color:rgba(56,189,248,.55);
+
+  background:rgba(30,41,59,.78);
+}
+
+.fantastic-movie-card img{
+  width:64px;
+  height:96px;
+
+  flex:0 0 64px;
+
+  object-fit:cover;
+
+  border-radius:7px;
+
+  border:1px solid rgba(255,255,255,.12);
+}
+
+.fantastic-movie-info{
+  min-width:0;
+}
+
+.fantastic-movie-info strong{
+  display:block;
+
+  color:#fff;
+
+  font-size:15px;
+  line-height:1.45;
+  font-weight:900;
+}
+
+.fantastic-movie-info span{
+  display:block;
+
+  margin-top:4px;
+
+  color:#94a3b8;
+
+  font-size:14px;
+  line-height:1.4;
+  font-weight:700;
+}
+
+.fantastic-movie-info small{
+  display:block;
+
+  margin-top:9px;
+
+  color:#bae6fd;
+
+  font-size:14px;
+  line-height:1.4;
+  font-weight:800;
+}
+
+
+/* ---------- シリーズごとの色 ---------- */
+
+.fantastic-series-reboot{
+  border-left-color:#64748b;
+}
+
+.fantastic-series-reboot
+.fantastic-series-title > span{
+  color:#cbd5e1;
+}
+
+.fantastic-series-mcu{
+  border-left-color:#8b5cf6;
+}
+
+.fantastic-series-mcu
+.fantastic-series-title > span{
+  color:#c4b5fd;
+}
+
+
+/* ---------- スマホ ---------- */
+
+@media(max-width:700px){
+
+  .fantastic-world{
+    margin-top:26px;
+    padding-top:24px;
+  }
+
+  .fantastic-world-heading h2{
+    font-size:22px;
+  }
+
+  .fantastic-world-heading p{
+    font-size:15px;
+  }
+
+  .fantastic-series{
+    padding:17px 14px;
+  }
+
+  .fantastic-series-number{
+    top:14px;
+    right:13px;
+
+    font-size:22px;
+  }
+
+  .fantastic-series-title h3{
+    padding-right:35px;
+
+    font-size:18px;
+  }
+
+  .fantastic-series-tags{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .fantastic-movies{
+    grid-template-columns:1fr;
+
+    gap:9px;
+  }
+
+  .fantastic-movie-card img{
+    width:70px;
+    height:105px;
+
+    flex-basis:70px;
+  }
+
+}
+
+/* =====================================================
+   SONY SPIDER-MAN RELATED WORLD
+===================================================== */
+
+.sony-world{
+  position:relative;
+  z-index:2;
+  width:100%;
+  max-width:none;
+  box-sizing:border-box;
+
+  margin:34px auto 0;
+  padding-top:30px;
+
+  border-top:1px solid rgba(148,163,184,.22);
+}
+
+
+/* ---------- 見出し ---------- */
+
+.sony-world-heading{
+  text-align:center;
+}
+
+.sony-world-badge{
+  display:inline-block;
+
+  margin-bottom:8px;
+  padding:5px 11px;
+
+  border-radius:999px;
+
+  background:rgba(236,72,153,.13);
+  border:1px solid rgba(244,114,182,.25);
+
+  color:#fbcfe8;
+
+  font-size:14px;
+  font-weight:900;
+}
+
+.sony-world-heading h2{
+  margin:0;
+
+  color:#fff;
+
+  font-size:26px;
+  line-height:1.4;
+}
+
+.sony-world-heading p{
+  max-width:680px;
+
+  margin:10px auto 0;
+
+  color:#cbd5e1;
+
+  font-size:15px;
+  line-height:1.75;
+}
+
+.sony-world-heading strong{
+  color:#fff;
+}
+
+
+/* ---------- シリーズ ---------- */
+
+.sony-series{
+  position:relative;
+
+  margin-top:24px;
+  padding:19px 20px;
+
+  border:1px solid rgba(244,114,182,.24);
+  border-left:4px solid #ec4899;
+
+  border-radius:14px;
+
+  background:rgba(255,255,255,.055);
+}
+
+.sony-series-number{
+  position:absolute;
+
+  top:15px;
+  right:17px;
+
+  color:rgba(255,255,255,.20);
+
+  font-size:25px;
+  line-height:1;
+  font-weight:900;
+}
+
+.sony-series-title > span{
+  display:block;
+
+  margin-bottom:3px;
+
+  color:#f9a8d4;
+
+  font-size:14px;
+  line-height:1.4;
+  font-weight:900;
+}
+
+.sony-series-title h3{
+  margin:0;
+
+  color:#fff;
+
+  font-size:20px;
+  line-height:1.45;
+}
+
+.sony-series-sub{
+  margin:3px 0 0;
+
+  color:#94a3b8;
+
+  font-size:14px;
+  line-height:1.5;
+  font-weight:700;
+}
+
+
+/* ---------- 説明 ---------- */
+
+.sony-series-info{
+  margin-top:12px;
+}
+
+.sony-series-info > p{
+  margin:0;
+
+  color:#dbeafe;
+
+  font-size:15px;
+  line-height:1.7;
+}
+
+.sony-series-tags{
+  display:flex;
+  flex-wrap:wrap;
+
+  gap:7px;
+
+  margin-top:11px;
+}
+
+.sony-series-tags span{
+  display:inline-flex;
+  align-items:center;
+
+  padding:6px 9px;
+
+  border-radius:8px;
+
+  background:rgba(15,23,42,.55);
+  border:1px solid rgba(148,163,184,.20);
+
+  color:#cbd5e1;
+
+  font-size:14px;
+  line-height:1.4;
+  font-weight:700;
+}
+
+
+/* ---------- 映画カード ---------- */
+
+.sony-movies{
+  display:grid;
+
+  grid-template-columns:
+    repeat(3,minmax(0,1fr));
+
+  gap:12px;
+
+  margin-top:17px;
+}
+
+.sony-movie-card{
+  display:flex;
+  align-items:center;
+
+  gap:11px;
+
+  min-width:0;
+
+  padding:9px;
+
+  border:1px solid rgba(148,163,184,.22);
+  border-radius:10px;
+
+  background:rgba(15,23,42,.48);
+
+  color:#fff;
+  text-decoration:none;
+
+  transition:
+    transform .15s ease,
+    border-color .15s ease,
+    background .15s ease;
+}
+
+.sony-movie-card:hover{
+  transform:translateY(-2px);
+
+  border-color:rgba(244,114,182,.50);
+
+  background:rgba(30,41,59,.78);
+}
+
+.sony-movie-card img{
+  width:64px;
+  height:96px;
+
+  flex:0 0 64px;
+
+  object-fit:cover;
+
+  border-radius:7px;
+
+  border:1px solid rgba(255,255,255,.12);
+}
+
+.sony-movie-info{
+  min-width:0;
+}
+
+.sony-movie-info strong{
+  display:block;
+
+  color:#fff;
+
+  font-size:15px;
+  line-height:1.45;
+  font-weight:900;
+}
+
+.sony-movie-info span{
+  display:block;
+
+  margin-top:4px;
+
+  color:#94a3b8;
+
+  font-size:14px;
+  line-height:1.4;
+  font-weight:700;
+}
+
+.sony-movie-info small{
+  display:block;
+
+  margin-top:9px;
+
+  color:#fbcfe8;
+
+  font-size:14px;
+  line-height:1.4;
+  font-weight:800;
+}
+
+
+/* ---------- 02 ---------- */
+
+.sony-series-other{
+  border-left-color:#8b5cf6;
+}
+
+.sony-series-other
+.sony-series-title > span{
+  color:#c4b5fd;
+}
+
+
+/* ---------- スマホ ---------- */
+
+@media(max-width:700px){
+
+  .sony-world{
+    margin-top:26px;
+    padding-top:24px;
+  }
+
+  .sony-world-heading h2{
+    font-size:22px;
+  }
+
+  .sony-world-heading p{
+    font-size:15px;
+  }
+
+  .sony-series{
+    padding:17px 14px;
+  }
+
+  .sony-series-number{
+    top:14px;
+    right:13px;
+
+    font-size:22px;
+  }
+
+  .sony-series-title h3{
+    padding-right:35px;
+
+    font-size:18px;
+  }
+
+  .sony-series-tags{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .sony-movies{
+    grid-template-columns:1fr;
+
+    gap:9px;
+  }
+
+  .sony-movie-card img{
+    width:70px;
+    height:105px;
+
+    flex-basis:70px;
+  }
+
+}
+
+/* =====================================================
+   CLASSIC / OTHER MARVEL MOVIES
+===================================================== */
+
+.classic-marvel-world{
+  position:relative;
+  z-index:2;
+
+  width:100%;
+  max-width:none;
+  box-sizing:border-box;
+
+  margin:34px auto 0;
+  padding-top:30px;
+
+  border-top:1px solid rgba(148,163,184,.22);
+}
+
+
+/* ---------- 見出し ---------- */
+
+.classic-marvel-heading{
+  text-align:center;
+}
+
+.classic-marvel-badge{
+  display:inline-block;
+
+  margin-bottom:8px;
+  padding:5px 11px;
+
+  border-radius:999px;
+
+  background:rgba(245,158,11,.13);
+  border:1px solid rgba(251,191,36,.25);
+
+  color:#fde68a;
+
+  font-size:14px;
+  font-weight:900;
+}
+
+.classic-marvel-heading h2{
+  margin:0;
+
+  color:#fff;
+
+  font-size:26px;
+  line-height:1.4;
+}
+
+.classic-marvel-heading p{
+  max-width:760px;
+  margin:10px auto 0;
+
+  color:#cbd5e1;
+
+  font-size:15px;
+  line-height:1.75;
+}
+
+
+/* ---------- シリーズ ---------- */
+
+.classic-marvel-series{
+  position:relative;
+
+  margin-top:24px;
+  padding:19px 20px;
+
+  border:1px solid rgba(148,163,184,.25);
+  border-left:4px solid #f59e0b;
+  border-radius:14px;
+
+  background:rgba(255,255,255,.055);
+}
+
+.classic-marvel-number{
+  position:absolute;
+
+  top:15px;
+  right:17px;
+
+  color:rgba(255,255,255,.20);
+
+  font-size:25px;
+  line-height:1;
+  font-weight:900;
+}
+
+.classic-marvel-title > span{
+  display:block;
+
+  margin-bottom:3px;
+
+  color:#fde68a;
+
+  font-size:14px;
+  line-height:1.4;
+  font-weight:900;
+}
+
+.classic-marvel-title h3{
+  margin:0;
+
+  color:#fff;
+
+  font-size:20px;
+  line-height:1.45;
+}
+
+.classic-marvel-sub{
+  margin:3px 0 0;
+
+  color:#94a3b8;
+
+  font-size:14px;
+  line-height:1.5;
+  font-weight:700;
+}
+
+
+/* ---------- 説明 ---------- */
+
+.classic-marvel-info{
+  margin-top:12px;
+}
+
+.classic-marvel-info > p{
+  margin:0;
+
+  color:#dbeafe;
+
+  font-size:15px;
+  line-height:1.7;
+}
+
+.classic-marvel-tags{
+  display:flex;
+  flex-wrap:wrap;
+
+  gap:7px;
+
+  margin-top:11px;
+}
+
+.classic-marvel-tags span{
+  display:inline-flex;
+  align-items:center;
+
+  padding:6px 9px;
+
+  border-radius:8px;
+
+  background:rgba(15,23,42,.55);
+  border:1px solid rgba(148,163,184,.20);
+
+  color:#cbd5e1;
+
+  font-size:14px;
+  line-height:1.4;
+  font-weight:700;
+}
+
+
+/* ---------- 映画カード ---------- */
+
+.classic-marvel-movies{
+  display:grid;
+
+  grid-template-columns:
+    repeat(3,minmax(0,1fr));
+
+  gap:12px;
+
+  margin-top:17px;
+}
+
+.classic-marvel-movie-card{
+  display:flex;
+  align-items:center;
+
+  gap:11px;
+
+  min-width:0;
+
+  padding:9px;
+
+  border:1px solid rgba(148,163,184,.22);
+  border-radius:10px;
+
+  background:rgba(15,23,42,.48);
+
+  color:#fff;
+  text-decoration:none;
+
+  transition:
+    transform .15s ease,
+    border-color .15s ease,
+    background .15s ease;
+}
+
+.classic-marvel-movie-card:hover{
+  transform:translateY(-2px);
+
+  border-color:rgba(251,191,36,.50);
+
+  background:rgba(30,41,59,.78);
+}
+
+.classic-marvel-movie-card img{
+  width:64px;
+  height:96px;
+
+  flex:0 0 64px;
+
+  object-fit:cover;
+
+  border-radius:7px;
+
+  border:1px solid rgba(255,255,255,.12);
+}
+
+.classic-marvel-movie-info{
+  min-width:0;
+}
+
+.classic-marvel-movie-info strong{
+  display:block;
+
+  color:#fff;
+
+  font-size:15px;
+  line-height:1.45;
+  font-weight:900;
+}
+
+.classic-marvel-movie-info span{
+  display:block;
+
+  margin-top:4px;
+
+  color:#94a3b8;
+
+  font-size:14px;
+  line-height:1.4;
+  font-weight:700;
+}
+
+.classic-marvel-movie-info small{
+  display:block;
+
+  margin-top:9px;
+
+  color:#fde68a;
+
+  font-size:14px;
+  line-height:1.4;
+  font-weight:800;
+}
+
+
+/* ---------- 各シリーズのアクセント ---------- */
+
+.classic-marvel-ghost{
+  border-left-color:#f97316;
+}
+
+.classic-marvel-ghost
+.classic-marvel-title > span{
+  color:#fdba74;
+}
+
+.classic-marvel-daredevil{
+  border-left-color:#ef4444;
+}
+
+.classic-marvel-daredevil
+.classic-marvel-title > span{
+  color:#fca5a5;
+}
+
+.classic-marvel-punisher{
+  border-left-color:#64748b;
+}
+
+.classic-marvel-punisher
+.classic-marvel-title > span{
+  color:#cbd5e1;
+}
+
+
+/* =====================================================
+   MORE OLD MARVEL MOVIES
+===================================================== */
+
+.classic-marvel-more{
+  margin-top:24px;
+
+  border:1px solid rgba(148,163,184,.24);
+  border-radius:12px;
+
+  background:rgba(15,23,42,.42);
+
+  overflow:hidden;
+}
+
+.classic-marvel-more summary{
+  position:relative;
+
+  padding:15px 48px 15px 16px;
+
+  color:#e2e8f0;
+
+  font-size:15px;
+  line-height:1.5;
+  font-weight:900;
+
+  cursor:pointer;
+
+  list-style:none;
+}
+
+.classic-marvel-more summary::-webkit-details-marker{
+  display:none;
+}
+
+.classic-marvel-more summary::after{
+  content:"＋";
+
+  position:absolute;
+
+  top:50%;
+  right:17px;
+
+  transform:translateY(-50%);
+
+  color:#94a3b8;
+
+  font-size:22px;
+  line-height:1;
+  font-weight:700;
+}
+
+.classic-marvel-more[open] summary::after{
+  content:"−";
+}
+
+.classic-marvel-more-inner{
+  padding:0 16px 16px;
+
+  border-top:1px solid rgba(148,163,184,.18);
+}
+
+.classic-marvel-more-intro{
+  margin:14px 0 0;
+
+  color:#94a3b8;
+
+  font-size:14px;
+  line-height:1.7;
+}
+
+
+/* 将来の作品リンク */
+
+.classic-marvel-more-list{
+  display:grid;
+
+  gap:7px;
+
+  margin-top:12px;
+}
+
+.classic-marvel-more-list a{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  gap:15px;
+
+  padding:10px 12px;
+
+  border:1px solid rgba(148,163,184,.18);
+  border-radius:8px;
+
+  background:rgba(255,255,255,.035);
+
+  color:#e2e8f0;
+
+  font-size:14px;
+  line-height:1.5;
+
+  text-decoration:none;
+}
+
+.classic-marvel-more-list a:hover{
+  background:rgba(255,255,255,.07);
+}
+
+.classic-marvel-more-list strong{
+  flex:0 0 auto;
+
+  color:#bfdbfe;
+
+  font-size:14px;
+}
+
+
+/* ---------- スマホ ---------- */
+
+@media(max-width:700px){
+
+  .classic-marvel-world{
+    margin-top:26px;
+    padding-top:24px;
+  }
+
+  .classic-marvel-heading h2{
+    font-size:22px;
+  }
+
+  .classic-marvel-heading p{
+    font-size:15px;
+  }
+
+  .classic-marvel-series{
+    padding:17px 14px;
+  }
+
+  .classic-marvel-number{
+    top:14px;
+    right:13px;
+
+    font-size:22px;
+  }
+
+  .classic-marvel-title h3{
+    padding-right:35px;
+
+    font-size:18px;
+  }
+
+  .classic-marvel-tags{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .classic-marvel-movies{
+    grid-template-columns:1fr;
+
+    gap:9px;
+  }
+
+  .classic-marvel-movie-card img{
+    width:70px;
+    height:105px;
+
+    flex-basis:70px;
+  }
+
+  .classic-marvel-more-list a{
+    align-items:flex-start;
+    flex-direction:column;
+
+    gap:4px;
+  }
+
+}
+
+/* =====================================================
+   MCU外・関連作品
+   シリーズ全体の横幅を統一
+===================================================== */
+
+#connectionsView .marvel-dc-guide,
+#connectionsView .spider-world,
+#connectionsView .xmen-world,
+#connectionsView .deadpool-world{
+  width:100%;
+  max-width:none;
+  box-sizing:border-box;
+}
+
+/* MCU外・関連作品
+   シリーズ見出し説明の横幅を少し広げる */
+
+.spider-world-heading p,
+.xmen-world-heading p,
+.deadpool-world-heading p,
+.fantastic-world-heading p,
+.sony-world-heading p{
+  max-width:760px;
+}
+
+/* =====================================================
+   スマホ
+===================================================== */
+
+@media(max-width:700px){
+
+  .spider-world{
+    margin-top:26px;
+    padding-top:24px;
+  }
+
+  .spider-world-heading h2{
+    font-size:22px;
+  }
+
+  .spider-world-heading p{
+    font-size:15px;
+  }
+
+  .spider-series{
+    padding:17px 14px;
+  }
+
+  .spider-series-number{
+    top:14px;
+    right:13px;
+
+    font-size:22px;
+  }
+
+  .spider-series-title h3{
+    padding-right:35px;
+
+    font-size:18px;
+  }
+
+  .spider-series-tags{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+}
   
 </style>
 
@@ -5382,7 +8064,2285 @@ a.mcu-tab{
     >
   </div>
 
+  <!-- =====================================================
+       MARVELとDCの違い
+  ====================================================== -->
+
+  <div class="marvel-dc-guide">
+
+    <div class="marvel-dc-guide-heading">
+      <span>💡 初心者向け</span>
+      <h3>あれ？ バットマンやスーパーマンは？</h3>
+      <p>
+        実は、バットマンやスーパーマンは
+        マーベルのヒーローではありません。
+        <strong>DC（DCコミックス）</strong>から生まれた、
+        別のヒーローたちです。
+      </p>
+    </div>
+
+    <div class="marvel-dc-compare">
+
+      <div class="marvel-dc-card marvel-side-card">
+        <div class="marvel-dc-name">
+          MARVEL
+          <small>マーベル</small>
+        </div>
+
+        <p class="marvel-dc-examples">
+          スパイダーマン ／ アイアンマン<br>
+          キャプテン・アメリカ ／ ソー<br>
+          X-MEN ／ デッドプール
+        </p>
+
+        <div class="marvel-dc-now">
+          ← 今、このページで紹介している世界
+        </div>
+      </div>
+
+      <div class="marvel-dc-vs">
+        VS
+      </div>
+
+      <div class="marvel-dc-card dc-side-card">
+        <div class="marvel-dc-name">
+          DC
+          <small>DCコミックス</small>
+        </div>
+
+        <p class="marvel-dc-examples">
+          バットマン ／ スーパーマン<br>
+          ワンダーウーマン ／ フラッシュ<br>
+          アクアマン など
+        </p>
+
+        <div class="marvel-dc-other">
+          → マーベルとは別のコミック作品
+        </div>
+      </div>
+
+    </div>
+
+    <p class="marvel-dc-note">
+      同じ「アメコミのヒーロー」でも、
+      MARVELとDCは別のグループ。
+      まずはここを分けて考えると、作品の世界がぐっと分かりやすくなります。
+    </p>
+
+  </div>
+
+<!-- =====================================================
+     MCU RELATED SERIES JUMP NAV
+===================================================== -->
+
+<nav
+  class="related-jump-nav"
+  aria-label="マーベル関連シリーズから探す"
+>
+
+  <div class="related-jump-title">
+    <span>🔎</span>
+    見たいシリーズへジャンプ
+  </div>
+
+  <div class="related-jump-buttons">
+
+    <a href="#related-spider">
+      🕷️ スパイダーマン
+    </a>
+
+    <a href="#related-xmen">
+      ❌ X-MEN
+    </a>
+
+    <a href="#related-deadpool">
+      🔴 デッドプール
+    </a>
+
+    <a href="#related-fantastic">
+      4️⃣ ファンタスティック4
+    </a>
+
+    <a href="#related-sony">
+      🕸️ ソニー関連
+    </a>
+
+    <a href="#related-classic">
+      🎞️ その他のマーベル
+    </a>
+
+  </div>
+
+</nav>
+
+<!-- =====================================================
+     スパイダーマンの世界
+====================================================== -->
+
+<section class="spider-world" id="related-spider">
+
+  <div class="spider-world-heading">
+
+    <span class="spider-world-badge">
+      🕷️ シリーズから探す
+    </span>
+
+    <h2>
+      スパイダーマンの世界
+    </h2>
+
+    <p>
+      スパイダーマン映画には、
+      実は<strong>3つの大きなシリーズ</strong>があります。
+      <br>
+      同じピーター・パーカーでも、
+      主演俳優や映画の世界がそれぞれ違います。
+    </p>
+
+  </div>
+
+
+  <div class="spider-series-list">
+
+
+    <!-- トビー・マグワイア版 -->
+
+    <div class="spider-series spider-series-tobey">
+
+      <div class="spider-series-number">
+        01
+      </div>
+
+      <div class="spider-series-title">
+
+        <span>
+          最初の3部作
+        </span>
+
+        <h3>
+          トビー・マグワイア版
+        </h3>
+
+        <p class="spider-series-sub">
+          サム・ライミ監督
+        </p>
+
+      </div>
+
+      <div class="spider-series-info">
+
+        <p>
+          2002年から始まった、
+          トビー・マグワイア主演のスパイダーマン3部作。
+        </p>
+
+        <div class="spider-series-tags">
+          <span>🎬 ソニー・ピクチャーズ</span>
+          <span>🌍 MCUとは別の世界からスタート</span>
+        </div>
+
+      </div>
+
+     <div class="spider-movies">
+
+  <a
+    class="spider-movie-card"
+    href="detail.html?id=557&type=movie"
+  >
+    <img
+      src="https://image.tmdb.org/t/p/w342/gh4cZbhZxyTbgxQPxD0dOudNPTn.jpg"
+      alt="スパイダーマン"
+      loading="lazy"
+    >
+
+    <div class="spider-movie-info">
+      <strong>スパイダーマン</strong>
+      <span>2002年</span>
+      <small>作品詳細を見る →</small>
+    </div>
+  </a>
+
+
+  <a
+    class="spider-movie-card"
+    href="detail.html?id=558&type=movie"
+  >
+    <img
+      src="https://image.tmdb.org/t/p/w342/aGuvNAaaZuWXYQQ6N2v7DeuP6mB.jpg"
+      alt="スパイダーマン2"
+      loading="lazy"
+    >
+
+    <div class="spider-movie-info">
+      <strong>スパイダーマン2</strong>
+      <span>2004年</span>
+      <small>作品詳細を見る →</small>
+    </div>
+  </a>
+
+
+  <a
+    class="spider-movie-card"
+    href="detail.html?id=559&type=movie"
+  >
+    <img
+      src="https://image.tmdb.org/t/p/w342/qFmwhVUoUSXjkKRmca5yGDEXBIj.jpg"
+      alt="スパイダーマン3"
+      loading="lazy"
+    >
+
+    <div class="spider-movie-info">
+      <strong>スパイダーマン3</strong>
+      <span>2007年</span>
+      <small>作品詳細を見る →</small>
+    </div>
+  </a>
+
+</div>
+
+    </div>
+
+
+    <!-- アンドリュー・ガーフィールド版 -->
+
+    <div class="spider-series spider-series-andrew">
+
+      <div class="spider-series-number">
+        02
+      </div>
+
+      <div class="spider-series-title">
+
+        <span>
+          新しく生まれ変わったシリーズ
+        </span>
+
+        <h3>
+          アンドリュー・ガーフィールド版
+        </h3>
+
+        <p class="spider-series-sub">
+        マーク・ウェブ監督
+        </p>
+
+      </div>
+
+      <div class="spider-series-info">
+
+        <p>
+          トビー版とは別の世界で、
+          新たに始まったスパイダーマンシリーズです。
+        </p>
+
+        <div class="spider-series-tags">
+          <span>🎬 ソニー・ピクチャーズ</span>
+          <span>🌍 MCUとは別の世界からスタート</span>
+        </div>
+
+      </div>
+
+      <div class="spider-movies">
+
+  <a
+    class="spider-movie-card"
+    href="detail.html?id=1930&type=movie"
+  >
+    <img
+      src="https://image.tmdb.org/t/p/w342/jexoNYnPd6vVrmygwF6QZmWPFdu.jpg"
+      alt="アメイジング・スパイダーマン"
+      loading="lazy"
+    >
+
+    <div class="spider-movie-info">
+      <strong>アメイジング・スパイダーマン</strong>
+      <span>2012年</span>
+      <small>作品詳細を見る →</small>
+    </div>
+  </a>
+
+
+  <a
+    class="spider-movie-card"
+    href="detail.html?id=102382&type=movie"
+  >
+    <img
+      src="https://image.tmdb.org/t/p/w342/bU7nTmvmy0h3VUP01v1T2imgH6N.jpg"
+      alt="アメイジング・スパイダーマン2"
+      loading="lazy"
+    >
+
+    <div class="spider-movie-info">
+      <strong>アメイジング・スパイダーマン2</strong>
+      <span>2014年</span>
+      <small>作品詳細を見る →</small>
+    </div>
+  </a>
+
+</div>
+
+    </div>
+
+
+    <!-- トム・ホランド版 -->
+
+    <div class="spider-series spider-series-tom">
+
+      <div class="spider-series-number">
+        03
+      </div>
+
+      <div class="spider-series-title">
+
+        <span>
+          MCUに参加
+        </span>
+
+        <h3>
+          トム・ホランド版
+        </h3>
+
+        <p class="spider-series-sub">
+          MCUのスパイダーマン
+        </p>
+
+      </div>
+
+      <div class="spider-series-info">
+
+        <p>
+        ソニーとマーベル・スタジオの協力によって、ここではじめてMCUの世界に仲間入りします。
+        </p>
+
+        <div class="spider-series-tags">
+          <span>🎬 ソニー ＋ マーベル・スタジオ</span>
+          <span>🌍 MCU</span>
+        </div>
+
+      </div>
+
+      <div class="spider-movies">
+
+  <a
+    class="spider-movie-card"
+    href="detail.html?id=315635&type=movie"
+  >
+    <img
+      src="https://image.tmdb.org/t/p/w342/c24sv2weTHPsmDa7jEMN0m2P3RT.jpg"
+      alt="スパイダーマン：ホームカミング"
+      loading="lazy"
+    >
+
+    <div class="spider-movie-info">
+      <strong>スパイダーマン：ホームカミング</strong>
+      <span>2017年</span>
+      <small>作品詳細を見る →</small>
+    </div>
+  </a>
+
+
+  <a
+    class="spider-movie-card"
+    href="detail.html?id=429617&type=movie"
+  >
+    <img
+      src="https://image.tmdb.org/t/p/w342/4q2NNj4S5dG2RLF9CpXsej7yXl.jpg"
+      alt="スパイダーマン：ファー・フロム・ホーム"
+      loading="lazy"
+    >
+
+    <div class="spider-movie-info">
+      <strong>スパイダーマン：ファー・フロム・ホーム</strong>
+      <span>2019年</span>
+      <small>作品詳細を見る →</small>
+    </div>
+  </a>
+
+
+  <a
+    class="spider-movie-card"
+    href="detail.html?id=634649&type=movie"
+  >
+    <img
+      src="https://image.tmdb.org/t/p/w342/5weKu49pzJCt06OPpjvT80efnQj.jpg"
+      alt="スパイダーマン：ノー・ウェイ・ホーム"
+      loading="lazy"
+    >
+
+    <div class="spider-movie-info">
+      <strong>スパイダーマン：ノー・ウェイ・ホーム</strong>
+      <span>2021年</span>
+      <small>作品詳細を見る →</small>
+    </div>
+  </a>
+
+</div>
+
+    </div>
+
+
+  </div>
+
 </section>
+
+<!-- =====================================================
+     X-MENの世界
+====================================================== -->
+
+<section class="xmen-world" id="related-xmen">
+  
+　　<div class="xmen-world-heading">
+
+    <span class="xmen-world-badge">
+      ❌ シリーズから探す
+    </span>
+
+    <h2>
+      X-MENの世界
+    </h2>
+
+    <p>
+      特別な能力を持つミュータントたちが、
+      人間との共存をめぐって戦うX-MENシリーズ。
+      <br>
+      まずは、映画シリーズの原点となった3部作から見てみましょう。
+    </p>
+
+  </div>
+
+
+  <div class="xmen-series">
+
+    <div class="xmen-series-number">
+      01
+    </div>
+
+    <div class="xmen-series-title">
+
+      <span>
+        X-MEN映画の原点
+      </span>
+
+      <h3>
+        オリジナル X-MEN 3部作
+      </h3>
+
+      <p class="xmen-series-sub">
+        プロフェッサーXたち、おなじみのX-MENが活躍
+      </p>
+
+    </div>
+
+
+    <div class="xmen-series-info">
+
+      <p>
+        プロフェッサーXとマグニートーを中心に、
+        ウルヴァリンやストームたちの物語が描かれる最初のシリーズです。
+      </p>
+
+      <div class="xmen-series-tags">
+        <span>🎬 20世紀フォックス</span>
+        <span>🌍 MCUとは別の世界からスタート</span>
+      </div>
+
+    </div>
+
+
+    <div class="xmen-movies">
+
+  <a
+    class="xmen-movie-card"
+    href="detail.html?id=36657&type=movie"
+  >
+    <img
+      src="https://image.tmdb.org/t/p/w342/bRDAc4GogyS9ci3ow7UnInOcriN.jpg"
+      alt="X-MEN"
+      loading="lazy"
+    >
+
+    <div class="xmen-movie-info">
+      <strong>X-MEN</strong>
+      <span>2000年</span>
+      <small>作品詳細を見る →</small>
+    </div>
+  </a>
+
+
+  <a
+    class="xmen-movie-card"
+    href="detail.html?id=36658&type=movie"
+  >
+    
+  <img
+  src="https://image.tmdb.org/t/p/w342/axu6yoVMnoXIPL2XTIxXRVq2JGL.jpg"
+  alt="X-MEN2"
+  loading="lazy"
+>
+
+    <div class="xmen-movie-info">
+      <strong>X-MEN2</strong>
+      <span>2003年</span>
+      <small>作品詳細を見る →</small>
+    </div>
+  </a>
+
+
+  <a
+    class="xmen-movie-card"
+    href="detail.html?id=36668&type=movie"
+  >
+    <img
+      src="https://image.tmdb.org/t/p/w342/a2xicU8DpKtRizOHjQLC1JyCSRS.jpg"
+      alt="X-MEN：ファイナル ディシジョン"
+      loading="lazy"
+    >
+
+    <div class="xmen-movie-info">
+      <strong>X-MEN：ファイナル ディシジョン</strong>
+      <span>2006年</span>
+      <small>作品詳細を見る →</small>
+    </div>
+  </a>
+
+</div>
+
+  </div>
+
+<!-- =====================================================
+     02 若き日のX-MEN
+====================================================== -->
+
+<div class="xmen-series xmen-series-young">
+
+  <div class="xmen-series-number">
+    02
+  </div>
+
+  <div class="xmen-series-title">
+
+    <span>
+      X-MENの過去へ
+    </span>
+
+    <h3>
+      若き日のX-MEN
+    </h3>
+
+    <p class="xmen-series-sub">
+      若き日のプロフェッサーXとマグニートー
+    </p>
+
+  </div>
+
+
+  <div class="xmen-series-info">
+
+    <p>
+      若き日のプロフェッサーXとマグニートーを中心に、
+      X-MENがどのように始まったのかを描くシリーズです。
+    </p>
+
+    <div class="xmen-series-tags">
+      <span>🎬 20世紀フォックス</span>
+      <span>🕐 オリジナル3部作より前の時代からスタート</span>
+    </div>
+
+  </div>
+
+
+  <div class="xmen-movies">
+
+
+    <!-- ファースト・ジェネレーション -->
+
+    <a
+      class="xmen-movie-card"
+      href="detail.html?id=49538&type=movie"
+    >
+
+      <img
+        src="https://image.tmdb.org/t/p/w342/9ClbjVada4E8vUtoq7YfBdLwPSj.jpg"
+        alt="X-MEN：ファースト・ジェネレーション"
+        loading="lazy"
+      >
+
+      <div class="xmen-movie-info">
+
+        <strong>
+          X-MEN：ファースト・ジェネレーション
+        </strong>
+
+        <span>
+          2011年
+        </span>
+
+        <small>
+          作品詳細を見る →
+        </small>
+
+      </div>
+
+    </a>
+
+
+    <!-- フューチャー＆パスト -->
+
+    <a
+      class="xmen-movie-card xmen-movie-bridge"
+      href="detail.html?id=127585&type=movie"
+    >
+
+      <img
+        src="https://image.tmdb.org/t/p/w342/v3nzutbUIGZROj82ZrPpVvx8xwU.jpg"
+        alt="X-MEN：フューチャー＆パスト"
+        loading="lazy"
+      >
+
+      <div class="xmen-movie-info">
+
+        <strong>
+          X-MEN：フューチャー＆パスト
+        </strong>
+
+        <span>
+          2014年
+        </span>
+
+        <small>
+          作品詳細を見る →
+        </small>
+
+      </div>
+
+    </a>
+
+
+    <!-- アポカリプス -->
+
+    <a
+      class="xmen-movie-card"
+      href="detail.html?id=246655&type=movie"
+    >
+
+      <img
+        src="https://image.tmdb.org/t/p/w342/wK8pmNSzfdnYTBROt4veWJ0FC2w.jpg"
+        alt="X-MEN：アポカリプス"
+        loading="lazy"
+      >
+
+      <div class="xmen-movie-info">
+
+        <strong>
+          X-MEN：アポカリプス
+        </strong>
+
+        <span>
+          2016年
+        </span>
+
+        <small>
+          作品詳細を見る →
+        </small>
+
+      </div>
+
+    </a>
+
+
+    <!-- ダーク・フェニックス -->
+
+    <a
+      class="xmen-movie-card"
+      href="detail.html?id=320288&type=movie"
+    >
+
+      <img
+        src="https://image.tmdb.org/t/p/w342/h1H2eBYr2mmqjr0NPofK3ZPSRCt.jpg"
+        alt="X-MEN：ダーク・フェニックス"
+        loading="lazy"
+      >
+
+      <div class="xmen-movie-info">
+
+        <strong>
+          X-MEN：ダーク・フェニックス
+        </strong>
+
+        <span>
+          2019年
+        </span>
+
+        <small>
+          作品詳細を見る →
+        </small>
+
+      </div>
+
+    </a>
+
+  </div>
+
+
+  <div class="xmen-bridge-note">
+    🔀 『フューチャー＆パスト』で、
+    オリジナル世代と若い世代の物語がつながります。
+  </div>
+
+</div>
+
+
+<!-- =====================================================
+     03 ウルヴァリン
+====================================================== -->
+
+<div class="xmen-series xmen-series-wolverine">
+
+  <div class="xmen-series-number">
+    03
+  </div>
+
+  <div class="xmen-series-title">
+
+  <span>
+    人気キャラクターをもっと深く
+  </span>
+
+  <h3>
+    ウルヴァリン単独シリーズ
+  </h3>
+
+  <p class="xmen-series-sub">
+    その過去から、ひとつの物語の終着点まで
+  </p>
+
+</div>
+
+
+<div class="xmen-series-info">
+
+  <p>
+    X-MENシリーズの中心人物のひとり、
+    ウルヴァリンを主役に描いた3作品です。
+  </p>
+
+  <div class="xmen-series-tags">
+    <span>🐺 単独作品</span>
+    <span>🌍 X-MENの世界</span>
+  </div>
+
+</div>
+
+
+  <div class="xmen-movies">
+
+
+    <!-- ウルヴァリン：X-MEN ZERO -->
+
+    <a
+      class="xmen-movie-card"
+      href="detail.html?id=2080&type=movie"
+    >
+
+      <img
+        src="https://image.tmdb.org/t/p/w342/r080DGEBrur8yZ6LMztafAoPC3e.jpg"
+        alt="ウルヴァリン：X-MEN ZERO"
+        loading="lazy"
+      >
+
+      <div class="xmen-movie-info">
+
+        <strong>
+          ウルヴァリン：X-MEN ZERO
+        </strong>
+
+        <span>
+          2009年
+        </span>
+
+        <small>
+          作品詳細を見る →
+        </small>
+
+      </div>
+
+    </a>
+
+
+    <!-- ウルヴァリン：SAMURAI -->
+
+    <a
+      class="xmen-movie-card"
+      href="detail.html?id=76170&type=movie"
+    >
+
+      <img
+        src="https://image.tmdb.org/t/p/w342/xIfVsRobT3MZ5hTlCetDILE2zS.jpg"
+        alt="ウルヴァリン：SAMURAI"
+        loading="lazy"
+      >
+
+      <div class="xmen-movie-info">
+
+        <strong>
+          ウルヴァリン：SAMURAI
+        </strong>
+
+        <span>
+          2013年
+        </span>
+
+        <small>
+          作品詳細を見る →
+        </small>
+
+      </div>
+
+    </a>
+
+
+    <!-- LOGAN／ローガン -->
+
+    <a
+      class="xmen-movie-card"
+      href="detail.html?id=263115&type=movie"
+    >
+
+      <img
+        src="https://image.tmdb.org/t/p/w342/3sycsHgzaq5K9Q5wJ0rprURe6p9.jpg"
+        alt="LOGAN／ローガン"
+        loading="lazy"
+      >
+
+      <div class="xmen-movie-info">
+
+        <strong>
+          LOGAN／ローガン
+        </strong>
+
+        <span>
+          2017年
+        </span>
+
+        <small>
+          作品詳細を見る →
+        </small>
+
+      </div>
+
+    </a>
+
+  </div>
+
+</div>
+
+</section>
+
+<!-- =====================================================
+     デッドプールの世界
+====================================================== -->
+
+<section class="deadpool-world" id="related-deadpool">
+
+  <div class="deadpool-world-heading">
+
+    <span class="deadpool-world-badge">
+      🔴 シリーズから探す
+    </span>
+
+    <h2>
+      デッドプールの世界
+    </h2>
+
+    <p>
+      型破りなヒーロー、デッドプールを主人公にしたシリーズ。
+      <br>
+      まずは最初の2作品を見て、
+      その先のMCUとのつながりへ進んでみましょう。
+    </p>
+
+  </div>
+
+
+  <div class="deadpool-series">
+
+    <div class="deadpool-series-number">
+      01
+    </div>
+
+    <div class="deadpool-series-title">
+
+      <span>
+        まずはここから
+      </span>
+
+      <h3>
+        デッドプールシリーズ
+      </h3>
+
+      <p class="deadpool-series-sub">
+        独自の世界から始まった2作品
+      </p>
+
+    </div>
+
+
+    <div class="deadpool-series-info">
+
+      <p>
+        デッドプールの物語は、
+        MCUとは別の世界からスタートします。
+      </p>
+
+      <div class="deadpool-series-tags">
+        <span>🎬 20世紀フォックス</span>
+        <span>🌍 MCUとは別の世界からスタート</span>
+      </div>
+
+    </div>
+
+
+    <div class="deadpool-movies">
+
+      <!-- デッドプール -->
+
+      <a
+        class="deadpool-movie-card"
+        href="detail.html?id=293660&type=movie"
+      >
+
+        <img
+          src="https://image.tmdb.org/t/p/w342/zhqrRtBVHAbHqLl9O5dMYAHeyFH.jpg"
+          alt="デッドプール"
+          loading="lazy"
+        >
+
+        <div class="deadpool-movie-info">
+
+          <strong>
+            デッドプール
+          </strong>
+
+          <span>
+            2016年
+          </span>
+
+          <small>
+            作品詳細を見る →
+          </small>
+
+        </div>
+
+      </a>
+
+
+      <!-- デッドプール2 -->
+
+      <a
+        class="deadpool-movie-card"
+        href="detail.html?id=383498&type=movie"
+      >
+
+        <img
+          src="https://image.tmdb.org/t/p/w342/5nwP7IpkgSXdRfZ9qipTsmx6Wne.jpg"
+          alt="デッドプール2"
+          loading="lazy"
+        >
+
+        <div class="deadpool-movie-info">
+
+          <strong>
+            デッドプール2
+          </strong>
+
+          <span>
+            2018年
+          </span>
+
+          <small>
+            作品詳細を見る →
+          </small>
+
+        </div>
+
+      </a>
+
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
+       MCUとのつながり
+  ====================================================== -->
+
+  <div class="deadpool-series deadpool-series-mcu">
+
+    <div class="deadpool-series-number">
+      02
+    </div>
+
+    <div class="deadpool-series-title">
+
+      <span>
+        MCUとのつながりへ
+      </span>
+
+      <h3>
+        デッドプール＆ウルヴァリン
+      </h3>
+
+      <p class="deadpool-series-sub">
+        2つのシリーズが交差する物語
+      </p>
+
+    </div>
+
+
+    <div class="deadpool-series-info">
+
+      <p>
+        デッドプールとウルヴァリンが共演し、
+        MCUやマルチバースとのつながりが大きく広がります。
+      </p>
+
+      <div class="deadpool-series-tags">
+        <span>🌐 MCUとのつながり</span>
+        <span>🐺 ウルヴァリン登場</span>
+      </div>
+
+    </div>
+
+
+    <div class="deadpool-movies deadpool-movies-single">
+
+      <a
+        class="deadpool-movie-card"
+        href="detail.html?id=533535&type=movie"
+      >
+
+        <img
+          src="https://image.tmdb.org/t/p/w342/3kQ7wDhrAd02fEwSBGQ1ZtCJDze.jpg"
+          alt="デッドプール＆ウルヴァリン"
+          loading="lazy"
+        >
+
+        <div class="deadpool-movie-info">
+
+          <strong>
+            デッドプール＆ウルヴァリン
+          </strong>
+
+          <span>
+            2024年
+          </span>
+
+          <small>
+            作品詳細を見る →
+          </small>
+
+        </div>
+
+      </a>
+
+    </div>
+
+  </div>
+
+
+
+</section>
+
+<!-- =====================================================
+     FANTASTIC FOUR WORLD
+===================================================== -->
+
+<section class="fantastic-world" id="related-fantastic">
+
+  <div class="fantastic-world-heading">
+
+    <span class="fantastic-world-badge">
+      🔵 シリーズから探す
+    </span>
+
+    <h2>
+      ファンタスティック・フォーの世界
+    </h2>
+
+    <p>
+      マーベルを代表するヒーローチームのひとつ、
+      ファンタスティック・フォー。
+      <br>
+      映画では何度か新しく作り直されているため、
+      <strong>3つのシリーズに分けて見る</strong>と分かりやすくなります。
+    </p>
+
+  </div>
+
+
+  <!-- =================================================
+       01 2005・2007
+  ================================================== -->
+
+  <div class="fantastic-series fantastic-series-original">
+
+    <div class="fantastic-series-number">
+      01
+    </div>
+
+    <div class="fantastic-series-title">
+
+      <span>
+        まずは最初の映画シリーズ
+      </span>
+
+      <h3>
+        旧ファンタスティック・フォー
+      </h3>
+
+      <p class="fantastic-series-sub">
+        2005年から始まった2作品
+      </p>
+
+    </div>
+
+
+    <div class="fantastic-series-info">
+
+      <p>
+        4人のヒーローが誕生し、
+        チームとして活躍していく最初の映画シリーズです。
+      </p>
+
+      <div class="fantastic-series-tags">
+
+        <span>
+          🎬 2005年スタート
+        </span>
+
+        <span>
+          👥 4人のヒーローチーム
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <div class="fantastic-movies">
+
+      <a
+        class="fantastic-movie-card"
+        href="detail.html?id=9738&type=movie"
+      >
+
+        <img
+          src="https://image.tmdb.org/t/p/w342/cba6ju8CgRQVmbs86vfl0Nn91rB.jpg"
+          alt="ファンタスティック・フォー ［超能力ユニット］"
+          loading="lazy"
+        >
+
+        <div class="fantastic-movie-info">
+
+          <strong>
+            ファンタスティック・フォー<br>
+            ［超能力ユニット］
+          </strong>
+
+          <span>
+            2005
+          </span>
+
+          <small>
+            詳細を見る →
+          </small>
+
+        </div>
+
+      </a>
+
+
+      <a
+        class="fantastic-movie-card"
+        href="detail.html?id=1979&type=movie"
+      >
+
+        <img
+          src="https://image.tmdb.org/t/p/w342/8iMXNYOee3xIskzh6ox7DgYkHZF.jpg"
+          alt="ファンタスティック・フォー：銀河の危機"
+          loading="lazy"
+        >
+
+        <div class="fantastic-movie-info">
+
+          <strong>
+            ファンタスティック・フォー：<br>
+            銀河の危機
+          </strong>
+
+          <span>
+            2007
+          </span>
+
+          <small>
+            詳細を見る →
+          </small>
+
+        </div>
+
+      </a>
+
+    </div>
+
+  </div>
+
+
+  <!-- =================================================
+       02 2015 REBOOT
+  ================================================== -->
+
+  <div class="fantastic-series fantastic-series-reboot">
+
+    <div class="fantastic-series-number">
+      02
+    </div>
+
+    <div class="fantastic-series-title">
+
+      <span>
+        新しい設定で再スタート
+      </span>
+
+      <h3>
+        2015年 リブート版
+      </h3>
+
+      <p class="fantastic-series-sub">
+        前の2作品とは別の物語
+      </p>
+
+    </div>
+
+
+    <div class="fantastic-series-info">
+
+      <p>
+        キャストや設定を一新して作られた、
+        2005年版とはつながらない新しいファンタスティック・フォーです。
+      </p>
+
+      <div class="fantastic-series-tags">
+
+        <span>
+          🔄 リブート
+        </span>
+
+        <span>
+          🌍 旧シリーズとは別の世界
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <div class="fantastic-movies fantastic-movies-single">
+
+      <a
+        class="fantastic-movie-card"
+        href="detail.html?id=166424&type=movie"
+      >
+
+        <img
+          src="https://image.tmdb.org/t/p/w342/zqgdH80qschXeClxIU5mPvicBTz.jpg"
+          alt="ファンタスティック・フォー"
+          loading="lazy"
+        >
+
+        <div class="fantastic-movie-info">
+
+          <strong>
+            ファンタスティック・フォー
+          </strong>
+
+          <span>
+            2015
+          </span>
+
+          <small>
+            詳細を見る →
+          </small>
+
+        </div>
+
+      </a>
+
+    </div>
+
+  </div>
+
+
+  <!-- =================================================
+       03 MCU
+  ================================================== -->
+
+  <div class="fantastic-series fantastic-series-mcu">
+
+    <div class="fantastic-series-number">
+      03
+    </div>
+
+    <div class="fantastic-series-title">
+
+      <span>
+        MCUのファンタスティック4へ
+      </span>
+
+      <h3>
+        ファンタスティック4：ファースト・ステップ
+      </h3>
+
+      <p class="fantastic-series-sub">
+        MCUで新しく始まったファンタスティック4
+      </p>
+
+    </div>
+
+
+    <div class="fantastic-series-info">
+
+      <p>
+        これまでの映画シリーズの続編ではなく、
+        MCUで新しく描かれるファンタスティック4の物語です。
+      </p>
+
+      <div class="fantastic-series-tags">
+
+        <span>
+          🌐 MCU
+        </span>
+
+        <span>
+          ✨ 新しいファンタスティック4
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <div class="fantastic-movies fantastic-movies-single">
+
+      <a
+        class="fantastic-movie-card"
+        href="detail.html?id=617126&type=movie"
+      >
+
+        <img
+          src="https://image.tmdb.org/t/p/w342/7AuLDxII9LcORX4dFa0QeXTqjyC.jpg"
+          alt="ファンタスティック４：ファースト・ステップ"
+          loading="lazy"
+        >
+
+        <div class="fantastic-movie-info">
+
+          <strong>
+            ファンタスティック4：<br>
+            ファースト・ステップ
+          </strong>
+
+          <span>
+            2025
+          </span>
+
+          <small>
+            詳細を見る →
+          </small>
+
+        </div>
+
+      </a>
+
+    </div>
+
+  </div>
+
+<!-- =====================================================
+     SONY SPIDER-MAN RELATED WORLD
+===================================================== -->
+
+<section class="sony-world" id="related-sony">
+
+  <div class="sony-world-heading">
+
+    <span class="sony-world-badge">
+      🕸️ シリーズから探す
+    </span>
+
+    <h2>
+      ソニーのスパイダーマン関連作品
+    </h2>
+
+    <p>
+      スパイダーマンのコミックに登場するキャラクターたちを
+      主人公にした、ソニーのマーベル映画です。
+      <br>
+      <strong>MCUとは別の世界から始まった作品</strong>として見ると、
+      関係が分かりやすくなります。
+    </p>
+
+  </div>
+
+
+  <!-- =================================================
+       01 VENOM
+  ================================================== -->
+
+  <div class="sony-series sony-series-venom">
+
+    <div class="sony-series-number">
+      01
+    </div>
+
+    <div class="sony-series-title">
+
+      <span>
+        まずはこのシリーズ
+      </span>
+
+      <h3>
+        ヴェノムシリーズ
+      </h3>
+
+      <p class="sony-series-sub">
+        ヴェノムとエディ・ブロックを描く3作品
+      </p>
+
+    </div>
+
+
+    <div class="sony-series-info">
+
+      <p>
+        スパイダーマンのコミックから生まれた人気キャラクター、
+        ヴェノムを主人公にしたシリーズです。
+      </p>
+
+      <div class="sony-series-tags">
+
+        <span>
+          🖤 ヴェノム
+        </span>
+
+        <span>
+          🕸️ スパイダーマン関連
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <div class="sony-movies">
+
+      <a
+        class="sony-movie-card"
+        href="detail.html?id=335983&type=movie"
+      >
+
+        <img
+          src="https://image.tmdb.org/t/p/w342/oCB5jiWP91b7F8HM5LZY9S8uQjW.jpg"
+          alt="ヴェノム"
+          loading="lazy"
+        >
+
+        <div class="sony-movie-info">
+
+          <strong>
+            ヴェノム
+          </strong>
+
+          <span>
+            2018
+          </span>
+
+          <small>
+            詳細を見る →
+          </small>
+
+        </div>
+
+      </a>
+
+
+      <a
+        class="sony-movie-card"
+        href="detail.html?id=580489&type=movie"
+      >
+
+        <img
+          src="https://image.tmdb.org/t/p/w342/nT7UzSEAB0mfyOzlv40BiMSiavl.jpg"
+          alt="ヴェノム：レット・ゼア・ビー・カーネイジ"
+          loading="lazy"
+        >
+
+        <div class="sony-movie-info">
+
+          <strong>
+            ヴェノム：レット・ゼア・ビー・カーネイジ
+          </strong>
+
+          <span>
+            2021
+          </span>
+
+          <small>
+            詳細を見る →
+          </small>
+
+        </div>
+
+      </a>
+
+
+      <a
+        class="sony-movie-card"
+        href="detail.html?id=912649&type=movie"
+      >
+
+        <img
+          src="https://image.tmdb.org/t/p/w342/9fYBXUeXhb7vMaSQdjrBSYZ9O7P.jpg"
+          alt="ヴェノム：ザ・ラストダンス"
+          loading="lazy"
+        >
+
+        <div class="sony-movie-info">
+
+          <strong>
+            ヴェノム：ザ・ラストダンス
+          </strong>
+
+          <span>
+            2024
+          </span>
+
+          <small>
+            詳細を見る →
+          </small>
+
+        </div>
+
+      </a>
+
+    </div>
+
+  </div>
+
+
+  <!-- =================================================
+       02 OTHER SONY MARVEL MOVIES
+  ================================================== -->
+
+  <div class="sony-series sony-series-other">
+
+    <div class="sony-series-number">
+      02
+    </div>
+
+    <div class="sony-series-title">
+
+      <span>
+        さらに広がる関連作品
+      </span>
+
+      <h3>
+        その他のソニー系マーベル作品
+      </h3>
+
+      <p class="sony-series-sub">
+        スパイダーマンのコミックから広がったキャラクターたち
+      </p>
+
+    </div>
+
+
+    <div class="sony-series-info">
+
+      <p>
+        モービウス、マダム・ウェブ、クレイヴンなど、
+        スパイダーマン作品にゆかりのあるキャラクターを
+        主人公にした映画です。
+      </p>
+
+      <div class="sony-series-tags">
+
+        <span>
+          🕸️ スパイダーマン関連
+        </span>
+
+        <span>
+          🎬 ソニー作品
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <div class="sony-movies">
+
+      <a
+        class="sony-movie-card"
+        href="detail.html?id=526896&type=movie"
+      >
+
+        <img
+          src="https://image.tmdb.org/t/p/w342/nm3cQlgz0BfQTtG6Cqg63pAREaY.jpg"
+          alt="モービウス"
+          loading="lazy"
+        >
+
+        <div class="sony-movie-info">
+
+          <strong>
+            モービウス
+          </strong>
+
+          <span>
+            2022
+          </span>
+
+          <small>
+            詳細を見る →
+          </small>
+
+        </div>
+
+      </a>
+
+
+      <a
+        class="sony-movie-card"
+        href="detail.html?id=634492&type=movie"
+      >
+
+        <img
+          src="https://image.tmdb.org/t/p/w342/zdA3oevwpok36fAVhxaj6dfAo3Y.jpg"
+          alt="マダム・ウェブ"
+          loading="lazy"
+        >
+
+        <div class="sony-movie-info">
+
+          <strong>
+            マダム・ウェブ
+          </strong>
+
+          <span>
+            2024
+          </span>
+
+          <small>
+            詳細を見る →
+          </small>
+
+        </div>
+
+      </a>
+
+
+      <a
+        class="sony-movie-card"
+        href="detail.html?id=539972&type=movie"
+      >
+
+        <img
+          src="https://image.tmdb.org/t/p/w342/zsdPZIhwiv07jnrKjlrctokoNMp.jpg"
+          alt="クレイヴン・ザ・ハンター"
+          loading="lazy"
+        >
+
+        <div class="sony-movie-info">
+
+          <strong>
+            クレイヴン・ザ・ハンター
+          </strong>
+
+          <span>
+            2024
+          </span>
+
+          <small>
+            詳細を見る →
+          </small>
+
+        </div>
+
+      </a>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- =====================================================
+     CLASSIC / OTHER MARVEL MOVIES
+===================================================== -->
+
+<section class="classic-marvel-world" id="related-classic">
+
+  <div class="classic-marvel-heading">
+
+    <span class="classic-marvel-badge">
+      🎞️ こんな作品もマーベル
+    </span>
+
+    <h2>
+      MCU以前・その他のマーベル映画
+    </h2>
+
+    <p>
+      MCUが始まる前から、
+      マーベルのキャラクターたちはさまざまな映画で活躍してきました。
+      <br>
+      ここでは、代表的な実写映画シリーズをまとめて紹介します。
+    </p>
+
+  </div>
+
+
+  <!-- =================================================
+       01 BLADE
+  ================================================== -->
+
+  <div class="classic-marvel-series classic-marvel-blade">
+
+    <div class="classic-marvel-number">
+      01
+    </div>
+
+    <div class="classic-marvel-title">
+
+      <span>
+        吸血鬼と戦うダークヒーロー
+      </span>
+
+      <h3>
+        ブレイドシリーズ
+      </h3>
+
+      <p class="classic-marvel-sub">
+        1998年から続いた3部作
+      </p>
+
+    </div>
+
+
+    <div class="classic-marvel-info">
+
+      <p>
+        人間と吸血鬼の血を引くブレイドを主人公にした、
+        ダークな雰囲気のアクションシリーズです。
+      </p>
+
+      <div class="classic-marvel-tags">
+
+        <span>
+          🧛 吸血鬼
+        </span>
+
+        <span>
+          ⚔️ ダークヒーロー
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <div class="classic-marvel-movies">
+
+      <a
+        class="classic-marvel-movie-card"
+        href="detail.html?id=36647&type=movie"
+      >
+
+        <img
+          src="https://image.tmdb.org/t/p/w342/sBT3LwOubAYf8PhODQbC02g3L4T.jpg"
+          alt="ブレイド"
+          loading="lazy"
+        >
+
+        <div class="classic-marvel-movie-info">
+
+          <strong>
+            ブレイド
+          </strong>
+
+          <span>
+            1998
+          </span>
+
+          <small>
+            詳細を見る →
+          </small>
+
+        </div>
+
+      </a>
+
+
+      <a
+        class="classic-marvel-movie-card"
+        href="detail.html?id=36586&type=movie"
+      >
+
+        <img
+          src="https://image.tmdb.org/t/p/w342/hrFaz7FmBY8DRJ2tY9GliAfum4z.jpg"
+          alt="ブレイド2"
+          loading="lazy"
+        >
+
+        <div class="classic-marvel-movie-info">
+
+          <strong>
+            ブレイド2
+          </strong>
+
+          <span>
+            2002
+          </span>
+
+          <small>
+            詳細を見る →
+          </small>
+
+        </div>
+
+      </a>
+
+
+      <a
+        class="classic-marvel-movie-card"
+        href="detail.html?id=36648&type=movie"
+      >
+
+        <img
+          src="https://image.tmdb.org/t/p/w342/lNMtF62HCd6Z62F668Mkl6ATBFc.jpg"
+          alt="ブレイド3"
+          loading="lazy"
+        >
+
+        <div class="classic-marvel-movie-info">
+
+          <strong>
+            ブレイド3
+          </strong>
+
+          <span>
+            2004
+          </span>
+
+          <small>
+            詳細を見る →
+          </small>
+
+        </div>
+
+      </a>
+
+    </div>
+
+  </div>
+
+
+  <!-- =================================================
+       02 GHOST RIDER
+  ================================================== -->
+
+  <div class="classic-marvel-series classic-marvel-ghost">
+
+    <div class="classic-marvel-number">
+      02
+    </div>
+
+    <div class="classic-marvel-title">
+
+      <span>
+        炎をまとった異色のヒーロー
+      </span>
+
+      <h3>
+        ゴーストライダー
+      </h3>
+
+      <p class="classic-marvel-sub">
+        ニコラス・ケイジ主演の2作品
+      </p>
+
+    </div>
+
+
+    <div class="classic-marvel-info">
+
+      <p>
+        炎に包まれた姿で悪と戦う、
+        マーベルの超自然系ヒーローを描いたシリーズです。
+      </p>
+
+      <div class="classic-marvel-tags">
+
+        <span>
+          🔥 ゴーストライダー
+        </span>
+
+        <span>
+          🏍️ 超自然アクション
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <div class="classic-marvel-movies">
+
+      <a
+        class="classic-marvel-movie-card"
+        href="detail.html?id=1250&type=movie"
+      >
+
+        <img
+          src="https://image.tmdb.org/t/p/w342/ljhrNk3XCCQhi8bfEh7KeJNbGUU.jpg"
+          alt="ゴーストライダー"
+          loading="lazy"
+        >
+
+        <div class="classic-marvel-movie-info">
+
+          <strong>
+            ゴーストライダー
+          </strong>
+
+          <span>
+            2007
+          </span>
+
+          <small>
+            詳細を見る →
+          </small>
+
+        </div>
+
+      </a>
+
+
+      <a
+        class="classic-marvel-movie-card"
+        href="detail.html?id=71676&type=movie"
+      >
+
+        <img
+          src="https://image.tmdb.org/t/p/w342/iByGhV0lBKmy4spPMxPck1imdK7.jpg"
+          alt="ゴーストライダー2"
+          loading="lazy"
+        >
+
+        <div class="classic-marvel-movie-info">
+
+          <strong>
+            ゴーストライダー2
+          </strong>
+
+          <span>
+            2011
+          </span>
+
+          <small>
+            詳細を見る →
+          </small>
+
+        </div>
+
+      </a>
+
+    </div>
+
+  </div>
+
+
+  <!-- =================================================
+       03 DAREDEVIL / ELEKTRA
+  ================================================== -->
+
+  <div class="classic-marvel-series classic-marvel-daredevil">
+
+    <div class="classic-marvel-number">
+      03
+    </div>
+
+    <div class="classic-marvel-title">
+
+      <span>
+        街を舞台にしたヒーローたち
+      </span>
+
+      <h3>
+        デアデビル ＆ エレクトラ
+      </h3>
+
+      <p class="classic-marvel-sub">
+        2003年の映画からつながる2作品
+      </p>
+
+    </div>
+
+
+    <div class="classic-marvel-info">
+
+      <p>
+        デアデビルの映画から、
+        エレクトラを主人公にした作品へとつながります。
+      </p>
+
+      <div class="classic-marvel-tags">
+
+        <span>
+          😈 デアデビル
+        </span>
+
+        <span>
+          ⚔️ エレクトラ
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <div class="classic-marvel-movies">
+
+      <a
+        class="classic-marvel-movie-card"
+        href="detail.html?id=9480&type=movie"
+      >
+
+        <img
+          src="https://image.tmdb.org/t/p/w342/x8dPTzjEeal1KQb5TwmmF4OoGUK.jpg"
+          alt="デアデビル"
+          loading="lazy"
+        >
+
+        <div class="classic-marvel-movie-info">
+
+          <strong>
+            デアデビル
+          </strong>
+
+          <span>
+            2003
+          </span>
+
+          <small>
+            詳細を見る →
+          </small>
+
+        </div>
+
+      </a>
+
+
+      <a
+        class="classic-marvel-movie-card"
+        href="detail.html?id=9947&type=movie"
+      >
+
+        <img
+          src="https://image.tmdb.org/t/p/w342/t79MwIBDLS8zsF0imrkfkMVXoKQ.jpg"
+          alt="エレクトラ"
+          loading="lazy"
+        >
+
+        <div class="classic-marvel-movie-info">
+
+          <strong>
+            エレクトラ
+          </strong>
+
+          <span>
+            2005
+          </span>
+
+          <small>
+            詳細を見る →
+          </small>
+
+        </div>
+
+      </a>
+
+    </div>
+
+  </div>
+
+
+  <!-- =================================================
+       04 PUNISHER
+  ================================================== -->
+
+  <div class="classic-marvel-series classic-marvel-punisher">
+
+    <div class="classic-marvel-number">
+      04
+    </div>
+
+    <div class="classic-marvel-title">
+
+      <span>
+        正義と復讐を描くアンチヒーロー
+      </span>
+
+      <h3>
+        パニッシャー
+      </h3>
+
+      <p class="classic-marvel-sub">
+        異なる設定で作られた2つの映画
+      </p>
+
+    </div>
+
+
+    <div class="classic-marvel-info">
+
+      <p>
+        犯罪者への復讐を続けるフランク・キャッスルを描いた作品。
+        2本は同じシリーズの続編ではなく、別の映画版として楽しめます。
+      </p>
+
+      <div class="classic-marvel-tags">
+
+        <span>
+          💀 パニッシャー
+        </span>
+
+        <span>
+          🔄 別設定の映画版
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <div class="classic-marvel-movies">
+
+      <a
+        class="classic-marvel-movie-card"
+        href="detail.html?id=7220&type=movie"
+      >
+
+        <img
+          src="https://image.tmdb.org/t/p/w342/zFul3uk7P5kqQVXm9OLTqBNoSqC.jpg"
+          alt="パニッシャー"
+          loading="lazy"
+        >
+
+        <div class="classic-marvel-movie-info">
+
+          <strong>
+            パニッシャー
+          </strong>
+
+          <span>
+            2004
+          </span>
+
+          <small>
+            詳細を見る →
+          </small>
+
+        </div>
+
+      </a>
+
+
+      <a
+        class="classic-marvel-movie-card"
+        href="detail.html?id=13056&type=movie"
+      >
+
+        <img
+          src="https://image.tmdb.org/t/p/w342/cLSh9U6nJGWLo6J6PFzK6dG4M3d.jpg"
+          alt="パニッシャー：ウォー・ゾーン"
+          loading="lazy"
+        >
+
+        <div class="classic-marvel-movie-info">
+
+          <strong>
+            パニッシャー：ウォー・ゾーン
+          </strong>
+
+          <span>
+            2008
+          </span>
+
+          <small>
+            詳細を見る →
+          </small>
+
+        </div>
+
+      </a>
+
+    </div>
+
+  </div>
+
+
+  <!-- =================================================
+       MORE OLD MARVEL MOVIES
+       将来追加用
+  ================================================== -->
+
+  <details class="classic-marvel-more">
+
+    <summary>
+      🎞️ もっと昔のマーベル映像作品も見てみる
+    </summary>
+
+    <div class="classic-marvel-more-inner">
+
+      <p class="classic-marvel-more-intro">
+        マーベルには、このほかにも昔からさまざまな映像作品があります。
+        ここには今後、作品を少しずつ追加していきます。
+      </p>
+
+      <div class="classic-marvel-more-list">
+
+        <!--
+        将来はこの形で1作品ずつ追加できます。
+
+        <a href="detail.html?id=作品ID&type=movie">
+          <span>作品名（公開年）</span>
+          <strong>詳細を見る →</strong>
+        </a>
+        -->
+
+      </div>
+
+    </div>
+
+  </details>
+
+</section>
+
+</section>
+
+</section>
+
+
 <section class="mcu-timeline-section" id="timelineSection">
 
 <div class="mcu-release-guide">
