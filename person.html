@@ -913,9 +913,9 @@ img{
 
     <a href="index.html">
 
-      <h1 class="site-title">
-        🎬 ドコデミレル？
-      </h1>
+      <div class="site-title">
+  🎬 ドコデミレル？
+</div>
 
     </a>
 
@@ -1000,11 +1000,10 @@ img{
 
       <div>
 
-        <h2
-          id="personName"
-          class="person-name"
-        ></h2>
-
+        <h1
+  id="personName"
+  class="person-name"
+></h1>
         <div
           id="personOriginalName"
           class="person-original-name"
@@ -2387,7 +2386,36 @@ if (metaDescription) {
 
 }
 
+const ogTitle =
+  document.getElementById(
+    "ogTitle"
+  );
 
+const ogDescription =
+  document.getElementById(
+    "ogDescription"
+  );
+
+if (ogTitle) {
+
+  ogTitle.setAttribute(
+    "content",
+    person.name +
+    "の映画・出演作品一覧｜配信情報｜ドコデミレル？"
+  );
+
+}
+
+if (ogDescription) {
+
+  ogDescription.setAttribute(
+    "content",
+    person.name +
+    "の映画・ドラマなど出演作品を一覧で紹介。出演作品から配信情報を確認できます。"
+  );
+
+}
+    
     const canonicalUrl =
       "https://doko-de-mireru.vercel.app/person.html?id=" +
       encodeURIComponent(
@@ -2404,11 +2432,42 @@ if (metaDescription) {
         canonicalUrl
       );
 
+    const ogUrl =
+  document.getElementById(
+    "ogUrl"
+  );
 
+if (ogUrl) {
+
+  ogUrl.setAttribute(
+    "content",
+    canonicalUrl
+  );
+
+}
+    
     // =====================================================
     // 写真
     // =====================================================
 
+const ogImage =
+  document.getElementById(
+    "ogImage"
+  );
+
+if (
+  ogImage &&
+  person.profile_path
+) {
+
+  ogImage.setAttribute(
+    "content",
+    "https://image.tmdb.org/t/p/w500" +
+    person.profile_path
+  );
+
+}
+    
     if (person.profile_path) {
 
       personPhoto.innerHTML =
