@@ -75,7 +75,15 @@
   content="website"
 >  
   
+<!-- =========================================================
+     構造化データ
+========================================================= -->
 
+<script
+  id="personStructuredData"
+  type="application/ld+json"
+></script>
+  
 <style>
 
 /* =========================================================
@@ -2445,6 +2453,79 @@ if (ogUrl) {
   );
 
 }
+
+const personStructuredData =
+  document.getElementById(
+    "personStructuredData"
+  );
+
+if (personStructuredData) {
+
+  const personSchema = {
+    "@context":"https://schema.org",
+    "@graph":[
+      {
+        "@type":"Person",
+        "@id":canonicalUrl + "#person",
+        "name":person.name,
+        "url":canonicalUrl
+      },
+      {
+        "@type":"BreadcrumbList",
+        "itemListElement":[
+          {
+            "@type":"ListItem",
+            "position":1,
+            "name":"ドコデミレル？",
+            "item":"https://doko-de-mireru.vercel.app/"
+          },
+          {
+            "@type":"ListItem",
+            "position":2,
+            "name":person.name,
+            "item":canonicalUrl
+          }
+        ]
+      }
+    ]
+  };
+
+
+  if (
+    person.original_name &&
+    person.original_name !== person.name
+  ) {
+
+    personSchema["@graph"][0].alternateName =
+      person.original_name;
+
+  }
+
+
+  if (person.birthday) {
+
+    personSchema["@graph"][0].birthDate =
+      person.birthday;
+
+  }
+
+
+  if (person.profile_path) {
+
+    personSchema["@graph"][0].image =
+      "https://image.tmdb.org/t/p/w500" +
+      person.profile_path;
+
+  }
+
+
+  personStructuredData.textContent =
+    JSON.stringify(
+      personSchema
+    );
+
+}
+
     
     // =====================================================
     // 写真
@@ -2651,9 +2732,11 @@ if (
         false;
 
       castTitle.textContent =
-        "🎭 出演作品（" +
-        castData.length +
-        "件）";
+  "🎭 " +
+  person.name +
+  "の出演作品（" +
+  castData.length +
+  "件）";
 
       renderCast();
     }
@@ -2675,10 +2758,11 @@ if (
         false;
 
       voiceTitle.textContent =
-        "🎙️ 声の出演（" +
-        voiceData.length +
-        "件）";
-
+  "🎙️ " +
+  person.name +
+  "の声の出演（" +
+  voiceData.length +
+  "件）";
       renderVoice();
     }
 
@@ -2699,10 +2783,12 @@ if (
         false;
 
       directorTitle.textContent =
-        "🎬 監督作品（" +
-        directorData.length +
-        "件）";
-
+  "🎬 " +
+  person.name +
+  "の監督作品（" +
+  directorData.length +
+  "件）";
+      
       renderDirector();
     }
 
