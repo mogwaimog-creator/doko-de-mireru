@@ -1260,7 +1260,79 @@ MCU・マーベルを見る順番【2026年最新】｜公開順・時系列・�
     grid-template-columns:1fr;
   }
 }   
- 
+
+/* =====================================================
+   NEXT MOVIES
+   次回予告っぽく強調
+===================================================== */
+
+.short-future-movie{
+  position:relative;
+  overflow:hidden;
+
+  padding:20px 18px 17px;
+
+  border:1px solid rgba(147,197,253,.48);
+  border-radius:12px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(59,130,246,.18),
+      rgba(255,255,255,.07)
+    );
+
+  box-shadow:
+    0 0 16px rgba(59,130,246,.10),
+    inset 0 1px 0 rgba(255,255,255,.08);
+}
+
+
+/* COMING SOON */
+
+.short-future-movie::before{
+  content:"COMING SOON";
+
+  display:block;
+  margin-bottom:7px;
+
+  color:#93c5fd;
+
+  font-size:12px;
+  line-height:1;
+  font-weight:900;
+  letter-spacing:.12em;
+}
+
+
+/* 作品名 */
+
+.short-future-movie strong{
+  display:block;
+
+  margin-bottom:7px;
+
+  color:#fff;
+
+  font-size:18px;
+  line-height:1.4;
+  font-weight:900;
+}
+
+
+/* 公開予定 */
+
+.short-future-movie span{
+  display:block;
+
+  color:#dbeafe;
+
+  font-size:15px;
+  line-height:1.5;
+  font-weight:800;
+}
+
+    
 /* =====================================================
    時系列：上部ナビとの間隔を24pxに統一
 ===================================================== */
@@ -11964,10 +12036,6 @@ a.mcu-tab{
     <strong>最短ルートはここでゴールです。</strong>
   </p>
 
-  <p class="short-route-finish-next">
-    ここまでで、最短ルートは完走！
-  </p>
-
   <p>
     もちろん、MCUにはこのルートでは紹介しきれなかった
     映画やドラマがまだたくさんあります。
@@ -11986,24 +12054,26 @@ a.mcu-tab{
 
   <div class="short-future-heading">
 
-    <span>
-      🚀 NEXT
-    </span>
+  <span>
+    🚀 NEXT
+  </span>
 
-    <h2>
-      そして、MCUはこの先へ
-    </h2>
+  <h2>
+    じゃあ、MCUの物語はもう終わりなの？
+  </h2>
 
-    <p>
-      最短ルートはここで完走。
-      <br>
-      でも、MCUそのものの物語はまだ終わりません。
-      <br>
-      新しい物語は、すでに動き始めています。
-    </p>
+  <p>
+    <strong>
+      いいえ、まだ終わっていません。
+    </strong>
+    <br>
+    新しい物語は、すでに動き始めています。
+    <br>
+    そしてこの先には、
+    <strong>新たな「アベンジャーズ」映画も待っています。</strong>
+  </p>
 
-  </div>
-
+</div>
 
   <div class="short-future-movies">
 
