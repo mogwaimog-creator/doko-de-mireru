@@ -53,7 +53,8 @@ module.exports = async function handler(req, res) {
     // =====================================================
 
     const MAX_PAGES = 20;
-
+    const PERSON_MAX_PAGES = 10;
+    
 
     // =====================================================
     // TMDB JSON取得
@@ -168,7 +169,77 @@ module.exports = async function handler(req, res) {
 
     }
 
+        // =====================================================
+    // TMDB人気人物取得
+    // =====================================================
 
+    async function fetchPopularPeople() {
+
+      const requests = [];
+
+      for (
+        let page = 1;
+        page <= PERSON_MAX_PAGES;
+        page++
+      ) {
+
+        const url =
+          "https://api.themoviedb.org/3/person/popular" +
+          "?api_key=" +
+          encodeURIComponent(apiKey) +
+          "&language=ja-JP" +
+          "&page=" +
+          page;
+
+        requests.push(
+          fetchJson(url)
+        );
+
+      }
+
+
+      const datasets =
+        await Promise.all(requests);
+
+
+      const people = [];
+
+
+      datasets.forEach(function(data) {
+
+        if (
+          !data ||
+          !Array.isArray(data.results)
+        ) {
+
+          return;
+
+        }
+
+
+        data.results.forEach(function(person) {
+
+          if (
+            person &&
+            person.id
+          ) {
+
+            people.push({
+              id: person.id
+            });
+
+          }
+
+        });
+
+      });
+
+
+      return people;
+
+    }
+
+    
     // =====================================================
     // タイトル正規化
     //
@@ -639,6 +710,13 @@ module.exports = async function handler(req, res) {
         "tv"
       );
 
+    // =====================================================
+    // 人気人物
+    // =====================================================
+
+    const popularPeople =
+      await fetchPopularPeople();
+    
 
     // =====================================================
     // 重要作品
@@ -845,6 +923,38 @@ providerPages.forEach(function(page){
 
     });
 
+       // =====================================================
+    // 人物ページ
+    // =====================================================
+
+    popularPeople.forEach(function(person) {
+
+      if (
+        !person ||
+        !person.id
+      ) {
+
+        return;
+
+      }
+
+
+      const personUrl =
+        "https://doko-de-mireru.vercel.app/person.html?id=" +
+        encodeURIComponent(
+          String(person.id)
+        );
+
+
+      urls.push(`
+  <url>
+    <loc>${personUrl}</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>`);
+
+    });
+    
 
     // =====================================================
     // XML生成
