@@ -26,6 +26,7 @@
 </title>
 
 <meta
+  id="metaDescription"
   name="description"
   content="俳優・声優・監督の出演作品や監督作品を探せます。"
 >
@@ -41,6 +42,39 @@
   href="https://doko-de-mireru.vercel.app/person.html"
 >
 
+<!-- =========================================================
+     OGP
+========================================================= -->
+
+<meta
+  id="ogTitle"
+  property="og:title"
+  content="人物情報｜ドコデミレル？"
+>
+
+<meta
+  id="ogDescription"
+  property="og:description"
+  content="俳優・声優・監督の出演作品や監督作品を探せます。"
+>
+
+<meta
+  id="ogImage"
+  property="og:image"
+  content="https://doko-de-mireru.vercel.app/og-image.png"
+>
+
+<meta
+  id="ogUrl"
+  property="og:url"
+  content="https://doko-de-mireru.vercel.app/person.html"
+>
+
+<meta
+  property="og:type"
+  content="website"
+>  
+  
 
 <style>
 
@@ -2334,8 +2368,24 @@ async function loadPerson(){
     // =====================================================
 
     document.title =
-      person.name +
-      "の出演作品・監督作品｜ドコデミレル？";
+  person.name +
+  "の映画・出演作品一覧｜配信情報｜ドコデミレル？";
+
+
+const metaDescription =
+  document.getElementById(
+    "metaDescription"
+  );
+
+if (metaDescription) {
+
+  metaDescription.setAttribute(
+    "content",
+    person.name +
+    "の映画・ドラマなど出演作品を一覧で紹介。出演作品から配信情報を確認できます。"
+  );
+
+}
 
 
     const canonicalUrl =
