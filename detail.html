@@ -1872,6 +1872,108 @@ header p{
 .series-title{
   min-height:42px;
 }
+
+/* =========================================================
+   MCUを見る順番への案内
+========================================================= */
+
+.mcu-guide{
+  display:flex;
+  align-items:center;
+  gap:12px;
+
+  margin:14px 0 16px;
+  padding:13px 15px;
+
+  border:1px solid #93a9d8;
+  border-radius:11px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #eef3ff 0%,
+      #e5edff 55%,
+      #edf4ff 100%
+    );
+
+  box-shadow:
+    0 3px 10px rgba(30,64,175,.08);
+}
+
+.mcu-guide-icon{
+  flex:0 0 auto;
+
+  font-size:25px;
+  line-height:1;
+}
+
+.mcu-guide-content{
+  min-width:0;
+}
+
+.mcu-guide-title{
+  color:#243b6b;
+
+  font-size:16px;
+  line-height:1.4;
+  font-weight:900;
+}
+
+.mcu-guide-text{
+  margin-top:2px;
+
+  color:#475569;
+
+  font-size:14px;
+  line-height:1.5;
+}
+
+.mcu-guide-link{
+  display:inline-block;
+
+  margin-top:5px;
+
+  color:#2563eb;
+
+  font-size:15px;
+  line-height:1.4;
+  font-weight:900;
+
+  text-decoration:none;
+}
+
+.mcu-guide-link:hover{
+  text-decoration:underline;
+}
+
+
+@media(max-width:700px){
+
+  .mcu-guide{
+    align-items:flex-start;
+
+    gap:9px;
+
+    padding:12px 13px;
+  }
+
+  .mcu-guide-icon{
+    font-size:22px;
+  }
+
+  .mcu-guide-title{
+    font-size:15px;
+  }
+
+  .mcu-guide-text{
+    font-size:14px;
+  }
+
+  .mcu-guide-link{
+    font-size:14px;
+  }
+
+}
   
 </style>
 
@@ -2076,8 +2178,40 @@ Netflix、Amazon Prime Video、U-NEXT、Hulu、Disney+など、
 ></div>
 
 
-<div class="movie-side-info">
+<!-- =========================================================
+     MCUを見る順番への案内
+========================================================= -->
 
+<div
+  id="mcuGuide"
+  class="mcu-guide"
+>
+  <div class="mcu-guide-icon">
+    🌐
+  </div>
+
+  <div class="mcu-guide-content">
+
+    <div class="mcu-guide-title">
+      この作品はMCUシリーズの作品です
+    </div>
+
+    <div class="mcu-guide-text">
+      公開順・時系列・最短ルートから、見る順番を確認できます。
+    </div>
+
+    <a
+      class="mcu-guide-link"
+      href="mcu.html"
+    >
+      MCU・マーベルを見る順番を見る →
+    </a>
+
+  </div>
+</div>
+
+
+<div class="movie-side-info">
 
 <div class="side-section">
 
