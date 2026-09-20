@@ -4124,13 +4124,27 @@ if(movie.status){
 
 }
 
-
+/* ジャンル */
 
   renderGenres(
     movie.genres
   );
 
+/* MCU・マーベル関連作品の案内 */
 
+const mcuGuide =
+  document.getElementById(
+    "mcuGuide"
+  );
+
+if(mcuGuide){
+
+  mcuGuide.hidden =
+    !isMcuGuideWork(movie);
+
+}
+
+  
   const poster =
     document.getElementById(
       "poster"
