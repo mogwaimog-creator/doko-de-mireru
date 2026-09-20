@@ -859,29 +859,7 @@ MCU・マーベルを見る順番【2026年最新】｜公開順・時系列・�
   font-weight:700;
 }/*
 
- =====================================================
-   最短ルートはただいま改良中です
-===================================================== */
-    
-#shortView .short-update-notice{
-  width:fit-content;
-  max-width:100%;
 
-  margin:14px 0 20px;
-  padding:8px 14px;
-
-  border:1px solid #cbd5e1;
-  border-radius:8px;
-
-  background:#f8fafc;
-
-  color:#475569;
-  font-size:14px;
-  font-weight:800;
-  line-height:1.5;
-
-  box-sizing:border-box;
-}
 /* =====================================================
    NEW ERA
 ===================================================== */
@@ -1008,55 +986,6 @@ MCU・マーベルを見る順番【2026年最新】｜公開順・時系列・�
   font-weight:700;
 }
 
-/* =====================================================
-   NEW ERA
-   完走後の案内
-===================================================== */
-
-.short-new-era-guide{
-  max-width:850px;
-  margin:18px auto 0;
-  padding:18px 22px;
-
-  border:1px solid rgba(34,197,94,.28);
-  border-radius:12px;
-
-  background:rgba(255,255,255,.62);
-
-  font-size:16px;
-  line-height:1.8;
-  text-align:center;
-}
-
-.short-new-era-guide p{
-  margin:0;
-}
-
-.short-new-era-guide-main{
-  margin-bottom:10px !important;
-  font-size:17px;
-}
-
-.short-new-era-guide-main strong{
-  color:#166534;
-  font-weight:900;
-}
-
-.short-new-era-guide-note{
-  margin-top:12px !important;
-  padding-top:12px;
-
-  border-top:1px dashed rgba(22,101,52,.25);
-
-  color:#36584a;
-  font-size:15px;
-}
-
-.short-new-era-guide-note strong{
-  color:#166534;
-  font-weight:900;
-}
-    
 /* =====================================================
    ⭐ できれば見てほしい
    本筋カードと同じ横幅
@@ -1309,79 +1238,7 @@ MCU・マーベルを見る順番【2026年最新】｜公開順・時系列・�
     grid-template-columns:1fr;
   }
 }   
-
-/* =====================================================
-   NEXT MOVIES
-   次回予告っぽく強調
-===================================================== */
-
-.short-future-movie{
-  position:relative;
-  overflow:hidden;
-
-  padding:20px 18px 17px;
-
-  border:1px solid rgba(147,197,253,.48);
-  border-radius:12px;
-
-  background:
-    linear-gradient(
-      135deg,
-      rgba(59,130,246,.18),
-      rgba(255,255,255,.07)
-    );
-
-  box-shadow:
-    0 0 16px rgba(59,130,246,.10),
-    inset 0 1px 0 rgba(255,255,255,.08);
-}
-
-
-/* COMING SOON */
-
-.short-future-movie::before{
-  content:"COMING SOON";
-
-  display:block;
-  margin-bottom:7px;
-
-  color:#93c5fd;
-
-  font-size:12px;
-  line-height:1;
-  font-weight:900;
-  letter-spacing:.12em;
-}
-
-
-/* 作品名 */
-
-.short-future-movie strong{
-  display:block;
-
-  margin-bottom:7px;
-
-  color:#fff;
-
-  font-size:18px;
-  line-height:1.4;
-  font-weight:900;
-}
-
-
-/* 公開予定 */
-
-.short-future-movie span{
-  display:block;
-
-  color:#dbeafe;
-
-  font-size:15px;
-  line-height:1.5;
-  font-weight:800;
-}
-
-    
+ 
 /* =====================================================
    時系列：上部ナビとの間隔を24pxに統一
 ===================================================== */
@@ -1905,7 +1762,7 @@ html{
   align-items:flex-start;
 
   margin:0 0 16px;
-　padding:14px 15px;
+  padding:14px 15px;
   
     background:
     linear-gradient(
@@ -1932,7 +1789,7 @@ html{
   justify-content:center;
 
   width:38px;
-　height:38px;
+  height:38px;
 
   background:#eaf2ff;
   border-radius:50%;
@@ -2011,50 +1868,7 @@ html{
   color:#93c5fd;
 }
 
-    
-/* =====================================================
-   工事中のお知らせ
-===================================================== */
 
-.mcu-under-construction{
-  margin:18px 0 0;
-  padding:11px 16px;
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:10px;
-
-  background:#fff7ed;
-  border:1px solid #fed7aa;
-  border-radius:12px;
-
-  color:#9a3412;
-
-  font-size:13px;
-}
-
-.mcu-under-construction strong{
-  white-space:nowrap;
-}
-
-.mcu-under-construction span{
-  color:#7c2d12;
-}
-
-@media(max-width:700px){
-
-  .mcu-under-construction{
-    display:block;
-    text-align:center;
-  }
-
-  .mcu-under-construction span{
-    display:block;
-    margin-top:4px;
-  }
-
-}
 
 /* =====================================================
    MCU 上部・3つの基本ルート
@@ -3973,6 +3787,42 @@ a.mcu-tab{
   border-color:rgba(251,191,36,.66);
 }
 
+/* =====================================================
+   MCU CONNECTION LABEL
+   MCUにつながる見出し用
+===================================================== */
+
+.mcu-connection-label{
+  display:table !important;
+
+  width:auto !important;
+  max-width:100% !important;
+
+  margin-bottom:3px;
+  padding:5px 12px;
+
+  border:1px solid rgba(168,85,247,.85);
+  border-radius:999px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(236,72,153,.32) 0%,
+      rgba(168,85,247,.34) 48%,
+      rgba(59,130,246,.32) 100%
+    );
+
+  color:#fff !important;
+
+  font-size:14px;
+  line-height:1.4;
+  font-weight:900;
+
+  box-shadow:
+    0 0 8px rgba(168,85,247,.30),
+    0 0 16px rgba(59,130,246,.14),
+    inset 0 1px 0 rgba(255,255,255,.14);
+}
 
 /* =====================================================
    hover
@@ -5899,6 +5749,77 @@ a.mcu-tab{
     font-size:14px;
   }
 
+}
+
+/* =====================================================
+   MARVEL / DC
+   初めての人向け比較
+===================================================== */
+
+/* MARVEL側 */
+
+.marvel-dc-card.marvel-side-card{
+  border-color:rgba(248,113,113,.62);
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(127,29,29,.34),
+      rgba(69,10,10,.16)
+    );
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.05),
+    0 0 18px rgba(239,68,68,.08);
+}
+
+.marvel-side-card .marvel-dc-name{
+  color:#fca5a5;
+}
+
+
+/* DC側 */
+
+.marvel-dc-card.dc-side-card{
+  border-color:rgba(96,165,250,.62);
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(30,64,175,.34),
+      rgba(30,58,138,.16)
+    );
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.05),
+    0 0 18px rgba(59,130,246,.08);
+}
+
+.dc-side-card .marvel-dc-name{
+  color:#93c5fd;
+}
+
+
+/* MARVEL ≠ DC */
+
+.marvel-dc-vs{
+  color:#fff;
+
+  font-size:28px;
+  line-height:1;
+  font-weight:900;
+
+  text-shadow:
+    0 0 12px rgba(255,255,255,.22);
+}
+
+
+/* 最後の結論 */
+
+.marvel-dc-note strong{
+  color:#fff;
+  font-size:17px;
+  font-weight:900;
 }
 
 /* =====================================================
@@ -8029,6 +7950,26 @@ a.mcu-tab{
   max-width:760px;
 }
 
+.mcu-connection-tag{
+  border:1px solid rgba(168,85,247,.85) !important;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(236,72,153,.32) 0%,
+      rgba(168,85,247,.34) 48%,
+      rgba(59,130,246,.32) 100%
+    ) !important;
+
+  color:#fff !important;
+
+  font-weight:900;
+
+  box-shadow:
+    0 0 8px rgba(168,85,247,.30),
+    0 0 16px rgba(59,130,246,.14),
+    inset 0 1px 0 rgba(255,255,255,.14);
+}
 /* =====================================================
    スマホ
 ===================================================== */
@@ -8071,26 +8012,71 @@ a.mcu-tab{
   }
 
 }
-  
+ 
+/* =====================================================
+   MCUページ → ドコデミレル？への検索導線
+===================================================== */
+
+.mcu-search-guide{
+  display:flex;
+  align-items:center;
+  gap:10px;
+
+  margin-bottom:16px;
+
+  font-size:15px;
+  line-height:1.5;
+}
+
+.mcu-search-guide a{
+  color:#2563eb;
+  font-size:16px;
+  font-weight:900;
+  text-decoration:none;
+}
+
+.mcu-search-guide a:hover{
+  text-decoration:underline;
+}
+
+.mcu-search-guide span{
+  color:#475569;
+  font-weight:600;
+}
+
+@media(max-width:700px){
+
+  .mcu-search-guide{
+    display:block;
+  }
+
+  .mcu-search-guide span{
+    display:block;
+    margin-top:2px;
+    padding-left:24px;
+    font-size:14px;
+  }
+
+}
+ 
 </style>
 
 </head>
 <body>
 <div class="page-wrap">
 <header class="mcu-header">
-<div class="mcu-under-construction" id="mcuUnderConstruction" style="display:none;">
-<strong>
-    🚧 現在このページは工事中です
-  </strong>
-<span>
-    MCU・マーベルの見る順番ガイドを制作しています。
-    内容やデザインは変更される場合があります。
+
+<div class="mcu-search-guide">
+
+  <a href="index.html">
+    🔍 他の映画・ドラマ・アニメを探す
+  </a>
+
+  <span>
+    ドコデミレル？で配信先を検索できます
   </span>
-</div>
-<a class="mcu-back" href="index.html">
-        ← ドコデミレル？に戻る
-      </a>
-<div class="mcu-hero">
+
+</div><div class="mcu-hero">
 <h1>
           🦸 MCU・マーベルを見る順番
         </h1>
@@ -8200,68 +8186,97 @@ a.mcu-tab{
        MARVELとDCの違い
   ====================================================== -->
 
-  <div class="marvel-dc-guide">
+<div class="marvel-dc-guide">
 
-    <div class="marvel-dc-guide-heading">
-      <span>💡 初心者向け</span>
-      <h3>あれ？ バットマンやスーパーマンは？</h3>
-      <p>
-        実は、バットマンやスーパーマンは
-        マーベルのヒーローではありません。
-        <strong>DC（DCコミックス）</strong>から生まれた、
-        別のヒーローたちです。
-      </p>
-    </div>
+  <div class="marvel-dc-guide-heading">
 
-    <div class="marvel-dc-compare">
+    <span>
+      💡 最初にこれだけ知っておこう
+    </span>
 
-      <div class="marvel-dc-card marvel-side-card">
-        <div class="marvel-dc-name">
-          MARVEL
-          <small>マーベル</small>
-        </div>
+    <h3>
+      あれ？ バットマンやスーパーマンは？
+    </h3>
 
-        <p class="marvel-dc-examples">
-          スパイダーマン ／ アイアンマン<br>
-          キャプテン・アメリカ ／ ソー<br>
-          X-MEN ／ デッドプール
-        </p>
-
-        <div class="marvel-dc-now">
-          ← 今、このページで紹介している世界
-        </div>
-      </div>
-
-      <div class="marvel-dc-vs">
-        VS
-      </div>
-
-      <div class="marvel-dc-card dc-side-card">
-        <div class="marvel-dc-name">
-          DC
-          <small>DCコミックス</small>
-        </div>
-
-        <p class="marvel-dc-examples">
-          バットマン ／ スーパーマン<br>
-          ワンダーウーマン ／ フラッシュ<br>
-          アクアマン など
-        </p>
-
-        <div class="marvel-dc-other">
-          → マーベルとは別のコミック作品
-        </div>
-      </div>
-
-    </div>
-
-    <p class="marvel-dc-note">
-      同じ「アメコミのヒーロー」でも、
-      MARVELとDCは別のグループ。
-      まずはここを分けて考えると、作品の世界がぐっと分かりやすくなります。
+    <p>
+      スパイダーマンやアイアンマンと、
+      バットマンやスーパーマン。
+      <br>
+      同じ「アメコミのヒーロー」なので一緒の世界に見えますが、
+      <br>
+      <strong>
+        実は、MARVELとDCは別のグループです。
+      </strong>
     </p>
 
   </div>
+
+
+  <div class="marvel-dc-compare">
+
+    <!-- MARVEL -->
+    <div class="marvel-dc-card marvel-side-card">
+
+      <div class="marvel-dc-name">
+        MARVEL
+        <small>マーベル</small>
+      </div>
+
+      <p class="marvel-dc-examples">
+        スパイダーマン ／ アイアンマン
+        <br>
+        キャプテン・アメリカ ／ ソー
+        <br>
+        X-MEN ／ デッドプール
+      </p>
+
+      <div class="marvel-dc-now">
+        このページで紹介する世界
+      </div>
+
+    </div>
+
+
+    <div class="marvel-dc-vs">
+      ≠
+    </div>
+
+
+    <!-- DC -->
+    <div class="marvel-dc-card dc-side-card">
+
+      <div class="marvel-dc-name">
+        DC
+        <small>DCコミックス</small>
+      </div>
+
+      <p class="marvel-dc-examples">
+        バットマン ／ スーパーマン
+        <br>
+        ワンダーウーマン ／ フラッシュ
+        <br>
+        アクアマン など
+      </p>
+
+      <div class="marvel-dc-other">
+        MARVELとは別のヒーローたち
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <p class="marvel-dc-note">
+    <strong>
+      このページで紹介するのはMARVELの世界。
+    </strong>
+    <br>
+    まずこの違いだけ覚えておけば、
+    この先の作品のつながりがぐっと分かりやすくなります。
+  </p>
+
+</div>
 
 <!-- =====================================================
      MCU RELATED SERIES JUMP NAV
@@ -8525,17 +8540,17 @@ a.mcu-tab{
 
       <div class="spider-series-title">
 
-        <span>
-          MCUに参加
-        </span>
+        <span class="mcu-connection-label">
+        MCUに初登場
+       </span>
 
         <h3>
-          トム・ホランド版
+        トム・ホランド版
         </h3>
 
         <p class="spider-series-sub">
-          MCUのスパイダーマン
-        </p>
+        ジョン・ワッツ監督
+         </p>
 
       </div>
 
@@ -8547,7 +8562,9 @@ a.mcu-tab{
 
         <div class="spider-series-tags">
           <span>🎬 ソニー ＋ マーベル・スタジオ</span>
-          <span>🌍 MCU</span>
+          <span class="mcu-connection-tag">
+         🌍 MCU
+          </span>
         </div>
 
       </div>
@@ -8658,10 +8675,7 @@ a.mcu-tab{
         オリジナル X-MEN 3部作
       </h3>
 
-      <p class="xmen-series-sub">
-        プロフェッサーXたち、おなじみのX-MENが活躍
-      </p>
-
+      
     </div>
 
 
@@ -8760,10 +8774,7 @@ a.mcu-tab{
       若き日のX-MEN
     </h3>
 
-    <p class="xmen-series-sub">
-      若き日のプロフェッサーXとマグニートー
-    </p>
-
+    
   </div>
 
 
@@ -8943,10 +8954,7 @@ a.mcu-tab{
     ウルヴァリン単独シリーズ
   </h3>
 
-  <p class="xmen-series-sub">
-    その過去から、ひとつの物語の終着点まで
-  </p>
-
+  
 </div>
 
 
@@ -9104,16 +9112,13 @@ a.mcu-tab{
     <div class="deadpool-series-title">
 
       <span>
-        まずはここから
+        独自の世界から始まった2作品
       </span>
 
       <h3>
         デッドプールシリーズ
       </h3>
 
-      <p class="deadpool-series-sub">
-        独自の世界から始まった2作品
-      </p>
 
     </div>
 
@@ -9121,8 +9126,7 @@ a.mcu-tab{
     <div class="deadpool-series-info">
 
       <p>
-        デッドプールの物語は、
-        MCUとは別の世界からスタートします。
+       破天荒で型破りなヒーロー、デッドプールの活躍を描く2作品です。
       </p>
 
       <div class="deadpool-series-tags">
@@ -9215,7 +9219,7 @@ a.mcu-tab{
 
     <div class="deadpool-series-title">
 
-      <span>
+      <span class="mcu-connection-label">
         MCUとのつながりへ
       </span>
 
@@ -9223,10 +9227,7 @@ a.mcu-tab{
         デッドプール＆ウルヴァリン
       </h3>
 
-      <p class="deadpool-series-sub">
-        2つのシリーズが交差する物語
-      </p>
-
+      
     </div>
 
 
@@ -9234,11 +9235,11 @@ a.mcu-tab{
 
       <p>
         デッドプールとウルヴァリンが共演し、
-        MCUやマルチバースとのつながりが大きく広がります。
+        マルチバースを通して、MCUの世界とのつながりが生まれます。
       </p>
 
       <div class="deadpool-series-tags">
-        <span>🌐 MCUとのつながり</span>
+        <span class="mcu-connection-tag">🌐 MCUとのつながり</span>
         <span>🐺 ウルヴァリン登場</span>
       </div>
 
@@ -9324,17 +9325,14 @@ a.mcu-tab{
     <div class="fantastic-series-title">
 
       <span>
-        まずは最初の映画シリーズ
+        2005年に始まった初代シリーズ
       </span>
 
       <h3>
         旧ファンタスティック・フォー
       </h3>
 
-      <p class="fantastic-series-sub">
-        2005年から始まった2作品
-      </p>
-
+      
     </div>
 
 
@@ -9441,16 +9439,14 @@ a.mcu-tab{
     <div class="fantastic-series-title">
 
       <span>
-        新しい設定で再スタート
+        新しいキャストと設定のリニューアル版
       </span>
 
       <h3>
-        2015年 リブート版
+        ファンタスティック・フォー（2015）
       </h3>
 
-      <p class="fantastic-series-sub">
-        前の2作品とは別の物語
-      </p>
+     
 
     </div>
 
@@ -9525,18 +9521,15 @@ a.mcu-tab{
 
     <div class="fantastic-series-title">
 
-      <span>
-        MCUのファンタスティック4へ
+      <span class="mcu-connection-label">
+        MCUに初登場
       </span>
 
       <h3>
         ファンタスティック4：ファースト・ステップ
       </h3>
 
-      <p class="fantastic-series-sub">
-        MCUで新しく始まったファンタスティック4
-      </p>
-
+      
     </div>
 
 
@@ -9549,8 +9542,8 @@ a.mcu-tab{
 
       <div class="fantastic-series-tags">
 
-        <span>
-          🌐 MCU
+        <span class="mcu-connection-tag">
+          🌍 MCU
         </span>
 
         <span>
@@ -9638,25 +9631,21 @@ a.mcu-tab{
     <div class="sony-series-title">
 
       <span>
-        まずはこのシリーズ
+        スパイダーマンのコミックから生まれた人気キャラクター
       </span>
 
       <h3>
         ヴェノムシリーズ
       </h3>
 
-      <p class="sony-series-sub">
-        ヴェノムとエディ・ブロックを描く3作品
-      </p>
-
+     
     </div>
 
 
     <div class="sony-series-info">
 
       <p>
-        スパイダーマンのコミックから生まれた人気キャラクター、
-        ヴェノムを主人公にしたシリーズです。
+        ヴェノムと、その宿主となったエディ・ブロックの物語を描く3作品です。
       </p>
 
       <div class="sony-series-tags">
@@ -9790,10 +9779,7 @@ a.mcu-tab{
         その他のソニー系マーベル作品
       </h3>
 
-      <p class="sony-series-sub">
-        スパイダーマンのコミックから広がったキャラクターたち
-      </p>
-
+      
     </div>
 
 
@@ -9963,10 +9949,7 @@ a.mcu-tab{
         ブレイドシリーズ
       </h3>
 
-      <p class="classic-marvel-sub">
-        1998年から続いた3部作
-      </p>
-
+      
     </div>
 
 
@@ -10108,18 +10091,14 @@ a.mcu-tab{
         ゴーストライダー
       </h3>
 
-      <p class="classic-marvel-sub">
-        ニコラス・ケイジ主演の2作品
-      </p>
-
+      
     </div>
 
 
     <div class="classic-marvel-info">
 
       <p>
-        炎に包まれた姿で悪と戦う、
-        マーベルの超自然系ヒーローを描いたシリーズです。
+        悪魔と契約した男ジョニー・ブレイズを、ニコラス・ケイジが演じるダークヒーロー作品です。
       </p>
 
       <div class="classic-marvel-tags">
@@ -10223,9 +10202,6 @@ a.mcu-tab{
         デアデビル ＆ エレクトラ
       </h3>
 
-      <p class="classic-marvel-sub">
-        2003年の映画からつながる2作品
-      </p>
 
     </div>
 
@@ -10338,9 +10314,6 @@ a.mcu-tab{
         パニッシャー
       </h3>
 
-      <p class="classic-marvel-sub">
-        異なる設定で作られた2つの映画
-      </p>
 
     </div>
 
@@ -10349,6 +10322,7 @@ a.mcu-tab{
 
       <p>
         犯罪者への復讐を続けるフランク・キャッスルを描いた作品。
+       
         2本は同じシリーズの続編ではなく、別の映画版として楽しめます。
       </p>
 
@@ -10438,35 +10412,48 @@ a.mcu-tab{
        将来追加用
   ================================================== -->
 
-  <details class="classic-marvel-more">
+ <details class="classic-marvel-more">
 
-    <summary>
-      🎞️ もっと昔のマーベル映像作品も見てみる
-    </summary>
+  <summary>
+    🎞️ ほかにもある！昔のマーベル映画
+  </summary>
 
-    <div class="classic-marvel-more-inner">
+  <div class="classic-marvel-more-inner">
 
-      <p class="classic-marvel-more-intro">
-        マーベルには、このほかにも昔からさまざまな映像作品があります。
-        ここには今後、作品を少しずつ追加していきます。
-      </p>
+    <p class="classic-marvel-more-intro">
+      ほかにも、こんなマーベル映画があります。
+      <br>
+      気になる作品名をクリックすると、
+      作品情報・配信情報を確認できます。
+    </p>
 
-      <div class="classic-marvel-more-list">
+    <div class="classic-marvel-more-list">
 
-        <!--
-        将来はこの形で1作品ずつ追加できます。
+      <a href="detail.html?id=10658&type=movie">
+        ハワード・ザ・ダック／暗黒魔王の陰謀（1986）
+      </a>
 
-        <a href="detail.html?id=作品ID&type=movie">
-          <span>作品名（公開年）</span>
-          <strong>詳細を見る →</strong>
-        </a>
-        -->
+      <a href="detail.html?id=8867&type=movie">
+        パニッシャー（1989）
+      </a>
 
-      </div>
+      <a href="detail.html?id=13995&type=movie">
+        キャプテン・アメリカ（1990）
+      </a>
+
+      <a href="detail.html?id=1927&type=movie">
+        ハルク（2003）
+      </a>
+
+      <a href="detail.html?id=18882&type=movie">
+        マン・シング（2005）
+      </a>
 
     </div>
 
-  </details>
+  </div>
+
+</details>
 
 </section>
 
@@ -12081,85 +12068,21 @@ a.mcu-tab{
 
   <p>
     『スパイダーマン：ノー・ウェイ・ホーム』までたどり着いたら、
-    MCUの大きな流れを追うために選んだ
-    <strong>最短ルートはここでゴールです。</strong>
+    最短ルートはいったんここでゴール。
+  </p>
+
+  <p class="short-route-finish-next">
+    でも、MCUの物語はまだまだ続きます。
   </p>
 
   <p>
-    もちろん、MCUにはこのルートでは紹介しきれなかった
-    映画やドラマがまだたくさんあります。
-    <br>
-    でも、それらを全部見なければ
-    「完走」できないわけではありません。
+    新しい物語が動き出すまで、
+    気になったヒーローや世界をもう少し見て回ってみませんか？
   </p>
 
 </div>
 
-<!-- =====================================================
-     そして、MCUはこの先へ
-===================================================== -->
 
-<section class="short-future">
-
-  <div class="short-future-heading">
-
-  <span>
-    🚀 NEXT
-  </span>
-
-  <h2>
-    じゃあ、MCUの物語はもう終わりなの？
-  </h2>
-
-  <p>
-    <strong>
-      いいえ、まだ終わっていません。
-    </strong>
-    <br>
-    新しい物語は、すでに動き始めています。
-    <br>
-    そしてこの先には、
-    <strong>新たな「アベンジャーズ」映画も待っています。</strong>
-  </p>
-
-</div>
-
-  <div class="short-future-movies">
-
-    <div class="short-future-movie">
-
-      <strong>
-        Avengers: Doomsday
-      </strong>
-
-      <span>
-        2026年12月18日 公開予定
-      </span>
-
-    </div>
-
-
-    <div class="short-future-movie">
-
-      <strong>
-        Avengers: Secret Wars
-      </strong>
-
-      <span>
-        2027年12月17日 公開予定
-      </span>
-
-    </div>
-
-  </div>
-
-
-  <p class="short-future-note">
-    ※公開予定は変更される場合があります。
-  </p>
-
-</section>
-    
 <!-- =====================================================
      NEW ERA
 ===================================================== -->
@@ -12167,39 +12090,24 @@ a.mcu-tab{
 <section class="short-new-era">
   <div class="short-new-era-heading">
 
-  <span>
-    🌱 NEW ERA
-  </span>
+    <span>
+      🌱 NEW ERA
+    </span>
 
-  <h2>
-    ここからは、この世界をもっと知りたい人へ
-  </h2>
-
-  <div class="short-new-era-guide">
-
-    <p class="short-new-era-guide-main">
-      <strong>
-        ここから先は、今のところ最短ルートの必須作品ではありません。
-      </strong>
-    </p>
+    <h2>
+      ここからは、新しい世界へ
+    </h2>
 
     <p>
-      MCUの世界をもっともっと知りたい人や、
-      気になるヒーローの物語をもう少し追いかけてみたい人へ。
+      MCUの世界は、ここからさらに広がっていきます。
       <br>
-      最短ルートでは省いた映画やドラマの中から、
-      気になる作品を自由に選んで楽しんでください。
-    </p>
-
-    <p class="short-new-era-guide-note">
-      🌱 ただし、今はサイドストーリーに見える物語も、
-      これからのMCUの展開によっては
-      <strong>重要度が上がっていく可能性があります。</strong>
+      <strong>
+        全部を見る必要はありません。気になったヒーローや世界を選んでOK！
+      </strong>
     </p>
 
   </div>
 
-</div>
 
   <!-- できれば見てほしい -->
 <article class="short-star-card short-star-card-new">
@@ -13165,7 +13073,66 @@ a.mcu-tab{
 
 </div>
 
-    
+<!-- =====================================================
+     そして、MCUはこの先へ
+===================================================== -->
+
+<section class="short-future">
+
+  <div class="short-future-heading">
+
+    <span>
+      🚀 NEXT
+    </span>
+
+    <h2>
+      そして、MCUはこの先へ
+    </h2>
+
+    <p>
+      新しい物語は、すでに動き始めています。
+      <br>
+      これから待っているMCUの物語も、お楽しみに！
+    </p>
+
+  </div>
+
+
+  <div class="short-future-movies">
+
+    <div class="short-future-movie">
+
+      <strong>
+        Avengers: Doomsday
+      </strong>
+
+      <span>
+        2026年12月18日 公開予定
+      </span>
+
+    </div>
+
+
+    <div class="short-future-movie">
+
+      <strong>
+        Avengers: Secret Wars
+      </strong>
+
+      <span>
+        2027年12月17日 公開予定
+      </span>
+
+    </div>
+
+  </div>
+
+
+  <p class="short-future-note">
+    ※公開予定は変更される場合があります。
+  </p>
+
+</section>    
 </main>
 
 
