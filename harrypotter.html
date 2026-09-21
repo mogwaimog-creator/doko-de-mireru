@@ -1511,6 +1511,7 @@ try{
 
 function applyWatchedState(){
 
+  
   const checks =
     document.querySelectorAll(
       ".hp-watched-check"
@@ -1678,6 +1679,13 @@ updateWatchProgress();
    タブをクリックした時
 ===================================================== */
 
+/* -----------------------------------------------------
+   選択した表示順を保存
+----------------------------------------------------- */
+
+const HP_VIEW_STORAGE_KEY =
+  "dokomireru-harrypotter-view-v1";
+  
 const hpTabs =
   document.querySelectorAll(
     ".hp-tab[data-view]"
@@ -1709,6 +1717,15 @@ hpTabs.forEach(tab => {
 
       const view =
         tab.dataset.view;
+
+      try{
+  localStorage.setItem(
+    HP_VIEW_STORAGE_KEY,
+    view
+  );
+}catch(error){
+  /* 保存できない環境では何もしない */
+}
 
 
       /* -------------------------
