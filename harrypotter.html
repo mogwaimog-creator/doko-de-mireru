@@ -528,6 +528,298 @@ body{
 
 }
 
+/* =====================================================
+   作品一覧
+===================================================== */
+
+.hp-order-section{
+  margin:0 0 60px;
+}
+
+.hp-order-heading{
+  margin-bottom:18px;
+
+  padding:20px 22px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #1f2937,
+      #312e81
+    );
+
+  border-left:4px solid #f59e0b;
+  border-radius:16px;
+
+  color:#ffffff;
+
+  box-shadow:
+    0 6px 18px
+    rgba(15,23,42,.10);
+}
+
+.hp-order-heading > span{
+  display:block;
+
+  margin-bottom:5px;
+
+  color:#fcd34d;
+
+  font-size:13px;
+  font-weight:900;
+
+  letter-spacing:.08em;
+}
+
+.hp-order-heading h2{
+  margin:0 0 6px;
+
+  font-size:22px;
+}
+
+.hp-order-heading p{
+  margin:0;
+
+  max-width:850px;
+
+  color:#d1d5db;
+
+  font-size:14px;
+  line-height:1.7;
+}
+
+
+/* =====================================================
+   映画カード
+===================================================== */
+
+.hp-movie-grid{
+  display:grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0,1fr));
+
+  gap:16px;
+}
+
+.hp-movie-card{
+  position:relative;
+
+  padding:18px;
+
+  background:#ffffff;
+
+  border:
+    1px solid
+    #e5e7eb;
+
+  border-radius:17px;
+
+  box-shadow:
+    0 3px 12px
+    rgba(15,23,42,.06);
+}
+
+.hp-movie-number{
+  position:absolute;
+
+  top:12px;
+  left:16px;
+
+  color:#b45309;
+
+  font-size:28px;
+  line-height:1;
+
+  font-weight:900;
+}
+
+.hp-movie-main{
+  display:flex;
+
+  align-items:flex-start;
+
+  gap:16px;
+
+  padding-top:32px;
+}
+
+.hp-movie-poster{
+  width:105px;
+  height:158px;
+
+  flex:0 0 105px;
+
+  object-fit:cover;
+
+  background:#e5e7eb;
+
+  border-radius:9px;
+}
+
+.hp-movie-info{
+  display:flex;
+
+  min-width:0;
+
+  flex:1;
+  flex-direction:column;
+}
+
+.hp-movie-type{
+  align-self:flex-start;
+
+  margin-bottom:6px;
+
+  padding:3px 8px;
+
+  color:#92400e;
+  background:#fef3c7;
+
+  border:
+    1px solid
+    #fde68a;
+
+  border-radius:999px;
+
+  font-size:13px;
+  font-weight:900;
+}
+
+.hp-movie-info h3{
+  margin:0 0 6px;
+
+  color:#1f2937;
+
+  font-size:18px;
+  line-height:1.4;
+}
+
+.hp-movie-meta{
+  margin-bottom:10px;
+
+  color:#64748b;
+
+  font-size:14px;
+  font-weight:700;
+}
+
+.hp-movie-point{
+  margin:0 0 13px;
+
+  color:#475569;
+
+  font-size:14px;
+  line-height:1.65;
+}
+
+
+/* =====================================================
+   これはもう観た！
+===================================================== */
+
+.hp-watched{
+  display:flex;
+
+  align-items:center;
+
+  gap:8px;
+
+  width:max-content;
+
+  max-width:100%;
+
+  margin-top:auto;
+  padding:8px 11px;
+
+  background:#fffbeb;
+
+  border:
+    1px solid
+    #fde68a;
+
+  border-radius:9px;
+
+  color:#92400e;
+
+  font-size:14px;
+  font-weight:900;
+
+  cursor:pointer;
+}
+
+.hp-watched-check{
+  width:18px;
+  height:18px;
+
+  margin:0;
+
+  accent-color:#d97706;
+
+  cursor:pointer;
+}
+
+.hp-detail-link{
+  display:inline-block;
+
+  margin-top:11px;
+
+  color:#2563eb;
+
+  font-size:14px;
+  font-weight:800;
+
+  text-decoration:none;
+}
+
+.hp-detail-link:hover{
+  text-decoration:underline;
+}
+
+
+/* =====================================================
+   スマホ
+===================================================== */
+
+@media(max-width:700px){
+
+  .hp-movie-grid{
+    grid-template-columns:1fr;
+  }
+
+  .hp-order-heading{
+    padding:18px 16px;
+  }
+
+  .hp-order-heading h2{
+    font-size:20px;
+  }
+
+}
+
+@media(max-width:420px){
+
+  .hp-movie-card{
+    padding:15px;
+  }
+
+  .hp-movie-main{
+    gap:12px;
+  }
+
+  .hp-movie-poster{
+    width:95px;
+    height:143px;
+
+    flex-basis:95px;
+  }
+
+  .hp-movie-info h3{
+    font-size:17px;
+  }
+
+}
+  
 </style>
 
 </head>
@@ -630,11 +922,106 @@ body{
   </section>
 
 
-  <section class="hp-coming">
+   <!-- =====================================================
+       公開順
+  ====================================================== -->
 
-    🪄 ここにハリー・ポッター＋
-    ファンタスティック・ビースト
-    全11作品が入ります。
+  <section
+    class="hp-order-section"
+    id="release"
+  >
+
+    <div class="hp-order-heading">
+
+      <span>
+        🎬 RELEASE ORDER
+      </span>
+
+      <h2>
+        公開順で見る
+      </h2>
+
+      <p>
+        初めて見るなら、まずはこちらがおすすめ。
+        ハリー・ポッターからファンタスティック・ビーストまで、
+        映画が公開された順番に楽しめます。
+      </p>
+
+    </div>
+
+
+    <div
+      class="hp-movie-grid"
+      id="releaseMovies"
+    >
+
+      <!-- まず1作品だけ表示 -->
+
+      <article
+        class="hp-movie-card"
+        data-movie-id="671"
+      >
+
+        <div class="hp-movie-number">
+          01
+        </div>
+
+        <div class="hp-movie-main">
+
+          <img
+            class="hp-movie-poster"
+            src="https://image.tmdb.org/t/p/w342/wuMc08IPKEatf9rnMNXvIDxqP4W.jpg"
+            alt="ハリー・ポッターと賢者の石"
+          >
+
+          <div class="hp-movie-info">
+
+            <div class="hp-movie-type">
+              映画
+            </div>
+
+            <h3>
+              ハリー・ポッターと賢者の石
+            </h3>
+
+            <div class="hp-movie-meta">
+              2001年 ・ 152分
+            </div>
+
+            <p class="hp-movie-point">
+              すべての始まり。
+              ハリーが魔法界を知り、
+              ホグワーツでの物語が始まります。
+            </p>
+
+            <label class="hp-watched">
+
+              <input
+                type="checkbox"
+                class="hp-watched-check"
+                data-watch-id="671"
+              >
+
+              <span>
+                これはもう観た！
+              </span>
+
+            </label>
+
+            <a
+              class="hp-detail-link"
+              href="detail.html?id=671&type=movie"
+            >
+              作品詳細を見る →
+            </a>
+
+          </div>
+
+        </div>
+
+      </article>
+
+    </div>
 
   </section>
 
