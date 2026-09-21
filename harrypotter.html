@@ -337,6 +337,53 @@ body{
     box-shadow .2s ease;
 }
 
+/* =====================================================
+   公開順・時系列
+   選択中を分かりやすくする
+===================================================== */
+
+.hp-tab{
+  opacity:.68;
+
+  transform:scale(.97);
+
+  transition:
+    opacity .2s ease,
+    transform .2s ease,
+    box-shadow .2s ease,
+    filter .2s ease;
+}
+
+.hp-tab:hover{
+  opacity:.9;
+}
+
+.hp-tab.active{
+  position:relative;
+
+  opacity:1;
+
+  transform:
+    translateY(-2px)
+    scale(1.04);
+
+  outline:
+    2px solid
+    rgba(255,255,255,.95);
+
+  outline-offset:3px;
+
+  box-shadow:
+    0 0 0 4px
+    rgba(255,255,255,.14),
+
+    0 8px 22px
+    rgba(0,0,0,.28);
+
+  filter:
+    brightness(1.08);
+}
+  
 .hp-tab-release{
   background:
     linear-gradient(
@@ -903,11 +950,11 @@ body{
       >
 
         <a
-          class="hp-tab hp-tab-release"
-          href="#release"
-        >
-          🎬 公開順
-        </a>
+  class="hp-tab hp-tab-release active"
+  href="#release"
+>
+  ✓ 🎬 公開順
+</a>
 
         <a
           class="hp-tab hp-tab-timeline"
