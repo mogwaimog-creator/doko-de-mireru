@@ -1828,6 +1828,207 @@ hpTabs.forEach(tab => {
   );
 
 });
+
+/* =====================================================
+   ハリー・ポッター 配信ロゴ読み込み
+===================================================== */
+
+const hpProviderCache = new Map();
+
+
+async function fetchHpProviders(id){
+
+  const key = String(id);
+
+  if(hpProviderCache.has(key)){
+    return hpProviderCache.get(key);
+  }
+
+
+  const request = (async () => {
+
+    try{
+
+      const response =
+        await fetch(
+          "/api/search?id=" +
+          encodeURIComponent(id) +
+          "&type=movie"
+        );
+
+      if(!response.ok){
+        throw new Error(
+          "配信情報を取得できませんでした"
+        );
+      }
+
+
+      const data =
+        await response.json();
+
+
+      const providers =
+        Array.isArray(data.streaming)
+          ? data.streaming
+          : [];
+
+
+      const unique = [];
+
+      for(const provider of providers){
+
+        if(
+          !provider ||
+          !provider.logo_path
+        ){
+          continue;
+        }
+
+
+        if(
+          unique.some(
+            item =>
+              item.provider_id ===
+              provider.provider_id
+          )
+        ){
+          continue;
+        }
+
+
+        unique.push(provider);
+
+
+        if(unique.length >= 6){
+          break;
+        }
+
+      }
+
+
+      return unique;
+
+    }catch(error){
+
+      console.error(
+        "ハリポタ配信ロゴ取得エラー:",
+        id,
+        error
+      );
+
+      return [];
+
+    }
+
+  })();
+
+
+  hpProviderCache.set(
+    key,
+    request
+  );
+
+
+  return request;
+}
+
+
+/* -----------------------------------------------------
+   1つのカードへロゴを表示
+----------------------------------------------------- */
+
+async function loadHpProviderBox(box){
+
+  if(
+    !box ||
+    box.dataset.loaded === "1" ||
+    box.dataset.loading === "1"
+  ){
+    return;
+  }
+
+
+  const id =
+    box.dataset.id;
+
+  if(!id){
+    return;
+  }
+
+
+  box.dataset.loading = "1";
+
+
+  const providers =
+    await fetchHpProviders(id);
+
+
+  delete box.dataset.loading;
+
+
+  if(providers.length === 0){
+
+    box.dataset.loaded = "1";
+
+    return;
+  }
+
+
+  box.innerHTML = "";
+
+
+  for(const provider of providers){
+
+    const img =
+      document.createElement("img");
+
+
+    img.src =
+      "https://image.tmdb.org/t/p/w92" +
+      provider.logo_path;
+
+
+    img.alt =
+      provider.provider_name ||
+      "配信サービス";
+
+
+    img.loading = "lazy";
+
+
+    box.appendChild(img);
+
+  }
+
+
+  box.dataset.loaded = "1";
+}
+
+
+/* -----------------------------------------------------
+   画面内の配信ロゴを読み込む
+----------------------------------------------------- */
+
+function loadHpProviderLogos(){
+
+  const boxes =
+    document.querySelectorAll(
+      ".hp-provider-logos[data-id]"
+    );
+
+
+  boxes.forEach(box => {
+
+    loadHpProviderBox(box);
+
+  });
+
+}
+
+
+/* 最初の表示 */
+
+loadHpProviderLogos();
   
 </script>
   
