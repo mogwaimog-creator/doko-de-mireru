@@ -1128,10 +1128,10 @@ if(releaseMovies){
             .padStart(2, "0");
 
         return `
-          <article
-            class="hp-movie-card"
-            data-movie-id="${movie.id}"
-          >
+  <article
+    class="hp-movie-card ${index >= 8 ? 'is-fantastic' : ''}"
+    data-movie-id="${movie.id}"
+  >
 
             <div class="hp-movie-number">
               ${number}
