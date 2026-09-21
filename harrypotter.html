@@ -952,17 +952,18 @@ body{
         <a
   class="hp-tab hp-tab-release active"
   href="#release"
+  data-view="release"
 >
   ✓ 🎬 公開順
 </a>
 
-        <a
-          class="hp-tab hp-tab-timeline"
-          href="#timeline"
-        >
-          ⏳ 物語の時系列
-        </a>
-
+<a
+  class="hp-tab hp-tab-timeline"
+  href="#release"
+  data-view="timeline"
+>
+  ⏳ 物語の時系列
+</a>
       </nav>
 
     </section>
@@ -1020,21 +1021,24 @@ body{
     id="release"
   >
 
-    <div class="hp-order-heading">
+    <div
+  class="hp-order-heading"
+  id="orderHeading"
+>
+     
+      <span id="orderLabel">
+  🎬 RELEASE ORDER
+</span>
 
-      <span>
-        🎬 RELEASE ORDER
-      </span>
+      <h2 id="orderTitle">
+  公開順で見る
+</h2>
 
-      <h2>
-        公開順で見る
-      </h2>
-
-      <p>
-        初めて見るなら、まずはこちらがおすすめ。
-        ハリー・ポッターからファンタスティック・ビーストまで、
-        映画が公開された順番に楽しめます。
-      </p>
+      <p id="orderDescription">
+  初めて見るなら、まずはこちらがおすすめ。
+  ハリー・ポッターからファンタスティック・ビーストまで、
+  映画が公開された順番に楽しめます。
+</p>
 
     </div>
 
@@ -1273,6 +1277,134 @@ if(releaseMovies){
 }
 
 /* =====================================================
+   公開順・時系列 切り替え
+===================================================== */
+
+const releaseOrder =
+  harryPotterMovies.slice();
+
+
+const timelineIds = [
+  259316,
+  338952,
+  338953,
+  671,
+  672,
+  673,
+  674,
+  675,
+  767,
+  12444,
+  12445
+];
+
+
+const timelineOrder =
+  timelineIds
+    .map(id =>
+      harryPotterMovies.find(
+        movie => movie.id === id
+      )
+    )
+    .filter(Boolean);
+
+
+/* -----------------------------------------------------
+   カードを描き直す
+----------------------------------------------------- */
+
+function renderMovieCards(movies){
+
+  if(!releaseMovies){
+    return;
+  }
+
+
+  releaseMovies.innerHTML =
+    movies
+      .map((movie, index) => {
+
+        const number =
+          String(index + 1)
+            .padStart(2, "0");
+
+        const isFantastic =
+          movie.id === 259316 ||
+          movie.id === 338952 ||
+          movie.id === 338953;
+
+        return `
+          <article
+            class="hp-movie-card ${isFantastic ? "is-fantastic" : ""}"
+            data-movie-id="${movie.id}"
+          >
+
+            <div class="hp-movie-number">
+              ${number}
+            </div>
+
+            <div class="hp-movie-main">
+
+              <img
+                class="hp-movie-poster"
+                src="${movie.poster}"
+                alt="${movie.title}"
+                loading="lazy"
+              >
+
+              <div class="hp-movie-info">
+
+                <div class="hp-movie-type">
+                  映画
+                </div>
+
+                <h3>
+                  ${movie.title}
+                </h3>
+
+                <div class="hp-movie-meta">
+                  ${movie.year}年 ・
+                  ${movie.runtime}分
+                </div>
+
+                <p class="hp-movie-point">
+                  ${movie.point}
+                </p>
+
+                <label class="hp-watched">
+
+                  <input
+                    type="checkbox"
+                    class="hp-watched-check"
+                    data-watch-id="${movie.id}"
+                  >
+
+                  <span>
+                    これはもう観た！
+                  </span>
+
+                </label>
+
+                <a
+                  class="hp-detail-link"
+                  href="detail.html?id=${movie.id}&type=movie"
+                >
+                  作品詳細を見る →
+                </a>
+
+              </div>
+
+            </div>
+
+          </article>
+        `;
+
+      })
+      .join("");
+
+}
+  
+/* =====================================================
    「これはもう観た！」視聴記録
 ===================================================== */
 
@@ -1497,6 +1629,168 @@ document.addEventListener(
 applyWatchedState();
 
 updateWatchProgress();  
+
+/* =====================================================
+   タブをクリックした時
+===================================================== */
+
+const hpTabs =
+  document.querySelectorAll(
+    ".hp-tab[data-view]"
+  );
+
+const orderLabel =
+  document.getElementById(
+    "orderLabel"
+  );
+
+const orderTitle =
+  document.getElementById(
+    "orderTitle"
+  );
+
+const orderDescription =
+  document.getElementById(
+    "orderDescription"
+  );
+
+
+hpTabs.forEach(tab => {
+
+  tab.addEventListener(
+    "click",
+    event => {
+
+      event.preventDefault();
+
+      const view =
+        tab.dataset.view;
+
+
+      /* -------------------------
+         タブの選択状態
+      ------------------------- */
+
+      hpTabs.forEach(item => {
+
+        item.classList.remove(
+          "active"
+        );
+
+        if(
+          item.dataset.view ===
+          "release"
+        ){
+
+          item.innerHTML =
+            "🎬 公開順";
+
+        }else{
+
+          item.innerHTML =
+            "⏳ 物語の時系列";
+
+        }
+
+      });
+
+
+      tab.classList.add(
+        "active"
+      );
+
+
+      if(view === "timeline"){
+
+        tab.innerHTML =
+          "✓ ⏳ 物語の時系列";
+
+
+        renderMovieCards(
+          timelineOrder
+        );
+
+
+        if(orderLabel){
+
+          orderLabel.textContent =
+            "⏳ STORY TIMELINE";
+
+        }
+
+
+        if(orderTitle){
+
+          orderTitle.textContent =
+            "物語の時系列で見る";
+
+        }
+
+
+        if(orderDescription){
+
+          orderDescription.textContent =
+            "物語の年代順に楽しみたい人はこちら。ファンタスティック・ビースト3作品から始まり、その後ハリー・ポッター8作品へと続きます。";
+
+        }
+
+      }else{
+
+        tab.innerHTML =
+          "✓ 🎬 公開順";
+
+
+        renderMovieCards(
+          releaseOrder
+        );
+
+
+        if(orderLabel){
+
+          orderLabel.textContent =
+            "🎬 RELEASE ORDER";
+
+        }
+
+
+        if(orderTitle){
+
+          orderTitle.textContent =
+            "公開順で見る";
+
+        }
+
+
+        if(orderDescription){
+
+          orderDescription.textContent =
+            "初めて見るなら、まずはこちらがおすすめ。ハリー・ポッターからファンタスティック・ビーストまで、映画が公開された順番に楽しめます。";
+
+        }
+
+      }
+
+
+      /* -------------------------
+         視聴済みチェックを復元
+      ------------------------- */
+
+      applyWatchedState();
+
+
+      /* 一覧まで移動 */
+
+      document
+        .getElementById("release")
+        ?.scrollIntoView({
+          behavior:"smooth",
+          block:"start"
+        });
+
+    }
+  );
+
+});
   
 </script>
   
