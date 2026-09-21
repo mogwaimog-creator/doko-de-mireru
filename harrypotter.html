@@ -1225,6 +1225,232 @@ if(releaseMovies){
 
 }
 
+/* =====================================================
+   「これはもう観た！」視聴記録
+===================================================== */
+
+const WATCH_STORAGE_KEY =
+  "dokomireru-harrypotter-watched-v1";
+
+const watchCount =
+  document.getElementById(
+    "watchCount"
+  );
+
+const watchProgress =
+  document.getElementById(
+    "watchProgress"
+  );
+
+const progressNote =
+  document.querySelector(
+    ".hp-progress-note"
+  );
+
+
+/* -----------------------------------------------------
+   保存されている視聴記録を読み込む
+----------------------------------------------------- */
+
+let watchedMovies = [];
+
+try{
+
+  const saved =
+    localStorage.getItem(
+      WATCH_STORAGE_KEY
+    );
+
+  if(saved){
+
+    const parsed =
+      JSON.parse(saved);
+
+    if(Array.isArray(parsed)){
+
+      watchedMovies =
+        parsed.map(String);
+
+    }
+
+  }
+
+}catch(error){
+
+  watchedMovies = [];
+
+}
+
+
+/* -----------------------------------------------------
+   チェック状態を画面へ反映
+----------------------------------------------------- */
+
+function applyWatchedState(){
+
+  const checks =
+    document.querySelectorAll(
+      ".hp-watched-check"
+    );
+
+  checks.forEach(check => {
+
+    check.checked =
+      watchedMovies.includes(
+        String(check.dataset.watchId)
+      );
+
+  });
+
+}
+
+
+/* -----------------------------------------------------
+   上の進捗表示を更新
+----------------------------------------------------- */
+
+function updateWatchProgress(){
+
+  const total = 11;
+
+  const validIds =
+    harryPotterMovies.map(
+      movie => String(movie.id)
+    );
+
+  const count =
+    watchedMovies.filter(
+      id => validIds.includes(id)
+    ).length;
+
+  if(watchCount){
+
+    if(count === total){
+
+      watchCount.textContent =
+        "11 / 11作品 🎉 完走！";
+
+    }else{
+
+      watchCount.textContent =
+        `${count} / ${total}作品`;
+
+    }
+
+  }
+
+
+  if(watchProgress){
+
+    const percent =
+      (count / total) * 100;
+
+    watchProgress.style.width =
+      `${percent}%`;
+
+  }
+
+
+  if(progressNote){
+
+    if(count === total){
+
+      progressNote.textContent =
+        "🎉 魔法ワールド全11作品、完走です！";
+
+    }else if(count > 0){
+
+      progressNote.textContent =
+        `あと${total - count}作品で全作品完走です。`;
+
+    }else{
+
+      progressNote.textContent =
+        "観た作品をチェックすると、ここにあなたの進み具合が表示されます。";
+
+    }
+
+  }
+
+}
+
+
+/* -----------------------------------------------------
+   「これはもう観た！」を押した時
+----------------------------------------------------- */
+
+document.addEventListener(
+  "change",
+  event => {
+
+    if(
+      !event.target.classList.contains(
+        "hp-watched-check"
+      )
+    ){
+      return;
+    }
+
+
+    const movieId =
+      String(
+        event.target.dataset.watchId
+      );
+
+
+    if(event.target.checked){
+
+      if(
+        !watchedMovies.includes(movieId)
+      ){
+
+        watchedMovies.push(movieId);
+
+      }
+
+    }else{
+
+      watchedMovies =
+        watchedMovies.filter(
+          id => id !== movieId
+        );
+
+    }
+
+
+    try{
+
+      localStorage.setItem(
+        WATCH_STORAGE_KEY,
+        JSON.stringify(
+          watchedMovies
+        )
+      );
+
+    }catch(error){
+
+      /* 保存できない環境でも
+         チェック機能自体は動かす */
+
+    }
+
+
+    applyWatchedState();
+
+    updateWatchProgress();
+
+  }
+);
+
+
+/* -----------------------------------------------------
+   ページを開いた時
+----------------------------------------------------- */
+
+applyWatchedState();
+
+updateWatchProgress();  
+  
 </script>
   
 </body>
