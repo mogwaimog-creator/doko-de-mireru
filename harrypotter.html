@@ -950,82 +950,240 @@ body{
     </div>
 
 
-    <div
-      class="hp-movie-grid"
-      id="releaseMovies"
-    >
-
-      <!-- まず1作品だけ表示 -->
-
-      <article
-        class="hp-movie-card"
-        data-movie-id="671"
-      >
-
-        <div class="hp-movie-number">
-          01
-        </div>
-
-        <div class="hp-movie-main">
-
-          <img
-            class="hp-movie-poster"
-            src="https://image.tmdb.org/t/p/w342/wuMc08IPKEatf9rnMNXvIDxqP4W.jpg"
-            alt="ハリー・ポッターと賢者の石"
-          >
-
-          <div class="hp-movie-info">
-
-            <div class="hp-movie-type">
-              映画
-            </div>
-
-            <h3>
-              ハリー・ポッターと賢者の石
-            </h3>
-
-            <div class="hp-movie-meta">
-              2001年 ・ 152分
-            </div>
-
-            <p class="hp-movie-point">
-              すべての始まり。
-              ハリーが魔法界を知り、
-              ホグワーツでの物語が始まります。
-            </p>
-
-            <label class="hp-watched">
-
-              <input
-                type="checkbox"
-                class="hp-watched-check"
-                data-watch-id="671"
-              >
-
-              <span>
-                これはもう観た！
-              </span>
-
-            </label>
-
-            <a
-              class="hp-detail-link"
-              href="detail.html?id=671&type=movie"
-            >
-              作品詳細を見る →
-            </a>
-
-          </div>
-
-        </div>
-
-      </article>
-
-    </div>
+<div
+  class="hp-movie-grid"
+  id="releaseMovies"
+></div>
 
   </section>
 
 </main>
 
+<script>
+
+/* =====================================================
+   ハリー・ポッター
+   公開順 11作品
+===================================================== */
+
+const harryPotterMovies = [
+
+  {
+    id: 671,
+    title: "ハリー・ポッターと賢者の石",
+    year: 2001,
+    runtime: 152,
+    poster:
+      "https://image.tmdb.org/t/p/w342/wuMc08IPKEatf9rnMNXvIDxqP4W.jpg",
+    point:
+      "すべての始まり。ハリーが魔法界を知り、ホグワーツでの物語が始まります。"
+  },
+
+  {
+    id: 672,
+    title: "ハリー・ポッターと秘密の部屋",
+    year: 2002,
+    runtime: 161,
+    poster:
+      "https://image.tmdb.org/t/p/w342/sdEOH0992YZ0QSxgXNIGLq1ToUi.jpg",
+    point:
+      "ホグワーツ2年目。学校で起こる不可解な事件と、秘密の部屋の謎に迫ります。"
+  },
+
+  {
+    id: 673,
+    title: "ハリー・ポッターとアズカバンの囚人",
+    year: 2004,
+    runtime: 142,
+    poster:
+      "https://image.tmdb.org/t/p/w342/aWxwnYoe8p2d2fcxOqtvAtJ72Rw.jpg",
+    point:
+      "脱獄囚シリウス・ブラックの登場によって、ハリーの過去が大きく動き始めます。"
+  },
+
+  {
+    id: 674,
+    title: "ハリー・ポッターと炎のゴブレット",
+    year: 2005,
+    runtime: 157,
+    poster:
+      "https://image.tmdb.org/t/p/w342/fECBtHlr0RB3foNHDiCBXeg9Bv9.jpg",
+    point:
+      "三大魔法学校対抗試合が開催。物語はここからさらに大きな戦いへ進んでいきます。"
+  },
+
+  {
+    id: 675,
+    title: "ハリー・ポッターと不死鳥の騎士団",
+    year: 2007,
+    runtime: 138,
+    poster:
+      "https://image.tmdb.org/t/p/w342/5aOyriWkPec0zUDxmHFP9qMmBaj.jpg",
+    point:
+      "ヴォルデモート復活をめぐり魔法界が揺れる中、ハリーたちは自ら戦う準備を始めます。"
+  },
+
+  {
+    id: 767,
+    title: "ハリー・ポッターと謎のプリンス",
+    year: 2009,
+    runtime: 153,
+    poster:
+      "https://image.tmdb.org/t/p/w342/z7uo9zmQdQwU5ZJHFpv2Upl30i1.jpg",
+    point:
+      "ヴォルデモートの過去と秘密に迫り、最終決戦へ向けた重要な真実が明かされます。"
+  },
+
+  {
+    id: 12444,
+    title: "ハリー・ポッターと死の秘宝 PART1",
+    year: 2010,
+    runtime: 146,
+    poster:
+      "https://image.tmdb.org/t/p/w342/iGoXIpQb7Pot00EEdwpwPajheZ5.jpg",
+    point:
+      "ホグワーツを離れたハリー、ロン、ハーマイオニー。最後の戦いへ向けた旅が始まります。"
+  },
+
+  {
+    id: 12445,
+    title: "ハリー・ポッターと死の秘宝 PART2",
+    year: 2011,
+    runtime: 130,
+    poster:
+      "https://image.tmdb.org/t/p/w342/c54HpQmuwXjHq2C9wmoACjxoom3.jpg",
+    point:
+      "ついに迎える最終決戦。ハリーとヴォルデモートの長い戦いが決着を迎えます。"
+  },
+
+  {
+    id: 259316,
+    title: "ファンタスティック・ビーストと魔法使いの旅",
+    year: 2016,
+    runtime: 133,
+    poster:
+      "https://image.tmdb.org/t/p/w342/h6NYfVUyM6CDURtZSnBpz647Ldd.jpg",
+    point:
+      "舞台は1920年代のニューヨーク。魔法動物学者ニュート・スキャマンダーの物語が始まります。"
+  },
+
+  {
+    id: 338952,
+    title: "ファンタスティック・ビーストと黒い魔法使いの誕生",
+    year: 2018,
+    runtime: 134,
+    poster:
+      "https://image.tmdb.org/t/p/w342/fMMrl8fD9gRCFJvsx0SuFwkEOop.jpg",
+    point:
+      "勢力を拡大するグリンデルバルド。ニュートはダンブルドアからある依頼を受けます。"
+  },
+
+  {
+    id: 338953,
+    title: "ファンタスティック・ビーストとダンブルドアの秘密",
+    year: 2022,
+    runtime: 142,
+    poster:
+      "https://image.tmdb.org/t/p/w342/3c5GNLB4yRSLBby0trHoA1DSQxQ.jpg",
+    point:
+      "グリンデルバルドとの対決が激化。ダンブルドアの過去と秘密にも迫ります。"
+  }
+
+];
+
+
+/* =====================================================
+   公開順カードを表示
+===================================================== */
+
+const releaseMovies =
+  document.getElementById(
+    "releaseMovies"
+  );
+
+
+if(releaseMovies){
+
+  releaseMovies.innerHTML =
+    harryPotterMovies
+      .map((movie, index) => {
+
+        const number =
+          String(index + 1)
+            .padStart(2, "0");
+
+        return `
+          <article
+            class="hp-movie-card"
+            data-movie-id="${movie.id}"
+          >
+
+            <div class="hp-movie-number">
+              ${number}
+            </div>
+
+            <div class="hp-movie-main">
+
+              <img
+                class="hp-movie-poster"
+                src="${movie.poster}"
+                alt="${movie.title}"
+                loading="lazy"
+              >
+
+              <div class="hp-movie-info">
+
+                <div class="hp-movie-type">
+                  映画
+                </div>
+
+                <h3>
+                  ${movie.title}
+                </h3>
+
+                <div class="hp-movie-meta">
+                  ${movie.year}年 ・
+                  ${movie.runtime}分
+                </div>
+
+                <p class="hp-movie-point">
+                  ${movie.point}
+                </p>
+
+                <label class="hp-watched">
+
+                  <input
+                    type="checkbox"
+                    class="hp-watched-check"
+                    data-watch-id="${movie.id}"
+                  >
+
+                  <span>
+                    これはもう観た！
+                  </span>
+
+                </label>
+
+                <a
+                  class="hp-detail-link"
+                  href="detail.html?id=${movie.id}&type=movie"
+                >
+                  作品詳細を見る →
+                </a>
+
+              </div>
+
+            </div>
+
+          </article>
+        `;
+
+      })
+      .join("");
+
+}
+
+</script>
+  
 </body>
 </html>
