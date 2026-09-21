@@ -908,6 +908,37 @@ body{
   background:#f5f3ff;
   border-color:#ddd6fe;
 }  
+
+/* =====================================================
+   配信ロゴ
+   MCU最短ルートと同じサイズ
+===================================================== */
+
+.hp-provider-logos{
+  display:grid;
+  grid-template-columns:repeat(3, 40px);
+  gap:6px;
+
+  align-items:center;
+  justify-content:start;
+
+  min-height:50px;
+  margin-bottom:10px;
+}
+
+.hp-provider-logos img{
+  display:block;
+
+  width:40px;
+  height:24px;
+
+  max-width:40px;
+  max-height:24px;
+
+  object-fit:contain;
+
+  border-radius:5px;
+}
   
 </style>
 
@@ -1235,13 +1266,19 @@ if(releaseMovies){
                 </h3>
 
                 <div class="hp-movie-meta">
-                  ${movie.year}年 ・
-                  ${movie.runtime}分
-                </div>
+  ${movie.year}年 ・
+  ${movie.runtime}分
+</div>
 
-                <p class="hp-movie-point">
-                  ${movie.point}
-                </p>
+<div
+  class="hp-provider-logos"
+  data-id="${movie.id}"
+  data-type="movie">
+</div>
+
+<p class="hp-movie-point">
+  ${movie.point}
+</p>
 
                 <label class="hp-watched">
 
