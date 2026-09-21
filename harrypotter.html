@@ -2052,6 +2052,33 @@ function loadHpProviderLogos(){
 
 }
 
+/* =====================================================
+   更新後も選択したタブを復元
+===================================================== */
+
+try{
+
+  const savedView =
+    localStorage.getItem(
+      HP_VIEW_STORAGE_KEY
+    );
+
+  if(savedView === "timeline"){
+
+    const timelineTab =
+      document.querySelector(
+        '.hp-tab[data-view="timeline"]'
+      );
+
+    if(timelineTab){
+      timelineTab.click();
+    }
+
+  }
+
+}catch(error){
+  /* 読み込めない環境では公開順のまま */
+}  
 
 /* 最初の表示 */
 
