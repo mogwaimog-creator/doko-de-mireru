@@ -1400,14 +1400,19 @@ function renderMovieCards(movies){
                 </h3>
 
                 <div class="hp-movie-meta">
-                  ${movie.year}年 ・
-                  ${movie.runtime}分
-                </div>
+  ${movie.year}年 ・
+  ${movie.runtime}分
+</div>
 
-                <p class="hp-movie-point">
-                  ${movie.point}
-                </p>
+<div
+  class="hp-provider-logos"
+  data-id="${movie.id}"
+  data-type="movie">
+</div>
 
+<p class="hp-movie-point">
+  ${movie.point}
+</p>
                 <label class="hp-watched">
 
                   <input
