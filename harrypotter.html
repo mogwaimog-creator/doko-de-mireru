@@ -2364,22 +2364,31 @@ try{
       HP_VIEW_STORAGE_KEY
     );
 
-  if(savedView === "timeline"){
 
-    const timelineTab =
+  if(
+    savedView === "timeline" ||
+    savedView === "relationships"
+  ){
+
+    const savedTab =
       document.querySelector(
-        '.hp-tab[data-view="timeline"]'
+        `.hp-tab[data-view="${savedView}"]`
       );
 
-    if(timelineTab){
-      timelineTab.click();
+
+    if(savedTab){
+
+      savedTab.click();
+
     }
 
   }
 
 }catch(error){
+
   /* 読み込めない環境では公開順のまま */
-}  
+
+}
 
 /* 最初の表示 */
 
