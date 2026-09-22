@@ -1903,18 +1903,27 @@ hpTabs.forEach(tab => {
       const view =
         tab.dataset.view;
 
+
+      /* -------------------------
+         選択した表示を保存
+      ------------------------- */
+
       try{
-  localStorage.setItem(
-    HP_VIEW_STORAGE_KEY,
-    view
-  );
-}catch(error){
-  /* 保存できない環境では何もしない */
-}
+
+        localStorage.setItem(
+          HP_VIEW_STORAGE_KEY,
+          view
+        );
+
+      }catch(error){
+
+        /* 保存できない環境では何もしない */
+
+      }
 
 
       /* -------------------------
-         タブの選択状態
+         3つのタブをいったん通常表示へ戻す
       ------------------------- */
 
       hpTabs.forEach(item => {
@@ -1923,41 +1932,145 @@ hpTabs.forEach(tab => {
           "active"
         );
 
-       if(
-  item.dataset.view ===
-  "release"
-){
+        if(
+          item.dataset.view ===
+          "release"
+        ){
 
-  item.innerHTML =
-    "🎬 公開順";
+          item.innerHTML =
+            "🎬 公開順";
 
-}else if(
-  item.dataset.view ===
-  "timeline"
-){
+        }else if(
+          item.dataset.view ===
+          "timeline"
+        ){
 
-  item.innerHTML =
-    "⏳ 物語の時系列";
+          item.innerHTML =
+            "⏳ 物語の時系列";
 
-}else if(
-  item.dataset.view ===
-  "relationships"
-){
+        }else if(
+          item.dataset.view ===
+          "relationships"
+        ){
 
-  item.innerHTML =
-    "🪄 人物相関図";
+          item.innerHTML =
+            "🪄 人物相関図";
 
-}
+        }
 
       });
 
+
+      /* -------------------------
+         押したタブを選択状態にする
+      ------------------------- */
 
       tab.classList.add(
         "active"
       );
 
 
-      if(view === "timeline"){
+      /* -------------------------
+         表示するセクションを取得
+      ------------------------- */
+
+      const progressSection =
+        document.querySelector(
+          ".hp-progress"
+        );
+
+      const orderSection =
+        document.querySelector(
+          ".hp-order-section"
+        );
+
+      const relationshipsSection =
+        document.getElementById(
+          "relationships"
+        );
+
+
+      /* =================================================
+         人物相関図
+      ================================================= */
+
+      if(
+        view === "relationships"
+      ){
+
+        tab.innerHTML =
+          "✓ 🪄 人物相関図";
+
+
+        if(progressSection){
+
+          progressSection.style.display =
+            "none";
+
+        }
+
+
+        if(orderSection){
+
+          orderSection.style.display =
+            "none";
+
+        }
+
+
+        if(relationshipsSection){
+
+          relationshipsSection.hidden =
+            false;
+
+          relationshipsSection.scrollIntoView({
+            behavior:"smooth",
+            block:"start"
+          });
+
+        }
+
+
+        return;
+
+      }
+
+
+      /* =================================================
+         公開順・時系列
+      ================================================= */
+
+      if(progressSection){
+
+        progressSection.style.display =
+          "";
+
+      }
+
+
+      if(orderSection){
+
+        orderSection.style.display =
+          "";
+
+      }
+
+
+      if(relationshipsSection){
+
+        relationshipsSection.hidden =
+          true;
+
+      }
+
+
+      /* -------------------------
+         物語の時系列
+      ------------------------- */
+
+      if(
+        view === "timeline"
+      ){
 
         tab.innerHTML =
           "✓ ⏳ 物語の時系列";
@@ -1990,6 +2103,11 @@ hpTabs.forEach(tab => {
             "魔法ワールドの出来事を年代順に楽しみたい人はこちら。ファンタスティック・ビースト3作品から始まり、その後ハリー・ポッター8作品へと続きます。一度全作品を見た人の見直しにもおすすめの順番です。";
 
         }
+
+
+      /* -------------------------
+         公開順
+      ------------------------- */
 
       }else{
 
@@ -2033,9 +2151,6 @@ hpTabs.forEach(tab => {
       ------------------------- */
 
       applyWatchedState();
-
-　　　/* 配信ロゴを再読み込み */
-      
 
     }
   );
