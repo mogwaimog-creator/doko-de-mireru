@@ -1766,20 +1766,31 @@ hpTabs.forEach(tab => {
           "active"
         );
 
-        if(
-          item.dataset.view ===
-          "release"
-        ){
+       if(
+  item.dataset.view ===
+  "release"
+){
 
-          item.innerHTML =
-            "🎬 公開順";
+  item.innerHTML =
+    "🎬 公開順";
 
-        }else{
+}else if(
+  item.dataset.view ===
+  "timeline"
+){
 
-          item.innerHTML =
-            "⏳ 物語の時系列";
+  item.innerHTML =
+    "⏳ 物語の時系列";
 
-        }
+}else if(
+  item.dataset.view ===
+  "relationships"
+){
+
+  item.innerHTML =
+    "🪄 人物相関図";
+
+}
 
       });
 
