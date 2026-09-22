@@ -960,6 +960,122 @@ body{
 
   border-radius:5px;
 }
+
+/* =====================================================
+   人物相関図
+===================================================== */
+
+.hp-relationships-section{
+  margin:0 0 60px;
+}
+
+.hp-relationships-heading{
+  margin-bottom:18px;
+  padding:20px 22px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #134e4a,
+      #0f766e
+    );
+
+  border-left:4px solid #5eead4;
+  border-radius:16px;
+
+  color:#ffffff;
+
+  box-shadow:
+    0 6px 18px
+    rgba(15,23,42,.10);
+}
+
+.hp-relationships-heading > span{
+  display:block;
+
+  margin-bottom:5px;
+
+  color:#99f6e4;
+
+  font-size:14px;
+  font-weight:900;
+
+  letter-spacing:.08em;
+}
+
+.hp-relationships-heading h2{
+  margin:0 0 6px;
+
+  font-size:22px;
+}
+
+.hp-relationships-heading p{
+  max-width:850px;
+
+  margin:0;
+
+  color:#ccfbf1;
+
+  font-size:15px;
+  line-height:1.8;
+}
+
+
+/* =====================================================
+   相関図本体
+===================================================== */
+
+.hp-relationships-map{
+  position:relative;
+
+  padding:18px;
+
+  background:#ffffff;
+
+  border:
+    1px solid
+    #d1d5db;
+
+  border-radius:18px;
+
+  box-shadow:
+    0 5px 18px
+    rgba(15,23,42,.08);
+}
+
+.hp-relationships-map img{
+  display:block;
+
+  width:100%;
+  height:auto;
+
+  border-radius:12px;
+}
+
+
+/* =====================================================
+   スマホ
+===================================================== */
+
+@media(max-width:600px){
+
+  .hp-relationships-heading{
+    padding:18px 16px;
+  }
+
+  .hp-relationships-heading h2{
+    font-size:20px;
+  }
+
+  .hp-relationships-heading p{
+    font-size:14px;
+  }
+
+  .hp-relationships-map{
+    padding:10px;
+  }
+
+}
   
 </style>
 
@@ -1109,6 +1225,47 @@ body{
 
   </section>
 
+  <!-- =====================================================
+     人物相関図
+====================================================== -->
+
+<section
+  class="hp-relationships-section"
+  id="relationships"
+  hidden
+>
+
+  <div class="hp-relationships-heading">
+
+    <span>
+      🪄 CHARACTER RELATIONSHIP MAP
+    </span>
+
+    <h2>
+      ハリー・ポッター 人物相関図
+    </h2>
+
+    <p>
+      登場人物たちのつながりを、
+      園児のお遊戯会風の「人物関係路線図」にまとめました。
+      友情・家族・先生・ライバルなど、
+      魔法ワールドの関係を楽しくたどってみましょう。
+    </p>
+
+  </div>
+
+  <div class="hp-relationships-map">
+
+  <img
+    src="harrypotter-relationship-map.png"
+    alt="ハリー・ポッターの登場人物の関係を路線図風に表した人物相関図"
+    loading="lazy"
+  >
+
+</div>
+
+</section>
+  
 </main>
 
 <script>
