@@ -1910,6 +1910,18 @@ header p{
 
   transform:translateY(-1px);
 }
+
+#favoriteButton.is-favorite{
+  background:#e11d48;
+  color:#fff;
+
+  border-color:#e11d48;
+}
+
+#favoriteButton.is-favorite:hover{
+  background:#be123c;
+  border-color:#be123c;
+}
   
 /* =========================================================
    MCUを見る順番への案内
@@ -2536,6 +2548,211 @@ const content =
     "content"
   );
 
+ /* =========================================================
+   お気に入り
+========================================================= */
+
+const FAVORITES_KEY =
+  "dokoDeMireruFavorites";
+
+
+function getFavorites(){
+
+  try{
+
+    const saved =
+      localStorage.getItem(
+        FAVORITES_KEY
+      );
+
+    if(!saved){
+      return [];
+    }
+
+    const favorites =
+      JSON.parse(saved);
+
+    return Array.isArray(favorites)
+      ? favorites
+      : [];
+
+  }catch(error){
+
+    console.error(
+      "お気に入りの読み込みに失敗しました。",
+      error
+    );
+
+    return [];
+
+  }
+
+}
+
+
+function saveFavorites(favorites){
+
+  try{
+
+    localStorage.setItem(
+      FAVORITES_KEY,
+      JSON.stringify(favorites)
+    );
+
+  }catch(error){
+
+    console.error(
+      "お気に入りの保存に失敗しました。",
+      error
+    );
+
+  }
+
+}
+
+
+function setupFavoriteButton(movie){
+
+  const button =
+    document.getElementById(
+      "favoriteButton"
+    );
+
+  if(
+    !button ||
+    !movie ||
+    !movie.id
+  ){
+    return;
+  }
+
+
+  const favoriteId =
+    mediaType +
+    ":" +
+    String(movie.id);
+
+
+  function updateButton(){
+
+    const favorites =
+      getFavorites();
+
+    const isFavorite =
+      favorites.some(function(item){
+
+        return (
+          item &&
+          item.favoriteId ===
+            favoriteId
+        );
+
+      });
+
+
+    if(isFavorite){
+
+      button.textContent =
+        "♥ お気に入り登録済み";
+
+      button.classList.add(
+        "is-favorite"
+      );
+
+      button.setAttribute(
+        "aria-pressed",
+        "true"
+      );
+
+    }else{
+
+      button.textContent =
+        "♡ お気に入りに追加";
+
+      button.classList.remove(
+        "is-favorite"
+      );
+
+      button.setAttribute(
+        "aria-pressed",
+        "false"
+      );
+
+    }
+
+  }
+
+
+  button.onclick =
+    function(){
+
+      let favorites =
+        getFavorites();
+
+      const index =
+        favorites.findIndex(
+          function(item){
+
+            return (
+              item &&
+              item.favoriteId ===
+                favoriteId
+            );
+
+          }
+        );
+
+
+      if(index >= 0){
+
+        favorites.splice(
+          index,
+          1
+        );
+
+      }else{
+
+        favorites.push({
+
+          favoriteId:
+            favoriteId,
+
+          id:
+            String(movie.id),
+
+          type:
+            mediaType,
+
+          title:
+            movie.title ||
+            "作品情報",
+
+          poster_path:
+            movie.poster_path ||
+            "",
+
+          release_date:
+            movie.release_date ||
+            ""
+
+        });
+
+      }
+
+
+      saveFavorites(
+        favorites
+      );
+
+      updateButton();
+
+    };
+
+
+  updateButton();
+
+} 
+  
 
 /* =========================================================
    URL
@@ -2787,6 +3004,9 @@ async function loadMovie(){
       movie
     );
 
+    setupFavoriteButton(
+  movie
+);
 
     updateSeo(
       movie
