@@ -489,28 +489,261 @@ body{
 
 
 /* =====================================================
-   次の作業用
+   新劇場版
 ===================================================== */
 
-.eva-placeholder{
-  margin-bottom:60px;
+.eva-route-section{
+  margin-bottom:70px;
+  scroll-margin-top:20px;
+}
 
-  padding:28px 20px;
+
+.eva-route-heading{
+  margin-bottom:24px;
+  text-align:center;
+}
+
+
+.eva-route-kicker{
+  margin-bottom:5px;
+
+  color:#65a30d;
+
+  font-size:14px;
+  font-weight:900;
+
+  letter-spacing:.08em;
+}
+
+
+.eva-route-heading h2{
+  margin:0 0 8px;
+
+  color:#3b0764;
+
+  font-size:27px;
+}
+
+
+.eva-route-heading p{
+  margin:0;
+
+  color:#64748b;
+
+  font-size:16px;
+  line-height:1.7;
+}
+
+
+.eva-rebuild-list{
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+}
+
+
+.eva-work-row{
+  display:grid;
+
+  grid-template-columns:
+    minmax(0,1.45fr)
+    minmax(280px,.8fr);
+
+  gap:16px;
+}
+
+
+/* 作品カード */
+
+.eva-work-card{
+  position:relative;
+
+  padding:20px;
 
   background:#ffffff;
 
   border:
-    1px dashed
-    #c4b5fd;
+    1px solid
+    #ddd6fe;
+
+  border-left:
+    5px solid
+    #7e22ce;
 
   border-radius:16px;
 
+  box-shadow:
+    0 4px 14px
+    rgba(15,23,42,.06);
+}
+
+
+.eva-work-number{
+  position:absolute;
+
+  top:15px;
+  right:17px;
+
+  color:#7e22ce;
+
+  font-size:22px;
+  font-weight:900;
+
+  opacity:.72;
+}
+
+
+.eva-work-content{
+  display:flex;
+  gap:18px;
+}
+
+
+/* 仮ポスター */
+
+.eva-work-poster{
+  display:flex;
+
+  width:110px;
+  min-width:110px;
+  height:165px;
+
+  align-items:center;
+  justify-content:center;
+
+  background:
+    linear-gradient(
+      145deg,
+      #ede9fe,
+      #f5f3ff
+    );
+
+  border:
+    1px solid
+    #ddd6fe;
+
+  border-radius:9px;
+
+  color:#7e22ce;
+
+  font-size:14px;
+  font-weight:900;
+}
+
+
+.eva-work-info{
+  display:flex;
+  min-width:0;
+  flex:1;
+  flex-direction:column;
+}
+
+
+.eva-work-info h3{
+  margin:
+    3px
+    48px
+    5px
+    0;
+
+  color:#1f2937;
+
+  font-size:20px;
+  line-height:1.45;
+}
+
+
+.eva-work-meta{
+  margin-bottom:12px;
+
   color:#64748b;
 
-  text-align:center;
+  font-size:14px;
+  font-weight:700;
+}
+
+
+.eva-work-catch{
+  margin:0 0 14px;
+
+  color:#4d7c0f;
+
+  font-size:16px;
+  font-weight:900;
+  line-height:1.6;
+}
+
+
+.eva-work-detail{
+  display:inline-block;
+
+  margin-top:auto;
+
+  color:#6b21a8;
 
   font-size:15px;
-  font-weight:700;
+  font-weight:900;
+
+  text-decoration:none;
+}
+
+
+.eva-work-detail:hover{
+  text-decoration:underline;
+}
+
+
+/* 初心者メモ */
+
+.eva-beginner-memo{
+  padding:20px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #faf5ff,
+      #ffffff
+    );
+
+  border:
+    1px solid
+    #e9d5ff;
+
+  border-left:
+    5px solid
+    #84cc16;
+
+  border-radius:16px;
+}
+
+
+.eva-memo-label{
+  margin-bottom:13px;
+
+  color:#65a30d;
+
+  font-size:14px;
+  font-weight:900;
+}
+
+
+.eva-beginner-memo h3{
+  margin:0 0 9px;
+
+  color:#3b0764;
+
+  font-size:18px;
+  line-height:1.45;
+}
+
+
+.eva-beginner-memo p{
+  margin:0;
+
+  color:#475569;
+
+  font-size:15px;
+  line-height:1.75;
 }
 
 
@@ -566,6 +799,47 @@ body{
     font-size:22px;
   }
 
+  /* 新劇場版 */
+
+  .eva-work-row{
+    grid-template-columns:1fr;
+  }
+
+
+  .eva-work-card{
+    padding:17px;
+  }
+
+
+  .eva-work-content{
+    gap:14px;
+  }
+
+
+  .eva-work-poster{
+    width:92px;
+    min-width:92px;
+    height:138px;
+  }
+
+
+  .eva-work-info h3{
+    margin-right:35px;
+
+    font-size:17px;
+  }
+
+
+  .eva-work-number{
+    font-size:18px;
+  }
+
+
+  .eva-beginner-memo{
+    padding:18px;
+  }
+
+  
 }
 
 </style>
@@ -773,12 +1047,299 @@ body{
        次回ここから作品を追加
   ====================================================== -->
 
-  <section
-    class="eva-placeholder"
-    id="rebuild"
-  >
-    🎬 次に「新劇場版4作品」をここへ追加します。
-  </section>
+  <!-- =====================================================
+     新劇場版
+====================================================== -->
+
+<section
+  class="eva-route-section"
+  id="rebuild"
+>
+
+  <div class="eva-route-heading">
+
+    <div class="eva-route-kicker">
+      🎬 REBUILD OF EVANGELION
+    </div>
+
+    <h2>
+      新劇場版を見る順番
+    </h2>
+
+    <p>
+      初めて見る人は『序』から。
+      4作品を順番に見ればOKです。
+    </p>
+
+  </div>
+
+
+  <div class="eva-rebuild-list">
+
+
+    <!-- 01 序 -->
+
+    <div class="eva-work-row">
+
+      <article class="eva-work-card">
+
+        <div class="eva-work-number">
+          01
+        </div>
+
+        <div class="eva-work-content">
+
+          <div class="eva-work-poster">
+            POSTER
+          </div>
+
+          <div class="eva-work-info">
+
+            <h3>
+              ヱヴァンゲリヲン新劇場版：序
+            </h3>
+
+            <div class="eva-work-meta">
+              2007年
+            </div>
+
+            <p class="eva-work-catch">
+              すべてはここから始まる。
+            </p>
+
+            <a
+              class="eva-work-detail"
+              href="#"
+            >
+              作品詳細を見る →
+            </a>
+
+          </div>
+
+        </div>
+
+      </article>
+
+
+      <aside class="eva-beginner-memo">
+
+        <div class="eva-memo-label">
+          🔰 はじめてのエヴァメモ
+        </div>
+
+        <h3>
+          🤖 エヴァンゲリオンとは？
+        </h3>
+
+        <p>
+          人類が運用する巨大な人型兵器。
+          主人公・碇シンジは、
+          エヴァ初号機に乗って戦います。
+        </p>
+
+      </aside>
+
+    </div>
+
+
+    <!-- 02 破 -->
+
+    <div class="eva-work-row">
+
+      <article class="eva-work-card">
+
+        <div class="eva-work-number">
+          02
+        </div>
+
+        <div class="eva-work-content">
+
+          <div class="eva-work-poster">
+            POSTER
+          </div>
+
+          <div class="eva-work-info">
+
+            <h3>
+              ヱヴァンゲリヲン新劇場版：破
+            </h3>
+
+            <div class="eva-work-meta">
+              2009年
+            </div>
+
+            <p class="eva-work-catch">
+              物語がさらに大きく動き出す。
+            </p>
+
+            <a
+              class="eva-work-detail"
+              href="#"
+            >
+              作品詳細を見る →
+            </a>
+
+          </div>
+
+        </div>
+
+      </article>
+
+
+      <aside class="eva-beginner-memo">
+
+        <div class="eva-memo-label">
+          🔰 はじめてのエヴァメモ
+        </div>
+
+        <h3>
+          👾 使徒とは？
+        </h3>
+
+        <p>
+          人類の前に現れる謎の敵。
+          姿や能力はさまざまで、
+          エヴァは使徒と戦います。
+        </p>
+
+      </aside>
+
+    </div>
+
+
+    <!-- 03 Q -->
+
+    <div class="eva-work-row">
+
+      <article class="eva-work-card">
+
+        <div class="eva-work-number">
+          03
+        </div>
+
+        <div class="eva-work-content">
+
+          <div class="eva-work-poster">
+            POSTER
+          </div>
+
+          <div class="eva-work-info">
+
+            <h3>
+              ヱヴァンゲリヲン新劇場版：Q
+            </h3>
+
+            <div class="eva-work-meta">
+              2012年
+            </div>
+
+            <p class="eva-work-catch">
+              物語は新たな局面へ。
+            </p>
+
+            <a
+              class="eva-work-detail"
+              href="#"
+            >
+              作品詳細を見る →
+            </a>
+
+          </div>
+
+        </div>
+
+      </article>
+
+
+      <aside class="eva-beginner-memo">
+
+        <div class="eva-memo-label">
+          🔰 はじめてのエヴァメモ
+        </div>
+
+        <h3>
+          🏢 NERV（ネルフ）とは？
+        </h3>
+
+        <p>
+          エヴァを運用し、使徒と戦う組織。
+          シンジの父・碇ゲンドウが
+          司令を務めています。
+        </p>
+
+      </aside>
+
+    </div>
+
+
+    <!-- 04 シン -->
+
+    <div class="eva-work-row">
+
+      <article class="eva-work-card">
+
+        <div class="eva-work-number">
+          04
+        </div>
+
+        <div class="eva-work-content">
+
+          <div class="eva-work-poster">
+            POSTER
+          </div>
+
+          <div class="eva-work-info">
+
+            <h3>
+              シン・エヴァンゲリオン劇場版
+            </h3>
+
+            <div class="eva-work-meta">
+              2021年
+            </div>
+
+            <p class="eva-work-catch">
+              新劇場版、完結。
+            </p>
+
+            <a
+              class="eva-work-detail"
+              href="#"
+            >
+              作品詳細を見る →
+            </a>
+
+          </div>
+
+        </div>
+
+      </article>
+
+
+      <aside class="eva-beginner-memo">
+
+        <div class="eva-memo-label">
+          🔰 はじめてのエヴァメモ
+        </div>
+
+        <h3>
+          🌆 第3新東京市とは？
+        </h3>
+
+        <p>
+          物語の主な舞台となる都市。
+          使徒との戦いに備えた、
+          特別な仕組みを持つ街です。
+        </p>
+
+      </aside>
+
+    </div>
+
+
+  </div>
+
+</section>
 
 
   <div id="original"></div>
