@@ -1874,6 +1874,44 @@ header p{
 }
 
 /* =========================================================
+   お気に入りボタン
+========================================================= */
+
+#favoriteButton{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+
+  margin:6px 0 12px;
+  padding:9px 15px;
+
+  background:#fff1f2;
+  color:#be123c;
+
+  border:1px solid #fda4af;
+  border-radius:9px;
+
+  font-family:inherit;
+  font-size:15px;
+  font-weight:bold;
+
+  cursor:pointer;
+
+  transition:
+    background .15s ease,
+    border-color .15s ease,
+    transform .15s ease;
+}
+
+#favoriteButton:hover{
+  background:#ffe4e6;
+  border-color:#fb7185;
+
+  transform:translateY(-1px);
+}
+  
+/* =========================================================
    MCUを見る順番への案内
 ========================================================= */
 
@@ -2181,7 +2219,17 @@ Netflix、Amazon Prime Video、U-NEXT、Hulu、Disney+など、
   class="genre-list"
 ></div>
 
+<!-- =========================================================
+     お気に入り
+========================================================= -->
 
+<button
+  id="favoriteButton"
+  type="button"
+>
+  ♡ お気に入りに追加
+</button>
+  
 <!-- =========================================================
      MCUを見る順番への案内
 ========================================================= -->
