@@ -1,1 +1,898 @@
+<!DOCTYPE html>
 
+<html lang="ja">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
+
+<title>
+お気に入り作品｜ドコデミレル？
+</title>
+
+<meta
+  name="description"
+  content="ドコデミレル？でお気に入りに登録した映画・ドラマ・アニメをまとめて確認できます。"
+>
+
+<meta
+  name="robots"
+  content="noindex, follow"
+>
+
+
+<style>
+
+/* =========================================================
+   基本
+========================================================= */
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+
+  font-family:
+    Arial,
+    "Noto Sans JP",
+    sans-serif;
+
+  background:#f5f7fb;
+  color:#222;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+
+/* =========================================================
+   ヘッダー
+========================================================= */
+
+.favorite-hero{
+  background:
+    radial-gradient(
+      circle at 15% 20%,
+      rgba(96,165,250,.18),
+      transparent 32%
+    ),
+
+    radial-gradient(
+      circle at 82% 15%,
+      rgba(167,139,250,.16),
+      transparent 30%
+    ),
+
+    linear-gradient(
+      135deg,
+      #081a36 0%,
+      #0b3268 52%,
+      #175aa4 100%
+    );
+
+  color:#fff;
+
+  padding:
+    24px 20px
+    42px;
+}
+
+
+.favorite-hero-inner{
+  width:min(1000px,94%);
+  margin:0 auto;
+}
+
+
+.favorite-site-name{
+  display:inline-block;
+
+  color:#fff;
+
+  font-size:26px;
+  font-weight:800;
+}
+
+
+.favorite-heading{
+  margin-top:34px;
+
+  text-align:center;
+}
+
+
+.favorite-heading h1{
+  margin:0;
+
+  font-size:32px;
+  line-height:1.4;
+}
+
+
+.favorite-heading p{
+  margin:
+    10px
+    0
+    0;
+
+  color:#dbe7f7;
+
+  font-size:15px;
+  line-height:1.7;
+}
+
+
+/* =========================================================
+   メイン
+========================================================= */
+
+.favorite-container{
+  width:min(1000px,94%);
+
+  margin:
+    26px
+    auto
+    60px;
+}
+
+
+/* =========================================================
+   件数
+========================================================= */
+
+.favorite-count{
+  margin-bottom:16px;
+
+  color:#475569;
+
+  font-size:15px;
+  font-weight:700;
+}
+
+
+/* =========================================================
+   お気に入り一覧
+========================================================= */
+
+.favorite-grid{
+  display:grid;
+
+  grid-template-columns:
+    repeat(5,minmax(0,1fr));
+
+  gap:16px;
+}
+
+
+/* =========================================================
+   カード
+========================================================= */
+
+.favorite-card{
+  position:relative;
+
+  overflow:hidden;
+
+  background:#fff;
+
+  border:
+    1px solid
+    #e5e7eb;
+
+  border-radius:14px;
+
+  box-shadow:
+    0 4px 14px
+    rgba(15,23,42,.08);
+
+  transition:
+    transform .15s ease,
+    box-shadow .15s ease,
+    border-color .15s ease;
+}
+
+
+.favorite-card:hover{
+  transform:
+    translateY(-2px);
+
+  border-color:#fda4af;
+
+  box-shadow:
+    0 7px 18px
+    rgba(15,23,42,.11);
+}
+
+
+/* =========================================================
+   ポスター
+========================================================= */
+
+.favorite-poster{
+  width:100%;
+
+  aspect-ratio:2 / 3;
+
+  display:block;
+
+  object-fit:cover;
+
+  background:#e5e7eb;
+}
+
+
+.favorite-no-poster{
+  width:100%;
+
+  aspect-ratio:2 / 3;
+
+  display:flex;
+
+  align-items:center;
+  justify-content:center;
+
+  background:#e5e7eb;
+
+  color:#64748b;
+
+  font-size:14px;
+}
+
+
+/* =========================================================
+   カード情報
+========================================================= */
+
+.favorite-card-info{
+  padding:
+    12px
+    12px
+    14px;
+}
+
+
+.favorite-title{
+  margin:0;
+
+  color:#111827;
+
+  font-size:15px;
+  font-weight:800;
+
+  line-height:1.5;
+}
+
+
+.favorite-year{
+  margin-top:6px;
+
+  color:#64748b;
+
+  font-size:14px;
+}
+
+
+.favorite-detail-link{
+  display:inline-block;
+
+  margin-top:10px;
+
+  color:#2563eb;
+
+  font-size:14px;
+  font-weight:700;
+}
+
+
+.favorite-detail-link:hover{
+  text-decoration:underline;
+}
+
+
+/* =========================================================
+   削除ボタン
+========================================================= */
+
+.favorite-remove{
+  width:100%;
+
+  margin-top:10px;
+
+  padding:
+    8px
+    10px;
+
+  background:#fff1f2;
+
+  border:
+    1px solid
+    #fda4af;
+
+  border-radius:8px;
+
+  color:#be123c;
+
+  font-family:inherit;
+  font-size:14px;
+  font-weight:700;
+
+  cursor:pointer;
+}
+
+
+.favorite-remove:hover{
+  background:#ffe4e6;
+}
+
+
+/* =========================================================
+   0件
+========================================================= */
+
+.favorite-empty{
+  padding:
+    55px
+    20px;
+
+  background:#fff;
+
+  border:
+    1px solid
+    #e5e7eb;
+
+  border-radius:18px;
+
+  text-align:center;
+
+  box-shadow:
+    0 4px 18px
+    rgba(15,23,42,.07);
+}
+
+
+.favorite-empty-heart{
+  margin-bottom:12px;
+
+  color:#e11d48;
+
+  font-size:38px;
+}
+
+
+.favorite-empty h2{
+  margin:
+    0
+    0
+    10px;
+
+  color:#111827;
+
+  font-size:21px;
+}
+
+
+.favorite-empty p{
+  margin:0;
+
+  color:#64748b;
+
+  font-size:15px;
+  line-height:1.7;
+}
+
+
+.favorite-back{
+  display:inline-block;
+
+  margin-top:20px;
+
+  padding:
+    10px
+    16px;
+
+  background:#2563eb;
+
+  border-radius:9px;
+
+  color:#fff;
+
+  font-size:15px;
+  font-weight:700;
+}
+
+
+/* =========================================================
+   タブレット
+========================================================= */
+
+@media(max-width:850px){
+
+  .favorite-grid{
+    grid-template-columns:
+      repeat(3,minmax(0,1fr));
+  }
+
+}
+
+
+/* =========================================================
+   スマホ
+========================================================= */
+
+@media(max-width:600px){
+
+  .favorite-hero{
+    padding:
+      20px
+      15px
+      34px;
+  }
+
+
+  .favorite-site-name{
+    font-size:22px;
+  }
+
+
+  .favorite-heading{
+    margin-top:26px;
+  }
+
+
+  .favorite-heading h1{
+    font-size:26px;
+  }
+
+
+  .favorite-heading p{
+    font-size:14px;
+  }
+
+
+  .favorite-grid{
+    grid-template-columns:
+      repeat(2,minmax(0,1fr));
+
+    gap:10px;
+  }
+
+
+  .favorite-card-info{
+    padding:10px;
+  }
+
+
+  .favorite-title{
+    font-size:14px;
+  }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     ヘッダー
+========================================================= -->
+
+<header class="favorite-hero">
+
+  <div class="favorite-hero-inner">
+
+    <a
+      href="index.html"
+      class="favorite-site-name"
+    >
+      🎬 ドコデミレル？
+    </a>
+
+
+    <div class="favorite-heading">
+
+      <h1>
+        ♥ お気に入り作品
+      </h1>
+
+      <p>
+        気になる映画・ドラマ・アニメをまとめて確認できます。
+      </p>
+
+    </div>
+
+  </div>
+
+</header>
+
+
+<!-- =========================================================
+     メイン
+========================================================= -->
+
+<main class="favorite-container">
+
+  <div
+    id="favoriteCount"
+    class="favorite-count"
+  ></div>
+
+
+  <div
+    id="favoriteList"
+    class="favorite-grid"
+  ></div>
+
+</main>
+
+
+<script>
+
+/* =========================================================
+   お気に入り
+========================================================= */
+
+const FAVORITES_KEY =
+  "dokoDeMireruFavorites";
+
+
+const favoriteList =
+  document.getElementById(
+    "favoriteList"
+  );
+
+
+const favoriteCount =
+  document.getElementById(
+    "favoriteCount"
+  );
+
+
+/* =========================================================
+   読み込み
+========================================================= */
+
+function getFavorites(){
+
+  try{
+
+    const saved =
+      localStorage.getItem(
+        FAVORITES_KEY
+      );
+
+
+    if(!saved){
+      return [];
+    }
+
+
+    const favorites =
+      JSON.parse(saved);
+
+
+    return Array.isArray(favorites)
+      ? favorites
+      : [];
+
+  }catch(error){
+
+    console.error(
+      "お気に入りの読み込みに失敗しました。",
+      error
+    );
+
+    return [];
+
+  }
+
+}
+
+
+/* =========================================================
+   保存
+========================================================= */
+
+function saveFavorites(favorites){
+
+  try{
+
+    localStorage.setItem(
+      FAVORITES_KEY,
+      JSON.stringify(favorites)
+    );
+
+  }catch(error){
+
+    console.error(
+      "お気に入りの保存に失敗しました。",
+      error
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   HTMLエスケープ
+========================================================= */
+
+function escapeHtml(value){
+
+  return String(value || "")
+    .replaceAll(
+      "&",
+      "&amp;"
+    )
+    .replaceAll(
+      "<",
+      "&lt;"
+    )
+    .replaceAll(
+      ">",
+      "&gt;"
+    )
+    .replaceAll(
+      '"',
+      "&quot;"
+    )
+    .replaceAll(
+      "'",
+      "&#039;"
+    );
+
+}
+
+
+/* =========================================================
+   一覧表示
+========================================================= */
+
+function renderFavorites(){
+
+  const favorites =
+    getFavorites();
+
+
+  favoriteList.innerHTML =
+    "";
+
+
+  if(!favorites.length){
+
+    favoriteCount.textContent =
+      "";
+
+
+    favoriteList.className =
+      "";
+
+
+    favoriteList.innerHTML = `
+      <div class="favorite-empty">
+
+        <div class="favorite-empty-heart">
+          ♡
+        </div>
+
+        <h2>
+          まだお気に入り作品はありません
+        </h2>
+
+        <p>
+          気になる作品の
+          「♡ お気に入りに追加」から
+          保存できます。
+        </p>
+
+        <a
+          href="index.html"
+          class="favorite-back"
+        >
+          作品を探す
+        </a>
+
+      </div>
+    `;
+
+    return;
+
+  }
+
+
+  favoriteList.className =
+    "favorite-grid";
+
+
+  favoriteCount.textContent =
+    "お気に入り " +
+    favorites.length +
+    "作品";
+
+
+  favorites.forEach(function(item){
+
+    const card =
+      document.createElement(
+        "article"
+      );
+
+
+    card.className =
+      "favorite-card";
+
+
+    const title =
+      escapeHtml(
+        item.title ||
+        "作品情報"
+      );
+
+
+    const year =
+      item.release_date
+        ? String(
+            item.release_date
+          ).slice(0,4)
+        : "";
+
+
+    const detailUrl =
+      "detail.html?id=" +
+      encodeURIComponent(
+        item.id
+      ) +
+      "&type=" +
+      encodeURIComponent(
+        item.type ||
+        "movie"
+      );
+
+
+    let posterHtml =
+      '<div class="favorite-no-poster">' +
+      '画像なし' +
+      '</div>';
+
+
+    if(item.poster_path){
+
+      posterHtml =
+        '<img ' +
+        'class="favorite-poster" ' +
+        'src="https://image.tmdb.org/t/p/w342' +
+        escapeHtml(
+          item.poster_path
+        ) +
+        '" ' +
+        'alt="' +
+        title +
+        '">';
+
+    }
+
+
+    card.innerHTML = `
+
+      <a href="${detailUrl}">
+
+        ${posterHtml}
+
+      </a>
+
+
+      <div class="favorite-card-info">
+
+        <h2 class="favorite-title">
+          ${title}
+        </h2>
+
+
+        ${
+          year
+            ? `
+              <div class="favorite-year">
+                ${escapeHtml(year)}年
+              </div>
+            `
+            : ""
+        }
+
+
+        <a
+          href="${detailUrl}"
+          class="favorite-detail-link"
+        >
+          作品情報を見る →
+        </a>
+
+
+        <button
+          type="button"
+          class="favorite-remove"
+          data-favorite-id="${escapeHtml(
+            item.favoriteId
+          )}"
+        >
+          ♥ お気に入りから削除
+        </button>
+
+      </div>
+
+    `;
+
+
+    favoriteList.appendChild(
+      card
+    );
+
+  });
+
+
+  document
+    .querySelectorAll(
+      ".favorite-remove"
+    )
+    .forEach(function(button){
+
+      button.addEventListener(
+        "click",
+        function(){
+
+          const favoriteId =
+            button.dataset.favoriteId;
+
+
+          const newFavorites =
+            getFavorites().filter(
+              function(item){
+
+                return (
+                  item.favoriteId !==
+                  favoriteId
+                );
+
+              }
+            );
+
+
+          saveFavorites(
+            newFavorites
+          );
+
+
+          renderFavorites();
+
+        }
+      );
+
+    });
+
+}
+
+
+/* =========================================================
+   開始
+========================================================= */
+
+renderFavorites();
+
+</script>
+
+
+</body>
+
+</html>
