@@ -154,8 +154,9 @@ a{
 .favorite-home-link:hover{
   background:
     rgba(255,255,255,.20);
-}
-/* =========================================================
+}  
+  
+  /* =========================================================
    メイン
 ========================================================= */
 
@@ -196,6 +197,9 @@ a{
   gap:16px;
 }
 
+.remove-short{
+  display:none;
+}  
 
 /* =========================================================
    カード
@@ -499,6 +503,14 @@ a{
     font-size:14px;
   }
 
+.remove-long{
+  display:none;
+}
+
+.remove-short{
+  display:inline;
+}
+  
 }
 
 </style>
@@ -852,16 +864,15 @@ function renderFavorites(){
 
 
         <button
-          type="button"
-          class="favorite-remove"
-          data-favorite-id="${escapeHtml(
-            item.favoriteId
-          )}"
-        >
-          ♥ お気に入りから削除
-        </button>
-
-      </div>
+  type="button"
+  class="favorite-remove"
+  data-favorite-id="${escapeHtml(
+    item.favoriteId
+  )}"
+>
+  <span class="remove-long">♥ お気に入りから削除</span>
+  <span class="remove-short">♥ 削除</span>
+</button>
 
     `;
 
