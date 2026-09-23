@@ -467,6 +467,70 @@ a{
   text-align:left;
 }
 
+/* =========================================================
+   ヘッダー お気に入り
+========================================================= */
+
+.hero-top-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+}
+
+
+.header-favorite-link{
+  display:inline-flex;
+
+  align-items:center;
+  justify-content:center;
+
+  gap:6px;
+
+  padding:
+    9px
+    14px;
+
+  background:
+    rgba(255,255,255,.96);
+
+  border:
+    1px solid
+    rgba(253,164,175,.85);
+
+  border-radius:10px;
+
+  color:#be123c;
+
+  font-size:15px;
+  font-weight:800;
+
+  box-shadow:
+    0 3px 12px
+    rgba(15,23,42,.12);
+
+  transition:
+    transform .15s ease,
+    background .15s ease;
+}
+
+
+.header-favorite-link:hover{
+  background:#fff1f2;
+
+  transform:
+    translateY(-1px);
+}
+
+
+.header-favorite-heart{
+  color:#e11d48;
+
+  font-size:17px;
+
+  line-height:1;
+}
+  
 
 /* =========================================================
    メインコピー
@@ -1396,6 +1460,26 @@ rgba(0,0,0,.08);
     height:48px;
   }
 
+/* お気に入り入口 */
+
+.hero-top-row{
+  gap:10px;
+}
+
+.header-favorite-link{
+  flex-shrink:0;
+
+  padding:
+    8px
+    11px;
+
+  font-size:14px;
+}
+
+.header-favorite-heart{
+  font-size:16px;
+}
+  
 }
      
 /* =========================================================
@@ -4988,12 +5072,25 @@ body.search-mode.show-other-search
 
   </div>
 
-  <div class="hero-inner">
+ <div class="hero-inner">
+
+  <div class="hero-top-row">
+
     <div class="site-brand">
       🎬 ドコデミレル？
     </div>
 
-    <div class="hero-copy">
+    <a
+      href="favorites.html"
+      class="header-favorite-link"
+    >
+      <span class="header-favorite-heart">♥</span>
+      お気に入り
+    </a>
+
+  </div>
+
+  <div class="hero-copy">
 
       <h1>
         観たい作品、どこで観られる？
