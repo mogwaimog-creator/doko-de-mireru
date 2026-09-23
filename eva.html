@@ -1652,9 +1652,13 @@ body{
 
         <div class="eva-work-content">
 
-          <div class="eva-work-poster eva-original-poster">
-            TV SERIES
-          </div>
+          <div
+  class="eva-work-poster eva-original-poster"
+  data-movie-id="890"
+  data-media-type="tv"
+>
+  読み込み中...
+</div>
 
           <div class="eva-work-info">
 
@@ -1666,13 +1670,23 @@ body{
               1995年・全26話
             </div>
 
+　　　　　　　<div
+  class="eva-work-streaming"
+  data-movie-id="890"
+  data-media-type="tv"
+>
+  <span class="eva-streaming-loading">
+    配信情報を確認中...
+  </span>
+</div>
+            
             <p class="eva-work-catch eva-original-catch">
               すべての始まりとなったTVシリーズ。
             </p>
 
             <a
               class="eva-work-detail"
-              href="#"
+              href="detail.html?id=890&type=tv"
             >
               作品詳細を見る →
             </a>
@@ -1717,9 +1731,12 @@ body{
 
         <div class="eva-work-content">
 
-          <div class="eva-work-poster eva-original-poster">
-            MOVIE
-          </div>
+          <div
+  class="eva-work-poster eva-original-poster"
+  data-movie-id="18491"
+>
+  読み込み中...
+</div>
 
           <div class="eva-work-info">
 
@@ -1732,6 +1749,15 @@ body{
               1997年
             </div>
 
+　　　　　　<div
+  class="eva-work-streaming"
+  data-movie-id="18491"
+>
+  <span class="eva-streaming-loading">
+    配信情報を確認中...
+  </span>
+</div>
+            
             <p class="eva-work-catch eva-original-catch">
               TV版を見たあとに見る旧劇場版。
             </p>
@@ -1743,7 +1769,7 @@ body{
 
             <a
               class="eva-work-detail"
-              href="#"
+              href="detail.html?id=18491"
             >
               作品詳細を見る →
             </a>
@@ -1824,17 +1850,22 @@ async function loadEvaPosters(){
   for(const poster of posters){
 
     const id =
-      poster.dataset.movieId;
+  poster.dataset.movieId;
+
+const mediaType =
+  poster.dataset.mediaType ||
+  "movie";
 
 
-    try{
+try{
 
-      const response =
-        await fetch(
-          "/api/search?id=" +
-          encodeURIComponent(id) +
-          "&type=movie"
-        );
+  const response =
+    await fetch(
+      "/api/search?id=" +
+      encodeURIComponent(id) +
+      "&type=" +
+      encodeURIComponent(mediaType)
+    );
 
 
       if(!response.ok){
@@ -1919,17 +1950,22 @@ async function loadEvaStreaming(){
   for(const element of elements){
 
     const id =
-      element.dataset.movieId;
+  element.dataset.movieId;
+
+const mediaType =
+  element.dataset.mediaType ||
+  "movie";
 
 
-    try{
+try{
 
-      const response =
-        await fetch(
-          "/api/search?id=" +
-          encodeURIComponent(id) +
-          "&type=movie"
-        );
+  const response =
+    await fetch(
+      "/api/search?id=" +
+      encodeURIComponent(id) +
+      "&type=" +
+      encodeURIComponent(mediaType)
+    );
 
 
       if(!response.ok){
