@@ -1243,6 +1243,142 @@ body{
   }
 
 } 
+
+/* =====================================================
+   エヴァンゲリオン30周年
+===================================================== */
+
+.eva-30th-section{
+  position:relative;
+  overflow:hidden;
+
+  margin:78px 0 70px;
+  padding:34px 38px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #ffffff 0%,
+      #faf5ff 100%
+    );
+
+  border:
+    1px solid
+    #d8b4fe;
+
+  border-radius:18px;
+
+  box-shadow:
+    0 4px 14px
+    rgba(15,23,42,.06);
+
+  scroll-margin-top:20px;
+}
+
+
+/* 背景の大きな30 */
+
+.eva-30th-number{
+  position:absolute;
+
+  right:24px;
+  top:50%;
+
+  transform:translateY(-50%);
+
+  color:
+    rgba(126,34,206,.07);
+
+  font-size:150px;
+  line-height:1;
+  font-weight:900;
+
+  pointer-events:none;
+}
+
+
+/* 本文 */
+
+.eva-30th-content{
+  position:relative;
+  z-index:1;
+
+  max-width:720px;
+}
+
+
+.eva-30th-kicker{
+  margin-bottom:6px;
+
+  color:#65a30d;
+
+  font-size:14px;
+  font-weight:900;
+
+  letter-spacing:.08em;
+}
+
+
+.eva-30th-content h2{
+  margin:0;
+
+  color:#3b0764;
+
+  font-size:27px;
+}
+
+
+/* 蛍光グリーンのライン */
+
+.eva-30th-line{
+  width:70px;
+  height:4px;
+
+  margin:15px 0 18px;
+
+  background:#84cc16;
+
+  border-radius:999px;
+}
+
+
+.eva-30th-content p{
+  margin:7px 0;
+
+  color:#475569;
+
+  font-size:16px;
+  line-height:1.8;
+}
+
+
+/* スマホ */
+
+@media(max-width:700px){
+
+  .eva-30th-section{
+    margin-top:60px;
+    padding:26px 22px;
+  }
+
+
+  .eva-30th-number{
+    right:8px;
+
+    font-size:110px;
+  }
+
+
+  .eva-30th-content h2{
+    font-size:23px;
+  }
+
+
+  .eva-30th-content p{
+    font-size:15px;
+  }
+
+}
   
 </style>
 
