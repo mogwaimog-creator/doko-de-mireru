@@ -1912,15 +1912,21 @@ header p{
 }
 
 #favoriteButton.is-favorite{
-  background:#e11d48;
-  color:#fff;
+  background:#fff1f2;
+  color:#be123c;
 
-  border-color:#e11d48;
+  border-color:#fda4af;
 }
 
 #favoriteButton.is-favorite:hover{
-  background:#be123c;
-  border-color:#be123c;
+  background:#ffe4e6;
+  border-color:#fb7185;
+}
+
+#favoriteButton .favorite-heart{
+  color:#e11d48;
+  font-size:17px;
+  line-height:1;
 }
   
 /* =========================================================
@@ -2652,8 +2658,8 @@ function setupFavoriteButton(movie){
 
     if(isFavorite){
 
-      button.textContent =
-        "♥ お気に入り登録済み";
+      button.innerHTML =
+  '<span class="favorite-heart">♥</span> お気に入り登録済み';
 
       button.classList.add(
         "is-favorite"
@@ -2666,9 +2672,9 @@ function setupFavoriteButton(movie){
 
     }else{
 
-      button.textContent =
-        "♡ お気に入りに追加";
-
+      button.innerHTML =
+  '<span class="favorite-heart">♡</span> お気に入りに追加';
+      
       button.classList.remove(
         "is-favorite"
       );
