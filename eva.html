@@ -672,6 +672,58 @@ body{
   font-weight:700;
 }
 
+/* =====================================================
+   新劇場版 配信ロゴ
+===================================================== */
+
+.eva-work-streaming{
+  display:flex;
+
+  align-items:center;
+  flex-wrap:wrap;
+
+  gap:6px;
+
+  min-height:32px;
+
+  margin:0 0 10px;
+}
+
+
+.eva-streaming-label{
+  margin-right:2px;
+
+  color:#64748b;
+
+  font-size:14px;
+  font-weight:700;
+}
+
+
+.eva-work-streaming img{
+  display:block;
+
+  width:30px;
+  height:30px;
+
+  object-fit:contain;
+
+  background:#ffffff;
+
+  border:
+    1px solid
+    #e5e7eb;
+
+  border-radius:5px;
+}
+
+
+.eva-streaming-loading,
+.eva-streaming-none{
+  color:#94a3b8;
+
+  font-size:14px;
+}  
 
 .eva-work-catch{
   margin:0 0 14px;
@@ -1113,13 +1165,21 @@ body{
             </h3>
 
             <div class="eva-work-meta">
-              2007年
-            </div>
+  2007年
+</div>
 
-            <p class="eva-work-catch">
-              すべてはここから始まる。
-            </p>
+<div
+  class="eva-work-streaming"
+  data-movie-id="15137"
+>
+  <span class="eva-streaming-loading">
+    配信情報を確認中...
+  </span>
+</div>
 
+<p class="eva-work-catch">
+  すべてはここから始まる。
+</p>
             <a
   class="eva-work-detail"
   href="detail.html?id=15137"
@@ -1184,6 +1244,15 @@ body{
               2009年
             </div>
 
+<div
+  class="eva-work-streaming"
+  data-movie-id="22843"
+>
+  <span class="eva-streaming-loading">
+    配信情報を確認中...
+  </span>
+</div>
+            
             <p class="eva-work-catch">
               物語がさらに大きく動き出す。
             </p>
@@ -1252,6 +1321,15 @@ body{
               2012年
             </div>
 
+<div
+  class="eva-work-streaming"
+  data-movie-id="75629"
+>
+  <span class="eva-streaming-loading">
+    配信情報を確認中...
+  </span>
+</div>
+            
             <p class="eva-work-catch">
               物語は新たな局面へ。
             </p>
@@ -1320,6 +1398,15 @@ body{
               2021年
             </div>
 
+<div
+  class="eva-work-streaming"
+  data-movie-id="283566"
+>
+  <span class="eva-streaming-loading">
+    配信情報を確認中...
+  </span>
+</div>
+            
             <p class="eva-work-catch">
               新劇場版、完結。
             </p>
@@ -1468,6 +1555,194 @@ async function loadEvaPosters(){
 
 loadEvaPosters();
 
+async function loadEvaStreaming(){
+
+  const elements =
+    document.querySelectorAll(
+      ".eva-work-streaming[data-movie-id]"
+    );
+
+
+  for(const element of elements){
+
+    const id =
+      element.dataset.movieId;
+
+
+    try{
+
+      const response =
+        await fetch(
+          "/api/search?id=" +
+          encodeURIComponent(id) +
+          "&type=movie"
+        );
+
+
+      if(!response.ok){
+
+        throw new Error(
+          "配信情報を取得できませんでした"
+        );
+
+      }
+
+
+      const movie =
+        await response.json();
+
+
+      const streaming =
+        Array.isArray(movie.streaming)
+          ? movie.streaming
+          : [];
+
+
+      const providers = [];
+
+      const usedNames =
+        new Set();
+
+
+      streaming.forEach(function(provider){
+
+        if(
+          !provider ||
+          !provider.logo_path
+        ){
+          return;
+        }
+
+
+        const name =
+          String(
+            provider.provider_name ||
+            ""
+          ).trim();
+
+
+        const key =
+          name.toLowerCase();
+
+
+        if(
+          !key ||
+          usedNames.has(key)
+        ){
+          return;
+        }
+
+
+        usedNames.add(key);
+
+        providers.push(
+          provider
+        );
+
+      });
+
+
+      element.innerHTML =
+        "";
+
+
+      if(providers.length === 0){
+
+        const none =
+          document.createElement(
+            "span"
+          );
+
+        none.className =
+          "eva-streaming-none";
+
+        none.textContent =
+          "見放題配信情報なし";
+
+        element.appendChild(
+          none
+        );
+
+        continue;
+
+      }
+
+
+      const label =
+        document.createElement(
+          "span"
+        );
+
+      label.className =
+        "eva-streaming-label";
+
+      label.textContent =
+        "見放題";
+
+      element.appendChild(
+        label
+      );
+
+
+      providers
+        .slice(0,3)
+        .forEach(function(provider){
+
+          const img =
+            document.createElement(
+              "img"
+            );
+
+
+          img.src =
+            "https://image.tmdb.org/t/p/w92" +
+            provider.logo_path;
+
+
+          img.alt =
+            provider.provider_name ||
+            "配信サービス";
+
+
+          img.title =
+            provider.provider_name ||
+            "";
+
+
+          img.loading =
+            "lazy";
+
+
+          element.appendChild(
+            img
+          );
+
+        });
+
+
+    }catch(error){
+
+      console.error(
+        "Eva streaming error:",
+        id,
+        error
+      );
+
+
+      element.innerHTML =
+        '<span class="eva-streaming-none">' +
+        '配信情報を取得できませんでした' +
+        '</span>';
+
+    }
+
+  }
+
+}
+
+
+loadEvaStreaming();
+  
 </script>  
 
 </body>
