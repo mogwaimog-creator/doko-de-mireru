@@ -1061,7 +1061,188 @@ body{
   color:#65a30d;
 }
 
-  
+ /* =====================================================
+   FAQ
+===================================================== */
+
+.eva-faq-section{
+  margin:78px 0 70px;
+  scroll-margin-top:20px;
+}
+
+
+.eva-faq-heading{
+  margin-bottom:24px;
+  text-align:center;
+}
+
+
+.eva-faq-kicker{
+  margin-bottom:5px;
+
+  color:#65a30d;
+
+  font-size:14px;
+  font-weight:900;
+  letter-spacing:.08em;
+}
+
+
+.eva-faq-heading h2{
+  margin:0 0 8px;
+
+  color:#3b0764;
+
+  font-size:27px;
+}
+
+
+.eva-faq-heading p{
+  margin:0;
+
+  color:#64748b;
+
+  font-size:16px;
+  line-height:1.7;
+}
+
+
+/* FAQ一覧 */
+
+.eva-faq-list{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+
+/* 1問ずつ */
+
+.eva-faq-item{
+  overflow:hidden;
+
+  background:#ffffff;
+
+  border:
+    1px solid
+    #ddd6fe;
+
+  border-left:
+    5px solid
+    #84cc16;
+
+  border-radius:14px;
+
+  box-shadow:
+    0 3px 10px
+    rgba(15,23,42,.05);
+}
+
+
+/* 質問 */
+
+.eva-faq-item summary{
+  position:relative;
+
+  padding:
+    18px
+    52px
+    18px
+    20px;
+
+  color:#3b0764;
+
+  font-size:16px;
+  font-weight:900;
+  line-height:1.6;
+
+  cursor:pointer;
+
+  list-style:none;
+}
+
+
+.eva-faq-item summary::-webkit-details-marker{
+  display:none;
+}
+
+
+/* ＋マーク */
+
+.eva-faq-item summary::after{
+  content:"+";
+
+  position:absolute;
+
+  top:50%;
+  right:20px;
+
+  transform:translateY(-50%);
+
+  color:#65a30d;
+
+  font-size:25px;
+  font-weight:900;
+}
+
+
+/* 開いたとき */
+
+.eva-faq-item[open] summary::after{
+  content:"−";
+}
+
+
+/* 回答 */
+
+.eva-faq-answer{
+  padding:
+    0
+    20px
+    19px;
+
+  color:#475569;
+
+  font-size:15px;
+  line-height:1.8;
+}
+
+
+/* スマホ */
+
+@media(max-width:700px){
+
+  .eva-faq-section{
+    margin-top:60px;
+  }
+
+
+  .eva-faq-heading h2{
+    font-size:23px;
+  }
+
+
+  .eva-faq-item summary{
+    padding:
+      16px
+      48px
+      16px
+      16px;
+
+    font-size:15px;
+  }
+
+
+  .eva-faq-answer{
+    padding:
+      0
+      16px
+      17px;
+
+    font-size:15px;
+  }
+
+} 
   
 </style>
 
@@ -1830,7 +2011,103 @@ body{
   </div>
 
 </section>
-  <div id="faq"></div>
+  <!-- =====================================================
+     FAQ
+===================================================== -->
+
+<section
+  class="eva-faq-section"
+  id="faq"
+>
+
+  <div class="eva-faq-heading">
+
+    <div class="eva-faq-kicker">
+      ❓ EVANGELION FAQ
+    </div>
+
+    <h2>
+      エヴァンゲリオンを見る順番 FAQ
+    </h2>
+
+    <p>
+      初めてエヴァを見るときに、
+      気になりやすいポイントをまとめました。
+    </p>
+
+  </div>
+
+
+  <div class="eva-faq-list">
+
+
+    <details class="eva-faq-item">
+
+      <summary>
+        新劇場版はTV版の続きですか？
+      </summary>
+
+      <div class="eva-faq-answer">
+        単純な「TV版の続き」ではありません。
+        新劇場版は『序』から始まる4作品のシリーズとして、
+        TV版を見ていなくても楽しめます。
+      </div>
+
+    </details>
+
+
+    <details class="eva-faq-item">
+
+      <summary>
+        『序』はTV版の総集編ですか？
+      </summary>
+
+      <div class="eva-faq-answer">
+        総集編ではありません。
+        TV版と共通する部分もありますが、
+        新劇場版として新しく描かれた作品です。
+        その後の『破』『Q』『シン』へと物語が続きます。
+      </div>
+
+    </details>
+
+
+    <details class="eva-faq-item">
+
+      <summary>
+        初めて見るならTV版と新劇場版、どちらから？
+      </summary>
+
+      <div class="eva-faq-answer">
+        どちらからでも大丈夫です。
+        新劇場版から見るなら
+        『序』→『破』→『Q』→『シン』の順番。
+        エヴァの原点から楽しみたいなら、
+        TV版全26話→『Air／まごころを、君に』の順番がおすすめです。
+      </div>
+
+    </details>
+
+
+    <details class="eva-faq-item">
+
+      <summary>
+        DEATH(TRUE)²だけ見ればTV版は飛ばせますか？
+      </summary>
+
+      <div class="eva-faq-answer">
+        初めて見る場合は、
+        TV版全26話の代わりとして見るのはおすすめしません。
+        DEATH(TRUE)²はTVシリーズを再構成した作品なので、
+        まずはTV版から見ると物語を追いやすくなります。
+      </div>
+
+    </details>
+
+
+  </div>
+
+</section>
   <div id="anniversary"></div>
 
 
