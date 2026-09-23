@@ -1615,14 +1615,61 @@ async function loadEvaStreaming(){
 
 
         const name =
-          String(
-            provider.provider_name ||
-            ""
-          ).trim();
+  String(
+    provider.provider_name ||
+    ""
+  ).trim();
 
 
-        const key =
-          name.toLowerCase();
+let key =
+  name.toLowerCase();
+
+
+/* 同じ配信サービスをまとめる */
+
+if(
+  key.includes("amazon") ||
+  key.includes("prime video")
+){
+  key = "prime";
+}
+
+else if(
+  key.includes("netflix")
+){
+  key = "netflix";
+}
+
+else if(
+  key.includes("u-next") ||
+  key.includes("unext")
+){
+  key = "unext";
+}
+
+else if(
+  key.includes("hulu")
+){
+  key = "hulu";
+}
+
+else if(
+  key.includes("disney")
+){
+  key = "disney";
+}
+
+else if(
+  key.includes("apple")
+){
+  key = "apple";
+}
+
+else if(
+  key.includes("fod")
+){
+  key = "fod";
+}
 
 
         if(
