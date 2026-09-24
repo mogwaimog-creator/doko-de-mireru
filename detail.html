@@ -2956,12 +2956,15 @@ function setupFavoriteButton(movie){
       }
 
 
-      saveFavorites(
+            saveFavorites(
         favorites
       );
 
-      updateButton();
+      if(index < 0 && typeof gtag === "function"){
+        gtag("event", "favorite_add");
+      }
 
+      updateButton();
     };
 
 
