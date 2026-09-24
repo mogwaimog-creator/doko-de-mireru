@@ -1873,7 +1873,38 @@ header p{
   min-height:42px;
 }
 
-/* =========================================================
+.favorite-actions{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:10px;
+
+  margin:
+    6px
+    0
+    12px;
+}
+
+.favorite-list-link{
+  display:inline-flex;
+  align-items:center;
+
+  padding:9px 12px;
+
+  color:#be123c;
+
+  font-size:15px;
+  font-weight:bold;
+
+  text-decoration:none;
+}
+
+.favorite-list-link:hover{
+  text-decoration:underline;
+}
+  
+  
+  /* =========================================================
    お気に入りボタン
 ========================================================= */
 
@@ -1883,7 +1914,7 @@ header p{
   justify-content:center;
   gap:6px;
 
-  margin:6px 0 12px;
+  margin:0;
   padding:9px 15px;
 
   background:#fff1f2;
@@ -2241,12 +2272,24 @@ Netflix、Amazon Prime Video、U-NEXT、Hulu、Disney+など、
      お気に入り
 ========================================================= -->
 
-<button
-  id="favoriteButton"
-  type="button"
->
-  ♡ お気に入りに追加
-</button>
+<div class="favorite-actions">
+
+  <button
+    id="favoriteButton"
+    type="button"
+  >
+    ♡ お気に入りに追加
+  </button>
+
+  <a
+    id="favoriteListLink"
+    class="favorite-list-link"
+    href="favorites.html"
+  >
+    ♥ お気に入り一覧を見る →
+  </a>
+
+</div>
   
 <!-- =========================================================
      MCUを見る順番への案内
@@ -2828,7 +2871,26 @@ function setupFavoriteButton(movie){
 
 } 
   
+const favoriteListLink =
+  document.getElementById(
+    "favoriteListLink"
+  );
 
+if(favoriteListLink){
+
+  const currentDetailUrl =
+    "detail.html" +
+    window.location.search;
+
+  favoriteListLink.href =
+    "favorites.html?from=" +
+    encodeURIComponent(
+      currentDetailUrl
+    );
+
+}
+
+  
 /* =========================================================
    URL
 ========================================================= */
