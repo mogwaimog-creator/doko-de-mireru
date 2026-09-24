@@ -2316,6 +2316,41 @@ Netflix、Amazon Prime Video、U-NEXT、Hulu、Disney+など、
 
 </div>  
 
+<!-- =========================================================
+     ハリー・ポッターを見る順番への案内
+========================================================= -->
+
+<div
+  id="harryPotterGuide"
+  class="mcu-guide"
+  hidden
+>
+
+  <div class="mcu-guide-icon">
+    🪄
+  </div>
+
+  <div class="mcu-guide-content">
+
+    <div class="mcu-guide-title">
+      魔法の世界をもっと楽しみたい方へ
+    </div>
+
+    <div class="mcu-guide-text">
+      シリーズの流れをたどりながら、見終わったタイトルをチェックできます。
+    </div>
+
+    <a
+      class="mcu-guide-link"
+      href="harrypotter.html"
+    >
+      ハリー・ポッターを見る順番ガイドへ →
+    </a>
+
+  </div>
+
+</div>
+  
 <div class="movie-side-info">
 
 <div class="side-section">
@@ -4151,6 +4186,46 @@ function isEvaGuideWork(movie){
   return movieIds.has(id);
 
 }
+
+/* =========================================================
+   ハリー・ポッター関連作品 判定
+========================================================= */
+
+function isHarryPotterGuideWork(movie){
+
+  if(
+    !movie ||
+    !movie.id
+  ){
+    return false;
+  }
+
+
+  const id =
+    Number(movie.id);
+
+
+  const movieIds = new Set([
+
+    671,      // 賢者の石
+    672,      // 秘密の部屋
+    673,      // アズカバンの囚人
+    674,      // 炎のゴブレット
+    675,      // 不死鳥の騎士団
+    767,      // 謎のプリンス
+    12444,    // 死の秘宝 PART1
+    12445,    // 死の秘宝 PART2
+
+    259316,   // ファンタスティック・ビーストと魔法使いの旅
+    338952,   // 黒い魔法使いの誕生
+    338953    // ダンブルドアの秘密
+
+  ]);
+
+
+  return movieIds.has(id);
+
+}
   
 /* =========================================================
    作品情報表示
@@ -4513,6 +4588,19 @@ if(evaGuide){
 
 }
 
+/* ハリー・ポッター関連作品の案内 */
+
+const harryPotterGuide =
+  document.getElementById(
+    "harryPotterGuide"
+  );
+
+if(harryPotterGuide){
+
+  harryPotterGuide.hidden =
+    !isHarryPotterGuideWork(movie);
+
+}  
   
   const poster =
     document.getElementById(
