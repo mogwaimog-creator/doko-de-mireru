@@ -130,10 +130,17 @@ a{
   line-height:1.7;
 }
 
+.favorite-nav{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:12px;
+}
+  
 .favorite-home-link{
   display:inline-block;
 
-  margin-top:12px;
+  margin-top:0;
   padding:8px 13px;
 
   background:
@@ -536,12 +543,25 @@ a{
       🎬 ドコデミレル？
     </a>
 
-　　<a
-  href="index.html"
-  class="favorite-home-link"
->
-  ← メインサイトに戻る
-</a>
+　　<div class="favorite-nav">
+
+  <a
+    id="favoriteReturnLink"
+    href="#"
+    class="favorite-home-link"
+    hidden
+  >
+    ← 元の作品に戻る
+  </a>
+
+  <a
+    href="index.html"
+    class="favorite-home-link"
+  >
+    🏠 メインサイトに戻る
+  </a>
+
+</div>
     
 
     <div class="favorite-heading">
@@ -922,6 +942,38 @@ function renderFavorites(){
       );
 
     });
+
+}
+
+
+/* =========================================================
+   元の作品に戻る
+========================================================= */
+
+const favoriteParams =
+  new URLSearchParams(
+    window.location.search
+  );
+
+const returnUrl =
+  favoriteParams.get("from");
+
+const favoriteReturnLink =
+  document.getElementById(
+    "favoriteReturnLink"
+  );
+
+if(
+  favoriteReturnLink &&
+  returnUrl &&
+  returnUrl.startsWith("detail.html?")
+){
+
+  favoriteReturnLink.href =
+    returnUrl;
+
+  favoriteReturnLink.hidden =
+    false;
 
 }
 
