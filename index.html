@@ -8480,6 +8480,92 @@ searchButton.addEventListener(
 );
 
 /* =========================================================
+   検索結果をクリア
+========================================================= */
+
+if(clearSearchButton){
+
+  clearSearchButton.addEventListener(
+    "click",
+    function(){
+
+      /* 検索文字を消す */
+
+      queryInput.value =
+        "";
+
+
+      /* 検索結果を消す */
+
+      results.innerHTML =
+        "";
+
+      status.innerHTML =
+        "";
+
+
+      /* 検索情報をリセット */
+
+      currentPage = 1;
+      currentQuery = "";
+
+
+      /* 保存している検索内容も消す */
+
+      sessionStorage.removeItem(
+        "dokoDeMireruLastQuery"
+      );
+
+      sessionStorage.removeItem(
+        "dokoDeMireruLastSearchType"
+      );
+
+
+      /* 検索モードを解除 */
+
+      document.body.classList.remove(
+        "search-mode"
+      );
+
+      document.body.classList.remove(
+        "show-other-search"
+      );
+
+
+      /* 見出しを元に戻す */
+
+      const searchResultsHeading =
+        document.getElementById(
+          "searchResultsHeading"
+        );
+
+      if(searchResultsHeading){
+
+        searchResultsHeading.textContent =
+          "🔍 検索結果";
+
+      }
+
+
+      /* クリアボタンを隠す */
+
+      clearSearchButton.hidden =
+        true;
+
+
+      /* ページ上部へ戻る */
+
+      window.scrollTo({
+        top:0,
+        behavior:"smooth"
+      });
+
+    }
+  );
+
+}
+  
+/* =========================================================
    検索後：ほかの検索方法を収納
 ========================================================= */
 
