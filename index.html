@@ -2010,6 +2010,69 @@ font-weight:bold;
 }
 
 /* =========================================================
+   検索結果 見出し＋クリア
+========================================================= */
+
+.search-results-header{
+  display:flex;
+
+  align-items:center;
+  justify-content:space-between;
+
+  gap:12px;
+
+  margin-bottom:16px;
+}
+
+
+.search-results-header .search-results-title{
+  margin:0;
+}
+
+
+.clear-search-button{
+  flex-shrink:0;
+
+  padding:
+    8px
+    14px;
+
+  border:
+    1px solid
+    #cbd5e1;
+
+  border-radius:999px;
+
+  background:#fff;
+
+  color:#475569;
+
+  font-size:14px;
+  font-weight:700;
+
+  cursor:pointer;
+
+  transition:
+    background .15s ease,
+    border-color .15s ease,
+    color .15s ease;
+}
+
+
+.clear-search-button:hover{
+  background:#f8fafc;
+
+  border-color:#94a3b8;
+
+  color:#1e293b;
+}
+
+
+.clear-search-button[hidden]{
+  display:none;
+}
+  
+/* =========================================================
    アニメ検索結果の分類見出し
 ========================================================= */
 
@@ -6192,12 +6255,25 @@ body.search-mode.show-other-search
   aria-labelledby="searchResultsHeading"
 >
 
+  <div class="search-results-header">
+
   <h2
     id="searchResultsHeading"
     class="search-results-title"
   >
     🔍 検索結果
   </h2>
+
+  <button
+    id="clearSearchButton"
+    class="clear-search-button"
+    type="button"
+    hidden
+  >
+    × クリア
+  </button>
+
+</div>
 
   <div
     id="results"
