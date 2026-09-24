@@ -1956,6 +1956,73 @@ color:#fff;
   background:transparent;
   color:#172554;
 }
+
+/* =========================================================
+   データ・画像クレジット
+========================================================= */
+
+.data-credits{
+  margin-top:40px;
+  padding:28px 20px;
+
+  background:#eef2f7;
+
+  border-top:
+    1px solid
+    #dbe3ee;
+
+  color:#64748b;
+}
+
+.data-credits-inner{
+  width:min(1000px,94%);
+  margin:0 auto;
+
+  text-align:center;
+}
+
+.data-credits-title{
+  margin:
+    0
+    0
+    12px;
+
+  color:#334155;
+
+  font-size:16px;
+  font-weight:800;
+}
+
+.data-credits p{
+  margin:
+    7px
+    0;
+
+  font-size:14px;
+  line-height:1.7;
+}
+
+.tmdb-logo-link{
+  display:inline-block;
+
+  margin:
+    12px
+    0
+    6px;
+}
+
+.tmdb-logo{
+  display:block;
+
+  width:180px;
+  max-width:100%;
+
+  height:auto;
+}
+
+.tmdb-notice{
+  color:#64748b;
+}
   
 </style>
   
@@ -2478,15 +2545,49 @@ color:#fff;
 </main>
 
 
-<footer>
+<!-- =========================================================
+     データ・画像クレジット
+========================================================= -->
 
-  <p>
-    配信情報はTMDBおよびJustWatchの情報を参考にしています。
-  </p>
+<footer class="data-credits">
 
-  <p>
-    © ドコデミレル？
-  </p>
+  <div class="data-credits-inner">
+
+    <p class="data-credits-title">
+      データ・画像について
+    </p>
+
+    <p>
+      映画・ドラマ・人物等の情報および画像には、
+      TMDB（The Movie Database）のAPIを利用しています。
+    </p>
+
+    <a
+      href="https://www.themoviedb.org/"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="tmdb-logo-link"
+    >
+      <img
+        src="tmdb-logo.svg"
+        alt="The Movie Database (TMDB)"
+        class="tmdb-logo"
+      >
+    </a>
+
+    <p class="tmdb-notice">
+      This product uses the TMDB API but is not endorsed or certified by TMDB.
+    </p>
+
+    <p>
+      配信サービス情報のデータ提供：JustWatch
+    </p>
+
+    <p>
+      © ドコデミレル？
+    </p>
+
+  </div>
 
 </footer>
 
