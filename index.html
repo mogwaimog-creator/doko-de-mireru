@@ -6322,6 +6322,11 @@ const results =
     "results"
   );
 
+const clearSearchButton =
+  document.getElementById(
+    "clearSearchButton"
+  );
+  
 let currentPage = 1;
 let currentQuery = "";
 let isLoadingMore = false;
@@ -6502,6 +6507,15 @@ if(searchResultsHeading){
 
   searchResultsHeading.textContent =
     '🔍「' + query + '」の検索結果';
+
+
+  if(clearSearchButton){
+
+    clearSearchButton.hidden =
+      false;
+
+  }
+
 
   searchResultsHeading.scrollIntoView({
     behavior: "smooth",
