@@ -3,20 +3,26 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="robots" content="noindex,follow">
+  <meta name="robots" content="index,follow">
   <title>スター・ウォーズを見る順番｜ドコデミレル？</title>
-  <meta name="description" content="スター・ウォーズの映画・ドラマ・アニメを見る順番を、初心者向け、映画の時系列、全映像作品の公開順から選べます。">
+  <meta name="description" content="スター・ウォーズを見る順番を初心者向けの本筋9作、映画の時系列、ドラマ・アニメ込みの時系列、公開順の辞書から選べます。">
+  <link rel="canonical" href="https://doko-de-mireru.vercel.app/starwars.html">
   <style>
     :root{font-family:system-ui,-apple-system,"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;color:#182234;background:#f5f7fb}
     *{box-sizing:border-box}body{margin:0}a{color:#174b90}button{font:inherit}
     .wrap{max-width:1100px;margin:auto;padding:0 22px}.hero{background:linear-gradient(135deg,#101c35,#263d65);color:white;padding:20px 0 44px}
-    .back{color:#dceaff;text-decoration:none;font-size:14px}.hero h1{font-size:clamp(27px,4vw,42px);margin:38px 0 10px}.hero p{line-height:1.8;max-width:720px;color:#e2e8f0}
+    .back{color:#dceaff;text-decoration:none;font-size:14px}.hero h1{font-size:clamp(27px,4vw,42px);margin:38px 0 10px}.hero h1::after{content:"";display:block;width:74px;height:4px;border-radius:4px;background:#e8bd52;margin-top:17px}.hero p{line-height:1.8;max-width:720px;color:#e2e8f0}
     .tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:30px}.tab{background:#fff;color:#25466d;border:2px solid transparent;border-radius:14px;padding:14px 10px;cursor:pointer;font-weight:800;line-height:1.45;min-height:68px}
     .tab[aria-selected="true"]{background:#fff4ce;color:#563d00;border-color:#e3ad3d;box-shadow:0 4px 16px #0003}
-    main{padding-top:30px;padding-bottom:65px}.intro{background:white;border:1px solid #dce4f0;border-radius:18px;padding:22px 26px;margin-bottom:26px}.intro h2{margin:0 0 12px;font-size:23px}.intro p{line-height:1.8;margin:0}.note{background:#fff8e5;border-left:4px solid #dba72f;padding:12px 16px;margin-top:16px;border-radius:5px;line-height:1.65}
-    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.card{background:white;border:1px solid #dce4f0;border-radius:14px;padding:18px;display:flex;gap:16px;min-height:142px}.num{flex:0 0 37px;height:37px;border-radius:50%;background:#dce9fb;color:#163b69;display:grid;place-items:center;font-weight:900}.card h3{font-size:17px;line-height:1.5;margin:6px 0}.meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:13px;color:#53647b}.badge{border-radius:30px;background:#eaf0ff;color:#254a83;padding:3px 9px;font-weight:700}.badge.saga{background:#fff0d1;color:#795000}.badge.series{background:#e9f7ee;color:#23623b}.badge.animation{background:#f1eafb;color:#653897}.card p{color:#526174;font-size:14px;line-height:1.65;margin:8px 0 0}.card a{display:inline-block;margin-top:9px;font-size:14px;font-weight:700}
-    .group-title{grid-column:1/-1;margin:17px 0 0;font-size:18px;color:#273e5d}.guide{margin:0 0 20px;color:#526174;line-height:1.7}.footer{border-top:1px solid #dce4f0;padding:20px 0;color:#607088;font-size:13px;line-height:1.8}
-    @media(max-width:760px){.tabs{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}.hero{padding-bottom:30px}.card{min-height:0}}
+    main{padding-top:30px;padding-bottom:65px}.intro{background:white;border:1px solid #dce4f0;border-radius:18px;padding:22px 26px;margin-bottom:26px}.intro h2{margin:0 0 12px;font-size:23px}.count{display:inline-block;margin-left:8px;font-size:15px;color:#765300;background:#fff2cc;border-radius:999px;padding:4px 10px;vertical-align:middle}.intro p{line-height:1.8;margin:0}.note{background:#fff8e5;border-left:4px solid #dba72f;padding:12px 16px;margin-top:16px;border-radius:5px;line-height:1.65}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.card{position:relative;background:white;border:1px solid #dce4f0;border-top:3px solid #e8bd52;border-radius:17px;padding:18px;min-width:0;box-shadow:0 3px 12px #0f172a0f}.num{position:absolute;top:12px;left:17px;color:#a37412;font-size:28px;line-height:1;font-weight:900}.card-main{display:flex;align-items:flex-start;gap:16px;padding-top:30px}.poster{width:105px;height:158px;flex:0 0 105px;object-fit:cover;background:#e5e7eb;border-radius:9px}.card-info{min-width:0;flex:1;display:flex;flex-direction:column;align-self:stretch}.card h3{font-size:18px;line-height:1.4;margin:4px 0 7px}.meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:14px;color:#53647b}.badge{border-radius:30px;background:#eaf0ff;color:#254a83;padding:3px 9px;font-size:13px;font-weight:800}.badge.saga{background:#fff0d1;color:#795000}.badge.series{background:#e9f7ee;color:#23623b}.badge.animation{background:#f1eafb;color:#653897}.card p{color:#526174;font-size:14px;line-height:1.65;margin:9px 0 0}.card a{display:inline-block;margin-top:10px;font-size:14px;font-weight:800;text-decoration:none}.card a:hover{color:#8b6100;text-decoration:underline}
+    .providers{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:12px;min-height:26px}.providers img{width:35px;height:24px;object-fit:contain;border-radius:4px}.providers-label{font-size:12px;color:#67778d}.group-title{grid-column:1/-1;margin:17px 0 0;font-size:18px;color:#273e5d}.guide{margin:0 0 20px;color:#526174;line-height:1.7}.footer{border-top:1px solid #dce4f0;padding:20px 0;color:#607088;font-size:13px;line-height:1.8}
+    .grid.dictionary{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.dictionary .card{padding:16px}.dictionary .card-main{gap:12px}.dictionary .poster{width:88px;height:132px;flex-basis:88px}.dictionary .card h3{font-size:16px}.dictionary .providers img{width:30px;height:21px}
+    .side-section{grid-column:1/-1;margin:8px 0 14px;padding:19px;background:#edf4ff;border:1px solid #bfd2ed;border-radius:17px}.side-section h3{margin:0 0 6px;color:#244a7a;font-size:18px}.side-section>p{margin:0 0 15px;color:#475b75;font-size:14px;line-height:1.7}.side-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.card.optional{background:#f9fbff;border-color:#b8cce9;border-top-color:#6e96cc}.optional .num{font-size:14px;color:#315f99}.optional .badge{background:#e3ecfa;color:#28558a}.side-note{align-self:center;color:#36577f;font-size:15px;line-height:1.8;font-weight:700}
+    .section-heading{grid-column:1/-1;margin:18px 0 0;padding:12px 16px;border-left:4px solid #d7a83e;background:#fff8e8;border-radius:5px;color:#654800;font-size:18px;font-weight:900}.section-heading:first-child{margin-top:0}.era-box{padding:18px 20px;background:#eef4fb;border:1px solid #c8d9ec;border-left:5px solid #d7a83e;border-radius:13px;color:#244365}.era-box strong{display:block;font-size:20px}.era-box p{margin:7px 0 0;font-size:14px;font-weight:500;line-height:1.75;color:#435b75}
+    @media(max-width:800px){.grid.dictionary{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:760px){.tabs{grid-template-columns:repeat(2,1fr)}.grid,.grid.dictionary,.side-grid{grid-template-columns:1fr}.hero{padding-bottom:30px}}
+    @media(max-width:390px){.poster{width:85px;height:128px;flex-basis:85px}.card-main{gap:12px}.card{padding:15px}.card h3{font-size:16px}}
   </style>
 </head>
 <body>
@@ -32,7 +38,7 @@
     </nav>
   </div></header>
   <main class="wrap"><section class="intro" id="intro" aria-live="polite"></section><div class="grid" id="cards"></div></main>
-  <footer class="footer"><div class="wrap">作品の順番は StarWars.com の公式視聴ガイドを参照しています。<a href="https://www.starwars.com/news/star-wars-movies-and-series-guide" target="_blank" rel="noopener noreferrer">公式ガイドを見る</a><br>映画・ドラマの情報には TMDB API を利用しています。This product uses the TMDB API but is not endorsed or certified by TMDB.</div></footer>
+  <footer class="footer"><div class="wrap">作品の順番は StarWars.com の公式視聴ガイドを参照しています。<a href="https://www.starwars.com/news/star-wars-movies-and-series-guide" target="_blank" rel="noopener noreferrer">公式ガイドを見る</a><br>作品情報・画像の提供：<a href="https://www.themoviedb.org/" target="_blank" rel="noopener noreferrer">TMDB</a>　配信サービス情報のデータ提供：JustWatch<br>This product uses the TMDB API but is not endorsed or certified by TMDB.<br><a href="privacy.html">プライバシーポリシー・免責事項</a></div></footer>
   <script>
   // 時系列の番号は公式ガイドの大まかな順番。年代が重なるシリーズには注記を表示する。
   const works = [
@@ -68,27 +74,89 @@
   const byKey = Object.fromEntries(works.map(w=>[w.key,w]));
   const beginner = 'four five six one two three seven eight nine'.split(' ');
   const filmKeys = 'one two three solo rogue four five six grogu seven eight nine'.split(' ');
-  const releaseKeys = 'four five six one two three clonefilm clones rebels seven rogue eight solo resistance mando nine boba badbatch obi andor jedi ahsoka empire acolyte skeleton underworld maul grogu'.split(' ');
-  const labels = {saga:'本筋',spinoff:'外伝映画',series:'ドラマ',animation:'アニメ'};
+  const releaseKeys = 'four five six one two three clonefilm clones rebels seven rogue eight solo resistance mando nine badbatch boba obi andor jedi ahsoka empire acolyte skeleton underworld maul grogu'.split(' ');
+  const posters = {
+    acolyte:'gb7dMaVYOvzjrnYPdxlX41L4vWW',one:'l2s53sR2LAFaP5xDot1CvrKPj8V',two:'9lBVfsXpSjJqtwICydK3B8VgmUo',clonefilm:'6q9QPfYf3vyO4AcMGsQcY8lZGEQ',clones:'qEYdgXGUoSpIGi5lP07tgcXN5jZ',jedi:'4bhwClefxsZ5YatUHdy8Y1fyecZ',three:'oGF4V8raXCcreGeqfDAD8gRVJCR',empire:'3CIlvqrORRiaJAowdGvxQnMSLDI',underworld:'zHckei7tsGl1oFfkasWvbe0RE4w',badbatch:'1TiFFaXZFkuoGIcmpnqSmSpn2ZQ',maul:'qVeSC02WVvYAMDPPKKCbWCvC1rE',solo:'Sywy96OPeJwsHko86FDFKKzCFE',obi:'yoGRaqpICFXreRyvt2Z7GGqE0K',andor:'iea0VuThfDZmhOA4cyj4HBgsOT6',rebels:'eLrScs6Bs26JMcS8hiZhf7YRROr',rogue:'fFWc9VmWtj3fpTYC07h5RDUT3fB',four:'8Ukkz0fbIzwpNEGdhzOdXXWSpXe',five:'mbLTbU4zqdY1nOQP9OTxj9LeRTL',six:'tmQ9HzBvXzYuTP1qwVAoYXQvTU1',mando:'89ITO0p4bPTD0Hh4Yuvk3XtHjN2',boba:'zND8lnBPAOiEvD2TyUifx3eJ6nh',ahsoka:'m4umt8sTfxwqEZCQ3klKNKtFqZZ',skeleton:'m4sGXOMMD4YIv6wm9FSMjfZ4MpC',grogu:'6JC12YUAIKHr8vYiA8XroIsjv1Z',resistance:'xul6SG8rar3wkHPY8YusUtxcdlZ',seven:'4Ed75kG0g24rLyABRF1xysqVkMD',eight:'qHAGQSdkpxHmwu3fFRadbpSXeT',nine:'2bw0i8dYbUSoDsXZBaTodu49fsl'
+  };
+  const points = {
+    four:'ルークが旅立ち、反乱軍と帝国の戦いに加わります。',five:'反乱軍と帝国の戦いが、さらに激しくなります。',six:'ルークたちと帝国の戦いが決着へ向かいます。',
+    one:'少年アナキンとジェダイの出会いから物語が始まります。',two:'成長したアナキンの前で、共和国の対立が深まります。',three:'銀河を揺るがす戦いが、大きな転機を迎えます。',
+    seven:'新たな世代の人物たちが、銀河の戦いに巻き込まれます。',eight:'レイたちの旅と、レジスタンスの戦いが続きます。',nine:'新しい世代の三部作が結末を迎えます。',
+    rogue:'反乱軍の重要な任務を描き、エピソード4の直前につながる映画。',solo:'ハン・ソロの若い頃を描く外伝映画。',grogu:'ドラマ「マンダロリアン」から続く映画。先にドラマを見るのがおすすめ。',
+    acolyte:'エピソード1より前の時代を描くドラマ。',clonefilm:'エピソード2と3の間のアニメ映画。',clones:'クローン戦争を描くアニメシリーズ。',
+    jedi:'複数の時代のジェダイを描く短編アニメ。',empire:'帝国に関わる人物を描く短編アニメ。',underworld:'裏社会の人物を描く短編アニメ。',
+    badbatch:'エピソード3前後から続くアニメシリーズ。',maul:'帝国の時代のモールを描くアニメシリーズ。',obi:'エピソード3と4の間のオビ＝ワンを描くドラマ。',
+    andor:'「ローグ・ワン」へつながるドラマ。',rebels:'帝国に立ち向かう仲間たちのアニメシリーズ。',mando:'エピソード6の後を舞台にしたドラマ。',
+    boba:'「マンダロリアン」とつながるドラマ。',ahsoka:'「反乱者たち」などと関係の深いドラマ。',skeleton:'新共和国の時代に起こる別の冒険。',
+    resistance:'エピソード7の前後にまたがるアニメシリーズ。'
+  };
+  const labels = {saga:'本筋映画',spinoff:'外伝映画',series:'ドラマ',animation:'アニメ'};
   const descriptions = {
     beginner:['初心者向け','初めて見るなら、まずは本筋の映画9作を公開順に。公開当時の順番で世界を知り、外伝やドラマは後から自由に楽しめます。','外伝映画2作とドラマは、本筋9作を理解するための必須作品ではありません。'],
-    films:['映画の時系列','公開済みの実写劇場映画12作を、物語の流れに沿って並べました。公開順とは違う発見を楽しみたい人向けです。','「マンダロリアン・アンド・グローグー」はドラマ「マンダロリアン」から続く映画です。ドラマを先に見ると分かりやすくなります。'],
-    expanded:['ドラマ・アニメ込みの時系列','映画と主なドラマ・アニメを、物語の大まかな時代順に並べています。映画を見終わったあと、好きな時代を深掘りできます。','「テイルズ」シリーズは複数の時代にまたがります。「キャシアン・アンドー」と「反乱者たち」など、同時期に進む作品もあります。厳密な各話順ではありません。'],
-    release:['完全公開順（辞書）','映画と主なドラマ・アニメシリーズを、公開・配信開始年の順にまとめました。作品名や公開年を調べるための一覧です。','対象は公式視聴ガイドに掲載された映画と主なシリーズです。短編、特番、ドキュメンタリー、書籍、ゲームは含めていません。同じ年の作品は公式ガイドの掲載順です。']
+    films:['映画の時系列','公開済みの実写劇場映画12作を、物語の時代順に並べました。まずはエピソード1から始まり、外伝もその時代に挟みます。','これは物語の時系列です。初めて見るなら「初心者向け」の公開順がおすすめ。ドラマから続く映画の前には、寄り道ポイントを置いています。'],
+    expanded:['ドラマ・アニメ込みの時系列','映画に主なドラマ・アニメを加え、銀河の時代ごとに並べました。気になる時代の作品を選んで見られます。','カードの年は公開・配信開始年です。時代BOXは物語の中のおおまかな時期を示します。短編集や同時期に進むシリーズもあるため、厳密な各話順ではありません。'],
+    release:['完全公開順（辞書）','映画と主なドラマ・アニメシリーズを、公開・配信開始順にまとめました。作品名や公開年を調べるための一覧です。','対象は公式視聴ガイドに掲載された映画と主なシリーズです。単発の短編、特番、ドキュメンタリー、書籍、ゲームは含めていません。同じ年の作品は初回公開・配信開始日の早い順です。']
   };
+  const eraHeadings={
+    films:{0:'共和国から帝国へ',3:'エピソード4につながる外伝',5:'エピソード3から約19年後・ルークの物語へ',8:'エピソード6後の別の物語',9:'エピソード6から約30年後・新たな世代へ'},
+    expanded:{0:'エピソード1より前',1:'共和国とクローン戦争',7:'帝国の時代',16:'エピソード3から約19年後・ルークの物語へ',19:'新共和国の時代',25:'エピソード6から約30年後・新たな世代へ'}
+  };
+  const eraNotes={
+    0:'ジェダイが活躍する、エピソード1より約100年前の時代。まだ本筋の戦争よりずっと前です。',
+    1:'銀河共和国とジェダイの時代。エピソード2から、共和国と分離主義勢力のクローン戦争が始まります。',
+    7:'帝国が銀河を支配する時代。各地で帝国に抵抗する人々の物語が進みます。',
+    16:'反乱軍と帝国軍が正面からぶつかる時代。ルークたちの三部作へつながります。',
+    19:'帝国の時代を経て、新共和国が銀河の立て直しを進めます。平和の陰には新たな火種も残っています。',
+    25:'ファースト・オーダーに対し、レジスタンスと新しい世代の主人公たちが立ち向かいます。'
+  };
+  const counts={beginner:'本筋9作＋寄り道2作',films:'映画12作＋ドラマ寄り道1作',expanded:'28作品',release:'28作品'};
   const escapeHtml = value => String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  function cardHtml(w,number,optional=false){
+    const type=(w.type==='series'||(w.type==='animation'&&w.key!=='clonefilm'))?'tv':'movie';
+    const detail=`<a href="detail.html?id=${w.id}&type=${type}">作品詳細を見る →</a>`;
+    const provider=`<div class="providers" data-id="${w.id}" data-type="${type}"><span class="providers-label">配信情報を確認中…</span></div>`;
+    return `<article class="card${optional?' optional':''}"><span class="num">${optional?'寄り道':String(number).padStart(2,'0')}</span><div class="card-main"><img class="poster" src="https://image.tmdb.org/t/p/w342/${posters[w.key]}.jpg" alt="${escapeHtml(w.title)}のポスター" loading="lazy"><div class="card-info"><span class="badge ${w.type}" style="align-self:flex-start">${labels[w.type]}</span><h3>${escapeHtml(w.title)}</h3><div class="meta">公開：${w.year}年</div>${provider}<p>${escapeHtml(points[w.key])}</p>${detail}</div></div></article>`;
+  }
   function render(tab){
     const [title,lead,note]=descriptions[tab];
-    document.getElementById('intro').innerHTML=`<h2>${title}</h2><p>${lead}</p><div class="note">${note}</div>`;
+    document.getElementById('intro').innerHTML=`<h2>${title}<span class="count">${counts[tab]}</span></h2><p>${lead}</p><div class="note">${note}</div>`;
+    document.getElementById('cards').classList.toggle('dictionary',tab==='release');
     const items=tab==='beginner'?beginner.map(k=>byKey[k]):tab==='films'?filmKeys.map(k=>byKey[k]):tab==='expanded'?[...works].sort((a,b)=>a.era-b.era):releaseKeys.map(k=>byKey[k]);
     document.getElementById('cards').innerHTML=items.map((w,i)=>{
-      const type=w.type==='series'?'series':'movie';
-      const detail=w.id?`<a href="detail.html?id=${w.id}&type=${type}">作品詳細・配信先を見る →</a>`:'';
-      const caution=w.key==='grogu'?'<p>ドラマ「マンダロリアン」から続く映画</p>':'';
-      return `<article class="card"><span class="num">${String(i+1).padStart(2,'0')}</span><div><div class="meta"><span>${w.year}年</span><span class="badge ${w.type}">${labels[w.type]}</span></div><h3>${escapeHtml(w.title)}</h3>${caution}${detail}</div></article>`;
+      let html='';
+      if(eraHeadings[tab]?.[i]){
+        html=tab==='expanded'
+          ?`<div class="section-heading era-box"><strong>${eraHeadings[tab][i]}</strong><p>${eraNotes[i]}</p></div>`
+          :`<div class="section-heading">${eraHeadings[tab][i]}</div>`;
+      }
+      if(tab==='films'&&i===8){
+        html+=`<aside class="side-section"><h3>✦ 寄り道ポイント</h3><p>次の映画はドラマ「マンダロリアン」から続く作品です。映画12作の番号には含めず、先に見るドラマをここに案内します。</p><div class="side-grid">${cardHtml(byKey.mando,0,true)}<div class="side-note">ドラマを見てから、次の「マンダロリアン・アンド・グローグー」へ進むと分かりやすくなります。</div></div></aside>`;
+      }
+      html+=cardHtml(w,i+1);
+      if(tab==='beginner'&&i===2){
+        html+=`<aside class="side-section"><h3>✦ 寄り道ポイント</h3><p>次の本筋はエピソード1。この2作は興味があればどうぞ。どちらも本筋9作の数には含みません。</p><div class="side-grid">${cardHtml(byKey.rogue,0,true)}${cardHtml(byKey.solo,0,true)}</div></aside>`;
+      }
+      return html;
     }).join('');
     document.querySelectorAll('.tab').forEach(b=>{const selected=b.dataset.tab===tab;b.setAttribute('aria-selected',String(selected));b.tabIndex=selected?0:-1});
+    document.querySelectorAll('.providers').forEach(box=>providerObserver.observe(box));
   }
+  const providerCache=new Map();
+  const apiBase=location.protocol==='file:'?'https://doko-de-mireru.vercel.app':'';
+  async function loadProviders(box){
+    const key=`${box.dataset.type}:${box.dataset.id}`;
+    if(!providerCache.has(key))providerCache.set(key,fetch(`${apiBase}/api/search?id=${encodeURIComponent(box.dataset.id)}&type=${box.dataset.type}`)
+      .then(response=>{if(!response.ok)throw Error('配信情報の取得に失敗');return response.json()})
+      .then(data=>Array.isArray(data.streaming)?data.streaming:[]).catch(()=>null));
+    const providers=await providerCache.get(key);
+    if(!box.isConnected)return;
+    if(providers===null){box.textContent='配信状況は作品詳細でご確認ください';return}
+    const unique=providers.filter((p,i,all)=>p&&p.logo_path&&all.findIndex(x=>x&&x.provider_id===p.provider_id)===i).slice(0,6);
+    if(!unique.length){box.textContent='現在、見放題の配信情報はありません';return}
+    box.innerHTML='<span class="providers-label">見放題</span>';
+    unique.forEach(p=>{const img=document.createElement('img');img.src='https://image.tmdb.org/t/p/w92'+p.logo_path;img.alt=p.provider_name||'配信サービス';img.loading='lazy';box.appendChild(img)});
+  }
+  const providerObserver=new IntersectionObserver((entries,observer)=>entries.forEach(entry=>{if(entry.isIntersecting){observer.unobserve(entry.target);loadProviders(entry.target)}}),{rootMargin:'200px'});
   document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>render(b.dataset.tab)));
   render('beginner');
   </script>
