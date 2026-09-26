@@ -867,6 +867,24 @@ providerPages.forEach(function(page){
 
 });
 
+// 見る順番の特集ページ
+const seriesPages = [
+  "series.html",
+  "mcu.html",
+  "harrypotter.html",
+  "eva.html",
+  "starwars.html"
+];
+
+seriesPages.forEach(function(page){
+  urls.push(`
+  <url>
+    <loc>https://doko-de-mireru.vercel.app/${page}</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>`);
+});
+
     
 
     // =====================================================
