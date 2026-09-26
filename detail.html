@@ -2461,6 +2461,19 @@ Netflix、Amazon Prime Video、U-NEXT、Hulu、Disney+など、
 
 </div>
   
+<!-- =========================================================
+     スター・ウォーズを見る順番への案内
+========================================================= -->
+
+<div id="starWarsGuide" class="mcu-guide" hidden>
+  <div class="mcu-guide-icon">🌌</div>
+  <div class="mcu-guide-content">
+    <div class="mcu-guide-title">スター・ウォーズはどの順番で見る？</div>
+    <div class="mcu-guide-text">初心者向けの順番から、映画の時系列やドラマ・アニメを含む順番まで紹介しています。</div>
+    <a class="mcu-guide-link" href="starwars.html">スター・ウォーズを見る順番ガイドへ →</a>
+  </div>
+</div>
+
 <div class="movie-side-info">
 
 <div class="side-section">
@@ -4393,6 +4406,29 @@ function isHarryPotterGuideWork(movie){
   return movieIds.has(id);
 
 }
+
+/* スター・ウォーズ特集に掲載している作品だけを案内 */
+function isStarWarsGuideWork(movie){
+
+  if(!movie || !movie.id) return false;
+
+  const id = Number(movie.id);
+
+  const movieIds = new Set([
+    11, 1891, 1892, 1893, 1894, 1895,
+    140607, 181808, 181812,
+    330459, 348350, 12180, 1228710
+  ]);
+
+  const tvIds = new Set([
+    114479, 4194, 203085, 251091, 288055, 105971,
+    289219, 92830, 83867, 60554, 82856, 115036,
+    114461, 225011, 79093
+  ]);
+
+  return mediaType === "tv" ? tvIds.has(id) : movieIds.has(id);
+
+}
   
 /* =========================================================
    作品情報表示
@@ -4767,7 +4803,17 @@ if(harryPotterGuide){
   harryPotterGuide.hidden =
     !isHarryPotterGuideWork(movie);
 
-}  
+}
+
+/* スター・ウォーズ関連作品の案内 */
+
+const starWarsGuide =
+  document.getElementById("starWarsGuide");
+
+if(starWarsGuide){
+  starWarsGuide.hidden =
+    !isStarWarsGuideWork(movie);
+}
   
   const poster =
     document.getElementById(
