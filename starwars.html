@@ -1,1 +1,96 @@
-
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,follow">
+  <title>スター・ウォーズを見る順番｜ドコデミレル？</title>
+  <meta name="description" content="スター・ウォーズの映画・ドラマ・アニメを見る順番を、初心者向け、映画の時系列、全映像作品の公開順から選べます。">
+  <style>
+    :root{font-family:system-ui,-apple-system,"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;color:#182234;background:#f5f7fb}
+    *{box-sizing:border-box}body{margin:0}a{color:#174b90}button{font:inherit}
+    .wrap{max-width:1100px;margin:auto;padding:0 22px}.hero{background:linear-gradient(135deg,#101c35,#263d65);color:white;padding:20px 0 44px}
+    .back{color:#dceaff;text-decoration:none;font-size:14px}.hero h1{font-size:clamp(27px,4vw,42px);margin:38px 0 10px}.hero p{line-height:1.8;max-width:720px;color:#e2e8f0}
+    .tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:30px}.tab{background:#fff;color:#25466d;border:2px solid transparent;border-radius:14px;padding:14px 10px;cursor:pointer;font-weight:800;line-height:1.45;min-height:68px}
+    .tab[aria-selected="true"]{background:#fff4ce;color:#563d00;border-color:#e3ad3d;box-shadow:0 4px 16px #0003}
+    main{padding-top:30px;padding-bottom:65px}.intro{background:white;border:1px solid #dce4f0;border-radius:18px;padding:22px 26px;margin-bottom:26px}.intro h2{margin:0 0 12px;font-size:23px}.intro p{line-height:1.8;margin:0}.note{background:#fff8e5;border-left:4px solid #dba72f;padding:12px 16px;margin-top:16px;border-radius:5px;line-height:1.65}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.card{background:white;border:1px solid #dce4f0;border-radius:14px;padding:18px;display:flex;gap:16px;min-height:142px}.num{flex:0 0 37px;height:37px;border-radius:50%;background:#dce9fb;color:#163b69;display:grid;place-items:center;font-weight:900}.card h3{font-size:17px;line-height:1.5;margin:6px 0}.meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:13px;color:#53647b}.badge{border-radius:30px;background:#eaf0ff;color:#254a83;padding:3px 9px;font-weight:700}.badge.saga{background:#fff0d1;color:#795000}.badge.series{background:#e9f7ee;color:#23623b}.badge.animation{background:#f1eafb;color:#653897}.card p{color:#526174;font-size:14px;line-height:1.65;margin:8px 0 0}.card a{display:inline-block;margin-top:9px;font-size:14px;font-weight:700}
+    .group-title{grid-column:1/-1;margin:17px 0 0;font-size:18px;color:#273e5d}.guide{margin:0 0 20px;color:#526174;line-height:1.7}.footer{border-top:1px solid #dce4f0;padding:20px 0;color:#607088;font-size:13px;line-height:1.8}
+    @media(max-width:760px){.tabs{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}.hero{padding-bottom:30px}.card{min-height:0}}
+  </style>
+</head>
+<body>
+  <header class="hero"><div class="wrap">
+    <a class="back" href="index.html">← ドコデミレル？に戻る</a>
+    <h1>スター・ウォーズを見る順番</h1>
+    <p>初めての人は映画の本筋から。見たい作品を調べたい人は公開順の辞書へ。映画・ドラマ・アニメのつながりも、目的に合わせてたどれます。</p>
+    <nav class="tabs" role="tablist" aria-label="見る順番">
+      <button class="tab" role="tab" aria-selected="true" data-tab="beginner">🌟 初心者向け</button>
+      <button class="tab" role="tab" aria-selected="false" data-tab="films">⏳ 映画の時系列</button>
+      <button class="tab" role="tab" aria-selected="false" data-tab="expanded">🌌 ドラマ・アニメ込みの時系列</button>
+      <button class="tab" role="tab" aria-selected="false" data-tab="release">📚 完全公開順（辞書）</button>
+    </nav>
+  </div></header>
+  <main class="wrap"><section class="intro" id="intro" aria-live="polite"></section><div class="grid" id="cards"></div></main>
+  <footer class="footer"><div class="wrap">作品の順番は StarWars.com の公式視聴ガイドを参照しています。<a href="https://www.starwars.com/news/star-wars-movies-and-series-guide" target="_blank" rel="noopener noreferrer">公式ガイドを見る</a><br>映画・ドラマの情報には TMDB API を利用しています。This product uses the TMDB API but is not endorsed or certified by TMDB.</div></footer>
+  <script>
+  // 時系列の番号は公式ガイドの大まかな順番。年代が重なるシリーズには注記を表示する。
+  const works = [
+    ['acolyte','スター・ウォーズ：アコライト',2024,'series',0,114479],
+    ['one','エピソード1／ファントム・メナス',1999,'saga',1,1893],
+    ['two','エピソード2／クローンの攻撃',2002,'saga',2,1894],
+    ['clonefilm','クローン・ウォーズ（アニメ映画）',2008,'animation',3,12180],
+    ['clones','クローン・ウォーズ（アニメシリーズ）',2008,'animation',4,4194],
+    ['jedi','テイルズ・オブ・ジェダイ',2022,'animation',5,203085],
+    ['three','エピソード3／シスの復讐',2005,'saga',6,1895],
+    ['empire','テイルズ・オブ・エンパイア',2024,'animation',7,251091],
+    ['underworld','テイルズ・オブ・アンダーワールド',2025,'animation',8,288055],
+    ['badbatch','バッド・バッチ',2021,'animation',9,105971],
+    ['maul','モール／シャドウ・ロード',2026,'animation',10,289219],
+    ['solo','ハン・ソロ／スター・ウォーズ・ストーリー',2018,'spinoff',11,348350],
+    ['obi','オビ＝ワン・ケノービ',2022,'series',12,92830],
+    ['andor','キャシアン・アンドー',2022,'series',13,83867],
+    ['rebels','スター・ウォーズ 反乱者たち',2014,'animation',14,60554],
+    ['rogue','ローグ・ワン／スター・ウォーズ・ストーリー',2016,'spinoff',15,330459],
+    ['four','エピソード4／新たなる希望',1977,'saga',16,11],
+    ['five','エピソード5／帝国の逆襲',1980,'saga',17,1891],
+    ['six','エピソード6／ジェダイの帰還',1983,'saga',18,1892],
+    ['mando','マンダロリアン',2019,'series',19,82856],
+    ['boba','ボバ・フェット／The Book of Boba Fett',2021,'series',20,115036],
+    ['ahsoka','アソーカ',2023,'series',21,114461],
+    ['skeleton','スケルトン・クルー',2024,'series',22,225011],
+    ['grogu','スター・ウォーズ／マンダロリアン・アンド・グローグー',2026,'spinoff',23,1228710],
+    ['resistance','スター・ウォーズ レジスタンス',2018,'animation',24,79093],
+    ['seven','エピソード7／フォースの覚醒',2015,'saga',25,140607],
+    ['eight','エピソード8／最後のジェダイ',2017,'saga',26,181808],
+    ['nine','エピソード9／スカイウォーカーの夜明け',2019,'saga',27,181812]
+  ].map(([key,title,year,type,era,id])=>({key,title,year,type,era,id}));
+  const byKey = Object.fromEntries(works.map(w=>[w.key,w]));
+  const beginner = 'four five six one two three seven eight nine'.split(' ');
+  const filmKeys = 'one two three solo rogue four five six grogu seven eight nine'.split(' ');
+  const releaseKeys = 'four five six one two three clonefilm clones rebels seven rogue eight solo resistance mando nine boba badbatch obi andor jedi ahsoka empire acolyte skeleton underworld maul grogu'.split(' ');
+  const labels = {saga:'本筋',spinoff:'外伝映画',series:'ドラマ',animation:'アニメ'};
+  const descriptions = {
+    beginner:['初心者向け','初めて見るなら、まずは本筋の映画9作を公開順に。公開当時の順番で世界を知り、外伝やドラマは後から自由に楽しめます。','外伝映画2作とドラマは、本筋9作を理解するための必須作品ではありません。'],
+    films:['映画の時系列','公開済みの実写劇場映画12作を、物語の流れに沿って並べました。公開順とは違う発見を楽しみたい人向けです。','「マンダロリアン・アンド・グローグー」はドラマ「マンダロリアン」から続く映画です。ドラマを先に見ると分かりやすくなります。'],
+    expanded:['ドラマ・アニメ込みの時系列','映画と主なドラマ・アニメを、物語の大まかな時代順に並べています。映画を見終わったあと、好きな時代を深掘りできます。','「テイルズ」シリーズは複数の時代にまたがります。「キャシアン・アンドー」と「反乱者たち」など、同時期に進む作品もあります。厳密な各話順ではありません。'],
+    release:['完全公開順（辞書）','映画と主なドラマ・アニメシリーズを、公開・配信開始年の順にまとめました。作品名や公開年を調べるための一覧です。','対象は公式視聴ガイドに掲載された映画と主なシリーズです。短編、特番、ドキュメンタリー、書籍、ゲームは含めていません。同じ年の作品は公式ガイドの掲載順です。']
+  };
+  const escapeHtml = value => String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  function render(tab){
+    const [title,lead,note]=descriptions[tab];
+    document.getElementById('intro').innerHTML=`<h2>${title}</h2><p>${lead}</p><div class="note">${note}</div>`;
+    const items=tab==='beginner'?beginner.map(k=>byKey[k]):tab==='films'?filmKeys.map(k=>byKey[k]):tab==='expanded'?[...works].sort((a,b)=>a.era-b.era):releaseKeys.map(k=>byKey[k]);
+    document.getElementById('cards').innerHTML=items.map((w,i)=>{
+      const type=w.type==='series'?'series':'movie';
+      const detail=w.id?`<a href="detail.html?id=${w.id}&type=${type}">作品詳細・配信先を見る →</a>`:'';
+      const caution=w.key==='grogu'?'<p>ドラマ「マンダロリアン」から続く映画</p>':'';
+      return `<article class="card"><span class="num">${String(i+1).padStart(2,'0')}</span><div><div class="meta"><span>${w.year}年</span><span class="badge ${w.type}">${labels[w.type]}</span></div><h3>${escapeHtml(w.title)}</h3>${caution}${detail}</div></article>`;
+    }).join('');
+    document.querySelectorAll('.tab').forEach(b=>{const selected=b.dataset.tab===tab;b.setAttribute('aria-selected',String(selected));b.tabIndex=selected?0:-1});
+  }
+  document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>render(b.dataset.tab)));
+  render('beginner');
+  </script>
+</body>
+</html>
