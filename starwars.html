@@ -11,7 +11,7 @@
     :root{font-family:system-ui,-apple-system,"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;color:#182234;background:#f5f7fb}
     *{box-sizing:border-box}body{margin:0}a{color:#174b90}button{font:inherit}
     .wrap{max-width:1100px;margin:auto;padding:0 22px}.hero{background:linear-gradient(135deg,#101c35,#263d65);color:white;padding:20px 0 44px}
-    .back{color:#dceaff;text-decoration:none;font-size:14px}.hero h1{font-size:clamp(27px,4vw,42px);margin:38px 0 10px}.hero h1::after{content:"";display:block;width:74px;height:4px;border-radius:4px;background:#e8bd52;margin-top:17px}.hero p{line-height:1.8;max-width:720px;color:#e2e8f0}
+    .back{color:#dceaff;text-decoration:none;font-size:14px}.hero h1{font-size:clamp(27px,4vw,42px);margin:38px 0 10px}.hero p{line-height:1.8;max-width:720px;color:#e2e8f0}
     .tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:30px}.tab{background:#fff;color:#25466d;border:2px solid transparent;border-radius:14px;padding:14px 10px;cursor:pointer;font-weight:800;line-height:1.45;min-height:68px}
     .tab[aria-selected="true"]{background:#fff4ce;color:#563d00;border-color:#e3ad3d;box-shadow:0 4px 16px #0003}
     main{padding-top:30px;padding-bottom:65px}.intro{background:white;border:1px solid #dce4f0;border-radius:18px;padding:22px 26px;margin-bottom:26px}.intro h2{margin:0 0 12px;font-size:23px}.count{display:inline-block;margin-left:8px;font-size:15px;color:#765300;background:#fff2cc;border-radius:999px;padding:4px 10px;vertical-align:middle}.intro p{line-height:1.8;margin:0}.note{background:#fff8e5;border-left:4px solid #dba72f;padding:12px 16px;margin-top:16px;border-radius:5px;line-height:1.65}
@@ -23,6 +23,15 @@
     @media(max-width:800px){.grid.dictionary{grid-template-columns:repeat(2,minmax(0,1fr))}}
     @media(max-width:760px){.tabs{grid-template-columns:repeat(2,1fr)}.grid,.grid.dictionary,.side-grid{grid-template-columns:1fr}.hero{padding-bottom:30px}}
     @media(max-width:390px){.poster{width:85px;height:128px;flex-basis:85px}.card-main{gap:12px}.card{padding:15px}.card h3{font-size:16px}}
+    /* カードと見出しの文字サイズを揃える */
+    .back{font-size:15px;font-weight:700}.hero h1{font-size:clamp(30px,4vw,44px);font-weight:800}.hero p{font-size:17px;font-weight:500}
+    .tab{font-size:17px;font-weight:800}.intro h2{font-size:24px;font-weight:800}.count{font-size:15px}.intro p,.note{font-size:17px;font-weight:400}
+    .card{padding:20px}.num{font-size:30px}.card h3{font-size:21px;line-height:1.45;font-weight:800}.card p{font-size:17px;line-height:1.7;margin-top:12px;font-weight:600;color:#34445c}.meta,.card a{font-size:16px}.card a{margin-top:12px;font-weight:800}.providers-label{font-size:15px}.badge{font-size:14px;font-weight:800}
+    .section-heading,.side-section h3{font-size:19px}.era-box strong{font-size:21px}.era-box p,.side-section>p,.side-note{font-size:16px}
+    .dictionary .card{padding:17px}.dictionary .card h3{font-size:18px}.dictionary .card p{font-size:16px}.dictionary .meta,.dictionary .card a{font-size:15px}.dictionary .providers-label{font-size:14px}
+    @media(max-width:390px){.card h3{font-size:19px}.card p{font-size:16px}.dictionary .card h3{font-size:17px}.tab{font-size:16px}}
+    .faq{background:#fff;border:1px solid #dce4f0;border-radius:17px;padding:24px;margin-top:42px}.faq h2{font-size:22px;margin:0 0 6px}.faq>p{color:#526174;margin:0 0 17px;line-height:1.7}.faq details{border-top:1px solid #dce4f0}.faq summary{position:relative;list-style:none;cursor:pointer;font-size:16px;font-weight:800;padding:14px 32px 14px 2px}.faq summary::-webkit-details-marker{display:none}.faq summary::after{content:'＋';position:absolute;right:4px;color:#946b17}.faq details[open] summary::after{content:'−'}.faq details p{line-height:1.75;color:#43536b;margin:0 0 15px;padding-right:26px}
+    .footer{text-align:center;background:#eef3f9;padding:35px 0 42px}.footer strong{display:block;color:#253b58;margin-bottom:12px}.footer p{margin:9px 0}.footer .tmdb-logo{width:170px;max-width:50%;height:auto;margin:8px auto}.top-button{position:fixed;bottom:22px;right:22px;border:0;border-radius:999px;padding:12px 18px;background:#283f75;color:#fff;font-weight:900;box-shadow:0 5px 16px #14254650;cursor:pointer;z-index:2}.top-button[hidden]{display:none}
   </style>
 </head>
 <body>
@@ -37,8 +46,28 @@
       <button class="tab" role="tab" aria-selected="false" data-tab="release">📚 完全公開順（辞書）</button>
     </nav>
   </div></header>
-  <main class="wrap"><section class="intro" id="intro" aria-live="polite"></section><div class="grid" id="cards"></div></main>
-  <footer class="footer"><div class="wrap">作品の順番は StarWars.com の公式視聴ガイドを参照しています。<a href="https://www.starwars.com/news/star-wars-movies-and-series-guide" target="_blank" rel="noopener noreferrer">公式ガイドを見る</a><br>作品情報・画像の提供：<a href="https://www.themoviedb.org/" target="_blank" rel="noopener noreferrer">TMDB</a>　配信サービス情報のデータ提供：JustWatch<br>This product uses the TMDB API but is not endorsed or certified by TMDB.<br><a href="privacy.html">プライバシーポリシー・免責事項</a></div></footer>
+  <main class="wrap">
+    <section class="intro" id="intro" aria-live="polite"></section><div class="grid" id="cards"></div>
+    <section class="faq" aria-labelledby="faq-title">
+      <h2 id="faq-title">❓ スター・ウォーズを見る順番 よくある質問</h2>
+      <p>初めて見る人が迷いやすいポイントをまとめました。</p>
+      <details><summary>初めて見るなら、どの順番がおすすめ？</summary><p>「初心者向け」タブの本筋映画9作を、エピソード4からの公開順で見るのがおすすめです。寄り道ポイントの外伝は、興味が湧いたら楽しめます。</p></details>
+      <details><summary>ドラマやアニメも必ず見る必要がある？</summary><p>本筋の映画9作を追うために必須ではありません。銀河の別の時代や人物をもっと知りたいときに、ドラマ・アニメ込みの時系列を使ってください。</p></details>
+      <details><summary>「ローグ・ワン」と「ハン・ソロ」は本筋の映画？</summary><p>どちらも外伝映画です。「ローグ・ワン」はエピソード4の直前につながり、「ハン・ソロ」は若い頃のハン・ソロを描きます。</p></details>
+      <details><summary>「マンダロリアン・アンド・グローグー」から見ても大丈夫？</summary><p>ドラマ「マンダロリアン」から続く映画です。映画の時系列タブでは、映画の前にドラマを寄り道ポイントとして案内しています。</p></details>
+    </section>
+  </main>
+  <footer class="footer"><div class="wrap">
+    <strong>データ・画像について</strong>
+    <p>作品の順番は <a href="https://www.starwars.com/news/star-wars-movies-and-series-guide" target="_blank" rel="noopener noreferrer">StarWars.com の公式視聴ガイド</a>を参照しています。</p>
+    <p>映画・ドラマ等の情報および画像には、TMDB の API を利用しています。</p>
+    <a href="https://www.themoviedb.org/" target="_blank" rel="noopener noreferrer"><img class="tmdb-logo" src="tmdb-logo.svg" alt="TMDB"></a>
+    <p>This product uses the TMDB API but is not endorsed or certified by TMDB.</p>
+    <p>配信サービス情報のデータ提供：JustWatch</p>
+    <p><a href="privacy.html">プライバシーポリシー・免責事項</a></p>
+    <p>© ドコデミレル？</p>
+  </div></footer>
+  <button type="button" class="top-button" id="topButton" hidden>↑ TOPへ</button>
   <script>
   // 時系列の番号は公式ガイドの大まかな順番。年代が重なるシリーズには注記を表示する。
   const works = [
@@ -158,6 +187,9 @@
   }
   const providerObserver=new IntersectionObserver((entries,observer)=>entries.forEach(entry=>{if(entry.isIntersecting){observer.unobserve(entry.target);loadProviders(entry.target)}}),{rootMargin:'200px'});
   document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>render(b.dataset.tab)));
+  const topButton=document.getElementById('topButton');
+  window.addEventListener('scroll',()=>{topButton.hidden=window.scrollY<500},{passive:true});
+  topButton.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
   render('beginner');
   </script>
 </body>
