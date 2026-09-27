@@ -68,7 +68,7 @@ body{background:linear-gradient(180deg,#eef1eb 0,#f7f7f5 360px,#f6f7f5 100%)}
 .series-tabs a[data-tab="japan"][aria-current="page"]{background:#a72e37;border-color:#a72e37;color:#fff}
 .series-tabs a[data-tab="monsterverse"][aria-current="page"]{background:#35668e;border-color:#35668e;color:#fff}
 .series-tabs a[data-tab="dictionary"][aria-current="page"]{background:#547b60;border-color:#547b60;color:#fff}
-</style></head><body id="top"><header><div class="wrap"><nav class="header-links" aria-label="サイト内の移動"><a href="index.html">← ドコデミレル？に戻る</a><a href="series.html">ほかの作品のシリーズも見てみる →</a></nav><h1>ゴジラを見る順番</h1><p>見たい物語から、ゴジラの世界へ。</p></div></header><main class="wrap"><nav class="series-tabs" aria-label="ゴジラ特集のページを選ぶ">
+</style><style>.top-button{position:fixed;right:22px;bottom:22px;z-index:10;border:0;border-radius:999px;padding:12px 18px;background:#274735;color:#fff;font-size:16px;font-weight:900;box-shadow:0 5px 16px #132a1b55;cursor:pointer}.top-button[hidden]{display:none}</style></head><body id="top"><header><div class="wrap"><nav class="header-links" aria-label="サイト内の移動"><a href="index.html">← ドコデミレル？に戻る</a><a href="series.html">ほかの作品のシリーズも見てみる →</a></nav><h1>ゴジラを見る順番</h1><p>見たい物語から、ゴジラの世界へ。</p></div></header><main class="wrap"><nav class="series-tabs" aria-label="ゴジラ特集のページを選ぶ">
 <a href="#japan" data-tab="japan" aria-current="page">日本の新しいゴジラ</a>
 <a href="#monsterverse" data-tab="monsterverse">モンスター・ヴァース</a>
 <a href="#dictionary" data-tab="dictionary">全作品辞書</a>
@@ -162,7 +162,7 @@ body{background:linear-gradient(180deg,#eef1eb 0,#f7f7f5 360px,#f6f7f5 100%)}
 <article class="work compact" data-year="1956" data-query="空の大怪獣ラドン"><div class="poster" data-poster>ポスター</div><div class="work-body"><div class="work-top"><h3>空の大怪獣ラドン</h3><span class="year">1956年公開</span></div><div class="work-bottom"><div class="providers" data-providers aria-live="polite">配信情報を確認中…</div><a class="detail" href="#" data-detail>作品詳細を見る →</a></div></div></article>
 <article class="work compact" data-year="1958" data-query="大怪獣バラン"><div class="poster" data-poster>ポスター</div><div class="work-body"><div class="work-top"><h3>大怪獣バラン</h3><span class="year">1958年公開</span></div><div class="work-bottom"><div class="providers" data-providers aria-live="polite">配信情報を確認中…</div><a class="detail" href="#" data-detail>作品詳細を見る →</a></div></div></article>
 </div></section></section></div>
-<a class="back bottom-back" href="#top">ページの先頭へ戻る ↑</a></main><footer class="footer"><div class="wrap"><strong>データ・画像について</strong><p>作品の区分・公開年は東宝・ゴジラ公式の作品情報を参照しています。配信情報は表示時点の状況をご確認ください。</p><p>映画・ドラマ情報と画像にはTMDBのAPIを利用しています。</p><a class="tmdb-credit" href="https://www.themoviedb.org/" target="_blank" rel="noopener noreferrer"><img src="tmdb-logo.svg" alt="TMDB" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><span hidden>TMDB（The Movie Database）</span></a><p>This product uses the TMDB API but is not endorsed or certified by TMDB.</p><p>配信サービス情報のデータ提供：JustWatch</p><p><a href="privacy.html">プライバシーポリシー・免責事項</a></p><p>© ドコデミレル？</p></div></footer><script>
+</main><footer class="footer"><div class="wrap"><strong>データ・画像について</strong><p>作品の区分・公開年は東宝・ゴジラ公式の作品情報を参照しています。配信情報は表示時点の状況をご確認ください。</p><p>映画・ドラマ情報と画像にはTMDBのAPIを利用しています。</p><a class="tmdb-credit" href="https://www.themoviedb.org/" target="_blank" rel="noopener noreferrer"><img src="tmdb-logo.svg" alt="TMDB" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><span hidden>TMDB（The Movie Database）</span></a><p>This product uses the TMDB API but is not endorsed or certified by TMDB.</p><p>配信サービス情報のデータ提供：JustWatch</p><p><a href="privacy.html">プライバシーポリシー・免責事項</a></p><p>© ドコデミレル？</p></div></footer><button type="button" class="top-button" id="topButton" hidden>↑ TOPへ</button><script>
 // Match a title to the site's movie/TV search API. Never link a different film when a remake shares its title.
 const apiRoot=location.protocol==='file:'?'https://doko-de-mireru.vercel.app':'';
 const cache=new Map();
@@ -188,4 +188,4 @@ const boxes=[...document.querySelectorAll('.work:not(.upcoming)')];for(const box
   window.addEventListener('hashchange',fromHash);
   fromHash();
 })();
-</script></body></html>
+</script><script>const topButton=document.getElementById('topButton');function updateTopButton(){topButton.hidden=window.scrollY<500}window.addEventListener('scroll',updateTopButton,{passive:true});topButton.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));updateTopButton();</script></body></html>
