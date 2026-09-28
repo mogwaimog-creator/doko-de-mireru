@@ -13,32 +13,255 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="robots" content="index,follow">
   <title>シリーズ作品を見る順番一覧｜ドコデミレル？</title>
-  <meta name="description" content="MCU、ハリー・ポッター、エヴァンゲリオン、スター・ウォーズ、ジュラシック、ゴジラの見る順番をまとめた一覧。公開順や物語の時系列から選べます。">
+  <meta name="description" content="MCU、ハリー・ポッター、エヴァンゲリオン、スター・ウォーズ、ロード・オブ・ザ・リング、ジュラシック、ゴジラの見る順番をまとめた一覧。公開順や物語の時系列から選べます。">
   <link rel="canonical" href="https://doko-de-mireru.vercel.app/series.html">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="シリーズ作品を見る順番一覧｜ドコデミレル？">
+  <meta property="og:description" content="作品数が多いシリーズも、もう迷わない。公開順・物語の時系列・初心者向けルートなどから選べます。">
+  <meta property="og:url" content="https://doko-de-mireru.vercel.app/series.html">
+  <meta name="twitter:card" content="summary">
+
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"BreadcrumbList",
+    "itemListElement":[
+      {"@type":"ListItem","position":1,"name":"ドコデミレル？","item":"https://doko-de-mireru.vercel.app/"},
+      {"@type":"ListItem","position":2,"name":"シリーズ作品を見る順番","item":"https://doko-de-mireru.vercel.app/series.html"}
+    ]
+  }
+  </script>
+
   <style>
-    :root{font-family:system-ui,-apple-system,"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;color:#26344c;background:#f8f9fd}
-    *{box-sizing:border-box}body{margin:0}a{color:#3457a2}.wrap{max-width:1040px;margin:auto;padding:0 22px}
-    header{background:linear-gradient(120deg,#edf3ff,#f4edff 65%,#fdf2fa);color:#26344c;padding:22px 0 48px;border-bottom:1px solid #e7e3f3}header a{color:#455e91;text-decoration:none;font-size:15px;font-weight:700}h1{font-size:clamp(28px,4vw,42px);margin:38px 0 12px}header p{line-height:1.8;color:#586783;margin:0}
-    main{padding-top:34px;padding-bottom:64px}.lead{margin:0 0 24px;color:#4c5b72;line-height:1.8}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
-    .card{display:block;min-width:0;padding:24px;border:1px solid #dfe5f2;border-left:5px solid var(--accent);background:#fff;border-radius:17px;box-shadow:0 4px 14px #26344c0d;text-decoration:none;transition:transform .16s,box-shadow .16s}.card:hover{transform:translateY(-2px);box-shadow:0 8px 20px #26344c1b}.card h2{color:#26344c;font-size:21px;margin:0 0 10px}.card p{color:#455771;font-size:16px;line-height:1.7;margin:0 0 13px}.card span{font-size:15px;font-weight:800}.card:nth-child(1){--accent:#6b8fe2}.card:nth-child(2){--accent:#65a88e}.card:nth-child(3){--accent:#9b80d6}.card:nth-child(4){--accent:#d1ab54}.card:nth-child(5){--accent:#4a9470}.card:nth-child(6){--accent:#4a9470}.card:nth-child(7){--accent:#a82028}.new{display:inline-block;margin-left:8px;padding:3px 8px;border-radius:999px;background:#fff0c5;color:#795100;font-size:12px;vertical-align:middle}
-    footer{text-align:center;background:#f0f2f9;color:#5f6e82;padding:26px 15px;font-size:14px}footer a{margin:0 8px}
-    @media(max-width:700px){.grid{grid-template-columns:1fr}.card{padding:20px}}
-  </style>
+    :root{
+      font-family:system-ui,-apple-system,"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+      color:#26344c;
+      background:#f5f7fb;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:#f5f7fb;color:#26344c}
+    a{color:inherit}
+    .wrap{max-width:1120px;margin:auto;padding:0 22px}
+
+    header{
+      background:linear-gradient(135deg,#101a2c 0%,#131d31 58%,#21182d 100%);
+      border-bottom:1px solid #2b3850;
+      padding:18px 0 28px;
+    }
+    .back-link{color:#b8c5da;text-decoration:none;font-size:15px;font-weight:800}
+    .back-link:hover{color:#fff}
+    .eyebrow{margin:20px 0 5px;color:#8fb2ff;font-size:14px;font-weight:900;letter-spacing:.12em}
+    h1{font-size:clamp(29px,4vw,43px);line-height:1.2;margin:0 0 9px;color:#fff}
+    header p{line-height:1.7;color:#c4cede;margin:0;max-width:760px;font-size:16px}
+    .hero-tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:15px}
+    .hero-tags span{padding:5px 10px;border:1px solid #3b4c68;border-radius:999px;background:#18243a;color:#dce7f8;font-size:13px;font-weight:800}
+
+    main{padding-top:0;padding-bottom:58px}
+    section+section{margin-top:38px}
+    .section-title{font-size:22px;line-height:1.35;margin:0 0 15px;color:#1c2a42}
+
+    .first-section{margin-top:42px}
+
+    .recommend-area{
+      padding:20px;
+      border:1px solid #c9b9e8;
+      border-radius:18px;
+      background:linear-gradient(135deg,#f2edff 0%,#e9efff 52%,#f7edfa 100%);
+      box-shadow:0 7px 22px rgba(38,52,76,.08);
+    }
+
+    .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+
+    .card{
+      --accent:#7fa6ff;
+      position:relative;
+      display:flex;
+      flex-direction:column;
+      min-width:0;
+      min-height:142px;
+      padding:16px 17px 15px;
+      overflow:hidden;
+      border:1px solid #dce3ed;
+      border-top:4px solid var(--accent);
+      border-radius:13px;
+      background:#f8fafc;
+      color:#172238;
+      text-decoration:none;
+      box-shadow:0 4px 12px rgba(0,0,0,.14);
+      transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease,background .18s ease;
+    }
+    .card::after{
+      content:"";
+      position:absolute;
+      inset:-1px;
+      pointer-events:none;
+      border-radius:13px;
+      opacity:0;
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.9),0 0 22px rgba(255,255,255,.28);
+      transition:opacity .18s ease;
+    }
+    .card:hover{
+      transform:translateY(-3px);
+      background:#fff;
+      border-color:#fff;
+      box-shadow:0 10px 25px rgba(0,0,0,.28),0 0 20px rgba(255,255,255,.12);
+    }
+    .card:hover::after{opacity:1}
+    .card h3{font-size:18px;line-height:1.4;margin:0 0 11px;color:#172238}
+    .tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:13px}
+    .tag{display:inline-block;padding:4px 8px;border-radius:999px;background:color-mix(in srgb,var(--accent) 14%,white);border:1px solid color-mix(in srgb,var(--accent) 32%,white);color:#33445f;font-size:12px;line-height:1.2;font-weight:800}
+    .open{margin-top:auto;color:var(--link,#244a93);font-size:14px;font-weight:900}
+    .open::after{content:" →";display:inline-block;transition:transform .18s ease}
+    .card:hover .open::after{transform:translateX(3px)}
+
+    .foreign{--accent:#3976b9;--soft:#eaf4ff;--soft-border:#bfd8f1;--link:#2767a9}
+    .japanese{--accent:#cf4d67;--soft:#fff0f4;--soft-border:#efbdc8;--link:#b53c56}
+    .anime{--accent:#f0b400;--soft:#fff9df;--soft-border:#f3d65f;--link:#b87900}
+
+    .all-head{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin-bottom:15px}
+    .all-head .section-title{margin:0}
+    .filters{display:flex;flex-wrap:wrap;gap:7px}
+    .filter-btn{
+      appearance:none;border:1px solid #425778;background:#172944;color:#eef4ff;
+      border-radius:999px;padding:7px 13px;font:inherit;font-size:14px;font-weight:850;cursor:pointer;
+      transition:.16s ease;
+    }
+    .filter-btn:hover{background:#243b5d;border-color:#7185a5;color:#fff}
+    .filter-btn.active{background:#fff;color:var(--link);border-color:#d7e0ed;box-shadow:0 2px 8px rgba(38,52,76,.10)}
+    .series-card.is-hidden{display:none}
+
+    .future{
+      margin-top:34px;padding:18px 20px;border:1px solid #dbe2ed;border-radius:15px;background:#fff;
+      box-shadow:0 5px 16px rgba(38,52,76,.06);
+    }
+    .future strong{display:block;margin-bottom:5px;color:#1c2a42;font-size:17px}
+    .future p{margin:0;color:#5d6b80;line-height:1.7;font-size:15px}
+
+    footer{text-align:center;background:#080e19;border-top:1px solid #263248;color:#8998af;padding:24px 15px;font-size:14px}
+    footer a{margin:0 8px;color:#b6c3d7}
+
+    @media(max-width:820px){
+      .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .all-head{align-items:flex-start;flex-direction:column;gap:11px}
+    }
+    @media(max-width:560px){
+      .wrap{padding:0 15px}
+      header{padding:15px 0 23px}
+      .eyebrow{margin-top:16px}
+      main{padding-top:0}
+      section+section{margin-top:29px}
+      .first-section{margin-top:30px}
+      .recommend-area{padding:15px}
+      .grid{grid-template-columns:1fr}
+      .card{min-height:128px;padding:14px 15px 13px}
+      .card h3{font-size:18px}
+      .filter-btn{padding:7px 11px}
+    }
+    .kana-note{
+    font-size:15px;
+    font-weight:700;
+    color:#667085;
+  }
+</style>
 </head>
 <body>
-  <header><div class="wrap"><a href="index.html">← ドコデミレル？に戻る</a><h1>シリーズ作品を見る順番</h1><p>気になるシリーズを選んで、公開順や物語の時系列を見てみましょう。</p></div></header>
+  <header>
+    <div class="wrap">
+      <a class="back-link" href="index.html">← ドコデミレル？に戻る</a>
+      <div class="eyebrow">🎬 SERIES GUIDE</div>
+      <h1>シリーズ作品、どこから見る？</h1>
+      <p>作品数が多いシリーズも、もう迷わない。公開順・物語の時系列・初心者向けルートなど、シリーズごとに見やすく整理しています。</p>
+      <div class="hero-tags">
+        <span>公開順</span><span>物語の時系列</span><span>初心者向け</span><span>最短ルート</span><span>寄り道作品</span>
+      </div>
+    </div>
+  </header>
+
   <main class="wrap">
-    <p class="lead">現在公開中のシリーズ特集をまとめました。</p>
-    <div class="grid">
-      <a class="card" href="mcu.html"><h2>🦸 MCU・マーベル</h2><p>数多くの映画とドラマを、公開順・時系列・最短ルートから選べます。</p><span>見る順番を開く →</span></a>
-      <a class="card" href="harrypotter.html"><h2>🪄 ハリー・ポッター</h2><p>ハリー・ポッターとファンタスティック・ビーストの映画をたどれます。</p><span>見る順番を開く →</span></a>
-      <a class="card" href="eva.html"><h2>🤖 エヴァンゲリオン</h2><p>TV版・旧劇場版と新劇場版、それぞれの物語への入口です。</p><span>見る順番を開く →</span></a>
-      <a class="card" href="starwars.html"><h2>🌌 スター・ウォーズ</h2><p>初心者向けの本筋、映画の時系列、ドラマ・アニメ込みの順番を選べます。</p><span>見る順番を開く →</span></a>
-      <a class="card" href="lordoftherings.html"><h2>💍 ロード・オブ・ザ・リング <small class="new">NEW</small></h2><p>映画6作を公開順に。ホビット、寄り道作品と中つ国の地図も案内します。</p><span>見る順番を開く →</span></a>
-      <a class="card" href="jurassic.html"><h2>🦖 ジュラシック・パーク／ワールド <small class="new">NEW</small></h2><p>映画7作を公開順に。旧シリーズ、新シリーズ、新作からの入口も案内します。</p><span>見る順番を開く →</span></a>
-      <a class="card" href="godzilla.html"><h2>🦖 ゴジラ <small class="new">NEW</small></h2><p>日本の新しい作品、モンスター・ヴァース、公開済み映画の全作品辞書を案内します。</p><span>見る順番を開く →</span></a>
+    <section class="recommend-area first-section">
+      <h2 class="section-title">🔥 今おすすめのシリーズ</h2>
+      <div class="grid">
+        <a class="card mcu foreign" href="mcu.html">
+          <h3>🦸 MCU・マーベル</h3>
+          <div class="tags"><span class="tag">公開順</span><span class="tag">時系列</span><span class="tag">最短ルート</span></div>
+          <span class="open">見る順番を見る</span>
+        </a>
+        <a class="card starwars foreign" href="starwars.html">
+          <h3>🌌 スター・ウォーズ</h3>
+          <div class="tags"><span class="tag">初心者向け</span><span class="tag">時系列</span><span class="tag">公開順</span></div>
+          <span class="open">見る順番を見る</span>
+        </a>
+        <a class="card godzilla japanese" href="godzilla.html">
+          <h3>🦖 ゴジラ</h3>
+          <div class="tags"><span class="tag">初心者向け</span><span class="tag">シリーズ別</span><span class="tag">全作品</span></div>
+          <span class="open">見る順番を見る</span>
+        </a>
+      </div>
+    </section>
+
+    <section>
+      <div class="all-head">
+        <h2 class="section-title">すべてのシリーズ <span class="kana-note">（あ行～）</span></h2>
+        <div class="filters" aria-label="シリーズの絞り込み">
+          <button class="filter-btn active" type="button" data-filter="all">すべて</button>
+          <button class="filter-btn" type="button" data-filter="western">洋画</button>
+          <button class="filter-btn" type="button" data-filter="japanese">邦画</button>
+          <button class="filter-btn" type="button" data-filter="anime">アニメ</button>
+        </div>
+      </div>
+
+      <div class="grid" id="seriesGrid">
+      <a class="card series-card eva anime" data-category="anime japanese" href="eva.html"><h3>🤖 エヴァンゲリオン</h3><div class="tags"><span class="tag">初心者向け</span><span class="tag">新劇場版</span><span class="tag">TV・旧劇場版</span></div><span class="open">見る順番を見る</span></a>
+      <a class="card series-card mcu foreign" data-category="western" href="mcu.html"><h3>🦸 MCU・マーベル</h3><div class="tags"><span class="tag">公開順</span><span class="tag">時系列</span><span class="tag">最短ルート</span></div><span class="open">見る順番を見る</span></a>
+      <a class="card series-card godzilla japanese" data-category="japanese" href="godzilla.html"><h3>🦖 ゴジラ</h3><div class="tags"><span class="tag">初心者向け</span><span class="tag">シリーズ別</span><span class="tag">全作品</span></div><span class="open">見る順番を見る</span></a>
+      <a class="card series-card jurassic foreign" data-category="western" href="jurassic.html"><h3>🦖 ジュラシック・パーク／ワールド</h3><div class="tags"><span class="tag">公開順</span><span class="tag">時系列</span><span class="tag">寄り道</span></div><span class="open">見る順番を見る</span></a>
+      <a class="card series-card starwars foreign" data-category="western" href="starwars.html"><h3>🌌 スター・ウォーズ</h3><div class="tags"><span class="tag">初心者向け</span><span class="tag">時系列</span><span class="tag">公開順</span></div><span class="open">見る順番を見る</span></a>
+      <a class="card series-card harry foreign" data-category="western" href="harrypotter.html"><h3>🪄 ハリー・ポッター</h3><div class="tags"><span class="tag">公開順</span><span class="tag">時系列</span><span class="tag">人物相関図</span></div><span class="open">見る順番を見る</span></a>
+      <a class="card series-card lotr foreign" data-category="western" href="lordoftherings.html"><h3>💍 ロード・オブ・ザ・リング</h3><div class="tags"><span class="tag">公開順</span><span class="tag">ホビット</span><span class="tag">中つ国</span></div><span class="open">見る順番を見る</span></a>
+    </div>
+    </section>
+
+    <div class="future">
+      <strong>🎬 次はどのシリーズ？</strong>
+      <p>「見る順番がわかりにくい」「作品数が多くて迷う」シリーズを、これからも追加していきます。</p>
     </div>
   </main>
+
   <footer>© ドコデミレル？ <a href="index.html">トップページ</a><a href="privacy.html">プライバシーポリシー・免責事項</a></footer>
+
+  <script>
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const seriesCards = document.querySelectorAll('.series-card');
+
+    filterButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const filter = button.dataset.filter;
+        filterButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+
+        seriesCards.forEach(card => {
+          const categories = (card.dataset.category || '').split(' ');
+          card.classList.toggle('is-hidden', filter !== 'all' && !categories.includes(filter));
+        });
+      });
+    });
+  </script>
 </body>
 </html>
+
+<style>
+/* 第4案：カテゴリ色 */
+.filter-btn[data-filter="western"]{border-color:#3976b9;color:#3976b9;background:#eef7ff}
+.filter-btn[data-filter="japanese"]{border-color:#cf4d67;color:#b53c56;background:#fff0f4}
+.filter-btn[data-filter="anime"]{border-color:#e5ad00;color:#9b6700;background:#fff8d6}
+.filter-btn[data-filter="all"]{border-color:#596579;color:#26344c;background:#fff}
+.filter-btn:hover{filter:brightness(.97)}
+.filter-btn.active{background:#26344c;color:#fff;border-color:#26344c;box-shadow:0 2px 8px rgba(38,52,76,.13)}
+</style>
+
+<style>
+.recommend-area > .section-title{
+  color:#352b59;
+}
+</style>
