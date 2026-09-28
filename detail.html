@@ -2474,6 +2474,43 @@ Netflix、Amazon Prime Video、U-NEXT、Hulu、Disney+など、
   </div>
 </div>
 
+
+<!-- =========================================================
+     ゴジラを見る順番への案内
+========================================================= -->
+<div id="godzillaGuide" class="mcu-guide" hidden>
+  <div class="mcu-guide-icon">🦖</div>
+  <div class="mcu-guide-content">
+    <div class="mcu-guide-title">ゴジラ作品をもっと楽しみたい方へ</div>
+    <div class="mcu-guide-text">日本のゴジラとモンスター・ヴァースのつながりや、見る順番を紹介しています。</div>
+    <a class="mcu-guide-link" href="godzilla.html">ゴジラを見る順番ガイドへ →</a>
+  </div>
+</div>
+
+<!-- =========================================================
+     ジュラシックを見る順番への案内
+========================================================= -->
+<div id="jurassicGuide" class="mcu-guide" hidden>
+  <div class="mcu-guide-icon">🦕</div>
+  <div class="mcu-guide-content">
+    <div class="mcu-guide-title">ジュラシックの世界をもっと楽しみたい方へ</div>
+    <div class="mcu-guide-text">パークからワールドへ続く映画の順番と、物語のつながりを紹介しています。</div>
+    <a class="mcu-guide-link" href="jurassic.html">ジュラシックを見る順番ガイドへ →</a>
+  </div>
+</div>
+
+<!-- =========================================================
+     ロード・オブ・ザ・リングを見る順番への案内
+========================================================= -->
+<div id="lordOfTheRingsGuide" class="mcu-guide" hidden>
+  <div class="mcu-guide-icon">💍</div>
+  <div class="mcu-guide-content">
+    <div class="mcu-guide-title">中つ国の旅をもっと楽しみたい方へ</div>
+    <div class="mcu-guide-text">『ロード・オブ・ザ・リング』と『ホビット』の見る順番や、物語の時代関係を紹介しています。</div>
+    <a class="mcu-guide-link" href="lordoftherings.html">ロード・オブ・ザ・リングを見る順番ガイドへ →</a>
+  </div>
+</div>
+
 <div class="movie-side-info">
 
 <div class="side-section">
@@ -4430,6 +4467,75 @@ function isStarWarsGuideWork(movie){
 
 }
   
+/* 特集ページに掲載した作品だけを詳細ページから案内 */
+function isJurassicGuideWork(movie){
+  if(!movie || !movie.id) return false;
+  const id = Number(movie.id);
+  const movieIds = new Set([329, 330, 331, 135397, 351286, 507086, 1234821]);
+  const tvIds = new Set([93741, 237512]);
+  return mediaType === "tv" ? tvIds.has(id) : movieIds.has(id);
+}
+
+function isLordOfTheRingsGuideWork(movie){
+  if(!movie || !movie.id) return false;
+  const id = Number(movie.id);
+  const movieIds = new Set([120, 121, 122, 49051, 57158, 122917, 839033]);
+  const tvIds = new Set([84773]);
+  return mediaType === "tv" ? tvIds.has(id) : movieIds.has(id);
+}
+
+function isGodzillaGuideWork(movie){
+  if(!movie) return false;
+  const year = Number(String(movie.release_date || movie.first_air_date || "").slice(0, 4));
+  const normalize = value => String(value || "").toLowerCase()
+    .replace(/[\s\u3000・：:／/×xXｘ\-‐‑–—.。『』「」!?！？()（）]/g, "");
+  const titles = [movie.title, movie.name, movie.original_title, movie.original_name]
+    .filter(Boolean).map(normalize);
+  const movieWorks = [
+    [2016, 'シン・ゴジラ'],
+    [2023, 'ゴジラ-1.0'],
+    [2026, 'ゴジラ-0.0'],
+    [2014, 'Godzilla'],
+    [2017, 'キングコング：髑髏島の巨神'],
+    [2019, 'ゴジラ キング・オブ・モンスターズ'],
+    [2021, 'ゴジラvsコング'],
+    [2024, 'ゴジラxコング 新たなる帝国'],
+    [1954, 'ゴジラ'],
+    [1955, 'ゴジラの逆襲'],
+    [1962, 'キングコング対ゴジラ'],
+    [1964, 'モスラ対ゴジラ'],
+    [1966, 'ゴジラ・エビラ・モスラ 南海の大決闘'],
+    [1967, '怪獣島の決戦 ゴジラの息子'],
+    [1969, 'ゴジラ・ミニラ・ガバラ オール怪獣大進撃'],
+    [1971, 'ゴジラ対ヘドラ'],
+    [1972, '地球攻撃命令 ゴジラ対ガイガン'],
+    [1973, 'ゴジラ対メガロ'],
+    [1974, 'ゴジラ対メカゴジラ'],
+    [1975, 'メカゴジラの逆襲'],
+    [1984, 'ゴジラ'],
+    [1989, 'ゴジラvsビオランテ'],
+    [1991, 'ゴジラvsキングギドラ'],
+    [1992, 'ゴジラvsモスラ'],
+    [1993, 'ゴジラvsメカゴジラ'],
+    [1994, 'ゴジラvsスペースゴジラ'],
+    [1995, 'ゴジラvsデストロイア'],
+    [1999, 'ゴジラ2000 ミレニアム'],
+    [2000, 'ゴジラ×メガギラス G消滅作戦'],
+    [2001, 'ゴジラ・モスラ・キングギドラ 大怪獣総攻撃'],
+    [2002, 'ゴジラ×メカゴジラ'],
+    [2003, 'ゴジラ×モスラ×メカゴジラ 東京SOS'],
+    [2004, 'ゴジラ FINAL WARS']
+  ];
+  const tvWorks = [
+    [2023, 'モナーク：レガシー・オブ・モンスターズ'],
+    [2023, 'スカル・アイランド']
+  ];
+  const works = mediaType === "tv" ? tvWorks : movieWorks;
+  if(works.some(([workYear, title]) => workYear === year && titles.includes(normalize(title)))) return true;
+  return mediaType !== "tv" && (year === 1998 || year === 2014) &&
+    titles.some(title => title.includes("godzilla") || title.includes("ゴジラ"));
+}
+
 /* =========================================================
    作品情報表示
 ========================================================= */
@@ -4815,6 +4921,17 @@ if(starWarsGuide){
     !isStarWarsGuideWork(movie);
 }
   
+/* ゴジラ・ジュラシック・中つ国の作品案内 */
+const relatedGuides = [
+  ["godzillaGuide", isGodzillaGuideWork],
+  ["jurassicGuide", isJurassicGuideWork],
+  ["lordOfTheRingsGuide", isLordOfTheRingsGuideWork]
+];
+for(const [guideId, isCoveredWork] of relatedGuides){
+  const guide = document.getElementById(guideId);
+  if(guide) guide.hidden = !isCoveredWork(movie);
+}
+
   const poster =
     document.getElementById(
       "poster"
