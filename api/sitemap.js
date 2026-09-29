@@ -873,7 +873,13 @@ const seriesPages = [
   "mcu.html",
   "harrypotter.html",
   "eva.html",
-  "starwars.html"
+  "starwars.html",
+  "lordoftherings.html",
+  "jurassic.html",
+  "godzilla.html",
+  "godzilla-monsterverse.html",
+  "godzilla-dictionary.html",
+  "kimetsu.html"
 ];
 
 seriesPages.forEach(function(page){
