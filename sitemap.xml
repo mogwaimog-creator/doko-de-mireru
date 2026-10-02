@@ -44,18 +44,6 @@
   </url>
 
   <url>
-    <loc>https://doko-de-mireru.vercel.app/godzilla-monsterverse.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <url>
-    <loc>https://doko-de-mireru.vercel.app/godzilla-dictionary.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <url>
     <loc>https://doko-de-mireru.vercel.app/series.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
