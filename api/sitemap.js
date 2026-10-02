@@ -877,8 +877,6 @@ const seriesPages = [
   "lordoftherings.html",
   "jurassic.html",
   "godzilla.html",
-  "godzilla-monsterverse.html",
-  "godzilla-dictionary.html",
   "kimetsu.html"
 ];
 
