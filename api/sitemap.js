@@ -878,7 +878,10 @@ const seriesPages = [
   "jurassic.html",
   "godzilla.html",
   "kimetsu.html"
-];
+,
+  "odoru.html",
+  "minions.html",
+  "streaming.html"];
 
 seriesPages.forEach(function(page){
   urls.push(`
