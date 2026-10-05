@@ -163,12 +163,30 @@
     font-weight:700;
     color:#667085;
   }
+
+/* 第4案：カテゴリ色 */
+.filter-btn[data-filter="western"]{border-color:#3976b9;color:#3976b9;background:#eef7ff}
+.filter-btn[data-filter="japanese"]{border-color:#cf4d67;color:#b53c56;background:#fff0f4}
+.filter-btn[data-filter="anime"]{border-color:#e5ad00;color:#9b6700;background:#fff8d6}
+.filter-btn[data-filter="all"]{border-color:#596579;color:#26344c;background:#fff}
+.filter-btn:hover{filter:brightness(.97)}
+.filter-btn.active{background:#26344c;color:#fff;border-color:#26344c;box-shadow:0 2px 8px rgba(38,52,76,.13)}
+
+
+.recommend-area > .section-title{
+  color:#352b59;
+}
+
+.compare-entry{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-top:24px;padding:20px 22px;border:1px solid #cbbce9;border-radius:16px;background:linear-gradient(120deg,#f0ebfb,#edf3ff);text-decoration:none;box-shadow:0 5px 16px rgba(38,52,76,.06)}
+.compare-entry strong{display:block;color:#352b59;font-size:19px;margin-bottom:5px}.compare-entry p{margin:0;line-height:1.7;color:#526079;font-size:14px}.compare-entry .entry-cta{flex-shrink:0;border-radius:10px;background:#514281;color:white;padding:11px 15px;font-weight:800}.compare-entry:hover{border-color:#8b70bf}.compare-entry:focus-visible{outline:3px solid #6e54b0;outline-offset:4px}@media(max-width:560px){.compare-entry{align-items:flex-start;flex-direction:column;padding:17px;gap:12px}.compare-entry .entry-cta{font-size:14px}}
+
+.series-header-nav{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px}.comparison-nav-button{display:inline-flex;align-items:center;justify-content:center;padding:11px 16px;border:1px solid #cbbce9;border-radius:10px;background:#514281;color:#fff;text-decoration:none;font-size:16px;line-height:1.5;font-weight:850;box-shadow:0 3px 9px rgba(0,0,0,.14)}.comparison-nav-button:hover{background:#665293}.comparison-nav-button:focus-visible{outline:3px solid #cbbce9;outline-offset:4px}@media(max-width:560px){.comparison-nav-button{font-size:15px;padding:9px 12px}}
 </style>
 </head>
 <body>
   <header>
     <div class="wrap">
-      <a class="back-link" href="index.html">← ドコデミレル？に戻る</a>
+      <div class="series-header-nav"><a class="back-link" href="index.html">← ドコデミレル？に戻る</a><a class="comparison-nav-button" href="streaming.html">📊 動画配信サービス比較</a></div>
       <div class="eyebrow">🎬 SERIES GUIDE</div>
       <h1>シリーズ作品、どこから見る？</h1>
       <p>作品数が多いシリーズも、もう迷わない。公開順・物語の時系列・初心者向けルートなど、シリーズごとに見やすく整理しています。</p>
@@ -251,19 +269,3 @@
   </script>
 </body>
 </html>
-
-<style>
-/* 第4案：カテゴリ色 */
-.filter-btn[data-filter="western"]{border-color:#3976b9;color:#3976b9;background:#eef7ff}
-.filter-btn[data-filter="japanese"]{border-color:#cf4d67;color:#b53c56;background:#fff0f4}
-.filter-btn[data-filter="anime"]{border-color:#e5ad00;color:#9b6700;background:#fff8d6}
-.filter-btn[data-filter="all"]{border-color:#596579;color:#26344c;background:#fff}
-.filter-btn:hover{filter:brightness(.97)}
-.filter-btn.active{background:#26344c;color:#fff;border-color:#26344c;box-shadow:0 2px 8px rgba(38,52,76,.13)}
-</style>
-
-<style>
-.recommend-area > .section-title{
-  color:#352b59;
-}
-</style>
