@@ -61,13 +61,23 @@
     .faq{background:#fff;border:1px solid #dce4f0;border-radius:17px;padding:24px;margin-top:42px}.faq h2{font-size:22px;margin:0 0 6px}.faq>p{color:#526174;margin:0 0 17px;line-height:1.7}.faq details{border-top:1px solid #dce4f0}.faq summary{position:relative;list-style:none;cursor:pointer;font-size:16px;font-weight:800;padding:14px 32px 14px 2px}.faq summary::-webkit-details-marker{display:none}.faq summary::after{content:'＋';position:absolute;right:4px;color:#946b17}.faq details[open] summary::after{content:'−'}.faq details p{line-height:1.75;color:#43536b;margin:0 0 15px;padding-right:26px}
     .footer{text-align:center;background:#eef3f9;padding:35px 0 42px}.footer strong{display:block;color:#253b58;margin-bottom:12px}.footer p{margin:9px 0}.footer .tmdb-logo{width:170px;max-width:50%;height:auto;margin:8px auto}.top-button{position:fixed;bottom:22px;right:22px;border:0;border-radius:999px;padding:12px 18px;background:#283f75;color:#fff;font-weight:900;box-shadow:0 5px 16px #14254650;cursor:pointer;z-index:2}.top-button[hidden]{display:none}
   </style>
+<script>
+const dokoApiRoot=location.protocol==='file:'||['localhost','127.0.0.1'].includes(location.hostname)?'https://doko-de-mireru.vercel.app':'';
+function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Set(),result=[];for(const item of Array.isArray(items)?items:[]){if(!item)continue;const id=aliases[Number(item.provider_id)]||Number(item.provider_id);if(seen.has(id))continue;seen.add(id);const canonical=(items||[]).find(p=>p&&Number(p.provider_id)===id);result.push(canonical||{...item,provider_id:id,provider_name:id===8?'Netflix':id===9?'Amazon Prime Video':item.provider_name});}return result;}
+</script><style>.doko-provider-unconfirmed{grid-column:1/-1;flex-basis:100%;width:auto!important;height:auto!important;background:none!important;border:0!important;box-shadow:none!important;font-size:14px;line-height:1.7;text-align:left}.doko-streaming-note{margin:28px auto 24px;padding:15px 18px;border:1px solid currentColor;border-radius:12px;font-size:15px;line-height:1.8;max-width:1080px}.doko-streaming-note p{margin:0 0 7px}.doko-streaming-note a{font-weight:800;color:inherit}.providers,.provider-logos,.mcu-provider-logos,.hp-provider-logos,.eva-provider-logos{flex-wrap:wrap;overflow:visible}</style><style>
+.sw-comparison-callout{display:flex;align-items:center;justify-content:space-between;gap:18px;margin:24px 0 0;padding:18px 22px;border:1px solid #c9d7e9;border-left:4px solid #e3ad3d;border-radius:14px;background:#f0f5fc;color:#182234}
+.sw-comparison-copy{min-width:0}.sw-comparison-callout h2{margin:0 0 5px;color:#25466d;font-size:21px;line-height:1.5}.hero .sw-comparison-callout p{margin:0;color:#334155;font-size:16px;line-height:1.7}
+.sw-comparison-button{display:inline-block;flex-shrink:0;max-width:100%;padding:8px 14px;border:2px solid #25466d;border-radius:10px;background:#25466d;color:#fff!important;font-size:16px;font-weight:800;line-height:1.6;text-align:center;text-decoration:none}.sw-comparison-button:hover{background:#193552;border-color:#193552}.sw-comparison-button:focus-visible{outline:3px solid #e3ad3d;outline-offset:3px}
+@media(max-width:900px){.sw-comparison-callout{flex-direction:column;align-items:stretch;gap:12px;padding:16px}.sw-comparison-button{width:100%}}
+</style>
 </head>
 <body>
   <header class="hero"><div class="wrap">
     <a class="back" href="index.html">← ドコデミレル？に戻る</a><a href="series.html" style="display:inline-block;margin-left:12px;color:#fff2d7;font-size:16px;font-weight:800">ほかのシリーズを見る →</a>
     <h1>スター・ウォーズを見る順番</h1>
     <p>初めての人は映画の本筋から。見たい作品を調べたい人は公開順の辞書へ。映画・ドラマ・アニメのつながりも、目的に合わせてたどれます。</p>
-    <nav class="tabs" role="tablist" aria-label="見る順番">
+    <section class="sw-comparison-callout" aria-label="スター・ウォーズの配信先を比較"><div class="sw-comparison-copy"><h2>📺 スター・ウォーズをまとめて楽しむならDisney＋</h2><p>料金・機能や、ほかのサービスの見放題対象も比較したい方はこちら</p></div><a class="sw-comparison-button" href="streaming.html?view=series#series-starwars">スター・ウォーズの配信サービスを比較する →</a></section>
+<nav class="tabs" role="tablist" aria-label="見る順番">
       <button class="tab" role="tab" aria-selected="true" data-tab="beginner">🌟 初心者向け</button>
       <button class="tab" role="tab" aria-selected="false" data-tab="films">⏳ 映画の時系列</button>
       <button class="tab" role="tab" aria-selected="false" data-tab="expanded">🌌 ドラマ・アニメ込みの時系列</button>
@@ -84,7 +94,7 @@
       <details><summary>「ローグ・ワン」と「ハン・ソロ」は本筋の映画？</summary><p>どちらも外伝映画です。「ローグ・ワン」はエピソード4の直前につながり、「ハン・ソロ」は若い頃のハン・ソロを描きます。</p></details>
       <details><summary>「マンダロリアン・アンド・グローグー」から見ても大丈夫？</summary><p>ドラマ「マンダロリアン」から続く映画です。映画の時系列タブでは、映画の前にドラマを寄り道ポイントとして案内しています。</p></details>
     </section>
-  </main>
+  <aside class="doko-streaming-note"><p><strong>配信情報について</strong><br>見放題の配信先は、比較表と同じ日本向けデータを使用しています。取得できた配信ロゴを表示し、同じサービスの広告付きプランはひとつにまとめています。追加チャンネルは通常のPrime Videoとは別の契約条件です。TVの全話・全シーズンの対象範囲と、契約前の見放題条件は公式サイトでご確認ください。</p><a href="streaming.html?view=series#series-starwars">このシリーズの見放題比較表を見る →</a></aside></main>
   <footer class="footer"><div class="wrap">
     <strong>データ・画像について</strong>
     <p>作品の順番は <a href="https://www.starwars.com/news/star-wars-movies-and-series-guide" target="_blank" rel="noopener noreferrer">StarWars.com の公式視聴ガイド</a>を参照しています。</p>
@@ -204,12 +214,12 @@
     const key=`${box.dataset.type}:${box.dataset.id}`;
     if(!providerCache.has(key))providerCache.set(key,fetch(`${apiBase}/api/search?id=${encodeURIComponent(box.dataset.id)}&type=${box.dataset.type}`)
       .then(response=>{if(!response.ok)throw Error('配信情報の取得に失敗');return response.json()})
-      .then(data=>Array.isArray(data.streaming)?data.streaming:[]).catch(()=>null));
+      .then(data=>Array.isArray(data.streaming)?dokoNormalizeStreaming(data.streaming):[]).catch(()=>null));
     const providers=await providerCache.get(key);
     if(!box.isConnected)return;
     if(providers===null){box.textContent='配信状況は作品詳細でご確認ください';return}
-    const unique=providers.filter((p,i,all)=>p&&p.logo_path&&all.findIndex(x=>x&&x.provider_id===p.provider_id)===i).slice(0,6);
-    if(!unique.length){box.textContent='現在、見放題の配信情報はありません';return}
+    const unique=providers.filter((p,i,all)=>p&&p.logo_path&&all.findIndex(x=>x&&x.provider_id===p.provider_id)===i);
+    if(!unique.length){box.textContent='見放題情報は未確認です';return}
     box.innerHTML='<span class="providers-label">見放題</span>';
     unique.forEach(p=>{const img=document.createElement('img');img.src='https://image.tmdb.org/t/p/w92'+p.logo_path;img.alt=p.provider_name||'配信サービス';img.loading='lazy';box.appendChild(img)});
   }
