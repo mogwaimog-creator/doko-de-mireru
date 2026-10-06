@@ -881,6 +881,7 @@ const seriesPages = [
 ,
   "odoru.html",
   "minions.html",
+  "wildspeed.html",
   "streaming.html"];
 
 seriesPages.forEach(function(page){
