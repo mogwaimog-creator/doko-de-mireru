@@ -1167,6 +1167,23 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
 </style><style>
 .hp-top-button{position:fixed;right:max(16px,calc((100vw - 1100px)/2 + 16px));bottom:calc(22px + env(safe-area-inset-bottom,0px));z-index:50;padding:12px 18px;border:1px solid #fbbf24;border-radius:999px;background:#312e81;color:#fff;font-family:inherit;font-size:16px;font-weight:800;line-height:1.5;box-shadow:0 5px 18px #1e1b4b40;cursor:pointer}
 .hp-top-button:hover{background:#4338ca}.hp-top-button:focus-visible{outline:3px solid #d97706;outline-offset:4px}.hp-top-button[hidden]{display:none}
+</style><style>
+.hp-story-intro{margin:0 0 24px;padding:24px;background:linear-gradient(135deg,#fffdf5,#fef3c7);border:1px solid #e4c58e;border-radius:16px;line-height:1.85}.hp-story-intro>span{font-size:14px;font-weight:800;color:#92400e}.hp-story-intro h2{font-size:24px;color:#312e81;margin:6px 0 12px}.hp-story-intro p{font-size:16px;margin:10px 0}.hp-story-intro .hp-story-next{padding-top:12px;border-top:1px solid #e4d7b5;font-weight:700}.hp-side-intro{font-size:15px;line-height:1.8;color:#475569;margin:0 0 18px}
+.hp-movie-grid{display:flex;flex-direction:column;gap:18px}.hp-guide-row{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:18px;align-items:start}.hp-guide-row-solo{grid-template-columns:minmax(0,1fr) 300px}.hp-guide-row .hp-movie-card{min-width:0}.hp-movie-main{gap:18px}.hp-side-guide{padding:19px;background:#f5f3ff;border:1px solid #d5cced;border-top:4px solid #7c3aed;border-radius:15px;line-height:1.75}.hp-guide-label{font-size:14px;font-weight:800;color:#6d28d9}.hp-side-guide h3{font-size:19px;color:#312e81;margin:7px 0 10px}.hp-side-guide p{font-size:15px;color:#475569;margin:0 0 12px}.hp-side-guide dl{margin:0}.hp-side-guide dl div{padding:10px 0;border-top:1px solid #ddd6fe}.hp-side-guide dt{font-size:16px;font-weight:800;color:#312e81}.hp-side-guide dd{font-size:15px;color:#475569;margin:4px 0 0}.hp-side-guide .hp-guide-note{font-size:14px;margin:10px 0 0}.hp-guide-sources{font-size:14px;line-height:1.8;margin:16px 0}
+@media(max-width:850px){.hp-guide-row,.hp-guide-row-solo{grid-template-columns:1fr}.hp-side-guide{order:-1}.hp-story-intro{padding:20px 17px}.hp-story-intro h2{font-size:21px}.hp-side-guide{padding:16px}.hp-side-intro{font-size:14px}}
+</style><style>
+.hp-guide-row,.hp-guide-row-solo{grid-template-columns:minmax(0,3fr) minmax(0,2fr);align-items:start}.hp-side-guide{background:#edf3f8;border-color:#c0cfdd;border-top-color:#294963;padding:22px}.hp-guide-label,.hp-side-guide h3,.hp-side-guide dt{color:#24455e}.hp-guide-label{display:flex;justify-content:space-between;align-items:center;gap:8px}.hp-guide-label b{font-size:23px}.hp-side-guide h3{font-size:21px}.hp-side-guide dl div{border-color:#ccd9e4}.hp-side-guide dd,.hp-side-guide p{font-size:16px}.hp-fb-link{padding:13px;margin-top:15px;background:#fff;border:1px solid #c0cfdd;border-radius:10px;font-size:15px;line-height:1.8}.hp-fb-link p{font-size:15px;margin:7px 0}.hp-fb-link a{color:#24455e;font-weight:800}.hp-guide-row .hp-movie-card{padding:18px}.hp-guide-row .hp-movie-main{gap:15px}
+@media(max-width:850px){.hp-guide-row,.hp-guide-row-solo{grid-template-columns:1fr}.hp-side-guide{padding:18px}.hp-side-guide h3{font-size:20px}}
+</style><style>
+.hp-side-guide{padding:15px 18px;line-height:1.6}.hp-guide-label b{font-size:20px}.hp-side-guide h3{font-size:20px;margin:6px 0 8px}.hp-side-guide p{font-size:15px;margin:0 0 8px}.hp-side-guide dl div{padding:7px 0}.hp-side-guide dt{font-size:16px}.hp-side-guide dd{font-size:15px;margin:3px 0 0;line-height:1.6}
+.hp-side-guide[aria-label="ハリー・ポッターガイド3"] dl,.hp-side-guide[aria-label="ハリー・ポッターガイド9"] dl{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 14px}.hp-side-guide[aria-label="ハリー・ポッターガイド3"] dl+p{font-size:14px;margin:8px 0 0}.hp-fb-link{padding:10px;margin-top:10px}.hp-fb-link p{margin:5px 0;font-size:14px}
+@media(max-width:420px){.hp-side-guide[aria-label="ハリー・ポッターガイド3"] dl,.hp-side-guide[aria-label="ハリー・ポッターガイド9"] dl{grid-template-columns:1fr}.hp-side-guide{padding:14px 16px}}
+</style><style>
+.hp-side-guide dt{font-weight:500;color:#475569;font-size:15px}.hp-side-guide dd,.hp-side-guide p{font-weight:400;color:#536174}.hp-guide-label{font-weight:500;color:#536174}.hp-guide-label b{font-weight:600;font-size:18px;color:#536174}.hp-side-guide h3{font-weight:700}.hp-side-guide{scroll-margin-top:16px}.hp-fb-link strong{font-weight:500;color:#475569}.hp-intro-guide-links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:14px}.hp-intro-guide-links>div{padding:15px 17px;border:1px solid #e4d7b5;border-radius:12px;background:#ffffffb3}.hp-intro-guide-links h3{font-size:18px;line-height:1.6;color:#312e81;margin:0 0 8px}.hp-intro-guide-links p{font-size:15px;margin:0 0 10px}.hp-intro-guide-links a{font-size:15px;font-weight:600;color:#294963;line-height:1.8}
+@media(max-width:700px){.hp-intro-guide-links{grid-template-columns:1fr;gap:10px}}
+</style><style>
+.hp-order-tabs{margin:20px 0 24px;padding:18px 22px;background:linear-gradient(135deg,#1f2937,#312e81);border-radius:16px;gap:14px;align-items:center}.hp-order-tabs .hp-tab{display:inline-flex;align-items:center;justify-content:center}.hp-progress{margin-bottom:20px}
+@media(max-width:600px){.hp-order-tabs{padding:16px;gap:12px}}
 </style></head>
 
 <body>
@@ -1198,8 +1215,39 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
         初めてなら、まずは本編8作を公開順で見るのがおすすめです。
       </p>
 
-      <nav
-        class="hp-tabs"
+      
+
+    </section>
+
+  </div>
+
+</header>
+
+
+<main class="page-wrap">
+<section class="hp-story-intro" aria-labelledby="hp-story-title"><span>ようこそ、魔法の世界へ</span><h2 id="hp-story-title">🪄 ハリー・ポッターって、どんな物語？</h2><p>自分が魔法使いだと知った少年ハリーが、魔法学校ホグワーツへ。ロンやハーマイオニーと出会い、友情を育みながら、魔法界の謎や危険に立ち向かっていく物語です。</p><p>魔法の授業、空飛ぶほうき、不思議な生き物。そして、仲間と過ごす学校生活。<strong>魔法の知識がなくても、ハリーと一緒に世界を知っていけます。</strong></p><p class="hp-story-next">映画は本編8作。初めてなら『賢者の石』から公開順で楽しめます。</p><div class="hp-intro-guide-links"><div><h3>では、ファンタスティック・ビーストって何？</h3><p>ハリー・ポッターと同じ魔法界の、昔の時代を描く別シリーズ。魔法動物を研究するニュートが主人公です。</p><a href="#release" data-hp-guide-view="timeline">ファンタビのガイドを見る →</a></div><div><h3>🔰 魔法界をもっと知りたい・おさらいしたい方へ</h3><p>魔法学校や4つの寮、おなじみの人物を、初心者向けガイドで紹介しています。</p><a href="#release" data-hp-guide-view="release">ハリー・ポッターのガイドを見る →</a></div></div></section>
+<section class="hp-start-guide" aria-labelledby="hp-start-title">
+  <h2 id="hp-start-title">初めてなら、本編8作を公開順で</h2>
+  <p>『賢者の石』から『死の秘宝 PART2』まで、ハリーの成長と冒険を順番に楽しめます。<strong>ハリーの物語は本編8作で完結</strong>。ファンタビを先に見ておく必要はありません。</p>
+  <div class="hp-time-grid" aria-label="まとめて見る時間の目安">
+    <div><span>ハリー・ポッター本編8作</span><strong>約19時間40分</strong></div>
+    <div><span>ファンタビ3作</span><strong>約6時間50分</strong></div>
+    <div><span>全11作</span><strong>約26時間30分</strong></div>
+  </div>
+  <p class="hp-time-note">掲載している上映時間の合計を約10分単位に丸めた目安です。休憩時間は含みません。配信版・ディスク版などで上映時間が異なる場合があります。</p>
+  <div class="hp-guide-faq">
+    <details><summary>ファンタスティック・ビースト（ファンタビ）って何？</summary><p>ハリー・ポッターと同じ魔法界を舞台に、ハリーが生まれるより前の時代を描く別シリーズです。魔法動物学者ニュート・スキャマンダーを中心に物語が進み、若い頃のダンブルドアも登場します。本編の続編ではなく、魔法界の過去を楽しむ作品です。</p></details>
+    <details><summary>公開順と時系列は、どう違う？</summary><p><strong>公開順：</strong>ハリー・ポッター8作 → ファンタビ3作。初めて見る方にはこちらがおすすめです。</p><p><strong>時系列：</strong>ファンタビ3作 → ハリー・ポッター8作。映画が公開された年ではなく、物語の舞台となる時代で並べます。若い頃のダンブルドアなどを通して、同じ魔法界の過去と後の時代をたどれます。</p></details>
+    <details><summary>ファンタビも全部見ないと、ハリーの物語は完結しない？</summary><p>ハリー・ポッター本編8作だけで、ハリーの物語を最後まで楽しめます。ファンタビは、魔法界をもっと知りたくなったときに楽しめる別シリーズです。このページではファンタビの公開済み3作を紹介しています。</p></details>
+    <details><summary>『死の秘宝』のPART1・PART2は両方見る？</summary><p>はい。最後の物語を前後編で描く2作品です。PART1 → PART2の順に見てください。本編8作のうち、7作目と8作目にあたります。</p></details>
+  </div>
+</section>
+
+<section class="hp-comparison-callout" aria-label="ハリー・ポッターの配信先を比較"><div><h2>📺 ハリー・ポッターはどこで見られる？</h2><p>料金・作品数・見放題対象をまとめて比較したい方はこちら</p></div><a class="hp-comparison-button" href="streaming.html?view=series#series-harrypotter">ハリー・ポッターの配信サービスを比較する →</a></section>
+
+
+  <nav
+        class="hp-tabs hp-order-tabs"
         aria-label="見る順番"
       >
 
@@ -1229,35 +1277,7 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
       
       </nav>
 
-    </section>
-
-  </div>
-
-</header>
-
-
-<main class="page-wrap">
-<section class="hp-start-guide" aria-labelledby="hp-start-title">
-  <h2 id="hp-start-title">初めてなら、本編8作を公開順で</h2>
-  <p>『賢者の石』から『死の秘宝 PART2』まで、ハリーの成長と冒険を順番に楽しめます。<strong>ハリーの物語は本編8作で完結</strong>。ファンタビを先に見ておく必要はありません。</p>
-  <div class="hp-time-grid" aria-label="まとめて見る時間の目安">
-    <div><span>ハリー・ポッター本編8作</span><strong>約19時間40分</strong></div>
-    <div><span>ファンタビ3作</span><strong>約6時間50分</strong></div>
-    <div><span>全11作</span><strong>約26時間30分</strong></div>
-  </div>
-  <p class="hp-time-note">掲載している上映時間の合計を約10分単位に丸めた目安です。休憩時間は含みません。配信版・ディスク版などで上映時間が異なる場合があります。</p>
-  <div class="hp-guide-faq">
-    <details><summary>ファンタスティック・ビースト（ファンタビ）って何？</summary><p>ハリー・ポッターと同じ魔法界を舞台に、ハリーが生まれるより前の時代を描く別シリーズです。魔法動物学者ニュート・スキャマンダーを中心に物語が進み、若い頃のダンブルドアも登場します。本編の続編ではなく、魔法界の過去を楽しむ作品です。</p></details>
-    <details><summary>公開順と時系列は、どう違う？</summary><p><strong>公開順：</strong>ハリー・ポッター8作 → ファンタビ3作。初めて見る方にはこちらがおすすめです。</p><p><strong>時系列：</strong>ファンタビ3作 → ハリー・ポッター8作。映画が公開された年ではなく、物語の舞台となる時代で並べます。若い頃のダンブルドアなどを通して、同じ魔法界の過去と後の時代をたどれます。</p></details>
-    <details><summary>ファンタビも全部見ないと、ハリーの物語は完結しない？</summary><p>ハリー・ポッター本編8作だけで、ハリーの物語を最後まで楽しめます。ファンタビは、魔法界をもっと知りたくなったときに楽しめる別シリーズです。このページではファンタビの公開済み3作を紹介しています。</p></details>
-    <details><summary>『死の秘宝』のPART1・PART2は両方見る？</summary><p>はい。最後の物語を前後編で描く2作品です。PART1 → PART2の順に見てください。本編8作のうち、7作目と8作目にあたります。</p></details>
-  </div>
-</section>
-
-<section class="hp-comparison-callout" aria-label="ハリー・ポッターの配信先を比較"><div><h2>📺 ハリー・ポッターはどこで見られる？</h2><p>料金・作品数・見放題対象をまとめて比較したい方はこちら</p></div><a class="hp-comparison-button" href="streaming.html?view=series#series-harrypotter">ハリー・ポッターの配信サービスを比較する →</a></section>
-
-
-  <section
+<section
     class="hp-progress"
     aria-label="視聴状況"
   >
@@ -1298,7 +1318,9 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
        公開順
   ====================================================== -->
 
-  <section
+  
+
+<section
     class="hp-order-section"
     id="release"
   >
@@ -1321,11 +1343,12 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
     </div>
 
 
+<p class="hp-side-intro">右側は作品カードとは別の、初心者向けガイドです。公開順ではハリー・ポッター、時系列ではファンタビの基本設定と、おなじみの人物の名前を紹介します。人物の秘密や後の展開には触れません。</p>
 <div
   class="hp-movie-grid"
   id="releaseMovies"
 >
-  <article
+  <div class="hp-guide-row"><article
     class="hp-movie-card "
     data-movie-id="671"
   >
@@ -1393,9 +1416,9 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
 
             </div>
 
-          </article>
+          </article><aside class="hp-side-guide" aria-label="ハリー・ポッターガイド1"><span class="hp-guide-label">🔰 初めてのハリー・ポッターガイド <b>01</b></span><h3>ホグワーツとは？</h3><p>ハリーたちが通う魔法学校です。魔法の授業や寮生活、仲間との出会いが物語の舞台になります。</p><div class="hp-fb-link"><strong>✨ ファンタビの世界も知りたい方へ</strong><p>「物語の時系列」タブでは、ファンタビの初心者向けガイドも紹介しています。</p><a href="#release" data-hp-fb-guide>時系列・ファンタビのガイドを見る →</a></div></aside></div>
         
-  <article
+  <div class="hp-guide-row"><article
     class="hp-movie-card "
     data-movie-id="672"
   >
@@ -1463,9 +1486,9 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
 
             </div>
 
-          </article>
+          </article><aside class="hp-side-guide" aria-label="ハリー・ポッターガイド2"><span class="hp-guide-label">🔰 初めてのハリー・ポッターガイド <b>02</b></span><h3>マグルとは？</h3><p>魔法を使わない人を、魔法界で呼ぶ言葉です。魔法使いたちは、マグルに魔法の存在を知られないように暮らしています。</p></aside></div>
         
-  <article
+  <div class="hp-guide-row"><article
     class="hp-movie-card "
     data-movie-id="673"
   >
@@ -1533,9 +1556,9 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
 
             </div>
 
-          </article>
+          </article><aside class="hp-side-guide" aria-label="ハリー・ポッターガイド3"><span class="hp-guide-label">🔰 初めてのハリー・ポッターガイド <b>03</b></span><h3>4つの寮とは？</h3><p>ホグワーツの生徒が所属する生活のグループ。それぞれ大切にする気質が違います。</p><dl><div><dt>グリフィンドール</dt><dd>勇気・勇敢さ</dd></div><div><dt>レイブンクロー</dt><dd>知性・学ぶこと</dd></div><div><dt>ハッフルパフ</dt><dd>誠実さ・勤勉さ・仲間への忠実さ</dd></div><div><dt>スリザリン</dt><dd>野心・機転・目標を達成する力</dd></div></dl><p>自分なら、どの寮が合いそう？ どの寮にもそれぞれのよさがあります。</p></aside></div>
         
-  <article
+  <div class="hp-guide-row"><article
     class="hp-movie-card "
     data-movie-id="674"
   >
@@ -1603,9 +1626,9 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
 
             </div>
 
-          </article>
+          </article><aside class="hp-side-guide" aria-label="ハリー・ポッターガイド4"><span class="hp-guide-label">🔰 初めてのハリー・ポッターガイド <b>04</b></span><h3>魔法の杖とは？</h3><p>魔法使いが呪文を使うときの大切な道具です。杖の動かし方や呪文を学ぶことも、魔法学校の授業の一つ。ハリーと一緒に魔法の世界を知っていきましょう。</p></aside></div>
         
-  <article
+  <div class="hp-guide-row"><article
     class="hp-movie-card "
     data-movie-id="675"
   >
@@ -1673,9 +1696,9 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
 
             </div>
 
-          </article>
+          </article><aside class="hp-side-guide" aria-label="ハリー・ポッターガイド5"><span class="hp-guide-label">🔰 初めてのハリー・ポッターガイド <b>05</b></span><h3>空飛ぶスポーツって？</h3><p>クィディッチは、空飛ぶほうきに乗って競う魔法界のチームスポーツです。</p><dl><div><dt>スニッチ</dt><dd>すばやく飛び回る、小さな金色の羽付きボール。</dd></div><div><dt>シーカー</dt><dd>スニッチを追いかける役割の選手です。</dd></div></dl><p>ルールを全部覚えなくても大丈夫。ほうきで飛ぶ選手たちの動きに注目してみよう！</p></aside></div>
         
-  <article
+  <div class="hp-guide-row"><article
     class="hp-movie-card "
     data-movie-id="767"
   >
@@ -1743,9 +1766,9 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
 
             </div>
 
-          </article>
+          </article><aside class="hp-side-guide" aria-label="ハリー・ポッターガイド6"><span class="hp-guide-label">🔰 初めてのハリー・ポッターガイド <b>06</b></span><h3>おなじみの3人組</h3><p>顔は分かるけど名前が出てこないときに。これまで出会った仲間のおさらいです。</p><dl><div><dt>ロン・ウィーズリー</dt><dd>ハリーの友達。同級生で、おなじみの3人組の一人。</dd></div><div><dt>ハーマイオニー・グレンジャー</dt><dd>勉強熱心なハリーの友達。3人組の一人です。</dd></div></dl></aside></div>
         
-  <article
+  <div class="hp-guide-row"><article
     class="hp-movie-card "
     data-movie-id="12444"
   >
@@ -1813,9 +1836,9 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
 
             </div>
 
-          </article>
+          </article><aside class="hp-side-guide" aria-label="ハリー・ポッターガイド7"><span class="hp-guide-label">🔰 初めてのハリー・ポッターガイド <b>07</b></span><h3>ほかの同級生たち</h3><dl><div><dt>ネビル・ロングボトム</dt><dd>少し不器用な、ハリーと同じ学年の同級生。</dd></div><div><dt>シェーマス・フィネガン</dt><dd>ハリーと同じ学年・同じ寮の同級生。</dd></div><div><dt>ディーン・トーマス</dt><dd>ハリーと同じ学年・同じ寮の同級生。</dd></div></dl></aside></div>
         
-  <article
+  <div class="hp-guide-row"><article
     class="hp-movie-card "
     data-movie-id="12445"
   >
@@ -1883,9 +1906,9 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
 
             </div>
 
-          </article>
+          </article><aside class="hp-side-guide" aria-label="ハリー・ポッターガイド8"><span class="hp-guide-label">🔰 初めてのハリー・ポッターガイド <b>08</b></span><h3>校長とハグリッド</h3><dl><div><dt>アルバス・ダンブルドア</dt><dd>最初の作品で、ホグワーツの校長として出会う人物。</dd></div><div><dt>ルビウス・ハグリッド</dt><dd>最初の作品では、ホグワーツの森や鍵を管理する、体の大きな人物。</dd></div></dl></aside></div>
         
-  <article
+  <div class="hp-guide-row"><article
     class="hp-movie-card is-fantastic"
     data-movie-id="259316"
   >
@@ -1953,9 +1976,9 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
 
             </div>
 
-          </article>
+          </article><aside class="hp-side-guide" aria-label="ハリー・ポッターガイド9"><span class="hp-guide-label">🔰 初めてのハリー・ポッターガイド <b>09</b></span><h3>先生たちの名前をおさらい</h3><p>最初の作品で出会ったときの担当教科で紹介します。</p><dl><div><dt>ミネルバ・マクゴナガル</dt><dd>変身術の先生。</dd></div><div><dt>セブルス・スネイプ</dt><dd>魔法薬学の先生。</dd></div><div><dt>フィリウス・フリットウィック</dt><dd>呪文学の先生。</dd></div><div><dt>ポモーナ・スプラウト</dt><dd>薬草学の先生。</dd></div></dl></aside></div>
         
-  <article
+  <div class="hp-guide-row"><article
     class="hp-movie-card is-fantastic"
     data-movie-id="338952"
   >
@@ -2023,9 +2046,9 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
 
             </div>
 
-          </article>
+          </article><aside class="hp-side-guide" aria-label="ハリー・ポッターガイド10"><span class="hp-guide-label">🔰 初めてのハリー・ポッターガイド <b>10</b></span><h3>ライバルの同級生たち</h3><dl><div><dt>ドラコ・マルフォイ</dt><dd>ハリーと張り合う同級生。</dd></div><div><dt>ビンセント・クラッブ</dt><dd>ドラコとよく一緒にいる同級生。</dd></div><div><dt>グレゴリー・ゴイル</dt><dd>クラッブとともに、ドラコと行動する同級生。</dd></div></dl></aside></div>
         
-  <article
+  <div class="hp-guide-row"><article
     class="hp-movie-card is-fantastic"
     data-movie-id="338953"
   >
@@ -2093,7 +2116,7 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
 
             </div>
 
-          </article>
+          </article><aside class="hp-side-guide" aria-label="ハリー・ポッターガイド11"><span class="hp-guide-label">🔰 初めてのハリー・ポッターガイド <b>11</b></span><h3>ヴォルデモートって誰？</h3><p>魔法界で恐れられる闇の魔法使いです。名前を口にすることさえ恐れる人もいます。</p><p>ここでは名前と基本的な立場だけ。正体の秘密やハリーとの詳しい関係、その後の展開には触れません。</p></aside></div>
         </div>
 
   </section>
@@ -2140,6 +2163,7 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
 
 </section>
   
+<p class="hp-guide-sources">魔法界・寮の特徴の参考：<a href="https://www.harrypotter.com/features/hogwarts-house-meanings" target="_blank" rel="noopener noreferrer">ハリー・ポッター公式サイト</a>（リンク先には人物情報を含みます）</p>
 <aside class="doko-streaming-note"><p><strong>配信情報について</strong><br>見放題の配信先は、比較表と同じ日本向けデータを使用しています。取得できた配信ロゴを表示し、同じサービスの広告付きプランはひとつにまとめています。追加チャンネルは通常のPrime Videoとは別の契約条件です。TVの全話・全シーズンの対象範囲と、契約前の見放題条件は公式サイトでご確認ください。</p><a href="streaming.html?view=series#series-harrypotter">このシリーズの見放題比較表を見る →</a></aside></main>
 
 <!-- =========================================================
@@ -2370,6 +2394,9 @@ const timelineOrder =
    カードを描き直す
 ----------------------------------------------------- */
 
+const hpReleaseGuides=["<aside class=\"hp-side-guide\" aria-label=\"ハリー・ポッターガイド1\"><span class=\"hp-guide-label\">🔰 初めてのハリー・ポッターガイド <b>01</b></span><h3>ホグワーツとは？</h3><p>ハリーたちが通う魔法学校です。魔法の授業や寮生活、仲間との出会いが物語の舞台になります。</p><div class=\"hp-fb-link\"><strong>✨ ファンタビの世界も知りたい方へ</strong><p>「物語の時系列」タブでは、ファンタビの初心者向けガイドも紹介しています。</p><a href=\"#release\" data-hp-fb-guide>時系列・ファンタビのガイドを見る →</a></div></aside>","<aside class=\"hp-side-guide\" aria-label=\"ハリー・ポッターガイド2\"><span class=\"hp-guide-label\">🔰 初めてのハリー・ポッターガイド <b>02</b></span><h3>マグルとは？</h3><p>魔法を使わない人を、魔法界で呼ぶ言葉です。魔法使いたちは、マグルに魔法の存在を知られないように暮らしています。</p></aside>","<aside class=\"hp-side-guide\" aria-label=\"ハリー・ポッターガイド3\"><span class=\"hp-guide-label\">🔰 初めてのハリー・ポッターガイド <b>03</b></span><h3>4つの寮とは？</h3><p>ホグワーツの生徒が所属する生活のグループ。それぞれ大切にする気質が違います。</p><dl><div><dt>グリフィンドール</dt><dd>勇気・勇敢さ</dd></div><div><dt>レイブンクロー</dt><dd>知性・学ぶこと</dd></div><div><dt>ハッフルパフ</dt><dd>誠実さ・勤勉さ・仲間への忠実さ</dd></div><div><dt>スリザリン</dt><dd>野心・機転・目標を達成する力</dd></div></dl><p>自分なら、どの寮が合いそう？ どの寮にもそれぞれのよさがあります。</p></aside>","<aside class=\"hp-side-guide\" aria-label=\"ハリー・ポッターガイド4\"><span class=\"hp-guide-label\">🔰 初めてのハリー・ポッターガイド <b>04</b></span><h3>魔法の杖とは？</h3><p>魔法使いが呪文を使うときの大切な道具です。杖の動かし方や呪文を学ぶことも、魔法学校の授業の一つ。ハリーと一緒に魔法の世界を知っていきましょう。</p></aside>","<aside class=\"hp-side-guide\" aria-label=\"ハリー・ポッターガイド5\"><span class=\"hp-guide-label\">🔰 初めてのハリー・ポッターガイド <b>05</b></span><h3>空飛ぶスポーツって？</h3><p>クィディッチは、空飛ぶほうきに乗って競う魔法界のチームスポーツです。</p><dl><div><dt>スニッチ</dt><dd>すばやく飛び回る、小さな金色の羽付きボール。</dd></div><div><dt>シーカー</dt><dd>スニッチを追いかける役割の選手です。</dd></div></dl><p>ルールを全部覚えなくても大丈夫。ほうきで飛ぶ選手たちの動きに注目してみよう！</p></aside>","<aside class=\"hp-side-guide\" aria-label=\"ハリー・ポッターガイド6\"><span class=\"hp-guide-label\">🔰 初めてのハリー・ポッターガイド <b>06</b></span><h3>おなじみの3人組</h3><p>顔は分かるけど名前が出てこないときに。これまで出会った仲間のおさらいです。</p><dl><div><dt>ロン・ウィーズリー</dt><dd>ハリーの友達。同級生で、おなじみの3人組の一人。</dd></div><div><dt>ハーマイオニー・グレンジャー</dt><dd>勉強熱心なハリーの友達。3人組の一人です。</dd></div></dl></aside>","<aside class=\"hp-side-guide\" aria-label=\"ハリー・ポッターガイド7\"><span class=\"hp-guide-label\">🔰 初めてのハリー・ポッターガイド <b>07</b></span><h3>ほかの同級生たち</h3><dl><div><dt>ネビル・ロングボトム</dt><dd>少し不器用な、ハリーと同じ学年の同級生。</dd></div><div><dt>シェーマス・フィネガン</dt><dd>ハリーと同じ学年・同じ寮の同級生。</dd></div><div><dt>ディーン・トーマス</dt><dd>ハリーと同じ学年・同じ寮の同級生。</dd></div></dl></aside>","<aside class=\"hp-side-guide\" aria-label=\"ハリー・ポッターガイド8\"><span class=\"hp-guide-label\">🔰 初めてのハリー・ポッターガイド <b>08</b></span><h3>校長とハグリッド</h3><dl><div><dt>アルバス・ダンブルドア</dt><dd>最初の作品で、ホグワーツの校長として出会う人物。</dd></div><div><dt>ルビウス・ハグリッド</dt><dd>最初の作品では、ホグワーツの森や鍵を管理する、体の大きな人物。</dd></div></dl></aside>","<aside class=\"hp-side-guide\" aria-label=\"ハリー・ポッターガイド9\"><span class=\"hp-guide-label\">🔰 初めてのハリー・ポッターガイド <b>09</b></span><h3>先生たちの名前をおさらい</h3><p>最初の作品で出会ったときの担当教科で紹介します。</p><dl><div><dt>ミネルバ・マクゴナガル</dt><dd>変身術の先生。</dd></div><div><dt>セブルス・スネイプ</dt><dd>魔法薬学の先生。</dd></div><div><dt>フィリウス・フリットウィック</dt><dd>呪文学の先生。</dd></div><div><dt>ポモーナ・スプラウト</dt><dd>薬草学の先生。</dd></div></dl></aside>","<aside class=\"hp-side-guide\" aria-label=\"ハリー・ポッターガイド10\"><span class=\"hp-guide-label\">🔰 初めてのハリー・ポッターガイド <b>10</b></span><h3>ライバルの同級生たち</h3><dl><div><dt>ドラコ・マルフォイ</dt><dd>ハリーと張り合う同級生。</dd></div><div><dt>ビンセント・クラッブ</dt><dd>ドラコとよく一緒にいる同級生。</dd></div><div><dt>グレゴリー・ゴイル</dt><dd>クラッブとともに、ドラコと行動する同級生。</dd></div></dl></aside>","<aside class=\"hp-side-guide\" aria-label=\"ハリー・ポッターガイド11\"><span class=\"hp-guide-label\">🔰 初めてのハリー・ポッターガイド <b>11</b></span><h3>ヴォルデモートって誰？</h3><p>魔法界で恐れられる闇の魔法使いです。名前を口にすることさえ恐れる人もいます。</p><p>ここでは名前と基本的な立場だけ。正体の秘密やハリーとの詳しい関係、その後の展開には触れません。</p></aside>"];
+const hpTimelineGuides=["<aside class=\"hp-side-guide\" aria-label=\"ファンタビガイド1\"><span class=\"hp-guide-label\">🔰 初めてのファンタビガイド <b>01</b></span><h3>ファンタビは、昔の魔法界のお話</h3><p>ハリー・ポッターと同じ魔法界の、ハリーが生まれるより前の時代を描きます。1作目は1926年のニューヨークから。</p><p>学校に入る少年ではなく、魔法動物を研究する大人のニュートが主人公です。</p></aside>","<aside class=\"hp-side-guide\" aria-label=\"ファンタビガイド2\"><span class=\"hp-guide-label\">🔰 初めてのファンタビガイド <b>02</b></span><h3>マグルとノー・マジ、何が違う？</h3><p>どちらも、魔法を使わない人の呼び方です。イギリスでは「マグル」、アメリカでは「ノー・マジ」。</p><p>魔法の基本は同じでも、国によって言葉や社会のルールが違います。</p></aside>","<aside class=\"hp-side-guide\" aria-label=\"ファンタビガイド3\"><span class=\"hp-guide-label\">🔰 初めてのファンタビガイド <b>03</b></span><h3>魔法動物と、不思議なトランク</h3><p>魔法動物は、不思議な力や特徴を持つ生き物たち。ニュートはその生態を研究しています。</p><p>ニュートのトランクは、見た目より中がずっと広い魔法の道具。どんな生き物がいるのかも楽しみの一つです。</p></aside>","<aside class=\"hp-side-guide\" aria-label=\"ファンタビガイド4\"><span class=\"hp-guide-label\">🔰 初めてのファンタビガイド <b>04</b></span><h3>MACUSA（マクーザ）とは？</h3><p>アメリカの魔法界を管理する組織です。魔法使いたちの社会のルールや、魔法の秘密を守る役割があります。</p><p>「アメリカの魔法界の役所」と考えると分かりやすいです。</p></aside>","<aside class=\"hp-side-guide\" aria-label=\"ファンタビガイド5\"><span class=\"hp-guide-label\">🔰 初めてのファンタビガイド <b>05</b></span><h3>主人公ニュートをおさらい</h3><dl><div><dt>ニュート・スキャマンダー</dt><dd>魔法動物を研究する主人公。生き物たちを大切にする魔法使いです。</dd></div></dl></aside>","<aside class=\"hp-side-guide\" aria-label=\"ファンタビガイド6\"><span class=\"hp-guide-label\">🔰 初めてのファンタビガイド <b>06</b></span><h3>ティナとクイニー、どっちだっけ？</h3><dl><div><dt>ティナ・ゴールドスタイン</dt><dd>ニュートがアメリカで出会う魔法使い。姉です。</dd></div><div><dt>クイニー・ゴールドスタイン</dt><dd>ティナの妹で、魔法使い。</dd></div></dl></aside>","<aside class=\"hp-side-guide\" aria-label=\"ファンタビガイド7\"><span class=\"hp-guide-label\">🔰 初めてのファンタビガイド <b>07</b></span><h3>ジェイコブって誰？</h3><dl><div><dt>ジェイコブ・コワルスキー</dt><dd>パン屋を開くことを夢見る、魔法を使わない人。ニュートと出会います。</dd></div></dl></aside>","<aside class=\"hp-side-guide\" aria-label=\"ファンタビガイド8\"><span class=\"hp-guide-label\">🔰 初めてのファンタビガイド <b>08</b></span><h3>若い頃のダンブルドア</h3><dl><div><dt>アルバス・ダンブルドア</dt><dd>ハリー・ポッターでおなじみの人物。ファンタビでは若い頃の姿で登場します。</dd></div></dl><p>ここでは過去の秘密や、詳しい人間関係には触れません。</p></aside>","<aside class=\"hp-side-guide\" aria-label=\"ファンタビガイド9\"><span class=\"hp-guide-label\">🔰 初めてのファンタビガイド <b>09</b></span><h3>グリンデルバルドって誰？</h3><dl><div><dt>ゲラート・グリンデルバルド</dt><dd>魔法界で勢力を広げる闇の魔法使い。ファンタビの物語で重要な人物です。</dd></div></dl><p>正体にまつわる秘密や、その後の展開は紹介しません。</p></aside>"];
+function hpWrapGuide(movie,card,index,isTimeline){const guide=(isTimeline?hpTimelineGuides:hpReleaseGuides)[index]||'';return `<div class="hp-guide-row${guide?'':' hp-guide-row-solo'}">${card}${guide}</div>`}
 function renderMovieCards(movies){
 
   if(!releaseMovies){
@@ -2462,6 +2489,7 @@ function renderMovieCards(movies){
         `;
 
             })
+      .map((card,index)=>hpWrapGuide(movies[index],card,index,movies[0]?.id===259316))
       .join("");
 
   loadHpProviderLogos();
@@ -3237,5 +3265,14 @@ loadHpProviderLogos();
   update();
 })();
 </script>
-</body>
+<script>
+document.addEventListener('click',event=>{
+  const link=event.target.closest('[data-hp-fb-guide],[data-hp-guide-view]');
+  if(!link)return;
+  event.preventDefault();
+  const view=link.dataset.hpGuideView||'timeline';
+  document.querySelector('.hp-tab[data-view="'+view+'"]').click();
+  requestAnimationFrame(()=>document.querySelector('#releaseMovies .hp-side-guide')?.scrollIntoView({block:'start',behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'}));
+});
+</script></body>
 </html>
