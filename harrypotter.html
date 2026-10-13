@@ -258,7 +258,7 @@ body{
   color:
     rgba(253,230,138,.58);
 
-  font-size:12px;
+  font-size:14px;
   font-weight:800;
 
   letter-spacing:.16em;
@@ -633,7 +633,7 @@ body{
 
   color:#fcd34d;
 
-  font-size:13px;
+  font-size:14px;
   font-weight:900;
 
   letter-spacing:.08em;
@@ -755,7 +755,7 @@ body{
 
   border-radius:999px;
 
-  font-size:13px;
+  font-size:14px;
   font-weight:900;
 }
 
@@ -1158,7 +1158,16 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
 .hp-comparison-button:hover{background:#78350f;border-color:#78350f}.hp-comparison-button:focus-visible{outline:3px solid #7c3aed;outline-offset:3px}
 @media(max-width:900px){.hp-comparison-callout{flex-direction:column;align-items:stretch;gap:12px;padding:16px}.hp-comparison-button{width:100%}}
 </style>
-</head>
+<style>
+.hp-start-guide{margin:0 0 24px;padding:22px;background:#fff;border:1px solid #e4d7b5;border-radius:16px;color:#374151;line-height:1.8}
+.hp-start-guide h2{margin:0 0 10px;font-size:22px;color:#312e81}.hp-start-guide p{margin:0 0 14px;font-size:16px}
+.hp-time-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:18px 0 12px}.hp-time-grid div{padding:16px 12px;background:#fffbeb;border:1px solid #f0dcab;border-radius:12px;text-align:center}.hp-time-grid div:nth-child(2){background:#f5f3ff;border-color:#ddd6fe}.hp-time-grid span{display:block;font-size:14px;font-weight:700}.hp-time-grid strong{display:block;font-size:23px;color:#92400e}.hp-time-grid div:nth-child(2) strong{color:#6d28d9}
+.hp-start-guide .hp-time-note{font-size:14px;color:#64748b}.hp-guide-faq details{border-top:1px solid #e5e7eb;padding:12px 0}.hp-guide-faq summary{cursor:pointer;font-size:16px;font-weight:800;color:#312e81}.hp-guide-faq details p{margin:10px 0 0}.hp-spoiler-note{font-size:14px;line-height:1.8;padding:12px 16px;background:#fffbeb;border:1px solid #f0dcab;border-radius:10px;color:#92400e}.hp-guide-faq summary:focus-visible{outline:3px solid #a78bfa;outline-offset:4px}
+@media(max-width:600px){.hp-start-guide{padding:18px 16px}.hp-start-guide h2{font-size:20px}.hp-time-grid{grid-template-columns:1fr;gap:8px}.hp-time-grid div{display:flex;align-items:center;justify-content:space-between;gap:10px;text-align:left;padding:12px}.hp-time-grid strong{font-size:20px;white-space:nowrap}}
+</style><style>
+.hp-top-button{position:fixed;right:max(16px,calc((100vw - 1100px)/2 + 16px));bottom:calc(22px + env(safe-area-inset-bottom,0px));z-index:50;padding:12px 18px;border:1px solid #fbbf24;border-radius:999px;background:#312e81;color:#fff;font-family:inherit;font-size:16px;font-weight:800;line-height:1.5;box-shadow:0 5px 18px #1e1b4b40;cursor:pointer}
+.hp-top-button:hover{background:#4338ca}.hp-top-button:focus-visible{outline:3px solid #d97706;outline-offset:4px}.hp-top-button[hidden]{display:none}
+</style></head>
 
 <body>
 
@@ -1186,7 +1195,7 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
         「公開順」と「物語の時系列」の
         2つの見方から楽しめます。
         初めて見る人も、もう一度見直したい人も、
-        好きな順番から始めてみましょう。
+        初めてなら、まずは本編8作を公開順で見るのがおすすめです。
       </p>
 
       <nav
@@ -1228,6 +1237,23 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
 
 
 <main class="page-wrap">
+<section class="hp-start-guide" aria-labelledby="hp-start-title">
+  <h2 id="hp-start-title">初めてなら、本編8作を公開順で</h2>
+  <p>『賢者の石』から『死の秘宝 PART2』まで、ハリーの成長と冒険を順番に楽しめます。<strong>ハリーの物語は本編8作で完結</strong>。ファンタビを先に見ておく必要はありません。</p>
+  <div class="hp-time-grid" aria-label="まとめて見る時間の目安">
+    <div><span>ハリー・ポッター本編8作</span><strong>約19時間40分</strong></div>
+    <div><span>ファンタビ3作</span><strong>約6時間50分</strong></div>
+    <div><span>全11作</span><strong>約26時間30分</strong></div>
+  </div>
+  <p class="hp-time-note">掲載している上映時間の合計を約10分単位に丸めた目安です。休憩時間は含みません。配信版・ディスク版などで上映時間が異なる場合があります。</p>
+  <div class="hp-guide-faq">
+    <details><summary>ファンタスティック・ビースト（ファンタビ）って何？</summary><p>ハリー・ポッターと同じ魔法界を舞台に、ハリーが生まれるより前の時代を描く別シリーズです。魔法動物学者ニュート・スキャマンダーを中心に物語が進み、若い頃のダンブルドアも登場します。本編の続編ではなく、魔法界の過去を楽しむ作品です。</p></details>
+    <details><summary>公開順と時系列は、どう違う？</summary><p><strong>公開順：</strong>ハリー・ポッター8作 → ファンタビ3作。初めて見る方にはこちらがおすすめです。</p><p><strong>時系列：</strong>ファンタビ3作 → ハリー・ポッター8作。映画が公開された年ではなく、物語の舞台となる時代で並べます。若い頃のダンブルドアなどを通して、同じ魔法界の過去と後の時代をたどれます。</p></details>
+    <details><summary>ファンタビも全部見ないと、ハリーの物語は完結しない？</summary><p>ハリー・ポッター本編8作だけで、ハリーの物語を最後まで楽しめます。ファンタビは、魔法界をもっと知りたくなったときに楽しめる別シリーズです。このページではファンタビの公開済み3作を紹介しています。</p></details>
+    <details><summary>『死の秘宝』のPART1・PART2は両方見る？</summary><p>はい。最後の物語を前後編で描く2作品です。PART1 → PART2の順に見てください。本編8作のうち、7作目と8作目にあたります。</p></details>
+  </div>
+</section>
+
 <section class="hp-comparison-callout" aria-label="ハリー・ポッターの配信先を比較"><div><h2>📺 ハリー・ポッターはどこで見られる？</h2><p>料金・作品数・見放題対象をまとめて比較したい方はこちら</p></div><a class="hp-comparison-button" href="streaming.html?view=series#series-harrypotter">ハリー・ポッターの配信サービスを比較する →</a></section>
 
 
@@ -1290,9 +1316,7 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
   公開順で見る
 </h2>
 
-      <p id="orderDescription">
-  初めて見るなら、まずはこちらがおすすめ。ハリー・ポッター8作品を公開順に楽しんだあと、ファンタスティック・ビースト3作品へ進みます。作品が公開された順番なので、初めての人でも物語や世界観を自然に楽しめます。
-</p>
+      <p id="orderDescription">初めてなら、ハリー・ポッター本編8作を公開順で見るのがおすすめです。ハリーの物語はこの8作で完結します。そのあと、同じ魔法界の過去を描くファンタスティック・ビースト3作へ。ファンタビを先に見ておく必要はありません。</p>
 
     </div>
 
@@ -1300,7 +1324,777 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
 <div
   class="hp-movie-grid"
   id="releaseMovies"
-></div>
+>
+  <article
+    class="hp-movie-card "
+    data-movie-id="671"
+  >
+
+            <div class="hp-movie-number">
+              01
+            </div>
+
+            <div class="hp-movie-main">
+
+              <img
+                class="hp-movie-poster"
+                src="https://image.tmdb.org/t/p/w342/wuMc08IPKEatf9rnMNXvIDxqP4W.jpg"
+                alt="ハリー・ポッターと賢者の石"
+                loading="lazy"
+              >
+
+              <div class="hp-movie-info">
+
+                <div class="hp-movie-type">
+                  映画
+                </div>
+
+                <h3>
+                  ハリー・ポッターと賢者の石
+                </h3>
+
+                <div class="hp-movie-meta">
+  2001年 ・
+  152分
+</div>
+
+<div
+  class="hp-provider-logos"
+  data-id="671"
+  data-type="movie">
+</div>
+
+<p class="hp-movie-point">
+  すべての始まり。ハリーが魔法界を知り、ホグワーツでの物語が始まります。
+</p>
+
+                <label class="hp-watched">
+
+                  <input
+                    type="checkbox"
+                    class="hp-watched-check"
+                    data-watch-id="671"
+                  >
+
+                  <span>
+                    これはもう観た！
+                  </span>
+
+                </label>
+
+                <a
+                  class="hp-detail-link"
+                  href="detail.html?id=671&type=movie"
+                >
+                  作品詳細を見る →
+                </a>
+
+              </div>
+
+            </div>
+
+          </article>
+        
+  <article
+    class="hp-movie-card "
+    data-movie-id="672"
+  >
+
+            <div class="hp-movie-number">
+              02
+            </div>
+
+            <div class="hp-movie-main">
+
+              <img
+                class="hp-movie-poster"
+                src="https://image.tmdb.org/t/p/w342/sdEOH0992YZ0QSxgXNIGLq1ToUi.jpg"
+                alt="ハリー・ポッターと秘密の部屋"
+                loading="lazy"
+              >
+
+              <div class="hp-movie-info">
+
+                <div class="hp-movie-type">
+                  映画
+                </div>
+
+                <h3>
+                  ハリー・ポッターと秘密の部屋
+                </h3>
+
+                <div class="hp-movie-meta">
+  2002年 ・
+  161分
+</div>
+
+<div
+  class="hp-provider-logos"
+  data-id="672"
+  data-type="movie">
+</div>
+
+<p class="hp-movie-point">
+  ホグワーツ2年目。学校で起こる不可解な事件と、秘密の部屋の謎に迫ります。
+</p>
+
+                <label class="hp-watched">
+
+                  <input
+                    type="checkbox"
+                    class="hp-watched-check"
+                    data-watch-id="672"
+                  >
+
+                  <span>
+                    これはもう観た！
+                  </span>
+
+                </label>
+
+                <a
+                  class="hp-detail-link"
+                  href="detail.html?id=672&type=movie"
+                >
+                  作品詳細を見る →
+                </a>
+
+              </div>
+
+            </div>
+
+          </article>
+        
+  <article
+    class="hp-movie-card "
+    data-movie-id="673"
+  >
+
+            <div class="hp-movie-number">
+              03
+            </div>
+
+            <div class="hp-movie-main">
+
+              <img
+                class="hp-movie-poster"
+                src="https://image.tmdb.org/t/p/w342/aWxwnYoe8p2d2fcxOqtvAtJ72Rw.jpg"
+                alt="ハリー・ポッターとアズカバンの囚人"
+                loading="lazy"
+              >
+
+              <div class="hp-movie-info">
+
+                <div class="hp-movie-type">
+                  映画
+                </div>
+
+                <h3>
+                  ハリー・ポッターとアズカバンの囚人
+                </h3>
+
+                <div class="hp-movie-meta">
+  2004年 ・
+  142分
+</div>
+
+<div
+  class="hp-provider-logos"
+  data-id="673"
+  data-type="movie">
+</div>
+
+<p class="hp-movie-point">
+  脱獄囚シリウス・ブラックの登場によって、ハリーの過去が大きく動き始めます。
+</p>
+
+                <label class="hp-watched">
+
+                  <input
+                    type="checkbox"
+                    class="hp-watched-check"
+                    data-watch-id="673"
+                  >
+
+                  <span>
+                    これはもう観た！
+                  </span>
+
+                </label>
+
+                <a
+                  class="hp-detail-link"
+                  href="detail.html?id=673&type=movie"
+                >
+                  作品詳細を見る →
+                </a>
+
+              </div>
+
+            </div>
+
+          </article>
+        
+  <article
+    class="hp-movie-card "
+    data-movie-id="674"
+  >
+
+            <div class="hp-movie-number">
+              04
+            </div>
+
+            <div class="hp-movie-main">
+
+              <img
+                class="hp-movie-poster"
+                src="https://image.tmdb.org/t/p/w342/fECBtHlr0RB3foNHDiCBXeg9Bv9.jpg"
+                alt="ハリー・ポッターと炎のゴブレット"
+                loading="lazy"
+              >
+
+              <div class="hp-movie-info">
+
+                <div class="hp-movie-type">
+                  映画
+                </div>
+
+                <h3>
+                  ハリー・ポッターと炎のゴブレット
+                </h3>
+
+                <div class="hp-movie-meta">
+  2005年 ・
+  157分
+</div>
+
+<div
+  class="hp-provider-logos"
+  data-id="674"
+  data-type="movie">
+</div>
+
+<p class="hp-movie-point">
+  三大魔法学校対抗試合が開催。物語はここからさらに大きな戦いへ進んでいきます。
+</p>
+
+                <label class="hp-watched">
+
+                  <input
+                    type="checkbox"
+                    class="hp-watched-check"
+                    data-watch-id="674"
+                  >
+
+                  <span>
+                    これはもう観た！
+                  </span>
+
+                </label>
+
+                <a
+                  class="hp-detail-link"
+                  href="detail.html?id=674&type=movie"
+                >
+                  作品詳細を見る →
+                </a>
+
+              </div>
+
+            </div>
+
+          </article>
+        
+  <article
+    class="hp-movie-card "
+    data-movie-id="675"
+  >
+
+            <div class="hp-movie-number">
+              05
+            </div>
+
+            <div class="hp-movie-main">
+
+              <img
+                class="hp-movie-poster"
+                src="https://image.tmdb.org/t/p/w342/5aOyriWkPec0zUDxmHFP9qMmBaj.jpg"
+                alt="ハリー・ポッターと不死鳥の騎士団"
+                loading="lazy"
+              >
+
+              <div class="hp-movie-info">
+
+                <div class="hp-movie-type">
+                  映画
+                </div>
+
+                <h3>
+                  ハリー・ポッターと不死鳥の騎士団
+                </h3>
+
+                <div class="hp-movie-meta">
+  2007年 ・
+  138分
+</div>
+
+<div
+  class="hp-provider-logos"
+  data-id="675"
+  data-type="movie">
+</div>
+
+<p class="hp-movie-point">
+  ヴォルデモート復活をめぐり魔法界が揺れる中、ハリーたちは自ら戦う準備を始めます。
+</p>
+
+                <label class="hp-watched">
+
+                  <input
+                    type="checkbox"
+                    class="hp-watched-check"
+                    data-watch-id="675"
+                  >
+
+                  <span>
+                    これはもう観た！
+                  </span>
+
+                </label>
+
+                <a
+                  class="hp-detail-link"
+                  href="detail.html?id=675&type=movie"
+                >
+                  作品詳細を見る →
+                </a>
+
+              </div>
+
+            </div>
+
+          </article>
+        
+  <article
+    class="hp-movie-card "
+    data-movie-id="767"
+  >
+
+            <div class="hp-movie-number">
+              06
+            </div>
+
+            <div class="hp-movie-main">
+
+              <img
+                class="hp-movie-poster"
+                src="https://image.tmdb.org/t/p/w342/z7uo9zmQdQwU5ZJHFpv2Upl30i1.jpg"
+                alt="ハリー・ポッターと謎のプリンス"
+                loading="lazy"
+              >
+
+              <div class="hp-movie-info">
+
+                <div class="hp-movie-type">
+                  映画
+                </div>
+
+                <h3>
+                  ハリー・ポッターと謎のプリンス
+                </h3>
+
+                <div class="hp-movie-meta">
+  2009年 ・
+  153分
+</div>
+
+<div
+  class="hp-provider-logos"
+  data-id="767"
+  data-type="movie">
+</div>
+
+<p class="hp-movie-point">
+  ヴォルデモートの過去と秘密に迫り、最終決戦へ向けた重要な真実が明かされます。
+</p>
+
+                <label class="hp-watched">
+
+                  <input
+                    type="checkbox"
+                    class="hp-watched-check"
+                    data-watch-id="767"
+                  >
+
+                  <span>
+                    これはもう観た！
+                  </span>
+
+                </label>
+
+                <a
+                  class="hp-detail-link"
+                  href="detail.html?id=767&type=movie"
+                >
+                  作品詳細を見る →
+                </a>
+
+              </div>
+
+            </div>
+
+          </article>
+        
+  <article
+    class="hp-movie-card "
+    data-movie-id="12444"
+  >
+
+            <div class="hp-movie-number">
+              07
+            </div>
+
+            <div class="hp-movie-main">
+
+              <img
+                class="hp-movie-poster"
+                src="https://image.tmdb.org/t/p/w342/iGoXIpQb7Pot00EEdwpwPajheZ5.jpg"
+                alt="ハリー・ポッターと死の秘宝 PART1"
+                loading="lazy"
+              >
+
+              <div class="hp-movie-info">
+
+                <div class="hp-movie-type">
+                  映画
+                </div>
+
+                <h3>
+                  ハリー・ポッターと死の秘宝 PART1
+                </h3>
+
+                <div class="hp-movie-meta">
+  2010年 ・
+  146分
+</div>
+
+<div
+  class="hp-provider-logos"
+  data-id="12444"
+  data-type="movie">
+</div>
+
+<p class="hp-movie-point">
+  ホグワーツを離れたハリー、ロン、ハーマイオニー。最後の戦いへ向けた旅が始まります。
+</p>
+
+                <label class="hp-watched">
+
+                  <input
+                    type="checkbox"
+                    class="hp-watched-check"
+                    data-watch-id="12444"
+                  >
+
+                  <span>
+                    これはもう観た！
+                  </span>
+
+                </label>
+
+                <a
+                  class="hp-detail-link"
+                  href="detail.html?id=12444&type=movie"
+                >
+                  作品詳細を見る →
+                </a>
+
+              </div>
+
+            </div>
+
+          </article>
+        
+  <article
+    class="hp-movie-card "
+    data-movie-id="12445"
+  >
+
+            <div class="hp-movie-number">
+              08
+            </div>
+
+            <div class="hp-movie-main">
+
+              <img
+                class="hp-movie-poster"
+                src="https://image.tmdb.org/t/p/w342/c54HpQmuwXjHq2C9wmoACjxoom3.jpg"
+                alt="ハリー・ポッターと死の秘宝 PART2"
+                loading="lazy"
+              >
+
+              <div class="hp-movie-info">
+
+                <div class="hp-movie-type">
+                  映画
+                </div>
+
+                <h3>
+                  ハリー・ポッターと死の秘宝 PART2
+                </h3>
+
+                <div class="hp-movie-meta">
+  2011年 ・
+  130分
+</div>
+
+<div
+  class="hp-provider-logos"
+  data-id="12445"
+  data-type="movie">
+</div>
+
+<p class="hp-movie-point">
+  ついに迎える最終決戦。ハリーとヴォルデモートの長い戦いが決着を迎えます。
+</p>
+
+                <label class="hp-watched">
+
+                  <input
+                    type="checkbox"
+                    class="hp-watched-check"
+                    data-watch-id="12445"
+                  >
+
+                  <span>
+                    これはもう観た！
+                  </span>
+
+                </label>
+
+                <a
+                  class="hp-detail-link"
+                  href="detail.html?id=12445&type=movie"
+                >
+                  作品詳細を見る →
+                </a>
+
+              </div>
+
+            </div>
+
+          </article>
+        
+  <article
+    class="hp-movie-card is-fantastic"
+    data-movie-id="259316"
+  >
+
+            <div class="hp-movie-number">
+              09
+            </div>
+
+            <div class="hp-movie-main">
+
+              <img
+                class="hp-movie-poster"
+                src="https://image.tmdb.org/t/p/w342/h6NYfVUyM6CDURtZSnBpz647Ldd.jpg"
+                alt="ファンタスティック・ビーストと魔法使いの旅"
+                loading="lazy"
+              >
+
+              <div class="hp-movie-info">
+
+                <div class="hp-movie-type">
+                  映画
+                </div>
+
+                <h3>
+                  ファンタスティック・ビーストと魔法使いの旅
+                </h3>
+
+                <div class="hp-movie-meta">
+  2016年 ・
+  133分
+</div>
+
+<div
+  class="hp-provider-logos"
+  data-id="259316"
+  data-type="movie">
+</div>
+
+<p class="hp-movie-point">
+  舞台は1920年代のニューヨーク。魔法動物学者ニュート・スキャマンダーの物語が始まります。
+</p>
+
+                <label class="hp-watched">
+
+                  <input
+                    type="checkbox"
+                    class="hp-watched-check"
+                    data-watch-id="259316"
+                  >
+
+                  <span>
+                    これはもう観た！
+                  </span>
+
+                </label>
+
+                <a
+                  class="hp-detail-link"
+                  href="detail.html?id=259316&type=movie"
+                >
+                  作品詳細を見る →
+                </a>
+
+              </div>
+
+            </div>
+
+          </article>
+        
+  <article
+    class="hp-movie-card is-fantastic"
+    data-movie-id="338952"
+  >
+
+            <div class="hp-movie-number">
+              10
+            </div>
+
+            <div class="hp-movie-main">
+
+              <img
+                class="hp-movie-poster"
+                src="https://image.tmdb.org/t/p/w342/fMMrl8fD9gRCFJvsx0SuFwkEOop.jpg"
+                alt="ファンタスティック・ビーストと黒い魔法使いの誕生"
+                loading="lazy"
+              >
+
+              <div class="hp-movie-info">
+
+                <div class="hp-movie-type">
+                  映画
+                </div>
+
+                <h3>
+                  ファンタスティック・ビーストと黒い魔法使いの誕生
+                </h3>
+
+                <div class="hp-movie-meta">
+  2018年 ・
+  134分
+</div>
+
+<div
+  class="hp-provider-logos"
+  data-id="338952"
+  data-type="movie">
+</div>
+
+<p class="hp-movie-point">
+  勢力を拡大するグリンデルバルド。ニュートはダンブルドアからある依頼を受けます。
+</p>
+
+                <label class="hp-watched">
+
+                  <input
+                    type="checkbox"
+                    class="hp-watched-check"
+                    data-watch-id="338952"
+                  >
+
+                  <span>
+                    これはもう観た！
+                  </span>
+
+                </label>
+
+                <a
+                  class="hp-detail-link"
+                  href="detail.html?id=338952&type=movie"
+                >
+                  作品詳細を見る →
+                </a>
+
+              </div>
+
+            </div>
+
+          </article>
+        
+  <article
+    class="hp-movie-card is-fantastic"
+    data-movie-id="338953"
+  >
+
+            <div class="hp-movie-number">
+              11
+            </div>
+
+            <div class="hp-movie-main">
+
+              <img
+                class="hp-movie-poster"
+                src="https://image.tmdb.org/t/p/w342/3c5GNLB4yRSLBby0trHoA1DSQxQ.jpg"
+                alt="ファンタスティック・ビーストとダンブルドアの秘密"
+                loading="lazy"
+              >
+
+              <div class="hp-movie-info">
+
+                <div class="hp-movie-type">
+                  映画
+                </div>
+
+                <h3>
+                  ファンタスティック・ビーストとダンブルドアの秘密
+                </h3>
+
+                <div class="hp-movie-meta">
+  2022年 ・
+  142分
+</div>
+
+<div
+  class="hp-provider-logos"
+  data-id="338953"
+  data-type="movie">
+</div>
+
+<p class="hp-movie-point">
+  グリンデルバルドとの対決が激化。ダンブルドアの過去と秘密にも迫ります。
+</p>
+
+                <label class="hp-watched">
+
+                  <input
+                    type="checkbox"
+                    class="hp-watched-check"
+                    data-watch-id="338953"
+                  >
+
+                  <span>
+                    これはもう観た！
+                  </span>
+
+                </label>
+
+                <a
+                  class="hp-detail-link"
+                  href="detail.html?id=338953&type=movie"
+                >
+                  作品詳細を見る →
+                </a>
+
+              </div>
+
+            </div>
+
+          </article>
+        </div>
 
   </section>
 
@@ -1333,7 +2127,8 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
 
   </div>
 
-  <div class="hp-relationships-map">
+  <p class="hp-spoiler-note"><strong>未視聴の方へ：</strong>人物相関図には、物語の途中で分かる関係が含まれる場合があります。ネタバレにご注意ください。</p>
+<div class="hp-relationships-map">
 
   <img
     src="harrypotter-relationship-map.png"
@@ -1536,92 +2331,7 @@ const releaseMovies =
   );
 
 
-if(releaseMovies){
-
-  releaseMovies.innerHTML =
-    harryPotterMovies
-      .map((movie, index) => {
-
-        const number =
-          String(index + 1)
-            .padStart(2, "0");
-
-        return `
-  <article
-    class="hp-movie-card ${index >= 8 ? 'is-fantastic' : ''}"
-    data-movie-id="${movie.id}"
-  >
-
-            <div class="hp-movie-number">
-              ${number}
-            </div>
-
-            <div class="hp-movie-main">
-
-              <img
-                class="hp-movie-poster"
-                src="${movie.poster}"
-                alt="${movie.title}"
-                loading="lazy"
-              >
-
-              <div class="hp-movie-info">
-
-                <div class="hp-movie-type">
-                  映画
-                </div>
-
-                <h3>
-                  ${movie.title}
-                </h3>
-
-                <div class="hp-movie-meta">
-  ${movie.year}年 ・
-  ${movie.runtime}分
-</div>
-
-<div
-  class="hp-provider-logos"
-  data-id="${movie.id}"
-  data-type="movie">
-</div>
-
-<p class="hp-movie-point">
-  ${movie.point}
-</p>
-
-                <label class="hp-watched">
-
-                  <input
-                    type="checkbox"
-                    class="hp-watched-check"
-                    data-watch-id="${movie.id}"
-                  >
-
-                  <span>
-                    これはもう観た！
-                  </span>
-
-                </label>
-
-                <a
-                  class="hp-detail-link"
-                  href="detail.html?id=${movie.id}&type=movie"
-                >
-                  作品詳細を見る →
-                </a>
-
-              </div>
-
-            </div>
-
-          </article>
-        `;
-
-      })
-      .join("");
-
-}
+/* 初期カードはHTMLに記載。タブ変更時だけ並び替えます。 */
 
 /* =====================================================
    公開順・時系列 切り替え
@@ -2225,7 +2935,7 @@ hpTabs.forEach(tab => {
         if(orderDescription){
 
           orderDescription.textContent =
-            "魔法ワールドの出来事を年代順に楽しみたい人はこちら。ファンタスティック・ビースト3作品から始まり、その後ハリー・ポッター8作品へと続きます。一度全作品を見た人の見直しにもおすすめの順番です。";
+            "物語の時代順では、ハリーが生まれるより前のファンタスティック・ビースト3作から、ハリー・ポッター本編8作へ進みます。同じ魔法界ですが、主人公も中心となる事件も異なります。一続きの11部作という意味ではなく、魔法界の過去からたどる見方です。初めてなら公開順、見直すなら時系列がおすすめです。";
 
         }
 
@@ -2264,7 +2974,7 @@ hpTabs.forEach(tab => {
         if(orderDescription){
 
           orderDescription.textContent =
-            "初めて見るなら、まずはこちらがおすすめ。ハリー・ポッター8作品を公開順に楽しんだあと、ファンタスティック・ビースト3作品へ進みます。作品が公開された順番なので、初めての人でも物語や世界観を自然に楽しめます。";
+            "初めてなら、ハリー・ポッター本編8作を公開順で見るのがおすすめです。ハリーの物語はこの8作で完結します。そのあと、同じ魔法界の過去を描くファンタスティック・ビースト3作へ。ファンタビを先に見ておく必要はありません。";
 
         }
 
@@ -2517,5 +3227,15 @@ loadHpProviderLogos();
   
 </script>
   
+<button type="button" class="hp-top-button" id="hpTopButton" aria-label="ページの先頭に戻る" hidden>↑ TOPへ</button>
+<script>
+(()=>{
+  const button=document.getElementById('hpTopButton');
+  const update=()=>{button.hidden=window.scrollY<500};
+  window.addEventListener('scroll',update,{passive:true});
+  button.addEventListener('click',()=>window.scrollTo({top:0,behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'}));
+  update();
+})();
+</script>
 </body>
 </html>
