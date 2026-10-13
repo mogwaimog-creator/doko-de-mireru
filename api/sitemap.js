@@ -882,8 +882,9 @@ const seriesPages = [
   "odoru.html",
   "minions.html",
   "wildspeed.html",
-  "streaming.html"];
-
+  "streaming.html",
+  "conan.html"];
+    
 seriesPages.forEach(function(page){
   urls.push(`
   <url>
