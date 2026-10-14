@@ -834,69 +834,6 @@ module.exports = async function handler(req, res) {
 
 
     // =====================================================
-    // トップページ
-    // =====================================================
-
-    urls.push(`
-  <url>
-    <loc>https://doko-de-mireru.vercel.app/</loc>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
-  </url>`);
-
-    // =====================================================
-// 配信サービス別ページ
-// =====================================================
-
-const providerPages = [
-  "netflix.html",
-  "prime.html",
-  "unext.html",
-  "hulu.html",
-  "disney.html"
-];
-
-providerPages.forEach(function(page){
-
-  urls.push(`
-  <url>
-    <loc>https://doko-de-mireru.vercel.app/${page}</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
-  </url>`);
-
-});
-
-// 見る順番の特集ページ
-const seriesPages = [
-  "series.html",
-  "mcu.html",
-  "harrypotter.html",
-  "eva.html",
-  "starwars.html",
-  "lordoftherings.html",
-  "jurassic.html",
-  "godzilla.html",
-  "kimetsu.html"
-,
-  "odoru.html",
-  "minions.html",
-  "wildspeed.html",
-  "streaming.html",
-  "conan.html"];
-    
-seriesPages.forEach(function(page){
-  urls.push(`
-  <url>
-    <loc>https://doko-de-mireru.vercel.app/${page}</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>`);
-});
-
-    
-
-    // =====================================================
     // 作品詳細ページ
     // =====================================================
 
@@ -907,7 +844,7 @@ seriesPages.forEach(function(page){
 
 
       let detailUrl =
-        "https://doko-de-mireru.vercel.app/detail.html?id=" +
+        "https://doko-de-mireru.com/detail.html?id=" +
         encodeURIComponent(itemId);
 
 
@@ -967,7 +904,7 @@ seriesPages.forEach(function(page){
 
 
       const personUrl =
-        "https://doko-de-mireru.vercel.app/person.html?id=" +
+        "https://doko-de-mireru.com/person.html?id=" +
         encodeURIComponent(
           String(person.id)
         );

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://doko-de-mireru.vercel.app/sitemap.xml
+Sitemap: https://doko-de-mireru.com/sitemap.xml
