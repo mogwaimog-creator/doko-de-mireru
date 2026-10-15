@@ -119,6 +119,10 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
 .sw-about-item p{font-size:15px;line-height:1.75;margin:0}
 @media(max-width:760px){.sw-about{padding:20px 16px}.sw-about-grid{grid-template-columns:1fr}}
 <style>
+/* Keep the four main switching tabs visible while reading each panel. */
+#sw-tabs{position:sticky;top:0;z-index:1000;background:#f0f4fa;padding:8px 0 10px;box-shadow:0 5px 14px rgba(12,28,51,.14);scroll-margin-top:0}
+#sw-tabs .tabs{margin-top:0}
+@media(max-width:760px){#sw-tabs{padding:6px 0 8px}#sw-tabs .tab{min-height:58px;padding:9px 6px}}
 /* 2026-10-16 approved focused refinements */
 .sw-tabs-anchor .tab{overflow-wrap:normal;word-break:keep-all}
 .sw-tab-sub{display:block;font-size:16px;line-height:1.35}
@@ -136,6 +140,12 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
 #sw-catalog-panel .sw-era-newage{background:#62478c}
 #sw-catalog-panel .era-box + .card{border-top-color:#6986a8}
 @media(min-width:761px){.sw-tabs-anchor .tab{min-height:80px}}
+</style>
+<style>
+/* スクロール中もメインの4タブを画面上端に固定（親要素の範囲外でも維持） */
+#sw-tabs.sw-tabs-fixed{position:fixed!important;top:0!important;left:0;right:0;width:100%;z-index:9999;margin:0!important;padding:8px max(16px,calc((100vw - 1056px)/2)) 10px;background:#f0f4fa;box-shadow:0 5px 14px rgba(12,28,51,.18)}
+#sw-tabs.sw-tabs-fixed .tabs{max-width:1056px;margin:0 auto}
+@media(max-width:760px){#sw-tabs.sw-tabs-fixed{padding:6px 12px 8px}}
 </style>
 </head>
 <body>
@@ -370,6 +380,40 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
   document.querySelectorAll('.providers').forEach(box=>providerObserver.observe(box));
   
  document.querySelectorAll('[data-goto-glossary]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();showTab('glossary');}));
+</script>
+
+<script>
+/* position:sticky は main の下端で解除されるため、通過後は fixed に切り替える */
+(function(){
+  const tabs=document.getElementById('sw-tabs');
+  if(!tabs)return;
+  const marker=document.createElement('div');
+  marker.setAttribute('aria-hidden','true');
+  tabs.parentNode.insertBefore(marker,tabs);
+  function update(){
+    const fixed=marker.getBoundingClientRect().top<=0;
+    if(fixed){
+      if(!tabs.classList.contains('sw-tabs-fixed')){
+        marker.style.height=tabs.offsetHeight+'px';
+        tabs.classList.add('sw-tabs-fixed');
+      }
+    }else{
+      tabs.classList.remove('sw-tabs-fixed');
+      marker.style.height='0px';
+    }
+  }
+  window.addEventListener('scroll',update,{passive:true});
+  window.addEventListener('resize',()=>{
+    if(tabs.classList.contains('sw-tabs-fixed')){
+      tabs.classList.remove('sw-tabs-fixed');
+      marker.style.height='0px';
+      marker.style.height=tabs.offsetHeight+'px';
+      tabs.classList.add('sw-tabs-fixed');
+    }
+    update();
+  });
+  update();
+})();
 </script>
 </body>
 </html>
