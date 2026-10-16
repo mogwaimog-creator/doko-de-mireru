@@ -15355,5 +15355,73 @@ if(mcuView === "short"){
  }));
 })();
 </script>
+
+<!-- MCU scroll navigation: compact fixed copy, original navigation stays unchanged -->
+<style>
+#mcuStickyNav{position:fixed;top:0;left:0;right:0;z-index:9990;display:none;padding:8px 12px;background:rgba(10,20,43,.97);box-shadow:0 5px 18px rgba(0,0,0,.24);box-sizing:border-box}
+#mcuStickyNav.is-visible{display:block}
+#mcuStickyNav .sticky-inner{max-width:1100px;margin:auto;display:flex;gap:7px;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin;padding:3px 0 5px}
+#mcuStickyNav a{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;gap:5px;min-height:39px;padding:7px 13px;border-radius:10px;border:1px solid #64748b;background:#1e3053;color:white;text-decoration:none;font-size:14px;font-weight:800;box-sizing:border-box;white-space:nowrap}
+#mcuStickyNav a:hover,#mcuStickyNav a:focus-visible{filter:brightness(1.22);outline:2px solid #93c5fd;outline-offset:1px}
+#mcuStickyNav .sticky-phase-1{background:#682136;border-color:#fb7185}
+#mcuStickyNav .sticky-phase-2{background:#71341e;border-color:#fb923c}
+#mcuStickyNav .sticky-phase-3{background:#64521b;border-color:#facc15}
+#mcuStickyNav .sticky-phase-4{background:#1d438e;border-color:#38bdf8}
+#mcuStickyNav .sticky-phase-5{background:#51238c;border-color:#c084fc}
+#mcuStickyNav .sticky-phase-6{background:#12636a;border-color:#2dd4bf}
+#mcuStickyNav[data-mode=timeline] a{background:#17274c;border-color:#6179bb}
+#mcuStickyNav[data-mode=short] a[href*="view=release"]{background:#2449ad}
+#mcuStickyNav[data-mode=short] a[href*="view=timeline"]{background:#6330b3}
+#mcuStickyNav[data-mode=short] a[href*="view=short"]{background:#c3471c}
+#mcuStickyNav[data-mode=connections] a{background:#37215c;border-color:#8b5cf6}
+#mcuStickyNav a[aria-current=page]{box-shadow:inset 0 0 0 2px #fff}
+html{scroll-padding-top:85px}
+#releaseView [id^=phase],#timelineView [id^=timeline-section-],#connectionsView [id^=related-]{scroll-margin-top:85px}
+@media(max-width:600px){#mcuStickyNav{padding:6px 8px}#mcuStickyNav a{font-size:14px;min-height:38px;padding:6px 10px}}
+</style>
+<nav id="mcuStickyNav" aria-label="スクロール中のジャンプメニュー"><div class="sticky-inner"></div></nav>
+<script>
+(function(){
+  const bar=document.getElementById('mcuStickyNav');
+  const inner=bar.querySelector('.sticky-inner');
+  const mode=new URLSearchParams(location.search).get('view')||'release';
+  const configurations={
+    release:{source:'.mcu-timeline .mcu-phase',start:'.mcu-timeline-scroll',end:'#releaseView'},
+    timeline:{source:'#timelineJumpNav .mcu-timeline-jump-links a',start:'#timelineJumpNav .mcu-timeline-jump-links',end:'#timelineView'},
+    short:{source:'.mcu-tabs a.mcu-tab',start:'.mcu-tabs',end:'#shortView'},
+    connections:{source:'.related-jump-buttons a',start:'.related-jump-buttons',end:'#connectionsView'}
+  };
+  const cfg=configurations[mode];
+  if(!cfg)return;
+  const start=document.querySelector(cfg.start),end=document.querySelector(cfg.end);
+  const originals=[...document.querySelectorAll(cfg.source)];
+  if(!start||!end||!originals.length)return;
+  bar.dataset.mode=mode;
+  originals.forEach((original,i)=>{
+    const a=document.createElement('a');
+    a.href=original.href;
+    if(mode==='release'){
+      a.className='sticky-phase-'+(i+1);
+      a.textContent='PHASE '+(i+1);
+    }else if(mode==='timeline'){
+      a.textContent=(i+1)+' '+(original.querySelector('strong')?.textContent||original.textContent).trim();
+    }else{
+      a.textContent=original.textContent.trim();
+      if(mode==='short'&&original.classList.contains('active'))a.setAttribute('aria-current','page');
+    }
+    inner.appendChild(a);
+  });
+  function update(){
+    const top=start.getBoundingClientRect().top;
+    const bottom=end.getBoundingClientRect().bottom;
+    const show=top<0&&bottom>bar.offsetHeight+15;
+    bar.classList.toggle('is-visible',show);
+  }
+  window.addEventListener('scroll',update,{passive:true});
+  window.addEventListener('resize',update,{passive:true});
+  update();
+})();
+</script>
+
 </body>
 </html>
