@@ -1599,7 +1599,7 @@ const normalizedMovieSearchQueries =
 
       return normalizeTitle(
         value
-      );
+      ).replace(/Ζ/g, "Z");
 
     })
     .filter(Boolean);
@@ -1622,7 +1622,7 @@ movies =
 
           return normalizeTitle(
             value
-          );
+          ).replace(/Ζ/g, "Z");
 
         })
         .filter(Boolean);
@@ -5430,6 +5430,32 @@ const titleAliasMap = {
   "スパイファミリー": [
     "SPY×FAMILY",
     "SPY FAMILY"
+  ],
+
+  // ワイルド・スピード：日本語の通称と英語原題
+  "ワイルドスピード": [
+    "ワイルド・スピード",
+    "Fast & Furious",
+    "The Fast and the Furious",
+    "Fast and Furious"
+  ],
+  "ワイスピ": [
+    "ワイルド・スピード",
+    "Fast & Furious",
+    "The Fast and the Furious",
+    "Fast and Furious"
+  ],
+
+  // Ζ（ギリシャ文字ゼータ）と Z（英字）の表記ゆれ
+  "機動戦士Ζガンダム": [
+    "機動戦士Zガンダム",
+    "機動戦士Ζガンダム",
+    "Mobile Suit Zeta Gundam"
+  ],
+  "機動戦士Zガンダム": [
+    "機動戦士Ζガンダム",
+    "機動戦士Zガンダム",
+    "Mobile Suit Zeta Gundam"
   ]
 
 };
