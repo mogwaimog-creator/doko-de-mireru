@@ -146,11 +146,27 @@ function gundamImage(path,size){
 }
 function gundamProviderRow(items,label){
  if(!Array.isArray(items)||!items.length)return '';
- const dedup=[...new Map(items.filter(x=>x&&x.provider_name).map(x=>[x.provider_id||x.provider_name,x])).values()];
- return `<div class="gundam-provider-row"><b>${label}</b><div class="gundam-provider-logos">${dedup.map(x=>{
-  const name=String(x.provider_name).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
+ const services=new Map();
+ for(const item of items){
+  if(!item||!item.provider_name)continue;
+  const raw=String(item.provider_name);
+  const n=raw.toLowerCase();
+  let key=String(item.provider_id||raw),display=raw;
+  if(/netflix/.test(n)){key='netflix';display='Netflix'}
+  else if(/amazon|prime video/.test(n)){key='prime';display='Prime Video'}
+  else if(/u-next|unext/.test(n)){key='unext';display='U-NEXT'}
+  else if(/hulu/.test(n)){key='hulu';display='Hulu'}
+  else if(/disney/.test(n)){key='disney';display='Disney+'}
+  else if(/apple/.test(n)){key='apple';display='Apple TV'}
+  else if(/fod/.test(n)){key='fod';display='FOD'}
+  if(!services.has(key))services.set(key,{...item,display});
+ }
+ const shown=[...services.values()].slice(0,9);
+ if(!shown.length)return '';
+ return `<div class="gundam-provider-row"><b>${label}</b><div class="gundam-provider-logos">${shown.map(x=>{
+  const name=String(x.display).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
   const logo=gundamImage(x.logo_path,'w92');
-  return logo?`<span class="gundam-provider" title="${name}"><img src="${logo}" alt="${name}" loading="lazy"><small>${name}</small></span>`:`<span class="gundam-provider">${name}</span>`;
+  return `<span class="gundam-provider" title="${name}">${logo?`<img src="${logo}" alt="${name}" loading="lazy">`:''}<small>${name}</small></span>`;
  }).join('')}</div></div>`;
 }
 function gundamAvailability(item){
@@ -174,7 +190,7 @@ async function hydrateGundamCards(){
   const item=await gundamLookup(title);
   if(!el.isConnected)continue;
   const poster=gundamImage(item?.poster_path,'w342'),slot=el.querySelector('.poster-placeholder');
-  if(poster&&slot){const img=document.createElement('img');img.className='work-poster';img.alt=title+'のポスター';img.loading='lazy';img.decoding='async';img.src=poster;img.onerror=()=>{img.remove();slot.hidden=false};slot.hidden=true;slot.after(img)}
+  if(poster&&slot){const img=document.createElement('img');img.className='work-poster';img.alt=title+'のポスター';img.loading='lazy';img.decoding='async';img.src=poster;img.onerror=()=>{img.remove();slot.hidden=false};slot.replaceWith(img)}
   const link=el.querySelector('.detail-link');
   if(link&&item){link.href=gundamDetailUrl(item);link.removeAttribute('onclick')}
   const availability=el.querySelector('.availability-note');
