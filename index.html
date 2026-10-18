@@ -4106,7 +4106,7 @@ padding:
 
 .home-feature-layout{
   display:grid;
-  grid-template-columns:minmax(0,2fr) minmax(260px,1fr);
+  grid-template-columns:repeat(3,minmax(0,1fr));
   gap:12px;
   align-items:stretch;
   margin-bottom:12px;
@@ -4116,6 +4116,25 @@ padding:
   margin-bottom:0;
 }
 
+
+
+/* 映画特集：TOPの3列レイアウト */
+.home-feature-layout .recommend-grid{grid-template-columns:1fr;gap:9px}
+.home-feature-layout .recommend-section{padding:18px 14px}
+.home-feature-layout .recommend-category{padding:10px}
+.home-feature-layout .recommend-heading h2{font-size:20px}
+.home-feature-layout .recommend-heading p{font-size:14px}
+.movie-feature-section{min-width:0;padding:18px;border:1px solid #b9d6c3;border-radius:18px;background:linear-gradient(140deg,#f4faf1,#e5f3eb 58%,#f9f7ee);box-shadow:0 6px 20px rgba(44,96,72,.09)}
+.movie-feature-heading h2{font-size:22px;color:#255b46;margin:0}
+.movie-feature-heading p{font-size:14px;color:#4b665b;line-height:1.6;margin:7px 0 14px}
+.movie-feature-card{display:flex;flex-direction:column;gap:12px;padding:20px 15px;border-radius:14px;border:1px solid #c9ddcb;background:linear-gradient(155deg,#fffef7,#e3efdf);text-decoration:none;color:#244d3d;min-height:190px;justify-content:center;transition:transform .15s ease,border-color .15s ease}
+.movie-feature-card:hover{border-color:#6fa58b;transform:translateY(-2px)}
+.movie-feature-card strong{font-size:19px;line-height:1.55}
+.movie-feature-card span{font-size:14px;line-height:1.6}
+.movie-feature-tag{font-weight:800;color:#527d62}
+.movie-feature-link{font-weight:800;color:#24634d;margin-top:5px}
+.movie-feature-future{font-size:14px;color:#567263;line-height:1.7;margin:14px 0 0}
+@media(max-width:850px){.home-feature-layout{grid-template-columns:1fr}}
 
 /* =========================================================
    シリーズを順番に見る
@@ -5426,11 +5445,6 @@ body.search-mode.show-other-search
   id="recommendArea"
   class="home-feature-layout"
 >
-
-<!-- =====================================================
-     おすすめ作品から探す
-====================================================== -->
-
 <section
   class="recommend-section"
   aria-labelledby="recommendHeading"
@@ -5443,7 +5457,7 @@ body.search-mode.show-other-search
     </h2>
 
     <p>
-      定番の人気作品から、配信情報をすぐにチェックできます
+      映画2作品・ドラマ1作品・アニメ1作品を紹介
     </p>
 
   </div>
@@ -5478,20 +5492,6 @@ body.search-mode.show-other-search
           <span class="recommend-arrow">›</span>
         </a>
 
-        <a href="./detail.html?id=372058&type=movie">
-          <span class="recommend-name">
-            君の名は。
-          </span>
-          <span class="recommend-arrow">›</span>
-        </a>
-
-        <a href="./detail.html?id=211672&type=movie">
-          <span class="recommend-name">
-            ミニオンズ
-          </span>
-          <span class="recommend-arrow">›</span>
-        </a>
-
       </div>
 
     </div>
@@ -5512,27 +5512,6 @@ body.search-mode.show-other-search
         <a href="./detail.html?id=218038&type=tv">
           <span class="recommend-name">
             VIVANT
-          </span>
-          <span class="recommend-arrow">›</span>
-        </a>
-
-        <a href="./detail.html?id=75701&type=tv">
-          <span class="recommend-name">
-            アンナチュラル
-          </span>
-          <span class="recommend-arrow">›</span>
-        </a>
-
-        <a href="./detail.html?id=55582&type=tv">
-          <span class="recommend-name">
-            孤独のグルメ
-          </span>
-          <span class="recommend-arrow">›</span>
-        </a>
-
-        <a href="./detail.html?id=210444&type=tv">
-          <span class="recommend-name">
-            silent
           </span>
           <span class="recommend-arrow">›</span>
         </a>
@@ -5561,27 +5540,6 @@ body.search-mode.show-other-search
           <span class="recommend-arrow">›</span>
         </a>
 
-        <a href="./detail.html?id=65733&type=tv">
-          <span class="recommend-name">
-            ドラえもん
-          </span>
-          <span class="recommend-arrow">›</span>
-        </a>
-
-        <a href="./detail.html?id=30623&type=tv">
-          <span class="recommend-name">
-            クレヨンしんちゃん
-          </span>
-          <span class="recommend-arrow">›</span>
-        </a>
-
-        <a href="./detail.html?id=37854&type=tv">
-          <span class="recommend-name">
-            ONE PIECE
-          </span>
-          <span class="recommend-arrow">›</span>
-        </a>
-
       </div>
 
     </div>
@@ -5591,10 +5549,20 @@ body.search-mode.show-other-search
 
 </section>
 
-
-<!-- =====================================================
-     シリーズを順番に見る
-====================================================== -->
+<!-- 映画特集：今後の企画もここに追加 -->
+<section id="movieFeatureSection" class="movie-feature-section" aria-labelledby="movieFeatureHeading">
+  <div class="movie-feature-heading">
+    <h2 id="movieFeatureHeading">🌿 映画特集</h2>
+    <p>懐かしい映画や名作を、もう一度。</p>
+  </div>
+  <a class="movie-feature-card" href="./ghibli.html">
+    <span class="movie-feature-tag">第1弾・ジブリ特集</span>
+    <strong>ジブリ作品は、今どこで見られる？</strong>
+    <span>作品一覧・配信・テレビ放送・上映情報</span>
+    <span class="movie-feature-link">ジブリ特集を見る →</span>
+  </a>
+  <p class="movie-feature-future">今後、思い出せない映画探し・年代別名作映画も追加予定です。</p>
+</section>
 
 <section
   id="watchOrderSection"
@@ -5622,13 +5590,9 @@ body.search-mode.show-other-search
 
     <a class="watch-order-more" href="series.html">すべてのシリーズを見る →</a>
   
-  </div>
 
 </section>
-
-
 </div>
-
 
 <!-- =====================================================
      配信サービスから探す
