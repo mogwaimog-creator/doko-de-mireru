@@ -1,2 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>https://doko-de-mireru.com/</loc><changefreq>weekly</changefreq></url><url><loc>https://doko-de-mireru.com/netflix.html</loc><changefreq>weekly</changefreq></url><url><loc>https://doko-de-mireru.com/prime.html</loc><changefreq>weekly</changefreq></url><url><loc>https://doko-de-mireru.com/unext.html</loc><changefreq>weekly</changefreq></url><url><loc>https://doko-de-mireru.com/hulu.html</loc><changefreq>weekly</changefreq></url><url><loc>https://doko-de-mireru.com/disney.html</loc><changefreq>weekly</changefreq></url><url><loc>https://doko-de-mireru.com/favorites.html</loc><changefreq>weekly</changefreq></url><url><loc>https://doko-de-mireru.com/privacy.html</loc><changefreq>weekly</changefreq></url></urlset>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>https://doko-de-mireru.com/</loc><changefreq>weekly</changefreq></url>
+  <url>
+  <loc>https://doko-de-mireru.com/ghibli.html</loc>
+  <changefreq>weekly</changefreq>
+</url>
+  
+  <url><loc>https://doko-de-mireru.com/netflix.html</loc><changefreq>weekly</changefreq></url><url><loc>https://doko-de-mireru.com/prime.html</loc><changefreq>weekly</changefreq></url><url><loc>https://doko-de-mireru.com/unext.html</loc><changefreq>weekly</changefreq></url><url><loc>https://doko-de-mireru.com/hulu.html</loc><changefreq>weekly</changefreq></url><url><loc>https://doko-de-mireru.com/disney.html</loc><changefreq>weekly</changefreq></url><url><loc>https://doko-de-mireru.com/favorites.html</loc><changefreq>weekly</changefreq></url><url><loc>https://doko-de-mireru.com/privacy.html</loc><changefreq>weekly</changefreq></url></urlset>
