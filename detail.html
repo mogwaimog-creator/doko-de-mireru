@@ -2520,6 +2520,41 @@ Netflix、Amazon Prime Video、U-NEXT、Hulu、Disney+など、
   </div>
 </div>
 
+
+<!-- 追加シリーズの見る順番ガイド -->
+<div id="gundamGuide" class="mcu-guide" hidden>
+  <div class="mcu-guide-icon">🤖</div>
+  <div class="mcu-guide-content">
+    <div class="mcu-guide-title">ガンダムをどの順番で見ればいい？</div>
+    <div class="mcu-guide-text">宇宙世紀・アナザー・ガンプラなど、作品のつながりや見る順番を紹介しています。</div>
+    <a class="mcu-guide-link" href="gundam.html">ガンダムを見る順番ガイドへ →</a>
+  </div>
+</div>
+<div id="minionsGuide" class="mcu-guide" hidden>
+  <div class="mcu-guide-icon">🍌</div>
+  <div class="mcu-guide-content">
+    <div class="mcu-guide-title">怪盗グルー・ミニオンズをもっと楽しむなら</div>
+    <div class="mcu-guide-text">映画の公開順・時系列や、ミニオンたちの楽しみ方を紹介しています。</div>
+    <a class="mcu-guide-link" href="minions.html">怪盗グルー・ミニオンズを見る順番ガイドへ →</a>
+  </div>
+</div>
+<div id="conanGuide" class="mcu-guide" hidden>
+  <div class="mcu-guide-icon">🔎</div>
+  <div class="mcu-guide-content">
+    <div class="mcu-guide-title">名探偵コナンの映画はどの順番で見る？</div>
+    <div class="mcu-guide-text">劇場版の見る順番や、作品ごとの見どころを紹介しています。</div>
+    <a class="mcu-guide-link" href="conan.html">名探偵コナンを見る順番ガイドへ →</a>
+  </div>
+</div>
+<div id="kimetsuGuide" class="mcu-guide" hidden>
+  <div class="mcu-guide-icon">⚔️</div>
+  <div class="mcu-guide-content">
+    <div class="mcu-guide-title">鬼滅の刃をどの順番で見ればいい？</div>
+    <div class="mcu-guide-text">TVアニメと映画のつながりを、初めての方にもわかりやすく紹介しています。</div>
+    <a class="mcu-guide-link" href="kimetsu.html">鬼滅の刃を見る順番ガイドへ →</a>
+  </div>
+</div>
+
 <div class="movie-side-info">
 
 <div class="side-section">
@@ -4279,6 +4314,28 @@ function appendStructuredData(
 
 }
 
+
+/* シリーズ作品の案内判定：作品名・原題とメディアタイプで判定 */
+function guideTitles(movie){
+  return [movie.title,movie.name,movie.original_title,movie.original_name]
+    .filter(Boolean).map(v=>String(v).normalize("NFKC").toLowerCase().replace(/\s+/g,""));
+}
+function isGundamGuideWork(movie){
+  return guideTitles(movie).some(t=>/ガンダム|gundam/.test(t)) &&
+    !guideTitles(movie).some(t=>/ガンダムエース|gundamace/.test(t));
+}
+function isMinionsGuideWork(movie){
+  if(mediaType!=="movie") return false;
+  return guideTitles(movie).some(t=>/^(怪盗グルー|ミニオンズ|despicableme|minions)/.test(t));
+}
+function isConanGuideWork(movie){
+  if(mediaType!=="movie") return false;
+  return guideTitles(movie).some(t=>/^(名探偵コナン|detectiveconan|caseclosed)/.test(t));
+}
+function isKimetsuGuideWork(movie){
+  return guideTitles(movie).some(t=>/鬼滅の刃|demonslayer/.test(t));
+}
+
 /* =========================================================
    MCU・マーベル関連作品 判定
 ========================================================= */
@@ -4938,6 +4995,17 @@ if(starWarsGuide){
     !isStarWarsGuideWork(movie);
 }
   
+/* ガンダム・ミニオンズ・コナン・鬼滅の刃の作品案内 */
+for(const [guideId, check] of [
+  ["gundamGuide", isGundamGuideWork],
+  ["minionsGuide", isMinionsGuideWork],
+  ["conanGuide", isConanGuideWork],
+  ["kimetsuGuide", isKimetsuGuideWork]
+]){
+  const guide = document.getElementById(guideId);
+  if(guide) guide.hidden = !check(movie);
+}
+
 /* ゴジラ・ジュラシック・中つ国の作品案内 */
 const relatedGuides = [
   ["godzillaGuide", isGodzillaGuideWork],
