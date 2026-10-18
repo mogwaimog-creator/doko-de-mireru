@@ -4136,6 +4136,13 @@ padding:
 .movie-feature-future{font-size:14px;color:#567263;line-height:1.7;margin:14px 0 0}
 @media(max-width:850px){.home-feature-layout{grid-template-columns:1fr}}
 
+/* 映画特集：シリーズと同じコンパクトなリンクカード */
+.movie-feature-list{display:flex;flex-direction:column;gap:9px}
+.movie-feature-section .movie-feature-card{display:block;min-height:0;padding:12px 13px;border-radius:11px;background:linear-gradient(135deg,#fff,#eaf3e6);border:1px solid #b8d5bd;color:#244d3d;text-decoration:none;transform:none}
+.movie-feature-section .movie-feature-card:hover{transform:translateY(-1px);border-color:#6fa58b}
+.movie-feature-name{display:block;font-size:14px;font-weight:800;line-height:1.5}
+.movie-feature-note{display:block;font-size:14px;color:#557468;line-height:1.5;margin-top:4px}
+
 /* =========================================================
    シリーズを順番に見る
 ========================================================= */
@@ -5457,7 +5464,7 @@ body.search-mode.show-other-search
     </h2>
 
     <p>
-      映画2作品・ドラマ1作品・アニメ1作品を紹介
+      映画1作品・ドラマ1作品・アニメ1作品を紹介
     </p>
 
   </div>
@@ -5481,13 +5488,6 @@ body.search-mode.show-other-search
         <a href="./detail.html?id=157336&type=movie">
           <span class="recommend-name">
             インターステラー
-          </span>
-          <span class="recommend-arrow">›</span>
-        </a>
-
-        <a href="./detail.html?id=671&type=movie">
-          <span class="recommend-name">
-            ハリー・ポッターと賢者の石
           </span>
           <span class="recommend-arrow">›</span>
         </a>
@@ -5555,13 +5555,12 @@ body.search-mode.show-other-search
     <h2 id="movieFeatureHeading">🌿 映画特集</h2>
     <p>懐かしい映画や名作を、もう一度。</p>
   </div>
-  <a class="movie-feature-card" href="./ghibli.html">
-    <span class="movie-feature-tag">第1弾・ジブリ特集</span>
-    <strong>ジブリ作品は、今どこで見られる？</strong>
-    <span>作品一覧・配信・テレビ放送・上映情報</span>
-    <span class="movie-feature-link">ジブリ特集を見る →</span>
-  </a>
-  <p class="movie-feature-future">今後、思い出せない映画探し・年代別名作映画も追加予定です。</p>
+  <div class="movie-feature-list">
+    <a class="movie-feature-card" href="./ghibli.html">
+      <span class="movie-feature-name">🌿 ジブリ作品は、今どこで見られる？</span>
+      <span class="movie-feature-note">作品一覧・配信・テレビ放送・上映情報</span>
+    </a>
+  </div>
 </section>
 
 <section
