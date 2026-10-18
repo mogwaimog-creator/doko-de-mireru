@@ -12140,11 +12140,10 @@ const runtime =
       // 関連TVシリーズを取得
       // ===================================================
 
-      series =
-        await getTvRelatedSeries(
-          tvId,
-          apiKey
-        );
+      // recommendations / similar は正式なシリーズ情報ではないため、
+      // ドラマの「関連シリーズ」には使用しない。
+      // 関連性が確実に確認できるデータがない場合は非表示。
+      series = [];
 
     }
 
