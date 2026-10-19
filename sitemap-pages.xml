@@ -4,5 +4,8 @@
   <loc>https://doko-de-mireru.com/ghibli.html</loc>
   <changefreq>weekly</changefreq>
 </url>
-  
+ <url>
+  <loc>https://doko-de-mireru.com/movie_shelf_1980_1984.html</loc>
+  <changefreq>weekly</changefreq>
+</url>
   <url><loc>https://doko-de-mireru.com/netflix.html</loc><changefreq>weekly</changefreq></url><url><loc>https://doko-de-mireru.com/prime.html</loc><changefreq>weekly</changefreq></url><url><loc>https://doko-de-mireru.com/unext.html</loc><changefreq>weekly</changefreq></url><url><loc>https://doko-de-mireru.com/hulu.html</loc><changefreq>weekly</changefreq></url><url><loc>https://doko-de-mireru.com/disney.html</loc><changefreq>weekly</changefreq></url><url><loc>https://doko-de-mireru.com/favorites.html</loc><changefreq>weekly</changefreq></url><url><loc>https://doko-de-mireru.com/privacy.html</loc><changefreq>weekly</changefreq></url></urlset>
