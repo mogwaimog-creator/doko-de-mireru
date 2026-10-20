@@ -8559,6 +8559,8 @@ function showError(message){
     try{
       const previous = new URL(document.referrer);
       const seriesNames = {
+        "ghibli.html":"ジブリ作品",
+        "movie_shelf_1980_1984.html":"名作映画の棚",
         "mcu.html":"MCU・マーベル",
         "harrypotter.html":"ハリー・ポッター",
         "starwars.html":"スター・ウォーズ",
@@ -8577,7 +8579,14 @@ function showError(message){
       const fileName = previous.pathname.split("/").pop().toLowerCase();
       if(previous.origin === window.location.origin &&
          Object.prototype.hasOwnProperty.call(seriesNames,fileName)){
-        backLink.href = previous.pathname + previous.search + previous.hash;
+        if(fileName === "movie_shelf_1980_1984.html"){
+          const shelfTab = previous.searchParams.get("shelfTab");
+          const allowedTabs = ["awards", "rankings", "memories"];
+          const tab = allowedTabs.includes(shelfTab) ? shelfTab : "awards";
+          backLink.href = previous.pathname + "?shelfTab=" + tab + "#shelf-heading";
+        }else{
+          backLink.href = previous.pathname + previous.search + previous.hash;
+        }
         backLink.textContent = "← " + seriesNames[fileName] + "のページに戻る";
         backLink.setAttribute("aria-label",seriesNames[fileName] + "のページに戻る");
         if(searchLink) searchLink.hidden = false;
