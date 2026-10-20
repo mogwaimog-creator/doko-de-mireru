@@ -4329,7 +4329,7 @@ function isMinionsGuideWork(movie){
   return guideTitles(movie).some(t=>/^(怪盗グルー|ミニオンズ|despicableme|minions)/.test(t));
 }
 function isConanGuideWork(movie){
-  if(mediaType!=="movie") return false;
+  if(mediaType!=="movie" && mediaType!=="tv") return false;
   return guideTitles(movie).some(t=>/^(名探偵コナン|detectiveconan|caseclosed)/.test(t));
 }
 function isKimetsuGuideWork(movie){
@@ -8539,6 +8539,52 @@ function showError(message){
     document.getElementById(
       "searchLink"
     );
+
+  // 名作映画の棚からの訪問だけ、元のタブへ戻す
+  if(from === "movie_shelf"){
+    const allowedTabs = ["awards", "rankings", "memories"];
+    const tab = params.get("shelfTab");
+    const selectedTab = allowedTabs.includes(tab) ? tab : "awards";
+    backLink.href = "./movie_shelf_1980_1984.html?shelfTab=" + selectedTab + "#shelf-heading";
+    backLink.textContent = "← 📼 名作映画の棚に戻る";
+    backLink.setAttribute("aria-label", "名作映画の棚に戻る");
+    if(searchLink) searchLink.hidden = false;
+    return;
+  }
+
+  // シリーズページから直接来た場合は、そのシリーズへ戻す。
+  // 同一サイト内の参照元のみ採用し、外部サイトへは誘導しない。
+  // from=... による既存の人物・配信サービスへの戻り先は優先する。
+  if(!from && document.referrer){
+    try{
+      const previous = new URL(document.referrer);
+      const seriesNames = {
+        "mcu.html":"MCU・マーベル",
+        "harrypotter.html":"ハリー・ポッター",
+        "starwars.html":"スター・ウォーズ",
+        "jurassic.html":"ジュラシック",
+        "godzilla.html":"ゴジラ",
+        "lordoftherings.html":"ロード・オブ・ザ・リング",
+        "eva.html":"エヴァンゲリオン",
+        "kimetsu.html":"鬼滅の刃",
+        "odoru.html":"踊る大捜査線",
+        "conan.html":"名探偵コナン",
+        "gundam.html":"ガンダム",
+        "minions.html":"怪盗グルー・ミニオンズ",
+        "wildspeed.html":"ワイルド・スピード",
+        "taxi.html":"TAXi"
+      };
+      const fileName = previous.pathname.split("/").pop().toLowerCase();
+      if(previous.origin === window.location.origin &&
+         Object.prototype.hasOwnProperty.call(seriesNames,fileName)){
+        backLink.href = previous.pathname + previous.search + previous.hash;
+        backLink.textContent = "← " + seriesNames[fileName] + "のページに戻る";
+        backLink.setAttribute("aria-label",seriesNames[fileName] + "のページに戻る");
+        if(searchLink) searchLink.hidden = false;
+        return;
+      }
+    }catch(e){ /* 参照元が取得できない場合は従来の動作 */ }
+  }
 
   const personId =
     params.get(
