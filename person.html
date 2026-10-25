@@ -2138,6 +2138,31 @@ function createWorkCard(work){
 
 const providerCache = new Map();
 
+// 配信情報の同時取得は最大3件。画面に近づいた順に処理します。
+const PROVIDER_MAX_CONCURRENT = 3;
+let providerActiveRequests = 0;
+const providerQueue = [];
+
+function queueProviderRequest(element){
+  if(!element || element.dataset.loaded === "1") return;
+  element.dataset.loaded = "1";
+  providerQueue.push(element);
+  processProviderQueue();
+}
+
+function processProviderQueue(){
+  while(providerActiveRequests < PROVIDER_MAX_CONCURRENT && providerQueue.length){
+    const element = providerQueue.shift();
+    // 「もっと見る」等でカードが再描画された場合、古いカードは取得しない。
+    if(!element.isConnected) continue;
+    providerActiveRequests++;
+    loadProviderStatus(element).finally(function(){
+      providerActiveRequests--;
+      processProviderQueue();
+    });
+  }
+}
+
 function renderProviderStatus(element, detail){
 
   if(!element){
@@ -2188,11 +2213,9 @@ function renderProviderStatus(element, detail){
 
 async function loadProviderStatus(element){
 
-  if(!element || element.dataset.loaded === "1"){
+  if(!element){
     return;
   }
-
-  element.dataset.loaded = "1";
 
   const id = element.dataset.providerId;
   const type = element.dataset.providerType || "movie";
@@ -2200,24 +2223,25 @@ async function loadProviderStatus(element){
 
   try{
 
-    let detail = providerCache.get(cacheKey);
+    // 同じ作品が複数セクションにあっても、通信中の取得を共有する。
+    let detailPromise = providerCache.get(cacheKey);
 
-    if(!detail){
+    if(!detailPromise){
       const url =
         "/api/search?id=" + encodeURIComponent(id) +
         (type === "tv" ? "&type=tv" : "");
 
-      const response = await fetch(url);
-
-      if(!response.ok){
-        throw new Error("配信情報を取得できませんでした。");
-      }
-
-      detail = await response.json();
-      providerCache.set(cacheKey, detail);
+      detailPromise = fetch(url).then(function(response){
+        if(!response.ok){
+          throw new Error("配信情報を取得できませんでした。");
+        }
+        return response.json();
+      });
+      providerCache.set(cacheKey, detailPromise);
     }
 
-    renderProviderStatus(element, detail);
+    const detail = await detailPromise;
+    if(element.isConnected) renderProviderStatus(element, detail);
 
   }catch(error){
     console.warn("PROVIDER STATUS ERROR:", error);
@@ -2237,7 +2261,7 @@ function observeProviderStatuses(){
     );
 
   if(!("IntersectionObserver" in window)){
-    targets.forEach(loadProviderStatus);
+    targets.forEach(queueProviderRequest);
     return;
   }
 
@@ -2247,7 +2271,7 @@ function observeProviderStatuses(){
         entries.forEach(function(entry){
           if(entry.isIntersecting){
             providerObserver.unobserve(entry.target);
-            loadProviderStatus(entry.target);
+            queueProviderRequest(entry.target);
           }
         });
       },
