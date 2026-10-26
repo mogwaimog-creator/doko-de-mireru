@@ -9824,62 +9824,73 @@ function observeGenreProviderStatuses(){
 async function loadPopularMovies(){
 
   const popularMovies =
-    document.getElementById(
-      "popularMovies"
-    );
+    document.getElementById("popularMovies");
 
   if(!popularMovies){
     return;
   }
 
+  // 同じタブで10分以内に再訪問した場合は、取得済みデータを再利用。
+  const cacheKey = "dokoDeMireruPopularMoviesV1";
+  const cacheDuration = 10 * 60 * 1000;
+
   try{
+    let results = null;
 
-    const response =
-      await fetch(
-        "/api/search?popular=1"
-      );
-
-    const data =
-      await response.json();
-
-    if(
-      !response.ok ||
-      !Array.isArray(data.results) ||
-      !data.results.length
-    ){
-
-      throw new Error(
-        "人気作品を取得できませんでした。"
-      );
-
+    try{
+      const saved = sessionStorage.getItem(cacheKey);
+      if(saved){
+        const cached = JSON.parse(saved);
+        if(
+          cached &&
+          typeof cached.savedAt === "number" &&
+          Date.now() - cached.savedAt >= 0 &&
+          Date.now() - cached.savedAt < cacheDuration &&
+          Array.isArray(cached.results) &&
+          cached.results.length
+        ){
+          results = cached.results;
+        }
+      }
+    }catch(cacheError){
+      // 保存領域を使えない環境でも、従来どおりAPIから取得する。
     }
 
+    if(!results){
+      const response = await fetch("/api/search?popular=1");
+      if(!response.ok){
+        throw new Error("人気作品を取得できませんでした。");
+      }
+
+      const data = await response.json();
+      if(!Array.isArray(data.results) || !data.results.length){
+        throw new Error("人気作品を取得できませんでした。");
+      }
+
+      results = data.results;
+
+      try{
+        sessionStorage.setItem(
+          cacheKey,
+          JSON.stringify({ savedAt: Date.now(), results })
+        );
+      }catch(cacheError){
+        // 保存失敗は表示に影響させない。
+      }
+    }
 
     popularMovies.innerHTML =
-      data.results
-        .map(
-          createPopularMovieCard
-        )
-        .join("");
-
+      results.map(createPopularMovieCard).join("");
 
   }catch(error){
-
-    console.error(
-      "Popular movies error:",
-      error
-    );
-
-    popularMovies.innerHTML =
-      `
+    console.error("Popular movies error:", error);
+    popularMovies.innerHTML = `
       <div class="empty">
         人気作品を取得できませんでした。
       </div>
-      `;
-
+    `;
   }
-
-}     
+}
 
 /* =========================================================
    人気作品カード
