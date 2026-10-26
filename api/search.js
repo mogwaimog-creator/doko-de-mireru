@@ -76,6 +76,17 @@ module.exports = async function handler(req, res) {
     });
   }
 
+  // =======================================================
+  // Vercel CDN キャッシュ（負荷軽減）
+  // 同一URLへの連続アクセスを一定時間キャッシュし、
+  // Serverless Function / TMDBへの再実行を抑える。
+  // ※ CDN Requestsの総数を減らす仕組みではありません。
+  // ※ ブラウザ側には長期保存させません。
+  // =======================================================
+  res.setHeader("Cache-Control", "public, max-age=0, must-revalidate");
+  res.setHeader("Vercel-CDN-Cache-Control", "s-maxage=300, stale-while-revalidate=600");
+
+
 
   try {
 
@@ -88,7 +99,8 @@ module.exports = async function handler(req, res) {
 
 
     if (!apiKey) {
-      return res.status(500).json({
+      res.setHeader("Vercel-CDN-Cache-Control", "no-store");
+    return res.status(500).json({
         error:
           "TMDB_API_KEY が設定されていません。"
       });
@@ -1014,7 +1026,8 @@ if (provider === "disney") {
 
     if (!query) {
 
-      return res.status(400).json({
+      res.setHeader("Vercel-CDN-Cache-Control", "no-store");
+    return res.status(400).json({
         error:
           "映画名を入力してください。"
       });
@@ -2107,6 +2120,7 @@ return res.status(200).json({
       error
     );
 
+    res.setHeader("Vercel-CDN-Cache-Control", "no-store");
     return res.status(500).json({
       error:
         "サーバー内部でエラーが発生しました。"
