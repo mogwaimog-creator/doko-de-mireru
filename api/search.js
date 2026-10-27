@@ -88,6 +88,28 @@ module.exports = async function handler(req, res) {
 
 
 
+  // 不正・過大な入力はTMDBに接続する前に拒否する。
+  // 通常の作品検索、人物検索、作品ID検索への影響を抑えるため
+  // 文字数とページ数だけを保守的に検証する。
+  const params = req.query || {};
+  const textKeys = ["query", "personSearch"];
+  for (const key of textKeys) {
+    if (params[key] !== undefined &&
+        (typeof params[key] !== "string" ||
+         params[key].length > 120)) {
+      res.setHeader("Cache-Control", "no-store");
+      return res.status(400).json({ error: "検索条件が長すぎるか不正です。" });
+    }
+  }
+  for (const key of ["page", "genrePage"]) {
+    if (params[key] !== undefined &&
+        (!/^\d{1,3}$/.test(String(params[key])) ||
+         Number(params[key]) < 1 || Number(params[key]) > 100)) {
+      res.setHeader("Cache-Control", "no-store");
+      return res.status(400).json({ error: "ページ番号が不正です。" });
+    }
+  }
+
   try {
 
     // =====================================================
