@@ -42,6 +42,25 @@ const apiRoot=location.protocol==='file:'||['localhost','127.0.0.1'].includes(lo
 function normalize(items){const aliases={1796:8,2100:9},seen=new Set(),out=[];for(const p of Array.isArray(items)?items:[]){if(!p)continue;const id=aliases[p.provider_id]||p.provider_id;if(seen.has(id))continue;seen.add(id);out.push(items.find(x=>x.provider_id===id)||{...p,provider_id:id,provider_name:id===8?'Netflix':id===9?'Amazon Prime Video':p.provider_name})}return out}
 function paint(key,items,failed=false){document.querySelectorAll('.providers').forEach(box=>{if(box.dataset.key!==key)return;box.replaceChildren();const list=normalize(items);if(failed||!list.length){box.textContent=failed?'配信状況は作品詳細・公式でご確認ください':'見放題の掲載情報なし。レンタル・購入は作品詳細で確認';return}const label=document.createElement('strong');label.textContent='見放題';box.append(label);list.forEach(p=>{if(!p.logo_path)return;const img=document.createElement('img');img.src='https://image.tmdb.org/t/p/w92'+p.logo_path;img.alt=p.provider_name||'配信サービス';img.title=p.provider_name||'';img.loading='lazy';box.append(img)})})}
 async function refresh(m){try{if(!m.id){const r=await fetch(apiRoot+'/api/search?query='+encodeURIComponent('Minions Monsters')+'&type=movie');if(!r.ok)throw Error();const d=await r.json(),arr=Array.isArray(d)?d:d.results||d.items||[];const found=arr.find(x=>String(x.release_date||'').startsWith('2026')&&/minion/i.test((x.original_title||'')+' '+(x.title||'')));if(!found)throw Error();m.id=found.id;document.querySelectorAll('.movie').forEach(el=>{if(el.dataset.key!==m.key)return;const a=el.querySelector('.detail');a.href='detail.html?id='+m.id+'&type=movie';a.textContent='作品詳細・配信先を見る →';if(found.poster_path){const img=document.createElement('img');img.className='poster';img.src='https://image.tmdb.org/t/p/w342'+found.poster_path;img.alt=m.title+'のポスター';img.loading='lazy';el.querySelector('.poster').replaceWith(img)}})}const r=await fetch(apiRoot+'/api/search?id='+m.id+'&type=movie');if(!r.ok)throw Error();const d=await r.json();if(!Array.isArray(d.streaming))throw Error();paint(m.key,d.streaming)}catch{if(m.streaming.length){paint(m.key,m.streaming);document.querySelectorAll('.providers').forEach(box=>{if(box.dataset.key===m.key){const note=document.createElement('span');note.textContent='（更新できず：2026年10月6日の取得情報）';box.append(note)}})}else paint(m.key,[],true)}}
-MOVIES.forEach(m=>paint(m.key,m.streaming,!m.id));let next=0;async function worker(){while(next<MOVIES.length)await refresh(MOVIES[next++])}Promise.all([worker(),worker(),worker()]);
+// 初期表示は保存済みデータのみ。ページ閲覧による /api/search の自動呼び出しを防止。
+MOVIES.forEach(m=>paint(m.key,m.streaming,!m.id));
+// 既存の見放題表示の直前に、手動更新の操作と情報取得日を追加する。
+const streamingControls=document.createElement('div');
+streamingControls.style.cssText='margin:12px 0;padding:12px 14px;border:1px solid #cbd5e1;border-radius:12px;background:#f8fafc;font-size:14px;line-height:1.7';
+const streamingInfo=document.createElement('span');
+streamingInfo.textContent='配信情報：2026年10月6日時点の保存データ。最新情報は作品詳細・公式サービスでご確認ください。';
+const refreshButton=document.createElement('button');
+refreshButton.type='button';refreshButton.textContent='配信情報を今すぐ確認';
+refreshButton.style.cssText='display:block;margin-top:8px;padding:9px 14px;border:1px solid #2563eb;border-radius:9px;background:#eff6ff;color:#1d4ed8;font-size:14px;font-weight:800;cursor:pointer';
+streamingControls.append(streamingInfo,refreshButton);
+const firstMovie=document.querySelector('.movie');
+if(firstMovie)firstMovie.parentElement.insertBefore(streamingControls,firstMovie);
+refreshButton.addEventListener('click',async()=>{
+  refreshButton.disabled=true;refreshButton.textContent='配信情報を確認中…';
+  let next=0;
+  async function worker(){while(next<MOVIES.length)await refresh(MOVIES[next++])}
+  try{await Promise.all([worker(),worker(),worker()]);streamingInfo.textContent='配信情報の確認が完了しました。確認できない作品は保存データを表示しています。';}
+  finally{refreshButton.disabled=false;refreshButton.textContent='配信情報をもう一度確認'}
+});
 document.querySelectorAll('img.poster').forEach(img=>img.addEventListener('error',()=>{const p=document.createElement('div');p.className='poster placeholder';p.textContent='🍌';p.setAttribute('aria-label','ポスター画像を読み込めませんでした');img.replaceWith(p)}));
 </script></body></html>
