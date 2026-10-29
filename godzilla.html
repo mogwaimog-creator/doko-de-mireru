@@ -231,8 +231,8 @@ const cache=new Map();
 const godzillaDetailCache=new Map();
 // 同じ作品を複数箇所に掲載していてもAPI負荷を抑える。
 let godzillaActive=0;const godzillaWaiting=[];
-function godzillaLimited(job){return new Promise((resolve,reject)=>{const run=()=>{godzillaActive++;Promise.resolve().then(job).then(resolve,reject).finally(()=>{godzillaActive--;godzillaWaiting.shift()?.()})};if(godzillaActive<3)run();else godzillaWaiting.push(run)})}
-async function godzillaFetch(url){for(let attempt=0;attempt<3;attempt++){try{const r=await godzillaLimited(()=>fetch(url));if(!r.ok)throw Error('HTTP '+r.status);return await r.json()}catch(e){if(attempt===2)throw e;await new Promise(done=>setTimeout(done,500*(attempt+1)))}}}
+function godzillaLimited(job){return new Promise((resolve,reject)=>{const run=()=>{godzillaActive++;Promise.resolve().then(job).then(resolve,reject).finally(()=>{godzillaActive--;godzillaWaiting.shift()?.()})};if(godzillaActive<2)run();else godzillaWaiting.push(run)})}
+async function godzillaFetch(url){for(let attempt=0;attempt<3;attempt++){try{const r=await godzillaLimited(()=>fetch(url));if(!r.ok)throw Error('HTTP '+r.status);return await r.json()}catch(e){if(attempt===2)throw e;await new Promise(done=>setTimeout(done,900*(attempt+1)))}}}
 // 確認済みTMDB ID。公開年をキーに含めて同名の別作品を混同しない。
 const godzillaKnownIds={
  '1954:ゴジラ':1678,'1955:ゴジラの逆襲':1679,'1962:キングコング対ゴジラ':1680,
@@ -243,6 +243,17 @@ const godzillaKnownIds={
  '1971:ゴジラ対ヘドラ':39464,'1972:地球攻撃命令 ゴジラ対ガイガン':19336,
  '1973:ゴジラ対メガロ':39264,'1974:ゴジラ対メカゴジラ':38582,'1975:メカゴジラの逆襲':19333
 };
+// 取得済みの昭和15作品のポスターを、APIが一時停止した場合にも利用する。
+const godzillaKnownPosters={
+1678:'/tK1tn8fCjhhk1chcFWa6Meu2T9C.jpg',1679:'/aVYnpE57YlPkv1VBT6DF3oOY82U.jpg',
+1680:'/xqhpSW49HeapMKnqGYgLAvbq43E.jpg',1682:'/vsZ84VABklpYCKvLF1XnYSmRSeT.jpg',
+15766:'/odYv7BsoOGe9K7FdOduO5wN0Urm.jpg',19545:'/7mwm5ymi7gdag0NYt2uUxqo195n.jpg',
+3115:'/g1faRjNarrIUfhjiv19N7HB1NvW.jpg',18627:'/cDACYf1ckBCk3hYmLNxZYv17eRN.jpg',
+3107:'/in8ERJqaQoZCh9ObOClUps8YJks.jpg',39462:'/2GisK3KxniLPQewIm2KF9Mq5vDb.jpg',
+39464:'/c7OdBLcx3Q7UrFty2lAWGMCEX6A.jpg',19336:'/qlrT24kx6GnuzKq3MX4PohhN52E.jpg',
+39264:'/bQ9VvHVkwRHyLV4yZwTqUxQ2rQR.jpg',38582:'/wNK64eTwwU8Io3gvGbWM4rZGUUL.jpg',
+19333:'/dpEuCwRBErdkXwQjHd9qsnoo9ot.jpg'
+};
 function godzillaDetail(match){const key=match.type+":"+match.id;if(!godzillaDetailCache.has(key))godzillaDetailCache.set(key,godzillaFetch(apiRoot+"/api/search?id="+match.id+"&type="+match.type).catch(e=>{godzillaDetailCache.delete(key);throw e}));return godzillaDetailCache.get(key)}
 function normalize(s){return String(s||'').normalize('NFKC').toLowerCase().replace(/[\s・:：×x\-ー／\/!！,.。、]/g,'')}
 async function resolve(box){
@@ -250,7 +261,7 @@ async function resolve(box){
  const type=['モナーク：レガシー・オブ・モンスターズ','スカル・アイランド'].includes(query)?'tv':'movie';
  const key=type+':'+query+':'+year;
  const knownId=type==='movie'?godzillaKnownIds[year+':'+query]:null;
- if(knownId){try{const data=await godzillaDetail({id:knownId,type});return {id:knownId,type,poster:data.poster_path||null}}catch(e){console.warn('Godzilla direct ID failed',knownId,e);return {id:knownId,type,poster:null}}}
+ if(knownId){return {id:knownId,type,poster:godzillaKnownPosters[knownId]||null}}
  if(!cache.has(key))cache.set(key,(async()=>{
   const variants=[query];
   // TMDBの日本語表記ゆれを吸収する。年の異なる同名作品は決して混同しない。
@@ -265,10 +276,12 @@ async function resolve(box){
      return y===year&&(title===normalize(query)||original===normalize(query)||title===normalize(term)||original===normalize(term));
     });
     if(exact?.id)return {id:exact.id,type,poster:exact.poster_path};
+    const sameYear=results.filter(item=>Number(String(item.release_date||item.first_air_date||item.year||'').slice(0,4))===year);
+    if(sameYear.length===1&&sameYear[0]?.id)return {id:sameYear[0].id,type,poster:sameYear[0].poster_path};
    }catch(e){console.warn('Godzilla lookup failed',term,e)}
   }
   return null;
- })());
+ })().then(result=>{if(!result)cache.delete(key);return result},error=>{cache.delete(key);throw error}));
  return cache.get(key);
 }
 function searchFallback(box){return 'index.html?query='+encodeURIComponent(box.dataset.query||'')}
