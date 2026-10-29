@@ -307,7 +307,8 @@ const godzillaKnownIds={
  '1967:怪獣島の決戦 ゴジラの息子':18627,'1968:怪獣総進撃':3107,
  '1969:ゴジラ・ミニラ・ガバラ オール怪獣大進撃':39462,
  '1971:ゴジラ対ヘドラ':39464,'1972:地球攻撃命令 ゴジラ対ガイガン':19336,
- '1973:ゴジラ対メガロ':39264,'1974:ゴジラ対メカゴジラ':38582,'1975:メカゴジラの逆襲':19333
+ '1973:ゴジラ対メガロ':39264,'1974:ゴジラ対メカゴジラ':38582,'1975:メカゴジラの逆襲':19333,
+ '1994:ゴジラvsスペースゴジラ':39466,'1995:ゴジラvsデストロイア':12561
 };
 // 取得済みの昭和15作品のポスターを、APIが一時停止した場合にも利用する。
 const godzillaKnownPosters={
@@ -322,12 +323,25 @@ const godzillaKnownPosters={
 };
 function godzillaDetail(match){const key=match.type+":"+match.id;if(!godzillaDetailCache.has(key))godzillaDetailCache.set(key,godzillaFetch(apiRoot+"/api/search?id="+match.id+"&type="+match.type).catch(e=>{godzillaDetailCache.delete(key);throw e}));return godzillaDetailCache.get(key)}
 function normalize(s){return String(s||'').normalize('NFKC').toLowerCase().replace(/[\s・:：×x\-ー／\/!！,.。、]/g,'')}
+// 一度特定できた作品ID・ポスターをブラウザ内に長期保存。
+// 配信情報の24時間保存とは別で、次回表示時のタイトル検索を省く。
+const GODZILLA_ID_TTL=90*24*60*60*1000;
+function godzillaReadIdentity(key){
+ try{const v=JSON.parse(localStorage.getItem('godzilla:identity:v2:'+key)||'null');
+  if(v&&v.id&&v.savedAt&&Date.now()-v.savedAt<GODZILLA_ID_TTL)return {id:v.id,type:v.type,poster:v.poster||null};
+ }catch(e){}return null;
+}
+function godzillaSaveIdentity(key,v){
+ if(!v||!v.id)return;
+ try{localStorage.setItem('godzilla:identity:v2:'+key,JSON.stringify({...v,savedAt:Date.now()}))}catch(e){}
+}
 async function resolve(box){
  const year=Number(box.dataset.year),query=box.dataset.query;
  const type=['モナーク：レガシー・オブ・モンスターズ','スカル・アイランド'].includes(query)?'tv':'movie';
  const key=type+':'+query+':'+year;
  const knownId=type==='movie'?godzillaKnownIds[year+':'+query]:null;
- if(knownId){return {id:knownId,type,poster:godzillaKnownPosters[knownId]||null}}
+ if(knownId){return {id:knownId,type,poster:godzillaKnownPosters[knownId]||godzillaReadIdentity(key)?.poster||null}}
+ const saved=godzillaReadIdentity(key);if(saved)return saved;
  if(!cache.has(key))cache.set(key,(async()=>{
   const variants=[query];
   // TMDBの日本語表記ゆれを吸収する。年の異なる同名作品は決して混同しない。
@@ -347,7 +361,7 @@ async function resolve(box){
    }catch(e){console.warn('Godzilla lookup failed',term,e)}
   }
   return null;
- })().then(result=>{if(!result)cache.delete(key);return result},error=>{cache.delete(key);throw error}));
+ })().then(result=>{if(result)godzillaSaveIdentity(key,result);else cache.delete(key);return result},error=>{cache.delete(key);throw error}));
  return cache.get(key);
 }
 function searchFallback(box){return 'index.html?query='+encodeURIComponent(box.dataset.query||'')}
@@ -381,12 +395,14 @@ async function fill(box){
 // 確認済み作品は通信を待たずにポスターと詳細リンクを表示する。
 // 配信情報だけを後から取得するため、429でも基本情報を失わない。
 function godzillaShowStatic(box){
- const id=godzillaKnownIds[box.dataset.year+':'+box.dataset.query];
+ const type=['モナーク：レガシー・オブ・モンスターズ','スカル・アイランド'].includes(box.dataset.query)?'tv':'movie';
+ const identity=godzillaReadIdentity(type+':'+box.dataset.query+':'+box.dataset.year);
+ const id=godzillaKnownIds[box.dataset.year+':'+box.dataset.query]||identity?.id;
  if(!id)return;
  const link=box.querySelector('[data-detail]');
- if(link){link.href='detail.html?id='+id+'&type=movie';link.textContent='作品詳細を見る →'}
+ if(link){link.href='detail.html?id='+id+'&type='+type;link.textContent='作品詳細を見る →'}
  const poster=box.querySelector('[data-poster]');
- const path=godzillaKnownPosters[id];
+ const path=godzillaKnownPosters[id]||identity?.poster;
  if(poster&&path&&!poster.querySelector('img')){
   poster.textContent='';
   const img=document.createElement('img');
