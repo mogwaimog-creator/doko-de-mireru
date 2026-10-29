@@ -259,7 +259,25 @@ function godzillaPump(){
   godzillaPump();
  });
 }
+// 24時間ブラウザキャッシュ。正常取得したID別詳細のみ保存し、失敗は保存しない。
+// 共有CDNキャッシュとは別。サーバー側の設定は変更しない。
+const GODZILLA_CACHE_TTL=24*60*60*1000;
+function godzillaStoredKey(url){
+ try {const u=new URL(url,location.href);return u.searchParams.has('id')&&u.pathname==='/api/search'?'godzilla-detail-v1:'+u.searchParams.get('type')+':'+u.searchParams.get('id'):null}
+ catch(e){return null}
+}
+function godzillaReadStored(url){
+ const key=godzillaStoredKey(url);if(!key)return null;
+ try{const entry=JSON.parse(localStorage.getItem(key)||'null');if(entry&&entry.savedAt>Date.now()-GODZILLA_CACHE_TTL&&entry.data&&entry.data.id)return entry.data;
+ if(entry)localStorage.removeItem(key)}catch(e){}return null;
+}
+function godzillaSaveStored(url,data){
+ const key=godzillaStoredKey(url);if(!key||!data||!data.id)return;
+ try{localStorage.setItem(key,JSON.stringify({savedAt:Date.now(),data}))}catch(e){}
+}
 function godzillaFetch(url){
+ const stored=godzillaReadStored(url);
+ if(stored)return Promise.resolve(stored);
  if(godzillaResponseCache.has(url))return godzillaResponseCache.get(url);
  const task=godzillaQueue(async()=>{
   const controller=new AbortController();
@@ -272,7 +290,9 @@ function godzillaFetch(url){
     throw Error('HTTP 429 (Vercel rate limit)');
    }
    if(!r.ok)throw Error('HTTP '+r.status);
-   return await r.json();
+   const data=await r.json();
+   godzillaSaveStored(url,data);
+   return data;
   }finally{clearTimeout(timeout)}
  });
  godzillaResponseCache.set(url,task);
@@ -337,7 +357,7 @@ async function fill(box){
  // リンクを先に安全な検索導線に設定。API応答待ちでもトップへ誤誘導しない。
  if(link){const known=godzillaKnownIds[box.dataset.year+':'+box.dataset.query];link.href=known?'detail.html?id='+known+'&type=movie':searchFallback(box);link.textContent=known?'作品詳細を見る →':'作品を検索する →'}
  const match=await resolve(box);
- if(poster){poster.textContent='';if(match?.poster){const img=document.createElement('img');img.src='https://image.tmdb.org/t/p/w185'+match.poster;img.alt=box.querySelector('h3')?.textContent+'のポスター';img.loading='lazy';poster.append(img)}else poster.textContent='画像なし'}
+ if(poster && !poster.querySelector('img')){poster.textContent='';if(match?.poster){const img=document.createElement('img');img.src='https://image.tmdb.org/t/p/w185'+match.poster;img.alt=box.querySelector('h3')?.textContent+'のポスター';img.loading='lazy';poster.append(img)}else poster.textContent='画像なし'}
  if(!match){if(providers)providers.textContent='配信情報を取得できませんでした';return}
  if(link){link.href='detail.html?id='+encodeURIComponent(match.id)+'&type='+match.type;link.textContent='作品詳細を見る →'}
  if(!providers)return;
@@ -356,7 +376,35 @@ async function fill(box){
  }
 }
 
-const boxes=[...document.querySelectorAll('.work:not(.upcoming)')];for(const box of boxes){box.querySelector('[data-detail]')?.addEventListener('click',async event=>{if(event.currentTarget.getAttribute('href')!=='#')return;event.preventDefault();const match=await resolve(box);if(match)location.href='detail.html?id='+encodeURIComponent(match.id)+'&type='+match.type;else location.href=searchFallback(box)})}if('IntersectionObserver'in window){const io=new IntersectionObserver(entries=>{for(const e of entries)if(e.isIntersecting){io.unobserve(e.target);fill(e.target)}},{rootMargin:'80px'});boxes.forEach(box=>io.observe(box))}else boxes.forEach(fill);
+// 配信情報の注意書きは、既存の作品カードを変更せず各表示欄の直後に配置する。
+document.querySelectorAll('.work [data-providers]').forEach(el=>{
+ const note=document.createElement('p');
+ note.className='provider-official-notice';
+ note.textContent='配信状況は変更される場合があります。視聴前に各配信サービスの公式サイトで最新情報をご確認ください。';
+ note.style.cssText='font-size:14px;line-height:1.6;margin:6px 0 0;opacity:.86';
+ el.insertAdjacentElement('afterend',note);
+});
+// 確認済み作品は通信を待たずにポスターと詳細リンクを表示する。
+// 配信情報だけを後から取得するため、429でも基本情報を失わない。
+function godzillaShowStatic(box){
+ const id=godzillaKnownIds[box.dataset.year+':'+box.dataset.query];
+ if(!id)return;
+ const link=box.querySelector('[data-detail]');
+ if(link){link.href='detail.html?id='+id+'&type=movie';link.textContent='作品詳細を見る →'}
+ const poster=box.querySelector('[data-poster]');
+ const path=godzillaKnownPosters[id];
+ if(poster&&path&&!poster.querySelector('img')){
+  poster.textContent='';
+  const img=document.createElement('img');
+  img.src='https://image.tmdb.org/t/p/w185'+path;
+  img.alt=(box.querySelector('h3')?.textContent||box.dataset.query)+'のポスター';
+  img.loading='lazy';
+  poster.append(img);
+ }
+}
+const boxes=[...document.querySelectorAll('.work:not(.upcoming)')];
+boxes.forEach(godzillaShowStatic);
+for(const box of boxes){box.querySelector('[data-detail]')?.addEventListener('click',async event=>{if(event.currentTarget.getAttribute('href')!=='#')return;event.preventDefault();const match=await resolve(box);if(match)location.href='detail.html?id='+encodeURIComponent(match.id)+'&type='+match.type;else location.href=searchFallback(box)})}if('IntersectionObserver'in window){const io=new IntersectionObserver(entries=>{for(const e of entries)if(e.isIntersecting){io.unobserve(e.target);fill(e.target)}},{rootMargin:'80px'});boxes.forEach(box=>io.observe(box))}else boxes.forEach(fill);
 </script><script>
 (function(){
   const tabs=[...document.querySelectorAll('.series-tabs a[data-tab]')];
