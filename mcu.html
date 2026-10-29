@@ -14852,214 +14852,37 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
 </footer> 
   
 
-<script>  
-  
-  
-/* =====================================================
-   MCU 全作品 配信ロゴ読み込み
-   ・映画／ドラマに対応
-   ・同じ作品IDはキャッシュ
-   ・画面付近に来たカードだけ取得
-===================================================== */
-
-const mcuProviderCache = new Map();
-
-async function fetchMcuProviders(id, type){
-
-  const key = id + ':' + type;
-
-  if(mcuProviderCache.has(key)){
-    return mcuProviderCache.get(key);
-  }
-
-  const request = (async () => {
-
-    try{
-
-      const response =
-        await fetch(
-          dokoApiRoot + '/api/search?id=' +
-          encodeURIComponent(id) +
-          '&type=' +
-          encodeURIComponent(type)
-        );
-
-      if(!response.ok){
-        throw new Error(
-          '配信情報を取得できませんでした'
-        );
-      }
-
-      const data =
-        await response.json();
-
-      const providers =
-        Array.isArray(data.streaming)
-          ? dokoNormalizeStreaming(data.streaming)
-          : [];
-
-      const unique = [];
-
-      for(const provider of providers){
-
-        if(
-          !provider ||
-          !provider.logo_path
-        ){
-          continue;
-        }
-
-        if(
-          unique.some(
-            item =>
-              item.provider_id ===
-              provider.provider_id
-          )
-        ){
-          continue;
-        }
-
-        unique.push(provider);
-      }
-
-      return unique;
-
-    }catch(error){
-
-      console.error(
-        'MCU配信ロゴ取得エラー:',
-        id,
-        type,
-        error
-      );
-
-      return [];
-    }
-
-  })();
-
-  mcuProviderCache.set(key, request);
-
-  return request;
-}
-
-
+<script>
+/* MCU配信ロゴ：Redisの保存済み情報を一括取得。訪問者からTMDBへ問い合わせない */
+const mcuCachedRecords=fetch('/api/series-watch?series=mcu',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('配信API '+r.status);return r.json();}).then(d=>d.providers||{});
+async function getMcuCachedRecord(id,type){const records=await mcuCachedRecords;return records[type+':'+id]||null;}
 async function loadMcuProviderBox(box){
-
-  if(
-    !box ||
-    box.dataset.loaded === '1' ||
-    box.dataset.loading === '1'
-  ){
-    return;
+ if(!box||box.dataset.loaded||box.dataset.loading)return;
+ box.dataset.loading='1';
+ try{
+  const record=await getMcuCachedRecord(box.dataset.id,box.dataset.type||'movie');
+  box.replaceChildren();
+  if(!record){box.textContent='配信情報を確認中です';}
+  else if(!record.flatrate.length){box.textContent='見放題の掲載情報なし';}
+  else{
+   const seen=new Set();
+   for(const p of record.flatrate){
+    if(!p.logo_path||seen.has(p.provider_id))continue;
+    seen.add(p.provider_id);
+    const img=document.createElement('img');img.src='https://image.tmdb.org/t/p/w92'+p.logo_path;img.alt=p.provider_name||'配信サービス';img.loading='lazy';box.append(img);
+   }
+   if(!box.children.length)box.textContent='見放題情報は未確認です';
   }
-
-  const id =
-    box.dataset.id;
-
-  const type =
-    box.dataset.type || 'movie';
-
-  if(!id){
-    return;
-  }
-
-  box.dataset.loading = '1';
-
-  const providers =
-    await fetchMcuProviders(
-      id,
-      type
-    );
-
-  delete box.dataset.loading;
-
-  if(providers.length === 0){
-    box.innerHTML = '<span class="doko-provider-unconfirmed">見放題情報は未確認です</span>';
-    box.dataset.loaded = '1';
-    return;
-  }
-
-  box.innerHTML = '';
-
-  for(const provider of providers){
-
-    const img =
-      document.createElement('img');
-
-    img.src =
-      'https://image.tmdb.org/t/p/w92' +
-      provider.logo_path;
-
-    img.alt =
-      provider.provider_name ||
-      '配信サービス';
-
-    img.loading = 'lazy';
-
-    box.appendChild(img);
-  }
-
-  box.dataset.loaded = '1';
+ }catch(e){console.error('MCU保存済み配信情報:',e);box.textContent='配信情報を取得できませんでした';}
+ finally{delete box.dataset.loading;box.dataset.loaded='1';}
 }
-
-
-function startMcuProviderLoading(){
-
-  const boxes =
-    document.querySelectorAll(
-      '.mcu-provider-logos[data-id]'
-    );
-
-  if(!boxes.length){
-    return;
-  }
-
-  if(
-    'IntersectionObserver' in window
-  ){
-
-    const observer =
-      new IntersectionObserver(
-        entries => {
-
-          entries.forEach(entry => {
-
-            if(!entry.isIntersecting){
-              return;
-            }
-
-            observer.unobserve(
-              entry.target
-            );
-
-            loadMcuProviderBox(
-              entry.target
-            );
-
-          });
-
-        },
-        {
-          rootMargin:'500px 0px'
-        }
-      );
-
-    boxes.forEach(box => {
-      observer.observe(box);
-    });
-
-  }else{
-
-    boxes.forEach(box => {
-      loadMcuProviderBox(box);
-    });
-
-  }
-
-}
-
-startMcuProviderLoading();
+(function(){
+ const boxes=document.querySelectorAll('.mcu-provider-logos[data-id]');
+ if('IntersectionObserver' in window){
+  const observer=new IntersectionObserver(entries=>{for(const e of entries)if(e.isIntersecting){observer.unobserve(e.target);loadMcuProviderBox(e.target);}},{rootMargin:'500px 0px'});
+  boxes.forEach(box=>observer.observe(box));
+ }else boxes.forEach(loadMcuProviderBox);
+})();
 </script>
 <button aria-label="ページ上部へ戻る" id="backToTop">
   ↑ TOPへ
@@ -15308,39 +15131,38 @@ if(mcuView === "short"){
 
 </script>
 <script>
+/* MCU配信比較表：保存済み見放題情報のみ。レンタル・購入は詳細ページで確認 */
 (function(){
- const list=document.getElementById('mcuWatchList');
- const isStreaming=new URLSearchParams(location.search).get('view')==='streaming';
- list.style.display=isStreaming?'':'none';
- if(isStreaming){const faq=document.getElementById('mcuFaq');if(faq)faq.style.display='none';}
- const rows=[...document.querySelectorAll('#mcuWatchList tbody tr[data-watch-id]')],cache=new Map(),queue=[];let active=0;
-
+ const list=document.getElementById('mcuWatchList');if(!list)return;
+ const active=new URLSearchParams(location.search).get('view')==='streaming';
+ list.style.display=active?'':'none';
+ if(active){const faq=document.getElementById('mcuFaq');if(faq)faq.style.display='none';}
+ if(!active)return;
+ const rows=[...list.querySelectorAll('tbody tr[data-watch-id]')];
  const isDisney=p=>Number(p.provider_id)===337||/disney/i.test(p.provider_name||'');
- function names(items){return [...new Set(items.map(p=>p.provider_name).filter(Boolean))].join('、');}
- function group(cell,label,items){
-  if(!items.length)return;
-  const disney=cell.hasAttribute('data-watch-disney');
-  const block=document.createElement(disney?'div':'details');block.className='watch-provider-group';
-  const badge=document.createElement(disney?'b':'summary');badge.className='watch-kind '+({'見放題':'watch-kind-streaming','レンタル':'watch-kind-rental','購入':'watch-kind-purchase'}[label]);
-  const count=new Set(items.map(p=>p.provider_name).filter(Boolean)).size;
-  badge.textContent=disney?label:label+' '+count+'件';block.append(badge);
-  if(!disney){const serviceNames=document.createElement('div');serviceNames.className='watch-service-names';serviceNames.textContent=names(items);block.append(serviceNames);}
-  cell.append(block);
+ function render(cell,items){
+  cell.replaceChildren();
+  if(!items.length){cell.textContent='見放題の掲載情報なし';return;}
+  const badge=document.createElement('b');badge.className='watch-kind watch-kind-streaming';badge.textContent='見放題';cell.append(badge);
+  const names=document.createElement('div');names.className='watch-service-names';names.textContent=[...new Set(items.map(p=>p.provider_name).filter(Boolean))].join('、');cell.append(names);
  }
  async function load(row){
-  const key=row.dataset.watchType+':'+row.dataset.watchId;
-
-  if(!cache.has(key))cache.set(key,fetch(dokoApiRoot + '/api/search?id='+encodeURIComponent(row.dataset.watchId)+'&type='+encodeURIComponent(row.dataset.watchType)).then(r=>{if(!r.ok)throw Error('fetch');return r.json();}).then(data=>{if(!Array.isArray(data.streaming))throw Error('data');return data;}));
   const disney=row.querySelector('[data-watch-disney]'),other=row.querySelector('[data-watch-other]');
-  try{const data=await cache.get(key),groups=[['見放題','streaming'],['レンタル','rental'],['購入','purchase']];disney.textContent='';other.textContent='';
-   for(const [label,k] of groups){const list=Array.isArray(data[k])?(k==='streaming'?dokoNormalizeStreaming(data[k]):data[k]):[];group(disney,label,list.filter(isDisney));group(other,label,list.filter(p=>!isDisney(p)));}
-   if(!disney.childNodes.length)disney.textContent='掲載情報なし';if(!other.childNodes.length)other.textContent='掲載情報なし';
-   const date=document.createElement('small');date.textContent='取得日：'+new Date().toLocaleDateString('ja-JP',{timeZone:'Asia/Tokyo'});other.append(date);
-  }catch(e){disney.textContent='取得できませんでした';other.textContent='作品詳細でご確認ください';}
+  if(!disney||!other)return;
+  try{
+   const record=await getMcuCachedRecord(row.dataset.watchId,row.dataset.watchType);
+   if(!record){disney.textContent='配信情報を確認中です';other.textContent='配信情報を確認中です';return;}
+   render(disney,record.flatrate.filter(isDisney));render(other,record.flatrate.filter(p=>!isDisney(p)));
+   const note=document.createElement('small');note.textContent='レンタル・購入は作品詳細で確認';other.append(note);
+  }catch(e){console.error('MCU配信比較表:',e);disney.textContent='取得できませんでした';other.textContent='取得できませんでした';}
  }
- function pump(){while(active<4&&queue.length){active++;load(queue.shift()).finally(()=>{active--;pump();});}}
+ const queue=[];let running=0;
+ function pump(){while(running<6&&queue.length){running++;load(queue.shift()).finally(()=>{running--;pump();});}}
  function enqueue(row){if(row.dataset.watchQueued)return;row.dataset.watchQueued='1';queue.push(row);pump();}
- if('IntersectionObserver' in window){const observer=new IntersectionObserver(entries=>{for(const e of entries)if(e.isIntersecting){enqueue(e.target);observer.unobserve(e.target);}},{rootMargin:'200px'});rows.forEach(row=>observer.observe(row));}else rows.forEach(enqueue);
+ if('IntersectionObserver' in window){
+  const observer=new IntersectionObserver(entries=>{for(const e of entries)if(e.isIntersecting){enqueue(e.target);observer.unobserve(e.target);}},{rootMargin:'300px'});
+  rows.forEach(row=>observer.observe(row));
+ }else rows.forEach(enqueue);
 })();
 </script>
 <script>
