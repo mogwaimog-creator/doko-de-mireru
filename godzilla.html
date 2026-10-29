@@ -231,8 +231,8 @@ const cache=new Map();
 const godzillaDetailCache=new Map();
 // 同じ作品を複数箇所に掲載していてもAPI負荷を抑える。
 let godzillaActive=0;const godzillaWaiting=[];
-function godzillaLimited(job){return new Promise((resolve,reject)=>{const run=()=>{godzillaActive++;Promise.resolve().then(job).then(resolve,reject).finally(()=>{godzillaActive--;godzillaWaiting.shift()?.()})};if(godzillaActive<2)run();else godzillaWaiting.push(run)})}
-async function godzillaFetch(url){for(let attempt=0;attempt<3;attempt++){try{const r=await godzillaLimited(()=>fetch(url));if(!r.ok)throw Error('HTTP '+r.status);return await r.json()}catch(e){if(attempt===2)throw e;await new Promise(done=>setTimeout(done,900*(attempt+1)))}}}
+function godzillaLimited(job){return new Promise((resolve,reject)=>{const run=()=>{godzillaActive++;Promise.resolve().then(job).then(resolve,reject).finally(()=>{godzillaActive--;godzillaWaiting.shift()?.()})};if(godzillaActive<1)run();else godzillaWaiting.push(run)})}
+async function godzillaFetch(url){for(let attempt=0;attempt<3;attempt++){try{const r=await godzillaLimited(()=>fetch(url));if(!r.ok)throw Error('HTTP '+r.status);return await r.json()}catch(e){if(attempt===2)throw e;await new Promise(done=>setTimeout(done,1500*(attempt+1)))}}}
 // 確認済みTMDB ID。公開年をキーに含めて同名の別作品を混同しない。
 const godzillaKnownIds={
  '1954:ゴジラ':1678,'1955:ゴジラの逆襲':1679,'1962:キングコング対ゴジラ':1680,
@@ -289,7 +289,7 @@ async function fill(box){
  const link=box.querySelector('[data-detail]'),providers=box.querySelector('[data-providers]');
  const poster=box.querySelector('[data-poster]');
  // リンクを先に安全な検索導線に設定。API応答待ちでもトップへ誤誘導しない。
- if(link){link.href=searchFallback(box);link.textContent='作品を検索する →'}
+ if(link){const known=godzillaKnownIds[box.dataset.year+':'+box.dataset.query];link.href=known?'detail.html?id='+known+'&type=movie':searchFallback(box);link.textContent=known?'作品詳細を見る →':'作品を検索する →'}
  const match=await resolve(box);
  if(poster){poster.textContent='';if(match?.poster){const img=document.createElement('img');img.src='https://image.tmdb.org/t/p/w185'+match.poster;img.alt=box.querySelector('h3')?.textContent+'のポスター';img.loading='lazy';poster.append(img)}else poster.textContent='画像なし'}
  if(!match){if(providers)providers.textContent='配信情報を取得できませんでした';return}
@@ -303,8 +303,13 @@ async function fill(box){
   if(!unique.length){providers.textContent='見放題情報は未確認です';return}
   const label=document.createElement('span');label.className='providers-label';label.textContent='見放題';providers.append(label);
   for(const p of unique){const img=document.createElement('img');img.src='https://image.tmdb.org/t/p/w92'+p.logo_path;img.alt=p.provider_name||'配信サービス';img.loading='lazy';providers.append(img)}
- }catch(e){providers.textContent='配信情報を取得できませんでした'}
+ }catch(e){
+  providers.textContent='配信情報を取得できませんでした ';
+  const retry=document.createElement('button');retry.type='button';retry.textContent='再確認';retry.style.cssText='font-size:15px;padding:5px 10px;cursor:pointer';
+  retry.addEventListener('click',async()=>{providers.textContent='配信情報を再確認中…';await fill(box)});providers.append(retry);
+ }
 }
+
 const boxes=[...document.querySelectorAll('.work:not(.upcoming)')];for(const box of boxes){box.querySelector('[data-detail]')?.addEventListener('click',async event=>{if(event.currentTarget.getAttribute('href')!=='#')return;event.preventDefault();const match=await resolve(box);if(match)location.href='detail.html?id='+encodeURIComponent(match.id)+'&type='+match.type;else location.href=searchFallback(box)})}if('IntersectionObserver'in window){const io=new IntersectionObserver(entries=>{for(const e of entries)if(e.isIntersecting){io.unobserve(e.target);fill(e.target)}},{rootMargin:'250px'});boxes.forEach(box=>io.observe(box))}else boxes.forEach(fill);
 </script><script>
 (function(){
