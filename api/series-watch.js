@@ -1,13 +1,17 @@
 'use strict';
 // Read-only endpoint: never calls TMDB and never triggers refresh.
 const {command}=require('./_redis');
-const works=require('../data/godzilla-works.json');
+const godzillaWorks=require('../data/godzilla-works.json');
+const allWorks=require('../data/streaming-works.json');
+const godzillaKeys=new Set(godzillaWorks.map(w=>`${w.type}:${w.id}`));
+const mcuWorks=allWorks.filter(w=>!godzillaKeys.has(`${w.type}:${w.id}`));
 const KEYPREFIX='doko:watch:v3:';
 const MAX_AGE_MS=36*60*60*1000; // Daily Hobby updates plus scheduling tolerance.
 module.exports=async(req,res)=>{
   res.setHeader('Cache-Control','public, max-age=0, s-maxage=120, stale-while-revalidate=60');
   if(req.method!=='GET')return res.status(405).json({error:'GET only'});
-  if(req.query.series!=='godzilla')return res.status(400).json({error:'Unknown series'});
+  if(!['godzilla','mcu'].includes(req.query.series))return res.status(400).json({error:'Unknown series'});
+  const works=req.query.series==='godzilla'?godzillaWorks:mcuWorks;
   try{
     const keys=works.map(w=>`${w.type}:${w.id}`);
     const values=await command(['MGET',...keys.map(k=>KEYPREFIX+k)]);
