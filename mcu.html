@@ -14865,10 +14865,17 @@ async function loadMcuProviderBox(box){
   if(!record){box.textContent='配信情報を確認中です';}
   else if(!record.flatrate.length){box.textContent='見放題の掲載情報なし';}
   else{
-   const seen=new Set();
+   // TMDBでは同一サービスに複数のprovider_idが付く場合がある。
+   // IDの別名・同じロゴ画像をまとめ、表示上の重複だけを除外する。
+   const seenIds=new Set(),seenLogos=new Set();
+   const aliases={1796:8,2100:9};
    for(const p of record.flatrate){
-    if(!p.logo_path||seen.has(p.provider_id))continue;
-    seen.add(p.provider_id);
+    if(!p||!p.logo_path)continue;
+    const rawId=Number(p.provider_id);
+    const canonicalId=aliases[rawId]||rawId;
+    const logoKey=p.logo_path;
+    if(seenIds.has(canonicalId)||seenLogos.has(logoKey))continue;
+    seenIds.add(canonicalId);seenLogos.add(logoKey);
     const img=document.createElement('img');img.src='https://image.tmdb.org/t/p/w92'+p.logo_path;img.alt=p.provider_name||'配信サービス';img.loading='lazy';box.append(img);
    }
    if(!box.children.length)box.textContent='見放題情報は未確認です';
