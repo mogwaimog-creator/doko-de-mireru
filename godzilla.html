@@ -229,23 +229,51 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
 const apiRoot=location.protocol==='file:'?'https://doko-de-mireru.com':'';
 const cache=new Map();
 const godzillaDetailCache=new Map();
-// 同じ作品を複数箇所に掲載していてもAPI負荷を抑える。
-let godzillaActive=0;const godzillaWaiting=[];
-// JSONの受信完了まで通信枠を占有する（以前はfetch開始直後に次の通信が始まっていた）。
-function godzillaLimited(job){return new Promise((resolve,reject)=>{const run=async()=>{godzillaActive++;try{resolve(await job())}catch(e){reject(e)}finally{godzillaActive--;const next=godzillaWaiting.shift();if(next)next()}};if(godzillaActive<2)run();else godzillaWaiting.push(run)})}
+// Vercel Firewall: /api/search は同一IPから60秒15回まで。
+// 他ページやタブからの通信にも余裕を残し、このページでは60秒あたり最大10回に抑える。
 const godzillaResponseCache=new Map();
+const godzillaWaiting=[];
+const godzillaSentAt=[];
+let godzillaRunning=false;
+let godzillaBlockedUntil=0;
+const GODZILLA_WINDOW_MS=61000;
+const GODZILLA_MAX_REQUESTS=10;
+function godzillaQueue(job){
+ return new Promise((resolve,reject)=>{
+  godzillaWaiting.push({job,resolve,reject});
+  godzillaPump();
+ });
+}
+function godzillaPump(){
+ if(godzillaRunning||!godzillaWaiting.length)return;
+ const now=Date.now();
+ while(godzillaSentAt.length&&now-godzillaSentAt[0]>=GODZILLA_WINDOW_MS)godzillaSentAt.shift();
+ const wait=Math.max(0,godzillaBlockedUntil-now,
+   godzillaSentAt.length>=GODZILLA_MAX_REQUESTS?GODZILLA_WINDOW_MS-(now-godzillaSentAt[0]):0);
+ if(wait>0){setTimeout(godzillaPump,wait+100);return}
+ godzillaRunning=true;
+ godzillaSentAt.push(now);
+ const item=godzillaWaiting.shift();
+ Promise.resolve().then(item.job).then(item.resolve,item.reject).finally(()=>{
+  godzillaRunning=false;
+  godzillaPump();
+ });
+}
 function godzillaFetch(url){
  if(godzillaResponseCache.has(url))return godzillaResponseCache.get(url);
- const task=godzillaLimited(async()=>{
-  for(let attempt=0;attempt<3;attempt++){
-   try{
-    const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),15000);
-    let r;
-    try{r=await fetch(url,{signal:controller.signal,cache:'default'})}finally{clearTimeout(timeout)}
-    if(!r.ok)throw Error('HTTP '+r.status);
-    return await r.json();
-   }catch(e){if(attempt===2)throw e;await new Promise(done=>setTimeout(done,900*(attempt+1)))}
-  }
+ const task=godzillaQueue(async()=>{
+  const controller=new AbortController();
+  const timeout=setTimeout(()=>controller.abort(),15000);
+  try{
+   const r=await fetch(url,{signal:controller.signal,cache:'default'});
+   if(r.status===429){
+    // Firewallの制限が発動した場合は即時再試行せず、次の通信も待たせる。
+    godzillaBlockedUntil=Math.max(godzillaBlockedUntil,Date.now()+65000);
+    throw Error('HTTP 429 (Vercel rate limit)');
+   }
+   if(!r.ok)throw Error('HTTP '+r.status);
+   return await r.json();
+  }finally{clearTimeout(timeout)}
  });
  godzillaResponseCache.set(url,task);
  task.catch(()=>godzillaResponseCache.delete(url));
