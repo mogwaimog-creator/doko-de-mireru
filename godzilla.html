@@ -229,12 +229,28 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
 const apiRoot=location.protocol==='file:'?'https://doko-de-mireru.com':'';
 const cache=new Map();
 const godzillaDetailCache=new Map();
-function godzillaDetail(match){const key=match.type+":"+match.id;if(!godzillaDetailCache.has(key))godzillaDetailCache.set(key,fetch(apiRoot+"/api/search?id="+match.id+"&type="+match.type).then(r=>{if(!r.ok)throw Error("detail");return r.json()}));return godzillaDetailCache.get(key)}
+// 同じ作品を複数箇所に掲載していてもAPI負荷を抑える。
+let godzillaActive=0;const godzillaWaiting=[];
+function godzillaLimited(job){return new Promise((resolve,reject)=>{const run=()=>{godzillaActive++;Promise.resolve().then(job).then(resolve,reject).finally(()=>{godzillaActive--;godzillaWaiting.shift()?.()})};if(godzillaActive<3)run();else godzillaWaiting.push(run)})}
+async function godzillaFetch(url){for(let attempt=0;attempt<3;attempt++){try{const r=await godzillaLimited(()=>fetch(url));if(!r.ok)throw Error('HTTP '+r.status);return await r.json()}catch(e){if(attempt===2)throw e;await new Promise(done=>setTimeout(done,500*(attempt+1)))}}}
+// 確認済みTMDB ID。公開年をキーに含めて同名の別作品を混同しない。
+const godzillaKnownIds={
+ '1954:ゴジラ':1678,'1955:ゴジラの逆襲':1679,'1962:キングコング対ゴジラ':1680,
+ '1964:モスラ対ゴジラ':1682,'1964:三大怪獣 地球最大の決戦':15766,
+ '1965:怪獣大戦争':19545,'1966:ゴジラ・エビラ・モスラ 南海の大決闘':3115,
+ '1967:怪獣島の決戦 ゴジラの息子':18627,'1968:怪獣総進撃':3107,
+ '1969:ゴジラ・ミニラ・ガバラ オール怪獣大進撃':39462,
+ '1971:ゴジラ対ヘドラ':39464,'1972:地球攻撃命令 ゴジラ対ガイガン':19336,
+ '1973:ゴジラ対メガロ':39264,'1974:ゴジラ対メカゴジラ':38582,'1975:メカゴジラの逆襲':19333
+};
+function godzillaDetail(match){const key=match.type+":"+match.id;if(!godzillaDetailCache.has(key))godzillaDetailCache.set(key,godzillaFetch(apiRoot+"/api/search?id="+match.id+"&type="+match.type).catch(e=>{godzillaDetailCache.delete(key);throw e}));return godzillaDetailCache.get(key)}
 function normalize(s){return String(s||'').normalize('NFKC').toLowerCase().replace(/[\s・:：×x\-ー／\/!！,.。、]/g,'')}
 async function resolve(box){
  const year=Number(box.dataset.year),query=box.dataset.query;
  const type=['モナーク：レガシー・オブ・モンスターズ','スカル・アイランド'].includes(query)?'tv':'movie';
  const key=type+':'+query+':'+year;
+ const knownId=type==='movie'?godzillaKnownIds[year+':'+query]:null;
+ if(knownId){try{const data=await godzillaDetail({id:knownId,type});return {id:knownId,type,poster:data.poster_path||null}}catch(e){console.warn('Godzilla direct ID failed',knownId,e);return {id:knownId,type,poster:null}}}
  if(!cache.has(key))cache.set(key,(async()=>{
   const variants=[query];
   // TMDBの日本語表記ゆれを吸収する。年の異なる同名作品は決して混同しない。
@@ -242,9 +258,7 @@ async function resolve(box){
   const swapped=query.replace(/vs/gi,'対').replace(/×/g,'対');if(swapped!==query)variants.push(swapped);
   for(const term of [...new Set(variants)]){
    try{
-    const r=await fetch(apiRoot+'/api/search?query='+encodeURIComponent(term)+'&type='+type);
-    if(!r.ok)continue;
-    const data=await r.json();const results=Array.isArray(data.results)?data.results:[];
+    const data=await godzillaFetch(apiRoot+'/api/search?query='+encodeURIComponent(term)+'&type='+type);const results=Array.isArray(data.results)?data.results:[];
     const exact=results.find(item=>{
      const y=Number(String(item.release_date||item.first_air_date||item.year||'').slice(0,4));
      const title=normalize(item.title||item.name),original=normalize(item.original_title||item.original_name);
