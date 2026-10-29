@@ -231,10 +231,54 @@ const cache=new Map();
 const godzillaDetailCache=new Map();
 function godzillaDetail(match){const key=match.type+":"+match.id;if(!godzillaDetailCache.has(key))godzillaDetailCache.set(key,fetch(apiRoot+"/api/search?id="+match.id+"&type="+match.type).then(r=>{if(!r.ok)throw Error("detail");return r.json()}));return godzillaDetailCache.get(key)}
 function normalize(s){return String(s||'').normalize('NFKC').toLowerCase().replace(/[\s・:：×x\-ー／\/!！,.。、]/g,'')}
-async function resolve(box){const year=Number(box.dataset.year),query=box.dataset.query,type=['モナーク：レガシー・オブ・モンスターズ','スカル・アイランド'].includes(query)?'tv':'movie';const key=type+':'+query+':'+year;if(!cache.has(key))cache.set(key,fetch(apiRoot+'/api/search?query='+encodeURIComponent(query)+'&type='+type).then(r=>{if(!r.ok)throw Error('search');return r.json()}).then(data=>{const results=Array.isArray(data.results)?data.results:[];const exact=results.find(item=>{const y=Number(String(item.release_date||item.first_air_date||item.year||'').slice(0,4));return y===year&&(normalize(item.title||item.name)===normalize(query)||normalize(item.original_title||item.original_name)===normalize(query))});return exact?{id:exact.id,type,poster:exact.poster_path}:null}).catch(()=>null));return cache.get(key)}
-async function fill(box){const link=box.querySelector('[data-detail]'),providers=box.querySelector('[data-providers]');const match=await resolve(box);const poster=box.querySelector('[data-poster]');if(poster){poster.textContent='';if(match?.poster){const img=document.createElement('img');img.src='https://image.tmdb.org/t/p/w185'+match.poster;img.alt=box.querySelector('h3')?.textContent+'のポスター';img.loading='lazy';poster.append(img)}else poster.textContent='画像なし'}if(!match){if(link){link.href='index.html';link.textContent='作品詳細を見る →'}if(providers)providers.textContent='配信情報はサイト内検索でご確認ください';return}if(link)link.href='detail.html?id='+encodeURIComponent(match.id)+'&type='+match.type;if(!providers)return;try{const data=await godzillaDetail(match);const items=Array.isArray(data.streaming)?dokoNormalizeStreaming(data.streaming):[];const unique=items.filter((x,i,a)=>x&&x.logo_path&&a.findIndex(z=>z&&z.provider_id===x.provider_id)===i);providers.textContent='';if(!unique.length){providers.textContent='見放題情報は未確認です';return}const label=document.createElement('span');label.className='providers-label';label.textContent='見放題';providers.append(label);for(const p of unique){const img=document.createElement('img');img.src='https://image.tmdb.org/t/p/w92'+p.logo_path;img.alt=p.provider_name||'配信サービス';img.loading='lazy';providers.append(img)}}catch(e){providers.textContent='配信情報は作品詳細でご確認ください'}
+async function resolve(box){
+ const year=Number(box.dataset.year),query=box.dataset.query;
+ const type=['モナーク：レガシー・オブ・モンスターズ','スカル・アイランド'].includes(query)?'tv':'movie';
+ const key=type+':'+query+':'+year;
+ if(!cache.has(key))cache.set(key,(async()=>{
+  const variants=[query];
+  // TMDBの日本語表記ゆれを吸収する。年の異なる同名作品は決して混同しない。
+  const compact=query.replace(/[・:：\s]/g,'');if(compact!==query)variants.push(compact);
+  const swapped=query.replace(/vs/gi,'対').replace(/×/g,'対');if(swapped!==query)variants.push(swapped);
+  for(const term of [...new Set(variants)]){
+   try{
+    const r=await fetch(apiRoot+'/api/search?query='+encodeURIComponent(term)+'&type='+type);
+    if(!r.ok)continue;
+    const data=await r.json();const results=Array.isArray(data.results)?data.results:[];
+    const exact=results.find(item=>{
+     const y=Number(String(item.release_date||item.first_air_date||item.year||'').slice(0,4));
+     const title=normalize(item.title||item.name),original=normalize(item.original_title||item.original_name);
+     return y===year&&(title===normalize(query)||original===normalize(query)||title===normalize(term)||original===normalize(term));
+    });
+    if(exact?.id)return {id:exact.id,type,poster:exact.poster_path};
+   }catch(e){console.warn('Godzilla lookup failed',term,e)}
+  }
+  return null;
+ })());
+ return cache.get(key);
 }
-const boxes=[...document.querySelectorAll('.work:not(.upcoming)')];for(const box of boxes){box.querySelector('[data-detail]')?.addEventListener('click',async event=>{if(event.currentTarget.getAttribute('href')!=='#')return;event.preventDefault();const match=await resolve(box);if(match)location.href='detail.html?id='+encodeURIComponent(match.id)+'&type='+match.type;else location.href='index.html'})}if('IntersectionObserver'in window){const io=new IntersectionObserver(entries=>{for(const e of entries)if(e.isIntersecting){io.unobserve(e.target);fill(e.target)}},{rootMargin:'250px'});boxes.forEach(box=>io.observe(box))}else boxes.forEach(fill);
+function searchFallback(box){return 'index.html?query='+encodeURIComponent(box.dataset.query||'')}
+async function fill(box){
+ const link=box.querySelector('[data-detail]'),providers=box.querySelector('[data-providers]');
+ const poster=box.querySelector('[data-poster]');
+ // リンクを先に安全な検索導線に設定。API応答待ちでもトップへ誤誘導しない。
+ if(link){link.href=searchFallback(box);link.textContent='作品を検索する →'}
+ const match=await resolve(box);
+ if(poster){poster.textContent='';if(match?.poster){const img=document.createElement('img');img.src='https://image.tmdb.org/t/p/w185'+match.poster;img.alt=box.querySelector('h3')?.textContent+'のポスター';img.loading='lazy';poster.append(img)}else poster.textContent='画像なし'}
+ if(!match){if(providers)providers.textContent='配信情報を取得できませんでした';return}
+ if(link){link.href='detail.html?id='+encodeURIComponent(match.id)+'&type='+match.type;link.textContent='作品詳細を見る →'}
+ if(!providers)return;
+ try{
+  const data=await godzillaDetail(match);
+  const items=Array.isArray(data.streaming)?dokoNormalizeStreaming(data.streaming):[];
+  const unique=items.filter((x,i,a)=>x&&x.logo_path&&a.findIndex(z=>z&&z.provider_id===x.provider_id)===i);
+  providers.textContent='';
+  if(!unique.length){providers.textContent='見放題情報は未確認です';return}
+  const label=document.createElement('span');label.className='providers-label';label.textContent='見放題';providers.append(label);
+  for(const p of unique){const img=document.createElement('img');img.src='https://image.tmdb.org/t/p/w92'+p.logo_path;img.alt=p.provider_name||'配信サービス';img.loading='lazy';providers.append(img)}
+ }catch(e){providers.textContent='配信情報を取得できませんでした'}
+}
+const boxes=[...document.querySelectorAll('.work:not(.upcoming)')];for(const box of boxes){box.querySelector('[data-detail]')?.addEventListener('click',async event=>{if(event.currentTarget.getAttribute('href')!=='#')return;event.preventDefault();const match=await resolve(box);if(match)location.href='detail.html?id='+encodeURIComponent(match.id)+'&type='+match.type;else location.href=searchFallback(box)})}if('IntersectionObserver'in window){const io=new IntersectionObserver(entries=>{for(const e of entries)if(e.isIntersecting){io.unobserve(e.target);fill(e.target)}},{rootMargin:'250px'});boxes.forEach(box=>io.observe(box))}else boxes.forEach(fill);
 </script><script>
 (function(){
   const tabs=[...document.querySelectorAll('.series-tabs a[data-tab]')];
