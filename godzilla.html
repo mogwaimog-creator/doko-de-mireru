@@ -376,14 +376,8 @@ async function fill(box){
  }
 }
 
-// 配信情報の注意書きは、既存の作品カードを変更せず各表示欄の直後に配置する。
-document.querySelectorAll('.work [data-providers]').forEach(el=>{
- const note=document.createElement('p');
- note.className='provider-official-notice';
- note.textContent='配信状況は変更される場合があります。視聴前に各配信サービスの公式サイトで最新情報をご確認ください。';
- note.style.cssText='font-size:14px;line-height:1.6;margin:6px 0 0;opacity:.86';
- el.insertAdjacentElement('afterend',note);
-});
+// 注意書きは配信一覧の冒頭に1回だけ表示する。作品カードには繰り返さない。
+// 配信一覧の冒頭には、すでに公式サイト確認の案内があるため追加不要。
 // 確認済み作品は通信を待たずにポスターと詳細リンクを表示する。
 // 配信情報だけを後から取得するため、429でも基本情報を失わない。
 function godzillaShowStatic(box){
