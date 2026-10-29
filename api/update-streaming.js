@@ -1,7 +1,7 @@
 'use strict';
 // Scheduled job. Read-only visitors never invoke this endpoint.
 const {command}=require('./_redis');
-const works=require('../data/godzilla-works.json');
+const works=require('../data/streaming-works.json');
 const KEYPREFIX='doko:watch:v3:';
 const LOCK='doko:watch:v3:refresh-lock';
 const CONCURRENCY=6;
