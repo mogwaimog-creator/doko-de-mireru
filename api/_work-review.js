@@ -22,6 +22,8 @@ async function registerForReview(work,source='unspecified',now=new Date().toISOS
   }
   const current=parse(await command(['GET',k]));
   if(!current)throw new Error('Review status unavailable; retry');
+  // Repair an index write that failed after the initial SET NX.
+  await command(['ZADD',INDEX,'NX',Date.parse(current.registeredAt||now),k]);
   if(current.fingerprint!==hash){
     const changed={...current,status:'needs_recheck',fingerprint:hash,changedAt:now,previousReviewAt:current.reviewedAt||null,reviewedAt:null,reviewedBy:null};
     // Compare-and-set protects a concurrent reviewer from being overwritten.
