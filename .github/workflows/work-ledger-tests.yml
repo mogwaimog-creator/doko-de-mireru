@@ -8,6 +8,8 @@ on:
     paths:
       - 'api/_work-ledger.js'
       - 'api/_work-error-policy.js'
+      - 'api/_work-issues.js'
+      - 'tests/work-issues.test.js'
       - 'tests/work-error-policy.test.js'
       - 'api/_work-from-tmdb.js'
       - 'api/work-detail.js'
@@ -31,7 +33,9 @@ jobs:
         run: |
           node --check api/_work-ledger.js
           node --check api/_work-error-policy.js
-          node --check tests/work-error-policy.test.js
+          node --check api/_work-issues.js
+          node --check tests/work-issues.test.js
+          node --check tests/work-error-policy.test.js tests/work-issues.test.js
           node --check api/_work-from-tmdb.js
           node --check api/work-detail.js
           node --check api/_detail-with-ledger.js
