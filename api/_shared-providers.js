@@ -8,6 +8,7 @@ const { providerResult } = require('./_provider-fallback');
 const { recordIssue, clearIssue } = require('./_work-issues');
 const PREFIX = 'doko:provider-window:v1';
 const LOCK_SECONDS = 90;
+const FAILURE_COOLDOWN_SECONDS = 600;
 
 function windowId(now = new Date()) {
   const d = new Date(now);
@@ -21,7 +22,7 @@ function windowId(now = new Date()) {
 function keys(type, id) {
   const item = identity(type, id);
   const base = PREFIX + ':' + item.type + ':' + item.id;
-  return { data: base, lock: base + ':lock' };
+  return { data: base, lock: base + ':lock', failure: base + ':failure' };
 }
 function parse(raw) {
   if (!raw) return null;
@@ -34,7 +35,7 @@ async function safeIssue(action) {
 async function getSharedProviders(type, id, load, now = new Date()) {
   if (typeof load !== 'function') throw new Error('Provider loader is required');
   const window = windowId(now);
-  const { data, lock } = keys(type, id);
+  const { data, lock, failure } = keys(type, id);
   let saved;
   try { saved = parse(await command(['GET', data])); }
   catch (error) {
@@ -45,6 +46,16 @@ async function getSharedProviders(type, id, load, now = new Date()) {
   }
   if (saved && saved.window === window && saved.availability && typeof saved.availability === 'object' && !Array.isArray(saved.availability)) {
     return { ...providerResult({ fresh: saved.availability }), lastSuccessfulAt: saved.lastSuccessfulAt, window, source: 'cache' };
+  }
+  // After a failed refresh, wait before another visitor attempts TMDB.
+  // The retry marker is scoped to the current JST window.
+  try {
+    if (await command(['GET', failure]) === window) {
+      return { ...providerResult({ saved: saved?.availability, lastSuccessfulAt: saved?.lastSuccessfulAt }), window, source: 'cooldown' };
+    }
+  } catch (error) {
+    console.error('SHARED PROVIDER COOLDOWN READ FAILED', error);
+    return { ...providerResult({ saved: saved?.availability, lastSuccessfulAt: saved?.lastSuccessfulAt }), window, source: 'cache-unavailable' };
   }
   // Atomic lock prevents simultaneous visitors from all hitting TMDB.
   let acquired;
@@ -68,6 +79,8 @@ async function getSharedProviders(type, id, load, now = new Date()) {
     await safeIssue(() => clearIssue(type, id, 'providers'));
     return { ...providerResult({ fresh }), lastSuccessfulAt, window, source: 'tmdb' };
   } catch (error) {
+    try { await command(['SET', failure, window, 'EX', FAILURE_COOLDOWN_SECONDS]); }
+    catch (cooldownError) { console.error('SHARED PROVIDER COOLDOWN WRITE FAILED', cooldownError); }
     await safeIssue(() => recordIssue(type, id, 'providers', error));
     return { ...providerResult({ saved: saved?.availability, lastSuccessfulAt: saved?.lastSuccessfulAt }), window, source: 'fallback' };
   } finally {
