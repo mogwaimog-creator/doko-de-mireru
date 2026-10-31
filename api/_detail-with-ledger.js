@@ -6,6 +6,7 @@
 const { getWork, putWork } = require('./_work-ledger');
 const { fromTmdb } = require('./_work-from-tmdb');
 const { recordIssue, clearIssue } = require('./_work-issues');
+const { registerForReview } = require('./_work-review');
 
 async function noteIssue(type, id, error) {
   try { await recordIssue(type, id, 'metadata', error); }
@@ -74,7 +75,10 @@ async function detailWithLedger(type, id, load) {
   }
   if (!original || Number(original.id) !== Number(id)) return original;
   try {
-    await putWork(type, id, fromTmdb(type, original));
+    const record = await putWork(type, id, fromTmdb(type, original));
+    // Registration is best-effort; metadata remains usable if the review index fails.
+    try { await registerForReview(record, 'detail'); }
+    catch (reviewError) { console.error('WORK REVIEW REGISTRATION FAILED', reviewError); }
   } catch (error) {
     console.error('WORK LEDGER WRITE FAILED', error);
   }
