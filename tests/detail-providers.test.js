@@ -55,3 +55,29 @@ test('TV and anime use the same opt-in provider bridge without losing rental dat
     else process.env.SHARED_PROVIDER_ENABLED = previous;
   }
 });
+
+test('malformed JP provider payload is rejected rather than cached as no streaming', async () => {
+  const Module = require('node:module');
+  const bridgePath = require.resolve('../api/_detail-providers');
+  const originalLoad = Module._load;
+  const previous = process.env.SHARED_PROVIDER_ENABLED;
+  Module._load = function(request, parent, isMain) {
+    if (request === './_shared-providers' && parent?.filename === bridgePath) {
+      return {getSharedProviders: async (_type, _id, loader) => loader()};
+    }
+    return originalLoad.apply(this, arguments);
+  };
+  delete require.cache[bridgePath];
+  try {
+    process.env.SHARED_PROVIDER_ENABLED = '1';
+    const {detailProviders: bridged} = require('../api/_detail-providers');
+    await assert.rejects(() => bridged('tv', 789, async () => ({results:{JP:[]}})), /Invalid Japanese provider response/);
+    await assert.rejects(() => bridged('movie', 789, async () => ({results:{JP:'invalid'}})), /Invalid Japanese provider response/);
+    assert.deepEqual(await bridged('tv', 789, async () => ({results:{}})), {});
+  } finally {
+    Module._load = originalLoad;
+    delete require.cache[bridgePath];
+    if (previous === undefined) delete process.env.SHARED_PROVIDER_ENABLED;
+    else process.env.SHARED_PROVIDER_ENABLED = previous;
+  }
+});
