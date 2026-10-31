@@ -477,7 +477,7 @@ async function hydrateGundamCards(){
    if(gundamSeasonWorks[title]){
     // 親シリーズの配信先をシーズン2の配信先として誤表示しない。
     if(availability){
-     const parent=title==='機動戦士ガンダムSEED DESTINY'?'機動戦士ガンダムSEED':title==='ガンダムビルドファイターズトライ'?'ガンダムビルドファイターズ':'親作品';
+     const parent=title==='機動戦士ガンダムSEED DESTINY'?'機動戦士ガンダムSEED':title==='ガンダムビルドファイターズトライ'?'ガンダムビルドファイターズ':'ガンダムビルドダイバーズ';
      availability.outerHTML='<div class="availability-note">TMDBでは『'+parent+'』のシーズン2として登録されています。この作品単独の配信情報は未確認です。親作品の配信状況がそのまま適用されるとは限りません。</div>';
     }
     const detail=el.querySelector('.detail-link');
