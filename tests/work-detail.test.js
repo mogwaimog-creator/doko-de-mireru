@@ -137,3 +137,15 @@ test('first-write-wins preserves a concurrent registration', async () => {
     delete require.cache[workPath];
   }
 });
+
+
+test('mismatched cached identity is never returned as another work', async () => {
+  const h = harness({ cached: JSON.stringify({ schemaVersion: 1, type: 'movie', id: 456, title: '別作品' }) });
+  try {
+    const response = await h.call();
+    assert.equal(response.statusCode, 200);
+    assert.equal(response.body.source, 'tmdb');
+    assert.equal(response.body.work.id, 123);
+    assert.equal(h.stats().tmdbCalls, 1);
+  } finally { h.cleanup(); }
+});
