@@ -167,3 +167,36 @@ test('a previous-window cooldown does not block the next JST update window', asy
   assert.equal(result.window, '2026-10-31-18');
   assert.equal(calls, 1);
 });
+
+test('simultaneous visitors share one TMDB refresh while the lock is held', async () => {
+  const now = new Date('2026-10-31T09:00:00Z');
+  const { data, lock, failure } = keys('movie', 1002);
+  store.delete(data);
+  store.delete(lock);
+  store.delete(failure);
+  let calls = 0;
+  let release;
+  const wait = new Promise(resolve => { release = resolve; });
+  const load = async () => {
+    calls++;
+    await wait;
+    return {flatrate:[{provider_id:8}]};
+  };
+  const firstPromise = getSharedProviders('movie', 1002, load, now);
+  // Wait for the first loader to start and acquire the Redis lock.
+  for (let i = 0; i < 20 && calls === 0; i++) await new Promise(resolve => setImmediate(resolve));
+  assert.equal(calls, 1);
+  const pending = await Promise.all(
+    Array.from({length: 8}, () => getSharedProviders('movie', 1002, load, now))
+  );
+  assert.equal(calls, 1);
+  assert.ok(pending.every(result => result.source === 'pending'));
+  assert.ok(pending.every(result => result.unavailable));
+  release();
+  const first = await firstPromise;
+  assert.equal(first.source, 'tmdb');
+  const next = await getSharedProviders('movie', 1002, load, now);
+  assert.equal(next.source, 'cache');
+  assert.equal(next.availability.flatrate[0].provider_id, 8);
+  assert.equal(calls, 1);
+});
