@@ -12042,9 +12042,11 @@ async function getTvDetail(tvId, apiKey) {
         "https://api.themoviedb.org/3/tv/" +
         encodeURIComponent(tvId) +
         "/watch/providers?api_key=" + encodeURIComponent(apiKey);
-      const providerResponse = await fetchJson(providerUrl);
-      providersData = providerResponse && providerResponse.results &&
-        providerResponse.results.JP || {};
+      const providerResult = await detailProviders('tv', tvId, () => fetchJson(providerUrl));
+      providersData = providerResult.availability || {};
+      if (providerResult.warning) {
+        console.warn('TV PROVIDERS STALE OR UNAVAILABLE', providerResult.warning);
+      }
     } catch (error) {
       console.error('TV PROVIDERS FETCH ERROR', error);
       providersData = {};
