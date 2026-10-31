@@ -9,6 +9,10 @@ on:
       - 'api/_work-ledger.js'
       - 'api/_work-from-tmdb.js'
       - 'api/work-detail.js'
+      - 'api/_detail-with-ledger.js'
+      - 'api/search.js'
+      - 'tests/detail-with-ledger.test.js'
+      - 'tests/work-ledger-roundtrip.test.js'
       - 'tests/work-detail.test.js'
       - '.github/workflows/work-ledger-tests.yml'
   workflow_dispatch:
@@ -30,5 +34,6 @@ jobs:
           node --check api/search.js
           node --check tests/work-detail.test.js
           node --check tests/work-ledger-roundtrip.test.js
+          node --check tests/detail-with-ledger.test.js
       - name: Test cache hit, miss and error handling
-        run: node --test tests/work-detail.test.js tests/work-ledger-roundtrip.test.js
+        run: node --test tests/work-detail.test.js tests/work-ledger-roundtrip.test.js tests/detail-with-ledger.test.js
