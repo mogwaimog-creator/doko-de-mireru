@@ -8,7 +8,7 @@ const {registerForReview}=require('./_work-review');
 const {recordError}=require('./_ops-errors');
 const {inventory}=require('./admin-work-migration-preview')._test;
 const BATCH=5;
-async function importBatch(offset=0,{read=command,load=loadTmdb}={}){
+async function importBatch(offset=0,{read=command,load=loadTmdb,logError=recordError}={}){
  const {works}=inventory();
  const page=works.slice(offset,offset+BATCH);
  const result={total:works.length,offset,nextOffset:offset+page.length<works.length?offset+page.length:null,imported:0,alreadyPresent:0,failed:[]};
@@ -30,7 +30,7 @@ async function importBatch(offset=0,{read=command,load=loadTmdb}={}){
    catch(e){console.error('series import review registration',e.message);}
   }catch(e){
    result.failed.push({type:work.type,id:work.id,reason:e.message});
-   try{await recordError({area:'work',code:'SERIES_IMPORT_FAILED',type:work.type,id:work.id,message:'共通台帳への作品登録に失敗しました'});}
+   try{await logError({area:'work',code:'SERIES_IMPORT_FAILED',type:work.type,id:work.id,message:'共通台帳への作品登録に失敗しました'});}
    catch(logError){console.error('import error journal unavailable',logError.message);}
   }
  }
