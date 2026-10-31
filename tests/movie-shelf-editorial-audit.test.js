@@ -3,7 +3,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
-const { extractLiteral, audit, compareEditorialSources } = require('../scripts/audit-movie-shelf');
+const { extractLiteral, audit, compareEditorialSources, editorialEntryFingerprints, compareEditorialEntries } = require('../scripts/audit-movie-shelf');
 const html = fs.readFileSync(path.join(__dirname, '../movie_shelf_1980_1984.html'), 'utf8');
 
 test('movie shelf editorial blocks can be audited without writing data', () => {
@@ -42,4 +42,16 @@ test('comparison identifies unchanged, changed and not-yet-tracked editorial blo
     approvedAwardStories: 'unchanged'
   });
   assert.equal(compareEditorialSources({}, newHashes).memoryFilms, 'untracked');
+});
+
+test('individual movie text edits are detected without flagging unrelated entries', () => {
+  const before = editorialEntryFingerprints(html);
+  const edited = html.replace('長い廊下、双子の少女', '長い廊下と双子の少女');
+  assert.notEqual(edited, html);
+  const changes = compareEditorialEntries(before, editorialEntryFingerprints(edited));
+  assert.deepEqual(changes.memoryFilms.changed, ['movie:694:シャイニング']);
+  assert.deepEqual(changes.memoryFilms.added, []);
+  assert.deepEqual(changes.memoryFilms.removed, []);
+  assert.deepEqual(changes.verifiedClassicInfo.changed, []);
+  assert.deepEqual(changes.approvedAwardStories.changed, []);
 });
