@@ -73,6 +73,15 @@ function editorialEntryFingerprints(html) {
   return out;
 }
 
+function buildEditorialSnapshot(html) {
+  const sections = {};
+  for (const name of ['memoryFilms', 'verifiedClassicInfo', 'approvedAwardStories']) {
+    const value = extractLiteral(html, name);
+    sections[name] = JSON.parse(JSON.stringify(value));
+  }
+  return { schemaVersion: 1, sources: sections, fingerprints: editorialEntryFingerprints(html) };
+}
+
 function planEditorialMigration(previous, current) {
   const changes = compareEditorialEntries(previous, current);
   const plan = {};
@@ -131,4 +140,4 @@ if (require.main === module) {
   const html = fs.readFileSync(path.join(__dirname, '../movie_shelf_1980_1984.html'), 'utf8');
   console.log(JSON.stringify(audit(html), null, 2));
 }
-module.exports = { extractLiteral, editorialFingerprints, compareEditorialSources, editorialEntryFingerprints, compareEditorialEntries, planEditorialMigration, audit };
+module.exports = { extractLiteral, editorialFingerprints, compareEditorialSources, editorialEntryFingerprints, compareEditorialEntries, planEditorialMigration, buildEditorialSnapshot, audit };
