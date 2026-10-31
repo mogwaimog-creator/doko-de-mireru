@@ -480,6 +480,7 @@ let item=known?{id:known.id,content_type:known.type}:null;
 if(!known){try{item=await gundamLookup(x.title,/映画/.test(x.format||'')?'movie':'tv')}catch(e){}}
 if(token!==streamToken||!tr.isConnected)return;
 let providers=Array.isArray(item?.streaming)?item.streaming:[];
+let providerUnknown=!item?.id;
 if(item?.id&&item?.content_type){
  try{
   const url=gundamApiRoot+'/api/series-providers?id='+encodeURIComponent(item.id)+'&type='+encodeURIComponent(gundamApiType(item));
@@ -490,15 +491,15 @@ if(item?.id&&item?.content_type){
     tr.querySelectorAll('td').forEach(td=>{td.textContent='未確認';td.className='stream-none';td.title='配信情報の更新に失敗したため確認できません'});continue;
    }
    providers=Array.isArray(shared.streaming)?shared.streaming:[];
-  }else if(known){
+  }else if(known&&response.status===404){
    // The opt-in API is disabled (404) or temporarily unavailable.
    // Fall back to the existing detail API only for this known ID.
-   try{const legacy=await gundamById(known.id,known.type);providers=Array.isArray(legacy?.streaming)?legacy.streaming:[]}
-   catch(e){console.warn('配信情報の従来API取得失敗:',x.title,e)}
-  }
- }catch(e){console.warn('共通配信情報取得失敗:',x.title,e)}
+   try{const legacy=await gundamById(known.id,known.type);if(legacy)providers=Array.isArray(legacy.streaming)?legacy.streaming:[];else providerUnknown=true}
+   catch(e){providerUnknown=true;console.warn('配信情報の従来API取得失敗:',x.title,e)}
+  }else providerUnknown=true;
+ }catch(e){providerUnknown=true;console.warn('共通配信情報取得失敗:',x.title,e)}
 }
-tr.querySelectorAll('td').forEach((td,j)=>{const yes=providers.some(p=>p&&streamServices[j][1].test(String(p.provider_name||'')));td.textContent=yes?'◎':'ー';td.className=yes?'stream-yes':'stream-none';td.title=yes?'見放題の掲載あり':'見放題の掲載情報なし・未確認'})}}Promise.all(Array.from({length:3},()=>worker()));
+tr.querySelectorAll('td').forEach((td,j)=>{if(providerUnknown){td.textContent='未確認';td.className='stream-none';td.title='配信情報を取得できませんでした';return}const yes=providers.some(p=>p&&streamServices[j][1].test(String(p.provider_name||'')));td.textContent=yes?'◎':'ー';td.className=yes?'stream-yes':'stream-none';td.title=yes?'見放題の掲載あり':'見放題の掲載情報なし・未確認'})}}Promise.all(Array.from({length:3},()=>worker()));
 }
 
 function goWork(i){choose(data[i].tab);document.getElementById('work-'+i).scrollIntoView()}
