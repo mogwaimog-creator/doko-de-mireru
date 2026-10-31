@@ -13,8 +13,10 @@ function windowId(now = new Date()) {
   const d = new Date(now);
   if (!Number.isFinite(d.getTime())) throw new Error('Invalid date');
   const jst = new Date(d.getTime() + 9 * 60 * 60 * 1000);
+  const hour = jst.getUTCHours();
+  if (hour < 6) jst.setUTCDate(jst.getUTCDate() - 1);
   const date = jst.toISOString().slice(0, 10);
-  return date + (jst.getUTCHours() >= 18 ? '-18' : jst.getUTCHours() >= 6 ? '-06' : '-prev18');
+  return date + (hour >= 6 && hour < 18 ? '-06' : '-18');
 }
 function keys(type, id) {
   const item = identity(type, id);
