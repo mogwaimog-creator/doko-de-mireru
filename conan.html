@@ -181,10 +181,23 @@ function paintProviders(id,items,error=false){
   list.forEach(p=>{const span=document.createElement('span');span.className='provider-logo';span.title=p.provider_name;if(p.logo_path){const img=document.createElement('img');img.src='https://image.tmdb.org/t/p/original'+p.logo_path;img.alt=p.provider_name;img.loading='lazy';img.addEventListener('error',()=>{span.textContent=p.provider_name});span.append(img)}else span.textContent=p.provider_name;box.append(span)})
  });
 }
-async function refreshTVProviders(){const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),15000);try{const response=await fetch(apiRoot+'/api/search?id=30983&type=tv',{signal:controller.signal});if(!response.ok)throw Error('fetch');const data=await response.json();if(data.id!==30983||!Array.isArray(data.streaming))throw Error('data');document.querySelectorAll('[data-tv-tmdb]').forEach(box=>box.setAttribute('data-tmdb','tv-30983'));paintProviders('tv-30983',data.streaming)}catch{document.querySelectorAll('[data-tv-tmdb]').forEach(box=>{const note=document.createElement('span');note.className='provider-state';note.textContent='更新できず：2026年10月7日の取得情報';box.append(note)})}finally{clearTimeout(timer)}}
-const movieIDs=[...new Set([...document.querySelectorAll('.providers[data-tmdb]')].map(b=>b.dataset.tmdb))];let nextMovie=0;
-async function providerWorker(){while(nextMovie<movieIDs.length){const id=movieIDs[nextMovie++];const control=new AbortController();const timer=setTimeout(()=>control.abort(),15000);try{const response=await fetch(apiRoot+'/api/search?id='+id+'&type=movie',{signal:control.signal});if(!response.ok)throw Error('fetch');const data=await response.json();if(String(data.id)!==id||!Array.isArray(data.streaming))throw Error('data');paintProviders(id,data.streaming)}catch{paintProviders(id,[],true)}finally{clearTimeout(timer)}}}
-Promise.all([providerWorker(),providerWorker(),providerWorker()]);refreshTVProviders();
+// One shared Redis-only request for all films and the TV series.
+async function loadConanProviders(){
+ let data=null;
+ try{const r=await fetch(apiRoot+'/api/series-watch?series=conan');if(!r.ok)throw Error('cache unavailable');data=await r.json()}catch(e){console.warn('Conan cached providers unavailable',e)}
+ document.querySelectorAll('.providers[data-tmdb]').forEach(box=>{
+   const id=box.dataset.tmdb;
+   const record=data?.providers?.['movie:'+id];
+   if(record&&Array.isArray(record.flatrate))paintProviders(id,record.flatrate);
+   else paintProviders(id,[],true);
+ });
+ const tv=data?.providers?.['tv:30983'];
+ if(tv&&Array.isArray(tv.flatrate)){
+   document.querySelectorAll('[data-tv-tmdb]').forEach(box=>box.setAttribute('data-tmdb','tv-30983'));
+   paintProviders('tv-30983',tv.flatrate);
+ }
+}
+loadConanProviders();
 document.querySelectorAll('.film-poster').forEach(img=>img.addEventListener('error',()=>{const fallback=document.createElement('span');fallback.className='poster-fallback';fallback.textContent='ポスターを読み込めませんでした';img.replaceWith(fallback)}));
 
 const orgButtons=[...document.querySelectorAll('[data-org-tab]')];
