@@ -16,6 +16,9 @@ on:
       - 'api/update-streaming.js'
       - 'api/admin-status.js'
       - 'tests/admin-status.test.js'
+      - 'admin-review.html'
+      - 'admin-review.js'
+      - 'admin-review.css'
       - 'api/admin-confirm-review.js'
       - 'tests/admin-confirm-review.test.js'
       - 'api/admin-review-queue.js'
@@ -46,7 +49,7 @@ jobs:
           node-version: '22'
       - name: Verify JavaScript syntax
         run: |
-          for file in api/admin-confirm-review.js api/admin-review-queue.js api/_work-review.js api/_work-ledger.js api/_work-error-policy.js api/_work-issues.js api/_provider-fallback.js api/_shared-providers.js api/_work-from-tmdb.js api/work-detail.js api/_detail-with-ledger.js api/search.js api/update-streaming.js tests/*.test.js; do
+          for file in admin-review.js api/admin-confirm-review.js api/admin-review-queue.js api/_work-review.js api/_work-ledger.js api/_work-error-policy.js api/_work-issues.js api/_provider-fallback.js api/_shared-providers.js api/_work-from-tmdb.js api/work-detail.js api/_detail-with-ledger.js api/search.js api/update-streaming.js tests/*.test.js; do
             node --check "$file"
           done
       - name: Run all work ledger and provider safety tests
