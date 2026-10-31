@@ -82,3 +82,17 @@ test('Redis write failure still returns TMDB metadata', async () => {
     assert.equal(h.counts().loads, 1);
   } finally { h.cleanup(); }
 });
+
+test('TMDB retrieval error is rethrown without changing the user-facing result', async () => {
+  const h = setup();
+  try {
+    await assert.rejects(
+      h.adapter.detailWithLedger('movie', 123, async () => {
+        const error = new Error('TMDB unavailable');
+        error.status = 503;
+        throw error;
+      }),
+      /TMDB unavailable/
+    );
+  } finally { h.cleanup(); }
+});
