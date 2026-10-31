@@ -73,6 +73,20 @@ function editorialEntryFingerprints(html) {
   return out;
 }
 
+function planEditorialMigration(previous, current) {
+  const changes = compareEditorialEntries(previous, current);
+  const plan = {};
+  for (const [section, delta] of Object.entries(changes)) {
+    plan[section] = {
+      // A change report is not authorization to overwrite stored editorial text.
+      reviewBeforeImport: [...delta.added, ...delta.changed],
+      missingFromSource: delta.removed,
+      autoWrites: 0
+    };
+  }
+  return plan;
+}
+
 function compareEditorialEntries(previous, current) {
   const changes = {};
   for (const name of ['memoryFilms', 'verifiedClassicInfo', 'approvedAwardStories']) {
@@ -117,4 +131,4 @@ if (require.main === module) {
   const html = fs.readFileSync(path.join(__dirname, '../movie_shelf_1980_1984.html'), 'utf8');
   console.log(JSON.stringify(audit(html), null, 2));
 }
-module.exports = { extractLiteral, editorialFingerprints, compareEditorialSources, editorialEntryFingerprints, compareEditorialEntries, audit };
+module.exports = { extractLiteral, editorialFingerprints, compareEditorialSources, editorialEntryFingerprints, compareEditorialEntries, planEditorialMigration, audit };
