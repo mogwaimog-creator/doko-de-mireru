@@ -328,65 +328,23 @@ function gundamNextRefresh(now){
  return jst.getTime()-9*3600000;
 }
 const gundamLookupExpiry=new Map();
+// ID未確認作品を訪問者の操作で検索しない。誤作品の採用とAPI集中を防ぐ。
 function gundamLookup(title,preferredType){
- const cacheKey=title+'|'+(preferredType||'');
- const now=Date.now();
- const storageKey='gundam-work-v3:'+cacheKey;
- try{
-  const saved=JSON.parse(localStorage.getItem(storageKey)||'null');
-  if(saved&&saved.expires>now&&saved.item&&Number(saved.item.id)>0){
-   const fixed=gundamKnownIds[title];
-   if(!fixed||(Number(fixed.id)===Number(saved.item.id)&&fixed.type===gundamApiType(saved.item))){
-    return Promise.resolve(saved.item);
-   }
-  }
- }catch(e){}
- if(gundamLookupExpiry.get(cacheKey)<=now){
-  gundamLookupCache.delete(cacheKey);
-  gundamLookupExpiry.delete(cacheKey);
+ const known=gundamKnownIds[title];
+ if(!known||gundamSeasonWorks[title]||(preferredType&&preferredType!==known.type))return Promise.resolve(null);
+ const key=title+'|'+known.type,now=Date.now();
+ if(gundamLookupExpiry.get(key)<=now){
+  gundamLookupCache.delete(key);
+  gundamLookupExpiry.delete(key);
  }
- if(!gundamLookupCache.has(cacheKey)){
-  const expires=gundamNextRefresh(now);
-  gundamLookupExpiry.set(cacheKey,expires);
-  const promise=(async()=>{
-  const known=gundamKnownIds[title];
-  if(known&&(!preferredType||preferredType===known.type)){
-   // 確認済みIDは作品名検索にフォールバックさせない。
-   // 一時的なAPI障害でも別作品のポスター・配信情報を表示しない。
-   try{return await gundamById(known.id,known.type)}
-   catch(e){console.warn('ID取得失敗:',title,e);return null}
-  }
-  try{
-   const types=preferredType?[preferredType]:['tv','movie'];
-   const aliases=[...new Set([title,...(gundamAliases[title]||[])])];
-   const allowed=new Set(aliases.map(gundamNormalize));
-   // 表記ゆれを順に試す。IDが異なる別作品はタイトルが一致しても採用しない。
-   for(const q of aliases){
-    const settled=await Promise.allSettled(types.map(t=>gundamSearch(q,t)));
-    const results=settled.flatMap(r=>r.status==='fulfilled'?r.value:[]);
-    const exact=results.filter(x=>allowed.has(gundamNormalize(x.title||x.name))||allowed.has(gundamNormalize(x.original_title||x.original_name))||gundamSafeCandidate(title,x));
-    const match=exact.find(x=>gundamApiType(x)===(preferredType||'tv'))||exact[0];
-    if(match&&/^[1-9]\d*$/.test(String(match.id||'')))return match;
-   }
-   // 完全一致が見つからなかった対象作品だけ、固有の副題で再検索する。
-   // 別の作品のポスター・見放題を誤表示しないよう、厳密に候補を検査。
-   for(const q of (gundamExtraQueries[title]||[])){
-    const settled=await Promise.allSettled(types.map(t=>gundamSearch(q,t)));
-    const candidates=settled.flatMap(r=>r.status==='fulfilled'?r.value:[]);
-    const match=candidates.find(x=>gundamApiType(x)===(preferredType||'tv')&&gundamSafeCandidate(title,x)&&/^[1-9]\d*$/.test(String(x.id||'')));
-    if(match)return match;
-   }
+ if(!gundamLookupCache.has(key)){
+  gundamLookupExpiry.set(key,gundamNextRefresh(now));
+  gundamLookupCache.set(key,gundamById(known.id,known.type).catch(e=>{
+   console.warn('ガンダム配信情報を取得できません:',title,e);
    return null;
-  }catch(e){console.warn('ガンダム作品情報取得エラー:',title,e);return null}
- })();
-  gundamLookupCache.set(cacheKey,promise.then(item=>{
-   if(item&&Number(item.id)>0){
-    try{localStorage.setItem(storageKey,JSON.stringify({item,expires}))}catch(e){}
-   }
-   return item;
   }));
  }
- return gundamLookupCache.get(cacheKey);
+ return gundamLookupCache.get(key);
 }
 function gundamImage(path,size){
  if(typeof path!=='string')return null;
@@ -418,7 +376,7 @@ function gundamProviderRow(items){
  }).join('');
 }
 function gundamAvailability(item){
- if(!item)return '<div class="availability-note">配信情報を取得できませんでした。<a href="https://doko-de-mireru.com/" target="_blank" rel="noopener">作品検索はこちら →</a></div>';
+ if(!item)return '<div class="availability-note">配信情報は未確認です。</div>';
  return `<div class="gundam-availability"><div class="gundam-provider-row"><b>見放題</b><div class="gundam-provider-logos">${gundamProviderRow(item.streaming)}</div></div></div>`;
 }
 // 見放題（streaming）だけ表示。rental / purchase は詳細ページに委ねる。
