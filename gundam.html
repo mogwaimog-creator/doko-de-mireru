@@ -472,7 +472,13 @@ function gundamSharedProviders(id,type){
  if(!gundamProviderRequests.has(key)){
   const url=gundamApiRoot+'/api/series-providers?id='+encodeURIComponent(id)+'&type='+encodeURIComponent(type);
   const request=fetch(url,{headers:{Accept:'application/json'}})
-   .then(async response=>({status:response.status,data:response.ok?await response.json():null}))
+   .then(async response=>{
+    const result={status:response.status,data:response.ok?await response.json():null};
+    // Keep successful results and the disabled-feature 404 fallback;
+    // retry transient server errors on a later tab visit.
+    if(!response.ok&&response.status!==404)gundamProviderRequests.delete(key);
+    return result;
+   })
    .catch(error=>{gundamProviderRequests.delete(key);throw error});
   gundamProviderRequests.set(key,request);
  }
