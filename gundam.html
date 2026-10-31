@@ -318,6 +318,25 @@ const gundamSeasonWorks={
 };
 // 同じシーズンのポスターはタブ切替のたびに再取得しない。
 // シーズン専用ポスターは24時間再利用。配信情報は保存・流用しない。
+// ポスターはID指定のみ。CDNで30日保存し、閲覧者ごとの作品名検索を行わない。
+const gundamPosterCache=new Map();
+function gundamFixedPoster(title){
+ const work=gundamSeasonWorks[title]||gundamKnownIds[title];
+ if(!work)return Promise.resolve(null);
+ const key=work.id+'|'+(work.season||0);
+ if(!gundamPosterCache.has(key)){
+  gundamPosterCache.set(key,(async()=>{
+   try{
+    const url=gundamApiRoot+'/api/gundam-poster?id='+work.id+(work.season?'&season='+work.season:'');
+    const response=await fetch(url,{headers:{Accept:'application/json'}});
+    if(!response.ok)throw Error('ポスター取得 '+response.status);
+    const data=await response.json();
+    return gundamImage(data.poster_path,'w342');
+   }catch(e){console.warn('固定IDポスター取得失敗:',title,e);return null}
+  })());
+ }
+ return gundamPosterCache.get(key);
+}
 const gundamSeasonPosterCache=new Map();
 function gundamSeasonPoster(title){
  const info=gundamSeasonWorks[title];
@@ -442,7 +461,7 @@ async function hydrateGundamCards(){
   const el=cards[next++],title=el.getAttribute('data-title');
   const item=gundamSeasonWorks[title]?null:await gundamLookup(title,el.querySelector('.format-tag')?.textContent?.includes('映画')?'movie':'tv');
   if(!el.isConnected)continue;
-  const poster=gundamSeasonWorks[title]?await gundamSeasonPoster(title):gundamImage(item?.poster_path,'w342'),slot=el.querySelector('.poster-placeholder');
+  const poster=await gundamFixedPoster(title),slot=el.querySelector('.poster-placeholder');
   if(poster&&slot){
    const img=document.createElement('img');img.className='work-poster';img.alt=title+'のポスター';
    img.loading='lazy';img.decoding='async';img.src=poster;
