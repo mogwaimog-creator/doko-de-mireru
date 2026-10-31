@@ -493,12 +493,20 @@ function gundamRetryProviderRow(tr,id,type){
  gundamProviderRequests.delete(key);
  const cells=[...tr.querySelectorAll('td')];
  cells.forEach(td=>{td.textContent='再確認中…';td.className='stream-none'});
- gundamSharedProviders(id,type).then(response=>{
+ gundamSharedProviders(id,type).then(async response=>{
   if(retryToken!==streamToken||!tr.isConnected)return;
-  if(response.status!==200||response.data?.provider_status?.unavailable||response.data?.provider_status?.stale){
+  let providers;
+  if(response.status===404){
+   // The optional shared endpoint is disabled; use the legacy detail API.
+   const legacy=await gundamById(id,type);
+   if(retryToken!==streamToken||!tr.isConnected)return;
+   if(!legacy){gundamShowProviderRetry(tr,id,type);return}
+   providers=Array.isArray(legacy.streaming)?legacy.streaming:[];
+  }else if(response.status===200&&!response.data?.provider_status?.unavailable&&!response.data?.provider_status?.stale){
+   providers=Array.isArray(response.data.streaming)?response.data.streaming:[];
+  }else{
    gundamShowProviderRetry(tr,id,type);return;
   }
-  const providers=Array.isArray(response.data.streaming)?response.data.streaming:[];
   cells.forEach((td,j)=>{
    const yes=providers.some(p=>p&&streamServices[j][1].test(String(p.provider_name||'')));
    td.textContent=yes?'◎':'ー';td.className=yes?'stream-yes':'stream-none';
