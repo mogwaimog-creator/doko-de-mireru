@@ -13,8 +13,13 @@ async function detailProviders(type, id, load) {
     if (!raw || !raw.results || typeof raw.results !== 'object') {
       throw new Error('Invalid TMDB provider response');
     }
-    // Empty JP is valid when TMDB confirms no Japanese providers.
-    return raw.results.JP || {};
+    // Missing JP is a confirmed empty Japanese catalog, but malformed JP is not.
+    const jp = raw.results.JP;
+    if (jp == null) return {};
+    if (typeof jp !== 'object' || Array.isArray(jp)) {
+      throw new Error('Invalid Japanese provider response');
+    }
+    return jp;
   });
 }
 module.exports = { detailProviders };
