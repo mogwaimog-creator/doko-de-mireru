@@ -3,7 +3,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
-const { extractLiteral, audit } = require('../scripts/audit-movie-shelf');
+const { extractLiteral, audit, compareEditorialSources } = require('../scripts/audit-movie-shelf');
 const html = fs.readFileSync(path.join(__dirname, '../movie_shelf_1980_1984.html'), 'utf8');
 
 test('movie shelf editorial blocks can be audited without writing data', () => {
@@ -31,4 +31,15 @@ test('editorial fingerprints detect later text edits without touching other bloc
   assert.notEqual(updated.memoryFilms, original.memoryFilms);
   assert.equal(updated.verifiedClassicInfo, original.verifiedClassicInfo);
   assert.equal(updated.approvedAwardStories, original.approvedAwardStories);
+});
+
+test('comparison identifies unchanged, changed and not-yet-tracked editorial blocks', () => {
+  const oldHashes = audit(html).editorialFingerprints;
+  const newHashes = audit(html.replace('長い廊下、双子の少女', '長い廊下と双子の少女')).editorialFingerprints;
+  assert.deepEqual(compareEditorialSources(oldHashes, newHashes), {
+    memoryFilms: 'changed',
+    verifiedClassicInfo: 'unchanged',
+    approvedAwardStories: 'unchanged'
+  });
+  assert.equal(compareEditorialSources({}, newHashes).memoryFilms, 'untracked');
 });
