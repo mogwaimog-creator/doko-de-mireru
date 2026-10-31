@@ -54,6 +54,39 @@ function compareEditorialSources(previous, current) {
   }));
 }
 
+function editorialEntryFingerprints(html) {
+  const names = ['memoryFilms', 'verifiedClassicInfo', 'approvedAwardStories'];
+  const digest = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
+  const out = {};
+  for (const name of names) {
+    const block = extractLiteral(html, name);
+    if (name === 'memoryFilms') {
+      // Use stable IDs where available; include the title to expose accidental ID collisions.
+      out[name] = Object.fromEntries(block.map((entry, index) => [
+        entry.id ? 'movie:' + entry.id + ':' + entry.title : 'unverified:' + index + ':' + entry.title,
+        digest(entry)
+      ]));
+    } else {
+      out[name] = Object.fromEntries(Object.entries(block).map(([title, entry]) => [title, digest(entry)]));
+    }
+  }
+  return out;
+}
+
+function compareEditorialEntries(previous, current) {
+  const changes = {};
+  for (const name of ['memoryFilms', 'verifiedClassicInfo', 'approvedAwardStories']) {
+    const before = previous?.[name] || {};
+    const after = current?.[name] || {};
+    changes[name] = {
+      added: Object.keys(after).filter(key => !(key in before)),
+      changed: Object.keys(after).filter(key => key in before && after[key] !== before[key]),
+      removed: Object.keys(before).filter(key => !(key in after))
+    };
+  }
+  return changes;
+}
+
 function audit(html) {
   const memory = extractLiteral(html, 'memoryFilms');
   const verified = extractLiteral(html, 'verifiedClassicInfo');
@@ -84,4 +117,4 @@ if (require.main === module) {
   const html = fs.readFileSync(path.join(__dirname, '../movie_shelf_1980_1984.html'), 'utf8');
   console.log(JSON.stringify(audit(html), null, 2));
 }
-module.exports = { extractLiteral, editorialFingerprints, compareEditorialSources, audit };
+module.exports = { extractLiteral, editorialFingerprints, compareEditorialSources, editorialEntryFingerprints, compareEditorialEntries, audit };
