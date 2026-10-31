@@ -147,5 +147,6 @@ test('mismatched cached identity is never returned as another work', async () =>
     assert.equal(response.body.source, 'tmdb');
     assert.equal(response.body.work.id, 123);
     assert.equal(h.stats().tmdbCalls, 1);
+    assert.equal(h.stats().writes, 0);
   } finally { h.cleanup(); }
 });
