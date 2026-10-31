@@ -467,6 +467,7 @@ const streamServices=[['Netflix',/netflix/i],['Prime Video',/amazon|prime video/
 let streamToken=0;
 // Reuse in-flight and completed provider requests across tab switches and repeated works.
 const gundamProviderRequests=new Map();
+const gundamManualRetries=new Map();
 function gundamSharedProviders(id,type){
  const key=type+':'+id;
  if(!gundamProviderRequests.has(key)){
@@ -489,20 +490,23 @@ function gundamRetryProviderRow(tr,id,type){
  const retryToken=streamToken;
  if(tr.dataset.providerRetrying==='1')return;
  tr.dataset.providerRetrying='1';
- // Manual retries refresh the per-page cache; server-side cooldown still applies.
- gundamProviderRequests.delete(key);
+ // Share the retry promise across rows for the same work.
  const cells=[...tr.querySelectorAll('td')];
  cells.forEach(td=>{td.textContent='再確認中…';td.className='stream-none'});
- gundamSharedProviders(id,type).then(async response=>{
+ if(!gundamManualRetries.has(key)){
+  gundamProviderRequests.delete(key);
+  const request=gundamSharedProviders(id,type).then(async response=>{
+   if(response.status!==404)return response;
+   const legacy=await gundamById(id,type);
+   return {status:legacy?200:503,data:legacy?{streaming:legacy.streaming}:null};
+  });
+  gundamManualRetries.set(key,request);
+  request.finally(()=>{if(gundamManualRetries.get(key)===request)gundamManualRetries.delete(key)}).catch(()=>{});
+ }
+ gundamManualRetries.get(key).then(async response=>{
   if(retryToken!==streamToken||!tr.isConnected)return;
   let providers;
-  if(response.status===404){
-   // The optional shared endpoint is disabled; use the legacy detail API.
-   const legacy=await gundamById(id,type);
-   if(retryToken!==streamToken||!tr.isConnected)return;
-   if(!legacy){gundamShowProviderRetry(tr,id,type);return}
-   providers=Array.isArray(legacy.streaming)?legacy.streaming:[];
-  }else if(response.status===200&&!response.data?.provider_status?.unavailable&&!response.data?.provider_status?.stale){
+  if(response.status===200&&!response.data?.provider_status?.unavailable&&!response.data?.provider_status?.stale){
    providers=Array.isArray(response.data.streaming)?response.data.streaming:[];
   }else{
    gundamShowProviderRetry(tr,id,type);return;
