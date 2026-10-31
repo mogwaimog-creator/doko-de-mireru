@@ -318,9 +318,26 @@ function gundamSeasonPoster(title){
  }
  return gundamSeasonPosterCache.get(title);
 }
+// 日本時間6時・18時を境界とするブラウザ内の暫定キャッシュ。
+// 全訪問者での共有更新はサーバー側の別対応が必要。
+function gundamNextRefresh(now){
+ const jst=new Date(now+9*3600000);
+ const h=jst.getUTCHours();
+ jst.setUTCHours(h<6?6:h<18?18:30,0,0,0);
+ return jst.getTime()-9*3600000;
+}
+const gundamLookupExpiry=new Map();
 function gundamLookup(title,preferredType){
  const cacheKey=title+'|'+(preferredType||'');
- if(!gundamLookupCache.has(cacheKey))gundamLookupCache.set(cacheKey,(async()=>{
+ const now=Date.now();
+ if(gundamLookupExpiry.get(cacheKey)<=now){
+  gundamLookupCache.delete(cacheKey);
+  gundamLookupExpiry.delete(cacheKey);
+ }
+ if(!gundamLookupCache.has(cacheKey)){
+  const expires=gundamNextRefresh(now);
+  gundamLookupExpiry.set(cacheKey,expires);
+  const promise=(async()=>{
   const known=gundamKnownIds[title];
   if(known&&(!preferredType||preferredType===known.type)){
    // 確認済みIDは作品名検索にフォールバックさせない。
@@ -350,7 +367,9 @@ function gundamLookup(title,preferredType){
    }
    return null;
   }catch(e){console.warn('ガンダム作品情報取得エラー:',title,e);return null}
- })());
+ })();
+  gundamLookupCache.set(cacheKey,promise);
+ }
  return gundamLookupCache.get(cacheKey);
 }
 function gundamImage(path,size){
