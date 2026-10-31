@@ -335,7 +335,8 @@ async function fetchClassicFilm(item){
     if(direct)return direct;
    }catch(e){}
   }
-  if(item.title==='太陽の年')return null;
+  // Fixed IDs must not trigger title searches after a failed ID lookup.
+  if(fixedId||item.title==='太陽の年')return null;
   for(const query of [item.title,item.original].filter(Boolean)){
    try{
     const film=findFilmMatch(resultList(await shelfTitleSearch(query)),item);
