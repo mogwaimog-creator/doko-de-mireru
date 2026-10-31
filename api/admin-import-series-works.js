@@ -16,7 +16,16 @@ async function importBatch(offset=0,{read=command,load=loadTmdb,logError=recordE
   const {key}=identity(work.type,work.id);
   try{
    const existing=await read(['GET',key]);
-   if(existing){result.alreadyPresent++;continue;}
+   if(existing){
+    // An existing key is not necessarily a usable ledger record. Never
+    // overwrite invalid data automatically; surface it for investigation.
+    let parsed=null;
+    try{parsed=typeof existing==='string'?JSON.parse(existing):existing;}catch{}
+    if(parsed?.schemaVersion!==1||parsed?.type!==work.type||parsed?.id!==work.id||typeof parsed?.title!=='string'||!parsed.title.trim()){
+     throw new Error('Existing ledger record is invalid; manual repair required');
+    }
+    result.alreadyPresent++;continue;
+   }
    const item=await load(work);
    if(!item||Number(item.id)!==work.id)throw new Error('TMDB identity mismatch');
    const record=normalizeWork(work.type,work.id,{...fromTmdb(work.type,item),verification:{identity:'verified',metadata:'not_checked',items:{},notes:'ID confirmed in existing series inventory'}});
