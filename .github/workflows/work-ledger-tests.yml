@@ -26,6 +26,8 @@ jobs:
           node --check api/_work-ledger.js
           node --check api/_work-from-tmdb.js
           node --check api/work-detail.js
+          node --check api/_detail-with-ledger.js
+          node --check api/search.js
           node --check tests/work-detail.test.js
       - name: Test cache hit, miss and error handling
         run: node --test tests/work-detail.test.js
