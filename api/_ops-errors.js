@@ -3,6 +3,7 @@
 // Events are stored separately from fixed metadata, so metadata refreshes
 // cannot silently erase errors. No secrets, tokens, or stack traces are stored.
 const {command}=require('./_redis');
+const {randomUUID}=require('node:crypto');
 const KEY='doko:ops:errors:v1';
 const MAX=500;
 const TYPES=new Set(['work','person','streaming','series','feature','system']);
@@ -14,7 +15,7 @@ function normalize(input){
  const code=safe(input.code,80);
  if(!/^[A-Za-z0-9_.-]{1,80}$/.test(code))throw Error('Invalid error code');
  return {
-  eventId:globalThis.crypto.randomUUID(),
+  eventId:randomUUID(),
   area,code,
   type:['movie','tv'].includes(input.type)?input.type:null,
   id:Number.isSafeInteger(Number(input.id))&&Number(input.id)>0?Number(input.id):null,
