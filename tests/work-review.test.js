@@ -9,7 +9,7 @@ redis.command=async args=>{
  if(op==='GET')return store.get(k)||null;
  if(op==='SET'){if(rest[0]==='NX'&&store.has(k))return null;store.set(k,v);return 'OK';}
  if(op==='ZADD')return 1;
- if(op==='EVAL'){const key=args[3],old=args[5],next=args[6];if(store.get(key)!==old)return 0;store.set(key,next);return 1;}
+ if(op==='EVAL'){const isAudit=args[2]==='2';const key=args[3],old=args[isAudit?5:4],next=args[isAudit?6:5];if(store.get(key)!==old)return 0;store.set(key,next);return 1;}
  throw Error('Unexpected Redis command '+op);
 };
 const {registerForReview,getReview,markReviewed}=require('../api/_work-review');
