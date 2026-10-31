@@ -309,7 +309,7 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
       }).catch(()=>null));
     const providers=await providerCache.get(key);
     if(!box.isConnected)return;
-    if(providers===null){box.textContent='配信状況は作品詳細でご確認ください';return}
+    if(providers===null){box.textContent='配信情報を現在確認できません。作品詳細で再度ご確認ください';return}
     const unique=providers.filter((p,i,all)=>p&&p.logo_path&&all.findIndex(x=>x&&x.provider_id===p.provider_id)===i);
     if(!unique.length){box.textContent='見放題情報は未確認です';return}
     box.innerHTML='<span class="providers-label">見放題</span>';
