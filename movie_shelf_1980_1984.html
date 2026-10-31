@@ -203,6 +203,24 @@ function renderMemories(){
  document.getElementById('memory-grid').innerHTML=matching.length?matching.map(m=>`<button type="button" class="shelf3-card" data-memory-id="${m.id??'n'+memoryFilms.indexOf(m)}" aria-label="${memoryEscape(m.title)}の紹介を開く">${memoryCover(m)}<div class="shelf3-card-title">${memoryEscape(m.title)}</div></button>`).join(''):'<p class="shelf3-empty">該当する作品はありません。</p>';
  matching.forEach(m=>loadMemoryPoster(m));
 }
+// Share fixed-ID metadata requests between the VHS covers and detail dialogs.
+const shelfFixedMovieRequests=new Map();
+function shelfFixedMovie(id){
+ const key=String(id);
+ if(!shelfFixedMovieRequests.has(key)){
+  const base=location.protocol==='file:'?'https://doko-de-mireru.com':'';
+  const request=fetch(base+'/api/search?id='+encodeURIComponent(id)+'&type=movie')
+   .then(async response=>{
+    if(!response.ok)throw Error('作品情報API '+response.status);
+    return response.json();
+   }).catch(error=>{
+    shelfFixedMovieRequests.delete(key);
+    throw error;
+   });
+  shelfFixedMovieRequests.set(key,request);
+ }
+ return shelfFixedMovieRequests.get(key);
+}
 async function loadMemoryPoster(m){
  if(memoryCache.has(m.title))return;
  memoryCache.set(m.title,{poster:null});
@@ -213,8 +231,11 @@ async function loadMemoryPoster(m){
  try{
   let poster='';
   if(m.id){
-   const res=await fetch(base+'/api/search?id='+encodeURIComponent(m.id)+'&type=movie');
-   if(res.ok){const data=await res.json();const exact=Number(data?.id??data?.tmdb_id)===Number(m.id)?data:getItems(data).find(x=>Number(x.id??x.tmdb_id)===Number(m.id));poster=posterUrl(exact);}
+   try{
+    const data=await shelfFixedMovie(m.id);
+    const exact=Number(data?.id??data?.tmdb_id)===Number(m.id)?data:getItems(data).find(x=>Number(x.id??x.tmdb_id)===Number(m.id));
+    poster=posterUrl(exact);
+   }catch(e){console.warn('固定IDのポスター取得失敗',m.title,e)}
   }
   if(!poster){
    const res=await fetch(base+'/api/search?query='+encodeURIComponent(m.title)+'&type=movie');
@@ -272,14 +293,10 @@ async function fetchClassicFilm(item){
   const fixedId=classicKnownIds[item.title]||known.id;
   if(fixedId){
    try{
-    const endpoint=(location.protocol==='file:'?'https://doko-de-mireru.com':'')+'/api/search?id='+encodeURIComponent(fixedId)+'&type=movie';
-    const res=await fetch(endpoint);
-    if(res.ok){
-     const data=await res.json();
-     if(Number(data?.id)===Number(fixedId))return data;
-     const direct=resultList(data).find(x=>Number(x.id)===Number(fixedId));
-     if(direct)return direct;
-    }
+    const data=await shelfFixedMovie(fixedId);
+    if(Number(data?.id)===Number(fixedId))return data;
+    const direct=resultList(data).find(x=>Number(x.id)===Number(fixedId));
+    if(direct)return direct;
    }catch(e){}
   }
   if(item.title==='太陽の年')return null;
