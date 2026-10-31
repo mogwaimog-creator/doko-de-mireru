@@ -330,6 +330,16 @@ const gundamLookupExpiry=new Map();
 function gundamLookup(title,preferredType){
  const cacheKey=title+'|'+(preferredType||'');
  const now=Date.now();
+ const storageKey='gundam-work-v2:'+cacheKey;
+ try{
+  const saved=JSON.parse(localStorage.getItem(storageKey)||'null');
+  if(saved&&saved.expires>now&&saved.item&&Number(saved.item.id)>0){
+   const fixed=gundamKnownIds[title];
+   if(!fixed||(Number(fixed.id)===Number(saved.item.id)&&fixed.type===gundamApiType(saved.item))){
+    return Promise.resolve(saved.item);
+   }
+  }
+ }catch(e){}
  if(gundamLookupExpiry.get(cacheKey)<=now){
   gundamLookupCache.delete(cacheKey);
   gundamLookupExpiry.delete(cacheKey);
@@ -368,7 +378,12 @@ function gundamLookup(title,preferredType){
    return null;
   }catch(e){console.warn('ガンダム作品情報取得エラー:',title,e);return null}
  })();
-  gundamLookupCache.set(cacheKey,promise);
+  gundamLookupCache.set(cacheKey,promise.then(item=>{
+   if(item&&Number(item.id)>0){
+    try{localStorage.setItem(storageKey,JSON.stringify({item,expires}))}catch(e){}
+   }
+   return item;
+  }));
  }
  return gundamLookupCache.get(cacheKey);
 }
