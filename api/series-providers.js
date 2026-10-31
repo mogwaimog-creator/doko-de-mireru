@@ -12,13 +12,11 @@ module.exports = async function handler(req, res) {
   let work;
   try { work = identity(req.query?.type, req.query?.id); }
   catch (_) { return res.status(400).json({error:'Invalid work identity'}); }
-  const token = process.env.TMDB_API_KEY || process.env.TMDB_API_TOKEN;
+  const token = process.env.TMDB_API_KEY;
   if (!token) return res.status(503).json({error:'Provider service unavailable'});
   const url = 'https://api.themoviedb.org/3/' + work.type + '/' + work.id + '/watch/providers';
   const load = async () => {
-    const headers = process.env.TMDB_API_TOKEN ? {Authorization:'Bearer '+process.env.TMDB_API_TOKEN} : {};
-    const endpoint = process.env.TMDB_API_TOKEN ? url : url+'?api_key='+encodeURIComponent(process.env.TMDB_API_KEY);
-    const response = await fetch(endpoint,{headers});
+    const response = await fetch(url+'?api_key='+encodeURIComponent(token));
     if (!response.ok) throw new Error('TMDB providers HTTP '+response.status);
     return response.json();
   };
