@@ -33,14 +33,16 @@ async function registerForReview(work,source='unspecified',now=new Date().toISOS
   return {...current,created:false};
 }
 async function getReview(type,id){return parse(await command(['GET',key(type,id)]));}
-async function markReviewed(work,reviewer,now=new Date().toISOString()){
+async function markReviewed(work,reviewer,now=new Date().toISOString(),expectedFingerprint=null){
   if(typeof reviewer!=='string'||!reviewer.trim())throw new Error('Reviewer required');
   const k=key(work.type,work.id),current=await getReview(work.type,work.id);
   if(!current)throw new Error('Work not registered for review');
-  if(current.fingerprint!==fingerprint(work))throw new Error('Metadata changed; register updated work before review');
+  if(current.fingerprint!==fingerprint(work) || (expectedFingerprint && current.fingerprint!==expectedFingerprint))throw new Error('Metadata changed; register updated work before review');
   const next={...current,status:'reviewed',reviewedAt:now,reviewedBy:reviewer.trim()};
-  const lua="local raw=redis.call('GET',KEYS[1]); if raw~=ARGV[1] then return 0 end; redis.call('SET',KEYS[1],ARGV[2]); return 1";
-  const ok=await command(['EVAL',lua,'1',k,JSON.stringify(current),JSON.stringify(next)]);
+  const auditKey='doko:work-review-history:v1:'+work.type+':'+work.id;
+  const event=JSON.stringify({action:'reviewed',at:now,by:reviewer.trim(),from:current.status,to:'reviewed',fingerprint:current.fingerprint});
+  const lua="local raw=redis.call('GET',KEYS[1]); if raw~=ARGV[1] then return 0 end; redis.call('SET',KEYS[1],ARGV[2]); redis.call('LPUSH',KEYS[2],ARGV[3]); redis.call('LTRIM',KEYS[2],0,99); return 1";
+  const ok=await command(['EVAL',lua,'2',k,auditKey,JSON.stringify(current),JSON.stringify(next),event]);
   if(ok!==1)throw new Error('Review status changed concurrently; retry');
   return next;
 }
