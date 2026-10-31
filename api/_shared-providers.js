@@ -35,12 +35,24 @@ async function getSharedProviders(type, id, load, now = new Date()) {
   if (typeof load !== 'function') throw new Error('Provider loader is required');
   const window = windowId(now);
   const { data, lock } = keys(type, id);
-  const saved = parse(await command(['GET', data]));
+  let saved;
+  try { saved = parse(await command(['GET', data])); }
+  catch (error) {
+    console.error('SHARED PROVIDER CACHE READ FAILED', error);
+    // Do not stamp a cache outage as confirmed lack of streaming.
+    // Avoid bypassing the shared cache with one TMDB call per visitor.
+    return { ...providerResult(), window, source: 'cache-unavailable' };
+  }
   if (saved && saved.window === window && saved.availability && typeof saved.availability === 'object') {
     return { ...providerResult({ fresh: saved.availability }), lastSuccessfulAt: saved.lastSuccessfulAt, window, source: 'cache' };
   }
   // Atomic lock prevents simultaneous visitors from all hitting TMDB.
-  const acquired = await command(['SET', lock, window, 'NX', 'EX', LOCK_SECONDS]);
+  let acquired;
+  try { acquired = await command(['SET', lock, window, 'NX', 'EX', LOCK_SECONDS]); }
+  catch (error) {
+    console.error('SHARED PROVIDER LOCK FAILED', error);
+    return { ...providerResult({ saved: saved?.availability, lastSuccessfulAt: saved?.lastSuccessfulAt }), window, source: 'cache-unavailable' };
+  }
   if (acquired !== 'OK') {
     return { ...providerResult({ saved: saved?.availability, lastSuccessfulAt: saved?.lastSuccessfulAt }), window, source: 'pending' };
   }
