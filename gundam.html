@@ -465,6 +465,19 @@ function choose(tab,jump=false){if(tab==='stream'){showStreamingTab(jump);return
 
 const streamServices=[['Netflix',/netflix/i],['Prime Video',/amazon|prime video/i],['U-NEXT',/u-next|unext/i],['Hulu',/hulu/i],['Disney+',/disney/i],['FOD',/fod/i],['Apple TV',/apple/i]];
 let streamToken=0;
+// Reuse in-flight and completed provider requests across tab switches and repeated works.
+const gundamProviderRequests=new Map();
+function gundamSharedProviders(id,type){
+ const key=type+':'+id;
+ if(!gundamProviderRequests.has(key)){
+  const url=gundamApiRoot+'/api/series-providers?id='+encodeURIComponent(id)+'&type='+encodeURIComponent(type);
+  const request=fetch(url,{headers:{Accept:'application/json'}})
+   .then(async response=>({status:response.status,data:response.ok?await response.json():null}))
+   .catch(error=>{gundamProviderRequests.delete(key);throw error});
+  gundamProviderRequests.set(key,request);
+ }
+ return gundamProviderRequests.get(key);
+}
 function streamEsc(v){return String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;')}
 function showStreamingTab(jump=false){
  current='stream';for(const t of Object.keys(labels)){const b=document.getElementById('tab-'+t);b.classList.toggle('on',t==='stream');b.setAttribute('aria-selected',t==='stream')}
@@ -484,10 +497,9 @@ let providerUnknown=!item?.id;
 // Title-based lookup already returned subscription data; do not request it twice.
 if(known&&item?.id&&item?.content_type){
  try{
-  const url=gundamApiRoot+'/api/series-providers?id='+encodeURIComponent(item.id)+'&type='+encodeURIComponent(gundamApiType(item));
-  const response=await fetch(url,{headers:{Accept:'application/json'}});
-  if(response.ok){
-   const shared=await response.json();
+  const response=await gundamSharedProviders(item.id,gundamApiType(item));
+  if(response.status===200){
+   const shared=response.data;
    if(shared.provider_status?.unavailable||shared.provider_status?.stale){
     tr.querySelectorAll('td').forEach(td=>{td.textContent='未確認';td.className='stream-none';td.title='配信情報の更新に失敗したため確認できません'});continue;
    }
