@@ -10,7 +10,7 @@ async function detailProviders(type, id, load) {
   }
   return getSharedProviders(type, id, async () => {
     const raw = await load();
-    if (!raw || !raw.results || typeof raw.results !== 'object') {
+    if (!raw || !raw.results || typeof raw.results !== 'object' || Array.isArray(raw.results)) {
       throw new Error('Invalid TMDB provider response');
     }
     // Missing JP is a confirmed empty Japanese catalog, but malformed JP is not.
