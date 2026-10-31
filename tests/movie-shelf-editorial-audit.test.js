@@ -3,7 +3,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
-const { extractLiteral, audit, compareEditorialSources, editorialEntryFingerprints, compareEditorialEntries, planEditorialMigration } = require('../scripts/audit-movie-shelf');
+const { extractLiteral, audit, compareEditorialSources, editorialEntryFingerprints, compareEditorialEntries, planEditorialMigration, buildEditorialSnapshot } = require('../scripts/audit-movie-shelf');
 const html = fs.readFileSync(path.join(__dirname, '../movie_shelf_1980_1984.html'), 'utf8');
 
 test('movie shelf editorial blocks can be audited without writing data', () => {
@@ -63,4 +63,14 @@ test('editorial migration plan flags changed work for review and never writes au
   assert.deepEqual(plan.memoryFilms.reviewBeforeImport, ['movie:694:シャイニング']);
   assert.deepEqual(plan.memoryFilms.missingFromSource, []);
   for (const section of Object.values(plan)) assert.equal(section.autoWrites, 0);
+});
+
+test('read-only snapshot retains original editorial text and independent source sections', () => {
+  const snapshot = buildEditorialSnapshot(html);
+  assert.equal(snapshot.schemaVersion, 1);
+  assert.equal(snapshot.sources.memoryFilms[0].title, 'シャイニング');
+  assert.match(snapshot.sources.memoryFilms[0].memory, /長い廊下、双子の少女/);
+  assert.ok(Object.keys(snapshot.sources.verifiedClassicInfo).length > 0);
+  assert.ok(Object.keys(snapshot.sources.approvedAwardStories).length > 0);
+  assert.equal(snapshot.fingerprints.memoryFilms['movie:694:シャイニング'].length, 64);
 });
