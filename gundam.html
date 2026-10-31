@@ -535,6 +535,7 @@ if(known&&item?.id&&item?.content_type){
   if(response.status===200){
    const shared=response.data;
    if(shared.provider_status?.unavailable||shared.provider_status?.stale){
+    if(token!==streamToken||!tr.isConnected)return;
     gundamShowProviderRetry(tr,item.id,gundamApiType(item));continue;
    }
    providers=Array.isArray(shared.streaming)?shared.streaming:[];
@@ -545,6 +546,11 @@ if(known&&item?.id&&item?.content_type){
    catch(e){providerUnknown=true;console.warn('配信情報の従来API取得失敗:',x.title,e)}
   }else providerUnknown=true;
  }catch(e){providerUnknown=true;console.warn('共通配信情報取得失敗:',x.title,e)}
+}
+if(token!==streamToken||!tr.isConnected)return;
+if(providerUnknown&&known&&item?.id){
+ gundamShowProviderRetry(tr,item.id,gundamApiType(item));
+ continue;
 }
 tr.querySelectorAll('td').forEach((td,j)=>{if(providerUnknown){td.textContent='未確認';td.className='stream-none';td.title='配信情報を取得できませんでした';return}const yes=providers.some(p=>p&&streamServices[j][1].test(String(p.provider_name||'')));td.textContent=yes?'◎':'ー';td.className=yes?'stream-yes':'stream-none';td.title=yes?'見放題の掲載あり':'見放題の掲載情報なし・未確認'})}}Promise.all(Array.from({length:3},()=>worker()));
 }
