@@ -43,7 +43,7 @@ async function getSharedProviders(type, id, load, now = new Date()) {
     // Avoid bypassing the shared cache with one TMDB call per visitor.
     return { ...providerResult(), window, source: 'cache-unavailable' };
   }
-  if (saved && saved.window === window && saved.availability && typeof saved.availability === 'object') {
+  if (saved && saved.window === window && saved.availability && typeof saved.availability === 'object' && !Array.isArray(saved.availability)) {
     return { ...providerResult({ fresh: saved.availability }), lastSuccessfulAt: saved.lastSuccessfulAt, window, source: 'cache' };
   }
   // Atomic lock prevents simultaneous visitors from all hitting TMDB.
@@ -62,6 +62,8 @@ async function getSharedProviders(type, id, load, now = new Date()) {
       throw new Error('Invalid provider response');
     }
     const lastSuccessfulAt = new Date(now).toISOString();
+    // A refresh that could not be saved is not shared with later visitors.
+    // Return the previous data with a warning rather than claim a successful refresh.
     await command(['SET', data, JSON.stringify({ window, availability: fresh, lastSuccessfulAt })]);
     await safeIssue(() => clearIssue(type, id, 'providers'));
     return { ...providerResult({ fresh }), lastSuccessfulAt, window, source: 'tmdb' };
