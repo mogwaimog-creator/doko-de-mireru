@@ -267,21 +267,45 @@ const gundamApiRoot=location.protocol==='file:'||['localhost','127.0.0.1'].inclu
 function gundamResults(payload){return Array.isArray(payload)?payload:(payload?.results||[])}
 function gundamApiType(item){return String(item?.content_type||'').startsWith('movie')||item?.content_type==='movie'?'movie':'tv'}
 function gundamDetailUrl(item){return gundamApiRoot+'/detail.html?id='+encodeURIComponent(item.id)+'&type='+gundamApiType(item)}
-async function gundamSearch(title,type){
- const r=await fetch(gundamApiRoot+'/api/search?query='+encodeURIComponent(title)+'&type='+type,{headers:{Accept:'application/json'}});
- if(!r.ok)throw Error('検索API '+r.status);
- return gundamResults(await r.json());
-}
 // TMDBで作品と種別を確認できたものは検索結果の表記ゆれに依存させない。
 // 確認できない作品は検索候補から厳格に照合し、別作品を誤表示しない。
 const gundamKnownIds={
  '機動戦士ガンダム':{id:21731,type:'tv'},
  '機動戦士ガンダムUC':{id:45500,type:'tv'},
  '機動戦士ガンダム 水星の魔女':{id:196400,type:'tv'},
- '機動戦士ガンダム00':{id:21732,type:'tv'}
+ '機動戦士ガンダム 鉄血のオルフェンズ':{id:64375,type:'tv'},
+ '機動戦士ガンダム 第08MS小隊':{id:43887,type:'tv'},
+ '劇場版 機動戦士ガンダム00 -A wakening of the Trailblazer-':{id:37048,type:'movie'},
+ '機動戦士ガンダム00':{id:21732,type:'tv'},
+ '機動戦士Ζガンダム':{id:13674,type:'tv'},
+ '機動戦士ガンダムΖΖ':{id:5660,type:'tv'},
+ '機動戦士ガンダム 逆襲のシャア':{id:16157,type:'movie'},
+ '機動戦士ガンダム THE ORIGIN':{id:88865,type:'tv'},
+ '機動戦士ガンダム0080 ポケットの中の戦争':{id:46512,type:'tv'},
+ '機動戦士ガンダム ククルス・ドアンの島':{id:883768,type:'movie'},
+ '機動戦士ガンダムNT':{id:553610,type:'movie'},
+ '機動戦士ガンダム 閃光のハサウェイ':{id:685274,type:'movie'},
+ '機動戦士ガンダム 閃光のハサウェイ キルケーの魔女':{id:910850,type:'movie'},
+ '機動戦士ガンダムF91':{id:16308,type:'movie'},
+ '機動戦士ガンダム0083 STARDUST MEMORY':{id:72677,type:'tv'},
+ '機動戦士Vガンダム':{id:25797,type:'tv'},
+ '機動戦士ガンダムSEED':{id:20111,type:'tv'},
+ '機動戦士ガンダムSEED FREEDOM':{id:1146972,type:'movie'},
+ '機動武闘伝Gガンダム':{id:30093,type:'tv'},
+ '新機動戦記ガンダムW':{id:21730,type:'tv'},
+ '機動新世紀ガンダムX':{id:25504,type:'tv'},
+ '∀ガンダム':{id:37546,type:'tv'},
+ '機動戦士ガンダムAGE':{id:45835,type:'tv'},
+ 'ガンダム Gのレコンギスタ':{id:61414,type:'tv'},
+ 'ガンダムビルドファイターズ':{id:60667,type:'tv'},
+ 'ガンダムビルドダイバーズ':{id:76821,type:'tv'},
+ 'SDガンダムワールド 三国創傑伝':{id:91566,type:'tv'},
+ 'SDガンダムワールド ヒーローズ':{id:122468,type:'tv'},
+ '新機動戦記ガンダムW Endless Waltz':{id:22914,type:'movie'}
 };
 async function gundamById(id,type){
- const r=await fetch(gundamApiRoot+'/api/search?id='+encodeURIComponent(id)+'&type='+type,{headers:{Accept:'application/json'}});
+ const url=Object.values(gundamKnownIds).some(x=>x.id===Number(id)&&x.type===type)?'/api/gundam-stream?id='+encodeURIComponent(id):'/api/search?id='+encodeURIComponent(id)+'&type='+type;
+ const r=await fetch(gundamApiRoot+url,{headers:{Accept:'application/json'}});
  if(!r.ok)throw Error('作品詳細API '+r.status);
  const result=await r.json();
  return result&&result.id?{...result,content_type:type}:null;
@@ -289,51 +313,73 @@ async function gundamById(id,type){
 // 既存APIのシーズン詳細機能を使用。配信情報は親番組全体のため流用しない。
 const gundamSeasonWorks={
  '機動戦士ガンダムSEED DESTINY':{id:20111,season:2},
- 'ガンダムビルドファイターズトライ':{id:60667,season:2}
+ 'ガンダムビルドファイターズトライ':{id:60667,season:2},
+ 'ガンダムビルドダイバーズRe:RISE':{id:76821,season:2}
 };
-async function gundamSeasonPoster(title){
- const info=gundamSeasonWorks[title];
- if(!info)return null;
- try{
-  const url=gundamApiRoot+'/api/search?id='+info.id+'&type=tv&season='+info.season;
-  const r=await fetch(url,{headers:{Accept:'application/json'}});
-  if(!r.ok)throw Error('シーズン取得 '+r.status);
-  const data=await r.json();
-  if(Number(data.season_number)!==info.season)return null;
-  return gundamImage(data.poster_path,'w342');
- }catch(e){console.warn('シーズンポスター取得失敗:',title,e);return null}
+// 同じシーズンのポスターはタブ切替のたびに再取得しない。
+// シーズン専用ポスターは24時間再利用。配信情報は保存・流用しない。
+// ポスターはID指定のみ。CDNで30日保存し、閲覧者ごとの作品名検索を行わない。
+const gundamPosterCache=new Map();
+function gundamFixedPoster(title){
+ const work=gundamSeasonWorks[title]||gundamKnownIds[title];
+ if(!work)return Promise.resolve(null);
+ const key=work.id+'|'+(work.season||0);
+ if(!gundamPosterCache.has(key)){
+  gundamPosterCache.set(key,(async()=>{
+   try{
+    const url=gundamApiRoot+'/api/gundam-poster?id='+work.id+(work.season?'&season='+work.season:'');
+    const response=await fetch(url,{headers:{Accept:'application/json'}});
+    if(!response.ok)throw Error('ポスター取得 '+response.status);
+    const data=await response.json();
+    return gundamImage(data.poster_path,'w342');
+   }catch(e){console.warn('固定IDポスター取得失敗:',title,e);return null}
+  })());
+ }
+ return gundamPosterCache.get(key);
 }
+const gundamSeasonPosterCache=new Map();
+function gundamSeasonPoster(title){
+ const info=gundamSeasonWorks[title];
+ if(!info)return Promise.resolve(null);
+ if(!gundamSeasonPosterCache.has(title)){
+  gundamSeasonPosterCache.set(title,(async()=>{
+   try{
+    const url=gundamApiRoot+'/api/gundam-stream?id='+info.id+'&season='+info.season;
+    const r=await fetch(url,{headers:{Accept:'application/json'}});
+    if(!r.ok)throw Error('シーズン取得 '+r.status);
+    const data=await r.json();
+    return gundamImage(data.poster_path,'w342');
+   }catch(e){console.warn('シーズンポスター取得失敗:',title,e);return null}
+  })());
+ }
+ return gundamSeasonPosterCache.get(title);
+}
+// 日本時間6時・18時を境界とするブラウザ内の暫定キャッシュ。
+// 全訪問者での共有更新はサーバー側の別対応が必要。
+function gundamNextRefresh(now){
+ const jst=new Date(now+9*3600000);
+ const h=jst.getUTCHours();
+ jst.setUTCHours(h<6?6:h<18?18:30,0,0,0);
+ return jst.getTime()-9*3600000;
+}
+const gundamLookupExpiry=new Map();
+// ID未確認作品を訪問者の操作で検索しない。誤作品の採用とAPI集中を防ぐ。
 function gundamLookup(title,preferredType){
- const cacheKey=title+'|'+(preferredType||'');
- if(!gundamLookupCache.has(cacheKey))gundamLookupCache.set(cacheKey,(async()=>{
-  const known=gundamKnownIds[title];
-  if(known&&(!preferredType||preferredType===known.type)){
-   try{const result=await gundamById(known.id,known.type);if(result)return result}catch(e){console.warn('ID取得失敗:',title,e)}
-  }
-  try{
-   const types=preferredType?[preferredType]:['tv','movie'];
-   const aliases=[...new Set([title,...(gundamAliases[title]||[])])];
-   const allowed=new Set(aliases.map(gundamNormalize));
-   // 表記ゆれを順に試す。IDが異なる別作品はタイトルが一致しても採用しない。
-   for(const q of aliases){
-    const settled=await Promise.allSettled(types.map(t=>gundamSearch(q,t)));
-    const results=settled.flatMap(r=>r.status==='fulfilled'?r.value:[]);
-    const exact=results.filter(x=>allowed.has(gundamNormalize(x.title||x.name))||allowed.has(gundamNormalize(x.original_title||x.original_name))||gundamSafeCandidate(title,x));
-    const match=exact.find(x=>gundamApiType(x)===(preferredType||'tv'))||exact[0];
-    if(match&&/^[1-9]\d*$/.test(String(match.id||'')))return match;
-   }
-   // 完全一致が見つからなかった対象作品だけ、固有の副題で再検索する。
-   // 別の作品のポスター・見放題を誤表示しないよう、厳密に候補を検査。
-   for(const q of (gundamExtraQueries[title]||[])){
-    const settled=await Promise.allSettled(types.map(t=>gundamSearch(q,t)));
-    const candidates=settled.flatMap(r=>r.status==='fulfilled'?r.value:[]);
-    const match=candidates.find(x=>gundamApiType(x)===(preferredType||'tv')&&gundamSafeCandidate(title,x)&&/^[1-9]\d*$/.test(String(x.id||'')));
-    if(match)return match;
-   }
+ const known=gundamKnownIds[title];
+ if(!known||gundamSeasonWorks[title]||(preferredType&&preferredType!==known.type))return Promise.resolve(null);
+ const key=title+'|'+known.type,now=Date.now();
+ if(gundamLookupExpiry.get(key)<=now){
+  gundamLookupCache.delete(key);
+  gundamLookupExpiry.delete(key);
+ }
+ if(!gundamLookupCache.has(key)){
+  gundamLookupExpiry.set(key,gundamNextRefresh(now));
+  gundamLookupCache.set(key,gundamById(known.id,known.type).catch(e=>{
+   console.warn('ガンダム配信情報を取得できません:',title,e);
    return null;
-  }catch(e){console.warn('ガンダム作品情報取得エラー:',title,e);return null}
- })());
- return gundamLookupCache.get(cacheKey);
+  }));
+ }
+ return gundamLookupCache.get(key);
 }
 function gundamImage(path,size){
  if(typeof path!=='string')return null;
@@ -365,7 +411,7 @@ function gundamProviderRow(items){
  }).join('');
 }
 function gundamAvailability(item){
- if(!item)return '<div class="availability-note">配信情報を取得できませんでした。<a href="https://doko-de-mireru.com/" target="_blank" rel="noopener">作品検索はこちら →</a></div>';
+ if(!item)return '<div class="availability-note">配信情報は未確認です。</div>';
  return `<div class="gundam-availability"><div class="gundam-provider-row"><b>見放題</b><div class="gundam-provider-logos">${gundamProviderRow(item.streaming)}</div></div></div>`;
 }
 // 見放題（streaming）だけ表示。rental / purchase は詳細ページに委ねる。
@@ -397,7 +443,14 @@ async function openGundamDetail(event,anchor){
  event.preventDefault();
  const title=anchor.getAttribute('data-title')||'';
  const fallback='index.html?query='+encodeURIComponent(title);
- const match=await gundamLookup(title,anchor.getAttribute('data-type')||'tv');
+ const known=gundamKnownIds[title];
+ const requestedType=anchor.getAttribute('data-type')||'tv';
+ // 確認済みIDならクリック時の追加API呼び出しを省略する。
+ if(known&&known.type===requestedType){
+  location.href=gundamApiRoot+'/detail.html?id='+encodeURIComponent(known.id)+'&type='+known.type;
+  return false;
+ }
+ const match=await gundamLookup(title,requestedType);
  location.href=match?gundamDetailUrl(match):fallback;
  return false;
 }
@@ -406,9 +459,9 @@ async function hydrateGundamCards(){
  let next=0;
  async function worker(){while(next<cards.length){
   const el=cards[next++],title=el.getAttribute('data-title');
-  const item=await gundamLookup(title,el.querySelector('.format-tag')?.textContent?.includes('映画')?'movie':'tv');
+  const item=gundamSeasonWorks[title]?null:await gundamLookup(title,el.querySelector('.format-tag')?.textContent?.includes('映画')?'movie':'tv');
   if(!el.isConnected)continue;
-  const poster=gundamSeasonWorks[title]?await gundamSeasonPoster(title):gundamImage(item?.poster_path,'w342'),slot=el.querySelector('.poster-placeholder');
+  const poster=await gundamFixedPoster(title),slot=el.querySelector('.poster-placeholder');
   if(poster&&slot){
    const img=document.createElement('img');img.className='work-poster';img.alt=title+'のポスター';
    img.loading='lazy';img.decoding='async';img.src=poster;
@@ -434,7 +487,10 @@ async function hydrateGundamCards(){
    const availability=el.querySelector('.availability-note');
    if(gundamSeasonWorks[title]){
     // 親シリーズの配信先をシーズン2の配信先として誤表示しない。
-    if(availability)availability.outerHTML='<div class="availability-note">見放題の掲載情報なし（この作品単独の配信情報は未確認）</div>';
+    if(availability){
+     const parent=title==='機動戦士ガンダムSEED DESTINY'?'機動戦士ガンダムSEED':title==='ガンダムビルドファイターズトライ'?'ガンダムビルドファイターズ':'ガンダムビルドダイバーズ';
+     availability.outerHTML='<div class="availability-note">TMDBでは『'+parent+'』のシーズン2として登録されています。この作品単独の配信情報は未確認です。親作品の配信状況がそのまま適用されるとは限りません。</div>';
+    }
     const detail=el.querySelector('.detail-link');
     if(detail){
      const seasonInfo=gundamSeasonWorks[title];
@@ -475,7 +531,7 @@ function showStreamingTab(jump=false){
  document.getElementById('content').innerHTML='<h2>📺 ガンダム作品別・配信先一覧</h2><p>宇宙世紀は物語の時系列順、アナザーとガンプラ・SDは各シリーズの順番に並べています。</p><div class="stream-legend"><span><b style="color:#16764b">◎</b> 見放題の掲載あり</span><span><b>ー</b> 見放題の掲載情報なし・未確認</span><span>※ 契約前に公式でご確認ください。</span></div><div class="stream-scroll" tabindex="0"><table class="stream-table"><thead><tr><th class="stream-work">作品名・公開年</th>'+streamServices.map(s=>'<th>'+s[0]+'</th>').join('')+'</tr></thead><tbody>'+rows+'</tbody></table></div><p>※「ー」は未配信の断定ではありません。TV版と劇場版の配信状況は異なる場合があります。</p>';
  document.getElementById('subnav').innerHTML='<a href="#content">配信先一覧</a><button onclick="backToTimeline()">年表を見る ↑</button>';if(jump)document.getElementById('guide').scrollIntoView();
  const token=++streamToken,trs=[...document.querySelectorAll('#content tr[data-stream-index]')];let next=0;
- async function worker(){while(next<trs.length&&token===streamToken){const tr=trs[next++],x=data[Number(tr.dataset.streamIndex)];if(gundamSeasonWorks[x.title]){tr.querySelectorAll('td').forEach(td=>{td.textContent='ー';td.className='stream-none';td.title='シーズン単独の配信情報は未確認'});continue}let item=null;try{item=await gundamLookup(x.title,/映画/.test(x.format||'')?'movie':'tv')}catch(e){}if(token!==streamToken||!tr.isConnected)return;const providers=Array.isArray(item?.streaming)?item.streaming:[];tr.querySelectorAll('td').forEach((td,j)=>{const yes=providers.some(p=>p&&streamServices[j][1].test(String(p.provider_name||'')));td.textContent=yes?'◎':'ー';td.className=yes?'stream-yes':'stream-none';td.title=yes?'見放題の掲載あり':'見放題の掲載情報なし・未確認'})}}Promise.all(Array.from({length:3},()=>worker()));
+ async function worker(){while(next<trs.length&&token===streamToken){const tr=trs[next++],x=data[Number(tr.dataset.streamIndex)];if(gundamSeasonWorks[x.title]){tr.querySelectorAll('td').forEach(td=>{td.textContent='ー';td.className='stream-none';td.title='TMDBでは親作品のシーズン2として登録。この作品単独の配信情報は未確認（親作品の配信先は流用していません）'});continue}let item=null;try{item=await gundamLookup(x.title,/映画/.test(x.format||'')?'movie':'tv')}catch(e){}if(token!==streamToken||!tr.isConnected)return;const providers=Array.isArray(item?.streaming)?item.streaming:[];tr.querySelectorAll('td').forEach((td,j)=>{const yes=providers.some(p=>p&&streamServices[j][1].test(String(p.provider_name||'')));td.textContent=yes?'◎':'ー';td.className=yes?'stream-yes':'stream-none';td.title=yes?'見放題の掲載あり':'見放題の掲載情報なし・未確認'})}}Promise.all(Array.from({length:3},()=>worker()));
 }
 
 function goWork(i){choose(data[i].tab);document.getElementById('work-'+i).scrollIntoView()}
