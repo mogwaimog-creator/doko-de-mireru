@@ -117,3 +117,53 @@ test('cooldown preserves last known streaming providers as stale', async () => {
   assert.equal(second.availability.flatrate[0].provider_id, 8);
   assert.equal(calls, 1);
 });
+
+test('after cooldown expires, a recovered TMDB refresh replaces stale data', async () => {
+  const now = new Date('2026-10-31T09:00:00Z');
+  const { data, lock, failure } = keys('movie', 999);
+  store.set(data, JSON.stringify({
+    window: '2026-10-31-06',
+    availability: {rent:[{provider_id:2}]},
+    lastSuccessfulAt: '2026-10-31T00:00:00Z'
+  }));
+  let calls = 0;
+  const first = await getSharedProviders('movie', 999, async () => {
+    calls++; throw new Error('TMDB temporarily unavailable');
+  }, now);
+  assert.equal(first.stale, true);
+  const waiting = await getSharedProviders('movie', 999, async () => {
+    calls++; return {flatrate:[{provider_id:8}]};
+  }, now);
+  assert.equal(waiting.source, 'cooldown');
+  assert.equal(calls, 1);
+
+  // Simulate the Redis expiry of the 10-minute cooldown and 90-second lock.
+  store.delete(failure);
+  store.delete(lock);
+  const recovered = await getSharedProviders('movie', 999, async () => {
+    calls++; return {flatrate:[{provider_id:8}]};
+  }, new Date('2026-10-31T09:11:00Z'));
+  assert.equal(recovered.source, 'tmdb');
+  assert.equal(recovered.stale, false);
+  assert.equal(recovered.availability.flatrate[0].provider_id, 8);
+  assert.equal(calls, 2);
+  const next = await getSharedProviders('movie', 999, async () => {
+    calls++; throw new Error('must not refetch');
+  }, new Date('2026-10-31T09:12:00Z'));
+  assert.equal(next.source, 'cache');
+  assert.equal(next.warning, null);
+  assert.equal(calls, 2);
+});
+
+test('a previous-window cooldown does not block the next JST update window', async () => {
+  const { failure, lock } = keys('tv', 1001);
+  store.set(failure, '2026-10-31-06');
+  store.delete(lock);
+  let calls = 0;
+  const result = await getSharedProviders('tv', 1001, async () => {
+    calls++; return {buy:[{provider_id:3}]};
+  }, new Date('2026-10-31T09:00:00Z'));
+  assert.equal(result.source, 'tmdb');
+  assert.equal(result.window, '2026-10-31-18');
+  assert.equal(calls, 1);
+});
