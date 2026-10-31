@@ -2314,191 +2314,30 @@ try{
 }
 
 
-loadEvaPosters();
+// Existing fixed poster images are retained; do not query TMDB on page visits.
 
 async function loadEvaStreaming(){
-
-  const elements =
-    document.querySelectorAll(
-      ".eva-work-streaming[data-movie-id]"
-    );
-
-
-  for(const element of elements){
-
-    const id =
-  element.dataset.movieId;
-
-const mediaType =
-  element.dataset.mediaType ||
-  "movie";
-
-
-try{
-
-  const response =
-    await fetch(
-      dokoApiRoot + "/api/search?id=" +
-      encodeURIComponent(id) +
-      "&type=" +
-      encodeURIComponent(mediaType)
-    );
-
-
-      if(!response.ok){
-
-        throw new Error(
-          "配信情報を取得できませんでした"
-        );
-
-      }
-
-
-      const movie =
-        await response.json();
-
-
-      const streaming =
-        Array.isArray(movie.streaming)
-          ? dokoNormalizeStreaming(movie.streaming)
-          : [];
-
-
-      const providers = [];
-
-      const usedNames =
-        new Set();
-
-
-      streaming.forEach(function(provider){
-
-        if(
-          !provider ||
-          !provider.logo_path
-        ){
-          return;
-        }
-
-
-        const key = String(provider.provider_id || provider.provider_name || "");
-
-
-        if(
-          !key ||
-          usedNames.has(key)
-        ){
-          return;
-        }
-
-
-        usedNames.add(key);
-
-        providers.push(
-          provider
-        );
-
-      });
-
-
-      element.innerHTML =
-        "";
-
-
-      if(providers.length === 0){
-
-        const none =
-          document.createElement(
-            "span"
-          );
-
-        none.className =
-          "eva-streaming-none";
-
-        none.textContent =
-          "見放題情報は未確認です";
-
-        element.appendChild(
-          none
-        );
-
-        continue;
-
-      }
-
-
-      const label =
-        document.createElement(
-          "span"
-        );
-
-      label.className =
-        "eva-streaming-label";
-
-      label.textContent =
-        "見放題";
-
-      element.appendChild(
-        label
-      );
-
-
-      providers
-        
-        .forEach(function(provider){
-
-          const img =
-            document.createElement(
-              "img"
-            );
-
-
-          img.src =
-            "https://image.tmdb.org/t/p/w92" +
-            provider.logo_path;
-
-
-          img.alt =
-            provider.provider_name ||
-            "配信サービス";
-
-
-          img.title =
-            provider.provider_name ||
-            "";
-
-
-          img.loading =
-            "lazy";
-
-
-          element.appendChild(
-            img
-          );
-
-        });
-
-
-    }catch(error){
-
-      console.error(
-        "Eva streaming error:",
-        id,
-        error
-      );
-
-
-      element.innerHTML =
-        '<span class="eva-streaming-none">' +
-        '配信情報を取得できませんでした' +
-        '</span>';
-
+  let data=null;
+  try{
+    const response=await fetch(dokoApiRoot+'/api/series-watch?series=eva');
+    if(!response.ok)throw Error('cache unavailable');
+    data=await response.json();
+  }catch(e){console.warn('Eva cached streaming unavailable',e)}
+  document.querySelectorAll('.eva-work-streaming[data-movie-id]').forEach(element=>{
+    const key=(element.dataset.mediaType||'movie')+':'+element.dataset.movieId;
+    const record=data?.providers?.[key];
+    if(!record||!Array.isArray(record.flatrate)){
+      element.innerHTML='<span class="eva-streaming-none">配信情報を取得できませんでした</span>';
+      return;
     }
-
-  }
-
+    const list=dokoNormalizeStreaming(record.flatrate).filter(p=>p&&p.logo_path);
+    const seen=new Set(),providers=list.filter(p=>{const k=String(p.provider_id||p.provider_name||'');if(!k||seen.has(k))return false;seen.add(k);return true});
+    element.replaceChildren();
+    if(!providers.length){element.innerHTML='<span class="eva-streaming-none">見放題情報は未確認です</span>';return}
+    const label=document.createElement('span');label.className='eva-streaming-label';label.textContent='見放題';element.appendChild(label);
+    providers.forEach(p=>{const img=document.createElement('img');img.src='https://image.tmdb.org/t/p/w92'+p.logo_path;img.alt=p.provider_name||'配信サービス';img.title=p.provider_name||'';img.loading='lazy';element.appendChild(img)});
+  });
 }
-
-
 loadEvaStreaming();
   
 </script>  
