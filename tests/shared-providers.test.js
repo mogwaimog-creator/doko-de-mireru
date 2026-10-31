@@ -200,3 +200,44 @@ test('simultaneous visitors share one TMDB refresh while the lock is held', asyn
   assert.equal(next.availability.flatrate[0].provider_id, 8);
   assert.equal(calls, 1);
 });
+
+test('while refresh is slow, other visitors see previous streaming as stale', async () => {
+  const now = new Date('2026-10-31T09:00:00Z');
+  const { data, lock, failure } = keys('tv', 1003);
+  store.set(data, JSON.stringify({
+    window: '2026-10-31-06',
+    availability: {rent:[{provider_id:2}]},
+    lastSuccessfulAt: '2026-10-31T00:00:00Z'
+  }));
+  store.delete(lock);
+  store.delete(failure);
+  let calls = 0;
+  let release;
+  const wait = new Promise(resolve => { release = resolve; });
+  const firstPromise = getSharedProviders('tv', 1003, async () => {
+    calls++;
+    await wait;
+    return {flatrate:[{provider_id:8}]};
+  }, now);
+  for (let i = 0; i < 20 && calls === 0; i++) await new Promise(resolve => setImmediate(resolve));
+  assert.equal(calls, 1);
+  const pending = await getSharedProviders('tv', 1003, async () => {
+    calls++;
+    throw new Error('must not fetch again');
+  }, now);
+  assert.equal(pending.source, 'pending');
+  assert.equal(pending.stale, true);
+  assert.equal(pending.availability.rent[0].provider_id, 2);
+  assert.match(pending.warning, /前回確認/);
+  release();
+  const refreshed = await firstPromise;
+  assert.equal(refreshed.source, 'tmdb');
+  const latest = await getSharedProviders('tv', 1003, async () => {
+    calls++;
+    throw new Error('must not fetch after refresh');
+  }, now);
+  assert.equal(latest.source, 'cache');
+  assert.equal(latest.stale, false);
+  assert.equal(latest.availability.flatrate[0].provider_id, 8);
+  assert.equal(calls, 1);
+});
