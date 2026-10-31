@@ -273,7 +273,32 @@ const gundamKnownIds={
  '機動戦士ガンダム':{id:21731,type:'tv'},
  '機動戦士ガンダムUC':{id:45500,type:'tv'},
  '機動戦士ガンダム 水星の魔女':{id:196400,type:'tv'},
- '機動戦士ガンダム00':{id:21732,type:'tv'}
+ '機動戦士ガンダム00':{id:21732,type:'tv'},
+ '機動戦士Ζガンダム':{id:13674,type:'tv'},
+ '機動戦士ガンダムΖΖ':{id:5660,type:'tv'},
+ '機動戦士ガンダム 逆襲のシャア':{id:16157,type:'movie'},
+ '機動戦士ガンダム THE ORIGIN':{id:88865,type:'tv'},
+ '機動戦士ガンダム0080 ポケットの中の戦争':{id:46512,type:'tv'},
+ '機動戦士ガンダム ククルス・ドアンの島':{id:883768,type:'movie'},
+ '機動戦士ガンダムNT':{id:553610,type:'movie'},
+ '機動戦士ガンダム 閃光のハサウェイ':{id:685274,type:'movie'},
+ '機動戦士ガンダム 閃光のハサウェイ キルケーの魔女':{id:910850,type:'movie'},
+ '機動戦士ガンダムF91':{id:16308,type:'movie'},
+ '機動戦士ガンダム0083 STARDUST MEMORY':{id:72677,type:'tv'},
+ '機動戦士Vガンダム':{id:25797,type:'tv'},
+ '機動戦士ガンダムSEED':{id:20111,type:'tv'},
+ '機動戦士ガンダムSEED FREEDOM':{id:1146972,type:'movie'},
+ '機動武闘伝Gガンダム':{id:30093,type:'tv'},
+ '新機動戦記ガンダムW':{id:21730,type:'tv'},
+ '機動新世紀ガンダムX':{id:25504,type:'tv'},
+ '∀ガンダム':{id:37546,type:'tv'},
+ '機動戦士ガンダムAGE':{id:45835,type:'tv'},
+ 'ガンダム Gのレコンギスタ':{id:61414,type:'tv'},
+ 'ガンダムビルドファイターズ':{id:60667,type:'tv'},
+ 'ガンダムビルドダイバーズ':{id:76821,type:'tv'},
+ 'SDガンダムワールド 三国創傑伝':{id:91566,type:'tv'},
+ 'SDガンダムワールド ヒーローズ':{id:122468,type:'tv'},
+ '新機動戦記ガンダムW Endless Waltz':{id:22914,type:'tv'}
 };
 async function gundamById(id,type){
  const url=type==='tv'&&Object.values(gundamKnownIds).some(x=>x.id===Number(id)&&x.type===type)?'/api/gundam-stream?id='+encodeURIComponent(id):'/api/search?id='+encodeURIComponent(id)+'&type='+type;
