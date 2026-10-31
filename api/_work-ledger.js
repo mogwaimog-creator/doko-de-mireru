@@ -18,6 +18,20 @@ function textOrNull(value) {
   return typeof value === 'string' && value.trim() ? value.trim() : null;
 }
 
+// Page-specific additions are stored by page key and can grow without changing
+// the shared metadata schema. Preserve unknown fields within each page's extras.
+function plainObject(value) {
+  return value && typeof value === 'object' && !Array.isArray(value) ? value : {};
+}
+function normalizePageExtras(value) {
+  const extras = {};
+  for (const [page, fields] of Object.entries(plainObject(value))) {
+    if (!/^[a-zA-Z0-9_-]{1,80}$/.test(page)) continue;
+    if (fields && typeof fields === 'object' && !Array.isArray(fields)) extras[page] = fields;
+  }
+  return extras;
+}
+
 function normalizeWork(type, id, source) {
   const work = identity(type, id);
   if (!source || typeof source !== 'object' || Array.isArray(source)) {
@@ -46,7 +60,17 @@ function normalizeWork(type, id, source) {
     voteCount: Number.isSafeInteger(source.voteCount) ? source.voteCount : null,
     checkedAt: textOrNull(source.checkedAt) || new Date().toISOString(),
     nextCheckAt: textOrNull(source.nextCheckAt),
-    manualReview: source.manualReview === true
+    manualReview: source.manualReview === true,
+    // ID verification is independent of editorial/metadata checks.
+    verification: {
+      identity: textOrNull(source.verification?.identity) || 'not_recorded',
+      metadata: textOrNull(source.verification?.metadata) || 'not_checked',
+      items: plainObject(source.verification?.items),
+      notes: textOrNull(source.verification?.notes)
+    },
+    errors: Array.isArray(source.errors) ? source.errors : [],
+    // Supplemental fields per page; not limited to a predefined list.
+    pageExtras: normalizePageExtras(source.pageExtras)
   };
   if (!record.title) throw new Error('Work title is required');
   return record;
