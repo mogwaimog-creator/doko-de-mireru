@@ -22,7 +22,8 @@ module.exports=async function handler(req,res){
  }
  const apiKey=process.env.TMDB_API_KEY;
  if(!apiKey)return res.status(503).json({error:'Provider lookup unavailable'});
- const ttl=secondsUntilBoundary();
+ // Season posters change rarely; cache them 30 days instead of refetching twice daily.
+ const ttl=seasonAllowed?2592000:secondsUntilBoundary();
  res.setHeader('Cache-Control','public, max-age=0, must-revalidate');
  res.setHeader('Vercel-CDN-Cache-Control','s-maxage='+ttl);
  try{
