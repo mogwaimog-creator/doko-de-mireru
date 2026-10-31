@@ -99,7 +99,9 @@ async function putWorkIfAbsent(type, id, source) {
   const { key } = identity(type, id);
   const saved = await command(['SET', key, JSON.stringify(record), 'NX']);
   if (saved === 'OK') return record;
-  return (await getWork(type, id)) || record;
+  const existing = await getWork(type, id);
+  if (!existing) throw new Error('Existing work ledger record is invalid; manual repair required');
+  return existing;
 }
 
 module.exports = { identity, normalizeWork, getWork, putWork, putWorkIfAbsent };
