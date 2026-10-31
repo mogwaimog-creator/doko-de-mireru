@@ -7,11 +7,12 @@ const original=Module._load;
 Module._load=function(request,parent,isMain){
  if(parent?.filename===path&&request==='./_redis')return {command:async args=>{
    if(args[0]==='ZRANGE')return ['doko:work-review:v1:movie:1726'];
-   if(args[0]==='MGET')return [JSON.stringify({type:'movie',id:1726,status:'unreviewed',fingerprint:'abc',registeredAt:'2026-10-31'})];
+   if(args[0]==='MGET'&&args[1].includes('work-review:'))return [JSON.stringify({type:'movie',id:1726,status:'unreviewed',fingerprint:'abc',registeredAt:'2026-10-31'})];
+   if(args[0]==='MGET'&&args[1].includes('doko:work:v1:'))return [JSON.stringify({title:'アイアンマン',releaseDate:'2008-04-30'})];
    if(args[0]==='ZCARD')return 1;
    throw Error('Unexpected command');
  }};
- if(parent?.filename===path&&request==='./_work-ledger')return {getWork:async()=>({title:'アイアンマン',releaseDate:'2008-04-30'})};
+ if(parent?.filename===path&&request==='./_work-ledger')return {identity:(type,id)=>({key:'doko:work:v1:'+type+':'+id})};
  return original.apply(this,arguments);
 };
 const handler=require('../api/admin-review-queue');
