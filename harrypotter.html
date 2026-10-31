@@ -2164,7 +2164,7 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
 </section>
   
 <p class="hp-guide-sources">魔法界・寮の特徴の参考：<a href="https://www.harrypotter.com/features/hogwarts-house-meanings" target="_blank" rel="noopener noreferrer">ハリー・ポッター公式サイト</a>（リンク先には人物情報を含みます）</p>
-<aside class="doko-streaming-note"><p><strong>配信情報について</strong><br>見放題の配信先は、比較表と同じ日本向けデータを使用しています。取得できた配信ロゴを表示し、同じサービスの広告付きプランはひとつにまとめています。追加チャンネルは通常のPrime Videoとは別の契約条件です。TVの全話・全シーズンの対象範囲と、契約前の見放題条件は公式サイトでご確認ください。</p><a href="streaming.html?view=series#series-harrypotter">このシリーズの見放題比較表を見る →</a></aside></main>
+<aside class="doko-streaming-note"><p><strong>配信情報について</strong><br>見放題の配信情報は、毎日朝6時・夕方18時（日本時間）を目安に更新しています。配信状況は随時変更される場合があるため、視聴・契約の前に各配信サービスの公式サイトで最新情報をご確認ください。<br/>見放題の配信先は、比較表と同じ日本向けデータを使用しています。取得できた配信ロゴを表示し、同じサービスの広告付きプランはひとつにまとめています。追加チャンネルは通常のPrime Videoとは別の契約条件です。TVの全話・全シーズンの対象範囲と、契約前の見放題条件は公式サイトでご確認ください。</p><a href="streaming.html?view=series#series-harrypotter">このシリーズの見放題比較表を見る →</a></aside></main>
 
 <!-- =========================================================
      データ・画像クレジット
@@ -3024,100 +3024,24 @@ hpTabs.forEach(tab => {
    ハリー・ポッター 配信ロゴ読み込み
 ===================================================== */
 
-const hpProviderCache = new Map();
-
-
-async function fetchHpProviders(id){
-
-  const key = String(id);
-
-  if(hpProviderCache.has(key)){
-    return hpProviderCache.get(key);
+let hpBatchPromise = null;
+function fetchHpProviders(id){
+  if(!hpBatchPromise){
+    hpBatchPromise = fetch(dokoApiRoot + "/api/series-watch?series=harrypotter")
+      .then(response => {if(!response.ok)throw new Error("配信情報を取得できませんでした");return response.json();})
+      .catch(error => {console.error("ハリポタ配信情報取得エラー:",error);return null;});
   }
-
-
-  const request = (async () => {
-
-    try{
-
-      const response =
-        await fetch(
-          dokoApiRoot + "/api/search?id=" +
-          encodeURIComponent(id) +
-          "&type=movie"
-        );
-
-      if(!response.ok){
-        throw new Error(
-          "配信情報を取得できませんでした"
-        );
-      }
-
-
-      const data =
-        await response.json();
-
-
-      const providers =
-        Array.isArray(data.streaming)
-          ? dokoNormalizeStreaming(data.streaming)
-          : [];
-
-
-      const unique = [];
-
-      for(const provider of providers){
-
-        if(
-          !provider ||
-          !provider.logo_path
-        ){
-          continue;
-        }
-
-
-        if(
-          unique.some(
-            item =>
-              item.provider_id ===
-              provider.provider_id
-          )
-        ){
-          continue;
-        }
-
-
-        unique.push(provider);
-
-      }
-
-
-      return unique;
-
-    }catch(error){
-
-      console.error(
-        "ハリポタ配信ロゴ取得エラー:",
-        id,
-        error
-      );
-
-      return [];
-
+  return hpBatchPromise.then(data => {
+    const providers = data?.providers?.["movie:"+id]?.flatrate;
+    if(!Array.isArray(providers))return [];
+    const unique = [];
+    for(const provider of dokoNormalizeStreaming(providers)){
+      if(!provider || !provider.logo_path || unique.some(item=>item.provider_id===provider.provider_id))continue;
+      unique.push(provider);
     }
-
-  })();
-
-
-  hpProviderCache.set(
-    key,
-    request
-  );
-
-
-  return request;
+    return unique;
+  });
 }
-
 
 /* -----------------------------------------------------
    1つのカードへロゴを表示
