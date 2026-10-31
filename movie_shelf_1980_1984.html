@@ -191,8 +191,9 @@ const memoryFilms=[{"year":1980,"title":"シャイニング","id":694,"genres":[
 const memoryGenres=['すべて','SF','ホラー','アクション・冒険','コメディ','ドラマ・青春','恋愛','ファンタジー','サスペンス・犯罪'];
 let memoryGenre='すべて',memoryOrigin='すべて',memoryReturnFocus=null;
 const memoryCache=new Map();
+function memoryKey(movie){return Number.isSafeInteger(Number(movie.id))&&Number(movie.id)>0?'movie:'+Number(movie.id):'title:'+movie.title+'|'+(movie.year||'');}
 function memoryEscape(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-function memoryPoster(movie){const cached=memoryCache.get(movie.title);return cached?.poster||'';}
+function memoryPoster(movie){const cached=memoryCache.get(memoryKey(movie));return cached?.poster||'';}
 function memoryCover(movie,large=false){const poster=memoryPoster(movie);return `<div class="${large?'shelf3-largecover':'shelf3-cover'}">${poster?`<img loading="lazy" src="${memoryEscape(poster)}" alt="${memoryEscape(movie.title)}のポスター" onerror="this.style.display='none';this.parentElement.textContent=this.alt.replace('のポスター','')">`:`<span>${memoryEscape(movie.title)}</span>`}</div>`;}
 function renderMemories(){
  const o=document.getElementById('memory-origin'),g=document.getElementById('memory-genres');
@@ -240,10 +241,11 @@ function shelfTitleSearch(query){
  return shelfTitleRequests.get(key);
 }
 async function loadMemoryPoster(m){
- if(memoryCache.has(m.title))return;
+ const key=memoryKey(m);
+ if(memoryCache.has(key))return;
  // Mark an in-flight request; release the marker on failure so a later
  // visit to this shelf can retry without reloading the whole page.
- memoryCache.set(m.title,{poster:null});
+ memoryCache.set(key,{poster:null});
  const base=location.protocol==='file:'?'https://doko-de-mireru.com':'';
  const normalize=x=>String(x||'').normalize('NFKC').toLowerCase().replace(/[\s・!！／/ー－-]/g,'');
  const getItems=data=>Array.isArray(data)?data:Array.isArray(data?.results)?data.results:Array.isArray(data?.movies)?data.movies:Array.isArray(data?.items)?data.items:[];
@@ -264,13 +266,13 @@ async function loadMemoryPoster(m){
    if(film&&(!m.id||Number(film.id??film.tmdb_id)===Number(m.id)))poster=posterUrl(film);
   }
   if(!poster){
-   memoryCache.delete(m.title);
+   memoryCache.delete(key);
    return;
   }
-  memoryCache.set(m.title,{poster});
+  memoryCache.set(key,{poster});
   if(!document.getElementById('memory-section').hidden)renderMemoryCoversOnly();
  }catch(e){
-  memoryCache.delete(m.title);
+  memoryCache.delete(key);
   console.warn('名作映画のポスター取得失敗',m.title,e);
  }
 }
