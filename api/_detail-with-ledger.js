@@ -3,7 +3,7 @@
 // Opt-in integration for existing /api/search detail responses.
 // Cache stores a reusable subset of TMDB detail, never watch/providers.
 // Disabled by default until reviewed on a preview deployment.
-const { getWork, putWork } = require('./_work-ledger');
+const { getWork, putWorkIfAbsent } = require('./_work-ledger');
 const { fromTmdb } = require('./_work-from-tmdb');
 const { recordIssue, clearIssue } = require('./_work-issues');
 const { registerForReview } = require('./_work-review');
@@ -75,7 +75,7 @@ async function detailWithLedger(type, id, load) {
   }
   if (!original || Number(original.id) !== Number(id)) return original;
   try {
-    const record = await putWork(type, id, fromTmdb(type, original));
+    const record = await putWorkIfAbsent(type, id, fromTmdb(type, original));
     // Registration is best-effort; metadata remains usable if the review index fails.
     try { await registerForReview(record, 'detail'); }
     catch (reviewError) { console.error('WORK REVIEW REGISTRATION FAILED', reviewError); }
