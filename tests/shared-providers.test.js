@@ -77,3 +77,13 @@ test('Redis lock outage preserves previous data without calling TMDB', async () 
     assert.equal(calls, 0);
   } finally { failLock = false; }
 });
+
+test('malformed current-window provider cache is not presented as fresh', async () => {
+  const { data } = keys('movie', 666);
+  store.set(data, JSON.stringify({window:'2026-10-31-18',availability:[],lastSuccessfulAt:'2026-10-31T09:00:00Z'}));
+  let calls = 0;
+  const result = await getSharedProviders('movie', 666, async () => {calls++; return {flatrate:[]};}, new Date('2026-10-31T09:30:00Z'));
+  assert.equal(result.source, 'tmdb');
+  assert.equal(calls, 1);
+  assert.deepEqual(result.availability, {flatrate:[]});
+});
