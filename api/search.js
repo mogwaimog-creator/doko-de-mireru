@@ -12047,7 +12047,9 @@ async function getTvDetail(tvId, apiKey) {
       ? tv["watch/providers"].results.JP
       : {};
 
-  if (ledgerEnabled && !tv["watch/providers"]) {
+  // Shared provider cache must be used even when TMDB metadata embeds providers.
+  // Without this, TV detail requests bypass the 06:00 / 18:00 shared window.
+  if (process.env.SHARED_PROVIDER_ENABLED === '1' || (ledgerEnabled && !tv["watch/providers"])) {
     try {
       const providerUrl =
         "https://api.themoviedb.org/3/tv/" +
