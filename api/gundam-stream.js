@@ -10,6 +10,12 @@ function secondsUntilBoundary(){
 module.exports=async function handler(req,res){
  if(req.method!=='GET')return res.status(405).json({error:'GET only'});
  const id=String(req.query?.id||'');
+ const season=String(req.query?.season||'');
+ const seasonAllowed=(id==='20111'||id==='60667'||id==='76821')&&season==='2';
+ if(season&&!seasonAllowed){
+   res.setHeader('Cache-Control','no-store');
+   return res.status(400).json({error:'Unverified season'});
+ }
  if(!Object.prototype.hasOwnProperty.call(WORKS,id)){
   res.setHeader('Cache-Control','no-store');
   return res.status(400).json({error:'Unverified work ID'});
@@ -20,15 +26,17 @@ module.exports=async function handler(req,res){
  res.setHeader('Cache-Control','public, max-age=0, must-revalidate');
  res.setHeader('Vercel-CDN-Cache-Control','s-maxage='+ttl);
  try{
-  const url='https://api.themoviedb.org/3/'+WORKS[id]+'/'+id+'?api_key='+encodeURIComponent(apiKey)+'&append_to_response=watch/providers';
+  const url=seasonAllowed
+        ?'https://api.themoviedb.org/3/tv/'+id+'/season/2?api_key='+encodeURIComponent(apiKey)
+        :'https://api.themoviedb.org/3/'+WORKS[id]+'/'+id+'?api_key='+encodeURIComponent(apiKey)+'&append_to_response=watch/providers';
   const response=await fetch(url,{headers:{Accept:'application/json'}});
   if(!response.ok)throw new Error('TMDB '+response.status);
   const payload=await response.json();
-  const jp=payload?.['watch/providers']?.results?.JP||{};
+  const jp=seasonAllowed?{}:(payload?.['watch/providers']?.results?.JP||{});
   const streaming=Array.isArray(jp.flatrate)?jp.flatrate.map(x=>({
    provider_id:x.provider_id,provider_name:x.provider_name,logo_path:x.logo_path
   })):[];
-  return res.status(200).json({id:Number(id),content_type:WORKS[id],poster_path:payload.poster_path||null,streaming,checked_at:new Date().toISOString()});
+  return res.status(200).json({id:Number(id),content_type:WORKS[id],season_number:seasonAllowed?2:null,poster_path:payload.poster_path||null,streaming,checked_at:new Date().toISOString()});
  }catch(e){
   res.setHeader('Vercel-CDN-Cache-Control','no-store');
   return res.status(502).json({error:'Streaming information unavailable'});
