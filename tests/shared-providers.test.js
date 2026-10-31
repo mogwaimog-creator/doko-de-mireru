@@ -4,10 +4,11 @@ const assert = require('node:assert/strict');
 const redis = require('../api/_redis');
 const original = redis.command;
 const store = new Map();
-let failRead = false, failLock = false;
+let failRead = false, failLock = false, failDataWrite = false;
 redis.command = async ([op, key, value, ...rest]) => {
   if (op === 'GET') { if (failRead) throw new Error('Redis GET failed'); return store.get(key) || null; }
   if (op === 'SET') {
+    if (failDataWrite && key === keys('movie', 1004).data) throw new Error('Redis data write failed');
     if (failLock && rest[0] === 'NX') throw new Error('Redis lock failed');
     if (rest[0] === 'NX' && store.has(key)) return null;
     store.set(key, value); return 'OK';
@@ -240,4 +241,38 @@ test('while refresh is slow, other visitors see previous streaming as stale', as
   assert.equal(latest.stale, false);
   assert.equal(latest.availability.flatrate[0].provider_id, 8);
   assert.equal(calls, 1);
+});
+
+test('failed Redis save keeps previous providers and does not falsely mark refresh successful', async () => {
+  const now = new Date('2026-10-31T09:00:00Z');
+  const { data, lock, failure } = keys('movie', 1004);
+  store.set(data, JSON.stringify({
+    window: '2026-10-31-06',
+    availability: {rent:[{provider_id:2}]},
+    lastSuccessfulAt: '2026-10-31T00:00:00Z'
+  }));
+  store.delete(lock);
+  store.delete(failure);
+  let calls = 0;
+  failDataWrite = true;
+  try {
+    const first = await getSharedProviders('movie', 1004, async () => {
+      calls++;
+      return {flatrate:[{provider_id:8}]};
+    }, now);
+    assert.equal(first.source, 'fallback');
+    assert.equal(first.stale, true);
+    assert.equal(first.availability.rent[0].provider_id, 2);
+    assert.match(first.warning, /前回確認/);
+    const second = await getSharedProviders('movie', 1004, async () => {
+      calls++;
+      throw new Error('must not retry during cooldown');
+    }, now);
+    assert.equal(second.source, 'cooldown');
+    assert.equal(second.stale, true);
+    assert.equal(calls, 1);
+    assert.equal(JSON.parse(store.get(data)).window, '2026-10-31-06');
+  } finally {
+    failDataWrite = false;
+  }
 });
