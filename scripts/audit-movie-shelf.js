@@ -5,6 +5,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
+const { createHash } = require('node:crypto');
 
 function extractLiteral(html, name) {
   const marker = 'const ' + name + '=';
@@ -35,6 +36,15 @@ function extractLiteral(html, name) {
   return vm.runInNewContext('(' + html.slice(pos, end) + ')', Object.create(null), { timeout: 1000 });
 }
 
+function editorialFingerprints(html) {
+  return Object.fromEntries(['memoryFilms', 'verifiedClassicInfo', 'approvedAwardStories'].map(name => {
+    const value = extractLiteral(html, name);
+    // Stable for source formatting changes; changes when the actual text changes.
+    const digest = createHash('sha256').update(JSON.stringify(value)).digest('hex');
+    return [name, digest];
+  }));
+}
+
 function audit(html) {
   const memory = extractLiteral(html, 'memoryFilms');
   const verified = extractLiteral(html, 'verifiedClassicInfo');
@@ -52,6 +62,7 @@ function audit(html) {
     invalidMemoryIds: Array.from(invalidIds),
     // All three blocks are retained independently, even for the same title.
     editorialSources: ['memoryFilms', 'verifiedClassicInfo', 'approvedAwardStories'],
+    editorialFingerprints: editorialFingerprints(html),
     sample: {
       title: memory[0]?.title,
       summaryPresent: Boolean(memory[0]?.summary),
@@ -64,4 +75,4 @@ if (require.main === module) {
   const html = fs.readFileSync(path.join(__dirname, '../movie_shelf_1980_1984.html'), 'utf8');
   console.log(JSON.stringify(audit(html), null, 2));
 }
-module.exports = { extractLiteral, audit };
+module.exports = { extractLiteral, editorialFingerprints, audit };
