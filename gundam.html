@@ -281,7 +281,8 @@ const gundamKnownIds={
  '機動戦士ガンダム00':{id:21732,type:'tv'}
 };
 async function gundamById(id,type){
- const r=await fetch(gundamApiRoot+'/api/search?id='+encodeURIComponent(id)+'&type='+type,{headers:{Accept:'application/json'}});
+ const url=type==='tv'&&Object.values(gundamKnownIds).some(x=>x.id===Number(id)&&x.type===type)?'/api/gundam-stream?id='+encodeURIComponent(id):'/api/search?id='+encodeURIComponent(id)+'&type='+type;
+ const r=await fetch(gundamApiRoot+url,{headers:{Accept:'application/json'}});
  if(!r.ok)throw Error('作品詳細API '+r.status);
  const result=await r.json();
  return result&&result.id?{...result,content_type:type}:null;
