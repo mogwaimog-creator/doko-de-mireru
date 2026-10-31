@@ -487,9 +487,9 @@ function gundamSharedProviders(id,type){
 function gundamRetryProviderRow(tr,id,type){
  const key=type+':'+id;
  const retryToken=streamToken;
- // Preserve shared in-flight requests: retry only when the prior request settled.
  if(tr.dataset.providerRetrying==='1')return;
  tr.dataset.providerRetrying='1';
+ // Manual retries refresh the per-page cache; server-side cooldown still applies.
  gundamProviderRequests.delete(key);
  const cells=[...tr.querySelectorAll('td')];
  cells.forEach(td=>{td.textContent='再確認中…';td.className='stream-none'});
