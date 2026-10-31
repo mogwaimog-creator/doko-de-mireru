@@ -312,8 +312,8 @@ function findFilmMatch(list,item){
  // Prefer the known TMDB ID; otherwise require an exact title match.
  const knownId=classicKnownIds[item.title]||getFilmByTitle(item.title)?.id||verifiedClassicInfo[item.title]?.id;
  if(knownId){
-  const byId=list.find(x=>Number(x.id??x.tmdb_id)===Number(knownId));
-  if(byId)return byId;
+  // A known ID must not silently fall back to a different film with a similar title.
+  return list.find(x=>Number(x.id??x.tmdb_id)===Number(knownId))||null;
  }
  return exact.find(x=>{const year=Number((x.release_date||x.first_air_date||'').slice(0,4));return item.year&&year&&Math.abs(year-item.year)<=1;})|| (exact.length===1?exact[0]:null);
 }
