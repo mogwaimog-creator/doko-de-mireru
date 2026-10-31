@@ -481,7 +481,8 @@ if(!known){try{item=await gundamLookup(x.title,/映画/.test(x.format||'')?'movi
 if(token!==streamToken||!tr.isConnected)return;
 let providers=Array.isArray(item?.streaming)?item.streaming:[];
 let providerUnknown=!item?.id;
-if(item?.id&&item?.content_type){
+// Title-based lookup already returned subscription data; do not request it twice.
+if(known&&item?.id&&item?.content_type){
  try{
   const url=gundamApiRoot+'/api/series-providers?id='+encodeURIComponent(item.id)+'&type='+encodeURIComponent(gundamApiType(item));
   const response=await fetch(url,{headers:{Accept:'application/json'}});
