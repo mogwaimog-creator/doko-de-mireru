@@ -5851,7 +5851,11 @@ function renderProviders(movie){
     "provider-empty-message";
 
   message.textContent =
-    "現在、動画配信サービスでの配信情報を確認できません。";
+    movie.provider_status && movie.provider_status.unavailable
+      ? "配信情報の取得に失敗しました。配信されていないという意味ではありません。"
+      : movie.provider_status && movie.provider_status.stale
+        ? "前回確認した配信先はありません。最新情報の取得にも失敗しています。"
+        : "現在、動画配信サービスでの配信情報を確認できません。";
 
   empty.appendChild(
     title
