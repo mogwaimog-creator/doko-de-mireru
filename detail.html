@@ -2625,6 +2625,8 @@ Netflix、Amazon Prime Video、U-NEXT、Hulu、Disney+など、
 見放題・レンタル・購入などの配信情報を掲載しています。
 </p>
 
+<p id="providerStatusNotice" role="status" aria-live="polite" hidden style="color:#a12323;font-size:15px;font-weight:600;line-height:1.7;margin:12px 0;"></p>
+
 <div id="providers"></div>
 
 <!-- 配信サービスの料金・機能比較への案内 -->
@@ -4633,6 +4635,17 @@ function renderMovie(movie){
   movie.title || "作品情報"
 );
 
+  const providerNotice = document.getElementById("providerStatusNotice");
+  const providerStatus = movie.provider_status;
+  if (providerNotice) {
+    const warning = providerStatus && (providerStatus.stale || providerStatus.unavailable)
+      ? providerStatus.warning || "現在、最新の配信情報を確認できません。"
+      : "";
+    providerNotice.textContent = warning;
+    providerNotice.hidden = !warning;
+  }
+
+
 
   setText(
     "breadcrumbMovieName",
@@ -4730,6 +4743,12 @@ if(
 
 }
 
+
+if (movie.provider_status && movie.provider_status.unavailable) {
+  providerDescription = "現在、この作品の配信情報を確認できません。配信なしと確定したわけではありません。";
+} else if (movie.provider_status && movie.provider_status.stale) {
+  providerDescription = "前回確認した配信情報です。最新の配信状況は確認できていません。";
+}
 
 setText(
   "providersDescription",
@@ -5626,6 +5645,15 @@ function renderFaq(movie){
     }
 
   ];
+  if (movie.provider_status && (movie.provider_status.unavailable || movie.provider_status.stale)) {
+    const notice = movie.provider_status.unavailable
+      ? "現在、配信情報を確認できません。配信されていないと確定したわけではありません。"
+      : "前回確認した配信情報です。最新の状況は確認できていません。";
+    faqs.forEach(function(item){
+      item.answer = notice;
+    });
+  }
+
 
 
   /* -------------------------------------------------------
