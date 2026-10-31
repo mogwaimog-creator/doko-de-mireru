@@ -3,7 +3,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
-const { extractLiteral, audit, compareEditorialSources, editorialEntryFingerprints, compareEditorialEntries } = require('../scripts/audit-movie-shelf');
+const { extractLiteral, audit, compareEditorialSources, editorialEntryFingerprints, compareEditorialEntries, planEditorialMigration } = require('../scripts/audit-movie-shelf');
 const html = fs.readFileSync(path.join(__dirname, '../movie_shelf_1980_1984.html'), 'utf8');
 
 test('movie shelf editorial blocks can be audited without writing data', () => {
@@ -54,4 +54,13 @@ test('individual movie text edits are detected without flagging unrelated entrie
   assert.deepEqual(changes.memoryFilms.removed, []);
   assert.deepEqual(changes.verifiedClassicInfo.changed, []);
   assert.deepEqual(changes.approvedAwardStories.changed, []);
+});
+
+test('editorial migration plan flags changed work for review and never writes automatically', () => {
+  const previous = editorialEntryFingerprints(html);
+  const next = editorialEntryFingerprints(html.replace('長い廊下、双子の少女', '長い廊下と双子の少女'));
+  const plan = planEditorialMigration(previous, next);
+  assert.deepEqual(plan.memoryFilms.reviewBeforeImport, ['movie:694:シャイニング']);
+  assert.deepEqual(plan.memoryFilms.missingFromSource, []);
+  for (const section of Object.values(plan)) assert.equal(section.autoWrites, 0);
 });
