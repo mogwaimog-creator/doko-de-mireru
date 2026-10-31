@@ -22,3 +22,13 @@ test('the original editorial text remains available for later migration', () => 
   const stories = extractLiteral(html, 'approvedAwardStories');
   assert.ok(Object.values(stories).some(lines => Array.isArray(lines) && lines.length > 0));
 });
+
+test('editorial fingerprints detect later text edits without touching other blocks', () => {
+  const original = audit(html).editorialFingerprints;
+  const changed = html.replace('長い廊下、双子の少女', '長い廊下と双子の少女');
+  assert.notEqual(changed, html, 'fixture must contain the original text');
+  const updated = audit(changed).editorialFingerprints;
+  assert.notEqual(updated.memoryFilms, original.memoryFilms);
+  assert.equal(updated.verifiedClassicInfo, original.verifiedClassicInfo);
+  assert.equal(updated.approvedAwardStories, original.approvedAwardStories);
+});
