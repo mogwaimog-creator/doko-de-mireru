@@ -415,7 +415,14 @@ async function openGundamDetail(event,anchor){
  event.preventDefault();
  const title=anchor.getAttribute('data-title')||'';
  const fallback='index.html?query='+encodeURIComponent(title);
- const match=await gundamLookup(title,anchor.getAttribute('data-type')||'tv');
+ const known=gundamKnownIds[title];
+ const requestedType=anchor.getAttribute('data-type')||'tv';
+ // 確認済みIDならクリック時の追加API呼び出しを省略する。
+ if(known&&known.type===requestedType){
+  location.href=gundamApiRoot+'/detail.html?id='+encodeURIComponent(known.id)+'&type='+known.type;
+  return false;
+ }
+ const match=await gundamLookup(title,requestedType);
  location.href=match?gundamDetailUrl(match):fallback;
  return false;
 }
