@@ -292,6 +292,8 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
   const providerCache=new Map();
   const apiBase=location.protocol==='file:'?'https://doko-de-mireru.com':'';
   async function loadProviders(box){
+    if(box.dataset.providerLoading==='1')return;
+    box.dataset.providerLoading='1';
     const key=`${box.dataset.type}:${box.dataset.id}`;
     if(!providerCache.has(key))providerCache.set(key,fetch(`${apiBase}/api/series-providers?id=${encodeURIComponent(box.dataset.id)}&type=${encodeURIComponent(box.dataset.type)}`)
       .then(async response=>{
@@ -316,6 +318,7 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
         return null;
       }));
     const providers=await providerCache.get(key);
+    delete box.dataset.providerLoading;
     if(!box.isConnected)return;
     if(providers===null){
       box.textContent='配信情報を現在確認できません。';
