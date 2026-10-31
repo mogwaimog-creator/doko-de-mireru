@@ -87,3 +87,33 @@ test('malformed current-window provider cache is not presented as fresh', async 
   assert.equal(calls, 1);
   assert.deepEqual(result.availability, {flatrate:[]});
 });
+
+test('failed refresh enters cooldown and subsequent visitors do not retry TMDB', async () => {
+  const now = new Date('2026-10-31T09:00:00Z');
+  let calls = 0;
+  const load = async () => { calls++; throw new Error('TMDB unavailable'); };
+  const first = await getSharedProviders('movie', 777, load, now);
+  const second = await getSharedProviders('movie', 777, load, now);
+  assert.equal(first.source, 'fallback');
+  assert.equal(second.source, 'cooldown');
+  assert.equal(second.unavailable, true);
+  assert.equal(calls, 1);
+});
+
+test('cooldown preserves last known streaming providers as stale', async () => {
+  const now = new Date('2026-10-31T09:00:00Z');
+  const { data } = keys('tv', 888);
+  store.set(data, JSON.stringify({
+    window: '2026-10-31-06',
+    availability: { flatrate: [{provider_id: 8}] },
+    lastSuccessfulAt: '2026-10-31T00:00:00Z'
+  }));
+  let calls = 0;
+  const load = async () => { calls++; throw new Error('TMDB unavailable'); };
+  await getSharedProviders('tv', 888, load, now);
+  const second = await getSharedProviders('tv', 888, load, now);
+  assert.equal(second.source, 'cooldown');
+  assert.equal(second.stale, true);
+  assert.equal(second.availability.flatrate[0].provider_id, 8);
+  assert.equal(calls, 1);
+});
