@@ -331,7 +331,7 @@ const gundamLookupExpiry=new Map();
 function gundamLookup(title,preferredType){
  const cacheKey=title+'|'+(preferredType||'');
  const now=Date.now();
- const storageKey='gundam-work-v2:'+cacheKey;
+ const storageKey='gundam-work-v3:'+cacheKey;
  try{
   const saved=JSON.parse(localStorage.getItem(storageKey)||'null');
   if(saved&&saved.expires>now&&saved.item&&Number(saved.item.id)>0){
