@@ -486,11 +486,15 @@ function gundamSharedProviders(id,type){
 }
 function gundamRetryProviderRow(tr,id,type){
  const key=type+':'+id;
+ const retryToken=streamToken;
+ // Preserve shared in-flight requests: retry only when the prior request settled.
+ if(tr.dataset.providerRetrying==='1')return;
+ tr.dataset.providerRetrying='1';
  gundamProviderRequests.delete(key);
  const cells=[...tr.querySelectorAll('td')];
  cells.forEach(td=>{td.textContent='再確認中…';td.className='stream-none'});
  gundamSharedProviders(id,type).then(response=>{
-  if(!tr.isConnected)return;
+  if(retryToken!==streamToken||!tr.isConnected)return;
   if(response.status!==200||response.data?.provider_status?.unavailable||response.data?.provider_status?.stale){
    gundamShowProviderRetry(tr,id,type);return;
   }
@@ -500,7 +504,8 @@ function gundamRetryProviderRow(tr,id,type){
    td.textContent=yes?'◎':'ー';td.className=yes?'stream-yes':'stream-none';
    td.title=yes?'見放題の掲載あり':'見放題の掲載情報なし・未確認';
   });
- }).catch(()=>{if(tr.isConnected)gundamShowProviderRetry(tr,id,type)});
+ }).catch(()=>{if(retryToken===streamToken&&tr.isConnected)gundamShowProviderRetry(tr,id,type)})
+ .finally(()=>{delete tr.dataset.providerRetrying});
 }
 function gundamShowProviderRetry(tr,id,type){
  const cells=[...tr.querySelectorAll('td')];
