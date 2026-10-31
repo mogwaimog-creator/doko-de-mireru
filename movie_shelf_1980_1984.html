@@ -308,8 +308,14 @@ function moviePosterPath(x){let path=cleanText(x.poster_path||x.posterPath||x.po
 function findFilmMatch(list,item){
  const titles=[item.title,item.original].filter(Boolean).map(x=>x.normalize('NFKC').toLowerCase());
  const exact=list.filter(x=>[x.title,x.name,x.original_title].filter(Boolean).some(t=>titles.includes(t.normalize('NFKC').toLowerCase())));
- const candidates=exact.length?exact:list;
- return candidates.find(x=>{const year=Number((x.release_date||x.first_air_date||'').slice(0,4));return item.year&&year&&Math.abs(year-item.year)<=1;})|| (exact.length===1?exact[0]:null);
+ // A release-year match alone is not evidence that two films are the same.
+ // Prefer the known TMDB ID; otherwise require an exact title match.
+ const knownId=classicKnownIds[item.title]||getFilmByTitle(item.title)?.id||verifiedClassicInfo[item.title]?.id;
+ if(knownId){
+  const byId=list.find(x=>Number(x.id??x.tmdb_id)===Number(knownId));
+  if(byId)return byId;
+ }
+ return exact.find(x=>{const year=Number((x.release_date||x.first_air_date||'').slice(0,4));return item.year&&year&&Math.abs(year-item.year)<=1;})|| (exact.length===1?exact[0]:null);
 }
 const classicKnownIds={"パレルモ、あるいはヴォルフスブルク":130544,"ドラえもん のび太の宇宙開拓史":162103,"ドラえもん のび太の魔界大冒険":161699,"E.T.":601,"南極物語":17895,"探偵物語":292674,"時をかける少女":62385,"里見八犬伝":47578,"愛情物語":431187,"忍者ハットリくん＋パーマン 超能力ウォーズ":1202616,"スター・ウォーズ／帝国の逆襲":1891,"スター・ウォーズ／ジェダイの復讐":1892,"ブッシュマン":8393,"ダーティファイター／燃えよ鉄拳":17169,"黄昏":11816,"ミスター・アーサー":13665,"ゴーストバスターズ":620,"ベスト・キッド":1885,"遙かなる山の呼び声":73324,"転校生":129689,"疑惑":335390,"細雪":42116,"楢山節考":42113,"Wの悲劇":326598,"グロリア":10889};
 const classicSearchCache=new Map();
