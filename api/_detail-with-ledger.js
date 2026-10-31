@@ -5,6 +5,16 @@
 // Disabled by default until reviewed on a preview deployment.
 const { getWork, putWork } = require('./_work-ledger');
 const { fromTmdb } = require('./_work-from-tmdb');
+const { recordIssue, clearIssue } = require('./_work-issues');
+
+async function noteIssue(type, id, error) {
+  try { await recordIssue(type, id, 'metadata', error); }
+  catch (issueError) { console.error('WORK ISSUE RECORD FAILED', issueError); }
+}
+async function resolveIssue(type, id) {
+  try { await clearIssue(type, id, 'metadata'); }
+  catch (issueError) { console.error('WORK ISSUE CLEAR FAILED', issueError); }
+}
 
 function restore(type, work) {
   const tv = type === 'tv';
@@ -55,13 +65,21 @@ async function detailWithLedger(type, id, load) {
     console.error('WORK LEDGER READ FAILED', error);
   }
 
-  const original = await load();
+  let original;
+  try {
+    original = await load();
+  } catch (error) {
+    await noteIssue(type, id, error);
+    throw error;
+  }
   if (!original || Number(original.id) !== Number(id)) return original;
   try {
     await putWork(type, id, fromTmdb(type, original));
   } catch (error) {
     console.error('WORK LEDGER WRITE FAILED', error);
   }
+  // A successful upstream response resolves a prior metadata retrieval incident.
+  await resolveIssue(type, id);
   return original;
 }
 
