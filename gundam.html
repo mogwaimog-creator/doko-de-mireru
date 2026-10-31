@@ -267,11 +267,6 @@ const gundamApiRoot=location.protocol==='file:'||['localhost','127.0.0.1'].inclu
 function gundamResults(payload){return Array.isArray(payload)?payload:(payload?.results||[])}
 function gundamApiType(item){return String(item?.content_type||'').startsWith('movie')||item?.content_type==='movie'?'movie':'tv'}
 function gundamDetailUrl(item){return gundamApiRoot+'/detail.html?id='+encodeURIComponent(item.id)+'&type='+gundamApiType(item)}
-async function gundamSearch(title,type){
- const r=await fetch(gundamApiRoot+'/api/search?query='+encodeURIComponent(title)+'&type='+type,{headers:{Accept:'application/json'}});
- if(!r.ok)throw Error('検索API '+r.status);
- return gundamResults(await r.json());
-}
 // TMDBで作品と種別を確認できたものは検索結果の表記ゆれに依存させない。
 // 確認できない作品は検索候補から厳格に照合し、別作品を誤表示しない。
 const gundamKnownIds={
