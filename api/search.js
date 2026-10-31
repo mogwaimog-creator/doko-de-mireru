@@ -2186,6 +2186,7 @@ async function getMovieDetail(
   // =======================================================
 
   let providersJP = {};
+  let movieProviderStatus = null;
 
 
   try {
@@ -2201,6 +2202,7 @@ async function getMovieDetail(
     const providerResult =
       await detailProviders('movie', movieId, () => fetchJson(providerUrl));
 
+    movieProviderStatus = providerResult;
     if (providerResult.availability) {
       providersJP = providerResult.availability;
     }
@@ -2216,6 +2218,9 @@ async function getMovieDetail(
     );
 
     providersJP = {};
+    if (process.env.SHARED_PROVIDER_ENABLED === '1') {
+      movieProviderStatus = { unavailable: true, stale: false, warning: '現在、配信情報を確認できません。' };
+    }
 
   }
 
@@ -2742,6 +2747,11 @@ vote_count:
     // ===================================================
     // 配信
     // ===================================================
+
+    provider_status: process.env.SHARED_PROVIDER_ENABLED === '1' && movieProviderStatus
+      ? { stale: !!movieProviderStatus.stale, unavailable: !!movieProviderStatus.unavailable,
+          warning: movieProviderStatus.warning || null, lastSuccessfulAt: movieProviderStatus.lastSuccessfulAt || null }
+      : null,
 
     streaming:
       streaming,
@@ -12029,6 +12039,7 @@ async function getTvDetail(tvId, apiKey) {
   // 日本の配信情報
   // =======================================================
 
+  let tvProviderStatus = null;
   let providersData =
     tv["watch/providers"] &&
     tv["watch/providers"].results &&
@@ -12043,6 +12054,7 @@ async function getTvDetail(tvId, apiKey) {
         encodeURIComponent(tvId) +
         "/watch/providers?api_key=" + encodeURIComponent(apiKey);
       const providerResult = await detailProviders('tv', tvId, () => fetchJson(providerUrl));
+      tvProviderStatus = providerResult;
       providersData = providerResult.availability || {};
       if (providerResult.warning) {
         console.warn('TV PROVIDERS STALE OR UNAVAILABLE', providerResult.warning);
@@ -12050,6 +12062,9 @@ async function getTvDetail(tvId, apiKey) {
     } catch (error) {
       console.error('TV PROVIDERS FETCH ERROR', error);
       providersData = {};
+      if (process.env.SHARED_PROVIDER_ENABLED === '1') {
+        tvProviderStatus = { unavailable: true, stale: false, warning: '現在、配信情報を確認できません。' };
+      }
     }
   }
 
@@ -12597,6 +12612,11 @@ const googlePlay =
     // ===================================================
     // 配信情報
     // ===================================================
+
+    provider_status: process.env.SHARED_PROVIDER_ENABLED === '1' && tvProviderStatus
+      ? { stale: !!tvProviderStatus.stale, unavailable: !!tvProviderStatus.unavailable,
+          warning: tvProviderStatus.warning || null, lastSuccessfulAt: tvProviderStatus.lastSuccessfulAt || null }
+      : null,
 
     streaming:
       streaming,
