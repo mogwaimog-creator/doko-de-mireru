@@ -291,17 +291,24 @@ const gundamSeasonWorks={
  '機動戦士ガンダムSEED DESTINY':{id:20111,season:2},
  'ガンダムビルドファイターズトライ':{id:60667,season:2}
 };
-async function gundamSeasonPoster(title){
+// 同じシーズンのポスターはタブ切替のたびに再取得しない。
+const gundamSeasonPosterCache=new Map();
+function gundamSeasonPoster(title){
  const info=gundamSeasonWorks[title];
- if(!info)return null;
- try{
-  const url=gundamApiRoot+'/api/search?id='+info.id+'&type=tv&season='+info.season;
-  const r=await fetch(url,{headers:{Accept:'application/json'}});
-  if(!r.ok)throw Error('シーズン取得 '+r.status);
-  const data=await r.json();
-  if(Number(data.season_number)!==info.season)return null;
-  return gundamImage(data.poster_path,'w342');
- }catch(e){console.warn('シーズンポスター取得失敗:',title,e);return null}
+ if(!info)return Promise.resolve(null);
+ if(!gundamSeasonPosterCache.has(title)){
+  gundamSeasonPosterCache.set(title,(async()=>{
+   try{
+    const url=gundamApiRoot+'/api/search?id='+info.id+'&type=tv&season='+info.season;
+    const r=await fetch(url,{headers:{Accept:'application/json'}});
+    if(!r.ok)throw Error('シーズン取得 '+r.status);
+    const data=await r.json();
+    if(Number(data.season_number)!==info.season)return null;
+    return gundamImage(data.poster_path,'w342');
+   }catch(e){console.warn('シーズンポスター取得失敗:',title,e);return null}
+  })());
+ }
+ return gundamSeasonPosterCache.get(title);
 }
 function gundamLookup(title,preferredType){
  const cacheKey=title+'|'+(preferredType||'');
