@@ -16,7 +16,7 @@ function setup({ readError = false, writeError = false } = {}) {
       if (readError) throw Error('Redis read failed');
       return records.get(type + ':' + id) || null;
     },
-    async putWork(type, id, source) {
+    async putWorkIfAbsent(type, id, source) {
       writes++;
       if (writeError) throw Error('Redis write failed');
       const record = require('../api/_work-ledger').normalizeWork(type, id, source);
