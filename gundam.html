@@ -484,6 +484,34 @@ function gundamSharedProviders(id,type){
  }
  return gundamProviderRequests.get(key);
 }
+function gundamRetryProviderRow(tr,id,type){
+ const key=type+':'+id;
+ gundamProviderRequests.delete(key);
+ const cells=[...tr.querySelectorAll('td')];
+ cells.forEach(td=>{td.textContent='再確認中…';td.className='stream-none'});
+ gundamSharedProviders(id,type).then(response=>{
+  if(!tr.isConnected)return;
+  if(response.status!==200||response.data?.provider_status?.unavailable||response.data?.provider_status?.stale){
+   gundamShowProviderRetry(tr,id,type);return;
+  }
+  const providers=Array.isArray(response.data.streaming)?response.data.streaming:[];
+  cells.forEach((td,j)=>{
+   const yes=providers.some(p=>p&&streamServices[j][1].test(String(p.provider_name||'')));
+   td.textContent=yes?'◎':'ー';td.className=yes?'stream-yes':'stream-none';
+   td.title=yes?'見放題の掲載あり':'見放題の掲載情報なし・未確認';
+  });
+ }).catch(()=>{if(tr.isConnected)gundamShowProviderRetry(tr,id,type)});
+}
+function gundamShowProviderRetry(tr,id,type){
+ const cells=[...tr.querySelectorAll('td')];
+ cells.forEach(td=>{td.textContent='未確認';td.className='stream-none';td.title='配信情報を取得できませんでした'});
+ if(!cells.length)return;
+ const button=document.createElement('button');
+ button.type='button';button.textContent='再確認';
+ button.style.cssText='font:inherit;font-size:14px;padding:4px 8px;border:1px solid #8d9bb0;border-radius:6px;background:#fff;color:#273e5d;cursor:pointer';
+ button.addEventListener('click',()=>gundamRetryProviderRow(tr,id,type));
+ cells[0].textContent='';cells[0].appendChild(button);
+}
 function streamEsc(v){return String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;')}
 function showStreamingTab(jump=false){
  current='stream';for(const t of Object.keys(labels)){const b=document.getElementById('tab-'+t);b.classList.toggle('on',t==='stream');b.setAttribute('aria-selected',t==='stream')}
@@ -507,7 +535,7 @@ if(known&&item?.id&&item?.content_type){
   if(response.status===200){
    const shared=response.data;
    if(shared.provider_status?.unavailable||shared.provider_status?.stale){
-    tr.querySelectorAll('td').forEach(td=>{td.textContent='未確認';td.className='stream-none';td.title='配信情報の更新に失敗したため確認できません'});continue;
+    gundamShowProviderRetry(tr,item.id,gundamApiType(item));continue;
    }
    providers=Array.isArray(shared.streaming)?shared.streaming:[];
   }else if(known&&response.status===404){
