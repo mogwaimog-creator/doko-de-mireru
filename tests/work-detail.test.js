@@ -12,10 +12,10 @@ function harness({ cached = null, redisError = false, tmdbStatus = 200 } = {}) {
   const records = new Map();
   if (cached) records.set('movie:123', cached);
   let reads = 0, writes = 0, tmdbCalls = 0;
-  const command = async ([verb, key, value]) => {
+  const command = async ([verb, key, value, condition]) => {
     if (redisError) throw new Error('Redis unavailable');
     if (verb === 'GET') { reads++; return records.get(key.replace('doko:work:v1:', '')) || null; }
-    if (verb === 'SET') { writes++; records.set(key.replace('doko:work:v1:', ''), value); return 'OK'; }
+    if (verb === 'SET') { const name = key.replace('doko:work:v1:', ''); if (condition === 'NX' && records.has(name)) return null; writes++; records.set(name, value); return 'OK'; }
     throw new Error('Unexpected Redis command');
   };
   const previousFetch = global.fetch;
@@ -102,4 +102,38 @@ test('invalid input does not contact TMDB', async () => {
     assert.equal((await h.call({ type: 'movie', id: '123' }, 'POST')).statusCode, 405);
     assert.equal(h.stats().tmdbCalls, 0);
   } finally { h.cleanup(); }
+});
+
+
+test('first-write-wins preserves a concurrent registration', async () => {
+  const { normalizeWork } = require('../api/_work-ledger');
+  const original = normalizeWork('movie', 999, {
+    title: '編集済み作品', pageExtras: { shelf: { note: '編集した紹介文' } },
+    verification: { identity: 'verified', metadata: 'reviewed' }
+  });
+  // Isolate the atomic NX behavior from Redis and ensure the original survives.
+  const stored = new Map([['doko:work:v1:movie:999', JSON.stringify(original)]]);
+  const workPath = require.resolve('../api/_work-ledger');
+  const priorLoad = Module._load;
+  Module._load = function(request, parent, isMain) {
+    if (request === './_redis' && parent?.filename === workPath) return {
+      command: async ([verb, key, value, flag]) => {
+        if (verb === 'GET') return stored.get(key) || null;
+        if (verb === 'SET') { if (flag === 'NX' && stored.has(key)) return null; stored.set(key, value); return 'OK'; }
+        throw Error('Unexpected command');
+      }
+    };
+    return priorLoad.apply(this, arguments);
+  };
+  delete require.cache[workPath];
+  try {
+    const ledger = require('../api/_work-ledger');
+    const result = await ledger.putWorkIfAbsent('movie', 999, { title: 'TMDBの作品名' });
+    assert.equal(result.title, '編集済み作品');
+    assert.equal(result.pageExtras.shelf.note, '編集した紹介文');
+    assert.equal(result.verification.identity, 'verified');
+  } finally {
+    Module._load = priorLoad;
+    delete require.cache[workPath];
+  }
 });
