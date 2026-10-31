@@ -258,10 +258,10 @@ async function loadMemoryPoster(m){
    }catch(e){console.warn('固定IDのポスター取得失敗',m.title,e)}
   }
   if(!poster){
-   const data=await shelfTitleSearch(m.title);
-   const items=getItems(data);
-   const found=items.find(x=>Number(x.id??x.tmdb_id)===Number(m.id))||items.find(x=>normalize(x.title||x.name)===normalize(m.title));
-   poster=posterUrl(found);
+   // The detail lookup already shares fixed-ID and title requests.
+   // Reuse its verified match instead of launching a second title search.
+   const film=await fetchClassicFilm(m);
+   if(film&&(!m.id||Number(film.id??film.tmdb_id)===Number(m.id)))poster=posterUrl(film);
   }
   if(!poster){
    memoryCache.delete(m.title);
