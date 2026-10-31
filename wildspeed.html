@@ -178,7 +178,17 @@ document.querySelectorAll('.watched').forEach(b=>b.addEventListener('click',()=>
 const apiRoot=location.protocol==='file:'||['localhost','127.0.0.1'].includes(location.hostname)?'https://doko-de-mireru.com':'';
 function normalize(items){const aliases={1796:8,2100:9},seen=new Set(),out=[];for(const p of Array.isArray(items)?items:[]){if(!p)continue;const id=aliases[p.provider_id]||p.provider_id;if(seen.has(id))continue;seen.add(id);out.push(items.find(x=>x.provider_id===id)||{...p,provider_id:id,provider_name:id===8?'Netflix':id===9?'Amazon Prime Video':p.provider_name})}return out}
 function paint(key,items,failed=false){document.querySelectorAll('.providers').forEach(box=>{if(box.dataset.key!==key)return;box.replaceChildren();const list=normalize(items);if(failed||!list.length){box.textContent=failed?'配信状況は作品詳細・公式でご確認ください':'見放題の掲載情報なし。レンタル・購入は作品詳細で確認';return}const label=document.createElement('strong');label.textContent='見放題';box.append(label);list.forEach(p=>{if(!p.logo_path)return;const img=document.createElement('img');img.src='https://image.tmdb.org/t/p/w92'+p.logo_path;img.alt=p.provider_name||'配信サービス';img.title=p.provider_name||'';img.loading='lazy';box.append(img)})})}
-async function refresh(m){try{const r=await fetch(apiRoot+'/api/search?id='+m.id+'&type=movie');if(!r.ok)throw Error();const d=await r.json();if(!Array.isArray(d.streaming))throw Error();paint(m.key,d.streaming)}catch{if(m.streaming.length){paint(m.key,m.streaming);document.querySelectorAll('.providers').forEach(box=>{if(box.dataset.key===m.key){const note=document.createElement('span');note.textContent='（更新できず：2026年10月6日の取得情報）';box.append(note)}})}else paint(m.key,[],true)}}
-MOVIES.forEach(m=>paint(m.key,m.streaming,!m.id));let next=0;async function worker(){while(next<MOVIES.length)await refresh(MOVIES[next++])}Promise.all([worker(),worker(),worker()]);
+// One shared Redis-only request; no visitor-triggered TMDB searches.
+const wildspeedProviders=fetch(apiRoot+'/api/series-watch?series=wildspeed')
+  .then(r=>{if(!r.ok)throw Error('cache unavailable');return r.json()})
+  .catch(()=>null);
+async function refresh(m){
+  const data=await wildspeedProviders;
+  const record=data?.providers?.['movie:'+m.id];
+  if(record&&Array.isArray(record.flatrate))paint(m.key,record.flatrate);
+  else paint(m.key,[],true);
+}
+MOVIES.forEach(m=>paint(m.key,[],true));
+wildspeedProviders.then(()=>MOVIES.forEach(refresh));
 document.querySelectorAll('img.poster').forEach(img=>img.addEventListener('error',()=>{const p=document.createElement('div');p.className='poster placeholder';p.textContent='🏁';p.setAttribute('aria-label','ポスター画像を読み込めませんでした');img.replaceWith(p)}));
 </script></body></html>
