@@ -1,0 +1,31 @@
+name: Work ledger tests
+
+on:
+  push:
+    branches:
+      - feature/shared-work-ledger-20261031
+  pull_request:
+    paths:
+      - 'api/_work-ledger.js'
+      - 'api/_work-from-tmdb.js'
+      - 'api/work-detail.js'
+      - 'tests/work-detail.test.js'
+      - '.github/workflows/work-ledger-tests.yml'
+  workflow_dispatch:
+
+jobs:
+  work-ledger:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify JavaScript syntax
+        run: |
+          node --check api/_work-ledger.js
+          node --check api/_work-from-tmdb.js
+          node --check api/work-detail.js
+          node --check tests/work-detail.test.js
+      - name: Test cache hit, miss and error handling
+        run: node --test tests/work-detail.test.js
