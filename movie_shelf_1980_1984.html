@@ -221,6 +221,24 @@ function shelfFixedMovie(id){
  }
  return shelfFixedMovieRequests.get(key);
 }
+// Share identical title searches between poster fallback and detail enrichment.
+const shelfTitleRequests=new Map();
+function shelfTitleSearch(query){
+ const key=String(query).normalize('NFKC').trim();
+ if(!shelfTitleRequests.has(key)){
+  const base=location.protocol==='file:'?'https://doko-de-mireru.com':'';
+  const request=fetch(base+'/api/search?query='+encodeURIComponent(key)+'&type=movie')
+   .then(async response=>{
+    if(!response.ok)throw Error('作品検索API '+response.status);
+    return response.json();
+   }).catch(error=>{
+    shelfTitleRequests.delete(key);
+    throw error;
+   });
+  shelfTitleRequests.set(key,request);
+ }
+ return shelfTitleRequests.get(key);
+}
 async function loadMemoryPoster(m){
  if(memoryCache.has(m.title))return;
  memoryCache.set(m.title,{poster:null});
@@ -238,8 +256,10 @@ async function loadMemoryPoster(m){
    }catch(e){console.warn('固定IDのポスター取得失敗',m.title,e)}
   }
   if(!poster){
-   const res=await fetch(base+'/api/search?query='+encodeURIComponent(m.title)+'&type=movie');
-   if(res.ok){const data=await res.json();const items=getItems(data);const found=items.find(x=>Number(x.id??x.tmdb_id)===Number(m.id))||items.find(x=>normalize(x.title||x.name)===normalize(m.title));poster=posterUrl(found);}
+   const data=await shelfTitleSearch(m.title);
+   const items=getItems(data);
+   const found=items.find(x=>Number(x.id??x.tmdb_id)===Number(m.id))||items.find(x=>normalize(x.title||x.name)===normalize(m.title));
+   poster=posterUrl(found);
   }
   if(!poster)return;
   memoryCache.set(m.title,{poster});
@@ -302,9 +322,7 @@ async function fetchClassicFilm(item){
   if(item.title==='太陽の年')return null;
   for(const query of [item.title,item.original].filter(Boolean)){
    try{
-    const endpoint=(location.protocol==='file:'?'https://doko-de-mireru.com':'')+'/api/search?query='+encodeURIComponent(query)+'&type=movie';
-    const res=await fetch(endpoint);if(!res.ok)continue;
-    const film=findFilmMatch(resultList(await res.json()),item);
+    const film=findFilmMatch(resultList(await shelfTitleSearch(query)),item);
     if(film)return film;
    }catch(e){}
   }
