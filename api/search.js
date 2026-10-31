@@ -12022,20 +12022,38 @@ async function getTvDetail(tvId, apiKey) {
     "&language=ja-JP" +
     "&append_to_response=credits,watch/providers";
 
-  const tv =
-    await fetchJson(url);
-
+  // When enabled, reuse cached TV metadata but fetch streaming separately.
+  // With the flag disabled, preserve the original single TMDB request.
+  const ledgerEnabled = process.env.WORK_LEDGER_ENABLED === '1';
+  const tv = ledgerEnabled
+    ? await detailWithLedger('tv', tvId, () => fetchJson(url))
+    : await fetchJson(url);
 
   // =======================================================
   // 日本の配信情報
   // =======================================================
 
-  const providersData =
+  let providersData =
     tv["watch/providers"] &&
     tv["watch/providers"].results &&
     tv["watch/providers"].results.JP
       ? tv["watch/providers"].results.JP
       : {};
+
+  if (ledgerEnabled && !tv["watch/providers"]) {
+    try {
+      const providerUrl =
+        "https://api.themoviedb.org/3/tv/" +
+        encodeURIComponent(tvId) +
+        "/watch/providers?api_key=" + encodeURIComponent(apiKey);
+      const providerResponse = await fetchJson(providerUrl);
+      providersData = providerResponse && providerResponse.results &&
+        providerResponse.results.JP || {};
+    } catch (error) {
+      console.error('TV PROVIDERS FETCH ERROR', error);
+      providersData = {};
+    }
+  }
 
 
   const streaming =
