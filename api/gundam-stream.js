@@ -18,7 +18,7 @@ module.exports=async function handler(req,res){
  if(!apiKey)return res.status(503).json({error:'Provider lookup unavailable'});
  const ttl=secondsUntilBoundary();
  res.setHeader('Cache-Control','public, max-age=0, must-revalidate');
- res.setHeader('Vercel-CDN-Cache-Control','s-maxage='+ttl+', stale-while-revalidate=60');
+ res.setHeader('Vercel-CDN-Cache-Control','s-maxage='+ttl);
  try{
   const url='https://api.themoviedb.org/3/'+WORKS[id]+'/'+id+'?api_key='+encodeURIComponent(apiKey)+'&append_to_response=watch/providers';
   const response=await fetch(url,{headers:{Accept:'application/json'}});
