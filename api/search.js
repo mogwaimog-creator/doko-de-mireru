@@ -2157,6 +2157,7 @@ return res.status(200).json({
 // =========================================================
 
 const { detailWithLedger } = require('./_detail-with-ledger');
+const { detailProviders } = require('./_detail-providers');
 
 async function getMovieDetail(
   movieId,
@@ -2197,19 +2198,14 @@ async function getMovieDetail(
       encodeURIComponent(apiKey);
 
 
-    const providerData =
-      await fetchJson(providerUrl);
+    const providerResult =
+      await detailProviders('movie', movieId, () => fetchJson(providerUrl));
 
-
-    if (
-      providerData &&
-      providerData.results &&
-      providerData.results.JP
-    ) {
-
-      providersJP =
-        providerData.results.JP;
-
+    if (providerResult.availability) {
+      providersJP = providerResult.availability;
+    }
+    if (providerResult.warning) {
+      console.warn('MOVIE PROVIDERS STALE OR UNAVAILABLE', providerResult.warning);
     }
 
   } catch (error) {
