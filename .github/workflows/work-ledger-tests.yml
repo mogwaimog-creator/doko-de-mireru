@@ -16,6 +16,8 @@ on:
       - 'api/update-streaming.js'
       - 'api/admin-status.js'
       - 'tests/admin-status.test.js'
+      - 'api/admin-review-queue.js'
+      - 'tests/admin-review-queue.test.js'
       - 'api/_work-review.js'
       - 'tests/work-review.test.js'
       - 'vercel.json'
@@ -42,8 +44,8 @@ jobs:
           node-version: '22'
       - name: Verify JavaScript syntax
         run: |
-          for file in api/_work-ledger.js api/_work-error-policy.js api/_work-issues.js api/_provider-fallback.js api/_shared-providers.js api/_work-from-tmdb.js api/work-detail.js api/_detail-with-ledger.js api/search.js api/update-streaming.js tests/*.test.js; do
+          for file in api/admin-review-queue.js api/_work-review.js api/_work-ledger.js api/_work-error-policy.js api/_work-issues.js api/_provider-fallback.js api/_shared-providers.js api/_work-from-tmdb.js api/work-detail.js api/_detail-with-ledger.js api/search.js api/update-streaming.js tests/*.test.js; do
             node --check "$file"
           done
       - name: Run all work ledger and provider safety tests
-        run: node --test tests/work-detail.test.js tests/work-ledger-roundtrip.test.js tests/detail-with-ledger.test.js tests/work-error-policy.test.js tests/work-issues.test.js tests/provider-fallback.test.js tests/shared-providers.test.js tests/scheduled-streaming.test.js tests/admin-status.test.js tests/work-review.test.js
+        run: node --test tests/work-detail.test.js tests/work-ledger-roundtrip.test.js tests/detail-with-ledger.test.js tests/work-error-policy.test.js tests/work-issues.test.js tests/provider-fallback.test.js tests/shared-providers.test.js tests/scheduled-streaming.test.js tests/admin-status.test.js tests/work-review.test.js tests/admin-review-queue.test.js
