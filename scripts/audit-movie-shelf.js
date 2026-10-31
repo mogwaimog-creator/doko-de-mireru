@@ -49,7 +49,7 @@ function audit(html) {
     awardStoryEntries: Object.keys(stories).length,
     fixedIdOverrides: Object.keys(ids).length,
     duplicateMemoryTitles: duplicates,
-    invalidMemoryIds: invalidIds,
+    invalidMemoryIds: Array.from(invalidIds),
     // All three blocks are retained independently, even for the same title.
     editorialSources: ['memoryFilms', 'verifiedClassicInfo', 'approvedAwardStories'],
     sample: {
