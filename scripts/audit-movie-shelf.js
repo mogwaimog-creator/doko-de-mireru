@@ -45,6 +45,15 @@ function editorialFingerprints(html) {
   }));
 }
 
+function compareEditorialSources(previous, current) {
+  const names = ['memoryFilms', 'verifiedClassicInfo', 'approvedAwardStories'];
+  return Object.fromEntries(names.map(name => {
+    const oldHash = previous?.[name];
+    const newHash = current?.[name];
+    return [name, !oldHash ? 'untracked' : oldHash === newHash ? 'unchanged' : 'changed'];
+  }));
+}
+
 function audit(html) {
   const memory = extractLiteral(html, 'memoryFilms');
   const verified = extractLiteral(html, 'verifiedClassicInfo');
@@ -75,4 +84,4 @@ if (require.main === module) {
   const html = fs.readFileSync(path.join(__dirname, '../movie_shelf_1980_1984.html'), 'utf8');
   console.log(JSON.stringify(audit(html), null, 2));
 }
-module.exports = { extractLiteral, editorialFingerprints, audit };
+module.exports = { extractLiteral, editorialFingerprints, compareEditorialSources, audit };
