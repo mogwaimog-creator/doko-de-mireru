@@ -92,4 +92,14 @@ async function putWork(type, id, source) {
   return record;
 }
 
-module.exports = { identity, normalizeWork, getWork, putWork };
+// First-write-wins for visitor-triggered imports. Never overwrite editorial
+// changes or a concurrent registration made after the initial cache miss.
+async function putWorkIfAbsent(type, id, source) {
+  const record = normalizeWork(type, id, source);
+  const { key } = identity(type, id);
+  const saved = await command(['SET', key, JSON.stringify(record), 'NX']);
+  if (saved === 'OK') return record;
+  return (await getWork(type, id)) || record;
+}
+
+module.exports = { identity, normalizeWork, getWork, putWork, putWorkIfAbsent };
