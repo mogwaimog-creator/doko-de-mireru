@@ -292,19 +292,27 @@ const gundamSeasonWorks={
  'ガンダムビルドファイターズトライ':{id:60667,season:2}
 };
 // 同じシーズンのポスターはタブ切替のたびに再取得しない。
+// シーズン専用ポスターは24時間再利用。配信情報は保存・流用しない。
 const gundamSeasonPosterCache=new Map();
 function gundamSeasonPoster(title){
  const info=gundamSeasonWorks[title];
  if(!info)return Promise.resolve(null);
  if(!gundamSeasonPosterCache.has(title)){
   gundamSeasonPosterCache.set(title,(async()=>{
+   const key='gundam-season-poster-v1:'+info.id+':'+info.season;
+   try{
+    const saved=JSON.parse(sessionStorage.getItem(key)||'null');
+    if(saved&&saved.expires>Date.now()&&gundamImage(saved.poster,'w342'))return saved.poster;
+   }catch(e){}
    try{
     const url=gundamApiRoot+'/api/search?id='+info.id+'&type=tv&season='+info.season;
     const r=await fetch(url,{headers:{Accept:'application/json'}});
     if(!r.ok)throw Error('シーズン取得 '+r.status);
     const data=await r.json();
     if(Number(data.season_number)!==info.season)return null;
-    return gundamImage(data.poster_path,'w342');
+    const poster=gundamImage(data.poster_path,'w342');
+    if(poster){try{sessionStorage.setItem(key,JSON.stringify({poster,expires:Date.now()+86400000}))}catch(e){}}
+    return poster;
    }catch(e){console.warn('シーズンポスター取得失敗:',title,e);return null}
   })());
  }
