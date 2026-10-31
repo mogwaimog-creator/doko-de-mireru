@@ -421,7 +421,7 @@ async function hydrateGundamCards(){
  let next=0;
  async function worker(){while(next<cards.length){
   const el=cards[next++],title=el.getAttribute('data-title');
-  const item=await gundamLookup(title,el.querySelector('.format-tag')?.textContent?.includes('映画')?'movie':'tv');
+  const item=gundamSeasonWorks[title]?null:await gundamLookup(title,el.querySelector('.format-tag')?.textContent?.includes('映画')?'movie':'tv');
   if(!el.isConnected)continue;
   const poster=gundamSeasonWorks[title]?await gundamSeasonPoster(title):gundamImage(item?.poster_path,'w342'),slot=el.querySelector('.poster-placeholder');
   if(poster&&slot){
