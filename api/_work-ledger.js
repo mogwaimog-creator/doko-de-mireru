@@ -81,7 +81,7 @@ async function getWork(type, id) {
   const raw = await command(['GET', key]);
   if (!raw) return null;
   const parsed = typeof raw === 'string' ? JSON.parse(raw) : raw;
-  if (!parsed || parsed.schemaVersion !== 1) return null;
+  if (!parsed || parsed.schemaVersion !== 1 || parsed.type !== type || parsed.id !== Number(id) || typeof parsed.title !== 'string' || !parsed.title.trim()) return null;
   return parsed;
 }
 
