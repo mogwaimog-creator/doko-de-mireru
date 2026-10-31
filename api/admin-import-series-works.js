@@ -5,6 +5,7 @@ const {command}=require('./_redis');
 const {identity,normalizeWork}=require('./_work-ledger');
 const {fromTmdb}=require('./_work-from-tmdb');
 const {registerForReview}=require('./_work-review');
+const {recordError}=require('./_ops-errors');
 const {inventory}=require('./admin-work-migration-preview')._test;
 const BATCH=5;
 async function importBatch(offset=0,{read=command,load=loadTmdb}={}){
@@ -18,7 +19,7 @@ async function importBatch(offset=0,{read=command,load=loadTmdb}={}){
    if(existing){result.alreadyPresent++;continue;}
    const item=await load(work);
    if(!item||Number(item.id)!==work.id)throw new Error('TMDB identity mismatch');
-   const record=normalizeWork(work.type,work.id,fromTmdb(work.type,item));
+   const record=normalizeWork(work.type,work.id,{...fromTmdb(work.type,item),verification:{identity:'verified',metadata:'not_checked',items:{},notes:'ID confirmed in existing series inventory'}});
    // NX avoids overwriting edits made since the initial existence check.
    const saved=await read(['SET',key,JSON.stringify(record),'NX']);
    if(saved!=='OK'){result.alreadyPresent++;continue;}
@@ -27,7 +28,11 @@ async function importBatch(offset=0,{read=command,load=loadTmdb}={}){
    // evidence that all metadata fields were manually checked.
    try{await registerForReview(record,'existing-series-import');}
    catch(e){console.error('series import review registration',e.message);}
-  }catch(e){result.failed.push({type:work.type,id:work.id,reason:e.message});}
+  }catch(e){
+   result.failed.push({type:work.type,id:work.id,reason:e.message});
+   try{await recordError({area:'work',code:'SERIES_IMPORT_FAILED',type:work.type,id:work.id,message:'共通台帳への作品登録に失敗しました'});}
+   catch(logError){console.error('import error journal unavailable',logError.message);}
+  }
  }
  return result;
 }
