@@ -306,7 +306,15 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
       .then(({data,legacy})=>{
         if(!legacy&&(data.provider_status?.unavailable||data.provider_status?.stale))return null;
         return Array.isArray(data.streaming)?dokoNormalizeStreaming(data.streaming):[];
-      }).catch(()=>null));
+      }).then(providers=>{
+        // An unsuccessful lookup must not be kept for the whole page session.
+        if(providers===null)providerCache.delete(key);
+        return providers;
+      }).catch(error=>{
+        providerCache.delete(key);
+        console.warn('スター・ウォーズ配信情報取得失敗',error);
+        return null;
+      }));
     const providers=await providerCache.get(key);
     if(!box.isConnected)return;
     if(providers===null){box.textContent='配信情報を現在確認できません。作品詳細で再度ご確認ください';return}
