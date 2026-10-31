@@ -22,15 +22,15 @@ module.exports=async function handler(req,res){
  res.setHeader('Cache-Control','public, max-age=0, must-revalidate');
  res.setHeader('Vercel-CDN-Cache-Control','s-maxage='+ttl+', stale-while-revalidate=60');
  try{
-  const url='https://api.themoviedb.org/3/tv/'+id+'/watch/providers?api_key='+encodeURIComponent(apiKey);
+  const url='https://api.themoviedb.org/3/tv/'+id+'?api_key='+encodeURIComponent(apiKey)+'&append_to_response=watch/providers';
   const response=await fetch(url,{headers:{Accept:'application/json'}});
   if(!response.ok)throw new Error('TMDB '+response.status);
   const payload=await response.json();
-  const jp=payload?.results?.JP||{};
+  const jp=payload?.['watch/providers']?.results?.JP||{};
   const streaming=Array.isArray(jp.flatrate)?jp.flatrate.map(x=>({
    provider_id:x.provider_id,provider_name:x.provider_name,logo_path:x.logo_path
   })):[];
-  return res.status(200).json({id:Number(id),content_type:'tv',streaming,checked_at:new Date().toISOString()});
+  return res.status(200).json({id:Number(id),content_type:'tv',poster_path:payload.poster_path||null,streaming,checked_at:new Date().toISOString()});
  }catch(e){
   res.setHeader('Vercel-CDN-Cache-Control','no-store');
   return res.status(502).json({error:'Streaming information unavailable'});
