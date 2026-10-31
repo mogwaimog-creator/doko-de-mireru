@@ -317,7 +317,20 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
       }));
     const providers=await providerCache.get(key);
     if(!box.isConnected)return;
-    if(providers===null){box.textContent='配信情報を現在確認できません。作品詳細で再度ご確認ください';return}
+    if(providers===null){
+      box.textContent='配信情報を現在確認できません。';
+      const retry=document.createElement('button');
+      retry.type='button';
+      retry.textContent='再確認';
+      retry.style.cssText='font:inherit;font-size:14px;padding:5px 10px;border:1px solid #8d9bb0;border-radius:6px;background:#fff;color:#273e5d;cursor:pointer';
+      retry.addEventListener('click',()=>{
+        retry.disabled=true;
+        box.textContent='配信情報を再確認しています…';
+        loadProviders(box);
+      });
+      box.appendChild(retry);
+      return;
+    }
     const unique=providers.filter((p,i,all)=>p&&p.logo_path&&all.findIndex(x=>x&&x.provider_id===p.provider_id)===i);
     if(!unique.length){box.textContent='見放題情報は未確認です';return}
     box.innerHTML='<span class="providers-label">見放題</span>';
