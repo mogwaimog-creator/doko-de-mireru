@@ -323,7 +323,10 @@ function gundamLookup(title,preferredType){
  if(!gundamLookupCache.has(cacheKey))gundamLookupCache.set(cacheKey,(async()=>{
   const known=gundamKnownIds[title];
   if(known&&(!preferredType||preferredType===known.type)){
-   try{const result=await gundamById(known.id,known.type);if(result)return result}catch(e){console.warn('ID取得失敗:',title,e)}
+   // 確認済みIDは作品名検索にフォールバックさせない。
+   // 一時的なAPI障害でも別作品のポスター・配信情報を表示しない。
+   try{return await gundamById(known.id,known.type)}
+   catch(e){console.warn('ID取得失敗:',title,e);return null}
   }
   try{
    const types=preferredType?[preferredType]:['tv','movie'];
