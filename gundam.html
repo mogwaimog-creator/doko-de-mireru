@@ -301,7 +301,7 @@ const gundamKnownIds={
  'ガンダムビルドダイバーズ':{id:76821,type:'tv'},
  'SDガンダムワールド 三国創傑伝':{id:91566,type:'tv'},
  'SDガンダムワールド ヒーローズ':{id:122468,type:'tv'},
- '新機動戦記ガンダムW Endless Waltz':{id:22914,type:'tv'}
+ '新機動戦記ガンダムW Endless Waltz':{id:22914,type:'movie'}
 };
 async function gundamById(id,type){
  const url=Object.values(gundamKnownIds).some(x=>x.id===Number(id)&&x.type===type)?'/api/gundam-stream?id='+encodeURIComponent(id):'/api/search?id='+encodeURIComponent(id)+'&type='+type;
