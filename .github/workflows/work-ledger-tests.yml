@@ -7,6 +7,8 @@ on:
   pull_request:
     paths:
       - 'api/_work-ledger.js'
+      - 'api/_work-error-policy.js'
+      - 'tests/work-error-policy.test.js'
       - 'api/_work-from-tmdb.js'
       - 'api/work-detail.js'
       - 'api/_detail-with-ledger.js'
@@ -28,12 +30,14 @@ jobs:
       - name: Verify JavaScript syntax
         run: |
           node --check api/_work-ledger.js
+          node --check api/_work-error-policy.js
+          node --check tests/work-error-policy.test.js
           node --check api/_work-from-tmdb.js
           node --check api/work-detail.js
           node --check api/_detail-with-ledger.js
           node --check api/search.js
           node --check tests/work-detail.test.js
           node --check tests/work-ledger-roundtrip.test.js
-          node --check tests/detail-with-ledger.test.js
+          node --check tests/detail-with-ledger.test.js tests/work-error-policy.test.js
       - name: Test cache hit, miss and error handling
         run: node --test tests/work-detail.test.js tests/work-ledger-roundtrip.test.js tests/detail-with-ledger.test.js
