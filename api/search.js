@@ -12026,7 +12026,9 @@ async function getTvDetail(tvId, apiKey) {
     "?api_key=" +
     apiKey +
     "&language=ja-JP" +
-    "&append_to_response=credits,watch/providers";
+    (process.env.SHARED_PROVIDER_ENABLED === '1'
+      ? "&append_to_response=credits"
+      : "&append_to_response=credits,watch/providers");
 
   // When enabled, reuse cached TV metadata but fetch streaming separately.
   // With the flag disabled, preserve the original single TMDB request.
