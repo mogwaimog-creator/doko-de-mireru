@@ -293,9 +293,20 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
   const apiBase=location.protocol==='file:'?'https://doko-de-mireru.com':'';
   async function loadProviders(box){
     const key=`${box.dataset.type}:${box.dataset.id}`;
-    if(!providerCache.has(key))providerCache.set(key,fetch(`${apiBase}/api/search?id=${encodeURIComponent(box.dataset.id)}&type=${box.dataset.type}`)
-      .then(response=>{if(!response.ok)throw Error('配信情報の取得に失敗');return response.json()})
-      .then(data=>Array.isArray(data.streaming)?dokoNormalizeStreaming(data.streaming):[]).catch(()=>null));
+    if(!providerCache.has(key))providerCache.set(key,fetch(`${apiBase}/api/series-providers?id=${encodeURIComponent(box.dataset.id)}&type=${encodeURIComponent(box.dataset.type)}`)
+      .then(async response=>{
+        if(response.status===404){
+          const legacy=await fetch(`${apiBase}/api/search?id=${encodeURIComponent(box.dataset.id)}&type=${box.dataset.type}`);
+          if(!legacy.ok)throw Error('配信情報の取得に失敗');
+          return {data:await legacy.json(),legacy:true};
+        }
+        if(!response.ok)throw Error('配信情報の取得に失敗');
+        return {data:await response.json(),legacy:false};
+      })
+      .then(({data,legacy})=>{
+        if(!legacy&&(data.provider_status?.unavailable||data.provider_status?.stale))return null;
+        return Array.isArray(data.streaming)?dokoNormalizeStreaming(data.streaming):[];
+      }).catch(()=>null));
     const providers=await providerCache.get(key);
     if(!box.isConnected)return;
     if(providers===null){box.textContent='配信状況は作品詳細でご確認ください';return}
