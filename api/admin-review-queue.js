@@ -1,7 +1,7 @@
 'use strict';
 // Authenticated read-only review queue. No mutations and no public indexing.
 const {command}=require('./_redis');
-const {getWork}=require('./_work-ledger');
+const {identity}=require('./_work-ledger');
 const INDEX='doko:work-review:index:v1';
 function parse(raw){try{return typeof raw==='string'?JSON.parse(raw):raw;}catch{return null;}}
 module.exports=async function adminReviewQueue(req,res){
@@ -18,11 +18,17 @@ module.exports=async function adminReviewQueue(req,res){
    const limit=50;
    const keys=await command(['ZRANGE',INDEX,start,start+limit-1]);
    const values=keys?.length?await command(['MGET',...keys]):[];
+   const valid=(values||[]).map(parse);
+   const workKeys=valid.map(review=>{try{return review?identity(review.type,review.id).key:null;}catch{return null;}});
+   const lookup=workKeys.filter(Boolean);
+   const workValues=lookup.length?await command(['MGET',...lookup]):[];
+   const works=new Map();let wi=0;
+   for(const k of workKeys){if(k)works.set(k,parse(workValues[wi++]));}
    const records=[];
    for(let i=0;i<(keys||[]).length;i++){
-     const review=parse(values?.[i]);
+     const review=valid[i];
      if(!review||!['unreviewed','reviewed','needs_recheck'].includes(review.status))continue;
-     const work=await getWork(review.type,review.id);
+     const work=works.get(workKeys[i]);
      records.push({type:review.type,id:review.id,title:work?.title||null,
        releaseYear:work?.releaseDate?.slice(0,4)||null,
        status:review.status,fingerprint:review.fingerprint||null,registeredAt:review.registeredAt,
