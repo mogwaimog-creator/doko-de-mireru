@@ -9,7 +9,7 @@ const ledgerPath = require.resolve('../api/_work-ledger');
 
 function setup({ readError = false, writeError = false } = {}) {
   const records = new Map();
-  let reads = 0, writes = 0, loads = 0;
+  let reads = 0, writes = 0, loads = 0, reviews = 0;
   const ledger = {
     async getWork(type, id) {
       reads++;
@@ -26,6 +26,9 @@ function setup({ readError = false, writeError = false } = {}) {
   };
   Module._load = function(request, parent, isMain) {
     if (request === './_work-ledger' && parent && parent.filename === adapterPath) return ledger;
+    if (request === './_work-review' && parent && parent.filename === adapterPath) return {
+      async registerForReview(work) { reviews++; assert.equal(work.id, 123); return { status: 'unreviewed' }; }
+    };
     return originalLoad.apply(this, arguments);
   };
   delete require.cache[adapterPath];
@@ -45,7 +48,7 @@ function setup({ readError = false, writeError = false } = {}) {
     else process.env.WORK_LEDGER_ENABLED = previousFlag;
     delete require.cache[adapterPath];
   }
-  return { call, cleanup, counts: () => ({ reads, writes, loads }), records, adapter };
+  return { call, cleanup, counts: () => ({ reads, writes, loads, reviews }), records, adapter };
 }
 
 test('enabled flag: TMDB only on first detail request', async () => {
@@ -53,7 +56,7 @@ test('enabled flag: TMDB only on first detail request', async () => {
   try {
     assert.equal((await h.call()).title, '作品');
     assert.equal((await h.call()).title, '作品');
-    assert.deepEqual(h.counts(), { reads: 2, writes: 1, loads: 1 });
+    assert.deepEqual(h.counts(), { reads: 2, writes: 1, loads: 1, reviews: 1 });
   } finally { h.cleanup(); }
 });
 
@@ -63,7 +66,7 @@ test('disabled flag: always use original detail route', async () => {
     process.env.WORK_LEDGER_ENABLED = '0';
     await h.call();
     await h.call();
-    assert.deepEqual(h.counts(), { reads: 0, writes: 0, loads: 2 });
+    assert.deepEqual(h.counts(), { reads: 0, writes: 0, loads: 2, reviews: 0 });
   } finally { h.cleanup(); }
 });
 
