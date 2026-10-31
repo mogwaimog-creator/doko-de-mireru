@@ -2156,6 +2156,8 @@ return res.status(200).json({
 // 作品詳細
 // =========================================================
 
+const { detailWithLedger } = require('./_detail-with-ledger');
+
 async function getMovieDetail(
   movieId,
   apiKey
@@ -2175,7 +2177,7 @@ async function getMovieDetail(
 
 
   const movie =
-    await fetchJson(movieUrl);
+    await detailWithLedger('movie', movieId, () => fetchJson(movieUrl));
 
 
   // =======================================================
