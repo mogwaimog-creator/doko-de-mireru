@@ -72,6 +72,7 @@ test('malformed JP provider payload is rejected rather than cached as no streami
     process.env.SHARED_PROVIDER_ENABLED = '1';
     const {detailProviders: bridged} = require('../api/_detail-providers');
     await assert.rejects(() => bridged('tv', 789, async () => ({results:{JP:[]}})), /Invalid Japanese provider response/);
+    await assert.rejects(() => bridged('tv', 789, async () => ({results:[]})), /Invalid TMDB provider response/);
     await assert.rejects(() => bridged('movie', 789, async () => ({results:{JP:'invalid'}})), /Invalid Japanese provider response/);
     assert.deepEqual(await bridged('tv', 789, async () => ({results:{}})), {});
   } finally {
