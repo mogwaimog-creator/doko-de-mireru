@@ -322,11 +322,11 @@ function findFilmMatch(list,item){
 const classicKnownIds={"パレルモ、あるいはヴォルフスブルク":130544,"ドラえもん のび太の宇宙開拓史":162103,"ドラえもん のび太の魔界大冒険":161699,"E.T.":601,"南極物語":17895,"探偵物語":292674,"時をかける少女":62385,"里見八犬伝":47578,"愛情物語":431187,"忍者ハットリくん＋パーマン 超能力ウォーズ":1202616,"スター・ウォーズ／帝国の逆襲":1891,"スター・ウォーズ／ジェダイの復讐":1892,"ブッシュマン":8393,"ダーティファイター／燃えよ鉄拳":17169,"黄昏":11816,"ミスター・アーサー":13665,"ゴーストバスターズ":620,"ベスト・キッド":1885,"遙かなる山の呼び声":73324,"転校生":129689,"疑惑":335390,"細雪":42116,"楢山節考":42113,"Wの悲劇":326598,"グロリア":10889};
 const classicSearchCache=new Map();
 async function fetchClassicFilm(item){
- const key=item.title+'|'+(item.year||'');
+ const known=getFilmByTitle(item.title)||verifiedClassicInfo[item.title]||{};
+ const fixedId=classicKnownIds[item.title]||known.id;
+ const key=fixedId?'movie:'+fixedId:'title:'+item.title+'|'+(item.year||'');
  if(classicSearchCache.has(key))return classicSearchCache.get(key);
  const promise=(async()=>{
-  const known=getFilmByTitle(item.title)||verifiedClassicInfo[item.title]||{};
-  const fixedId=classicKnownIds[item.title]||known.id;
   if(fixedId){
    try{
     const data=await shelfFixedMovie(fixedId);
