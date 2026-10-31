@@ -25,7 +25,7 @@ module.exports=async function adminReviewQueue(req,res){
      const work=await getWork(review.type,review.id);
      records.push({type:review.type,id:review.id,title:work?.title||null,
        releaseYear:work?.releaseDate?.slice(0,4)||null,
-       status:review.status,registeredAt:review.registeredAt,
+       status:review.status,fingerprint:review.fingerprint||null,registeredAt:review.registeredAt,
        reviewedAt:review.reviewedAt||null,reviewedBy:review.reviewedBy||null});
    }
    const total=await command(['ZCARD',INDEX]);
