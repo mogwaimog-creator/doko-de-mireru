@@ -12,13 +12,14 @@ const starwarsWorks=[{type:'tv',id:114479},{type:'movie',id:1893},{type:'movie',
 const wildspeedWorks=[9799,584,9615,13804,51497,82992,168259,337339,384018,385128,385687].map(id=>({type:'movie',id}));
 const minionsWorks=[20352,93456,211672,324852,438148,519182,1315772].map(id=>({type:'movie',id}));
 const odoruWorks=[{type:'tv',id:20794},...([545255,545819,55382,55384,65841,835865,193402,1285372,1285375,1491083,1172474,59952,45070,1394731,1475877].map(id=>({type:'movie',id})))];
+const evaWorks=[15137,22843,75629,283566,18491].map(id=>({type:'movie',id})).concat([{type:'tv',id:890}]);
 const KEYPREFIX='doko:watch:v3:';
 const MAX_AGE_MS=36*60*60*1000; // Daily Hobby updates plus scheduling tolerance.
 module.exports=async(req,res)=>{
   res.setHeader('Cache-Control','public, max-age=0, s-maxage=120, stale-while-revalidate=60');
   if(req.method!=='GET')return res.status(405).json({error:'GET only'});
-  if(!['godzilla','mcu','jurassic','harrypotter','lordoftherings','starwars','wildspeed','minions','odoru'].includes(req.query.series))return res.status(400).json({error:'Unknown series'});
-  const works=req.query.series==='godzilla'?godzillaWorks:req.query.series==='mcu'?mcuWorks:req.query.series==='jurassic'?jurassicWorks:req.query.series==='harrypotter'?harrypotterWorks:req.query.series==='lordoftherings'?lordoftheringsWorks:req.query.series==='starwars'?starwarsWorks:req.query.series==='wildspeed'?wildspeedWorks:req.query.series==='minions'?minionsWorks:odoruWorks;
+  if(!['godzilla','mcu','jurassic','harrypotter','lordoftherings','starwars','wildspeed','minions','odoru','eva'].includes(req.query.series))return res.status(400).json({error:'Unknown series'});
+  const works=req.query.series==='godzilla'?godzillaWorks:req.query.series==='mcu'?mcuWorks:req.query.series==='jurassic'?jurassicWorks:req.query.series==='harrypotter'?harrypotterWorks:req.query.series==='lordoftherings'?lordoftheringsWorks:req.query.series==='starwars'?starwarsWorks:req.query.series==='wildspeed'?wildspeedWorks:req.query.series==='minions'?minionsWorks:req.query.series==='odoru'?odoruWorks:evaWorks;
   try{
     const keys=works.map(w=>`${w.type}:${w.id}`);
     const values=await command(['MGET',...keys.map(k=>KEYPREFIX+k)]);
