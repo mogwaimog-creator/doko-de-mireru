@@ -10,6 +10,8 @@ on:
       - 'api/_work-error-policy.js'
       - 'api/_work-issues.js'
       - 'api/_provider-fallback.js'
+      - 'api/_shared-providers.js'
+      - 'tests/shared-providers.test.js'
       - 'tests/provider-fallback.test.js'
       - 'tests/work-issues.test.js'
       - 'tests/work-error-policy.test.js'
@@ -37,7 +39,9 @@ jobs:
           node --check api/_work-error-policy.js
           node --check api/_work-issues.js
           node --check api/_provider-fallback.js
-          node --check tests/provider-fallback.test.js
+          node --check api/_shared-providers.js
+          node --check tests/shared-providers.test.js
+          node --check tests/provider-fallback.test.js tests/shared-providers.test.js
           node --check tests/work-issues.test.js tests/provider-fallback.test.js
           node --check tests/work-error-policy.test.js tests/work-issues.test.js
           node --check api/_work-from-tmdb.js
