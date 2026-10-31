@@ -16,6 +16,8 @@ on:
       - 'api/update-streaming.js'
       - 'api/admin-status.js'
       - 'tests/admin-status.test.js'
+      - 'api/_work-review.js'
+      - 'tests/work-review.test.js'
       - 'vercel.json'
       - 'tests/provider-fallback.test.js'
       - 'tests/work-issues.test.js'
@@ -44,4 +46,4 @@ jobs:
             node --check "$file"
           done
       - name: Run all work ledger and provider safety tests
-        run: node --test tests/work-detail.test.js tests/work-ledger-roundtrip.test.js tests/detail-with-ledger.test.js tests/work-error-policy.test.js tests/work-issues.test.js tests/provider-fallback.test.js tests/shared-providers.test.js tests/scheduled-streaming.test.js tests/admin-status.test.js
+        run: node --test tests/work-detail.test.js tests/work-ledger-roundtrip.test.js tests/detail-with-ledger.test.js tests/work-error-policy.test.js tests/work-issues.test.js tests/provider-fallback.test.js tests/shared-providers.test.js tests/scheduled-streaming.test.js tests/admin-status.test.js tests/work-review.test.js
