@@ -1,6 +1,6 @@
 // Gundam fixed-ID streaming lookup. Japanese time 06:00 / 18:00 refresh boundaries.
 // No title search, no poster lookup, no parent-season provider inheritance.
-const WORKS=Object.freeze({'21731':'tv','45500':'tv','196400':'tv','64375':'tv','43887':'tv','37048':'movie','21732':'tv','13674':'tv','5660':'tv','16157':'movie','88865':'tv','46512':'tv','883768':'movie','553610':'movie','685274':'movie','910850':'movie','16308':'movie','72677':'tv','25797':'tv','20111':'tv','1146972':'movie','30093':'tv','21730':'tv','25504':'tv','37546':'tv','45835':'tv','61414':'tv','60667':'tv','76821':'tv','91566':'tv','122468':'tv','22914':'tv'});
+const WORKS=Object.freeze({'21731':'tv','45500':'tv','196400':'tv','64375':'tv','43887':'tv','37048':'movie','21732':'tv','13674':'tv','5660':'tv','16157':'movie','88865':'tv','46512':'tv','883768':'movie','553610':'movie','685274':'movie','910850':'movie','16308':'movie','72677':'tv','25797':'tv','20111':'tv','1146972':'movie','30093':'tv','21730':'tv','25504':'tv','37546':'tv','45835':'tv','61414':'tv','60667':'tv','76821':'tv','91566':'tv','122468':'tv','22914':'movie'});
 function secondsUntilBoundary(){
  const now=Date.now(),jst=new Date(now+9*3600000);
  const hour=jst.getUTCHours();
