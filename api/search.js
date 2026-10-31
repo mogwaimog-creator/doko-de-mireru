@@ -2156,6 +2156,9 @@ return res.status(200).json({
 // 作品詳細
 // =========================================================
 
+const { detailWithLedger } = require('./_detail-with-ledger');
+const { detailProviders } = require('./_detail-providers');
+
 async function getMovieDetail(
   movieId,
   apiKey
@@ -2175,7 +2178,7 @@ async function getMovieDetail(
 
 
   const movie =
-    await fetchJson(movieUrl);
+    await detailWithLedger('movie', movieId, () => fetchJson(movieUrl));
 
 
   // =======================================================
@@ -2183,6 +2186,7 @@ async function getMovieDetail(
   // =======================================================
 
   let providersJP = {};
+  let movieProviderStatus = null;
 
 
   try {
@@ -2195,19 +2199,15 @@ async function getMovieDetail(
       encodeURIComponent(apiKey);
 
 
-    const providerData =
-      await fetchJson(providerUrl);
+    const providerResult =
+      await detailProviders('movie', movieId, () => fetchJson(providerUrl));
 
-
-    if (
-      providerData &&
-      providerData.results &&
-      providerData.results.JP
-    ) {
-
-      providersJP =
-        providerData.results.JP;
-
+    movieProviderStatus = providerResult;
+    if (providerResult.availability) {
+      providersJP = providerResult.availability;
+    }
+    if (providerResult.warning) {
+      console.warn('MOVIE PROVIDERS STALE OR UNAVAILABLE', providerResult.warning);
     }
 
   } catch (error) {
@@ -2218,6 +2218,9 @@ async function getMovieDetail(
     );
 
     providersJP = {};
+    if (process.env.SHARED_PROVIDER_ENABLED === '1') {
+      movieProviderStatus = { unavailable: true, stale: false, warning: '現在、配信情報を確認できません。' };
+    }
 
   }
 
@@ -2744,6 +2747,11 @@ vote_count:
     // ===================================================
     // 配信
     // ===================================================
+
+    provider_status: process.env.SHARED_PROVIDER_ENABLED === '1' && movieProviderStatus
+      ? { stale: !!movieProviderStatus.stale, unavailable: !!movieProviderStatus.unavailable,
+          warning: movieProviderStatus.warning || null, lastSuccessfulAt: movieProviderStatus.lastSuccessfulAt || null }
+      : null,
 
     streaming:
       streaming,
@@ -12018,22 +12026,51 @@ async function getTvDetail(tvId, apiKey) {
     "?api_key=" +
     apiKey +
     "&language=ja-JP" +
-    "&append_to_response=credits,watch/providers";
+    (process.env.SHARED_PROVIDER_ENABLED === '1'
+      ? "&append_to_response=credits"
+      : "&append_to_response=credits,watch/providers");
 
-  const tv =
-    await fetchJson(url);
-
+  // When enabled, reuse cached TV metadata but fetch streaming separately.
+  // With the flag disabled, preserve the original single TMDB request.
+  const ledgerEnabled = process.env.WORK_LEDGER_ENABLED === '1';
+  const tv = ledgerEnabled
+    ? await detailWithLedger('tv', tvId, () => fetchJson(url))
+    : await fetchJson(url);
 
   // =======================================================
   // 日本の配信情報
   // =======================================================
 
-  const providersData =
+  let tvProviderStatus = null;
+  let providersData =
     tv["watch/providers"] &&
     tv["watch/providers"].results &&
     tv["watch/providers"].results.JP
       ? tv["watch/providers"].results.JP
       : {};
+
+  // Shared provider cache must be used even when TMDB metadata embeds providers.
+  // Without this, TV detail requests bypass the 06:00 / 18:00 shared window.
+  if (process.env.SHARED_PROVIDER_ENABLED === '1' || (ledgerEnabled && !tv["watch/providers"])) {
+    try {
+      const providerUrl =
+        "https://api.themoviedb.org/3/tv/" +
+        encodeURIComponent(tvId) +
+        "/watch/providers?api_key=" + encodeURIComponent(apiKey);
+      const providerResult = await detailProviders('tv', tvId, () => fetchJson(providerUrl));
+      tvProviderStatus = providerResult;
+      providersData = providerResult.availability || {};
+      if (providerResult.warning) {
+        console.warn('TV PROVIDERS STALE OR UNAVAILABLE', providerResult.warning);
+      }
+    } catch (error) {
+      console.error('TV PROVIDERS FETCH ERROR', error);
+      providersData = {};
+      if (process.env.SHARED_PROVIDER_ENABLED === '1') {
+        tvProviderStatus = { unavailable: true, stale: false, warning: '現在、配信情報を確認できません。' };
+      }
+    }
+  }
 
 
   const streaming =
@@ -12579,6 +12616,11 @@ const googlePlay =
     // ===================================================
     // 配信情報
     // ===================================================
+
+    provider_status: process.env.SHARED_PROVIDER_ENABLED === '1' && tvProviderStatus
+      ? { stale: !!tvProviderStatus.stale, unavailable: !!tvProviderStatus.unavailable,
+          warning: tvProviderStatus.warning || null, lastSuccessfulAt: tvProviderStatus.lastSuccessfulAt || null }
+      : null,
 
     streaming:
       streaming,
