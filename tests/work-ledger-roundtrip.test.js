@@ -41,3 +41,36 @@ test('TV seasons and cast survive roundtrip without streaming', () => {
   assert.equal(result.seasons[0].episode_count, 12);
   assert.equal(result['watch/providers'], undefined);
 });
+
+test('movie shelf editorial additions survive ledger normalization without affecting shared fields', () => {
+  const source = {
+    title: '名作映画',
+    posterPath: '/poster.jpg',
+    pageExtras: {
+      movieShelf: {
+        shelfIntro: '最初の紹介文',
+        awards: '映画賞の補足',
+        boxOffice: '当時の興行',
+        historicalContext: '公開当時の反響',
+        additionalNotes: '後から書き足した裏話'
+      }
+    }
+  };
+  const first = normalizeWork('movie', 123, source);
+  const revised = normalizeWork('movie', 123, {
+    ...first,
+    pageExtras: {
+      ...first.pageExtras,
+      movieShelf: {
+        ...first.pageExtras.movieShelf,
+        additionalNotes: 'さらに修正した裏話'
+      }
+    }
+  });
+  assert.equal(revised.title, '名作映画');
+  assert.equal(revised.posterPath, '/poster.jpg');
+  assert.equal(revised.pageExtras.movieShelf.awards, '映画賞の補足');
+  assert.equal(revised.pageExtras.movieShelf.boxOffice, '当時の興行');
+  assert.equal(revised.pageExtras.movieShelf.historicalContext, '公開当時の反響');
+  assert.equal(revised.pageExtras.movieShelf.additionalNotes, 'さらに修正した裏話');
+});
