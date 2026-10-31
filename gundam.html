@@ -304,7 +304,7 @@ const gundamKnownIds={
  '新機動戦記ガンダムW Endless Waltz':{id:22914,type:'tv'}
 };
 async function gundamById(id,type){
- const url=type==='tv'&&Object.values(gundamKnownIds).some(x=>x.id===Number(id)&&x.type===type)?'/api/gundam-stream?id='+encodeURIComponent(id):'/api/search?id='+encodeURIComponent(id)+'&type='+type;
+ const url=Object.values(gundamKnownIds).some(x=>x.id===Number(id)&&x.type===type)?'/api/gundam-stream?id='+encodeURIComponent(id):'/api/search?id='+encodeURIComponent(id)+'&type='+type;
  const r=await fetch(gundamApiRoot+url,{headers:{Accept:'application/json'}});
  if(!r.ok)throw Error('作品詳細API '+r.status);
  const result=await r.json();
