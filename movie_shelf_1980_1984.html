@@ -241,6 +241,8 @@ function shelfTitleSearch(query){
 }
 async function loadMemoryPoster(m){
  if(memoryCache.has(m.title))return;
+ // Mark an in-flight request; release the marker on failure so a later
+ // visit to this shelf can retry without reloading the whole page.
  memoryCache.set(m.title,{poster:null});
  const base=location.protocol==='file:'?'https://doko-de-mireru.com':'';
  const normalize=x=>String(x||'').normalize('NFKC').toLowerCase().replace(/[\s・!！／/ー－-]/g,'');
@@ -261,10 +263,16 @@ async function loadMemoryPoster(m){
    const found=items.find(x=>Number(x.id??x.tmdb_id)===Number(m.id))||items.find(x=>normalize(x.title||x.name)===normalize(m.title));
    poster=posterUrl(found);
   }
-  if(!poster)return;
+  if(!poster){
+   memoryCache.delete(m.title);
+   return;
+  }
   memoryCache.set(m.title,{poster});
   if(!document.getElementById('memory-section').hidden)renderMemoryCoversOnly();
- }catch(e){}
+ }catch(e){
+  memoryCache.delete(m.title);
+  console.warn('名作映画のポスター取得失敗',m.title,e);
+ }
 }
 function renderMemoryCoversOnly(){document.querySelectorAll('[data-memory-id]').forEach(el=>{const id=el.dataset.memoryId;const m=memoryFilms.find(x=>String(x.id??'n'+memoryFilms.indexOf(x))===id);if(m){const target=el.querySelector('.shelf3-cover');if(target&&memoryPoster(m))target.outerHTML=memoryCover(m);}})}
 
