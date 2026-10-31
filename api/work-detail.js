@@ -3,7 +3,7 @@
 // Experimental metadata-only endpoint. Does not replace /api/search or
 // touch existing doko:watch:* streaming keys.
 // GET /api/work-detail?type=movie&id=123
-const { getWork, putWork, identity } = require('./_work-ledger');
+const { getWork, putWorkIfAbsent, identity } = require('./_work-ledger');
 const { fromTmdb } = require('./_work-from-tmdb');
 
 module.exports = async function handler(req, res) {
@@ -48,7 +48,7 @@ module.exports = async function handler(req, res) {
     // If Redis is down, return the work anyway. Never cache failures.
     let record;
     try {
-      record = await putWork(work.type, work.id, metadata);
+      record = await putWorkIfAbsent(work.type, work.id, metadata);
     } catch (error) {
       console.error('WORK LEDGER WRITE ERROR', error);
       record = { ...metadata, id: work.id, type: work.type };
