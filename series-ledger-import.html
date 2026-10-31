@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><meta http-equiv="Cache-Control" content="no-store">
+<title>見る順番・共通台帳への登録（作業用）</title>
+<style>body{font-family:system-ui,sans-serif;max-width:760px;margin:3rem auto;padding:0 1rem;line-height:1.7;color:#202633}h1{font-size:1.5rem}p,li{font-size:1rem}label{display:block;margin:1rem 0}input{width:100%;box-sizing:border-box;padding:.7rem;font-size:1rem}button{padding:.7rem 1rem;margin-right:.5rem;font-size:1rem;cursor:pointer}button:disabled{opacity:.5;cursor:default}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f4f6f8;padding:1rem;min-height:7rem}strong{color:#b42318}</style>
+</head><body><h1>「見る順番」共通台帳の登録</h1>
+<p><strong>Preview作業用・本番公開ページの更新ではありません。</strong> ただしRedisは本番と共有されている可能性があります。既存の作品レコードを上書きせず、5件ずつ登録します。</p>
+<label>Vercelに設定した ADMIN_STATUS_SECRET（このページ内でのみ使用・保存しません）
+<input id="secret" type="password" autocomplete="off" spellcheck="false"></label>
+<button id="check">接続・件数を確認（書き込みなし）</button>
+<button id="start" disabled>未登録作品をまとめて登録</button>
+<button id="stop" disabled>停止</button>
+<pre id="status" role="status" aria-live="polite">まず「接続・件数を確認」を押してください。</pre>
+<script>
+(()=>{'use strict';
+const secret=document.getElementById('secret'),check=document.getElementById('check'),start=document.getElementById('start'),stop=document.getElementById('stop'),status=document.getElementById('status');
+let running=false,halt=false,verified=false,total=0;
+const output=s=>{status.textContent=s};
+async function call(path,method='GET',body){
+ const response=await fetch(path,{method,headers:{Authorization:'Bearer '+secret.value,...(body?{'Content-Type':'application/json'}:{})},body:body?JSON.stringify(body):undefined,cache:'no-store',credentials:'same-origin'});
+ const json=await response.json().catch(()=>({error:'JSONを読み取れません'}));
+ if(!response.ok)throw Error('HTTP '+response.status+' '+(json.error||''));
+ return json;
+}
+check.onclick=async()=>{
+ if(!secret.value){output('秘密の文字列を入力してください。');return;}
+ check.disabled=true;start.disabled=true;verified=false;
+ try{
+  const result=await call('/api/admin-work-migration-preview?offset=0');
+  total=result.total;
+  verified=true;start.disabled=false;
+  output('認証成功。登録候補 '+total+' 作品（type+IDの重複を除いた件数）。\n最初の25件のうち登録済み '+result.items.filter(x=>x.ledgerStatus==='registered').length+' 件。\n実行すると5件ずつ順番に処理します。');
+ }catch(e){output('確認できませんでした: '+e.message+'\n環境変数の反映とPreview URLを確認してください。')}
+ finally{check.disabled=false;}
+};
+start.onclick=async()=>{
+ if(!verified||running)return;
+ if(!confirm('登録候補 '+total+' 作品について、既存レコードを上書きせず5件ずつRedisに追加します。続行しますか？'))return;
+ running=true;halt=false;start.disabled=true;check.disabled=true;stop.disabled=false;secret.disabled=true;
+ let offset=0,imported=0,present=0,failures=[];
+ try{
+  while(offset<total&&!halt){
+   const result=await call('/api/admin-import-series-works','POST',{offset});
+   if(result.offset!==offset||result.nextOffset===offset)throw Error('ページ送りの異常');
+   imported+=result.imported;present+=result.alreadyPresent;failures.push(...result.failed);
+   output('処理 '+Math.min(offset+5,total)+' / '+total+' 件\n新規登録 '+imported+' 件 / 既存 '+present+' 件 / 失敗 '+failures.length+' 件\n'+(failures.length?'失敗一覧: '+JSON.stringify(failures.slice(-20),null,2):''));
+   if(result.nextOffset===null)break;
+   offset=result.nextOffset;
+   await new Promise(resolve=>setTimeout(resolve,400));
+  }
+  output((halt?'手動停止':'登録処理終了')+'\n新規登録 '+imported+' 件 / 既存 '+present+' 件 / 失敗 '+failures.length+' 件\n'+(failures.length?'失敗一覧: '+JSON.stringify(failures,null,2):'失敗なし')+'\n再実行しても既存作品は上書きされません。');
+ }catch(e){output('処理を停止しました。\n'+e.message+'\n新規 '+imported+' 件 / 既存 '+present+' 件 / 失敗 '+failures.length+' 件\n途中までの登録は保持されます。再実行で未登録作品を再試行できます。');}
+ finally{running=false;start.disabled=false;check.disabled=false;stop.disabled=true;secret.disabled=false;}
+};
+stop.onclick=()=>{halt=true;stop.disabled=true;};
+})();
+</script></body></html>
