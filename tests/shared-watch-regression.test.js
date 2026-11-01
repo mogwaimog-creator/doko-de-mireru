@@ -130,3 +130,11 @@ test('refreshes malformed or incomplete cache records in the same update window'
  assert.equal(needsRefresh({...good,checkedAt:'invalid'},win,now),true);
  assert.equal(needsRefresh({...good,checkedAt:'2026-11-02T09:32:00Z'},win,now),true);
 });
+
+test('all non-Gundam viewing-order pages visibly mark delayed cache information',()=>{
+ const series=['godzilla','mcu','jurassic','harrypotter','lordoftherings','starwars','wildspeed','minions','odoru','eva','conan'];
+ for(const name of series){
+  const html=fs.readFileSync(path.resolve(__dirname,'../'+name+'.html'),'utf8');
+  assert.ok(html.includes('#b91c1c'),name+' missing red cache-delay notice');
+ }
+});
