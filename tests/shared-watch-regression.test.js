@@ -138,3 +138,27 @@ test('all viewing-order pages visibly mark delayed cache information',()=>{
   assert.ok(html.includes('#b91c1c'),name+' missing red cache-delay notice');
  }
 });
+
+test('partial cache failures are reported without discarding healthy titles',async()=>{
+ const now=new Date().toISOString();
+ const records={
+  'doko:watch:v3:tv:21731':JSON.stringify({flatrate:[],checkedAt:now}),
+  'doko:watch:v3:tv:45500':'{invalid',
+  'doko:watch:v3:tv:196400':JSON.stringify({flatrate:null,checkedAt:now}),
+  'doko:watch:v3:tv:21732':JSON.stringify({flatrate:[],checkedAt:now})
+ };
+ const {response}=await call('gundam',records);
+ assert.equal(response.statusCode,200);
+ assert.deepEqual(Object.keys(response.body.providers).sort(),['tv:21731','tv:21732']);
+ assert.deepEqual(response.body.failures.sort(),['tv:196400','tv:45500']);
+ assert.equal(response.body.complete,false);
+});
+test('an entirely available cache reports complete without any TMDB calls',async()=>{
+ const now=new Date().toISOString();
+ const records=Object.fromEntries(ids.map(id=>['doko:watch:v3:tv:'+id,JSON.stringify({flatrate:[],checkedAt:now})]));
+ const {response,calls}=await call('gundam',records);
+ assert.equal(response.statusCode,200);
+ assert.equal(calls,1);
+ assert.equal(response.body.complete,true);
+ assert.deepEqual(response.body.failures,[]);
+});
