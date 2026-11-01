@@ -299,13 +299,13 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
     const data=await sharedProviders;
     if(!box.isConnected)return;
     const record=data?.providers?.[key];
-    if(!record||record.stale||!Array.isArray(record.flatrate)){
+    if(!record||!Array.isArray(record.flatrate)){
       box.textContent='配信情報を確認できません。作品詳細でご確認ください';
       return;
     }
     const unique=record.flatrate.filter((p,i,all)=>p&&p.logo_path&&all.findIndex(x=>x&&x.provider_id===p.provider_id)===i);
-    if(!unique.length){box.textContent='見放題の配信情報はありません';return}
-    box.innerHTML='<span class="providers-label">見放題</span>';
+    if(!unique.length){box.textContent=record.stale?'前回取得時は見放題の掲載情報なし（更新遅延中）':'見放題の配信情報はありません';return}
+    box.innerHTML='<span class="providers-label">'+(record.stale?'前回取得時の見放題（更新遅延中）':'見放題')+'</span>';
     unique.forEach(p=>{const img=document.createElement('img');img.src='https://image.tmdb.org/t/p/w92'+p.logo_path;img.alt=p.provider_name||'配信サービス';img.loading='lazy';box.appendChild(img)});
   }
   const providerObserver=new IntersectionObserver((entries,observer)=>entries.forEach(entry=>{if(entry.isIntersecting){observer.unobserve(entry.target);loadProviders(entry.target)}}),{rootMargin:'200px'});
