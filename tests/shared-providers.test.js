@@ -380,3 +380,33 @@ test('TMDB provider bridge treats missing JP as confirmed empty but malformed JP
     else process.env.SHARED_PROVIDER_ENABLED = previous;
   }
 });
+
+
+test('series-watch is read-only and returns missing entries without refreshing TMDB', async () => {
+  const seriesPath = require.resolve('../api/series-watch');
+  const savedCommand = redis.command;
+  const calls = [];
+  try {
+    redis.command = async args => {
+      calls.push(args);
+      assert.equal(args[0], 'MGET');
+      return args.slice(1).map(() => null);
+    };
+    delete require.cache[seriesPath];
+    const handler = require('../api/series-watch');
+    const response = {
+      code: 0, body: null,
+      setHeader() {},
+      status(code) { this.code = code; return this; },
+      json(body) { this.body = body; return this; }
+    };
+    await handler({ method: 'GET', query: { series: 'mcu' } }, response);
+    assert.equal(response.code, 200);
+    assert.equal(response.body.complete, false);
+    assert.ok(response.body.failures.length > 0);
+    assert.equal(calls.length, 1);
+  } finally {
+    redis.command = savedCommand;
+    delete require.cache[seriesPath];
+  }
+});
