@@ -553,9 +553,12 @@ if(known&&item?.id&&item?.content_type){
    const shared=response.data;
    if(shared.provider_status?.unavailable||shared.provider_status?.stale){
     if(token!==streamToken||!tr.isConnected)return;
-    gundamShowProviderRetry(tr,item.id,gundamApiType(item));continue;
-   }
-   providers=Array.isArray(shared.streaming)?shared.streaming:[];
+    // Keep last known subscription information visible but mark it unverified.
+    if(Array.isArray(shared.streaming)){
+     providers=shared.streaming;
+     tr.dataset.providerStale='1';
+    }else{gundamShowProviderRetry(tr,item.id,gundamApiType(item));continue;}
+   }else providers=Array.isArray(shared.streaming)?shared.streaming:[];
   }else if(known&&response.status===404){
    // The opt-in API is disabled (404) or temporarily unavailable.
    // Fall back to the existing detail API only for this known ID.
@@ -565,6 +568,7 @@ if(known&&item?.id&&item?.content_type){
  }catch(e){providerUnknown=true;console.warn('共通配信情報取得失敗:',x.title,e)}
 }
 if(token!==streamToken||!tr.isConnected)return;
+if(tr.dataset.providerStale==='1'){tr.title='前回取得した配信情報です（更新未確認）';tr.style.outline='2px solid #b42318';tr.style.outlineOffset='-2px';}
 if(providerUnknown&&known&&item?.id){
  gundamShowProviderRetry(tr,item.id,gundamApiType(item));
  continue;
