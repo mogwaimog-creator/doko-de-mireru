@@ -1,5 +1,6 @@
 'use strict';
-// Read-only endpoint: never calls TMDB and never triggers refresh.
+// Legacy mode is read-only; explicitly opted-in shared mode can refresh one work
+// per series per ten-minute slot, guarded by Redis atomic budget and work lock.
 const {command}=require('./_redis');
 const godzillaWorks=require('../data/godzilla-works.json');
 const allWorks=require('../data/streaming-works.json');
