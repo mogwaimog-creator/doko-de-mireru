@@ -474,11 +474,12 @@ const gundamTheatricalWorks={
 };
 async function gundamFixedAvailabilityById(type,id){
  try{
-  const data=await gundamSharedWatch();
-  const record=data&&data.providers&&data.providers[type+':'+id];
-  if(!record||record.stale)return '<div class="availability-note">配信情報を確認できませんでした。作品詳細でご確認ください。</div>';
-  return '<div class="gundam-availability"><div class="gundam-provider-row">'+gundamProviderRow(record.flatrate)+'</div></div>';
- }catch(e){return '<div class="availability-note">配信情報を確認できませんでした。作品詳細でご確認ください。</div>'}
+  const snapshot=await gundamSharedWatch;
+  const record=snapshot?.providers?.[type+':'+id];
+  if(!record||!Array.isArray(record.flatrate))return '<div class="availability-note">配信情報を確認できません。作品詳細でご確認ください。</div>';
+  const warning=record.stale?'<div class="availability-note" style="color:#b91c1c">配信情報の更新が遅れています。以下は前回取得時の情報です。</div>':'';
+  return warning+'<div class="gundam-availability"><div class="gundam-provider-row"><b>見放題</b><div class="gundam-provider-logos">'+gundamProviderRow(record.flatrate)+'</div></div></div>';
+ }catch(e){return '<div class="availability-note">配信情報を確認できません。作品詳細でご確認ください。</div>'}
 }
 async function hydrateGundamCards(){
  const cards=[...document.querySelectorAll('#content .card[data-title]')];
