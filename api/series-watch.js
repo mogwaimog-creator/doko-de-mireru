@@ -64,7 +64,7 @@ module.exports=async(req,res)=>{
       }catch(error){console.error('Shared provider batch read failed:',error.message);}
     }
     // Reserve a separate opt-in path for bounded series refresh.
-    if(process.env.SERIES_WATCH_REFRESH_ENABLED==='1' && process.env.SHARED_PROVIDER_ENABLED==='1'){
+    if(process.env.SERIES_WATCH_REFRESH_ENABLED==='1' && process.env.SHARED_PROVIDER_ENABLED==='1' && process.env.SERIES_WATCH_SHARED_READ_ENABLED==='1' && process.env.TMDB_API_KEY){
       try{
         const {windowId}=require('./_shared-providers');
         const window=windowId();
