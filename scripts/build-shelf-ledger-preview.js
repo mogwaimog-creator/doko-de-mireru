@@ -51,7 +51,7 @@ function build() {
     if (!startMatch) throw Error('Original ' + section + ' data declaration not found');
     const start = startMatch.index;
     const valueStart = start + startMatch[0].length;
-    const opener = compared.slice(valueStart).search(/[^\\s]/);
+    const opener = compared.slice(valueStart).search(/\S/);
     const valueIndex = valueStart + opener;
     const opening = compared[valueIndex];
     if (opening !== '{' && opening !== '[') throw Error('Unexpected ' + section + ' literal');
@@ -71,8 +71,8 @@ function build() {
         if (!stack.length) { end = i + 1; break; }
       }
     }
-    if (end < 0 || compared.slice(end).search(/[^\\s]/) < 0 ||
-        compared[end + compared.slice(end).search(/[^\\s]/)] !== ';')
+    if (end < 0 || compared.slice(end).search(/\S/) < 0 ||
+        compared[end + compared.slice(end).search(/\S/)] !== ';')
       throw Error('Unterminated ' + section + ' literal');
     compared = compared.slice(0, valueIndex) + JSON.stringify(data) + compared.slice(end);
   }
