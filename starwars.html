@@ -306,8 +306,8 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
         return {data:await response.json(),legacy:false};
       })
       .then(({data,legacy})=>{
-        if(!legacy&&(data.provider_status?.unavailable||data.provider_status?.stale))return null;
-        return Array.isArray(data.streaming)?dokoNormalizeStreaming(data.streaming):[];
+        if(!legacy&&data.provider_status?.unavailable&&!Array.isArray(data.streaming))return null;
+        return {items:Array.isArray(data.streaming)?dokoNormalizeStreaming(data.streaming):[],stale:!legacy&&!!(data.provider_status?.stale||data.provider_status?.unavailable)};
       }).then(providers=>{
         // An unsuccessful lookup must not be kept for the whole page session.
         if(providers===null)providerCache.delete(key);
@@ -317,7 +317,8 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
         console.warn('スター・ウォーズ配信情報取得失敗',error);
         return null;
       }));
-    const providers=await providerCache.get(key);
+    const providerResult=await providerCache.get(key);
+    const providers=providerResult?.items||null;
     delete box.dataset.providerLoading;
     if(!box.isConnected)return;
     if(providers===null){
@@ -335,9 +336,10 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
       return;
     }
     const unique=providers.filter((p,i,all)=>p&&p.logo_path&&all.findIndex(x=>x&&x.provider_id===p.provider_id)===i);
-    if(!unique.length){box.textContent='見放題情報は未確認です';return}
+    if(!unique.length){box.textContent='見放題情報は未確認です';if(providerResult.stale){const warning=document.createElement('span');warning.textContent=' ※前回取得した配信情報です（更新未確認）';warning.style.cssText='color:#b42318;font-size:14px';box.appendChild(warning)}return}
     box.innerHTML='<span class="providers-label">見放題</span>';
     unique.forEach(p=>{const img=document.createElement('img');img.src='https://image.tmdb.org/t/p/w92'+p.logo_path;img.alt=p.provider_name||'配信サービス';img.loading='lazy';box.appendChild(img)});
+    if(providerResult.stale){const warning=document.createElement('span');warning.textContent=' ※前回取得した配信情報です（更新未確認）';warning.style.cssText='color:#b42318;font-size:14px';box.appendChild(warning)}
   }
   const providerObserver=new IntersectionObserver((entries,observer)=>entries.forEach(entry=>{if(entry.isIntersecting){observer.unobserve(entry.target);loadProviders(entry.target)}}),{rootMargin:'200px'});
   const panels={beginner:document.getElementById('sw-beginner-panel'),catalog:document.getElementById('sw-catalog-panel'),people:document.getElementById('sw-people-panel'),glossary:document.getElementById('sw-glossary-panel')};
