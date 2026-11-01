@@ -52,7 +52,7 @@ module.exports=async(req,res)=>{
           const legacy=providers[keys[i]];
           // A successful fetch from an earlier 06:00/18:00 window remains usable,
           // but must be clearly marked stale even if it was fetched recently.
-          const stale=entry.window!==current || Date.now()-checked>MAX_AGE_MS;
+          const stale=entry.window!==current || windowId(entry.lastSuccessfulAt)!==current || Date.now()-checked>MAX_AGE_MS;
           // Do not replace a fresh legacy record with older shared data.
           if(stale&&legacy&&!legacy.stale)continue;
           // Never replace a newer legacy observation with an older shared one.
