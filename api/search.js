@@ -381,6 +381,14 @@ if (
   personId
 ) {
 
+  // 人物プロフィールと出演履歴は配信情報を含まないため、
+  // 配信情報より長いCDNキャッシュを利用する。
+  // CDNキャッシュは永続的な人物台帳ではない。
+  if (!/^\\d{1,10}$/.test(personId)) {
+    return res.status(400).json({ error: "人物IDが不正です。" });
+  }
+  res.setHeader("Vercel-CDN-Cache-Control", "s-maxage=2592000, stale-while-revalidate=86400");
+
   const person =
     await getPersonDetail(
       personId,
