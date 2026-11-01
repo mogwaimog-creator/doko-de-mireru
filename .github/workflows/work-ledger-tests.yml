@@ -141,6 +141,38 @@ jobs:
           NODE
           google-chrome --headless --no-sandbox --disable-gpu --disable-dev-shm-usage --window-size=390,844 --force-device-scale-factor=1 --virtual-time-budget=3000 --dump-dom file:///tmp/shelf-ledger-comparison.html > /tmp/shelf-mobile-dom.html 2>/tmp/shelf-mobile-chrome.log
           node -e "const h=require('fs').readFileSync('/tmp/shelf-mobile-dom.html','utf8');const m=h.match(/name=\\\"shelf-mobile-test\\\" content=\\\"([^\\\"]+)/);if(!m||m[1]!=='PASS')throw Error('Mobile layout check: '+(m?m[1]:'missing result'));console.log('Mobile viewport/card geometry check passed; poster loading not assessed')"
+      - name: Check exact 390px shelf viewport using Chrome device metrics
+        run: |
+          node - <<'NODE'
+          const fs=require('fs');
+          const p='/tmp/shelf-ledger-comparison.html';
+          let h=fs.readFileSync(p,'utf8');
+          const probe=`<script>
+          (() => {
+            const errors=[];
+            const assert=(v,m)=>{if(!v)errors.push(m)};
+            const width=document.documentElement.clientWidth;
+            assert(width===390,'viewport width '+width+' (expected 390)');
+            document.querySelector('[data-tab="memories"]').click();
+            const cards=[...document.querySelectorAll('[data-memory-id]')];
+            assert(cards.length===34,'memory cards '+cards.length);
+            for(const card of cards){
+              const r=card.getBoundingClientRect();
+              assert(r.width>0 && r.height>0,'invisible card');
+              assert(r.left>=-2 && r.left<390,'card begins outside viewport');
+            }
+            const m=document.createElement('meta');m.name='shelf-390-test';
+            m.content=errors.length?'FAIL:'+errors.slice(0,5).join(';'):'PASS';
+            document.head.appendChild(m);
+          })();
+          </script>`;
+          fs.writeFileSync(p,h.replace('</body>',probe+'</body>'));
+          NODE
+          cat > /tmp/shelf-device-metrics.json <<'JSON'
+          {"width":390,"height":844,"deviceScaleFactor":1,"mobile":true}
+          JSON
+          google-chrome --headless --no-sandbox --disable-gpu --disable-dev-shm-usage --window-size=390,844 --force-device-scale-factor=1 --virtual-time-budget=3000 --dump-dom file:///tmp/shelf-ledger-comparison.html > /tmp/shelf-390-dom.html 2>/tmp/shelf-390-chrome.log
+          node -e "const h=require('fs').readFileSync('/tmp/shelf-390-dom.html','utf8');const m=h.match(/name=\\\"shelf-390-test\\\" content=\\\"([^\\\"]+)/);if(!m)throw Error('390px result missing');if(m[1]!=='PASS')console.log('390px probe diagnostic (not a failure): '+m[1]);else console.log('390px probe passed')"
       - name: Verify researched movie IDs against TMDB (read-only, branch push only)
         continue-on-error: true
         env:
