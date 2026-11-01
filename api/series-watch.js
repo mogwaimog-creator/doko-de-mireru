@@ -63,6 +63,10 @@ module.exports=async(req,res)=>{
         }
       }catch(error){console.error('Shared provider batch read failed:',error.message);}
     }
+    // Reserve a separate opt-in path for bounded series refresh.
+    if(process.env.SERIES_WATCH_REFRESH_ENABLED==='1' && process.env.SHARED_PROVIDER_ENABLED==='1'){
+      // Refresh budget and provider calls must be validated before activation.
+    }
     return res.status(200).json({providers,failures,complete:failures.length===0});
   }catch(e){console.error('series-watch read:',e.message);return res.status(503).json({error:'保存済みの配信情報を読み込めません'});}
 };
