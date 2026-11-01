@@ -99,3 +99,11 @@ test('TMDB retrieval error is rethrown without changing the user-facing result',
     );
   } finally { h.cleanup(); }
 });
+
+
+test('movie and TV detail routes both have an explicit disabled-ledger TMDB fallback', () => {
+  const fs = require('node:fs');
+  const source = fs.readFileSync(require.resolve('../api/search.js'), 'utf8');
+  assert.match(source, /const movie = process\.env\.WORK_LEDGER_ENABLED === '1'\s*\? await detailWithLedger\('movie', movieId, \(\) => fetchJson\(movieUrl\)\)\s*: await fetchJson\(movieUrl\)/);
+  assert.match(source, /const ledgerEnabled = process\.env\.WORK_LEDGER_ENABLED === '1';\s*const tv = ledgerEnabled\s*\? await detailWithLedger\('tv', tvId, \(\) => fetchJson\(url\)\)\s*: await fetchJson\(url\)/);
+});
