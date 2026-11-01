@@ -2119,12 +2119,6 @@ function createWorkCard(work){
 
       "</div>" +
 
-      '<div class="work-provider-status is-loading" ' +
-        'data-provider-id="' + escapeHtml(String(work.id)) + '" ' +
-        'data-provider-type="' +
-          (work.content_type === "tv" ? "tv" : "movie") +
-        '">配信情報</div>' +
-
     "</a>"
   );
 
@@ -2135,155 +2129,6 @@ function createWorkCard(work){
 // 作品カード 配信情報
 // 画面に近づいた作品だけ取得してページを軽くする
 // =========================================================
-
-const providerCache = new Map();
-
-// 配信情報の同時取得は最大3件。画面に近づいた順に処理します。
-const PROVIDER_MAX_CONCURRENT = 3;
-let providerActiveRequests = 0;
-const providerQueue = [];
-
-function queueProviderRequest(element){
-  if(!element || element.dataset.loaded === "1") return;
-  element.dataset.loaded = "1";
-  providerQueue.push(element);
-  processProviderQueue();
-}
-
-function processProviderQueue(){
-  while(providerActiveRequests < PROVIDER_MAX_CONCURRENT && providerQueue.length){
-    const element = providerQueue.shift();
-    // 「もっと見る」等でカードが再描画された場合、古いカードは取得しない。
-    if(!element.isConnected) continue;
-    providerActiveRequests++;
-    loadProviderStatus(element).finally(function(){
-      providerActiveRequests--;
-      processProviderQueue();
-    });
-  }
-}
-
-function renderProviderStatus(element, detail){
-
-  if(!element){
-    return;
-  }
-
-  const streaming =
-    detail && Array.isArray(detail.streaming)
-      ? detail.streaming
-      : [];
-
-  element.classList.remove("is-loading");
-
-  if(streaming.length === 0){
-    element.innerHTML =
-      '<div class="work-provider-none">現在配信なし</div>';
-    return;
-  }
-
-  const visible = streaming.slice(0,8);
-  const rest = streaming.length - visible.length;
-
-  element.innerHTML =
-    '<div class="work-provider-label">' +
-      '<span>配信中</span>' +
-      (rest > 0
-        ? '<span class="work-provider-more">ほか ' + rest + '</span>'
-        : '') +
-    '</div>' +
-    '<div class="work-provider-logos">' +
-      visible.map(function(provider){
-        if(!provider || !provider.logo_path){
-          return "";
-        }
-        return (
-          '<img class="work-provider-logo" ' +
-          'src="https://image.tmdb.org/t/p/w92' +
-          escapeHtml(provider.logo_path) +
-          '" alt="' +
-          escapeHtml(provider.provider_name || "配信サービス") +
-          '" title="' +
-          escapeHtml(provider.provider_name || "") +
-          '" loading="lazy">'
-        );
-      }).join("") +
-    '</div>';
-}
-
-async function loadProviderStatus(element){
-
-  if(!element){
-    return;
-  }
-
-  const id = element.dataset.providerId;
-  const type = element.dataset.providerType || "movie";
-  const cacheKey = type + ":" + id;
-
-  try{
-
-    // 同じ作品が複数セクションにあっても、通信中の取得を共有する。
-    let detailPromise = providerCache.get(cacheKey);
-
-    if(!detailPromise){
-      const url =
-        "/api/search?id=" + encodeURIComponent(id) +
-        (type === "tv" ? "&type=tv" : "");
-
-      detailPromise = fetch(url).then(function(response){
-        if(!response.ok){
-          throw new Error("配信情報を取得できませんでした。");
-        }
-        return response.json();
-      });
-      providerCache.set(cacheKey, detailPromise);
-    }
-
-    const detail = await detailPromise;
-    if(element.isConnected) renderProviderStatus(element, detail);
-
-  }catch(error){
-    console.warn("PROVIDER STATUS ERROR:", error);
-    element.classList.remove("is-loading");
-    element.innerHTML =
-      '<div class="work-provider-none">配信情報なし</div>';
-  }
-}
-
-let providerObserver = null;
-
-function observeProviderStatuses(){
-
-  const targets =
-    document.querySelectorAll(
-      '.work-provider-status:not([data-observed="1"])'
-    );
-
-  if(!("IntersectionObserver" in window)){
-    targets.forEach(queueProviderRequest);
-    return;
-  }
-
-  if(!providerObserver){
-    providerObserver = new IntersectionObserver(
-      function(entries){
-        entries.forEach(function(entry){
-          if(entry.isIntersecting){
-            providerObserver.unobserve(entry.target);
-            queueProviderRequest(entry.target);
-          }
-        });
-      },
-      { rootMargin:"250px 0px" }
-    );
-  }
-
-  targets.forEach(function(target){
-    target.dataset.observed = "1";
-    providerObserver.observe(target);
-  });
-}
 
 // =========================================================
 // 出演作品表示
@@ -2310,8 +2155,6 @@ function renderWorks(
   moreWrapper.hidden =
     data.length <= 12 ||
     displayCount >= data.length;
-
-  observeProviderStatuses();
 }
 
 
@@ -2509,7 +2352,7 @@ async function loadPerson(){
 
     document.title =
   person.name +
-  "の映画・出演作品一覧｜配信情報｜ドコデミレル？";
+  "の映画・出演作品一覧｜ドコデミレル？";
 
 
 const metaDescription =
