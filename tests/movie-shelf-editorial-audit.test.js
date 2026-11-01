@@ -87,3 +87,15 @@ test('audit identifies conflicting IDs without discarding any editorial record',
     item.id === 694 && item.titles.includes(original.title) && item.titles.includes('13日の金曜日')));
   assert.equal(result.memoryFilms, audit(html).memoryFilms);
 });
+
+test('award and history editorial titles are preserved even when absent from memory shelf', () => {
+  const result = audit(html);
+  const awardTitles = Object.keys(extractLiteral(html, 'approvedAwardStories'));
+  const memoryTitles = new Set(extractLiteral(html, 'memoryFilms').map(item => item.title));
+  for (const title of awardTitles.filter(title => !memoryTitles.has(title))) {
+    assert.ok(result.editorialOnlyTitles.includes(title));
+  }
+  for (const title of result.unlinkedEditorialTitles) {
+    assert.ok(result.editorialOnlyTitles.includes(title));
+  }
+});
