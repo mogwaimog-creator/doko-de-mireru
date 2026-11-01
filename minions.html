@@ -48,7 +48,7 @@ const minionsProviders=fetch(apiRoot+'/api/series-watch?series=minions')
 async function refresh(m){
  const data=await minionsProviders;
  const record=data?.providers?.['movie:'+m.id];
- if(record&&Array.isArray(record.flatrate))paint(m.key,record.flatrate);
+ if(record&&Array.isArray(record.flatrate)){paint(m.key,record.flatrate);if(record.stale)document.querySelectorAll('.providers').forEach(box=>{if(box.dataset.key!==m.key)return;const note=document.createElement('span');note.textContent='更新遅延：前回取得時の配信情報';note.style.display='block';note.style.fontSize='14px';box.prepend(note)})}
  else paint(m.key,[],true);
 }
 MOVIES.forEach(m=>paint(m.key,[],true));
