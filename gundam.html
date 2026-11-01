@@ -461,7 +461,7 @@ async function hydrateGundamCards(){
    const availability=el.querySelector('.availability-note');
    if(gundamSeasonWorks[title]){
     // 親シリーズの配信先をシーズン2の配信先として誤表示しない。
-    if(availability)availability.outerHTML='<div class="availability-note">見放題の掲載情報なし（この作品単独の配信情報は未確認）</div>';
+    if(availability)availability.outerHTML='<div class="availability-note">このシーズン単独の見放題情報は未確認です。親番組の情報を流用していません。</div>';
     const detail=el.querySelector('.detail-link');
     if(detail){
      const seasonInfo=gundamSeasonWorks[title];
