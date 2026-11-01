@@ -298,3 +298,20 @@ test('06:00 and 18:00 JST refresh boundaries do not refresh before the boundary'
   assert.equal(afterMorning.window, '2026-11-02-06');
   assert.equal(afterEvening.window, '2026-11-02-18');
 });
+
+
+test('fresh confirmed empty availability is cached without repeated TMDB calls', async () => {
+  const id = 1102;
+  const now = new Date('2026-11-02T09:00:00Z');
+  let calls = 0;
+  const load = async () => { calls++; return {}; };
+  const first = await getSharedProviders('movie', id, load, now);
+  const second = await getSharedProviders('movie', id, load, now);
+  assert.equal(first.source, 'tmdb');
+  assert.deepEqual(first.availability, {});
+  assert.equal(first.unavailable, false);
+  assert.equal(second.source, 'cache');
+  assert.deepEqual(second.availability, {});
+  assert.equal(second.unavailable, false);
+  assert.equal(calls, 1);
+});
