@@ -172,10 +172,10 @@ if('ResizeObserver' in window)new ResizeObserver(()=>document.documentElement.st
 const characterJumps=document.getElementById('characterJumps');
 if('ResizeObserver' in window)new ResizeObserver(()=>{if(characterJumps.offsetHeight)document.documentElement.style.setProperty('--character-jump-height',characterJumps.offsetHeight+'px')}).observe(characterJumps);
 const apiRoot=location.protocol==='file:'?'https://doko-de-mireru.com':'';
-function paintProviders(id,items,error=false){
+function paintProviders(id,items,error=false,stale=false){
  document.querySelectorAll('.providers[data-tmdb="'+id+'"]').forEach(box=>{
-  if(error){const note=document.createElement('span');note.className='provider-state';note.textContent='更新できず：2026年10月7日の取得情報';box.append(note);return}
-  box.replaceChildren();const seen=new Set();const list=items.filter(p=>{if(([1796,2100].includes(p.provider_id)&&items.some(q=>q.provider_id===({1796:8,2100:9})[p.provider_id]))||seen.has(p.provider_id))return false;seen.add(p.provider_id);return true});
+  if(error){box.replaceChildren();const note=document.createElement('span');note.className='provider-state';note.textContent='配信情報を取得できませんでした';box.append(note);return}
+  box.replaceChildren();if(stale){const note=document.createElement('span');note.className='provider-state';note.textContent='更新遅延：前回取得時の配信情報';box.append(note)}const seen=new Set();const list=items.filter(p=>{if(([1796,2100].includes(p.provider_id)&&items.some(q=>q.provider_id===({1796:8,2100:9})[p.provider_id]))||seen.has(p.provider_id))return false;seen.add(p.provider_id);return true});
   if(!list.length){const text=document.createElement('span');text.className='provider-empty';text.textContent='見放題の掲載情報なし';box.append(text);return}
   const label=document.createElement('strong');label.textContent='見放題';box.append(label);
   list.forEach(p=>{const span=document.createElement('span');span.className='provider-logo';span.title=p.provider_name;if(p.logo_path){const img=document.createElement('img');img.src='https://image.tmdb.org/t/p/original'+p.logo_path;img.alt=p.provider_name;img.loading='lazy';img.addEventListener('error',()=>{span.textContent=p.provider_name});span.append(img)}else span.textContent=p.provider_name;box.append(span)})
@@ -188,13 +188,13 @@ async function loadConanProviders(){
  document.querySelectorAll('.providers[data-tmdb]').forEach(box=>{
    const id=box.dataset.tmdb;
    const record=data?.providers?.['movie:'+id];
-   if(record&&Array.isArray(record.flatrate))paintProviders(id,record.flatrate);
+   if(record&&Array.isArray(record.flatrate))paintProviders(id,record.flatrate,false,!!record.stale);
    else paintProviders(id,[],true);
  });
  const tv=data?.providers?.['tv:30983'];
  if(tv&&Array.isArray(tv.flatrate)){
    document.querySelectorAll('[data-tv-tmdb]').forEach(box=>box.setAttribute('data-tmdb','tv-30983'));
-   paintProviders('tv-30983',tv.flatrate);
+   paintProviders('tv-30983',tv.flatrate,false,!!tv.stale);
  }
 }
 loadConanProviders();
