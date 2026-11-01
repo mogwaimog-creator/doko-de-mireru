@@ -765,3 +765,21 @@ test('series-watch marks previous JST window legacy observations stale only in s
     delete require.cache[modulePath];
   }
 });
+
+
+test('current-window cache with invalid timestamp cannot masquerade as fresh', async () => {
+  const now = new Date('2026-11-01T09:05:00Z');
+  for (const [id, stamp] of [[71001,'not-a-date'],[71002,'2026-11-02T09:05:00Z']]) {
+    store.set(keys('movie',id).data,JSON.stringify({
+      window:windowId(now),availability:{flatrate:[{provider_id:8}]},lastSuccessfulAt:stamp
+    }));
+    let calls = 0;
+    const result = await getSharedProviders('movie',id,async()=>{
+      calls++;
+      return {flatrate:[{provider_id:9}]};
+    },now);
+    assert.equal(calls,1);
+    assert.equal(result.source,'tmdb');
+    assert.deepEqual(result.availability.flatrate,[{provider_id:9}]);
+  }
+});
