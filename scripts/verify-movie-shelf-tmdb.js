@@ -40,7 +40,12 @@ if (!token && !apiKey) {
       }
       const expected = normalize(item.original);
       const actual = [data.original_title, data.title].map(normalize);
-      const titleMatch = actual.includes(expected);
+      // Catalog labels sometimes contain both the English title and original
+      // title in parentheses. Require BOTH names to match the TMDB record.
+      const bilingual = item.original.match(/^(.+?)\\s*\\(([^()]+)\\)$/);
+      const titleMatch = bilingual
+        ? [bilingual[1], bilingual[2]].every(part => actual.includes(normalize(part)))
+        : actual.includes(expected);
       const productionYear = Number(String(data.release_date || '').slice(0, 4)) || null;
       // Catalog year may be Japan release, festival, or award year.
       const yearDifference = productionYear == null ? null : Math.abs(productionYear - item.year);
