@@ -34,9 +34,24 @@ function build() {
     if (JSON.stringify(reconstructed) !== JSON.stringify(source))
       throw Error('Local comparison fixture failed ' + section + ' editorial equivalence');
   }
-  const original = 'const memoryFilms=' + JSON.stringify(sourceMemory) + ';';
-  if (!html.includes(original)) throw Error('Original memory data anchor not found');
-  const replacement = 'const memoryFilms=' + JSON.stringify(memory) + ';';
+  // Reconstruct all three editorial data literals from normalized ledger
+  // candidates. This is still a comparison fixture, never a production edit.
+  let compared = html;
+  for (const [section, data] of [
+    ['memoryFilms', memory],
+    ...['verifiedClassicInfo', 'approvedAwardStories'].map(section => [
+      section,
+      Object.fromEntries(Object.keys(extractLiteral(html, section)).map(title => [
+        title, byTitle.get(title)?.[section]
+      ]))
+    ])
+  ]) {
+    const source = extractLiteral(html, section);
+    const original = 'const ' + section + '=' + JSON.stringify(source) + ';';
+    if (!compared.includes(original))
+      throw Error('Original ' + section + ' data anchor not found');
+    compared = compared.replace(original, 'const ' + section + '=' + JSON.stringify(data) + ';');
+  }
   // A banner differentiates the local fixture from the published page.
   const banner = '<div role="note" style="padding:12px;background:#fff3cd;color:#333;text-align:center;font-size:16px">開発用・台帳復元表示確認（本番サイトではありません）</div>';
   // The original page fetches posters from the production API when opened as a
@@ -44,8 +59,8 @@ function build() {
   // Browser tests inject a deterministic image separately when needed.
   const offlineGuard = '<script>window.fetch=function(){return Promise.reject(new Error("Offline comparison fixture: network requests disabled"));};</script>';
   if (!html.includes('</head>')) throw Error('HTML head anchor not found');
-  return html.replace('</head>', offlineGuard + '</head>')
-    .replace('<body>', '<body>' + banner).replace(original, replacement);
+  return compared.replace('</head>', offlineGuard + '</head>')
+    .replace('<body>', '<body>' + banner);
 }
 if (require.main === module) {
   const output = process.argv[2];
