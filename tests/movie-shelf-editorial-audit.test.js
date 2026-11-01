@@ -3,7 +3,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
-const { extractLiteral, audit, compareEditorialSources, editorialEntryFingerprints, compareEditorialEntries, planEditorialMigration, buildEditorialSnapshot } = require('../scripts/audit-movie-shelf');
+const { extractLiteral, audit, compareEditorialSources, editorialEntryFingerprints, compareEditorialEntries, planEditorialMigration, buildEditorialSnapshot, resolveEditorialTitleIds } = require('../scripts/audit-movie-shelf');
 const html = fs.readFileSync(path.join(__dirname, '../movie_shelf_1980_1984.html'), 'utf8');
 
 test('movie shelf editorial blocks can be audited without writing data', () => {
@@ -98,4 +98,16 @@ test('award and history editorial titles are preserved even when absent from mem
   for (const title of result.unlinkedEditorialTitles) {
     assert.ok(result.editorialOnlyTitles.includes(title));
   }
+});
+
+test('editorial ID resolution uses explicit IDs and never guesses unknown titles', () => {
+  const result = resolveEditorialTitleIds(html);
+  assert.equal(result.writes, 0);
+  for (const [section, titles] of Object.entries(result.resolved)) {
+    for (const [title, id] of Object.entries(titles)) {
+      assert.ok(Number.isSafeInteger(id) && id > 0, section + ':' + title);
+    }
+  }
+  assert.ok(result.needsReview.every(entry =>
+    ['missing-id', 'conflicting-ids'].includes(entry.reason)));
 });
