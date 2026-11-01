@@ -90,6 +90,10 @@ function resolveEditorialTitleIds(html) {
       const candidates = new Set(memoryIds.get(title) || []);
       const fixed = overrides[title];
       if (Number.isSafeInteger(fixed) && fixed > 0) candidates.add(fixed);
+      // Explicit IDs in editorial records are authoritative candidates too.
+      // Disagreement with the other sources remains blocked for review.
+      const embedded = block[title]?.id;
+      if (Number.isSafeInteger(embedded) && embedded > 0) candidates.add(embedded);
       if (candidates.size === 1) resolved[section][title] = [...candidates][0];
       else needsReview.push({ section, title, reason: candidates.size ? 'conflicting-ids' : 'missing-id', candidates: [...candidates] });
     }
