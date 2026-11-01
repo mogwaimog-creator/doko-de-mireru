@@ -195,6 +195,7 @@ async function loadConanProviders(){
  if(tv&&Array.isArray(tv.flatrate)){
    document.querySelectorAll('[data-tv-tmdb]').forEach(box=>box.setAttribute('data-tmdb','tv-30983'));
    paintProviders('tv-30983',tv.flatrate);
+   if(tv.stale){document.querySelectorAll('[data-tv-tmdb]').forEach(box=>{const warning=document.createElement('span');warning.textContent=' ※前回取得した配信情報です（更新未確認）';warning.style.cssText='color:#b42318;font-size:14px';box.appendChild(warning)})}
  }
 }
 loadConanProviders();
