@@ -30,3 +30,17 @@ test('preview never auto-writes ambiguous editorial content', () => {
   assert.ok(result.review.length > 0);
   assert.equal(result.writes, 0);
 });
+
+test('duplicate movie title is held for review without losing source entries', () => {
+  const memory = extractLiteral(html, 'memoryFilms');
+  const film = memory.find(item => Number.isSafeInteger(item.id) && item.id > 0);
+  assert.ok(film);
+  const marker = 'const memoryFilms=[';
+  assert.ok(html.includes(marker));
+  const changed = html.replace(marker, marker + JSON.stringify(film) + ',');
+  const result = preview(changed);
+  assert.ok(result.review.some(item => item.title === film.title && item.reason === 'conflicting-id'));
+  assert.ok(!result.records.some(item => item.title === film.title && item.pageExtras.movieShelf.memoryFilms));
+  assert.equal(result.snapshot.sources.memoryFilms.length, memory.length + 1);
+  assert.equal(result.writes, 0);
+});
