@@ -69,9 +69,20 @@ function preview(html) {
       byId.set(key, target);
     }
   }
+  // Prove every source entry is represented either by a candidate or by the
+  // retained snapshot. A preview is not a deletion or import instruction.
+  const sourceCounts = Object.fromEntries(Object.entries(snapshot.sources).map(([name, value]) =>
+    [name, Array.isArray(value) ? value.length : Object.keys(value).length]));
+  const candidateCounts = {
+    memoryFilms: [...byId.values()].filter(item => Object.hasOwn(item.pageExtras.movieShelf, 'memoryFilms')).length,
+    verifiedClassicInfo: [...byId.values()].filter(item => Object.hasOwn(item.pageExtras.movieShelf, 'verifiedClassicInfo')).length,
+    approvedAwardStories: [...byId.values()].filter(item => Object.hasOwn(item.pageExtras.movieShelf, 'approvedAwardStories')).length
+  };
+  const retainedForReview = Object.fromEntries(Object.keys(sourceCounts).map(name =>
+    [name, sourceCounts[name] - candidateCounts[name]]));
   // Full source snapshot is retained, including unmatched text; nothing is discarded.
   return { mode: 'read-only', writes: 0, records: [...byId.values()].sort((a,b) => a.tmdbId-b.tmdbId),
-    review, snapshot };
+    review, snapshot, coverage: { sourceCounts, candidateCounts, retainedForReview } };
 }
 
 if (require.main === module) {
