@@ -17,3 +17,11 @@ test('read-only migration report accounts for all editorial sections', () => {
   assert.ok(Array.isArray(result.fixedIdConflicts));
   assert.ok(Array.isArray(result.unlinkedEditorialTitles));
 });
+
+test('readiness summary never approves automatic editorial import', () => {
+  const result = report(html);
+  assert.equal(result.readiness.readyForAutomaticImport, false);
+  assert.equal(result.readiness.requiresEditorialReview, true);
+  assert.equal(result.readiness.counts.idConflicts, result.fixedIdConflicts.length);
+  assert.equal(result.readiness.counts.unlinkedEditorialTitles, result.unlinkedEditorialTitles.length);
+});
