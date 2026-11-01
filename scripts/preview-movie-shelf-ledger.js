@@ -153,6 +153,9 @@ function planCandidateMerge(candidate, existing) {
   if (existing.title !== incoming.title) {
     return { action: 'blocked', record: null, conflicts: ['title-mismatch'] };
   }
+  if (existing.pageExtras?.movieShelf != null && (typeof existing.pageExtras.movieShelf !== 'object' || Array.isArray(existing.pageExtras.movieShelf))) {
+    return { action: 'blocked', record: null, conflicts: ['invalid-existing-extras'] };
+  }
   const currentExtras = existing.pageExtras?.movieShelf || {};
   const nextExtras = incoming.pageExtras.movieShelf;
   const conflicts = Object.keys(nextExtras).filter(key =>
