@@ -48,8 +48,10 @@ module.exports=async(req,res)=>{
           try{entry=JSON.parse(shared[i]);}catch{continue;}
           if(!entry||!entry.availability||typeof entry.availability!=='object'||Array.isArray(entry.availability))continue;
           const flat=entry.availability.flatrate;
-          // A missing flatrate field is not proof that no service offers the title.
-          if(!Array.isArray(flat))continue;
+          // A successfully cached JP response may have only rent/buy offers.
+          // Such a record confirms no subscription offers; malformed flat-rate data does not.
+          if(flat!==undefined&&!Array.isArray(flat))continue;
+          const subscriptions=flat===undefined?[]:flat;
           const checked=Date.parse(entry.lastSuccessfulAt);
           if(!Number.isFinite(checked)||checked>Date.now()+60000)continue;
           const legacy=providers[keys[i]];
@@ -60,7 +62,7 @@ module.exports=async(req,res)=>{
           if(stale&&legacy&&!legacy.stale)continue;
           // Never replace a newer legacy observation with an older shared one.
           if(legacy&&Number.isFinite(Date.parse(legacy.checkedAt))&&Date.parse(legacy.checkedAt)>checked)continue;
-          providers[keys[i]]={flatrate:flat||[],checkedAt:entry.lastSuccessfulAt,stale};
+          providers[keys[i]]={flatrate:subscriptions,checkedAt:entry.lastSuccessfulAt,stale};
           const at=failures.indexOf(keys[i]);
           if(at>=0)failures.splice(at,1);
         }
