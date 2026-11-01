@@ -58,3 +58,22 @@ test('non-GET requests are rejected',async()=>{
  assert.equal(response.statusCode,405);
  assert.equal(calls,0);
 });
+
+const {windowJST}=require('../api/update-streaming.js')._test;
+test('JST 06:00 and 18:00 are distinct update windows',()=>{
+ const utc=(v)=>Date.parse(v);
+ assert.equal(windowJST(utc('2026-11-01T20:59:59Z')),'2026-11-01-18');
+ assert.equal(windowJST(utc('2026-11-01T21:00:00Z')),'2026-11-02-06');
+ assert.equal(windowJST(utc('2026-11-02T08:59:59Z')),'2026-11-02-06');
+ assert.equal(windowJST(utc('2026-11-02T09:00:00Z')),'2026-11-02-18');
+});
+test('stale cache is not silently treated as fresh',async()=>{
+ const future=new Date(Date.now()+120000).toISOString();
+ const {response}=await call('gundam',{'doko:watch:v3:tv:21731':JSON.stringify({flatrate:[],checkedAt:future})});
+ assert.equal(response.body.providers['tv:21731'].stale,true);
+});
+test('malformed cached JSON is isolated as a missing record',async()=>{
+ const {response}=await call('gundam',{'doko:watch:v3:tv:21731':'{broken'});
+ assert.equal(response.statusCode,200);
+ assert.equal(response.body.failures.includes('tv:21731'),true);
+});
