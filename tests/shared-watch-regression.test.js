@@ -14,6 +14,11 @@ test('all verified Gundam works are in the scheduled registry',()=>{
 test('registry contains no duplicate (type,id) pairs',()=>{
  assert.equal(keyset.size,works.length);
 });
+test('all Godzilla works are present in the canonical registry',()=>{
+ const godzilla=require('../data/godzilla-works.json');
+ assert.equal(godzilla.length,47);
+ for(const work of godzilla)assert.ok(keyset.has(work.type+':'+work.id),'missing '+work.type+':'+work.id);
+});
 async function call(query,records,method='GET'){
  const original=Module._load;
  let calls=0;
