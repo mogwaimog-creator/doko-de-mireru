@@ -883,3 +883,51 @@ test('opt-in series refresh enforces one series budget for repeated visitors',as
     delete require.cache[modulePath];
   }
 });
+
+
+test('simultaneous series visitors share one atomic refresh budget',async()=>{
+  const modulePath=require.resolve('../api/series-watch');
+  const original=redis.command;
+  const saved={
+    refresh:process.env.SERIES_WATCH_REFRESH_ENABLED,
+    read:process.env.SERIES_WATCH_SHARED_READ_ENABLED,
+    shared:process.env.SHARED_PROVIDER_ENABLED,
+    token:process.env.TMDB_API_KEY
+  };
+  let accepted=0,budgetAttempts=0;
+  try{
+    process.env.SERIES_WATCH_REFRESH_ENABLED='1';
+    process.env.SERIES_WATCH_SHARED_READ_ENABLED='1';
+    process.env.SHARED_PROVIDER_ENABLED='1';
+    process.env.TMDB_API_KEY='test-only';
+    redis.command=async args=>{
+      if(args[0]==='MGET')return args.slice(1).map(()=>null);
+      if(args[0]==='SET'&&args[1].startsWith('doko:series-refresh-budget:v1:')){
+        budgetAttempts++;
+        if(accepted===0){accepted++;return 'OK';}
+        return null;
+      }
+      if(args[0]==='GET')return null;
+      if(args[0]==='SET')return null;
+      throw new Error('Unexpected Redis command '+args[0]);
+    };
+    delete require.cache[modulePath];
+    const handler=require('../api/series-watch');
+    const calls=Array.from({length:12},()=>new Promise((resolve,reject)=>{
+      handler({method:'GET',query:{series:'godzilla'}},{
+        setHeader(){},status(){return this;},json(body){resolve(body);return this;}
+      }).catch(reject);
+    }));
+    const results=await Promise.all(calls);
+    assert.equal(results.length,12);
+    assert.equal(budgetAttempts,12);
+    assert.equal(accepted,1);
+  }finally{
+    redis.command=original;
+    for(const [key,env] of Object.entries({SERIES_WATCH_REFRESH_ENABLED:saved.refresh,SERIES_WATCH_SHARED_READ_ENABLED:saved.read,SHARED_PROVIDER_ENABLED:saved.shared,TMDB_API_KEY:saved.token})){
+      if(env===undefined)delete process.env[key];
+      else process.env[key]=env;
+    }
+    delete require.cache[modulePath];
+  }
+});
