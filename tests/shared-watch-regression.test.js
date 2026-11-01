@@ -86,3 +86,12 @@ test('malformed cached JSON is isolated as a missing record',async()=>{
  assert.equal(response.statusCode,200);
  assert.equal(response.body.failures.includes('tv:21731'),true);
 });
+
+test('all series endpoints read only canonical registered keys',async()=>{
+ for(const series of ['godzilla','mcu','jurassic','harrypotter','lordoftherings','starwars','wildspeed','minions','odoru','eva','conan','gundam']){
+  const {response,calls}=await call(series,{});
+  assert.equal(response.statusCode,200,series);
+  assert.equal(calls,1,series);
+  assert.ok(Array.isArray(response.body.failures),series);
+ }
+});
