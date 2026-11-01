@@ -4,6 +4,28 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { extractLiteral, buildEditorialSnapshot, resolveEditorialTitleIds, audit } = require('./audit-movie-shelf');
 
+function validatePreview(result) {
+  const problems = [];
+  const keys = new Set();
+  for (const record of result.records) {
+    if (keys.has(record.key)) problems.push('duplicate-key:' + record.key);
+    keys.add(record.key);
+    if (record.key !== record.type + ':' + record.tmdbId)
+      problems.push('invalid-key:' + record.key);
+    if (record.type !== 'movie' || !Number.isSafeInteger(record.tmdbId) || record.tmdbId <= 0)
+      problems.push('invalid-identity:' + record.key);
+  }
+  for (const section of ['memoryFilms', 'verifiedClassicInfo', 'approvedAwardStories']) {
+    const coverage = result.coverage;
+    if (coverage.sourceCounts[section] !== coverage.candidateCounts[section] + coverage.retainedForReview[section])
+      problems.push('coverage-mismatch:' + section);
+    if (coverage.retainedEntries[section].length !== coverage.retainedForReview[section])
+      problems.push('retained-mismatch:' + section);
+  }
+  if (result.writes !== 0 || result.mode !== 'read-only') problems.push('unsafe-mode');
+  return { valid: problems.length === 0, problems };
+}
+
 function preview(html) {
   const snapshot = buildEditorialSnapshot(html);
   const links = resolveEditorialTitleIds(html);
@@ -103,4 +125,4 @@ if (require.main === module) {
   const html = fs.readFileSync(path.join(__dirname, '../movie_shelf_1980_1984.html'), 'utf8');
   console.log(JSON.stringify(preview(html), null, 2));
 }
-module.exports = { preview };
+module.exports = { preview, validatePreview };
