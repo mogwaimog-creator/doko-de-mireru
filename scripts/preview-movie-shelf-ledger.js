@@ -13,12 +13,30 @@ function preview(html) {
   const review = [...links.needsReview];
   const blockedIds = new Set(issues.conflictingMemoryIds.map(item => item.id));
   const blockedTitles = new Set([...issues.overrideIdConflicts.map(item => item.title), ...issues.duplicateMemoryTitles]);
+  // Preflight all resolved editorial titles: two distinct titles must never
+  // share a ledger key just because they point to the same numeric ID.
+  const titlesById = new Map();
+  for (const entry of memory) {
+    if (!Number.isSafeInteger(entry.id) || entry.id <= 0) continue;
+    if (!titlesById.has(entry.id)) titlesById.set(entry.id, new Set());
+    titlesById.get(entry.id).add(entry.title);
+  }
+  for (const section of ['verifiedClassicInfo', 'approvedAwardStories']) {
+    for (const [title, id] of Object.entries(links.resolved[section])) {
+      if (!titlesById.has(id)) titlesById.set(id, new Set());
+      titlesById.get(id).add(title);
+    }
+  }
+  const ambiguousIds = new Set([...titlesById].filter(([, titles]) => titles.size > 1).map(([id]) => id));
+  for (const id of ambiguousIds)
+    review.push({ section: 'cross-section', title: [...titlesById.get(id)].join(' / '),
+      reason: 'multiple-titles-for-id', candidates: [id] });
   for (const entry of memory) {
     if (!Number.isSafeInteger(entry.id) || entry.id <= 0) {
       review.push({ section: 'memoryFilms', title: entry.title, reason: 'missing-or-invalid-id' });
       continue;
     }
-    if (blockedIds.has(entry.id) || blockedTitles.has(entry.title)) {
+    if ((blockedIds.has(entry.id) || ambiguousIds.has(entry.id)) || blockedTitles.has(entry.title)) {
       review.push({ section: 'memoryFilms', title: entry.title, reason: 'conflicting-id' });
       continue;
     }
@@ -34,7 +52,7 @@ function preview(html) {
   for (const section of ['verifiedClassicInfo', 'approvedAwardStories']) {
     for (const [title, value] of Object.entries(snapshot.sources[section])) {
       const id = links.resolved[section][title];
-      if (!id || blockedIds.has(id) || blockedTitles.has(title)) {
+      if (!id || blockedIds.has(id) || ambiguousIds.has(id) || blockedTitles.has(title)) {
         if (id && (blockedIds.has(id) || blockedTitles.has(title)))
           review.push({ section, title, reason: 'blocked-conflict', candidates: [id] });
         continue;
