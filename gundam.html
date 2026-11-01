@@ -308,7 +308,9 @@ function gundamLookup(title,preferredType){
  if(!gundamLookupCache.has(cacheKey))gundamLookupCache.set(cacheKey,(async()=>{
   const known=gundamKnownIds[title];
    if(known&&(!preferredType||preferredType===known.type)){
-    return {id:known.id,content_type:known.type,streaming:[]};
+    // Keep the existing poster/metadata path until fixed poster paths are verified.
+    // Cached streaming logos are rendered separately via gundamFixedAvailability.
+    try{const result=await gundamById(known.id,known.type);if(result)return result}catch(e){console.warn('ID取得失敗:',title,e)}
    }
   try{
    const types=preferredType?[preferredType]:['tv','movie'];
