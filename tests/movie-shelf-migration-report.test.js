@@ -25,3 +25,12 @@ test('readiness summary never approves automatic editorial import', () => {
   assert.equal(result.readiness.counts.idConflicts, result.fixedIdConflicts.length);
   assert.equal(result.readiness.counts.unlinkedEditorialTitles, result.unlinkedEditorialTitles.length);
 });
+
+test('report includes editorial title ID links and review items', () => {
+  const result = report(html);
+  assert.ok(result.editorialIdLinks.verifiedClassicInfo);
+  assert.ok(result.editorialIdLinks.approvedAwardStories);
+  assert.ok(Array.isArray(result.editorialIdReview));
+  assert.equal(result.readiness.counts.editorialIdReview, result.editorialIdReview.length);
+  assert.equal(result.readiness.readyForAutomaticImport, false);
+});
