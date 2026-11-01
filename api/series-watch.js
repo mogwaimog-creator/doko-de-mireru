@@ -82,7 +82,12 @@ module.exports=async(req,res)=>{
         // Rotate the candidate order between ten-minute slots to prevent the
         // first failing title from monopolizing every series refresh attempt.
         const slot=Math.floor(Date.now()/600000);
-        const selected=candidates.length?candidates[slot%candidates.length]:null;
+        // Start from a stable slot-dependent position in the full work list,
+        // then pick the first stale work. Shrinking the stale list must not
+        // randomly shift the starting point and starve later titles.
+        const start=slot%works.length;
+        const selected=Array.from({length:works.length},(_,i)=>works[(start+i)%works.length])
+          .find(w=>!providers[w.type+':'+w.id]||providers[w.type+':'+w.id].stale);
         if(candidates.length){
           const budget='doko:series-refresh-budget:v1:'+req.query.series+':'+window+':'+slot;
           const acquired=await command(['SET',budget,'1','NX','EX',600]);
