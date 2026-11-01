@@ -44,7 +44,7 @@ async function getSharedProviders(type, id, load, now = new Date()) {
     // Avoid bypassing the shared cache with one TMDB call per visitor.
     return { ...providerResult(), window, source: 'cache-unavailable' };
   }
-  if (saved && saved.window === window && saved.availability && typeof saved.availability === 'object' && !Array.isArray(saved.availability)) {
+  if (saved && saved.window === window && saved.availability && typeof saved.availability === 'object' && !Array.isArray(saved.availability) && typeof saved.lastSuccessfulAt === 'string' && Number.isFinite(Date.parse(saved.lastSuccessfulAt)) && Date.parse(saved.lastSuccessfulAt) <= new Date(now).getTime() + 60000) {
     return { ...providerResult({ fresh: saved.availability }), lastSuccessfulAt: saved.lastSuccessfulAt, window, source: 'cache' };
   }
   // After a failed refresh, wait before another visitor attempts TMDB.
