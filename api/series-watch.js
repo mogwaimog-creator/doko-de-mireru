@@ -47,7 +47,11 @@ module.exports=async(req,res)=>{
           const flat=entry.availability.flatrate;
           if(flat!==undefined&&!Array.isArray(flat))continue;
           if(!Number.isFinite(Date.parse(entry.lastSuccessfulAt)))continue;
-          providers[keys[i]]={flatrate:flat||[],checkedAt:entry.lastSuccessfulAt,stale:entry.window!==current};
+          const legacy=providers[keys[i]];
+          const stale=entry.window!==current;
+          // Do not replace a fresh legacy record with older shared data.
+          if(stale&&legacy&&!legacy.stale)continue;
+          providers[keys[i]]={flatrate:flat||[],checkedAt:entry.lastSuccessfulAt,stale};
           const at=failures.indexOf(keys[i]);
           if(at>=0)failures.splice(at,1);
         }
