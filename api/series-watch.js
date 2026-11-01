@@ -92,8 +92,10 @@ module.exports=async(req,res)=>{
               return response.json();
             });
             const key=work.type+':'+work.id;
-            if(result.availability&&Array.isArray(result.availability.flatrate)){
-              providers[key]={flatrate:result.availability.flatrate,checkedAt:result.lastSuccessfulAt||null,stale:result.stale===true};
+            if((result.source==='tmdb'||result.source==='cache') && result.availability && typeof result.availability==='object' && !Array.isArray(result.availability)){
+              // A successful JP response without flatrate means no subscription offers.
+              const flat=Array.isArray(result.availability.flatrate)?result.availability.flatrate:[];
+              providers[key]={flatrate:flat,checkedAt:result.lastSuccessfulAt||new Date().toISOString(),stale:false};
               const index=failures.indexOf(key);
               if(index>=0)failures.splice(index,1);
             }
