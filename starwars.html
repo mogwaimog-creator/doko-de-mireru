@@ -289,20 +289,36 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
     }).join('');
     document.querySelectorAll('.providers').forEach(box=>providerObserver.observe(box));
   }
-  const providerCache=new Map();
+  // 共通台帳に保存済みの配信情報のみ取得。作品ごとの検索APIは呼び出さない。
   const apiBase=location.protocol==='file:'?'https://doko-de-mireru.com':'';
+  const sharedProviders=fetch(apiBase+'/api/series-watch?series=starwars')
+    .then(r=>{if(!r.ok)throw Error('配信キャッシュ取得失敗');return r.json()})
+    .catch(()=>null);
   async function loadProviders(box){
-    const key=`${box.dataset.type}:${box.dataset.id}`;
-    if(!providerCache.has(key))providerCache.set(key,fetch(`${apiBase}/api/search?id=${encodeURIComponent(box.dataset.id)}&type=${box.dataset.type}`)
-      .then(response=>{if(!response.ok)throw Error('配信情報の取得に失敗');return response.json()})
-      .then(data=>Array.isArray(data.streaming)?dokoNormalizeStreaming(data.streaming):[]).catch(()=>null));
-    const providers=await providerCache.get(key);
+    const key=box.dataset.type+':'+box.dataset.id;
+    const data=await sharedProviders;
     if(!box.isConnected)return;
-    if(providers===null){box.textContent='配信状況は作品詳細でご確認ください';return}
-    const unique=providers.filter((p,i,all)=>p&&p.logo_path&&all.findIndex(x=>x&&x.provider_id===p.provider_id)===i);
-    if(!unique.length){box.textContent='見放題情報は未確認です';return}
-    box.innerHTML='<span class="providers-label">見放題</span>';
-    unique.forEach(p=>{const img=document.createElement('img');img.src='https://image.tmdb.org/t/p/w92'+p.logo_path;img.alt=p.provider_name||'配信サービス';img.loading='lazy';box.appendChild(img)});
+    const record=data?.providers?.[key];
+    if(!record||!Array.isArray(record.flatrate)){
+      box.textContent='配信情報を確認できません。作品詳細でご確認ください';
+      box.style.color='#b91c1c';
+      return;
+    }
+    const unique=record.flatrate.filter((p,i,all)=>p&&p.logo_path&&all.findIndex(x=>x&&x.provider_id===p.provider_id)===i);
+    if(!unique.length){
+      box.textContent=record.stale?'前回取得時は見放題の掲載情報なし（更新遅延中）':'見放題の配信情報はありません';
+      box.style.color=record.stale?'#b91c1c':'';
+      return;
+    }
+    box.innerHTML='<span class="providers-label">'+(record.stale?'前回取得時の見放題（更新遅延中）':'見放題')+'</span>';
+    box.style.color=record.stale?'#b91c1c':'';
+    unique.forEach(p=>{
+      const img=document.createElement('img');
+      img.src='https://image.tmdb.org/t/p/w92'+p.logo_path;
+      img.alt=p.provider_name||'配信サービス';
+      img.loading='lazy';
+      box.appendChild(img);
+    });
   }
   const providerObserver=new IntersectionObserver((entries,observer)=>entries.forEach(entry=>{if(entry.isIntersecting){observer.unobserve(entry.target);loadProviders(entry.target)}}),{rootMargin:'200px'});
   const panels={beginner:document.getElementById('sw-beginner-panel'),catalog:document.getElementById('sw-catalog-panel'),people:document.getElementById('sw-people-panel'),glossary:document.getElementById('sw-glossary-panel')};
