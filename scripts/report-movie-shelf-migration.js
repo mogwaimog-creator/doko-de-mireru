@@ -5,6 +5,22 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { audit, buildEditorialSnapshot, resolveEditorialTitleIds } = require('./audit-movie-shelf');
 
+function formatReviewQueue(result) {
+  const labels = {
+    'id-conflict': 'ID衝突',
+    'invalid-id': '無効ID',
+    'duplicate-title': '作品名重複',
+    'missing-id': 'ID未登録',
+    'editorial-id-review': '文章のID要確認'
+  };
+  const queue = reviewQueue(result);
+  if (!queue.length) return '確認待ちの作品はありません。';
+  return queue.map((entry, index) => {
+    const detail = entry.section ? ' [' + entry.section + ']' : '';
+    return (index + 1) + '. ' + labels[entry.kind] + ': ' + entry.title + detail;
+  }).join('\\n');
+}
+
 function reviewQueue(result) {
   const items = [];
   for (const conflict of result.fixedIdConflicts)
@@ -80,4 +96,4 @@ if (require.main === module) {
   const html = fs.readFileSync(path.join(__dirname, '../movie_shelf_1980_1984.html'), 'utf8');
   console.log(JSON.stringify(report(html), null, 2));
 }
-module.exports = { report, summarizeReadiness, formatReviewSummary, reviewQueue };
+module.exports = { report, summarizeReadiness, formatReviewSummary, reviewQueue, formatReviewQueue };
