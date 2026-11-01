@@ -45,7 +45,8 @@ module.exports=async(req,res)=>{
           try{entry=JSON.parse(shared[i]);}catch{continue;}
           if(!entry||!entry.availability||typeof entry.availability!=='object'||Array.isArray(entry.availability))continue;
           const flat=entry.availability.flatrate;
-          if(flat!==undefined&&!Array.isArray(flat))continue;
+          // A missing flatrate field is not proof that no service offers the title.
+          if(!Array.isArray(flat))continue;
           const checked=Date.parse(entry.lastSuccessfulAt);
           if(!Number.isFinite(checked)||checked>Date.now()+60000)continue;
           const legacy=providers[keys[i]];
