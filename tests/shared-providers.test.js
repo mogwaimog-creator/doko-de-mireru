@@ -702,3 +702,34 @@ test('series provider endpoint rejects invalid identities before contacting TMDB
     else process.env.SHARED_PROVIDER_ENABLED=previous;
   }
 });
+
+
+test('series-watch CDN cache is shorter only when shared read flag is enabled', async () => {
+  const modulePath = require.resolve('../api/series-watch');
+  const originalCommand = redis.command;
+  const originalFlag = process.env.SERIES_WATCH_SHARED_READ_ENABLED;
+  try {
+    redis.command = async args => args.slice(1).map(() => null);
+    for (const enabled of [false, true]) {
+      if (enabled) process.env.SERIES_WATCH_SHARED_READ_ENABLED = '1';
+      else delete process.env.SERIES_WATCH_SHARED_READ_ENABLED;
+      delete require.cache[modulePath];
+      const handler = require('../api/series-watch');
+      const headers = {};
+      const res = {
+        setHeader(k, v) { headers[k] = v; },
+        status() { return this; },
+        json() { return this; }
+      };
+      await handler({method:'GET',query:{series:'mcu'}},res);
+      assert.equal(headers['Cache-Control'], enabled
+        ? 'public, max-age=0, s-maxage=30, stale-while-revalidate=30'
+        : 'public, max-age=0, s-maxage=120, stale-while-revalidate=60');
+    }
+  } finally {
+    redis.command = originalCommand;
+    if (originalFlag === undefined) delete process.env.SERIES_WATCH_SHARED_READ_ENABLED;
+    else process.env.SERIES_WATCH_SHARED_READ_ENABLED = originalFlag;
+    delete require.cache[modulePath];
+  }
+});
