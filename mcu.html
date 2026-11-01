@@ -14862,9 +14862,10 @@ async function loadMcuProviderBox(box){
  try{
   const record=await getMcuCachedRecord(box.dataset.id,box.dataset.type||'movie');
   box.replaceChildren();
-  if(!record){box.textContent='配信情報を確認中です';}
-  else if(!record.flatrate.length){box.textContent='見放題の掲載情報なし';}
+  if(!record){box.textContent='配信情報を取得できませんでした';}
+  else if(!record.flatrate.length){if(record.stale){const warning=document.createElement('span');warning.textContent='更新遅延：前回取得時の配信情報';warning.style.display='block';warning.style.fontSize='14px';warning.style.color='#b91c1c';box.appendChild(warning)}const note=document.createElement('span');note.textContent='見放題の掲載情報なし';box.appendChild(note);}
   else{
+   if(record.stale){const warning=document.createElement('span');warning.textContent='配信情報の更新が遅れています（前回取得時の情報）';warning.style.display='block';warning.style.fontSize='14px';warning.style.color='#b91c1c';box.appendChild(warning)}
    // TMDBでは同一サービスに複数のprovider_idが付く場合がある。
    // IDの別名・同じロゴ画像をまとめ、表示上の重複だけを除外する。
    const seenIds=new Set(),seenLogos=new Set();
