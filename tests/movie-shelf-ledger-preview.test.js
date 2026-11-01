@@ -69,3 +69,13 @@ test('coverage accounts for every editorial source entry', () => {
   }
   assert.equal(result.writes, 0);
 });
+
+test('retained entries are identified by title without discarding their text', () => {
+  const result = preview(html);
+  for (const name of ['memoryFilms', 'verifiedClassicInfo', 'approvedAwardStories']) {
+    assert.equal(result.coverage.retainedEntries[name].length,
+      result.coverage.retainedForReview[name]);
+    assert.ok(result.coverage.retainedEntries[name].every(item => typeof item.title === 'string'));
+  }
+  assert.equal(result.writes, 0);
+});
