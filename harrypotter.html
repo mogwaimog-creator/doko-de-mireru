@@ -3081,6 +3081,7 @@ async function loadHpProviderBox(box){
   if(providers.length === 0){
     box.innerHTML = '<span class="doko-provider-unconfirmed">'+(result.missing?'配信情報を取得できませんでした':'見放題の掲載情報なし')+'</span>';
 
+    if(result.stale){const warning=document.createElement('span');warning.textContent='更新遅延：前回取得時の配信情報';warning.style.display='block';warning.style.fontSize='14px';box.appendChild(warning)}
     box.dataset.loaded = "1";
 
     return;
