@@ -76,9 +76,15 @@ test('read-only CLI prints Japanese review by default and supports JSON output',
 });
 
 test('mismatched fixed overrides are reported rather than silently accepted', () => {
-  const source = html.replace(/(const classicKnownIds=\{)/, '$1"シャイニング":999999,');
+  const { extractLiteral } = require('../scripts/audit-movie-shelf');
+  const overrides = extractLiteral(html, 'classicKnownIds');
+  const film = extractLiteral(html, 'memoryFilms').find(item =>
+    Number.isSafeInteger(item.id) && item.id > 0 && !Object.hasOwn(overrides, item.title));
+  assert.ok(film, 'fixture must contain a film without an override');
+  const source = html.replace('const classicKnownIds={',
+    'const classicKnownIds={' + JSON.stringify(film.title) + ':999999,');
   const result = report(source);
-  assert.ok(result.overrideIdConflicts.some(item => item.title === 'シャイニング'));
-  assert.ok(reviewQueue(result).some(item => item.kind === 'override-id-conflict' && item.title === 'シャイニング'));
+  assert.ok(result.overrideIdConflicts.some(item => item.title === film.title));
+  assert.ok(reviewQueue(result).some(item => item.kind === 'override-id-conflict' && item.title === film.title));
   assert.equal(result.writes, 0);
 });
