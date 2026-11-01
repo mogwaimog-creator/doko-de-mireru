@@ -396,6 +396,23 @@ function gundamProviderRow(items){
  }).join('');
 }
 // Verified Gundam titles use the shared Redis snapshot, not visitor-triggered TMDB.
+// Fixed-ID poster metadata; CDN cache for 30 days, no visitor title search.
+const gundamPosterCache=new Map();
+function gundamFixedPoster(title){
+ const work=gundamSeasonWorks[title]||gundamKnownIds[title];
+ if(!work)return Promise.resolve(null);
+ const key=work.id+':'+(work.season||0);
+ if(!gundamPosterCache.has(key))gundamPosterCache.set(key,(async()=>{
+  try{
+   const url=gundamApiRoot+'/api/gundam-poster?id='+work.id+(work.season?'&season='+work.season:'');
+   const r=await fetch(url);
+   if(!r.ok)throw Error('poster '+r.status);
+   const record=await r.json();
+   return gundamImage(record.poster_path,'w342');
+  }catch(e){console.warn('固定ポスターの取得失敗',title,e);return null}
+ })());
+ return gundamPosterCache.get(key);
+}
 const gundamFixedWorks=gundamKnownIds;
 const gundamSharedWatch=fetch(gundamApiRoot+'/api/series-watch?series=gundam')
  .then(r=>{if(!r.ok)throw Error('shared watch unavailable');return r.json()})
@@ -457,7 +474,7 @@ async function hydrateGundamCards(){
   const item=fixed?{id:fixed.id,content_type:fixed.type}:null;
   if(!el.isConnected)continue;
   // ポスターパス未検証の作品は検索を起動せず、既存のプレースホルダーを維持。
-  const poster=null,slot=el.querySelector('.poster-placeholder');
+  const poster=await gundamFixedPoster(title),slot=el.querySelector('.poster-placeholder');
   if(poster&&slot){
    const img=document.createElement('img');img.className='work-poster';img.alt=title+'のポスター';
    img.loading='lazy';img.decoding='async';img.src=poster;
