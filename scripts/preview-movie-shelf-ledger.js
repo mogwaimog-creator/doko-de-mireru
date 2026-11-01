@@ -306,6 +306,33 @@ if (require.main === module) {
         record.tmdbId <= 0) ||
         new Set(research.records.map(record => record.key)).size !== research.records.length)
       throw Error('Invalid or duplicate work key in 66-work preview');
+    // Static UI compatibility guard. These are the existing interactive
+    // contracts; this does not claim to be a real-browser visual test.
+    const uiContracts = {
+      tabs: [
+        "function setTab(tab)", "data-tab", "award-section",
+        "rank-section", "memory-section", "renderRankings()", "renderMemories()"
+      ],
+      filmCards: [
+        "function renderMemories()", "data-memory-id", "function openMemory(m,trigger)",
+        "memory-dialog-content", "memoryEscape(m.summary)", "memoryEscape(m.memory)"
+      ],
+      awardAndRankingDetails: [
+        "function showCommonDetails(items,kind,trigger)",
+        "data-award-title", "data-ranking-title", "function classicSection("
+      ],
+      filtersAndPosters: [
+        "data-memory-genre", "data-rank", "function loadMemoryPoster(",
+        "function shelfFixedMovie(id)", "function shelfTitleSearch(query)"
+      ]
+    };
+    for (const [feature, markers] of Object.entries(uiContracts)) {
+      for (const marker of markers)
+        if (!html.includes(marker))
+          throw Error('Existing shelf UI contract missing: ' + feature + ' / ' + marker);
+    }
+    console.log('Static shelf UI contracts passed: ' +
+      Object.keys(uiContracts).join(', '));
     // Simulate the planned ledger JSON round-trip and reconstruct the three
     // source sections. This does not change the live page or invoke Redis.
     const normalizedRecords = research.records.map(record => {
