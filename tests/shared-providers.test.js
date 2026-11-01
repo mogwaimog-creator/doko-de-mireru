@@ -591,6 +591,39 @@ test('series-watch chooses newer legacy observation even when shared window is c
 });
 
 
+test('series-watch does not treat missing shared flatrate as a confirmed empty list', async () => {
+  const seriesPath = require.resolve('../api/series-watch');
+  const savedCommand = redis.command;
+  const savedFlag = process.env.SERIES_WATCH_SHARED_READ_ENABLED;
+  try {
+    process.env.SERIES_WATCH_SHARED_READ_ENABLED = '1';
+    redis.command = async args => args.slice(1).map(key => {
+      if (key === 'doko:provider-window:v1:movie:1771') return JSON.stringify({
+        window: '2000-01-01-06',
+        availability: { rent: [{ provider_id: 9 }] },
+        lastSuccessfulAt: new Date().toISOString()
+      });
+      return null;
+    });
+    delete require.cache[seriesPath];
+    const handler = require('../api/series-watch');
+    const res = {
+      code: 0, body: null, setHeader() {},
+      status(code) { this.code=code; return this; },
+      json(body) { this.body=body; return this; }
+    };
+    await handler({ method: 'GET', query: { series: 'mcu' } }, res);
+    assert.equal(res.code, 200);
+    assert.equal(res.body.providers['movie:1771'], undefined);
+    assert.ok(res.body.failures.includes('movie:1771'));
+  } finally {
+    redis.command = savedCommand;
+    if (savedFlag === undefined) delete process.env.SERIES_WATCH_SHARED_READ_ENABLED;
+    else process.env.SERIES_WATCH_SHARED_READ_ENABLED = savedFlag;
+    delete require.cache[seriesPath];
+  }
+});
+
 test('series-watch marks previous-window shared records stale even when recently fetched', async () => {
   const seriesPath = require.resolve('../api/series-watch');
   const savedCommand = redis.command;
