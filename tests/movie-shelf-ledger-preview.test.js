@@ -44,3 +44,18 @@ test('duplicate movie title is held for review without losing source entries', (
   assert.equal(result.snapshot.sources.memoryFilms.length, memory.length + 1);
   assert.equal(result.writes, 0);
 });
+
+test('cross-section title collision blocks both candidates instead of choosing one', () => {
+  const memory = extractLiteral(html, 'memoryFilms');
+  const film = memory.find(item => Number.isSafeInteger(item.id) && item.id > 0);
+  assert.ok(film);
+  const marker = 'const classicKnownIds={';
+  assert.ok(html.includes(marker));
+  const altered = html.replace(marker, marker + '"アセンダンシー":' + film.id + ',');
+  const result = preview(altered);
+  assert.ok(result.review.some(item => item.reason === 'multiple-titles-for-id' && item.candidates.includes(film.id)));
+  assert.ok(!result.records.some(item => item.tmdbId === film.id));
+  assert.equal(result.writes, 0);
+  assert.deepEqual(JSON.parse(JSON.stringify(result.snapshot.sources.memoryFilms)),
+    JSON.parse(JSON.stringify(memory)));
+});
