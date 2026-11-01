@@ -5,6 +5,21 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { audit, buildEditorialSnapshot, resolveEditorialTitleIds } = require('./audit-movie-shelf');
 
+function reviewQueue(result) {
+  const items = [];
+  for (const conflict of result.fixedIdConflicts)
+    items.push({ kind: 'id-conflict', title: conflict.titles.join(' / '), detail: String(conflict.id) });
+  for (const title of result.invalidMemoryIds)
+    items.push({ kind: 'invalid-id', title });
+  for (const title of result.duplicateMemoryTitles)
+    items.push({ kind: 'duplicate-title', title });
+  for (const title of result.missingMemoryIds)
+    items.push({ kind: 'missing-id', title });
+  for (const entry of result.editorialIdReview)
+    items.push({ kind: 'editorial-id-review', title: entry.title, section: entry.section, detail: entry.reason });
+  return items.sort((a, b) => a.kind.localeCompare(b.kind) || a.title.localeCompare(b.title, 'ja'));
+}
+
 function formatReviewSummary(result) {
   const counts = result.readiness.counts;
   return [
@@ -65,4 +80,4 @@ if (require.main === module) {
   const html = fs.readFileSync(path.join(__dirname, '../movie_shelf_1980_1984.html'), 'utf8');
   console.log(JSON.stringify(report(html), null, 2));
 }
-module.exports = { report, summarizeReadiness, formatReviewSummary };
+module.exports = { report, summarizeReadiness, formatReviewSummary, reviewQueue };
