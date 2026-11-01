@@ -77,6 +77,7 @@ function resolveEditorialTitleIds(html) {
   const memory = extractLiteral(html, 'memoryFilms');
   const overrides = extractLiteral(html, 'classicKnownIds');
   const sections = ['verifiedClassicInfo', 'approvedAwardStories'];
+  const verified = extractLiteral(html, 'verifiedClassicInfo');
   const memoryIds = new Map();
   for (const item of memory) {
     if (!memoryIds.has(item.title)) memoryIds.set(item.title, new Set());
@@ -94,6 +95,9 @@ function resolveEditorialTitleIds(html) {
       // Disagreement with the other sources remains blocked for review.
       const embedded = block[title]?.id;
       if (Number.isSafeInteger(embedded) && embedded > 0) candidates.add(embedded);
+      // Award stories can reuse a matching verified film's explicit ID.
+      const verifiedId = verified[title]?.id;
+      if (Number.isSafeInteger(verifiedId) && verifiedId > 0) candidates.add(verifiedId);
       if (candidates.size === 1) resolved[section][title] = [...candidates][0];
       else needsReview.push({ section, title, reason: candidates.size ? 'conflicting-ids' : 'missing-id', candidates: [...candidates] });
     }
