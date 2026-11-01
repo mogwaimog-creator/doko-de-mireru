@@ -419,8 +419,8 @@ async function openGundamDetail(event,anchor){
  event.preventDefault();
  const title=anchor.getAttribute('data-title')||'';
  const fallback='index.html?query='+encodeURIComponent(title);
- const match=await gundamLookup(title,anchor.getAttribute('data-type')||'tv');
- location.href=match?gundamDetailUrl(match):fallback;
+ const fixed=gundamFixedWorks[title];
+ location.href=fixed?gundamDetailUrl({id:fixed.id,content_type:fixed.type}):fallback;
  return false;
 }
 async function hydrateGundamCards(){
@@ -429,9 +429,11 @@ async function hydrateGundamCards(){
  async function worker(){while(next<cards.length){
   const el=cards[next++],title=el.getAttribute('data-title');
   // シーズン2作品は親番組の検索結果を流用しない。ポスターは専用シーズン画像を取得する。
-  const item=gundamSeasonWorks[title]?null:await gundamLookup(title,el.querySelector('.format-tag')?.textContent?.includes('映画')?'movie':'tv');
+  const fixed=gundamFixedWorks[title];
+  const item=fixed?{id:fixed.id,content_type:fixed.type}:null;
   if(!el.isConnected)continue;
-  const poster=gundamSeasonWorks[title]?await gundamSeasonPoster(title):gundamImage(item?.poster_path,'w342'),slot=el.querySelector('.poster-placeholder');
+  // ポスターパス未検証の作品は検索を起動せず、既存のプレースホルダーを維持。
+  const poster=null,slot=el.querySelector('.poster-placeholder');
   if(poster&&slot){
    const img=document.createElement('img');img.className='work-poster';img.alt=title+'のポスター';
    img.loading='lazy';img.decoding='async';img.src=poster;
@@ -440,39 +442,21 @@ async function hydrateGundamCards(){
   }
   const link=el.querySelector('.detail-link');
   if(link&&item&&!gundamSeasonWorks[title]){link.href=gundamDetailUrl(item);link.removeAttribute('onclick')}
-  // 版の選択欄がある作品では、各版の見放題を別々に取得する。
+  // TV版と映画版の配信は別作品。未登録の版を検索・流用しない。
   if(el.querySelector('.version-choices')){
-   if(title==='機動戦士ガンダム'||title==='機動戦士Ζガンダム')await hydrateGundamVersions(el);
-   else if(title==='機動戦士ガンダムUC'){
-    const choices=[...el.querySelectorAll('.version-choice')];
-    const titles=['機動戦士ガンダムUC','機動戦士ガンダムユニコーン RE:0096'];
-    const versions=await Promise.all(titles.map(t=>gundamLookup(t,'tv')));
-    choices.slice(0,2).forEach((box,i)=>{
-     const note=box.querySelector('.availability-note');
-     if(note)note.outerHTML=(i===0?'<div class="availability-note">配信情報を確認中…</div>':gundamAvailability(versions[i]))+(versions[i]?`<a class="gundam-tv-detail" href="${gundamDetailUrl(versions[i])}">作品詳細・配信先を見る →</a>`:'');
-    });
-    const ovaNote=choices[0]?.querySelector('.availability-note');
-    if(ovaNote){
-     const cached=await gundamFixedAvailability('機動戦士ガンダムUC');
-     if(cached)ovaNote.outerHTML=cached;
-    }
+   const choices=[...el.querySelectorAll('.version-choice')];
+   for(let i=0;i<choices.length;i++){
+    const note=choices[i].querySelector('.availability-note');
+    if(note)note.outerHTML=i===0&&fixed?(await gundamFixedAvailability(title)):'<div class="availability-note">この版の見放題配信状況は未確認です。各配信サービスの公式サイトでご確認ください。</div>';
    }
-   // 別編集版の情報をTV版から流用しない。
   }else{
    const availability=el.querySelector('.availability-note');
    if(gundamSeasonWorks[title]){
-    // 親シリーズの配信先をシーズン2の配信先として誤表示しない。
     if(availability)availability.outerHTML='<div class="availability-note">TMDBでは親番組のシーズン2として登録されています。シーズン2単独の見放題配信状況は確認できていません。視聴前に各配信サービスの公式サイトでご確認ください。</div>';
     const detail=el.querySelector('.detail-link');
-    if(detail){
-     const seasonInfo=gundamSeasonWorks[title];
-     detail.href='https://www.themoviedb.org/tv/'+seasonInfo.id+'/season/'+seasonInfo.season;
-     detail.textContent='シーズンの作品情報を確認 →';
-     detail.target='_blank';detail.rel='noopener noreferrer';
-     detail.removeAttribute('onclick');
-    }
+    if(detail){const info=gundamSeasonWorks[title];detail.href='https://www.themoviedb.org/tv/'+info.id+'/season/'+info.season;detail.textContent='シーズンの作品情報を確認 →';detail.target='_blank';detail.rel='noopener noreferrer';detail.removeAttribute('onclick')}
    }else if(availability){
-    availability.outerHTML=(await gundamFixedAvailability(title))||gundamAvailability(item);
+    availability.outerHTML=fixed?(await gundamFixedAvailability(title)):'<div class="availability-note">この作品の見放題配信状況は未確認です。各配信サービスの公式サイトでご確認ください。</div>';
    }
   }
  }}
@@ -503,7 +487,7 @@ function showStreamingTab(jump=false){
  document.getElementById('content').innerHTML='<h2>📺 ガンダム作品別・配信先一覧</h2><p>宇宙世紀は物語の時系列順、アナザーとガンプラ・SDは各シリーズの順番に並べています。</p><div class="stream-legend"><span><b style="color:#16764b">◎</b> 見放題の掲載あり</span><span><b>ー</b> 見放題の掲載情報なし・未確認</span><span>※ 契約前に公式でご確認ください。</span></div><div class="stream-scroll" tabindex="0"><table class="stream-table"><thead><tr><th class="stream-work">作品名・公開年</th>'+streamServices.map(s=>'<th>'+s[0]+'</th>').join('')+'</tr></thead><tbody>'+rows+'</tbody></table></div><p>※「ー」は未配信の断定ではありません。TV版と劇場版の配信状況は異なる場合があります。</p>';
  document.getElementById('subnav').innerHTML='<a href="#content">配信先一覧</a><button onclick="backToTimeline()">年表を見る ↑</button>';if(jump)document.getElementById('guide').scrollIntoView();
  const token=++streamToken,trs=[...document.querySelectorAll('#content tr[data-stream-index]')];let next=0;
- async function worker(){while(next<trs.length&&token===streamToken){const tr=trs[next++],x=data[Number(tr.dataset.streamIndex)];if(gundamSeasonWorks[x.title]){tr.querySelectorAll('td').forEach(td=>{td.textContent='ー';td.className='stream-none';td.title='シーズン単独の配信情報は未確認'});continue}let providers=[],cacheStale=false,cacheMissing=false;const fixed=gundamFixedWorks[x.title];if(fixed){const snapshot=await gundamSharedWatch;const record=snapshot?.providers?.[fixed.type+':'+fixed.id];cacheMissing=!Array.isArray(record?.flatrate);cacheStale=!!record?.stale;providers=cacheMissing?[]:record.flatrate;}else{let item=null;try{item=await gundamLookup(x.title,/映画/.test(x.format||'')?'movie':'tv')}catch(e){}providers=Array.isArray(item?.streaming)?item.streaming:[];}if(token!==streamToken||!tr.isConnected)return;tr.querySelectorAll('td').forEach((td,j)=>{const yes=providers.some(p=>p&&streamServices[j][1].test(String(p.provider_name||'')));td.textContent=cacheMissing?'確認不可':yes?'◎':'ー';td.className=cacheMissing?'stream-none':yes?'stream-yes':'stream-none';td.title=cacheMissing?'保存済みの配信情報を取得できません':cacheStale?(yes?'見放題の掲載あり（前回取得時の情報・更新遅延）':'前回取得時の情報・更新遅延'):yes?'見放題の掲載あり':'見放題の掲載情報なし・未確認'})}}Promise.all(Array.from({length:3},()=>worker()));
+ async function worker(){while(next<trs.length&&token===streamToken){const tr=trs[next++],x=data[Number(tr.dataset.streamIndex)];if(gundamSeasonWorks[x.title]){tr.querySelectorAll('td').forEach(td=>{td.textContent='ー';td.className='stream-none';td.title='シーズン単独の配信情報は未確認'});continue}let providers=[],cacheStale=false,cacheMissing=false;const fixed=gundamFixedWorks[x.title];if(fixed){const snapshot=await gundamSharedWatch;const record=snapshot?.providers?.[fixed.type+':'+fixed.id];cacheMissing=!Array.isArray(record?.flatrate);cacheStale=!!record?.stale;providers=cacheMissing?[]:record.flatrate;}else{cacheMissing=true;providers=[];}if(token!==streamToken||!tr.isConnected)return;tr.querySelectorAll('td').forEach((td,j)=>{const yes=providers.some(p=>p&&streamServices[j][1].test(String(p.provider_name||'')));td.textContent=cacheMissing?'確認不可':yes?'◎':'ー';td.className=cacheMissing?'stream-none':yes?'stream-yes':'stream-none';td.title=cacheMissing?'保存済みの配信情報を取得できません':cacheStale?(yes?'見放題の掲載あり（前回取得時の情報・更新遅延）':'前回取得時の情報・更新遅延'):yes?'見放題の掲載あり':'見放題の掲載情報なし・未確認'})}}Promise.all(Array.from({length:3},()=>worker()));
 }
 
 function goWork(i){choose(data[i].tab);document.getElementById('work-'+i).scrollIntoView()}
