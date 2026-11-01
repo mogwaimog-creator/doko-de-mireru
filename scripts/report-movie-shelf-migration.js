@@ -3,7 +3,7 @@
 // Run: node scripts/report-movie-shelf-migration.js
 const fs = require('node:fs');
 const path = require('node:path');
-const { audit, buildEditorialSnapshot } = require('./audit-movie-shelf');
+const { audit, buildEditorialSnapshot, resolveEditorialTitleIds } = require('./audit-movie-shelf');
 
 function summarizeReadiness(result) {
   const counts = {
@@ -11,7 +11,8 @@ function summarizeReadiness(result) {
     invalidIds: result.invalidMemoryIds.length,
     duplicateTitles: result.duplicateMemoryTitles.length,
     missingIds: result.missingMemoryIds.length,
-    unlinkedEditorialTitles: result.unlinkedEditorialTitles.length
+    unlinkedEditorialTitles: result.unlinkedEditorialTitles.length,
+    editorialIdReview: result.editorialIdReview.length
   };
   return {
     counts,
@@ -24,6 +25,7 @@ function summarizeReadiness(result) {
 function report(html) {
   const source = audit(html);
   const snapshot = buildEditorialSnapshot(html);
+  const links = resolveEditorialTitleIds(html);
   const sections = Object.fromEntries(Object.entries(snapshot.sources).map(([name, entries]) =>
     [name, Array.isArray(entries) ? entries.length : Object.keys(entries).length]));
   const details = {
@@ -31,6 +33,8 @@ function report(html) {
     writes: 0,
     sourceSections: sections,
     fixedIdConflicts: source.conflictingMemoryIds,
+    editorialIdLinks: links.resolved,
+    editorialIdReview: links.needsReview,
     missingMemoryIds: source.missingMemoryIds,
     editorialOnlyTitles: source.editorialOnlyTitles,
     unlinkedEditorialTitles: source.unlinkedEditorialTitles,
