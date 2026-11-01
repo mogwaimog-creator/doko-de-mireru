@@ -174,7 +174,7 @@ if('ResizeObserver' in window)new ResizeObserver(()=>{if(characterJumps.offsetHe
 const apiRoot=location.protocol==='file:'?'https://doko-de-mireru.com':'';
 function paintProviders(id,items,error=false){
  document.querySelectorAll('.providers[data-tmdb="'+id+'"]').forEach(box=>{
-  if(error){const note=document.createElement('span');note.className='provider-state';note.textContent='更新できず：2026年10月7日の取得情報';box.append(note);return}
+  if(error){const note=document.createElement('span');note.className='provider-state';note.textContent='配信情報を更新できませんでした。作品詳細・公式サービスでご確認ください';box.append(note);return}
   box.replaceChildren();const seen=new Set();const list=items.filter(p=>{if(([1796,2100].includes(p.provider_id)&&items.some(q=>q.provider_id===({1796:8,2100:9})[p.provider_id]))||seen.has(p.provider_id))return false;seen.add(p.provider_id);return true});
   if(!list.length){const text=document.createElement('span');text.className='provider-empty';text.textContent='見放題の掲載情報なし';box.append(text);return}
   const label=document.createElement('strong');label.textContent='見放題';box.append(label);
