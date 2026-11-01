@@ -802,3 +802,36 @@ test('shared cache cannot claim the current window with an earlier-window timest
   assert.equal(result.source,'tmdb');
   assert.deepEqual(result.availability.flatrate,[{provider_id:9}]);
 });
+
+
+test('series-watch rejects a falsely current shared window as fresh', async () => {
+  const modulePath=require.resolve('../api/series-watch');
+  const originalCommand=redis.command;
+  const originalFlag=process.env.SERIES_WATCH_SHARED_READ_ENABLED;
+  const originalNow=Date.now;
+  try {
+    Date.now=()=>Date.parse('2026-11-01T09:05:00Z');
+    process.env.SERIES_WATCH_SHARED_READ_ENABLED='1';
+    redis.command=async args=>args.slice(1).map(key=>{
+      if(key==='doko:provider-window:v1:movie:1771')return JSON.stringify({
+        window:windowId(new Date('2026-11-01T09:05:00Z')),
+        lastSuccessfulAt:'2026-11-01T08:59:00Z',
+        availability:{flatrate:[{provider_id:8}]}
+      });
+      return null;
+    });
+    delete require.cache[modulePath];
+    let result;
+    await require('../api/series-watch')({method:'GET',query:{series:'mcu'}},{
+      setHeader(){},status(){return this;},json(body){result=body;return this;}
+    });
+    assert.equal(result.providers['movie:1771'].stale,true);
+    assert.deepEqual(result.providers['movie:1771'].flatrate,[{provider_id:8}]);
+  }finally{
+    Date.now=originalNow;
+    redis.command=originalCommand;
+    if(originalFlag===undefined)delete process.env.SERIES_WATCH_SHARED_READ_ENABLED;
+    else process.env.SERIES_WATCH_SHARED_READ_ENABLED=originalFlag;
+    delete require.cache[modulePath];
+  }
+});
