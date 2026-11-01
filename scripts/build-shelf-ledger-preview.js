@@ -47,7 +47,7 @@ function build() {
     ])
   ]) {
     const source = extractLiteral(html, section);
-    const startMatch = new RegExp('\\\\bconst\\\\s+' + section + '\\\\s*=').exec(compared);
+    const startMatch = new RegExp('\\bconst\\s+' + section + '\\s*=').exec(compared);
     if (!startMatch) throw Error('Original ' + section + ' data declaration not found');
     const start = startMatch.index;
     const valueStart = start + startMatch[0].length;
@@ -61,7 +61,7 @@ function build() {
       const c = compared[i];
       if (quote) {
         if (escaped) escaped = false;
-        else if (c === '\\\\') escaped = true;
+        else if (c === '\\') escaped = true;
         else if (c === quote) quote = '';
       } else if (c === "'" || c === '"' || c === '`') quote = c;
       else if (c === '{' || c === '[') stack.push(c);
