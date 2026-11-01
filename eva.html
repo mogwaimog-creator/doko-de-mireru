@@ -2236,7 +2236,7 @@ async function loadEvaStreaming(){
     const seen=new Set(),providers=list.filter(p=>{const k=String(p.provider_id||p.provider_name||'');if(!k||seen.has(k))return false;seen.add(k);return true});
     element.replaceChildren();
     if(record.stale){const note=document.createElement('span');note.textContent='更新遅延：前回取得時の配信情報';note.style.display='block';note.style.fontSize='14px';element.appendChild(note)}
-    if(!providers.length){element.innerHTML='<span class="eva-streaming-none">見放題情報は未確認です</span>';return}
+    if(!providers.length){const note=document.createElement('span');note.className='eva-streaming-none';note.textContent='見放題の掲載情報なし';element.appendChild(note);return}
     const label=document.createElement('span');label.className='eva-streaming-label';label.textContent='見放題';element.appendChild(label);
     providers.forEach(p=>{const img=document.createElement('img');img.src='https://image.tmdb.org/t/p/w92'+p.logo_path;img.alt=p.provider_name||'配信サービス';img.title=p.provider_name||'';img.loading='lazy';element.appendChild(img)});
   });
