@@ -73,6 +73,30 @@ function editorialEntryFingerprints(html) {
   return out;
 }
 
+function resolveEditorialTitleIds(html) {
+  const memory = extractLiteral(html, 'memoryFilms');
+  const overrides = extractLiteral(html, 'classicKnownIds');
+  const sections = ['verifiedClassicInfo', 'approvedAwardStories'];
+  const memoryIds = new Map();
+  for (const item of memory) {
+    if (!memoryIds.has(item.title)) memoryIds.set(item.title, new Set());
+    if (Number.isSafeInteger(item.id) && item.id > 0) memoryIds.get(item.title).add(item.id);
+  }
+  const resolved = {}, needsReview = [];
+  for (const section of sections) {
+    const block = extractLiteral(html, section);
+    resolved[section] = {};
+    for (const title of Object.keys(block)) {
+      const candidates = new Set(memoryIds.get(title) || []);
+      const fixed = overrides[title];
+      if (Number.isSafeInteger(fixed) && fixed > 0) candidates.add(fixed);
+      if (candidates.size === 1) resolved[section][title] = [...candidates][0];
+      else needsReview.push({ section, title, reason: candidates.size ? 'conflicting-ids' : 'missing-id', candidates: [...candidates] });
+    }
+  }
+  return { resolved, needsReview, writes: 0 };
+}
+
 function buildEditorialSnapshot(html) {
   const sections = {};
   for (const name of ['memoryFilms', 'verifiedClassicInfo', 'approvedAwardStories']) {
@@ -167,4 +191,4 @@ if (require.main === module) {
   const html = fs.readFileSync(path.join(__dirname, '../movie_shelf_1980_1984.html'), 'utf8');
   console.log(JSON.stringify(audit(html), null, 2));
 }
-module.exports = { extractLiteral, editorialFingerprints, compareEditorialSources, editorialEntryFingerprints, compareEditorialEntries, planEditorialMigration, buildEditorialSnapshot, audit };
+module.exports = { extractLiteral, editorialFingerprints, compareEditorialSources, editorialEntryFingerprints, compareEditorialEntries, planEditorialMigration, buildEditorialSnapshot, resolveEditorialTitleIds, audit };
