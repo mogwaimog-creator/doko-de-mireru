@@ -304,7 +304,7 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
       return;
     }
     const unique=record.flatrate.filter((p,i,all)=>p&&p.logo_path&&all.findIndex(x=>x&&x.provider_id===p.provider_id)===i);
-    if(!unique.length){box.textContent=record.stale?'前回取得時は見放題の掲載情報なし（更新遅延中）':'見放題の配信情報はありません';return}
+    if(!unique.length){box.textContent=record.stale?'前回取得時は見放題の掲載情報なし（更新遅延中）':'見放題の配信情報はありません';box.style.color=record.stale?'#b91c1c':'';return}
     box.innerHTML='<span class="providers-label">'+(record.stale?'前回取得時の見放題（更新遅延中）':'見放題')+'</span>';
     unique.forEach(p=>{const img=document.createElement('img');img.src='https://image.tmdb.org/t/p/w92'+p.logo_path;img.alt=p.provider_name||'配信サービス';img.loading='lazy';box.appendChild(img)});
   }
