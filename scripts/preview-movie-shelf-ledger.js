@@ -213,6 +213,12 @@ if (require.main === module) {
         throw new Error('Editorial content changed for ' + candidate.key);
     }
     console.log('Read-only checks passed for ' + result.records.length + ' candidates');
+    console.log('Source coverage: ' + JSON.stringify(result.coverage));
+    console.log('Review reasons: ' + JSON.stringify(result.review.reduce((counts, entry) => {
+      const key = entry.reason || 'unknown';
+      counts[key] = (counts[key] || 0) + 1;
+      return counts;
+    }, {})));
   } else console.log(JSON.stringify(preview(html), null, 2));
 }
 module.exports = { preview, validatePreview, toLedgerCandidate, planCandidateMerge, checkCandidateMerge };
