@@ -6,7 +6,9 @@ const { detailProviders } = require('./_detail-providers');
 
 module.exports = async function handler(req, res) {
   res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
-  res.setHeader('Vercel-CDN-Cache-Control', 's-maxage=300, stale-while-revalidate=600');
+  // A long CDN TTL could mask a 06:00/18:00 JST refresh window.
+  // The shared Redis cache remains the authority for per-work freshness.
+  res.setHeader('Vercel-CDN-Cache-Control', 's-maxage=60, stale-while-revalidate=60');
   if (req.method !== 'GET') return res.status(405).json({error:'GET only'});
   if (process.env.SHARED_PROVIDER_ENABLED !== '1') return res.status(404).json({error:'Shared providers disabled'});
   let work;
