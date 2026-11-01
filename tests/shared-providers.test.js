@@ -733,3 +733,35 @@ test('series-watch CDN cache is shorter only when shared read flag is enabled', 
     delete require.cache[modulePath];
   }
 });
+
+
+test('series-watch marks previous JST window legacy observations stale only in shared mode', async () => {
+  const modulePath = require.resolve('../api/series-watch');
+  const originalCommand = redis.command;
+  const originalFlag = process.env.SERIES_WATCH_SHARED_READ_ENABLED;
+  const originalNow = Date.now;
+  try {
+    Date.now = () => Date.parse('2026-11-01T09:01:00Z'); // 18:01 JST
+    redis.command = async args => args.slice(1).map(key =>
+      key === 'doko:watch:v3:movie:1771'
+        ? JSON.stringify({flatrate:[{provider_id:8}],checkedAt:'2026-11-01T08:59:00Z'})
+        : null);
+    for (const enabled of [false, true]) {
+      if (enabled) process.env.SERIES_WATCH_SHARED_READ_ENABLED = '1';
+      else delete process.env.SERIES_WATCH_SHARED_READ_ENABLED;
+      delete require.cache[modulePath];
+      let result;
+      await require('../api/series-watch')({method:'GET',query:{series:'mcu'}},{
+        setHeader(){},status(){return this;},json(body){result=body;return this;}
+      });
+      assert.equal(result.providers['movie:1771'].stale,enabled);
+      assert.deepEqual(result.providers['movie:1771'].flatrate,[{provider_id:8}]);
+    }
+  } finally {
+    Date.now = originalNow;
+    redis.command = originalCommand;
+    if (originalFlag === undefined) delete process.env.SERIES_WATCH_SHARED_READ_ENABLED;
+    else process.env.SERIES_WATCH_SHARED_READ_ENABLED = originalFlag;
+    delete require.cache[modulePath];
+  }
+});
