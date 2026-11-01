@@ -14880,6 +14880,13 @@ async function loadMcuProviderBox(box){
    }
    if(!box.children.length)box.textContent='見放題情報は未確認です';
   }
+  if(record.stale){
+   const warning=document.createElement('span');
+   warning.textContent=' ※前回取得した配信情報です（更新未確認）';
+   warning.style.color='#b42318';
+   warning.style.fontSize='14px';
+   box.append(warning);
+  }
  }catch(e){console.error('MCU保存済み配信情報:',e);box.textContent='配信情報を取得できませんでした';}
  finally{delete box.dataset.loading;box.dataset.loaded='1';}
 }
