@@ -33,6 +33,26 @@ module.exports=async(req,res)=>{
       }
       failures.push(keys[i]);
     }
+    // Optional read-only compatibility with the 06:00/18:00 shared cache.
+    if(process.env.SERIES_WATCH_SHARED_READ_ENABLED==='1'){
+      try{
+        const {windowId}=require('./_shared-providers');
+        const current=windowId();
+        const shared=await command(['MGET',...keys.map(k=>'doko:provider-window:v1:'+k)]);
+        for(let i=0;i<keys.length;i++){
+          if(!shared?.[i])continue;
+          let entry;
+          try{entry=JSON.parse(shared[i]);}catch{continue;}
+          if(!entry||!entry.availability||typeof entry.availability!=='object'||Array.isArray(entry.availability))continue;
+          const flat=entry.availability.flatrate;
+          if(flat!==undefined&&!Array.isArray(flat))continue;
+          if(!Number.isFinite(Date.parse(entry.lastSuccessfulAt)))continue;
+          providers[keys[i]]={flatrate:flat||[],checkedAt:entry.lastSuccessfulAt,stale:entry.window!==current};
+          const at=failures.indexOf(keys[i]);
+          if(at>=0)failures.splice(at,1);
+        }
+      }catch(error){console.error('Shared provider batch read failed:',error.message);}
+    }
     return res.status(200).json({providers,failures,complete:failures.length===0});
   }catch(e){console.error('series-watch read:',e.message);return res.status(503).json({error:'保存済みの配信情報を読み込めません'});}
 };
