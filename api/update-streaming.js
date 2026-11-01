@@ -40,7 +40,7 @@ module.exports=async(req,res)=>{
    const pending=[];
    for(let i=0;i<works.length;i++){
      let record=null;try{if(old?.[i])record=JSON.parse(old[i]);}catch{}
-     if(record?.window!==win || !Array.isArray(record?.flatrate) || !Number.isFinite(Date.parse(record?.checkedAt)))pending.push(works[i]);
+     if(record?.window!==win || !Array.isArray(record?.flatrate) || !Number.isFinite(Date.parse(record?.checkedAt)) || Date.parse(record.checkedAt)>Date.now()+60000)pending.push(works[i]);
    }
    let cursor=0,updated=0,failed=0;
    const deadline=Date.now()+WORK_BUDGET_MS;
