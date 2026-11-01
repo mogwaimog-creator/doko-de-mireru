@@ -307,9 +307,9 @@ function gundamLookup(title,preferredType){
  const cacheKey=title+'|'+(preferredType||'');
  if(!gundamLookupCache.has(cacheKey))gundamLookupCache.set(cacheKey,(async()=>{
   const known=gundamKnownIds[title];
-  if(known&&(!preferredType||preferredType===known.type)){
-   try{const result=await gundamById(known.id,known.type);if(result)return result}catch(e){console.warn('ID取得失敗:',title,e)}
-  }
+   if(known&&(!preferredType||preferredType===known.type)){
+    return {id:known.id,content_type:known.type,streaming:[]};
+   }
   try{
    const types=preferredType?[preferredType]:['tv','movie'];
    const aliases=[...new Set([title,...(gundamAliases[title]||[])])];
@@ -399,7 +399,7 @@ async function hydrateGundamVersions(card){
  if(boxes.length<2)return;
  const tv=await gundamVersionLookup(title,'tv');
  const tvNote=boxes[0].querySelector('.availability-note');
- if(tvNote)tvNote.outerHTML=gundamAvailability(tv)+(tv?`<a class="gundam-tv-detail" href="${gundamDetailUrl(tv)}">作品詳細・配信先を見る →</a>`:``);
+ if(tvNote)tvNote.outerHTML=((await gundamFixedAvailability(title))||gundamAvailability(tv))+(tv?`<a class="gundam-tv-detail" href="${gundamDetailUrl(tv)}">作品詳細・配信先を見る →</a>`:``);
  const movieTitles=title==='機動戦士ガンダム'?
   ['機動戦士ガンダム','機動戦士ガンダムII 哀・戦士編','機動戦士ガンダムIII めぐりあい宇宙編']:
   ['機動戦士Ζガンダム 星を継ぐ者','機動戦士ΖガンダムII 恋人たち','機動戦士ΖガンダムIII 星の鼓動は愛'];
@@ -445,8 +445,13 @@ async function hydrateGundamCards(){
     const versions=await Promise.all(titles.map(t=>gundamLookup(t,'tv')));
     choices.slice(0,2).forEach((box,i)=>{
      const note=box.querySelector('.availability-note');
-     if(note)note.outerHTML=gundamAvailability(versions[i])+(versions[i]?`<a class="gundam-tv-detail" href="${gundamDetailUrl(versions[i])}">作品詳細・配信先を見る →</a>`:'');
+     if(note)note.outerHTML=(i===0?'<div class="availability-note">配信情報を確認中…</div>':gundamAvailability(versions[i]))+(versions[i]?`<a class="gundam-tv-detail" href="${gundamDetailUrl(versions[i])}">作品詳細・配信先を見る →</a>`:'');
     });
+    const ovaNote=choices[0]?.querySelector('.availability-note');
+    if(ovaNote){
+     const cached=await gundamFixedAvailability('機動戦士ガンダムUC');
+     if(cached)ovaNote.outerHTML=cached;
+    }
    }
    // 別編集版の情報をTV版から流用しない。
   }else{
