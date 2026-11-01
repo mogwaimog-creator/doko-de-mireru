@@ -67,6 +67,43 @@ jobs:
           command -v google-chrome
           google-chrome --headless --no-sandbox --disable-gpu --disable-dev-shm-usage --virtual-time-budget=3000 --dump-dom file:///tmp/shelf-ledger-comparison.html > /tmp/shelf-rendered-dom.html 2>/tmp/shelf-chrome.log
           node -e "const fs=require('fs');const h=fs.readFileSync('/tmp/shelf-rendered-dom.html','utf8');for(const s of ['開発用・台帳復元表示確認','data-tab=','id=\\\"ranking-rows\\\"','data-ranking-title='])if(!h.includes(s))throw Error('Missing rendered UI marker: '+s);console.log('Headless Chrome shelf DOM smoke test passed')"
+      - name: Exercise shelf tabs and memory detail in headless Chrome
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const file = '/tmp/shelf-ledger-comparison.html';
+          let html = fs.readFileSync(file, 'utf8');
+          const test = `<script>
+          (() => {
+            const errors = [];
+            const assert = (condition, message) => { if (!condition) errors.push(message); };
+            try {
+              document.querySelector('[data-tab="memories"]').click();
+              assert(!document.getElementById('memory-section').hidden, 'memories tab hidden');
+              assert(document.querySelectorAll('[data-memory-id]').length === 34, 'memory card count');
+              const first = document.querySelector('[data-memory-id]');
+              first.click();
+              assert(document.getElementById('memory-dialog').open, 'memory dialog did not open');
+              assert(document.getElementById('memory-dialog-content').textContent.length > 30, 'memory dialog empty');
+              document.getElementById('memory-x').click();
+              assert(!document.getElementById('memory-dialog').open, 'memory dialog did not close');
+              document.querySelector('[data-tab="rankings"]').click();
+              assert(!document.getElementById('rank-section').hidden, 'rankings tab hidden');
+              assert(document.querySelectorAll('[data-ranking-title]').length > 0, 'ranking rows missing');
+              document.querySelector('[data-tab="awards"]').click();
+              assert(!document.getElementById('award-section').hidden, 'awards tab hidden');
+            } catch (e) { errors.push(String(e)); }
+            const node = document.createElement('meta');
+            node.setAttribute('name', 'shelf-interaction-test');
+            node.setAttribute('content', errors.length ? 'FAIL:' + errors.join(';') : 'PASS');
+            document.head.appendChild(node);
+          })();
+          </script>`;
+          html = html.replace('</body>', test + '</body>');
+          fs.writeFileSync(file, html);
+          NODE
+          google-chrome --headless --no-sandbox --disable-gpu --disable-dev-shm-usage --virtual-time-budget=3000 --dump-dom file:///tmp/shelf-ledger-comparison.html > /tmp/shelf-interaction-dom.html 2>/tmp/shelf-interaction-chrome.log
+          node -e "const fs=require('fs');const h=fs.readFileSync('/tmp/shelf-interaction-dom.html','utf8');if(!h.includes('name=\\\"shelf-interaction-test\\\" content=\\\"PASS\\\"'))throw Error('Shelf interaction test did not pass');console.log('Shelf tab/card/dialog interaction smoke test passed')"
       - name: Verify researched movie IDs against TMDB (read-only, branch push only)
         continue-on-error: true
         env:
