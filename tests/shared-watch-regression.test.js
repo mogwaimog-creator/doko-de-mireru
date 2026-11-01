@@ -95,3 +95,25 @@ test('all series endpoints read only canonical registered keys',async()=>{
   assert.ok(Array.isArray(response.body.failures),series);
  }
 });
+
+const fs=require('node:fs');
+test('all twelve viewing-order pages use the shared watch endpoint and handle stale records',()=>{
+ const series=['godzilla','mcu','jurassic','harrypotter','lordoftherings','starwars','wildspeed','minions','odoru','eva','conan','gundam'];
+ for(const name of series){
+  const html=fs.readFileSync(path.resolve(__dirname,'../'+name+'.html'),'utf8');
+  assert.ok(html.includes('/api/series-watch?series='+name),name+' missing shared watch endpoint');
+  assert.ok(html.includes('.stale'),name+' missing stale snapshot handling');
+ }
+});
+test('completed viewing-order pages do not request the legacy search API',()=>{
+ const complete=['godzilla','mcu','jurassic','harrypotter','lordoftherings','wildspeed','minions','odoru','eva','conan'];
+ for(const name of complete){
+  const html=fs.readFileSync(path.resolve(__dirname,'../'+name+'.html'),'utf8');
+  assert.ok(!html.includes('/api/search'),name+' still references legacy search API');
+ }
+});
+test('Gundam season-specific titles are not registered as standalone parent-show streaming data',()=>{
+ const html=fs.readFileSync(path.resolve(__dirname,'../gundam.html'),'utf8');
+ assert.ok(html.includes('gundamSeasonWorks'));
+ assert.ok(html.includes('親番組の情報を流用していません'));
+});
