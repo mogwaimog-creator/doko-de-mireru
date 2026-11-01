@@ -464,6 +464,22 @@ async function openGundamDetail(event,anchor){
  location.href=fixed?gundamDetailUrl({id:fixed.id,content_type:fixed.type}):fallback;
  return false;
 }
+const gundamTheatricalWorks={
+ '機動戦士ガンダム':{id:39228,type:'movie'},
+ '機動戦士ガンダムII 哀・戦士編':{id:39229,type:'movie'},
+ '機動戦士ガンダムIII めぐりあい宇宙編':{id:39230,type:'movie'},
+ '機動戦士Ζガンダム 星を継ぐ者':{id:19256,type:'movie'},
+ '機動戦士ΖガンダムII 恋人たち':{id:19257,type:'movie'},
+ '機動戦士ΖガンダムIII 星の鼓動は愛':{id:30606,type:'movie'}
+};
+async function gundamFixedAvailabilityById(type,id){
+ try{
+  const data=await gundamSharedWatch();
+  const record=data&&data.providers&&data.providers[type+':'+id];
+  if(!record||record.stale)return '<div class="availability-note">配信情報を確認できませんでした。作品詳細でご確認ください。</div>';
+  return '<div class="gundam-availability"><div class="gundam-provider-row">'+gundamProviderRow(record.flatrate)+'</div></div>';
+ }catch(e){return '<div class="availability-note">配信情報を確認できませんでした。作品詳細でご確認ください。</div>'}
+}
 async function hydrateGundamCards(){
  const cards=[...document.querySelectorAll('#content .card[data-title]')];
  let next=0;
@@ -494,7 +510,7 @@ async function hydrateGundamCards(){
     }else{
      const movies=title==='機動戦士ガンダム'?['機動戦士ガンダム','機動戦士ガンダムII 哀・戦士編','機動戦士ガンダムIII めぐりあい宇宙編']:title==='機動戦士Ζガンダム'?['機動戦士Ζガンダム 星を継ぐ者','機動戦士ΖガンダムII 恋人たち','機動戦士ΖガンダムIII 星の鼓動は愛']:null;
      if(movies&&i===1){
-      note.outerHTML='<div class="gundam-film-list">'+movies.map((name,j)=>'<div class="gundam-film-item"><b>'+(['I','II','III'][j])+' '+name+'</b><div class="availability-note">この劇場版の見放題配信状況は未確認です。各配信サービスの公式サイトでご確認ください。</div></div>').join('')+'</div>';
+      note.outerHTML='<div class="gundam-film-list">'+(await Promise.all(movies.map(async(name,j)=>{const film=gundamTheatricalWorks[name];const availability=film?await gundamFixedAvailabilityById(film.type,film.id):'<div class="availability-note">見放題配信状況は未確認です。</div>';return '<div class="gundam-film-item"><b>'+(['I','II','III'][j])+' '+name+'</b>'+availability+(film?'<a href="'+gundamDetailUrl({id:film.id,content_type:film.type})+'">作品詳細 →</a>':'')+'</div>'}))).join('')+'</div>';
      }else{
       note.outerHTML='<div class="availability-note">この編集版の見放題配信状況は未確認です。各配信サービスの公式サイトでご確認ください。</div>';
      }
