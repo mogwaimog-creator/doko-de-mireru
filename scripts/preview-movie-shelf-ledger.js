@@ -52,11 +52,28 @@ function researchPreview(html, diagnosticHtml) {
   const all = [...baseline.records, ...researchRecords];
   if (new Set(all.map(record => record.key)).size !== all.length)
     throw Error('Duplicate ledger key in research preview');
+  const candidateCounts = Object.fromEntries(
+    Object.keys(baseline.coverage.sourceCounts).map(section => [
+      section,
+      baseline.coverage.candidateCounts[section] +
+        researchRecords.filter(record => Object.hasOwn(record.pageExtras.movieShelf, section)).length
+    ])
+  );
+  const retainedEntries = Object.fromEntries(
+    Object.keys(baseline.coverage.sourceCounts).map(section => [
+      section,
+      baseline.coverage.retainedEntries[section].filter(entry =>
+        !researchRecords.some(record =>
+          record.title === entry.title &&
+          Object.hasOwn(record.pageExtras.movieShelf, section)))
+    ])
+  );
   const coverage = {
     ...baseline.coverage,
-    candidateCounts: Object.fromEntries(Object.keys(baseline.coverage.sourceCounts).map(section =>
-      [section, baseline.coverage.candidateCounts[section] +
-        researchRecords.filter(record => Object.hasOwn(record.pageExtras.movieShelf, section)).length]))
+    candidateCounts,
+    retainedEntries,
+    retainedForReview: Object.fromEntries(
+      Object.keys(retainedEntries).map(section => [section, retainedEntries[section].length]))
   };
   if (Object.keys(coverage.sourceCounts).some(section =>
     coverage.candidateCounts[section] !== coverage.sourceCounts[section]))
@@ -283,6 +300,10 @@ if (require.main === module) {
     if (research.records.length !== 66 || research.researchRecords.length !== 25 ||
         research.writes !== 0 || research.verifiedByTmdb !== false)
       throw Error('Research preview preflight failed');
+    const combinedValidation = validatePreview(research);
+    if (!combinedValidation.valid)
+      throw Error('Combined coverage invalid: ' + combinedValidation.problems.join(', '));
+    console.log('Combined 66-work coverage validated');
     // Exhaustive preflight: every original editorial entry must survive in the
     // same section and with identical content, across all 66 candidate records.
     const source = research.baseline.snapshot.sources;
