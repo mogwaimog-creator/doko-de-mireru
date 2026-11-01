@@ -990,3 +990,51 @@ test('series batch treats valid shared rent-only JP as confirmed empty flatrate'
     delete require.cache[modulePath];
   }
 });
+
+
+test('opt-in series visit refreshes one work and shares result without another TMDB request',async()=>{
+  const modulePath=require.resolve('../api/series-watch');
+  const originalCommand=redis.command;
+  const originalFetch=global.fetch;
+  const flags=['SERIES_WATCH_REFRESH_ENABLED','SERIES_WATCH_SHARED_READ_ENABLED','SHARED_PROVIDER_ENABLED','TMDB_API_KEY'];
+  const saved=flags.map(k=>process.env[k]);
+  const data=new Map();
+  let tmdbCalls=0,budgetGrants=0;
+  try{
+    for(const key of flags)process.env[key]='1';
+    redis.command=async args=>{
+      const [op,key,value,...rest]=args;
+      if(op==='MGET')return args.slice(1).map(k=>data.get(k)||null);
+      if(op==='GET')return data.get(key)||null;
+      if(op==='SET'){
+        if(rest[0]==='NX'&&data.has(key))return null;
+        data.set(key,value);
+        if(key.startsWith('doko:series-refresh-budget:v1:'))budgetGrants++;
+        return 'OK';
+      }
+      if(op==='ZREM'||op==='ZADD')return 1;
+      throw new Error('Unexpected Redis command '+op);
+    };
+    global.fetch=async()=>{tmdbCalls++;return {ok:true,json:async()=>({results:{JP:{flatrate:[{provider_id:8,logo_path:'/logo.png'}]}}})};};
+    delete require.cache[modulePath];
+    const handler=require('../api/series-watch');
+    const request=async()=>{
+      let result;
+      await handler({method:'GET',query:{series:'mcu'}},{
+        setHeader(){},status(){return this;},json(body){result=body;return this;}
+      });
+      return result;
+    };
+    const first=await request();
+    const second=await request();
+    assert.equal(tmdbCalls,1);
+    assert.equal(budgetGrants,1);
+    assert.equal(Object.values(first.providers).some(p=>p.flatrate.some(v=>v.provider_id===8)),true);
+    assert.equal(Object.values(second.providers).some(p=>p.flatrate.some(v=>v.provider_id===8)),true);
+  }finally{
+    redis.command=originalCommand;
+    global.fetch=originalFetch;
+    flags.forEach((k,i)=>{if(saved[i]===undefined)delete process.env[k];else process.env[k]=saved[i];});
+    delete require.cache[modulePath];
+  }
+});
