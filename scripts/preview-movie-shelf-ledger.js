@@ -306,6 +306,45 @@ if (require.main === module) {
         record.tmdbId <= 0) ||
         new Set(research.records.map(record => record.key)).size !== research.records.length)
       throw Error('Invalid or duplicate work key in 66-work preview');
+    // Simulate the planned ledger JSON round-trip and reconstruct the three
+    // source sections. This does not change the live page or invoke Redis.
+    const normalizedRecords = research.records.map(record => {
+      const input = toLedgerCandidate(record);
+      return JSON.parse(JSON.stringify(
+        require('../api/_work-ledger').normalizeWork(input.type, input.id, input)
+      ));
+    });
+    const reconstructed = {
+      memoryFilms: [],
+      verifiedClassicInfo: {},
+      approvedAwardStories: {}
+    };
+    for (const record of normalizedRecords) {
+      const extras = record.pageExtras.movieShelf;
+      if (Object.hasOwn(extras, 'memoryFilms'))
+        reconstructed.memoryFilms.push(extras.memoryFilms);
+      for (const section of ['verifiedClassicInfo', 'approvedAwardStories']) {
+        if (Object.hasOwn(extras, section))
+          reconstructed[section][record.title] = extras[section];
+      }
+    }
+    // Source arrays retain their original ordering, including any deliberate
+    // editorial ordering that a database's key order cannot guarantee.
+    const originalOrder = source.memoryFilms.map(entry => entry.title);
+    const byMemoryTitle = new Map(reconstructed.memoryFilms.map(entry => [entry.title, entry]));
+    reconstructed.memoryFilms = originalOrder.map(title => byMemoryTitle.get(title));
+    const canonical = value => JSON.stringify(value);
+    if (canonical(reconstructed.memoryFilms) !== canonical(source.memoryFilms))
+      throw Error('Ledger round-trip changed memoryFilms or its order');
+    for (const section of ['verifiedClassicInfo', 'approvedAwardStories']) {
+      if (Object.keys(reconstructed[section]).length !== Object.keys(source[section]).length)
+        throw Error('Ledger round-trip changed count: ' + section);
+      for (const [title, value] of Object.entries(source[section])) {
+        if (canonical(reconstructed[section][title]) !== canonical(value))
+          throw Error('Ledger round-trip changed content: ' + section + ' / ' + title);
+      }
+    }
+    console.log('Ledger JSON round-trip passed: 66 works, 74 editorial entries, original memory order preserved');
     console.log('Full editorial preservation passed: ' +
       JSON.stringify(sectionCounts) + ', unique works: ' + research.records.length);
     for (const record of research.researchRecords) {
