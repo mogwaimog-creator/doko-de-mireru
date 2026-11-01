@@ -59,9 +59,12 @@ jobs:
       - name: Verify movie shelf import boundary without writes
         run: node scripts/preview-movie-shelf-ledger.js --check
       - name: Verify researched movie IDs against TMDB (read-only, branch push only)
-        if: github.event_name == 'push'
         continue-on-error: true
         env:
           TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
         run: |
+          if [ -z "$TMDB_API_KEY" ]; then
+            echo 'TMDB verification not run: secret unavailable in this event.'
+            exit 0
+          fi
           node scripts/verify-movie-shelf-tmdb.js
