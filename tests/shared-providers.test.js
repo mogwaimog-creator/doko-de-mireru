@@ -960,3 +960,33 @@ test('series cache outage does not attempt any refresh budget or TMDB fetch',asy
     delete require.cache[modulePath];
   }
 });
+
+
+test('series batch treats valid shared rent-only JP as confirmed empty flatrate',async()=>{
+  const modulePath=require.resolve('../api/series-watch');
+  const original=redis.command;
+  const saved=process.env.SERIES_WATCH_SHARED_READ_ENABLED;
+  try{
+    process.env.SERIES_WATCH_SHARED_READ_ENABLED='1';
+    const now=new Date();
+    redis.command=async args=>{
+      if(args[0]!=='MGET')throw Error('Unexpected '+args[0]);
+      return args.slice(1).map(key=>key==='doko:provider-window:v1:movie:1771'
+        ?JSON.stringify({window:windowId(now),lastSuccessfulAt:now.toISOString(),availability:{rent:[{provider_id:2}]}})
+        :null);
+    };
+    delete require.cache[modulePath];
+    let result;
+    await require('../api/series-watch')({method:'GET',query:{series:'mcu'}},{
+      setHeader(){},status(){return this;},json(body){result=body;return this;}
+    });
+    assert.deepEqual(result.providers['movie:1771'].flatrate,[]);
+    assert.equal(result.providers['movie:1771'].stale,false);
+    assert.equal(result.failures.includes('movie:1771'),false);
+  }finally{
+    redis.command=original;
+    if(saved===undefined)delete process.env.SERIES_WATCH_SHARED_READ_ENABLED;
+    else process.env.SERIES_WATCH_SHARED_READ_ENABLED=saved;
+    delete require.cache[modulePath];
+  }
+});
