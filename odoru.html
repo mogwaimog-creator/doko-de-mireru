@@ -132,7 +132,7 @@ async function providers(box){
  const record=data?.providers?.[box.dataset.type+':'+box.dataset.id];
  if(!record||!Array.isArray(record.flatrate))return;
  const list=dokoNormalizeStreaming(record.flatrate).filter(p=>p.logo_path);
- if(!list.length){box.textContent='見放題情報は未確認です';return}
+ if(!list.length){box.textContent='見放題情報は未確認です';if(record.stale){const warning=document.createElement('span');warning.textContent=' ※前回取得した配信情報です（更新未確認）';warning.style.cssText='color:#b42318;font-size:14px';box.appendChild(warning)}return}
  box.replaceChildren();let t=document.createElement('span');t.textContent='見放題';box.append(t);
  let ids=new Set();for(let p of list){if(!p.logo_path||ids.has(p.provider_id))continue;ids.add(p.provider_id);let im=document.createElement('img');im.src='https://image.tmdb.org/t/p/w92'+p.logo_path;im.alt=p.provider_name||'配信サービス';im.title=im.alt;box.append(im)}
  if(record.stale){const warning=document.createElement('span');warning.textContent=' ※前回取得した配信情報です（更新未確認）';warning.style.cssText='color:#b42318;font-size:14px';box.appendChild(warning)}
