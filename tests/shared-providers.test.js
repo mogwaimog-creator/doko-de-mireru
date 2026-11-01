@@ -931,3 +931,32 @@ test('simultaneous series visitors share one atomic refresh budget',async()=>{
     delete require.cache[modulePath];
   }
 });
+
+
+test('series cache outage does not attempt any refresh budget or TMDB fetch',async()=>{
+  const modulePath=require.resolve('../api/series-watch');
+  const original=redis.command;
+  const flags=['SERIES_WATCH_REFRESH_ENABLED','SERIES_WATCH_SHARED_READ_ENABLED','SHARED_PROVIDER_ENABLED','TMDB_API_KEY'];
+  const saved=flags.map(key=>process.env[key]);
+  let budget=0;
+  try{
+    for(const key of flags)process.env[key]='1';
+    redis.command=async args=>{
+      if(args[0]==='MGET'&&args[1].startsWith('doko:watch:v3:'))return args.slice(1).map(()=>null);
+      if(args[0]==='MGET')throw new Error('Redis shared read offline');
+      if(args[0]==='SET'){budget++;return 'OK';}
+      throw new Error('Unexpected '+args[0]);
+    };
+    delete require.cache[modulePath];
+    let result;
+    await require('../api/series-watch')({method:'GET',query:{series:'godzilla'}},{
+      setHeader(){},status(){return this;},json(body){result=body;return this;}
+    });
+    assert.equal(budget,0);
+    assert.equal(result.complete,false);
+  }finally{
+    redis.command=original;
+    flags.forEach((key,i)=>{if(saved[i]===undefined)delete process.env[key];else process.env[key]=saved[i];});
+    delete require.cache[modulePath];
+  }
+});
