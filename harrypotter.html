@@ -3032,14 +3032,15 @@ function fetchHpProviders(id){
       .catch(error => {console.error("ハリポタ配信情報取得エラー:",error);return null;});
   }
   return hpBatchPromise.then(data => {
-    const providers = data?.providers?.["movie:"+id]?.flatrate;
-    if(!Array.isArray(providers))return [];
+    const record = data?.providers?.["movie:"+id];
+    const providers = record?.flatrate;
+    if(!Array.isArray(providers))return {providers:[],missing:true,stale:false};
     const unique = [];
     for(const provider of dokoNormalizeStreaming(providers)){
       if(!provider || !provider.logo_path || unique.some(item=>item.provider_id===provider.provider_id))continue;
       unique.push(provider);
     }
-    return unique;
+    return {providers:unique,missing:false,stale:!!record.stale};
   });
 }
 
@@ -3069,15 +3070,16 @@ async function loadHpProviderBox(box){
   box.dataset.loading = "1";
 
 
-  const providers =
+  const result =
     await fetchHpProviders(id);
+  const providers = result.providers;
 
 
   delete box.dataset.loading;
 
 
   if(providers.length === 0){
-    box.innerHTML = '<span class="doko-provider-unconfirmed">見放題情報は未確認です</span>';
+    box.innerHTML = '<span class="doko-provider-unconfirmed">'+(result.missing?'配信情報を取得できませんでした':'見放題の掲載情報なし')+'</span>';
 
     box.dataset.loaded = "1";
 
@@ -3086,6 +3088,7 @@ async function loadHpProviderBox(box){
 
 
   box.innerHTML = "";
+  if(result.stale){const warning=document.createElement('span');warning.textContent='更新遅延：前回取得時の配信情報';warning.style.display='block';warning.style.fontSize='14px';box.appendChild(warning)}
 
 
   for(const provider of providers){
