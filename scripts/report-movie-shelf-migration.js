@@ -8,6 +8,7 @@ const { audit, buildEditorialSnapshot, resolveEditorialTitleIds } = require('./a
 function formatReviewQueue(result) {
   const labels = {
     'id-conflict': 'ID衝突',
+    'override-id-conflict': '固定ID不一致',
     'invalid-id': '無効ID',
     'duplicate-title': '作品名重複',
     'missing-id': 'ID未登録',
@@ -25,6 +26,8 @@ function reviewQueue(result) {
   const items = [];
   for (const conflict of result.fixedIdConflicts)
     items.push({ kind: 'id-conflict', title: conflict.titles.join(' / '), detail: String(conflict.id) });
+  for (const conflict of result.overrideIdConflicts)
+    items.push({ kind: 'override-id-conflict', title: conflict.title, detail: String(conflict.memoryId) + ' / ' + String(conflict.overrideId) });
   for (const title of result.invalidMemoryIds)
     items.push({ kind: 'invalid-id', title });
   for (const title of result.duplicateMemoryTitles)
@@ -44,6 +47,7 @@ function formatReviewSummary(result) {
     '作品情報の補足: ' + result.sourceSections.verifiedClassicInfo + '件',
     '映画賞の補足: ' + result.sourceSections.approvedAwardStories + '件',
     'ID衝突: ' + counts.idConflicts + '件',
+    '固定ID不一致: ' + counts.overrideIdConflicts + '件',
     '無効ID: ' + counts.invalidIds + '件',
     '作品名重複: ' + counts.duplicateTitles + '件',
     '作品紹介のID未登録: ' + counts.missingIds + '件',
@@ -55,6 +59,7 @@ function formatReviewSummary(result) {
 function summarizeReadiness(result) {
   const counts = {
     idConflicts: result.fixedIdConflicts.length,
+    overrideIdConflicts: result.overrideIdConflicts.length,
     invalidIds: result.invalidMemoryIds.length,
     duplicateTitles: result.duplicateMemoryTitles.length,
     missingIds: result.missingMemoryIds.length,
@@ -80,6 +85,7 @@ function report(html) {
     writes: 0,
     sourceSections: sections,
     fixedIdConflicts: source.conflictingMemoryIds,
+    overrideIdConflicts: source.overrideIdConflicts,
     editorialIdLinks: links.resolved,
     editorialIdReview: links.needsReview,
     missingMemoryIds: source.missingMemoryIds,
