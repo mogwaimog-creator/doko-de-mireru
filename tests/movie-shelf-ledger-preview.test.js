@@ -3,7 +3,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
-const { preview } = require('../scripts/preview-movie-shelf-ledger');
+const { preview, validatePreview } = require('../scripts/preview-movie-shelf-ledger');
 const { extractLiteral } = require('../scripts/audit-movie-shelf');
 const html = fs.readFileSync(path.join(__dirname, '../movie_shelf_1980_1984.html'), 'utf8');
 
@@ -78,4 +78,16 @@ test('retained entries are identified by title without discarding their text', (
     assert.ok(result.coverage.retainedEntries[name].every(item => typeof item.title === 'string'));
   }
   assert.equal(result.writes, 0);
+});
+
+test('preview integrity validator accepts intact candidate and rejects corruption', () => {
+  const result = preview(html);
+  assert.deepEqual(validatePreview(result), { valid: true, problems: [] });
+  const corrupted = structuredClone(result);
+  corrupted.records.push(structuredClone(corrupted.records[0]));
+  corrupted.coverage.sourceCounts.memoryFilms += 1;
+  const checked = validatePreview(corrupted);
+  assert.equal(checked.valid, false);
+  assert.ok(checked.problems.some(item => item.startsWith('duplicate-key:')));
+  assert.ok(checked.problems.includes('coverage-mismatch:memoryFilms'));
 });
