@@ -162,3 +162,30 @@ test('an entirely available cache reports complete without any TMDB calls',async
  assert.equal(response.body.complete,true);
  assert.deepEqual(response.body.failures,[]);
 });
+
+test('scheduled updater refuses unauthorized requests before contacting Redis or TMDB',async()=>{
+ const handler=require('../api/update-streaming.js');
+ const previous=process.env.CRON_SECRET;
+ process.env.CRON_SECRET='test-only-secret';
+ try{
+  const response=()=>({statusCode:200,headers:{},setHeader(k,v){this.headers[k]=v;return this},status(code){this.statusCode=code;return this},json(data){this.body=data;return this}});
+  const missing=response();
+  await handler({method:'GET',headers:{}},missing);
+  assert.equal(missing.statusCode,401);
+  const wrong=response();
+  await handler({method:'GET',headers:{authorization:'Bearer incorrect'}},wrong);
+  assert.equal(wrong.statusCode,401);
+  const post=response();
+  await handler({method:'POST',headers:{authorization:'Bearer test-only-secret'}},post);
+  assert.equal(post.statusCode,405);
+ }finally{
+  if(previous===undefined)delete process.env.CRON_SECRET;
+  else process.env.CRON_SECRET=previous;
+ }
+});
+test('cron schedule matches 06:00 and 18:00 Japan time',()=>{
+ const config=require('../vercel.json');
+ const jobs=config.crons.filter(x=>x.path==='/api/update-streaming');
+ assert.equal(jobs.length,1);
+ assert.equal(jobs[0].schedule,'0 9,21 * * *');
+});
