@@ -383,7 +383,7 @@ async function gundamFixedAvailability(title){
  const record=snapshot?.providers?.[work.type+':'+work.id];
  if(!record||!Array.isArray(record.flatrate))
    return '<div class="availability-note">配信情報を確認できません。作品詳細でご確認ください。</div>';
- const warning=record.stale?'<div class="availability-note">配信情報の更新が遅れています。以下は前回取得時の情報です。</div>':'';
+ const warning=record.stale?'<div class="availability-note" style="color:#b91c1c">配信情報の更新が遅れています。以下は前回取得時の情報です。</div>':'';
   return warning+'<div class="gundam-availability"><div class="gundam-provider-row"><b>見放題</b><div class="gundam-provider-logos">'+gundamProviderRow(record.flatrate)+'</div></div></div>';
 }
 function gundamAvailability(item){
