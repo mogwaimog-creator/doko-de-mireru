@@ -17,7 +17,7 @@ const conanWorks=[21422,21452,28808,20677,32022,26662,39202,39203,39204,39205,39
 const KEYPREFIX='doko:watch:v3:';
 const MAX_AGE_MS=36*60*60*1000; // Daily Hobby updates plus scheduling tolerance.
 module.exports=async(req,res)=>{
-  res.setHeader('Cache-Control','public, max-age=0, s-maxage=120, stale-while-revalidate=60');
+  res.setHeader('Cache-Control',process.env.SERIES_WATCH_SHARED_READ_ENABLED==='1'?'public, max-age=0, s-maxage=30, stale-while-revalidate=30':'public, max-age=0, s-maxage=120, stale-while-revalidate=60');
   if(req.method!=='GET')return res.status(405).json({error:'GET only'});
   if(!['godzilla','mcu','jurassic','harrypotter','lordoftherings','starwars','wildspeed','minions','odoru','eva','conan'].includes(req.query.series))return res.status(400).json({error:'Unknown series'});
   const works=req.query.series==='godzilla'?godzillaWorks:req.query.series==='mcu'?mcuWorks:req.query.series==='jurassic'?jurassicWorks:req.query.series==='harrypotter'?harrypotterWorks:req.query.series==='lordoftherings'?lordoftheringsWorks:req.query.series==='starwars'?starwarsWorks:req.query.series==='wildspeed'?wildspeedWorks:req.query.series==='minions'?minionsWorks:req.query.series==='odoru'?odoruWorks:req.query.series==='eva'?evaWorks:conanWorks;
