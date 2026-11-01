@@ -483,12 +483,22 @@ async function hydrateGundamCards(){
   }
   const link=el.querySelector('.detail-link');
   if(link&&item&&!gundamSeasonWorks[title]){link.href=gundamDetailUrl(item);link.removeAttribute('onclick')}
-  // TV版と映画版の配信は別作品。未登録の版を検索・流用しない。
+  // TV版と劇場版・再編集版は別ID。版ごとの検索や親番組情報の流用は行わない。
   if(el.querySelector('.version-choices')){
    const choices=[...el.querySelectorAll('.version-choice')];
    for(let i=0;i<choices.length;i++){
     const note=choices[i].querySelector('.availability-note');
-    if(note)note.outerHTML=i===0&&fixed?(await gundamFixedAvailability(title)):'<div class="availability-note">この版の見放題配信状況は未確認です。各配信サービスの公式サイトでご確認ください。</div>';
+    if(!note)continue;
+    if(i===0&&fixed){
+     note.outerHTML=await gundamFixedAvailability(title);
+    }else{
+     const movies=title==='機動戦士ガンダム'?['機動戦士ガンダム','機動戦士ガンダムII 哀・戦士編','機動戦士ガンダムIII めぐりあい宇宙編']:title==='機動戦士Ζガンダム'?['機動戦士Ζガンダム 星を継ぐ者','機動戦士ΖガンダムII 恋人たち','機動戦士ΖガンダムIII 星の鼓動は愛']:null;
+     if(movies&&i===1){
+      note.outerHTML='<div class="gundam-film-list">'+movies.map((name,j)=>'<div class="gundam-film-item"><b>'+(['I','II','III'][j])+' '+name+'</b><div class="availability-note">この劇場版の見放題配信状況は未確認です。各配信サービスの公式サイトでご確認ください。</div></div>').join('')+'</div>';
+     }else{
+      note.outerHTML='<div class="availability-note">この編集版の見放題配信状況は未確認です。各配信サービスの公式サイトでご確認ください。</div>';
+     }
+    }
    }
   }else{
    const availability=el.querySelector('.availability-note');
