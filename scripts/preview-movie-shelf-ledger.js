@@ -4,6 +4,25 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { extractLiteral, buildEditorialSnapshot, resolveEditorialTitleIds, audit } = require('./audit-movie-shelf');
 
+// Convert a preview record into the shared ledger's exact input shape.
+ // This is a candidate only: never call putWork or Redis from this script.
+function toLedgerCandidate(record) {
+  if (!record || record.type !== 'movie' ||
+      !Number.isSafeInteger(record.tmdbId) || record.tmdbId <= 0 ||
+      record.key !== 'movie:' + record.tmdbId ||
+      typeof record.title !== 'string' || !record.title.trim() ||
+      !record.pageExtras?.movieShelf) {
+    throw new Error('Invalid movie shelf candidate');
+  }
+  return {
+    type: 'movie',
+    id: record.tmdbId,
+    title: record.title,
+    manualReview: true,
+    pageExtras: JSON.parse(JSON.stringify(record.pageExtras))
+  };
+}
+
 function validatePreview(result) {
   const problems = [];
   const keys = new Set();
@@ -125,4 +144,4 @@ if (require.main === module) {
   const html = fs.readFileSync(path.join(__dirname, '../movie_shelf_1980_1984.html'), 'utf8');
   console.log(JSON.stringify(preview(html), null, 2));
 }
-module.exports = { preview, validatePreview };
+module.exports = { preview, validatePreview, toLedgerCandidate };
