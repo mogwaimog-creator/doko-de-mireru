@@ -188,7 +188,7 @@ async function loadConanProviders(){
  document.querySelectorAll('.providers[data-tmdb]').forEach(box=>{
    const id=box.dataset.tmdb;
    const record=data?.providers?.['movie:'+id];
-   if(record&&Array.isArray(record.flatrate))paintProviders(id,record.flatrate);
+   if(record&&Array.isArray(record.flatrate)){paintProviders(id,record.flatrate);if(record.stale){const warning=document.createElement('span');warning.textContent=' ※前回取得した配信情報です（更新未確認）';warning.style.cssText='color:#b42318;font-size:14px';box.appendChild(warning)}}
    else paintProviders(id,[],true);
  });
  const tv=data?.providers?.['tv:30983'];
