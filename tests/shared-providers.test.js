@@ -315,3 +315,25 @@ test('fresh confirmed empty availability is cached without repeated TMDB calls',
   assert.equal(second.unavailable, false);
   assert.equal(calls, 1);
 });
+
+
+test('movie and TV with the same TMDB numeric ID never share provider cache', async () => {
+  const id = 1103;
+  const now = new Date('2026-11-02T09:00:00Z');
+  let movieCalls = 0, tvCalls = 0;
+  const movieLoad = async () => { movieCalls++; return { flatrate: [{ provider_id: 8 }] }; };
+  const tvLoad = async () => { tvCalls++; return { rent: [{ provider_id: 2 }] }; };
+  const movie = await getSharedProviders('movie', id, movieLoad, now);
+  const tv = await getSharedProviders('tv', id, tvLoad, now);
+  const movieAgain = await getSharedProviders('movie', id, movieLoad, now);
+  const tvAgain = await getSharedProviders('tv', id, tvLoad, now);
+  assert.equal(movie.source, 'tmdb');
+  assert.equal(tv.source, 'tmdb');
+  assert.equal(movieAgain.source, 'cache');
+  assert.equal(tvAgain.source, 'cache');
+  assert.deepEqual(movieAgain.availability, { flatrate: [{ provider_id: 8 }] });
+  assert.deepEqual(tvAgain.availability, { rent: [{ provider_id: 2 }] });
+  assert.equal(movieCalls, 1);
+  assert.equal(tvCalls, 1);
+  assert.notEqual(keys('movie', id).data, keys('tv', id).data);
+});
