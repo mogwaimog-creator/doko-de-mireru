@@ -63,3 +63,14 @@ test('Japanese review checklist is numbered and includes issue categories', () =
     assert.equal(checklist, '確認待ちの作品はありません。');
   }
 });
+
+test('read-only CLI prints Japanese review by default and supports JSON output', () => {
+  const { execFileSync } = require('node:child_process');
+  const script = path.join(__dirname, '../scripts/report-movie-shelf-migration.js');
+  const japanese = execFileSync(process.execPath, [script], { encoding: 'utf8' });
+  assert.match(japanese, /確認対象の作品/);
+  assert.match(japanese, /自動登録: 行いません/);
+  const json = JSON.parse(execFileSync(process.execPath, [script, '--json'], { encoding: 'utf8' }));
+  assert.equal(json.writes, 0);
+  assert.equal(json.readiness.readyForAutomaticImport, false);
+});
