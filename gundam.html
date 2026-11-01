@@ -364,6 +364,25 @@ function gundamProviderRow(items){
   return `<span class="gundam-provider" title="${name}">${logo?`<img src="${logo}" alt="${name}" loading="lazy">`:`<small>${name}</small>`}</span>`;
  }).join('');
 }
+// Verified Gundam titles use the shared Redis snapshot, not visitor-triggered TMDB.
+const gundamFixedWorks={
+ '機動戦士ガンダム':{id:21731,type:'tv'},
+ '機動戦士ガンダムUC':{id:45500,type:'tv'},
+ '機動戦士ガンダム 水星の魔女':{id:196400,type:'tv'},
+ '機動戦士ガンダム00':{id:21732,type:'tv'}
+};
+const gundamSharedWatch=fetch(gundamApiRoot+'/api/series-watch?series=gundam')
+ .then(r=>{if(!r.ok)throw Error('shared watch unavailable');return r.json()})
+ .catch(()=>null);
+async function gundamFixedAvailability(title){
+ const work=gundamFixedWorks[title];
+ if(!work)return null;
+ const snapshot=await gundamSharedWatch;
+ const record=snapshot?.providers?.[work.type+':'+work.id];
+ if(!record||record.stale||!Array.isArray(record.flatrate))
+  return '<div class="availability-note">配信情報を確認できません。作品詳細でご確認ください。</div>';
+ return '<div class="gundam-availability"><div class="gundam-provider-row"><b>見放題</b><div class="gundam-provider-logos">'+gundamProviderRow(record.flatrate)+'</div></div></div>';
+}
 function gundamAvailability(item){
  if(!item)return '<div class="availability-note">配信情報を取得できませんでした。<a href="https://doko-de-mireru.com/" target="_blank" rel="noopener">作品検索はこちら →</a></div>';
  return `<div class="gundam-availability"><div class="gundam-provider-row"><b>見放題</b><div class="gundam-provider-logos">${gundamProviderRow(item.streaming)}</div></div></div>`;
@@ -444,7 +463,7 @@ async function hydrateGundamCards(){
      detail.removeAttribute('onclick');
     }
    }else if(availability){
-    availability.outerHTML=gundamAvailability(item);
+    availability.outerHTML=(await gundamFixedAvailability(title))||gundamAvailability(item);
    }
   }
  }}
