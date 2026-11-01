@@ -94,6 +94,14 @@ function report(html) {
 
 if (require.main === module) {
   const html = fs.readFileSync(path.join(__dirname, '../movie_shelf_1980_1984.html'), 'utf8');
-  console.log(JSON.stringify(report(html), null, 2));
+  const result = report(html);
+  if (process.argv.includes('--json')) {
+    console.log(JSON.stringify(result, null, 2));
+  } else {
+    console.log(formatReviewSummary(result));
+    console.log('');
+    console.log('確認対象の作品');
+    console.log(formatReviewQueue(result));
+  }
 }
 module.exports = { report, summarizeReadiness, formatReviewSummary, reviewQueue, formatReviewQueue };
