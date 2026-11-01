@@ -51,6 +51,9 @@ module.exports=async(req,res)=>{
           // A successfully cached JP response may have only rent/buy offers.
           // Such a record confirms no subscription offers; malformed flat-rate data does not.
           if(flat!==undefined&&!Array.isArray(flat))continue;
+          // Only a current-window, timestamp-consistent record can confirm
+          // that a missing flatrate field means no subscription offers.
+          if(flat===undefined&&(entry.window!==current||windowId(entry.lastSuccessfulAt)!==current))continue;
           const subscriptions=flat===undefined?[]:flat;
           const checked=Date.parse(entry.lastSuccessfulAt);
           if(!Number.isFinite(checked)||checked>Date.now()+60000)continue;
