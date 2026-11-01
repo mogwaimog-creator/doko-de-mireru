@@ -571,14 +571,14 @@ if(token!==streamToken||!tr.isConnected)return;
 if(tr.dataset.providerStale==='1'){
  tr.title='前回取得した配信情報です（更新未確認）';
  tr.style.outline='2px solid #b42318';tr.style.outlineOffset='-2px';
- const warning=document.createElement('span');warning.textContent='更新未確認';warning.style.cssText='color:#b42318;font-size:14px;font-weight:bold;display:block';
- const first=tr.querySelector('td');if(first)first.appendChild(warning);
 }
 if(providerUnknown&&known&&item?.id){
  gundamShowProviderRetry(tr,item.id,gundamApiType(item));
  continue;
 }
-tr.querySelectorAll('td').forEach((td,j)=>{if(providerUnknown){td.textContent='未確認';td.className='stream-none';td.title='配信情報を取得できませんでした';return}const yes=providers.some(p=>p&&streamServices[j][1].test(String(p.provider_name||'')));td.textContent=yes?'◎':'ー';td.className=yes?'stream-yes':'stream-none';td.title=yes?'見放題の掲載あり':'見放題の掲載情報なし・未確認'})}}Promise.all(Array.from({length:3},()=>worker()));
+tr.querySelectorAll('td').forEach((td,j)=>{if(providerUnknown){td.textContent='未確認';td.className='stream-none';td.title='配信情報を取得できませんでした';return}const yes=providers.some(p=>p&&streamServices[j][1].test(String(p.provider_name||'')));td.textContent=yes?'◎':'ー';td.className=yes?'stream-yes':'stream-none';td.title=yes?'見放題の掲載あり':'見放題の掲載情報なし・未確認'});
+if(tr.dataset.providerStale==='1'){const first=tr.querySelector('td');if(first){const warning=document.createElement('span');warning.textContent='更新未確認';warning.style.cssText='color:#b42318;font-size:14px;font-weight:bold;display:block';first.appendChild(warning)}}
+}}Promise.all(Array.from({length:3},()=>worker()));
 }
 
 function goWork(i){choose(data[i].tab);document.getElementById('work-'+i).scrollIntoView()}
