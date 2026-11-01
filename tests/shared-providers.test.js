@@ -484,3 +484,39 @@ test('series-watch shared read preserves legacy fallback when shared record is m
     delete require.cache[seriesPath];
   }
 });
+
+
+test('series-watch does not replace a fresh legacy record with a stale shared record', async () => {
+  const seriesPath = require.resolve('../api/series-watch');
+  const savedCommand = redis.command;
+  const savedFlag = process.env.SERIES_WATCH_SHARED_READ_ENABLED;
+  try {
+    process.env.SERIES_WATCH_SHARED_READ_ENABLED = '1';
+    redis.command = async args => args.slice(1).map(key => {
+      if (key === 'doko:watch:v3:movie:1771') return JSON.stringify({
+        flatrate: [{ provider_id: 9 }], checkedAt: new Date().toISOString()
+      });
+      if (key === 'doko:provider-window:v1:movie:1771') return JSON.stringify({
+        window: '2020-01-01-06', availability: { flatrate: [{ provider_id: 8 }] },
+        lastSuccessfulAt: '2020-01-01T00:00:00.000Z'
+      });
+      return null;
+    });
+    delete require.cache[seriesPath];
+    const handler = require('../api/series-watch');
+    const res = {
+      code: 0, body: null, setHeader() {},
+      status(code) { this.code=code; return this; },
+      json(body) { this.body=body; return this; }
+    };
+    await handler({ method: 'GET', query: { series: 'mcu' } }, res);
+    assert.equal(res.code, 200);
+    assert.deepEqual(res.body.providers['movie:1771'].flatrate, [{ provider_id: 9 }]);
+    assert.equal(res.body.providers['movie:1771'].stale, false);
+  } finally {
+    redis.command = savedCommand;
+    if (savedFlag === undefined) delete process.env.SERIES_WATCH_SHARED_READ_ENABLED;
+    else process.env.SERIES_WATCH_SHARED_READ_ENABLED = savedFlag;
+    delete require.cache[seriesPath];
+  }
+});
