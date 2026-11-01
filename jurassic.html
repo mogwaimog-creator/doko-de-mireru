@@ -152,9 +152,10 @@ async function showProviders(box){
  if(!info||!Array.isArray(info.flatrate)){box.textContent='配信状況は作品詳細でご確認ください';return}
  const list=dokoNormalizeStreaming(info.flatrate);
  const unique=list.filter((p,i,a)=>p&&p.logo_path&&a.findIndex(x=>x&&x.provider_id===p.provider_id)===i);
- if(!unique.length){box.textContent='見放題情報は未確認です';return}
+ if(!unique.length){box.textContent='見放題情報は未確認です';if(info.stale){const warning=document.createElement('span');warning.textContent=' ※前回取得した配信情報です（更新未確認）';warning.style.cssText='color:#b42318;font-size:14px';box.appendChild(warning)}return}
  box.innerHTML='<span class="provider-label">見放題</span>';
  unique.forEach(p=>{const img=document.createElement('img');img.src='https://image.tmdb.org/t/p/w92'+p.logo_path;img.alt=p.provider_name||'配信サービス';img.loading='lazy';box.appendChild(img)});
+  if(info.stale){const warning=document.createElement('span');warning.textContent=' ※前回取得した配信情報です（更新未確認）';warning.style.cssText='color:#b42318;font-size:14px';box.appendChild(warning)}
 }
 if('IntersectionObserver'in window){const observer=new IntersectionObserver((entries,o)=>entries.forEach(e=>{if(e.isIntersecting){o.unobserve(e.target);showProviders(e.target)}}),{rootMargin:'200px'});document.querySelectorAll('.providers').forEach(el=>observer.observe(el))}else document.querySelectorAll('.providers').forEach(showProviders);</script><script>
 const watchedKey='dokomireru-jurassic-watched-v1';let watched=[];try{const stored=JSON.parse(localStorage.getItem(watchedKey)||'[]');if(Array.isArray(stored))watched=stored.map(String)}catch(e){}

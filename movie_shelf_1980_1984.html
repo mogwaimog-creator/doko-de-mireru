@@ -191,8 +191,9 @@ const memoryFilms=[{"year":1980,"title":"シャイニング","id":694,"genres":[
 const memoryGenres=['すべて','SF','ホラー','アクション・冒険','コメディ','ドラマ・青春','恋愛','ファンタジー','サスペンス・犯罪'];
 let memoryGenre='すべて',memoryOrigin='すべて',memoryReturnFocus=null;
 const memoryCache=new Map();
+function memoryKey(movie){return Number.isSafeInteger(Number(movie.id))&&Number(movie.id)>0?'movie:'+Number(movie.id):'title:'+movie.title+'|'+(movie.year||'');}
 function memoryEscape(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-function memoryPoster(movie){const cached=memoryCache.get(movie.title);return cached?.poster||'';}
+function memoryPoster(movie){const cached=memoryCache.get(memoryKey(movie));return cached?.poster||'';}
 function memoryCover(movie,large=false){const poster=memoryPoster(movie);return `<div class="${large?'shelf3-largecover':'shelf3-cover'}">${poster?`<img loading="lazy" src="${memoryEscape(poster)}" alt="${memoryEscape(movie.title)}のポスター" onerror="this.style.display='none';this.parentElement.textContent=this.alt.replace('のポスター','')">`:`<span>${memoryEscape(movie.title)}</span>`}</div>`;}
 function renderMemories(){
  const o=document.getElementById('memory-origin'),g=document.getElementById('memory-genres');
@@ -203,9 +204,48 @@ function renderMemories(){
  document.getElementById('memory-grid').innerHTML=matching.length?matching.map(m=>`<button type="button" class="shelf3-card" data-memory-id="${m.id??'n'+memoryFilms.indexOf(m)}" aria-label="${memoryEscape(m.title)}の紹介を開く">${memoryCover(m)}<div class="shelf3-card-title">${memoryEscape(m.title)}</div></button>`).join(''):'<p class="shelf3-empty">該当する作品はありません。</p>';
  matching.forEach(m=>loadMemoryPoster(m));
 }
+// Share fixed-ID metadata requests between the VHS covers and detail dialogs.
+const shelfFixedMovieRequests=new Map();
+function shelfFixedMovie(id){
+ const key=String(id);
+ if(!shelfFixedMovieRequests.has(key)){
+  const base=location.protocol==='file:'?'https://doko-de-mireru.com':'';
+  const request=fetch(base+'/api/search?id='+encodeURIComponent(id)+'&type=movie')
+   .then(async response=>{
+    if(!response.ok)throw Error('作品情報API '+response.status);
+    return response.json();
+   }).catch(error=>{
+    shelfFixedMovieRequests.delete(key);
+    throw error;
+   });
+  shelfFixedMovieRequests.set(key,request);
+ }
+ return shelfFixedMovieRequests.get(key);
+}
+// Share identical title searches between poster fallback and detail enrichment.
+const shelfTitleRequests=new Map();
+function shelfTitleSearch(query){
+ const key=String(query).normalize('NFKC').trim();
+ if(!shelfTitleRequests.has(key)){
+  const base=location.protocol==='file:'?'https://doko-de-mireru.com':'';
+  const request=fetch(base+'/api/search?query='+encodeURIComponent(key)+'&type=movie')
+   .then(async response=>{
+    if(!response.ok)throw Error('作品検索API '+response.status);
+    return response.json();
+   }).catch(error=>{
+    shelfTitleRequests.delete(key);
+    throw error;
+   });
+  shelfTitleRequests.set(key,request);
+ }
+ return shelfTitleRequests.get(key);
+}
 async function loadMemoryPoster(m){
- if(memoryCache.has(m.title))return;
- memoryCache.set(m.title,{poster:null});
+ const key=memoryKey(m);
+ if(memoryCache.has(key))return;
+ // Mark an in-flight request; release the marker on failure so a later
+ // visit to this shelf can retry without reloading the whole page.
+ memoryCache.set(key,{poster:null});
  const base=location.protocol==='file:'?'https://doko-de-mireru.com':'';
  const normalize=x=>String(x||'').normalize('NFKC').toLowerCase().replace(/[\s・!！／/ー－-]/g,'');
  const getItems=data=>Array.isArray(data)?data:Array.isArray(data?.results)?data.results:Array.isArray(data?.movies)?data.movies:Array.isArray(data?.items)?data.items:[];
@@ -213,17 +253,28 @@ async function loadMemoryPoster(m){
  try{
   let poster='';
   if(m.id){
-   const res=await fetch(base+'/api/search?id='+encodeURIComponent(m.id)+'&type=movie');
-   if(res.ok){const data=await res.json();const exact=Number(data?.id??data?.tmdb_id)===Number(m.id)?data:getItems(data).find(x=>Number(x.id??x.tmdb_id)===Number(m.id));poster=posterUrl(exact);}
+   try{
+    const data=await shelfFixedMovie(m.id);
+    const exact=Number(data?.id??data?.tmdb_id)===Number(m.id)?data:getItems(data).find(x=>Number(x.id??x.tmdb_id)===Number(m.id));
+    poster=posterUrl(exact);
+   }catch(e){console.warn('固定IDのポスター取得失敗',m.title,e)}
   }
   if(!poster){
-   const res=await fetch(base+'/api/search?query='+encodeURIComponent(m.title)+'&type=movie');
-   if(res.ok){const data=await res.json();const items=getItems(data);const found=items.find(x=>Number(x.id??x.tmdb_id)===Number(m.id))||items.find(x=>normalize(x.title||x.name)===normalize(m.title));poster=posterUrl(found);}
+   // The detail lookup already shares fixed-ID and title requests.
+   // Reuse its verified match instead of launching a second title search.
+   const film=await fetchClassicFilm(m);
+   if(film&&(!m.id||Number(film.id??film.tmdb_id)===Number(m.id)))poster=posterUrl(film);
   }
-  if(!poster)return;
-  memoryCache.set(m.title,{poster});
+  if(!poster){
+   memoryCache.delete(key);
+   return;
+  }
+  memoryCache.set(key,{poster});
   if(!document.getElementById('memory-section').hidden)renderMemoryCoversOnly();
- }catch(e){}
+ }catch(e){
+  memoryCache.delete(key);
+  console.warn('名作映画のポスター取得失敗',m.title,e);
+ }
 }
 function renderMemoryCoversOnly(){document.querySelectorAll('[data-memory-id]').forEach(el=>{const id=el.dataset.memoryId;const m=memoryFilms.find(x=>String(x.id??'n'+memoryFilms.indexOf(x))===id);if(m){const target=el.querySelector('.shelf3-cover');if(target&&memoryPoster(m))target.outerHTML=memoryCover(m);}})}
 
@@ -259,40 +310,49 @@ function moviePosterPath(x){let path=cleanText(x.poster_path||x.posterPath||x.po
 function findFilmMatch(list,item){
  const titles=[item.title,item.original].filter(Boolean).map(x=>x.normalize('NFKC').toLowerCase());
  const exact=list.filter(x=>[x.title,x.name,x.original_title].filter(Boolean).some(t=>titles.includes(t.normalize('NFKC').toLowerCase())));
- const candidates=exact.length?exact:list;
- return candidates.find(x=>{const year=Number((x.release_date||x.first_air_date||'').slice(0,4));return item.year&&year&&Math.abs(year-item.year)<=1;})|| (exact.length===1?exact[0]:null);
+ // A release-year match alone is not evidence that two films are the same.
+ // Prefer the known TMDB ID; otherwise require an exact title match.
+ const knownId=classicKnownIds[item.title]||getFilmByTitle(item.title)?.id||verifiedClassicInfo[item.title]?.id;
+ if(knownId){
+  // A known ID must not silently fall back to a different film with a similar title.
+  return list.find(x=>Number(x.id??x.tmdb_id)===Number(knownId))||null;
+ }
+ return exact.find(x=>{const year=Number((x.release_date||x.first_air_date||'').slice(0,4));return item.year&&year&&Math.abs(year-item.year)<=1;})|| (exact.length===1?exact[0]:null);
 }
 const classicKnownIds={"パレルモ、あるいはヴォルフスブルク":130544,"ドラえもん のび太の宇宙開拓史":162103,"ドラえもん のび太の魔界大冒険":161699,"E.T.":601,"南極物語":17895,"探偵物語":292674,"時をかける少女":62385,"里見八犬伝":47578,"愛情物語":431187,"忍者ハットリくん＋パーマン 超能力ウォーズ":1202616,"スター・ウォーズ／帝国の逆襲":1891,"スター・ウォーズ／ジェダイの復讐":1892,"ブッシュマン":8393,"ダーティファイター／燃えよ鉄拳":17169,"黄昏":11816,"ミスター・アーサー":13665,"ゴーストバスターズ":620,"ベスト・キッド":1885,"遙かなる山の呼び声":73324,"転校生":129689,"疑惑":335390,"細雪":42116,"楢山節考":42113,"Wの悲劇":326598,"グロリア":10889};
 const classicSearchCache=new Map();
 async function fetchClassicFilm(item){
- const key=item.title+'|'+(item.year||'');
+ const known=getFilmByTitle(item.title)||verifiedClassicInfo[item.title]||{};
+ const fixedId=classicKnownIds[item.title]||known.id;
+ const key=fixedId?'movie:'+fixedId:'title:'+item.title+'|'+(item.year||'');
  if(classicSearchCache.has(key))return classicSearchCache.get(key);
  const promise=(async()=>{
-  const known=getFilmByTitle(item.title)||verifiedClassicInfo[item.title]||{};
-  const fixedId=classicKnownIds[item.title]||known.id;
   if(fixedId){
    try{
-    const endpoint=(location.protocol==='file:'?'https://doko-de-mireru.com':'')+'/api/search?id='+encodeURIComponent(fixedId)+'&type=movie';
-    const res=await fetch(endpoint);
-    if(res.ok){
-     const data=await res.json();
-     if(Number(data?.id)===Number(fixedId))return data;
-     const direct=resultList(data).find(x=>Number(x.id)===Number(fixedId));
-     if(direct)return direct;
-    }
+    const data=await shelfFixedMovie(fixedId);
+    if(Number(data?.id)===Number(fixedId))return data;
+    const direct=resultList(data).find(x=>Number(x.id)===Number(fixedId));
+    if(direct)return direct;
    }catch(e){}
   }
-  if(item.title==='太陽の年')return null;
+  // Fixed IDs must not trigger title searches after a failed ID lookup.
+  if(fixedId||item.title==='太陽の年')return null;
   for(const query of [item.title,item.original].filter(Boolean)){
    try{
-    const endpoint=(location.protocol==='file:'?'https://doko-de-mireru.com':'')+'/api/search?query='+encodeURIComponent(query)+'&type=movie';
-    const res=await fetch(endpoint);if(!res.ok)continue;
-    const film=findFilmMatch(resultList(await res.json()),item);
+    const film=findFilmMatch(resultList(await shelfTitleSearch(query)),item);
     if(film)return film;
    }catch(e){}
   }
   return null;
- })();classicSearchCache.set(key,promise);return promise;
+ })();
+ classicSearchCache.set(key,promise);
+ // Keep confirmed matches, but allow another attempt after an unresolved lookup.
+ promise.then(film=>{
+  if(!film&&classicSearchCache.get(key)===promise)classicSearchCache.delete(key);
+ },()=>{
+  if(classicSearchCache.get(key)===promise)classicSearchCache.delete(key);
+ });
+ return promise;
 }
 const approvedAwardStories={"オール・ザット・ジャズ":["🏆 1980年カンヌ国際映画祭 パルム・ドール受賞！（『影武者』と同時受賞）","💡 ボブ・フォッシー監督が自身の舞台演出家としての生活や健康問題を色濃く投影した作品。","🎬 主人公が仕事に追われる姿には、監督自身が経験した心臓発作や過密な生活が反映されている。"],"アトランティック・シティ":["🏆 1980年ヴェネツィア国際映画祭 金獅子賞受賞！","💡 舞台となったアトランティックシティは、カジノ開発によって古い街並みが大きく変わろうとしていた時期だった。","🎬 取り壊される建物や変わりゆく街の風景が、映画の中に当時の記録として残っている。"],"歌え！ロレッタ 愛のために":["🏆 1981年ゴールデングローブ賞 作品賞（ミュージカル／コメディ部門）受賞！ アカデミー主演女優賞（シシー・スペイセク）も受賞。","💡 カントリー歌手ロレッタ・リンの実人生を映画化。本人がシシー・スペイセクを主演に希望したと伝えられる。","🎬 スペイセクは歌唱場面を吹き替えに頼らず、自ら歌ってロレッタ・リンを演じた。"],"グロリア":["🏆 1980年ヴェネツィア国際映画祭 金獅子賞受賞！（『アトランティック・シティ』と同時受賞）","💡 監督のジョン・カサヴェテスは、妻であるジーナ・ローランズを主演に迎えた。","🎬 強い女性を演じたローランズは、本作でアカデミー主演女優賞にノミネートされた。"],"ハートランド":["🏆 1980年ベルリン国際映画祭 金熊賞受賞！（『パレルモ、あるいはヴォルフスブルク』と同時受賞）","💡 19世紀末のアメリカ西部で暮らした女性エリノア・スチュワートの手紙をもとに作られた。","🎬 西部劇のような銃撃戦よりも、農作業や厳しい自然と向き合う日常を丹念に描いている。"],"影武者":["🏆 1980年カンヌ国際映画祭 パルム・ドール受賞！（『オール・ザット・ジャズ』と同時受賞）","💡 黒澤明監督が長年温めていた戦国時代の大作。製作にはジョージ・ルーカスとフランシス・フォード・コッポラも協力した。","🎬 大規模な合戦場面には多数の馬やエキストラが参加し、壮大な映像が生み出された。"],"普通の人々":["🏆 1981年アカデミー賞で4部門受賞！ 作品賞、監督賞（ロバート・レッドフォード）、助演男優賞（ティモシー・ハットン）、脚色賞。ゴールデングローブ賞でも作品賞（ドラマ部門）を受賞。","💡 俳優として知られたロバート・レッドフォードにとって、本作は映画監督デビュー作だった。","🎬 ティモシー・ハットンは20歳でアカデミー助演男優賞を受賞し、同部門の史上最年少受賞者となった。"],"パレルモ、あるいはヴォルフスブルク":["🏆 1980年ベルリン国際映画祭 金熊賞受賞！（『ハートランド』と同時受賞）","💡 シチリア島から西ドイツへ渡った若者を通じて、移民が直面する言葉や文化の壁を描いている。","🎬 約3時間に及ぶ作品で、シチリアとドイツの風景や生活の違いも印象的に映し出される。"],"ミスター・アーサー":["🏆 1982年ゴールデングローブ賞 作品賞（ミュージカル／コメディ部門）受賞！ アカデミー助演男優賞（ジョン・ギールグッド）も受賞。","💡 主演のダドリー・ムーアは、コメディアンであると同時に腕利きのピアニストとしても知られていた。","🎬 執事役のジョン・ギールグッドは舞台の名優で、本作のコミカルな演技が高く評価された。"],"炎のランナー":["🏆 1982年アカデミー賞で4部門受賞！ 作品賞、脚本賞、衣装デザイン賞、作曲賞。","💡 映画を象徴するヴァンゲリスの電子音楽は、1920年代を舞台にした作品としては意外な選択だった。","🎬 海辺を走るオープニングの場面と音楽は、映画史に残る印象的な組み合わせとなった。"],"急げ、急げ":["🏆 1981年ベルリン国際映画祭 金熊賞受賞！","💡 スペインのカルロス・サウラ監督が、当時の若者たちの犯罪と生活を描いた作品。","🎬 出演者には演技経験の少ない若者も起用され、ドキュメンタリーのような生々しさを生んだ。"],"鉄の男":["🏆 1981年カンヌ国際映画祭 パルム・ドール受賞！","💡 ポーランドの独立自主管理労働組合「連帯」の誕生を背景に、当時まさに進行していた社会の変化を映画に取り込んだ。","🎬 「連帯」の指導者レフ・ワレサ本人も出演。ワレサは後にノーベル平和賞を受賞し、ポーランド大統領となった。"],"鉛の時代":["🏆 1981年ヴェネツィア国際映画祭 金獅子賞受賞！","💡 西ドイツで活動した姉妹クリスティアーネとグドルン・エンスリンの関係から着想を得た。","🎬 監督マルガレーテ・フォン・トロッタは、政治と家族の葛藤を女性たちの視点から描いた。"],"黄昏":["🏆 1982年ゴールデングローブ賞 作品賞（ドラマ部門）受賞！ アカデミー賞では主演男優賞（ヘンリー・フォンダ）、主演女優賞（キャサリン・ヘプバーン）、脚色賞の3部門を受賞。","💡 ヘンリー・フォンダと娘のジェーン・フォンダが親子役で共演。実生活でも親子関係に複雑な歴史があった。","🎬 ヘンリー・フォンダは本作で初のアカデミー主演男優賞を受賞。授賞式の数か月後、77歳で亡くなった。"],"E.T.":["🏆 1983年ゴールデングローブ賞で作品賞（ドラマ部門）と作曲賞を受賞！ アカデミー賞では9部門ノミネート、作曲賞・録音賞・音響効果編集賞・視覚効果賞の4部門を受賞。","💡 E.T.の声には、声優パット・ウェルシュの声だけでなく、動物の鳴き声や呼吸音なども組み合わせて使われた。","🎬 エリオット役のヘンリー・トーマスは、オーディションで見せた迫真の演技によってスピルバーグ監督の心を動かした。"],"ガンジー":["🏆 1983年アカデミー賞で8部門受賞！ 作品賞、監督賞（リチャード・アッテンボロー）、主演男優賞（ベン・キングズレー）、脚本賞、撮影賞、美術賞、衣装デザイン賞、編集賞。","💡 リチャード・アッテンボロー監督は、この映画を実現するまで約20年を費やした。","🎬 ガンジーの葬儀の場面には約30万人ものエキストラが参加したとされる。"],"ミッシング":["🏆 1982年カンヌ国際映画祭 パルム・ドール受賞！（『路（みち）』と同時受賞） ジャック・レモンが男優賞を受賞。1983年アカデミー賞では脚色賞を受賞。","💡 チリで消息を絶った実在のアメリカ人ジャーナリストをめぐる事件に基づく。撮影はメキシコで行われ、チリでは上映が禁止された。","🎬 事件から長い年月を経た2016年、チリの裁判所で元軍関係者らに有罪判決が下された。"],"ことの次第":["🏆 1982年ヴェネツィア国際映画祭 金獅子賞受賞！","💡 ヴィム・ヴェンダース監督が、フランシス・フォード・コッポラ製作の『ハメット』で経験した映画制作上の苦労も背景にある。","🎬 別作品『The Territory』の撮影が資金難で止まったことをきっかけに、撮影が止まった映画を描く本作が生まれた。"],"トッツィー":["🏆 1983年ゴールデングローブ賞で3部門受賞！ 作品賞（ミュージカル／コメディ部門）、主演男優賞（ダスティン・ホフマン）、助演女優賞（ジェシカ・ラング）。さらにラングはアカデミー助演女優賞も受賞。","💡 ダスティン・ホフマンは女性役のメイクテストで、もっと美しく見せられないかと相談したが難しいと言われ、女性の容姿に対する社会の見方を考えるきっかけになったという。","🎬 ホフマンとシドニー・ポラック監督は演技や演出をめぐって何度も衝突。それでも作品はアカデミー賞10部門にノミネートされた。"],"ベロニカ・フォスのあこがれ":["🏆 1982年ベルリン国際映画祭 金熊賞受賞！","💡 戦前のドイツ映画界で活躍した女優ジビレ・シュミッツの晩年から着想を得た。彼女はナチス時代に人気を集めたものの、戦後は次第に仕事を失い、1955年に亡くなった。","🎬 ライナー・ヴェルナー・ファスビンダー監督は、短い生涯で40本を超える長編映画を手がけた多作の映画監督。しかし、本作が金熊賞に輝いた1982年、わずか37歳で急逝した。本作は監督の晩年を代表する作品の一つとなった。"],"路（みち）":["🏆 1982年カンヌ国際映画祭 パルム・ドール受賞！（『ミッシング』と同時受賞）","🏆 同映画祭で国際映画批評家連盟賞（FIPRESCI賞）も受賞！","💡 監督のユルマズ・ギュネイは、制作当時トルコの刑務所に収監されていた。獄中から脚本や演出方針を伝え、実際の撮影はシェリフ・ギョレンが担当した。","🎬 その後ギュネイは刑務所から脱出し、国外へ亡命した。"],"アセンダンシー":["🏆 1983年ベルリン国際映画祭 金熊賞受賞！","💡 物語の舞台は第一次世界大戦中のアイルランド。当時はまだイギリスの統治下にあり、独立を求める動きが強まっていた。映画は戦争と民族の対立が人々の暮らしに及ぼす影響を描く。","🎬 監督のエドワード・ベネットにとって、本作は長編映画デビュー作。"],"カルメンという名の女":["🏆 1983年ヴェネツィア国際映画祭で金獅子賞と技術賞を受賞！","💡 オペラ『カルメン』を大胆に作り替えた作品。しかし音楽にはビゼーの『カルメン』ではなく、ベートーヴェンの弦楽四重奏曲を使用している。","🎬 ジャン＝リュック・ゴダール監督自身が主人公カルメンの叔父役で出演。劇中でも映画監督という役どころを演じている。"],"愛と追憶の日々":["🏆 1984年アカデミー賞で5部門受賞！ 作品賞、監督賞（ジェームズ・L・ブルックス）、主演女優賞（シャーリー・マクレーン）、助演男優賞（ジャック・ニコルソン）、脚色賞。","🏆 同年のゴールデングローブ賞でも4部門受賞！ 作品賞（ドラマ部門）、主演女優賞（シャーリー・マクレーン）、助演男優賞（ジャック・ニコルソン）、脚本賞。","💡 テレビドラマの世界で活躍していたジェームズ・L・ブルックス監督にとって、本作は映画監督デビュー作だった。","🎬 ジャック・ニコルソンが演じた宇宙飛行士ギャレットは原作小説には登場しない、映画オリジナルの人物。"],"楢山節考":["🏆 1983年カンヌ国際映画祭 パルム・ドール受賞！","💡 今村昌平監督は、山村の厳しい暮らしをリアルに描くため、長野県の山中に集落のセットを建設。出演者たちは実際の山村生活を体験しながら撮影に臨んだ。","🎬 主演の緒形拳は役作りのため前歯を抜いたことで知られる。70歳の母親役を演じた坂本スミ子は撮影当時40代で、実年齢より20歳以上も年上の女性を演じた。"],"蜂の巣":["🏆 1983年ベルリン国際映画祭 金熊賞受賞！（『アセンダンシー』と同時受賞）","💡 監督のマリオ・カムスは、スペインの作家カミロ・ホセ・セラによる同名小説を映画化。セラは後に1989年のノーベル文学賞を受賞した。","🎬 物語の舞台は1940年代のマドリード。原作小説は300人を超える人物が登場する群像劇として知られている。"],"愛のイエントル":["🏆 1984年ゴールデングローブ賞で2部門受賞！ 作品賞（ミュージカル／コメディ部門）と監督賞（バーブラ・ストライサンド）。","🏆 同年のアカデミー賞では歌曲・編曲賞を受賞！","💡 主演のバーブラ・ストライサンドは監督・製作・主演を兼任。映画化の実現まで約15年を費やしていた。","🎬 本作はストライサンドの映画監督デビュー作。当時、ハリウッドで女性が大作映画の監督を務めることはまだ珍しく、主演・製作も自ら担うという大きな挑戦だった。"],"太陽の年":["🏆 1984年ヴェネツィア国際映画祭 金獅子賞受賞！","💡 監督のクシシュトフ・ザヌーシは、映画監督になる前に物理学と哲学を学んでいたという異色の経歴の持ち主。","🎬 第二次世界大戦後のポーランドを舞台に、言葉が十分に通じないアメリカ人兵士とポーランド人女性が、気持ちを伝えようとする姿を描く。"],"アマデウス":["🏆 1985年アカデミー賞で11部門ノミネート、8部門受賞！ 作品賞、監督賞（ミロシュ・フォアマン）、主演男優賞（F・マーリー・エイブラハム）、脚色賞、美術賞、衣装デザイン賞、メイクアップ賞、録音賞。","💡 モーツァルト役のトム・ハルスは撮影前にはピアノを弾けなかったが、役作りのため約半年間猛練習した。","🎬 撮影は主にプラハで行われ、モーツァルトのオペラ『ドン・ジョヴァンニ』が1787年に初演された劇場も使われた。"],"ラヴ・ストリームス":["🏆 1984年ベルリン国際映画祭 金熊賞受賞！","💡 監督・主演のジョン・カサヴェテス自身が家族と暮らしていた自宅が撮影に使われた。","🎬 姉弟を演じたジーナ・ローランズとジョン・カサヴェテスは、実生活では夫婦だった。"],"パリ、テキサス":["🏆 1984年カンヌ国際映画祭 パルム・ドール受賞！ さらに国際映画批評家連盟賞（FIPRESCI賞）、エキュメニカル審査員賞も受賞。","💡 題名の「パリ」はフランスの首都ではなく、アメリカ・テキサス州に実在する町の名前。ただしその町の風景が映画に登場するわけではない。","🎬 音楽を担当したライ・クーダーはブルース歌手ブラインド・ウィリー・ジョンソンの楽曲に着想を得て、印象的なスライドギターの音色を生み出した。"],"ロマンシング・ストーン／秘宝の谷":["🏆 1985年ゴールデングローブ賞で2部門受賞！ 作品賞（ミュージカル／コメディ部門）、主演女優賞（キャスリーン・ターナー）。","💡 ロバート・ゼメキス監督は本作以前に興行的に苦戦していたが、この映画の大ヒットが転機となった。","🎬 脚本家ダイアン・トーマスはウェイトレスとして働きながら脚本を書いていた。映画化された初めての脚本が大ヒットしたが、1985年に交通事故で亡くなった。"]};
 function classicSection(item,kind,i){

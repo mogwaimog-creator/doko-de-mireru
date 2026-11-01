@@ -465,6 +465,70 @@ function choose(tab,jump=false){if(tab==='stream'){showStreamingTab(jump);return
 
 const streamServices=[['Netflix',/netflix/i],['Prime Video',/amazon|prime video/i],['U-NEXT',/u-next|unext/i],['Hulu',/hulu/i],['Disney+',/disney/i],['FOD',/fod/i],['Apple TV',/apple/i]];
 let streamToken=0;
+// Reuse in-flight and completed provider requests across tab switches and repeated works.
+const gundamProviderRequests=new Map();
+const gundamManualRetries=new Map();
+function gundamSharedProviders(id,type){
+ const key=type+':'+id;
+ if(!gundamProviderRequests.has(key)){
+  const url=gundamApiRoot+'/api/series-providers?id='+encodeURIComponent(id)+'&type='+encodeURIComponent(type);
+  const request=fetch(url,{headers:{Accept:'application/json'}})
+   .then(async response=>{
+    const result={status:response.status,data:response.ok?await response.json():null};
+    // Keep successful results and the disabled-feature 404 fallback;
+    // retry transient server errors on a later tab visit.
+    if(!response.ok&&response.status!==404)gundamProviderRequests.delete(key);
+    return result;
+   })
+   .catch(error=>{gundamProviderRequests.delete(key);throw error});
+  gundamProviderRequests.set(key,request);
+ }
+ return gundamProviderRequests.get(key);
+}
+function gundamRetryProviderRow(tr,id,type){
+ const key=type+':'+id;
+ const retryToken=streamToken;
+ if(tr.dataset.providerRetrying==='1')return;
+ tr.dataset.providerRetrying='1';
+ // Share the retry promise across rows for the same work.
+ const cells=[...tr.querySelectorAll('td')];
+ cells.forEach(td=>{td.textContent='再確認中…';td.className='stream-none'});
+ if(!gundamManualRetries.has(key)){
+  gundamProviderRequests.delete(key);
+  const request=gundamSharedProviders(id,type).then(async response=>{
+   if(response.status!==404)return response;
+   const legacy=await gundamById(id,type);
+   return {status:legacy?200:503,data:legacy?{streaming:legacy.streaming}:null};
+  });
+  gundamManualRetries.set(key,request);
+  request.finally(()=>{if(gundamManualRetries.get(key)===request)gundamManualRetries.delete(key)}).catch(()=>{});
+ }
+ gundamManualRetries.get(key).then(async response=>{
+  if(retryToken!==streamToken||!tr.isConnected)return;
+  let providers;
+  if(response.status===200&&!response.data?.provider_status?.unavailable&&!response.data?.provider_status?.stale){
+   providers=Array.isArray(response.data.streaming)?response.data.streaming:[];
+  }else{
+   gundamShowProviderRetry(tr,id,type);return;
+  }
+  cells.forEach((td,j)=>{
+   const yes=providers.some(p=>p&&streamServices[j][1].test(String(p.provider_name||'')));
+   td.textContent=yes?'◎':'ー';td.className=yes?'stream-yes':'stream-none';
+   td.title=yes?'見放題の掲載あり':'見放題の掲載情報なし・未確認';
+  });
+ }).catch(()=>{if(retryToken===streamToken&&tr.isConnected)gundamShowProviderRetry(tr,id,type)})
+ .finally(()=>{delete tr.dataset.providerRetrying});
+}
+function gundamShowProviderRetry(tr,id,type){
+ const cells=[...tr.querySelectorAll('td')];
+ cells.forEach(td=>{td.textContent='未確認';td.className='stream-none';td.title='配信情報を取得できませんでした'});
+ if(!cells.length)return;
+ const button=document.createElement('button');
+ button.type='button';button.textContent='再確認';
+ button.style.cssText='font:inherit;font-size:14px;padding:4px 8px;border:1px solid #8d9bb0;border-radius:6px;background:#fff;color:#273e5d;cursor:pointer';
+ button.addEventListener('click',()=>gundamRetryProviderRow(tr,id,type));
+ cells[0].textContent='';cells[0].appendChild(button);
+}
 function streamEsc(v){return String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;')}
 function showStreamingTab(jump=false){
  current='stream';for(const t of Object.keys(labels)){const b=document.getElementById('tab-'+t);b.classList.toggle('on',t==='stream');b.setAttribute('aria-selected',t==='stream')}
@@ -475,7 +539,46 @@ function showStreamingTab(jump=false){
  document.getElementById('content').innerHTML='<h2>📺 ガンダム作品別・配信先一覧</h2><p>宇宙世紀は物語の時系列順、アナザーとガンプラ・SDは各シリーズの順番に並べています。</p><div class="stream-legend"><span><b style="color:#16764b">◎</b> 見放題の掲載あり</span><span><b>ー</b> 見放題の掲載情報なし・未確認</span><span>※ 契約前に公式でご確認ください。</span></div><div class="stream-scroll" tabindex="0"><table class="stream-table"><thead><tr><th class="stream-work">作品名・公開年</th>'+streamServices.map(s=>'<th>'+s[0]+'</th>').join('')+'</tr></thead><tbody>'+rows+'</tbody></table></div><p>※「ー」は未配信の断定ではありません。TV版と劇場版の配信状況は異なる場合があります。</p>';
  document.getElementById('subnav').innerHTML='<a href="#content">配信先一覧</a><button onclick="backToTimeline()">年表を見る ↑</button>';if(jump)document.getElementById('guide').scrollIntoView();
  const token=++streamToken,trs=[...document.querySelectorAll('#content tr[data-stream-index]')];let next=0;
- async function worker(){while(next<trs.length&&token===streamToken){const tr=trs[next++],x=data[Number(tr.dataset.streamIndex)];if(gundamSeasonWorks[x.title]){tr.querySelectorAll('td').forEach(td=>{td.textContent='ー';td.className='stream-none';td.title='シーズン単独の配信情報は未確認'});continue}let item=null;try{item=await gundamLookup(x.title,/映画/.test(x.format||'')?'movie':'tv')}catch(e){}if(token!==streamToken||!tr.isConnected)return;const providers=Array.isArray(item?.streaming)?item.streaming:[];tr.querySelectorAll('td').forEach((td,j)=>{const yes=providers.some(p=>p&&streamServices[j][1].test(String(p.provider_name||'')));td.textContent=yes?'◎':'ー';td.className=yes?'stream-yes':'stream-none';td.title=yes?'見放題の掲載あり':'見放題の掲載情報なし・未確認'})}}Promise.all(Array.from({length:3},()=>worker()));
+ async function worker(){while(next<trs.length&&token===streamToken){const tr=trs[next++],x=data[Number(tr.dataset.streamIndex)];if(gundamSeasonWorks[x.title]){tr.querySelectorAll('td').forEach(td=>{td.textContent='ー';td.className='stream-none';td.title='シーズン単独の配信情報は未確認'});continue}const known=gundamKnownIds[x.title];
+let item=known?{id:known.id,content_type:known.type}:null;
+if(!known){try{item=await gundamLookup(x.title,/映画/.test(x.format||'')?'movie':'tv')}catch(e){}}
+if(token!==streamToken||!tr.isConnected)return;
+let providers=Array.isArray(item?.streaming)?item.streaming:[];
+let providerUnknown=!item?.id;
+// Title-based lookup already returned subscription data; do not request it twice.
+if(known&&item?.id&&item?.content_type){
+ try{
+  const response=await gundamSharedProviders(item.id,gundamApiType(item));
+  if(response.status===200){
+   const shared=response.data;
+   if(shared.provider_status?.unavailable||shared.provider_status?.stale){
+    if(token!==streamToken||!tr.isConnected)return;
+    // Keep last known subscription information visible but mark it unverified.
+    if(Array.isArray(shared.streaming)){
+     providers=shared.streaming;
+     tr.dataset.providerStale='1';
+    }else{gundamShowProviderRetry(tr,item.id,gundamApiType(item));continue;}
+   }else providers=Array.isArray(shared.streaming)?shared.streaming:[];
+  }else if(known&&response.status===404){
+   // The opt-in API is disabled (404) or temporarily unavailable.
+   // Fall back to the existing detail API only for this known ID.
+   try{const legacy=await gundamById(known.id,known.type);if(legacy)providers=Array.isArray(legacy.streaming)?legacy.streaming:[];else providerUnknown=true}
+   catch(e){providerUnknown=true;console.warn('配信情報の従来API取得失敗:',x.title,e)}
+  }else providerUnknown=true;
+ }catch(e){providerUnknown=true;console.warn('共通配信情報取得失敗:',x.title,e)}
+}
+if(token!==streamToken||!tr.isConnected)return;
+if(tr.dataset.providerStale==='1'){
+ tr.title='前回取得した配信情報です（更新未確認）';
+ tr.style.outline='2px solid #b42318';tr.style.outlineOffset='-2px';
+}
+if(providerUnknown&&known&&item?.id){
+ gundamShowProviderRetry(tr,item.id,gundamApiType(item));
+ continue;
+}
+tr.querySelectorAll('td').forEach((td,j)=>{if(providerUnknown){td.textContent='未確認';td.className='stream-none';td.title='配信情報を取得できませんでした';return}const yes=providers.some(p=>p&&streamServices[j][1].test(String(p.provider_name||'')));td.textContent=yes?'◎':'ー';td.className=yes?'stream-yes':'stream-none';td.title=yes?'見放題の掲載あり':'見放題の掲載情報なし・未確認'});
+if(tr.dataset.providerStale==='1'){const first=tr.querySelector('td');if(first){const warning=document.createElement('span');warning.textContent='更新未確認';warning.style.cssText='color:#b42318;font-size:14px;font-weight:bold;display:block';first.appendChild(warning)}}
+}}Promise.all(Array.from({length:3},()=>worker()));
 }
 
 function goWork(i){choose(data[i].tab);document.getElementById('work-'+i).scrollIntoView()}

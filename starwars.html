@@ -292,17 +292,54 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
   const providerCache=new Map();
   const apiBase=location.protocol==='file:'?'https://doko-de-mireru.com':'';
   async function loadProviders(box){
+    if(box.dataset.providerLoading==='1')return;
+    box.dataset.providerLoading='1';
     const key=`${box.dataset.type}:${box.dataset.id}`;
-    if(!providerCache.has(key))providerCache.set(key,fetch(`${apiBase}/api/search?id=${encodeURIComponent(box.dataset.id)}&type=${box.dataset.type}`)
-      .then(response=>{if(!response.ok)throw Error('配信情報の取得に失敗');return response.json()})
-      .then(data=>Array.isArray(data.streaming)?dokoNormalizeStreaming(data.streaming):[]).catch(()=>null));
-    const providers=await providerCache.get(key);
+    if(!providerCache.has(key))providerCache.set(key,fetch(`${apiBase}/api/series-providers?id=${encodeURIComponent(box.dataset.id)}&type=${encodeURIComponent(box.dataset.type)}`)
+      .then(async response=>{
+        if(response.status===404){
+          const legacy=await fetch(`${apiBase}/api/search?id=${encodeURIComponent(box.dataset.id)}&type=${box.dataset.type}`);
+          if(!legacy.ok)throw Error('配信情報の取得に失敗');
+          return {data:await legacy.json(),legacy:true};
+        }
+        if(!response.ok)throw Error('配信情報の取得に失敗');
+        return {data:await response.json(),legacy:false};
+      })
+      .then(({data,legacy})=>{
+        if(!legacy&&data.provider_status?.unavailable&&!Array.isArray(data.streaming))return null;
+        return {items:Array.isArray(data.streaming)?dokoNormalizeStreaming(data.streaming):[],stale:!legacy&&!!(data.provider_status?.stale||data.provider_status?.unavailable)};
+      }).then(providers=>{
+        // An unsuccessful lookup must not be kept for the whole page session.
+        if(providers===null)providerCache.delete(key);
+        return providers;
+      }).catch(error=>{
+        providerCache.delete(key);
+        console.warn('スター・ウォーズ配信情報取得失敗',error);
+        return null;
+      }));
+    const providerResult=await providerCache.get(key);
+    const providers=providerResult?.items||null;
+    delete box.dataset.providerLoading;
     if(!box.isConnected)return;
-    if(providers===null){box.textContent='配信状況は作品詳細でご確認ください';return}
+    if(providers===null){
+      box.textContent='配信情報を現在確認できません。';
+      const retry=document.createElement('button');
+      retry.type='button';
+      retry.textContent='再確認';
+      retry.style.cssText='font:inherit;font-size:14px;padding:5px 10px;border:1px solid #8d9bb0;border-radius:6px;background:#fff;color:#273e5d;cursor:pointer';
+      retry.addEventListener('click',()=>{
+        retry.disabled=true;
+        box.textContent='配信情報を再確認しています…';
+        loadProviders(box);
+      });
+      box.appendChild(retry);
+      return;
+    }
     const unique=providers.filter((p,i,all)=>p&&p.logo_path&&all.findIndex(x=>x&&x.provider_id===p.provider_id)===i);
-    if(!unique.length){box.textContent='見放題情報は未確認です';return}
+    if(!unique.length){box.textContent='見放題情報は未確認です';if(providerResult.stale){const warning=document.createElement('span');warning.textContent=' ※前回取得した配信情報です（更新未確認）';warning.style.cssText='color:#b42318;font-size:14px';box.appendChild(warning)}return}
     box.innerHTML='<span class="providers-label">見放題</span>';
     unique.forEach(p=>{const img=document.createElement('img');img.src='https://image.tmdb.org/t/p/w92'+p.logo_path;img.alt=p.provider_name||'配信サービス';img.loading='lazy';box.appendChild(img)});
+    if(providerResult.stale){const warning=document.createElement('span');warning.textContent=' ※前回取得した配信情報です（更新未確認）';warning.style.cssText='color:#b42318;font-size:14px';box.appendChild(warning)}
   }
   const providerObserver=new IntersectionObserver((entries,observer)=>entries.forEach(entry=>{if(entry.isIntersecting){observer.unobserve(entry.target);loadProviders(entry.target)}}),{rootMargin:'200px'});
   const panels={beginner:document.getElementById('sw-beginner-panel'),catalog:document.getElementById('sw-catalog-panel'),people:document.getElementById('sw-people-panel'),glossary:document.getElementById('sw-glossary-panel')};

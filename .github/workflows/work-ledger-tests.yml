@@ -1,0 +1,279 @@
+name: Work ledger tests
+
+on:
+  push:
+    branches:
+      - feature/shared-work-ledger-20261031
+  pull_request:
+    paths:
+      - 'api/admin-import-series-works.js'
+      - 'tests/import-series-works.test.js'
+      - 'api/_work-ledger.js'
+      - 'api/_work-error-policy.js'
+      - 'api/_work-issues.js'
+      - 'api/_provider-fallback.js'
+      - 'api/_shared-providers.js'
+      - 'tests/shared-providers.test.js'
+      - 'tests/scheduled-streaming.test.js'
+      - 'api/update-streaming.js'
+      - 'api/admin-status.js'
+      - 'tests/admin-status.test.js'
+      - 'admin-review.html'
+      - 'admin-review.js'
+      - 'admin-review.css'
+      - 'api/admin-confirm-review.js'
+      - 'tests/admin-confirm-review.test.js'
+      - 'api/admin-review-queue.js'
+      - 'tests/admin-review-queue.test.js'
+      - 'api/_work-review.js'
+      - 'tests/work-review.test.js'
+      - 'vercel.json'
+      - 'tests/provider-fallback.test.js'
+      - 'tests/work-issues.test.js'
+      - 'tests/work-error-policy.test.js'
+      - 'api/_work-from-tmdb.js'
+      - 'api/work-detail.js'
+      - 'api/_detail-with-ledger.js'
+      - 'api/search.js'
+      - 'tests/detail-with-ledger.test.js'
+      - 'tests/work-ledger-roundtrip.test.js'
+      - 'tests/work-detail.test.js'
+      - '.github/workflows/work-ledger-tests.yml'
+  workflow_dispatch:
+
+jobs:
+  work-ledger:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify JavaScript syntax
+        run: |
+          for file in admin-review.js api/admin-import-series-works.js api/admin-confirm-review.js api/admin-review-queue.js api/_work-review.js api/_work-ledger.js api/_work-error-policy.js api/_work-issues.js api/_provider-fallback.js api/_shared-providers.js api/_work-from-tmdb.js api/work-detail.js api/_detail-with-ledger.js api/search.js api/update-streaming.js tests/*.test.js; do
+            node --check "$file"
+          done
+      - name: Run all work ledger and provider safety tests
+        run: node --test tests/*.test.js
+      - name: Verify movie shelf import boundary without writes
+        run: node scripts/preview-movie-shelf-ledger.js --check
+      - name: Build local-only ledger shelf comparison HTML
+        run: |
+          node scripts/build-shelf-ledger-preview.js /tmp/shelf-ledger-comparison.html
+          node -e "const fs=require('fs'); const h=fs.readFileSync('/tmp/shelf-ledger-comparison.html','utf8'); if(!h.includes('開発用・台帳復元表示確認') || !h.includes('function renderMemories()') || !h.includes('function setTab(tab)')) process.exit(1); console.log('Local HTML comparison fixture verified')"
+      - name: Smoke-test local shelf HTML in headless Chrome
+        run: |
+          command -v google-chrome
+          google-chrome --headless --no-sandbox --disable-gpu --disable-dev-shm-usage --virtual-time-budget=3000 --dump-dom file:///tmp/shelf-ledger-comparison.html > /tmp/shelf-rendered-dom.html 2>/tmp/shelf-chrome.log
+          node -e "const fs=require('fs');const h=fs.readFileSync('/tmp/shelf-rendered-dom.html','utf8');for(const s of ['開発用・台帳復元表示確認','data-tab=','id=\\\"ranking-rows\\\"','data-ranking-title='])if(!h.includes(s))throw Error('Missing rendered UI marker: '+s);console.log('Headless Chrome shelf DOM smoke test passed')"
+      - name: Exercise shelf tabs and memory detail in headless Chrome
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const file = '/tmp/shelf-ledger-comparison.html';
+          let html = fs.readFileSync(file, 'utf8');
+          const test = `<script>
+          (() => {
+            const errors = [];
+            const assert = (condition, message) => { if (!condition) errors.push(message); };
+            try {
+              document.querySelector('[data-tab="memories"]').click();
+              assert(!document.getElementById('memory-section').hidden, 'memories tab hidden');
+              assert(document.querySelectorAll('[data-memory-id]').length === 34, 'memory card count');
+              const first = document.querySelector('[data-memory-id]');
+              first.click();
+              assert(document.getElementById('memory-dialog').open, 'memory dialog did not open');
+              assert(document.getElementById('memory-dialog-content').textContent.length > 30, 'memory dialog empty');
+              document.getElementById('memory-x').click();
+              assert(!document.getElementById('memory-dialog').open, 'memory dialog did not close');
+              document.querySelector('[data-tab="rankings"]').click();
+              assert(!document.getElementById('rank-section').hidden, 'rankings tab hidden');
+              assert(document.querySelectorAll('[data-ranking-title]').length > 0, 'ranking rows missing');
+              document.querySelector('[data-tab="awards"]').click();
+              assert(!document.getElementById('award-section').hidden, 'awards tab hidden');
+            } catch (e) { errors.push(String(e)); }
+            const node = document.createElement('meta');
+            node.setAttribute('name', 'shelf-interaction-test');
+            node.setAttribute('content', errors.length ? 'FAIL:' + errors.join(';') : 'PASS');
+            document.head.appendChild(node);
+          })();
+          </script>`;
+          html = html.replace('</body>', test + '</body>');
+          fs.writeFileSync(file, html);
+          NODE
+          google-chrome --headless --no-sandbox --disable-gpu --disable-dev-shm-usage --virtual-time-budget=3000 --dump-dom file:///tmp/shelf-ledger-comparison.html > /tmp/shelf-interaction-dom.html 2>/tmp/shelf-interaction-chrome.log
+          node -e "const fs=require('fs');const h=fs.readFileSync('/tmp/shelf-interaction-dom.html','utf8');if(!h.includes('name=\\\"shelf-interaction-test\\\" content=\\\"PASS\\\"'))throw Error('Shelf interaction test did not pass');console.log('Shelf tab/card/dialog interaction smoke test passed')"
+      - name: Check shelf mobile viewport and image layout in Chrome
+        run: |
+          node - <<'NODE'
+          const fs=require('fs');
+          const file='/tmp/shelf-ledger-comparison.html';
+          let h=fs.readFileSync(file,'utf8');
+          const script=`<script>
+          (() => {
+            const errors=[];
+            const check=(ok,msg)=>{if(!ok)errors.push(msg)};
+            try {
+              const viewport=document.createElement('meta');
+              viewport.name='viewport';viewport.content='width=device-width, initial-scale=1';document.head.appendChild(viewport);
+              const width=document.documentElement.clientWidth;
+              check(width>=300 && width<=500,'unexpected Chrome headless viewport: '+width);
+              document.querySelector('[data-tab="memories"]').click();
+              const cards=[...document.querySelectorAll('[data-memory-id]')];
+              check(cards.length===34,'memory cards count');
+              for(const card of cards){
+                const rect=card.getBoundingClientRect();
+                check(rect.width>0 && rect.height>0,'card has zero dimensions');
+                check(rect.left>=-2 && rect.left<width,'card starts outside mobile viewport');
+              }
+              const posters=[...document.querySelectorAll('img')].filter(img=>img.closest('[data-memory-id]'));
+              // Poster images are loaded asynchronously and may be absent in offline fixture.\n              check(cards.length===34,'memory cards not available for poster check');
+              const bad=posters.filter(img=>img.getBoundingClientRect().width>width+2);
+              check(bad.length===0,'poster exceeds mobile viewport');
+            }catch(e){errors.push(String(e))}
+            const marker=document.createElement('meta');marker.name='shelf-mobile-test';
+            marker.content=errors.length?'FAIL:'+errors.slice(0,6).join(';'):'PASS';
+            document.head.appendChild(marker);
+          })();
+          </script>`;
+          fs.writeFileSync(file,h.replace('</body>',script+'</body>'));
+          NODE
+          google-chrome --headless --no-sandbox --disable-gpu --disable-dev-shm-usage --window-size=390,844 --force-device-scale-factor=1 --virtual-time-budget=3000 --dump-dom file:///tmp/shelf-ledger-comparison.html > /tmp/shelf-mobile-dom.html 2>/tmp/shelf-mobile-chrome.log
+          node -e "const h=require('fs').readFileSync('/tmp/shelf-mobile-dom.html','utf8');const m=h.match(/name=\\\"shelf-mobile-test\\\" content=\\\"([^\\\"]+)/);if(!m||m[1]!=='PASS')throw Error('Mobile layout check: '+(m?m[1]:'missing result'));console.log('Mobile viewport/card geometry check passed; poster loading not assessed')"
+      - name: Install Japanese fonts for accurate screenshot review
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends fonts-noto-cjk
+          fc-match 'Noto Sans CJK JP' | grep -i 'NotoSansCJK'
+      - name: Verify all restored editorial fields against the published source
+        run: |
+          node - <<'NODE'
+          const fs=require('node:fs');
+          const {extractLiteral}=require('./scripts/audit-movie-shelf');
+          const source=fs.readFileSync('movie_shelf_1980_1984.html','utf8');
+          const restored=fs.readFileSync('/tmp/shelf-ledger-comparison.html','utf8');
+          let total=0;
+          for(const name of ['memoryFilms','verifiedClassicInfo','approvedAwardStories']){
+            const before=extractLiteral(source,name);
+            const after=extractLiteral(restored,name);
+            if(JSON.stringify(before)!==JSON.stringify(after))throw Error('Editorial content/order changed: '+name);
+            const count=Array.isArray(before)?before.length:Object.keys(before).length;
+            total+=count;
+            console.log(name+': '+count+' entries, exact field/order match');
+          }
+          if(total!==74)throw Error('Expected 74 editorial entries, got '+total);
+          console.log('All 74 editorial entries match original source exactly');
+          NODE
+      - name: Emulate exact 390px mobile viewport via Chrome DevTools Protocol
+        run: |
+          google-chrome --headless --no-sandbox --disable-gpu --disable-dev-shm-usage --remote-debugging-port=9223 --user-data-dir=/tmp/shelf-chrome-cdp about:blank >/tmp/shelf-cdp.log 2>&1 &
+          CHROME_PID=$!
+          trap 'kill $CHROME_PID 2>/dev/null || true' EXIT
+          node - <<'NODE'
+          const fs=require('fs');
+          const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+          (async()=>{
+            let tabs;
+            for(let i=0;i<40;i++){
+              try {tabs=await(await fetch('http://127.0.0.1:9223/json')).json();if(tabs.find(t=>t.type==='page'))break;}catch{}
+              await sleep(250);
+            }
+            const tab=tabs?.find(t=>t.type==='page');
+            if(!tab)throw Error('Chrome CDP page unavailable');
+            const ws=new WebSocket(tab.webSocketDebuggerUrl);
+            await new Promise((resolve,reject)=>{ws.onopen=resolve;ws.onerror=reject});
+            let id=0;const pending=new Map();
+            ws.onmessage=e=>{const m=JSON.parse(e.data);if(m.id&&pending.has(m.id)){const p=pending.get(m.id);pending.delete(m.id);m.error?p.reject(Error(JSON.stringify(m.error))):p.resolve(m.result)}};
+            const send=(method,params={})=>new Promise((resolve,reject)=>{const n=++id;pending.set(n,{resolve,reject});ws.send(JSON.stringify({id:n,method,params}))});
+            await send('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});
+            await send('Page.enable');
+            await send('Page.navigate',{url:'file:///tmp/shelf-ledger-comparison.html'});
+            await sleep(2200);
+            const expression=`(()=>{const w=document.documentElement.clientWidth;const sections={awards:'award-section',rankings:'rank-section',memories:'memory-section'};const tabChecks={};for(const [tab,id] of Object.entries(sections)){document.querySelector('[data-tab="'+tab+'"]').click();tabChecks[tab]=Object.entries(sections).every(([name,sectionId])=>document.getElementById(sectionId).hidden===(name!==tab))&&document.querySelector('[data-tab="'+tab+'"]').classList.contains('active');}document.querySelector('[data-tab="memories"]').click();const cards=[...document.querySelectorAll('[data-memory-id]')];const bad=cards.filter(c=>{const r=c.getBoundingClientRect();return !r.width||!r.height||r.left < -2||r.left>=390});const first=memoryFilms[0];memoryCache.set(memoryKey(first),{poster:'https://image.tmdb.org/t/p/w342/test-poster.jpg'});renderMemoryCoversOnly();const classicChecks={};for(const [tab,selector] of [['awards','[data-award-title]'],['rankings','[data-ranking-title]']]){document.querySelector('[data-tab="'+tab+'"]').click();const trigger=document.querySelector(selector);trigger?.click();const dialog=document.getElementById('memory-dialog');classicChecks[tab]=!!trigger&&dialog.open&&document.getElementById('memory-dialog-content').textContent.trim().length>30;document.getElementById('memory-x').click();classicChecks[tab]&&=!dialog.open;}document.querySelector('[data-tab="memories"]').click();const firstCard=document.querySelector('[data-memory-id]');firstCard.click();const modal=document.getElementById('memory-dialog');const modalOk=modal.open&&document.getElementById('memory-dialog-content').textContent.includes(first.title);document.getElementById('memory-x').click();const closedOk=!modal.open;const cover=document.querySelector('[data-memory-id] .shelf3-cover img');const posterOk=!!cover && cover.getAttribute('src')==='https://image.tmdb.org/t/p/w342/test-poster.jpg' && cover.getAttribute('alt')===first.title+'のポスター';return {width:w,cards:cards.length,bad:bad.length,scrollWidth:document.documentElement.scrollWidth,posterDom:posterOk,tabChecks,classicChecks,modalOk,closedOk}})()`;
+            const result=await send('Runtime.evaluate',{expression,returnByValue:true,awaitPromise:true});
+            const v=result.result?.value;
+            // Save a real 390px screenshot for subsequent human visual review.
+            await send('Page.captureScreenshot',{format:'png',captureBeyondViewport:false}).then(p=>{
+              fs.writeFileSync('/tmp/shelf-mobile-390.png',Buffer.from(p.data,'base64'));
+            });
+            console.log('CDP mobile layout:',JSON.stringify(v));
+            ws.close();
+            if(!v||v.width!==390||v.cards!==34||v.bad!==0||!v.posterDom||!Object.values(v.tabChecks).every(Boolean)||!Object.values(v.classicChecks).every(Boolean)||!v.modalOk||!v.closedOk)throw Error('Exact 390px mobile card/tab/modal check failed');
+            console.log('Exact 390px mobile card layout and injected poster DOM passed; actual poster network loading not assessed');
+          })().catch(e=>{console.error(e);process.exitCode=1});
+          NODE
+      - name: Verify shelf poster image load and mobile text geometry offline
+        run: |
+          node - <<'NODE'
+          const fs=require('fs');
+          const file='/tmp/shelf-ledger-comparison.html';
+          let html=fs.readFileSync(file,'utf8');
+          const svg='<svg xmlns="http://www.w3.org/2000/svg" width="200" height="300"><rect width="200" height="300" fill="#445566"/></svg>';
+          const src='data:image/svg+xml;base64,'+Buffer.from(svg).toString('base64');
+          const script=`<script>
+          window.__shelfImageTest=async()=>{
+            const film=memoryFilms[0];
+            memoryCache.set(memoryKey(film),{poster:${JSON.stringify(src)}});
+            document.querySelector('[data-tab="memories"]').click();
+            renderMemoryCoversOnly();
+            const img=document.querySelector('[data-memory-id] .shelf3-cover img');
+            if(!img)return {ok:false,reason:'image element missing'};
+            await img.decode();
+            const r=img.getBoundingClientRect();
+            const title=document.querySelector('[data-memory-id] .shelf3-card-title');
+            const t=title.getBoundingClientRect();
+            return {ok:img.complete&&img.naturalWidth===200&&img.naturalHeight===300&&r.width>0&&r.right<=390&&t.width>0&&t.right<=390&&t.top>=r.top,posterWidth:r.width,titleWidth:t.width};
+          };
+          </script>`;
+          fs.writeFileSync(file,html.replace('</body>',script+'</body>'));
+          NODE
+          google-chrome --headless --no-sandbox --disable-gpu --disable-dev-shm-usage --remote-debugging-port=9224 --user-data-dir=/tmp/shelf-chrome-poster about:blank >/tmp/shelf-poster-cdp.log 2>&1 &
+          CHROME_PID=$!
+          trap 'kill $CHROME_PID 2>/dev/null || true' EXIT
+          node - <<'NODE'
+          const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+          (async()=>{
+            let tab;
+            for(let i=0;i<40;i++){try{tab=(await(await fetch('http://127.0.0.1:9224/json')).json()).find(x=>x.type==='page');if(tab)break}catch{}await sleep(250)}
+            if(!tab)throw Error('Chrome CDP unavailable');
+            const ws=new WebSocket(tab.webSocketDebuggerUrl);
+            await new Promise((ok,no)=>{ws.onopen=ok;ws.onerror=no});
+            let seq=0;const pending=new Map();
+            ws.onmessage=e=>{const m=JSON.parse(e.data);if(m.id&&pending.has(m.id)){const p=pending.get(m.id);pending.delete(m.id);m.error?p.reject(Error(JSON.stringify(m.error))):p.resolve(m.result)}};
+            const send=(method,params={})=>new Promise((resolve,reject)=>{const id=++seq;pending.set(id,{resolve,reject});ws.send(JSON.stringify({id,method,params}))});
+            await send('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});
+            await send('Page.enable');
+            await send('Page.navigate',{url:'file:///tmp/shelf-ledger-comparison.html'});
+            await sleep(1500);
+            const response=await send('Runtime.evaluate',{expression:'window.__shelfImageTest()',awaitPromise:true,returnByValue:true});
+            const result=response.result?.value;
+            console.log('Offline decoded poster/mobile geometry:',JSON.stringify(result));
+            ws.close();
+            if(!result?.ok)throw Error('Poster decode or mobile text geometry failed');
+          })().catch(e=>{console.error(e);process.exitCode=1});
+          NODE
+      - name: Capture offline desktop shelf screenshot
+        run: |
+          google-chrome --headless --no-sandbox --disable-gpu --disable-dev-shm-usage --hide-scrollbars --window-size=1280,900 --screenshot=/tmp/shelf-desktop-1280.png file:///tmp/shelf-ledger-comparison.html >/tmp/shelf-desktop.log 2>&1
+          test -s /tmp/shelf-desktop-1280.png
+          test -s /tmp/shelf-mobile-390.png
+      - name: Attach offline visual-review screenshots
+        uses: actions/upload-artifact@v4
+        with:
+          name: shelf-ledger-visual-review
+          path: |
+            /tmp/shelf-mobile-390.png
+            /tmp/shelf-desktop-1280.png
+          retention-days: 3
+          if-no-files-found: error
+      - name: Verify researched movie IDs against TMDB (read-only, branch push only)
+        continue-on-error: true
+        env:
+          TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
+        run: |
+          if [ -z "$TMDB_API_KEY" ]; then
+            echo 'TMDB verification not run: secret unavailable in this event.'
+            exit 0
+          fi
+          node scripts/verify-movie-shelf-tmdb.js
