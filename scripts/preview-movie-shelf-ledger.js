@@ -140,8 +140,75 @@ function preview(html) {
     review, snapshot, coverage: { sourceCounts, candidateCounts, retainedForReview, retainedEntries } };
 }
 
+
+// Read-only merge planner: never replace existing shared metadata or editorial
+// additions. Conflicting editorial values require a human decision.
+function planCandidateMerge(candidate, existing) {
+  const incoming = toLedgerCandidate(candidate);
+  if (existing == null) return { action: 'create-candidate', record: incoming, conflicts: [] };
+  if (existing.type !== incoming.type || existing.id !== incoming.id ||
+      typeof existing.title !== 'string' || !existing.title.trim()) {
+    return { action: 'blocked', record: null, conflicts: ['identity-or-existing-record'] };
+  }
+  if (existing.title !== incoming.title) {
+    return { action: 'blocked', record: null, conflicts: ['title-mismatch'] };
+  }
+  const currentExtras = existing.pageExtras?.movieShelf || {};
+  const nextExtras = incoming.pageExtras.movieShelf;
+  const conflicts = Object.keys(nextExtras).filter(key =>
+    Object.hasOwn(currentExtras, key) &&
+    JSON.stringify(currentExtras[key]) !== JSON.stringify(nextExtras[key]));
+  if (conflicts.length) return { action: 'review-required', record: null, conflicts };
+  // Preserve all existing shared fields and all other pages' additions.
+  const record = JSON.parse(JSON.stringify(existing));
+  record.pageExtras = record.pageExtras || {};
+  record.pageExtras.movieShelf = { ...currentExtras, ...nextExtras };
+  return { action: 'merge-candidate', record, conflicts: [] };
+}
+
+// Local assertion suite for the import boundary; no network or Redis writes.
+// Run with: node scripts/preview-movie-shelf-ledger.js --check
+function checkCandidateMerge() {
+  const assert = require('node:assert/strict');
+  const { normalizeWork } = require('../api/_work-ledger');
+  const sample = { key: 'movie:42', type: 'movie', tmdbId: 42,
+    title: '作品', pageExtras: { movieShelf: { memoryFilms: { title: '作品', id: 42, intro: '本文' } } } };
+  const fresh = planCandidateMerge(sample, null);
+  assert.equal(fresh.action, 'create-candidate');
+  assert.deepEqual(normalizeWork('movie', 42, fresh.record).pageExtras, sample.pageExtras);
+  const existing = normalizeWork('movie', 42, { title: '作品', overview: '共通説明',
+    pageExtras: { otherPage: { notes: '保持' }, movieShelf: { awards: '既存賞' } } });
+  const before = structuredClone(existing);
+  const merged = planCandidateMerge(sample, existing);
+  assert.equal(merged.action, 'merge-candidate');
+  assert.equal(merged.record.overview, '共通説明');
+  assert.equal(merged.record.pageExtras.otherPage.notes, '保持');
+  assert.equal(merged.record.pageExtras.movieShelf.awards, '既存賞');
+  assert.equal(merged.record.pageExtras.movieShelf.memoryFilms.intro, '本文');
+  assert.deepEqual(existing, before);
+  const conflict = planCandidateMerge(sample, { ...existing, pageExtras: {
+    movieShelf: { memoryFilms: { title: '作品', id: 42, intro: '人が修正した本文' } } } });
+  assert.equal(conflict.action, 'review-required');
+  assert.equal(conflict.record, null);
+  assert.deepEqual(conflict.conflicts, ['memoryFilms']);
+  assert.equal(planCandidateMerge(sample, { ...existing, title: '別作品' }).action, 'blocked');
+  assert.throws(() => planCandidateMerge({ ...sample, key: 'movie:99' }, existing));
+  return true;
+}
+
 if (require.main === module) {
   const html = fs.readFileSync(path.join(__dirname, '../movie_shelf_1980_1984.html'), 'utf8');
-  console.log(JSON.stringify(preview(html), null, 2));
+  if (process.argv.includes('--check')) {
+    checkCandidateMerge();
+    const result = preview(html);
+    if (!validatePreview(result).valid) throw new Error('Preview validation failed');
+    for (const candidate of result.records) {
+      const incoming = toLedgerCandidate(candidate);
+      const normalized = require('../api/_work-ledger').normalizeWork(incoming.type, incoming.id, incoming);
+      if (JSON.stringify(normalized.pageExtras) !== JSON.stringify(candidate.pageExtras))
+        throw new Error('Editorial content changed for ' + candidate.key);
+    }
+    console.log('Read-only checks passed for ' + result.records.length + ' candidates');
+  } else console.log(JSON.stringify(preview(html), null, 2));
 }
-module.exports = { preview, validatePreview, toLedgerCandidate };
+module.exports = { preview, validatePreview, toLedgerCandidate, planCandidateMerge, checkCandidateMerge };
