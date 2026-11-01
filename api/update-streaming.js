@@ -5,7 +5,7 @@ const works=require('../data/streaming-works.json');
 const KEYPREFIX='doko:watch:v3:';
 const LOCK='doko:watch:v3:refresh-lock';
 const CONCURRENCY=6;
-// Keep the lock longer than the longest plausible 265-title batch; never overlap refresh jobs.
+// The lock prevents overlapping refreshes; Vercel's function timeout is a separate limit.
 const LOCK_TTL_SECONDS=900;
 function windowJST(now=Date.now()){
  const d=new Date(now+9*3600000);const hour=d.getUTCHours();
