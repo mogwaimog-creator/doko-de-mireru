@@ -568,7 +568,12 @@ if(known&&item?.id&&item?.content_type){
  }catch(e){providerUnknown=true;console.warn('共通配信情報取得失敗:',x.title,e)}
 }
 if(token!==streamToken||!tr.isConnected)return;
-if(tr.dataset.providerStale==='1'){tr.title='前回取得した配信情報です（更新未確認）';tr.style.outline='2px solid #b42318';tr.style.outlineOffset='-2px';}
+if(tr.dataset.providerStale==='1'){
+ tr.title='前回取得した配信情報です（更新未確認）';
+ tr.style.outline='2px solid #b42318';tr.style.outlineOffset='-2px';
+ const warning=document.createElement('span');warning.textContent='更新未確認';warning.style.cssText='color:#b42318;font-size:14px;font-weight:bold;display:block';
+ const first=tr.querySelector('td');if(first)first.appendChild(warning);
+}
 if(providerUnknown&&known&&item?.id){
  gundamShowProviderRetry(tr,item.id,gundamApiType(item));
  continue;
