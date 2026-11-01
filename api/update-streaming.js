@@ -14,6 +14,10 @@ function windowJST(now=Date.now()){
  const day=(hour<6?new Date(d.getTime()-86400000):d).toISOString().slice(0,10);
  return `${day}-${hour<6?'18':hour<18?'06':'18'}`;
 }
+function needsRefresh(record,win,now=Date.now()){
+ const checked=Date.parse(record?.checkedAt);
+ return record?.window!==win || !Array.isArray(record?.flatrate) || !Number.isFinite(checked) || checked>now+60000;
+}
 async function provider(work){
  const key=process.env.TMDB_API_KEY;
  if(!key)throw new Error('TMDB_API_KEY unavailable');
@@ -40,7 +44,7 @@ module.exports=async(req,res)=>{
    const pending=[];
    for(let i=0;i<works.length;i++){
      let record=null;try{if(old?.[i])record=JSON.parse(old[i]);}catch{}
-     if(record?.window!==win || !Array.isArray(record?.flatrate) || !Number.isFinite(Date.parse(record?.checkedAt)) || Date.parse(record.checkedAt)>Date.now()+60000)pending.push(works[i]);
+     if(needsRefresh(record,win))pending.push(works[i]);
    }
    let cursor=0,updated=0,failed=0;
    const deadline=Date.now()+WORK_BUDGET_MS;
@@ -62,4 +66,4 @@ module.exports=async(req,res)=>{
  }catch(e){console.error('update-streaming',e.message);return res.status(503).json({error:'Update failed'});}
  finally{if(acquired){try{await command(['EVAL',"if redis.call('GET',KEYS[1])==ARGV[1] then return redis.call('DEL',KEYS[1]) else return 0 end",'1',LOCK,token]);}catch(e){console.error('unlock',e.message);}}}
 };
-module.exports._test={windowJST};
+module.exports._test={windowJST,needsRefresh};
