@@ -74,3 +74,16 @@ test('read-only snapshot retains original editorial text and independent source 
   assert.ok(Object.keys(snapshot.sources.approvedAwardStories).length > 0);
   assert.equal(snapshot.fingerprints.memoryFilms['movie:694:シャイニング'].length, 64);
 });
+
+test('audit identifies conflicting IDs without discarding any editorial record', () => {
+  const original = extractLiteral(html, 'memoryFilms')[0];
+  const changed = html.replace(
+    '"title":"13日の金曜日","id":4488',
+    '"title":"13日の金曜日","id":694'
+  );
+  assert.notEqual(changed, html);
+  const result = audit(changed);
+  assert.ok(result.conflictingMemoryIds.some(item =>
+    item.id === 694 && item.titles.includes(original.title) && item.titles.includes('13日の金曜日')));
+  assert.equal(result.memoryFilms, audit(html).memoryFilms);
+});
