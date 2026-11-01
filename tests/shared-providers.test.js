@@ -783,3 +783,22 @@ test('current-window cache with invalid timestamp cannot masquerade as fresh', a
     assert.deepEqual(result.availability.flatrate,[{provider_id:9}]);
   }
 });
+
+
+test('shared cache cannot claim the current window with an earlier-window timestamp', async () => {
+  const now = new Date('2026-11-01T09:05:00Z'); // JST 18:05
+  const id = 71003;
+  store.set(keys('movie',id).data,JSON.stringify({
+    window:windowId(now),
+    availability:{flatrate:[{provider_id:8}]},
+    lastSuccessfulAt:'2026-11-01T08:59:00Z' // JST 17:59
+  }));
+  let calls = 0;
+  const result = await getSharedProviders('movie',id,async()=>{
+    calls++;
+    return {flatrate:[{provider_id:9}]};
+  },now);
+  assert.equal(calls,1);
+  assert.equal(result.source,'tmdb');
+  assert.deepEqual(result.availability.flatrate,[{provider_id:9}]);
+});
