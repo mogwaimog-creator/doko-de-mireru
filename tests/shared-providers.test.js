@@ -994,6 +994,10 @@ test('series batch treats valid shared rent-only JP as confirmed empty flatrate'
 
 test('opt-in series visit refreshes one work and shares result without another TMDB request',async()=>{
   const modulePath=require.resolve('../api/series-watch');
+  const sharedPath=require.resolve('../api/_shared-providers');
+  const detailPath=require.resolve('../api/_detail-providers');
+  const oldShared=require.cache[sharedPath];
+  const oldDetail=require.cache[detailPath];
   const originalCommand=redis.command;
   const originalFetch=global.fetch;
   const flags=['SERIES_WATCH_REFRESH_ENABLED','SERIES_WATCH_SHARED_READ_ENABLED','SHARED_PROVIDER_ENABLED','TMDB_API_KEY'];
@@ -1017,6 +1021,8 @@ test('opt-in series visit refreshes one work and shares result without another T
     };
     global.fetch=async()=>{tmdbCalls++;return {ok:true,json:async()=>({results:{JP:{flatrate:[{provider_id:8,logo_path:'/logo.png'}]}}})};};
     delete require.cache[modulePath];
+    delete require.cache[sharedPath];
+    delete require.cache[detailPath];
     const handler=require('../api/series-watch');
     const request=async()=>{
       let result;
@@ -1036,5 +1042,9 @@ test('opt-in series visit refreshes one work and shares result without another T
     global.fetch=originalFetch;
     flags.forEach((k,i)=>{if(saved[i]===undefined)delete process.env[k];else process.env[k]=saved[i];});
     delete require.cache[modulePath];
+    delete require.cache[sharedPath];
+    delete require.cache[detailPath];
+    if(oldShared)require.cache[sharedPath]=oldShared;
+    if(oldDetail)require.cache[detailPath]=oldDetail;
   }
 });
