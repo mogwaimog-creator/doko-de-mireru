@@ -4,6 +4,67 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { extractLiteral, buildEditorialSnapshot, resolveEditorialTitleIds, audit } = require('./audit-movie-shelf');
 
+
+// Research candidates only: IDs gathered from external references have not been
+// verified against TMDB directly. Never treat this map as production authority.
+const researchedIdCandidates = Object.freeze({
+  'オール・ザット・ジャズ':16858,'アトランティック・シティ':23954,
+  '歌え！ロレッタ 愛のために':16769,'ハートランド':49427,'普通の人々':16619,
+  '炎のランナー':9443,'急げ、急げ':47211,'鉄の男':225,'鉛の時代':42142,
+  'ガンジー':783,'ミッシング':15600,'ことの次第':30363,'トッツィー':9576,
+  'ベロニカ・フォスのあこがれ':2262,'路（みち）':52556,'アセンダンシー':163143,
+  'カルメンという名の女':32689,'愛と追憶の日々':11050,'蜂の巣':104435,
+  '愛のイエントル':10269,'太陽の年':42096,'アマデウス':279,
+  'ラヴ・ストリームス':52109,'パリ、テキサス':655,
+  'ロマンシング・ストーン／秘宝の谷':9326
+});
+
+function researchPreview(html, diagnosticHtml) {
+  const baseline = preview(html);
+  const catalogMatch = diagnosticHtml.match(/const items=(\[[\s\S]*?\]);\s*const known=/);
+  if (!catalogMatch) throw Error('Missing diagnostic catalog');
+  const catalog = JSON.parse(catalogMatch[1]);
+  const remaining = Object.values(baseline.coverage.retainedEntries).flat();
+  const titles = [...new Set(remaining.map(entry => entry.title))];
+  const ids = Object.values(researchedIdCandidates);
+  if (titles.length !== ids.length || new Set(ids).size !== ids.length ||
+      titles.some(title => !Number.isSafeInteger(researchedIdCandidates[title]) ||
+        catalog.filter(entry => entry.title === title).length !== 1))
+    throw Error('Research candidates do not match unresolved source and catalog');
+  const existingIds = new Set(baseline.records.map(record => record.tmdbId));
+  if (ids.some(id => existingIds.has(id))) throw Error('Research ID collides with existing ledger candidate');
+  const fixed = extractLiteral(html, 'classicKnownIds');
+  if (Object.entries(fixed).some(([title,id]) =>
+    researchedIdCandidates[title] && researchedIdCandidates[title] !== id ||
+    ids.includes(id) && researchedIdCandidates[title] !== id))
+    throw Error('Research ID collides with fixed ID');
+  // Do not mutate baseline or silently promote unverified research to production.
+  const researchRecords = titles.map(title => ({
+    key: 'movie:' + researchedIdCandidates[title], type: 'movie',
+    tmdbId: researchedIdCandidates[title], title, manualReview: true,
+    verificationStatus: 'external-candidate-unverified-by-tmdb',
+    pageExtras: { movieShelf: Object.fromEntries(
+      ['verifiedClassicInfo','approvedAwardStories']
+        .filter(section => Object.hasOwn(baseline.snapshot.sources[section], title))
+        .map(section => [section, structuredClone(baseline.snapshot.sources[section][title])])
+    ) }
+  }));
+  const all = [...baseline.records, ...researchRecords];
+  if (new Set(all.map(record => record.key)).size !== all.length)
+    throw Error('Duplicate ledger key in research preview');
+  const coverage = {
+    ...baseline.coverage,
+    candidateCounts: Object.fromEntries(Object.keys(baseline.coverage.sourceCounts).map(section =>
+      [section, baseline.coverage.candidateCounts[section] +
+        researchRecords.filter(record => Object.hasOwn(record.pageExtras.movieShelf, section)).length]))
+  };
+  if (Object.keys(coverage.sourceCounts).some(section =>
+    coverage.candidateCounts[section] !== coverage.sourceCounts[section]))
+    throw Error('Research preview did not preserve all source entries');
+  return { mode:'read-only', writes:0, baseline, researchRecords, records:all,
+    coverage, verifiedByTmdb:false };
+}
+
 // Convert a preview record into the shared ledger's exact input shape.
  // This is a candidate only: never call putWork or Redis from this script.
 function toLedgerCandidate(record) {
@@ -218,6 +279,18 @@ if (require.main === module) {
       if (JSON.stringify(normalized.pageExtras) !== JSON.stringify(candidate.pageExtras))
         throw new Error('Editorial content changed for ' + candidate.key);
     }
+    const research = researchPreview(html, fs.readFileSync(path.join(__dirname, '../shelf-check.html'), 'utf8'));
+    if (research.records.length !== 66 || research.researchRecords.length !== 25 ||
+        research.writes !== 0 || research.verifiedByTmdb !== false)
+      throw Error('Research preview preflight failed');
+    for (const record of research.researchRecords) {
+      const normalized = require('../api/_work-ledger').normalizeWork('movie', record.tmdbId, toLedgerCandidate(record));
+      if (JSON.stringify(normalized.pageExtras) !== JSON.stringify(record.pageExtras))
+        throw Error('Research editorial content changed: ' + record.key);
+    }
+    console.log('Research-only candidates: ' + research.researchRecords.length +
+      ', total preview records: ' + research.records.length +
+      ', TMDB direct verification: pending');
     console.log('Read-only checks passed for ' + result.records.length + ' candidates');
     console.log('Source coverage: ' + JSON.stringify(result.coverage));
     console.log('Unique retained titles: ' + JSON.stringify([...new Set(Object.values(result.coverage.retainedEntries).flat().map(entry => entry.title))]));
@@ -228,4 +301,4 @@ if (require.main === module) {
     }, {})));
   } else console.log(JSON.stringify(preview(html), null, 2));
 }
-module.exports = { preview, validatePreview, toLedgerCandidate, planCandidateMerge, checkCandidateMerge };
+module.exports = { preview, validatePreview, toLedgerCandidate, planCandidateMerge, checkCandidateMerge, researchPreview, researchedIdCandidates };
