@@ -2336,6 +2336,7 @@ async function loadEvaStreaming(){
     if(!providers.length){element.innerHTML='<span class="eva-streaming-none">見放題情報は未確認です</span>';return}
     const label=document.createElement('span');label.className='eva-streaming-label';label.textContent='見放題';element.appendChild(label);
     providers.forEach(p=>{const img=document.createElement('img');img.src='https://image.tmdb.org/t/p/w92'+p.logo_path;img.alt=p.provider_name||'配信サービス';img.title=p.provider_name||'';img.loading='lazy';element.appendChild(img)});
+    if(record.stale){const warning=document.createElement('span');warning.textContent=' ※前回取得した配信情報です（更新未確認）';warning.style.cssText='color:#b42318;font-size:14px';element.appendChild(warning)}
   });
 }
 loadEvaStreaming();
