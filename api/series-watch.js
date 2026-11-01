@@ -65,7 +65,33 @@ module.exports=async(req,res)=>{
     }
     // Reserve a separate opt-in path for bounded series refresh.
     if(process.env.SERIES_WATCH_REFRESH_ENABLED==='1' && process.env.SHARED_PROVIDER_ENABLED==='1'){
-      // Refresh budget and provider calls must be validated before activation.
+      try{
+        const {windowId}=require('./_shared-providers');
+        const window=windowId();
+        const candidates=works.filter(w=>!providers[w.type+':'+w.id]||providers[w.type+':'+w.id].stale);
+        if(candidates.length){
+          const budget='doko:series-refresh-budget:v1:'+req.query.series+':'+window;
+          const acquired=await command(['SET',budget,'1','NX','EX',600]);
+          if(acquired==='OK'){
+            const work=candidates[0];
+            const {detailProviders}=require('./_detail-providers');
+            const result=await detailProviders(work.type,work.id,async()=>{
+              const token=process.env.TMDB_API_KEY;
+              if(!token)throw new Error('TMDB key unavailable');
+              const url='https://api.themoviedb.org/3/'+work.type+'/'+work.id+'/watch/providers?api_key='+encodeURIComponent(token);
+              const response=await fetch(url,{signal:AbortSignal.timeout(8000)});
+              if(!response.ok)throw new Error('TMDB HTTP '+response.status);
+              return response.json();
+            });
+            const key=work.type+':'+work.id;
+            if(result.availability&&Array.isArray(result.availability.flatrate)){
+              providers[key]={flatrate:result.availability.flatrate,checkedAt:result.lastSuccessfulAt||null,stale:result.stale===true};
+              const index=failures.indexOf(key);
+              if(index>=0)failures.splice(index,1);
+            }
+          }
+        }
+      }catch(error){console.error('SERIES BOUNDED REFRESH FAILED',error.message);}
     }
     return res.status(200).json({providers,failures,complete:failures.length===0});
   }catch(e){console.error('series-watch read:',e.message);return res.status(503).json({error:'保存済みの配信情報を読み込めません'});}
