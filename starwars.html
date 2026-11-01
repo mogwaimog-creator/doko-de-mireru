@@ -212,7 +212,7 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
     ['mando','マンダロリアン',2019,'series',19,82856],
     ['boba','ボバ・フェット／The Book of Boba Fett',2021,'series',20,115036],
     ['ahsoka','アソーカ',2023,'series',21,114461],
-    ['skeleton','スケルトン・クルー',2024,'series',22,225011],
+    ['skeleton','スケルトン・クルー',2024,'series',22,202879],
     ['grogu','スター・ウォーズ／マンダロリアン・アンド・グローグー',2026,'spinoff',23,1228710],
     ['resistance','スター・ウォーズ レジスタンス',2018,'animation',24,79093],
     ['seven','エピソード7／フォースの覚醒',2015,'saga',25,140607],
@@ -289,7 +289,7 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
     }).join('');
     document.querySelectorAll('.providers').forEach(box=>providerObserver.observe(box));
   }
-  // 共通台帳に保存済みの配信情報のみ取得。作品ごとの検索APIは呼び出さない。
+  // Shared cached watch data: no per-title /api/search calls.
   const apiBase=location.protocol==='file:'?'https://doko-de-mireru.com':'';
   const sharedProviders=fetch(apiBase+'/api/series-watch?series=starwars')
     .then(r=>{if(!r.ok)throw Error('配信キャッシュ取得失敗');return r.json()})
@@ -305,20 +305,10 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
       return;
     }
     const unique=record.flatrate.filter((p,i,all)=>p&&p.logo_path&&all.findIndex(x=>x&&x.provider_id===p.provider_id)===i);
-    if(!unique.length){
-      box.textContent=record.stale?'前回取得時は見放題の掲載情報なし（更新遅延中）':'見放題の配信情報はありません';
-      box.style.color=record.stale?'#b91c1c':'';
-      return;
-    }
+    if(!unique.length){box.textContent=record.stale?'前回取得時は見放題の掲載情報なし（更新遅延中）':'見放題の配信情報はありません';box.style.color=record.stale?'#b91c1c':'';return}
     box.innerHTML='<span class="providers-label">'+(record.stale?'前回取得時の見放題（更新遅延中）':'見放題')+'</span>';
     box.style.color=record.stale?'#b91c1c':'';
-    unique.forEach(p=>{
-      const img=document.createElement('img');
-      img.src='https://image.tmdb.org/t/p/w92'+p.logo_path;
-      img.alt=p.provider_name||'配信サービス';
-      img.loading='lazy';
-      box.appendChild(img);
-    });
+    unique.forEach(p=>{const img=document.createElement('img');img.src='https://image.tmdb.org/t/p/w92'+p.logo_path;img.alt=p.provider_name||'配信サービス';img.loading='lazy';box.appendChild(img)});
   }
   const providerObserver=new IntersectionObserver((entries,observer)=>entries.forEach(entry=>{if(entry.isIntersecting){observer.unobserve(entry.target);loadProviders(entry.target)}}),{rootMargin:'200px'});
   const panels={beginner:document.getElementById('sw-beginner-panel'),catalog:document.getElementById('sw-catalog-panel'),people:document.getElementById('sw-people-panel'),glossary:document.getElementById('sw-glossary-panel')};
