@@ -5,6 +5,8 @@ const works=require('../data/streaming-works.json');
 const KEYPREFIX='doko:watch:v3:';
 const LOCK='doko:watch:v3:refresh-lock';
 const CONCURRENCY=6;
+// Keep the lock longer than the longest plausible 265-title batch; never overlap refresh jobs.
+const LOCK_TTL_SECONDS=900;
 function windowJST(now=Date.now()){
  const d=new Date(now+9*3600000);const hour=d.getUTCHours();
  const day=(hour<6?new Date(d.getTime()-86400000):d).toISOString().slice(0,10);
@@ -27,7 +29,7 @@ module.exports=async(req,res)=>{
  const token=`${Date.now()}:${Math.random()}`;
  let acquired=false;
  try{
-   acquired=(await command(['SET',LOCK,token,'NX','EX',180]))==='OK';
+   acquired=(await command(['SET',LOCK,token,'NX','EX',LOCK_TTL_SECONDS]))==='OK';
    if(!acquired)return res.status(409).json({error:'Update already running'});
    const win=windowJST();
    // Skip successful items within the current update window; retries only missing/failed entries.
