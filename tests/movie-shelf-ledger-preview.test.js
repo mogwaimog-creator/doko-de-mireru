@@ -59,3 +59,13 @@ test('cross-section title collision blocks both candidates instead of choosing o
   assert.deepEqual(JSON.parse(JSON.stringify(result.snapshot.sources.memoryFilms)),
     JSON.parse(JSON.stringify(memory)));
 });
+
+test('coverage accounts for every editorial source entry', () => {
+  const result = preview(html);
+  for (const name of ['memoryFilms', 'verifiedClassicInfo', 'approvedAwardStories']) {
+    assert.equal(result.coverage.sourceCounts[name],
+      result.coverage.candidateCounts[name] + result.coverage.retainedForReview[name]);
+    assert.ok(result.coverage.retainedForReview[name] >= 0);
+  }
+  assert.equal(result.writes, 0);
+});
