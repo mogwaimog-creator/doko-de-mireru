@@ -3,7 +3,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
-const { report, formatReviewSummary } = require('../scripts/report-movie-shelf-migration');
+const { report, formatReviewSummary, reviewQueue } = require('../scripts/report-movie-shelf-migration');
 
 const html = fs.readFileSync(path.join(__dirname, '../movie_shelf_1980_1984.html'), 'utf8');
 test('read-only migration report accounts for all editorial sections', () => {
@@ -41,4 +41,13 @@ test('Japanese review summary shows counts and states no automatic import', () =
   assert.match(summary, /ID衝突: [0-9]+件/);
   assert.match(summary, /文章のID確認待ち: [0-9]+件/);
   assert.match(summary, /自動登録: 行いません/);
+});
+
+test('review queue contains actionable title-level issues without changing data', () => {
+  const result = report(html);
+  const queue = reviewQueue(result);
+  assert.ok(Array.isArray(queue));
+  assert.equal(queue.filter(x => x.kind === 'editorial-id-review').length, result.editorialIdReview.length);
+  assert.ok(queue.every(x => typeof x.title === 'string' && x.title.length > 0));
+  assert.equal(result.writes, 0);
 });
