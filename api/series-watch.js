@@ -34,11 +34,14 @@ module.exports=async(req,res)=>{
       failures.push(keys[i]);
     }
     // Optional read-only compatibility with the 06:00/18:00 shared cache.
+    let sharedReadOk=process.env.SERIES_WATCH_SHARED_READ_ENABLED!=='1';
     if(process.env.SERIES_WATCH_SHARED_READ_ENABLED==='1'){
       try{
         const {windowId}=require('./_shared-providers');
         const current=windowId();
         const shared=await command(['MGET',...keys.map(k=>'doko:provider-window:v1:'+k)]);
+        if(!Array.isArray(shared)||shared.length!==keys.length)throw new Error('Incomplete shared cache batch');
+        sharedReadOk=true;
         for(let i=0;i<keys.length;i++){
           if(!shared?.[i])continue;
           let entry;
@@ -63,8 +66,9 @@ module.exports=async(req,res)=>{
         }
       }catch(error){console.error('Shared provider batch read failed:',error.message);}
     }
-    // Reserve a separate opt-in path for bounded series refresh.
-    if(process.env.SERIES_WATCH_REFRESH_ENABLED==='1' && process.env.SHARED_PROVIDER_ENABLED==='1' && process.env.SERIES_WATCH_SHARED_READ_ENABLED==='1' && process.env.TMDB_API_KEY){
+    // Bounded refresh is opt-in and only runs after the shared cache is readable.
+    // A cache read failure must never turn into uncontrolled TMDB calls.
+    if(process.env.SERIES_WATCH_REFRESH_ENABLED==='1' && process.env.SHARED_PROVIDER_ENABLED==='1' && process.env.SERIES_WATCH_SHARED_READ_ENABLED==='1' && sharedReadOk && process.env.TMDB_API_KEY){
       try{
         const {windowId}=require('./_shared-providers');
         const window=windowId();
