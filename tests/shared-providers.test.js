@@ -1048,3 +1048,60 @@ test('opt-in series visit refreshes one work and shares result without another T
     if(oldDetail)require.cache[detailPath]=oldDetail;
   }
 });
+
+
+test('series candidate rotation can advance when an earlier title is already fresh',async()=>{
+  const modulePath=require.resolve('../api/series-watch');
+  const savedCommand=redis.command;
+  const flags=['SERIES_WATCH_REFRESH_ENABLED','SERIES_WATCH_SHARED_READ_ENABLED','SHARED_PROVIDER_ENABLED','TMDB_API_KEY'];
+  const saved=flags.map(k=>process.env[k]);
+  const originalFetch=global.fetch;
+  const originalNow=Date.now;
+  const sharedPath=require.resolve('../api/_shared-providers');
+  const detailPath=require.resolve('../api/_detail-providers');
+  const oldShared=require.cache[sharedPath],oldDetail=require.cache[detailPath];
+  const data=new Map();
+  const requested=[];
+  try{
+    flags.forEach(k=>process.env[k]='1');
+    Date.now=()=>Date.parse('2026-11-01T18:00:00Z');
+    redis.command=async args=>{
+      const [op,key,value,...rest]=args;
+      if(op==='MGET')return args.slice(1).map(k=>data.get(k)||null);
+      if(op==='GET')return data.get(key)||null;
+      if(op==='SET'){
+        if(rest[0]==='NX'&&data.has(key))return null;
+        data.set(key,value);return 'OK';
+      }
+      if(op==='ZREM'||op==='ZADD')return 1;
+      throw Error('Unexpected '+op);
+    };
+    global.fetch=async url=>{
+      requested.push(String(url));
+      return {ok:true,json:async()=>({results:{JP:{flatrate:[{provider_id:8}]}}})};
+    };
+    delete require.cache[modulePath];
+    delete require.cache[sharedPath];
+    delete require.cache[detailPath];
+    const handler=require('../api/series-watch');
+    const req={method:'GET',query:{series:'minions'}};
+    const run=async()=>{
+      await handler(req,{setHeader(){},status(){return this;},json(){return this;}});
+    };
+    await run();
+    assert.equal(requested.length,1);
+    const firstId=requested[0].match(/\/movie\/(\d+)\/watch/)[1];
+    assert.ok(firstId);
+    assert.equal(data.size>0,true);
+  }finally{
+    redis.command=savedCommand;
+    global.fetch=originalFetch;
+    Date.now=originalNow;
+    flags.forEach((k,i)=>{if(saved[i]===undefined)delete process.env[k];else process.env[k]=saved[i];});
+    delete require.cache[modulePath];
+    delete require.cache[sharedPath];
+    delete require.cache[detailPath];
+    if(oldShared)require.cache[sharedPath]=oldShared;
+    if(oldDetail)require.cache[detailPath]=oldDetail;
+  }
+});
