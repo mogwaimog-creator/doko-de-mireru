@@ -58,6 +58,10 @@ jobs:
         run: node --test tests/*.test.js
       - name: Verify movie shelf import boundary without writes
         run: node scripts/preview-movie-shelf-ledger.js --check
+      - name: Build local-only ledger shelf comparison HTML
+        run: |
+          node scripts/build-shelf-ledger-preview.js /tmp/shelf-ledger-comparison.html
+          node -e "const fs=require('fs'); const h=fs.readFileSync('/tmp/shelf-ledger-comparison.html','utf8'); if(!h.includes('開発用・台帳復元表示確認') || !h.includes('function renderMemories()') || !h.includes('function setTab(tab)')) process.exit(1); console.log('Local HTML comparison fixture verified')"
       - name: Verify researched movie IDs against TMDB (read-only, branch push only)
         continue-on-error: true
         env:
