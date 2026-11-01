@@ -117,3 +117,16 @@ test('Gundam season-specific titles are not registered as standalone parent-show
  assert.ok(html.includes('gundamSeasonWorks'));
  assert.ok(html.includes('親番組の情報を流用していません'));
 });
+
+const {needsRefresh}=require('../api/update-streaming.js')._test;
+test('refreshes malformed or incomplete cache records in the same update window',()=>{
+ const now=Date.parse('2026-11-02T09:30:00Z');
+ const win='2026-11-02-18';
+ const good={window:win,flatrate:[],checkedAt:'2026-11-02T09:00:00Z'};
+ assert.equal(needsRefresh(good,win,now),false);
+ assert.equal(needsRefresh(null,win,now),true);
+ assert.equal(needsRefresh({...good,window:'2026-11-02-06'},win,now),true);
+ assert.equal(needsRefresh({...good,flatrate:null},win,now),true);
+ assert.equal(needsRefresh({...good,checkedAt:'invalid'},win,now),true);
+ assert.equal(needsRefresh({...good,checkedAt:'2026-11-02T09:32:00Z'},win,now),true);
+});
