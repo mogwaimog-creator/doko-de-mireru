@@ -7,6 +7,8 @@ const LOCK='doko:watch:v3:refresh-lock';
 const CONCURRENCY=6;
 // The lock prevents overlapping refreshes; Vercel's function timeout is a separate limit.
 const LOCK_TTL_SECONDS=900;
+// Stop launching new title requests before the standard 300-second Fluid Compute limit.
+const WORK_BUDGET_MS=240000;
 function windowJST(now=Date.now()){
  const d=new Date(now+9*3600000);const hour=d.getUTCHours();
  const day=(hour<6?new Date(d.getTime()-86400000):d).toISOString().slice(0,10);
@@ -41,8 +43,10 @@ module.exports=async(req,res)=>{
      if(record?.window!==win)pending.push(works[i]);
    }
    let cursor=0,updated=0,failed=0;
+   const deadline=Date.now()+WORK_BUDGET_MS;
    async function worker(){
      while(cursor<pending.length){
+       if(Date.now()>=deadline)break;
        const w=pending[cursor++];
        try{
          const flatrate=await provider(w);
@@ -53,7 +57,8 @@ module.exports=async(req,res)=>{
      }
    }
    await Promise.all(Array.from({length:Math.min(CONCURRENCY,pending.length)},worker));
-   return res.status(200).json({window:win,total:works.length,alreadyCurrent:works.length-pending.length,updated,failed,complete:failed===0});
+   const deferred=pending.length-cursor;
+   return res.status(200).json({window:win,total:works.length,alreadyCurrent:works.length-pending.length,updated,failed,deferred,complete:failed===0&&deferred===0});
  }catch(e){console.error('update-streaming',e.message);return res.status(503).json({error:'Update failed'});}
  finally{if(acquired){try{await command(['EVAL',"if redis.call('GET',KEYS[1])==ARGV[1] then return redis.call('DEL',KEYS[1]) else return 0 end",'1',LOCK,token]);}catch(e){console.error('unlock',e.message);}}}
 };
