@@ -192,7 +192,7 @@ test('cron schedule matches 06:00 and 18:00 Japan time',()=>{
 
 test('all 28 Star Wars titles have unique canonical IDs and detail links',()=>{
  const html=fs.readFileSync(path.resolve(__dirname,'../starwars.html'),'utf8');
- const rows=[...html.matchAll(/\\['([^']+)','([^']+)',(\\d+),'([^']+)',(\\d+),(\\d+)\\]/g)];
+ const rows=[...html.matchAll(/\['([^']+)','([^']+)',(\d+),'([^']+)',(\d+),(\d+)\]/g)];
  assert.equal(rows.length,28,'unexpected Star Wars title count');
  const seen=new Set();
  for(const row of rows){
@@ -204,7 +204,7 @@ test('all 28 Star Wars titles have unique canonical IDs and detail links',()=>{
   assert.ok(keyset.has(canonical),'missing registered '+canonical);
  }
  assert.ok(html.includes('detail.html?id=${w.id}&type=${type}'),'dynamic detail link is missing');
- const staticCards=[...html.matchAll(/<div class="providers" data-id="(\\d+)" data-type="(movie|tv)"/g)];
+ const staticCards=[...html.matchAll(/<div class="providers" data-id="(\d+)" data-type="(movie|tv)"/g)];
  for(const [,id,type] of staticCards){
   assert.ok(seen.has(type+':'+id),'static Star Wars card has wrong media type: '+type+':'+id);
   assert.ok(html.includes('detail.html?id='+id+'&amp;type='+type),'static card detail link missing: '+type+':'+id);
