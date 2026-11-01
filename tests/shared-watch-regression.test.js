@@ -210,3 +210,12 @@ test('all 28 Star Wars titles have unique canonical IDs and detail links',()=>{
   assert.ok(html.includes('detail.html?id='+id+'&amp;type='+type),'static card detail link missing: '+type+':'+id);
  }
 });
+
+test('Star Wars visibly distinguishes missing cache, stale empty results and stale logos',()=>{
+ const html=fs.readFileSync(path.resolve(__dirname,'../starwars.html'),'utf8');
+ assert.ok(html.includes("box.textContent='配信情報を確認できません。作品詳細でご確認ください'"));
+ assert.ok(html.includes("box.style.color='#b91c1c'"),'missing cache must show red warning');
+ assert.ok(html.includes("record.stale?'前回取得時は見放題の掲載情報なし（更新遅延中）'"));
+ assert.ok(html.includes("box.style.color=record.stale?'#b91c1c':''"),'stale cache must show red warning');
+ assert.ok(html.includes("record.stale?'前回取得時の見放題（更新遅延中）'"),'stale provider logos must be labelled');
+});
