@@ -392,6 +392,23 @@ if (require.main === module) {
           throw Error('Ledger round-trip changed content: ' + section + ' / ' + title);
       }
     }
+    // Offline card/detail data equivalence: compare every field consumed by
+    // the existing memory card and detail templates, not just raw JSON blobs.
+    const memoryUiFields = ['title', 'year', 'origin', 'genres', 'summary',
+      'director', 'cast', 'memory', 'id'];
+    const memoryUiProjection = entry => Object.fromEntries(
+      memoryUiFields.map(field => [field, entry[field] ?? null]));
+    for (let i = 0; i < source.memoryFilms.length; i++) {
+      const before = memoryUiProjection(source.memoryFilms[i]);
+      const after = memoryUiProjection(reconstructed.memoryFilms[i]);
+      if (canonical(before) !== canonical(after))
+        throw Error('Memory card/detail fields changed at position ' + i);
+      if (!Array.isArray(after.genres) || !after.title ||
+          !Number.isInteger(after.year) || !Number.isSafeInteger(after.id))
+        throw Error('Memory UI requires missing or invalid fields: ' + after.title);
+    }
+    console.log('Memory card/detail data equivalence passed: ' +
+      reconstructed.memoryFilms.length + ' cards and dialogs');
     console.log('Ledger JSON round-trip passed: 66 works, 74 editorial entries, original memory order preserved');
     console.log('Full editorial preservation passed: ' +
       JSON.stringify(sectionCounts) + ', unique works: ' + research.records.length);
