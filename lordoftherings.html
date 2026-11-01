@@ -87,6 +87,7 @@ async function loadMedia(box){
   if(!unique.length){box.textContent='見放題情報は未確認です';return}
   box.replaceChildren();const label=document.createElement('strong');label.textContent='見放題';box.appendChild(label);
   unique.forEach(p=>{const img=document.createElement('img');img.src='https://image.tmdb.org/t/p/w92'+p.logo_path;img.alt=p.provider_name||'配信サービス';img.loading='lazy';box.appendChild(img)})
+  if(entry.stale){const warning=document.createElement('span');warning.textContent=' ※前回取得した配信情報です（更新未確認）';warning.style.cssText='color:#b42318;font-size:14px';box.appendChild(warning)}
 }
 document.querySelectorAll('.providers').forEach(loadMedia);
 </script></body></html>
