@@ -24,6 +24,16 @@ function build() {
   if (memory.length !== sourceMemory.length ||
       memory.some((item, i) => JSON.stringify(item) !== JSON.stringify(sourceMemory[i])))
     throw Error('Local comparison fixture failed editorial equivalence');
+  // The award and film-history sections must also survive normalization
+  // without losing a title, editorial field, or source insertion order.
+  for (const section of ['verifiedClassicInfo', 'approvedAwardStories']) {
+    const source = extractLiteral(html, section);
+    const reconstructed = Object.fromEntries(Object.keys(source).map(title => [
+      title, byTitle.get(title)?.[section]
+    ]));
+    if (JSON.stringify(reconstructed) !== JSON.stringify(source))
+      throw Error('Local comparison fixture failed ' + section + ' editorial equivalence');
+  }
   const original = 'const memoryFilms=' + JSON.stringify(sourceMemory) + ';';
   if (!html.includes(original)) throw Error('Original memory data anchor not found');
   const replacement = 'const memoryFilms=' + JSON.stringify(memory) + ';';
