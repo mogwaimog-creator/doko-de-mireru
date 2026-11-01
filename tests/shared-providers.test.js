@@ -276,3 +276,22 @@ test('failed Redis save keeps previous providers and does not falsely mark refre
     failDataWrite = false;
   }
 });
+
+
+test('06:00 and 18:00 JST refresh boundaries do not refresh before the boundary', async () => {
+  const id = 1101;
+  let calls = 0;
+  const load = async () => ({ flatrate: [{ provider_id: ++calls }] });
+  const beforeMorning = await getSharedProviders('movie', id, load, new Date('2026-11-01T20:59:59Z'));
+  const afterMorning = await getSharedProviders('movie', id, load, new Date('2026-11-01T21:00:00Z'));
+  const beforeEvening = await getSharedProviders('movie', id, load, new Date('2026-11-02T08:59:59Z'));
+  const afterEvening = await getSharedProviders('movie', id, load, new Date('2026-11-02T09:00:00Z'));
+  assert.equal(beforeMorning.source, 'tmdb');
+  assert.equal(afterMorning.source, 'tmdb');
+  assert.equal(beforeEvening.source, 'cache');
+  assert.equal(afterEvening.source, 'tmdb');
+  assert.equal(calls, 3);
+  assert.equal(beforeMorning.window, '2026-11-01-18');
+  assert.equal(afterMorning.window, '2026-11-02-06');
+  assert.equal(afterEvening.window, '2026-11-02-18');
+});
