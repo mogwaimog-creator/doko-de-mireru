@@ -29,7 +29,13 @@ function build() {
   const replacement = 'const memoryFilms=' + JSON.stringify(memory) + ';';
   // A banner differentiates the local fixture from the published page.
   const banner = '<div role="note" style="padding:12px;background:#fff3cd;color:#333;text-align:center;font-size:16px">開発用・台帳復元表示確認（本番サイトではありません）</div>';
-  return html.replace('<body>', '<body>' + banner).replace(original, replacement);
+  // The original page fetches posters from the production API when opened as a
+  // file:// URL. Keep every comparison run offline to avoid real API/CDN usage.
+  // Browser tests inject a deterministic image separately when needed.
+  const offlineGuard = '<script>window.fetch=function(){return Promise.reject(new Error("Offline comparison fixture: network requests disabled"));};</script>';
+  if (!html.includes('</head>')) throw Error('HTML head anchor not found');
+  return html.replace('</head>', offlineGuard + '</head>')
+    .replace('<body>', '<body>' + banner).replace(original, replacement);
 }
 if (require.main === module) {
   const output = process.argv[2];
