@@ -28,7 +28,7 @@ module.exports=async(req,res)=>{
     for(let i=0;i<keys.length;i++){
       if(values?.[i]){
         try{const record=JSON.parse(values[i]);if(Array.isArray(record.flatrate)){const checked=Date.parse(record.checkedAt);
-          const stale=!Number.isFinite(checked)||Date.now()-checked>MAX_AGE_MS||checked>Date.now()+60000;
+          const stale=!Number.isFinite(checked)||Date.now()-checked>MAX_AGE_MS||checked>Date.now()+60000||(process.env.SERIES_WATCH_SHARED_READ_ENABLED==='1'&&require('./_shared-providers').windowId(new Date(checked))!==require('./_shared-providers').windowId());
           providers[keys[i]]={flatrate:record.flatrate,checkedAt:record.checkedAt,stale};continue;}}catch{}
       }
       failures.push(keys[i]);
