@@ -2177,8 +2177,11 @@ async function getMovieDetail(
     "&append_to_response=credits";
 
 
-  const movie =
-    await detailWithLedger('movie', movieId, () => fetchJson(movieUrl));
+  // Keep movie metadata rollback consistent with the TV detail path.
+  // When the ledger flag is off, use the original TMDB metadata fetch.
+  const movie = process.env.WORK_LEDGER_ENABLED === '1'
+    ? await detailWithLedger('movie', movieId, () => fetchJson(movieUrl))
+    : await fetchJson(movieUrl);
 
 
   // =======================================================
