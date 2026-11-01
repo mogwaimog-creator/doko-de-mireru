@@ -42,7 +42,7 @@ if (!token && !apiKey) {
       const actual = [data.original_title, data.title].map(normalize);
       // Catalog labels sometimes contain both the English title and original
       // title in parentheses. Require BOTH names to match the TMDB record.
-      const bilingual = item.original.match(/^(.+?)\\s*\\(([^()]+)\\)$/);
+      const bilingual = item.original.match(/^(.+?)\s*\(([^()]+)\)$/);
       const titleMatch = bilingual
         ? [bilingual[1], bilingual[2]].every(part => actual.includes(normalize(part)))
         : actual.includes(expected);
