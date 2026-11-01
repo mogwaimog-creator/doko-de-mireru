@@ -46,7 +46,8 @@ module.exports=async(req,res)=>{
           if(!entry||!entry.availability||typeof entry.availability!=='object'||Array.isArray(entry.availability))continue;
           const flat=entry.availability.flatrate;
           if(flat!==undefined&&!Array.isArray(flat))continue;
-          if(!Number.isFinite(Date.parse(entry.lastSuccessfulAt)))continue;
+          const checked=Date.parse(entry.lastSuccessfulAt);
+          if(!Number.isFinite(checked)||checked>Date.now()+60000)continue;
           const legacy=providers[keys[i]];
           const stale=entry.window!==current;
           // Do not replace a fresh legacy record with older shared data.
