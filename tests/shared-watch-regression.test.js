@@ -25,12 +25,16 @@ async function call(query,records,method='GET'){
   }};
   return original.apply(this,arguments);
  };
- let handler;
- try{delete require.cache[endpoint];handler=require(endpoint)}
- finally{Module._load=original;delete require.cache[endpoint]}
- const response={statusCode:200,headers:{},setHeader(k,v){this.headers[k]=v;return this},status(code){this.statusCode=code;return this},json(data){this.body=data;return this}};
- await handler({method,query:{series:query}},response);
- return {response,calls};
+ try{
+  delete require.cache[endpoint];
+  const handler=require(endpoint);
+  const response={statusCode:200,headers:{},setHeader(k,v){this.headers[k]=v;return this},status(code){this.statusCode=code;return this},json(data){this.body=data;return this}};
+  await handler({method,query:{series:query}},response);
+  return {response,calls};
+ }finally{
+  Module._load=original;
+  delete require.cache[endpoint];
+ }
 }
 test('Gundam endpoint serves verified works from Redis only',async()=>{
  const now=new Date().toISOString();
