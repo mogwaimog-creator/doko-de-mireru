@@ -166,13 +166,13 @@ jobs:
             await send('Page.enable');
             await send('Page.navigate',{url:'file:///tmp/shelf-ledger-comparison.html'});
             await sleep(2200);
-            const expression=`(()=>{const w=document.documentElement.clientWidth;document.querySelector('[data-tab="memories"]').click();const cards=[...document.querySelectorAll('[data-memory-id]')];const bad=cards.filter(c=>{const r=c.getBoundingClientRect();return !r.width||!r.height||r.left < -2||r.left>=390});return {width:w,cards:cards.length,bad:bad.length,scrollWidth:document.documentElement.scrollWidth}})()`;
+            const expression=`(()=>{const w=document.documentElement.clientWidth;document.querySelector('[data-tab="memories"]').click();const cards=[...document.querySelectorAll('[data-memory-id]')];const bad=cards.filter(c=>{const r=c.getBoundingClientRect();return !r.width||!r.height||r.left < -2||r.left>=390});const first=memoryFilms[0];memoryCache.set(memoryKey(first),{poster:'https://image.tmdb.org/t/p/w342/test-poster.jpg'});renderMemoryCoversOnly();const cover=document.querySelector('[data-memory-id] .shelf3-cover img');const posterOk=!!cover && cover.getAttribute('src')==='https://image.tmdb.org/t/p/w342/test-poster.jpg' && cover.getAttribute('alt')===first.title+'のポスター';return {width:w,cards:cards.length,bad:bad.length,scrollWidth:document.documentElement.scrollWidth,posterDom:posterOk}})()`;
             const result=await send('Runtime.evaluate',{expression,returnByValue:true,awaitPromise:true});
             const v=result.result?.value;
             console.log('CDP mobile layout:',JSON.stringify(v));
             ws.close();
-            if(!v||v.width!==390||v.cards!==34||v.bad!==0)throw Error('Exact 390px mobile card layout check failed');
-            console.log('Exact 390px Chrome mobile viewport check passed; poster network loading not assessed');
+            if(!v||v.width!==390||v.cards!==34||v.bad!==0||!v.posterDom)throw Error('Exact 390px mobile card/poster DOM check failed');
+            console.log('Exact 390px mobile card layout and injected poster DOM passed; actual poster network loading not assessed');
           })().catch(e=>{console.error(e);process.exitCode=1});
           NODE
       - name: Verify researched movie IDs against TMDB (read-only, branch push only)
