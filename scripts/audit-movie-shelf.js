@@ -128,6 +128,19 @@ function audit(html) {
   const conflictingIds = [...titlesById].filter(([, titles]) => titles.size > 1)
     .map(([id, titles]) => ({ id, titles: [...titles] }));
   const missingIds = memory.filter(entry => entry.id == null).map(entry => entry.title);
+  // Editorial titles from award/history sections may not appear in memoryFilms.
+  // Report them separately; absence from one section is not a deletion instruction.
+  const titleGroups = {
+    memoryFilms: [...names],
+    verifiedClassicInfo: Object.keys(verified),
+    approvedAwardStories: Object.keys(stories)
+  };
+  const editorialOnlyTitles = [...new Set([
+    ...titleGroups.verifiedClassicInfo,
+    ...titleGroups.approvedAwardStories
+  ])].filter(title => !names.has(title));
+  const unlinkedEditorialTitles = editorialOnlyTitles.filter(title =>
+    !Number.isSafeInteger(ids[title]) || ids[title] <= 0);
   return {
     memoryFilms: memory.length,
     verifiedDescriptions: Object.keys(verified).length,
@@ -137,6 +150,8 @@ function audit(html) {
     invalidMemoryIds: Array.from(invalidIds),
     conflictingMemoryIds: conflictingIds,
     missingMemoryIds: missingIds,
+    editorialOnlyTitles,
+    unlinkedEditorialTitles,
     // All three blocks are retained independently, even for the same title.
     editorialSources: ['memoryFilms', 'verifiedClassicInfo', 'approvedAwardStories'],
     editorialFingerprints: editorialFingerprints(html),
