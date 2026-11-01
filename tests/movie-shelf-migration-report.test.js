@@ -57,8 +57,8 @@ test('Japanese review checklist is numbered and includes issue categories', () =
   const items = reviewQueue(result);
   const checklist = formatReviewQueue(result);
   if (items.length) {
-    assert.match(checklist, /^1\\. /);
-    assert.equal(checklist.split('\\n').length, items.length);
+    assert.match(checklist, /^1\. /);
+    assert.equal(checklist.split('\n').length, items.length);
   } else {
     assert.equal(checklist, '確認待ちの作品はありません。');
   }
