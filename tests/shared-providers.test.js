@@ -835,3 +835,47 @@ test('series-watch rejects a falsely current shared window as fresh', async () =
     delete require.cache[modulePath];
   }
 });
+
+
+test('opt-in series refresh enforces one series budget for repeated visitors',async()=>{
+  const modulePath=require.resolve('../api/series-watch');
+  const savedCommand=redis.command;
+  const savedRefresh=process.env.SERIES_WATCH_REFRESH_ENABLED;
+  const savedShared=process.env.SHARED_PROVIDER_ENABLED;
+  const savedToken=process.env.TMDB_API_KEY;
+  let budgetCalls=0,accepted=0;
+  try{
+    process.env.SERIES_WATCH_REFRESH_ENABLED='1';
+    process.env.SHARED_PROVIDER_ENABLED='1';
+    delete process.env.TMDB_API_KEY;
+    redis.command=async args=>{
+      if(args[0]==='MGET')return args.slice(1).map(()=>null);
+      if(args[0]==='SET'&&args[1].startsWith('doko:series-refresh-budget:v1:')){
+        budgetCalls++;
+        if(accepted++===0)return 'OK';
+        return null;
+      }
+      throw new Error('Unexpected command '+args[0]);
+    };
+    delete require.cache[modulePath];
+    const handler=require('../api/series-watch');
+    for(let i=0;i<3;i++){
+      let result;
+      await handler({method:'GET',query:{series:'godzilla'}},{
+        setHeader(){},status(){return this;},json(body){result=body;return this;}
+      });
+      assert.equal(result.complete,false);
+    }
+    assert.equal(budgetCalls,3);
+    assert.equal(accepted,3);
+  }finally{
+    redis.command=savedCommand;
+    if(savedRefresh===undefined)delete process.env.SERIES_WATCH_REFRESH_ENABLED;
+    else process.env.SERIES_WATCH_REFRESH_ENABLED=savedRefresh;
+    if(savedShared===undefined)delete process.env.SHARED_PROVIDER_ENABLED;
+    else process.env.SHARED_PROVIDER_ENABLED=savedShared;
+    if(savedToken===undefined)delete process.env.TMDB_API_KEY;
+    else process.env.TMDB_API_KEY=savedToken;
+    delete require.cache[modulePath];
+  }
+});
