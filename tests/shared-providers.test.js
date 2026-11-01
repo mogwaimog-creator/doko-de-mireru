@@ -410,3 +410,41 @@ test('series-watch is read-only and returns missing entries without refreshing T
     delete require.cache[seriesPath];
   }
 });
+
+
+test('series-watch opt-in reads the new shared cache without updating it', async () => {
+  const seriesPath = require.resolve('../api/series-watch');
+  const savedCommand = redis.command;
+  const savedFlag = process.env.SERIES_WATCH_SHARED_READ_ENABLED;
+  const calls = [];
+  try {
+    process.env.SERIES_WATCH_SHARED_READ_ENABLED = '1';
+    const now = new Date().toISOString();
+    const { windowId } = require('../api/_shared-providers');
+    redis.command = async args => {
+      calls.push(args);
+      assert.equal(args[0], 'MGET');
+      return args.slice(1).map(key => key === 'doko:provider-window:v1:movie:1771'
+        ? JSON.stringify({ window: windowId(), availability: { flatrate: [{ provider_id: 8 }] }, lastSuccessfulAt: now })
+        : null);
+    };
+    delete require.cache[seriesPath];
+    const handler = require('../api/series-watch');
+    const res = {
+      code: 0, body: null, setHeader() {},
+      status(code) { this.code=code; return this; },
+      json(body) { this.body=body; return this; }
+    };
+    await handler({ method: 'GET', query: { series: 'mcu' } }, res);
+    assert.equal(res.code, 200);
+    assert.deepEqual(res.body.providers['movie:1771'].flatrate, [{ provider_id: 8 }]);
+    assert.equal(res.body.providers['movie:1771'].stale, false);
+    assert.ok(!res.body.failures.includes('movie:1771'));
+    assert.equal(calls.length, 2);
+  } finally {
+    redis.command = savedCommand;
+    if (savedFlag === undefined) delete process.env.SERIES_WATCH_SHARED_READ_ENABLED;
+    else process.env.SERIES_WATCH_SHARED_READ_ENABLED = savedFlag;
+    delete require.cache[seriesPath];
+  }
+});
