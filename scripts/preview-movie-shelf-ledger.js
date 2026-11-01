@@ -80,9 +80,23 @@ function preview(html) {
   };
   const retainedForReview = Object.fromEntries(Object.keys(sourceCounts).map(name =>
     [name, sourceCounts[name] - candidateCounts[name]]));
+  const retainedEntries = {
+    memoryFilms: memory.filter(entry => ![...byId.values()].some(item =>
+      item.pageExtras.movieShelf.memoryFilms &&
+      item.pageExtras.movieShelf.memoryFilms.title === entry.title &&
+      item.pageExtras.movieShelf.memoryFilms.id === entry.id)).map(entry => ({
+        title: entry.title, id: entry.id ?? null
+      })),
+    verifiedClassicInfo: Object.keys(snapshot.sources.verifiedClassicInfo).filter(title =>
+      ![...byId.values()].some(item => item.title === title &&
+        Object.hasOwn(item.pageExtras.movieShelf, 'verifiedClassicInfo'))).map(title => ({ title })),
+    approvedAwardStories: Object.keys(snapshot.sources.approvedAwardStories).filter(title =>
+      ![...byId.values()].some(item => item.title === title &&
+        Object.hasOwn(item.pageExtras.movieShelf, 'approvedAwardStories'))).map(title => ({ title }))
+  };
   // Full source snapshot is retained, including unmatched text; nothing is discarded.
   return { mode: 'read-only', writes: 0, records: [...byId.values()].sort((a,b) => a.tmdbId-b.tmdbId),
-    review, snapshot, coverage: { sourceCounts, candidateCounts, retainedForReview } };
+    review, snapshot, coverage: { sourceCounts, candidateCounts, retainedForReview, retainedEntries } };
 }
 
 if (require.main === module) {
