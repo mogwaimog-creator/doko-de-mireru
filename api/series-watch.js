@@ -69,11 +69,15 @@ module.exports=async(req,res)=>{
         const {windowId}=require('./_shared-providers');
         const window=windowId();
         const candidates=works.filter(w=>!providers[w.type+':'+w.id]||providers[w.type+':'+w.id].stale);
+        // Rotate the candidate order between ten-minute slots to prevent the
+        // first failing title from monopolizing every series refresh attempt.
+        const slot=Math.floor(Date.now()/600000);
+        const selected=candidates.length?candidates[slot%candidates.length]:null;
         if(candidates.length){
           const budget='doko:series-refresh-budget:v1:'+req.query.series+':'+window;
           const acquired=await command(['SET',budget,'1','NX','EX',600]);
           if(acquired==='OK'){
-            const work=candidates[0];
+            const work=selected;
             const {detailProviders}=require('./_detail-providers');
             const result=await detailProviders(work.type,work.id,async()=>{
               const token=process.env.TMDB_API_KEY;
