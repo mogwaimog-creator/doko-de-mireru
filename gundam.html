@@ -428,7 +428,8 @@ async function hydrateGundamCards(){
  let next=0;
  async function worker(){while(next<cards.length){
   const el=cards[next++],title=el.getAttribute('data-title');
-  const item=await gundamLookup(title,el.querySelector('.format-tag')?.textContent?.includes('映画')?'movie':'tv');
+  // シーズン2作品は親番組の検索結果を流用しない。ポスターは専用シーズン画像を取得する。
+  const item=gundamSeasonWorks[title]?null:await gundamLookup(title,el.querySelector('.format-tag')?.textContent?.includes('映画')?'movie':'tv');
   if(!el.isConnected)continue;
   const poster=gundamSeasonWorks[title]?await gundamSeasonPoster(title):gundamImage(item?.poster_path,'w342'),slot=el.querySelector('.poster-placeholder');
   if(poster&&slot){
@@ -461,7 +462,7 @@ async function hydrateGundamCards(){
    const availability=el.querySelector('.availability-note');
    if(gundamSeasonWorks[title]){
     // 親シリーズの配信先をシーズン2の配信先として誤表示しない。
-    if(availability)availability.outerHTML='<div class="availability-note">このシーズン単独の見放題情報は未確認です。親番組の情報を流用していません。</div>';
+    if(availability)availability.outerHTML='<div class="availability-note">TMDBでは親番組のシーズン2として登録されています。シーズン2単独の見放題配信状況は確認できていません。視聴前に各配信サービスの公式サイトでご確認ください。</div>';
     const detail=el.querySelector('.detail-link');
     if(detail){
      const seasonInfo=gundamSeasonWorks[title];
