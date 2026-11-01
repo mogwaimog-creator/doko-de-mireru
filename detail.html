@@ -7910,6 +7910,14 @@ async function loadSeriesStreamingStatus(
       await response.json();
 
 
+    // An unavailable provider response is not proof that the title has no streaming.
+    // Keep related-series cards honest when the shared provider cache is down.
+    if (movie.provider_status && movie.provider_status.unavailable) {
+      element.className = "series-streaming-status none";
+      element.textContent = "配信情報を確認できません";
+      return;
+    }
+
     /* 見放題のみ取得 */
     const streaming =
       normalizeProviders(
