@@ -118,6 +118,16 @@ function audit(html) {
   const names = new Set(memory.map(x => x.title));
   const duplicates = [...names].filter(title => memory.filter(x => x.title === title).length > 1);
   const invalidIds = memory.filter(x => x.id != null && (!Number.isSafeInteger(x.id) || x.id <= 0)).map(x => x.title);
+  const titlesById = new Map();
+  for (const entry of memory) {
+    if (!Number.isSafeInteger(entry.id) || entry.id <= 0) continue;
+    const titles = titlesById.get(entry.id) || new Set();
+    titles.add(entry.title);
+    titlesById.set(entry.id, titles);
+  }
+  const conflictingIds = [...titlesById].filter(([, titles]) => titles.size > 1)
+    .map(([id, titles]) => ({ id, titles: [...titles] }));
+  const missingIds = memory.filter(entry => entry.id == null).map(entry => entry.title);
   return {
     memoryFilms: memory.length,
     verifiedDescriptions: Object.keys(verified).length,
@@ -125,6 +135,8 @@ function audit(html) {
     fixedIdOverrides: Object.keys(ids).length,
     duplicateMemoryTitles: duplicates,
     invalidMemoryIds: Array.from(invalidIds),
+    conflictingMemoryIds: conflictingIds,
+    missingMemoryIds: missingIds,
     // All three blocks are retained independently, even for the same title.
     editorialSources: ['memoryFilms', 'verifiedClassicInfo', 'approvedAwardStories'],
     editorialFingerprints: editorialFingerprints(html),
