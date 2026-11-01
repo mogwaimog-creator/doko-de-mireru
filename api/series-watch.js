@@ -14,13 +14,15 @@ const minionsWorks=[20352,93456,211672,324852,438148,519182,1315772].map(id=>({t
 const odoruWorks=[{type:'tv',id:20794},...([545255,545819,55382,55384,65841,835865,193402,1285372,1285375,1491083,1172474,59952,45070,1394731,1475877].map(id=>({type:'movie',id})))];
 const evaWorks=[15137,22843,75629,283566,18491].map(id=>({type:'movie',id})).concat([{type:'tv',id:890}]);
 const conanWorks=[21422,21452,28808,20677,32022,26662,39202,39203,39204,39205,39206,39207,28764,97375,77617,122583,228805,257512,316873,374856,438058,493006,566555,662638,903939,1047041,1209217,1396965,1545621].map(id=>({type:'movie',id})).concat([{type:'tv',id:30983}]);
+// Gundam: 32 independently verified titles; season 2 availability is not inherited.
+const gundamWorks=[{type:'tv',id:21731},{type:'tv',id:45500},{type:'tv',id:196400},{type:'tv',id:64375},{type:'tv',id:43887},{type:'movie',id:37048},{type:'tv',id:21732},{type:'tv',id:13674},{type:'tv',id:5660},{type:'movie',id:16157},{type:'tv',id:88865},{type:'tv',id:46512},{type:'movie',id:883768},{type:'movie',id:553610},{type:'movie',id:685274},{type:'movie',id:910850},{type:'movie',id:16308},{type:'tv',id:72677},{type:'tv',id:25797},{type:'tv',id:20111},{type:'movie',id:1146972},{type:'tv',id:30093},{type:'tv',id:21730},{type:'tv',id:25504},{type:'tv',id:37546},{type:'tv',id:45835},{type:'tv',id:61414},{type:'tv',id:60667},{type:'tv',id:76821},{type:'tv',id:91566},{type:'tv',id:122468},{type:'movie',id:22914}];
 const KEYPREFIX='doko:watch:v3:';
 const MAX_AGE_MS=36*60*60*1000; // Daily Hobby updates plus scheduling tolerance.
 module.exports=async(req,res)=>{
   res.setHeader('Cache-Control','public, max-age=0, s-maxage=120, stale-while-revalidate=60');
   if(req.method!=='GET')return res.status(405).json({error:'GET only'});
-  if(!['godzilla','mcu','jurassic','harrypotter','lordoftherings','starwars','wildspeed','minions','odoru','eva','conan'].includes(req.query.series))return res.status(400).json({error:'Unknown series'});
-  const works=req.query.series==='godzilla'?godzillaWorks:req.query.series==='mcu'?mcuWorks:req.query.series==='jurassic'?jurassicWorks:req.query.series==='harrypotter'?harrypotterWorks:req.query.series==='lordoftherings'?lordoftheringsWorks:req.query.series==='starwars'?starwarsWorks:req.query.series==='wildspeed'?wildspeedWorks:req.query.series==='minions'?minionsWorks:req.query.series==='odoru'?odoruWorks:req.query.series==='eva'?evaWorks:conanWorks;
+  if(!['godzilla','mcu','jurassic','harrypotter','lordoftherings','starwars','wildspeed','minions','odoru','eva','conan','gundam'].includes(req.query.series))return res.status(400).json({error:'Unknown series'});
+  const works=req.query.series==='godzilla'?godzillaWorks:req.query.series==='mcu'?mcuWorks:req.query.series==='jurassic'?jurassicWorks:req.query.series==='harrypotter'?harrypotterWorks:req.query.series==='lordoftherings'?lordoftheringsWorks:req.query.series==='starwars'?starwarsWorks:req.query.series==='wildspeed'?wildspeedWorks:req.query.series==='minions'?minionsWorks:req.query.series==='odoru'?odoruWorks:req.query.series==='eva'?evaWorks:req.query.series==='gundam'?gundamWorks:conanWorks;
   try{
     const keys=works.map(w=>`${w.type}:${w.id}`);
     const values=await command(['MGET',...keys.map(k=>KEYPREFIX+k)]);
