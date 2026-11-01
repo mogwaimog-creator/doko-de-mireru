@@ -47,10 +47,34 @@ function build() {
     ])
   ]) {
     const source = extractLiteral(html, section);
-    const original = 'const ' + section + '=' + JSON.stringify(source) + ';';
-    if (!compared.includes(original))
-      throw Error('Original ' + section + ' data anchor not found');
-    compared = compared.replace(original, 'const ' + section + '=' + JSON.stringify(data) + ';');
+    const startMatch = new RegExp('\\\\bconst\\\\s+' + section + '\\\\s*=').exec(compared);
+    if (!startMatch) throw Error('Original ' + section + ' data declaration not found');
+    const start = startMatch.index;
+    const valueStart = start + startMatch[0].length;
+    const opener = compared.slice(valueStart).search(/[^\\s]/);
+    const valueIndex = valueStart + opener;
+    const opening = compared[valueIndex];
+    if (opening !== '{' && opening !== '[') throw Error('Unexpected ' + section + ' literal');
+    const stack = [];
+    let quote = '', escaped = false, end = -1;
+    for (let i = valueIndex; i < compared.length; i++) {
+      const c = compared[i];
+      if (quote) {
+        if (escaped) escaped = false;
+        else if (c === '\\\\') escaped = true;
+        else if (c === quote) quote = '';
+      } else if (c === "'" || c === '"' || c === '`') quote = c;
+      else if (c === '{' || c === '[') stack.push(c);
+      else if (c === '}' || c === ']') {
+        const previous = stack.pop();
+        if (previous !== (c === '}' ? '{' : '[')) throw Error('Unbalanced ' + section);
+        if (!stack.length) { end = i + 1; break; }
+      }
+    }
+    if (end < 0 || compared.slice(end).search(/[^\\s]/) < 0 ||
+        compared[end + compared.slice(end).search(/[^\\s]/)] !== ';')
+      throw Error('Unterminated ' + section + ' literal');
+    compared = compared.slice(0, valueIndex) + JSON.stringify(data) + compared.slice(end);
   }
   // A banner differentiates the local fixture from the published page.
   const banner = '<div role="note" style="padding:12px;background:#fff3cd;color:#333;text-align:center;font-size:16px">開発用・台帳復元表示確認（本番サイトではありません）</div>';
