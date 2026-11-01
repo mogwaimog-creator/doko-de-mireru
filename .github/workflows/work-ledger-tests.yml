@@ -175,6 +175,56 @@ jobs:
             console.log('Exact 390px mobile card layout and injected poster DOM passed; actual poster network loading not assessed');
           })().catch(e=>{console.error(e);process.exitCode=1});
           NODE
+      - name: Verify shelf poster image load and mobile text geometry offline
+        run: |
+          node - <<'NODE'
+          const fs=require('fs');
+          const file='/tmp/shelf-ledger-comparison.html';
+          let html=fs.readFileSync(file,'utf8');
+          const svg='<svg xmlns="http://www.w3.org/2000/svg" width="200" height="300"><rect width="200" height="300" fill="#445566"/></svg>';
+          const src='data:image/svg+xml;base64,'+Buffer.from(svg).toString('base64');
+          const script=`<script>
+          window.__shelfImageTest=async()=>{
+            const film=memoryFilms[0];
+            memoryCache.set(memoryKey(film),{poster:${JSON.stringify(src)}});
+            document.querySelector('[data-tab="memories"]').click();
+            renderMemoryCoversOnly();
+            const img=document.querySelector('[data-memory-id] .shelf3-cover img');
+            if(!img)return {ok:false,reason:'image element missing'};
+            await img.decode();
+            const r=img.getBoundingClientRect();
+            const title=document.querySelector('[data-memory-id] .shelf3-card-title');
+            const t=title.getBoundingClientRect();
+            return {ok:img.complete&&img.naturalWidth===200&&img.naturalHeight===300&&r.width>0&&r.right<=390&&t.width>0&&t.right<=390&&t.top>=r.top,posterWidth:r.width,titleWidth:t.width};
+          };
+          </script>`;
+          fs.writeFileSync(file,html.replace('</body>',script+'</body>'));
+          NODE
+          google-chrome --headless --no-sandbox --disable-gpu --disable-dev-shm-usage --remote-debugging-port=9224 --user-data-dir=/tmp/shelf-chrome-poster about:blank >/tmp/shelf-poster-cdp.log 2>&1 &
+          CHROME_PID=$!
+          trap 'kill $CHROME_PID 2>/dev/null || true' EXIT
+          node - <<'NODE'
+          const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+          (async()=>{
+            let tab;
+            for(let i=0;i<40;i++){try{tab=(await(await fetch('http://127.0.0.1:9224/json')).json()).find(x=>x.type==='page');if(tab)break}catch{}await sleep(250)}
+            if(!tab)throw Error('Chrome CDP unavailable');
+            const ws=new WebSocket(tab.webSocketDebuggerUrl);
+            await new Promise((ok,no)=>{ws.onopen=ok;ws.onerror=no});
+            let seq=0;const pending=new Map();
+            ws.onmessage=e=>{const m=JSON.parse(e.data);if(m.id&&pending.has(m.id)){const p=pending.get(m.id);pending.delete(m.id);m.error?p.reject(Error(JSON.stringify(m.error))):p.resolve(m.result)}};
+            const send=(method,params={})=>new Promise((resolve,reject)=>{const id=++seq;pending.set(id,{resolve,reject});ws.send(JSON.stringify({id,method,params}))});
+            await send('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});
+            await send('Page.enable');
+            await send('Page.navigate',{url:'file:///tmp/shelf-ledger-comparison.html'});
+            await sleep(1500);
+            const response=await send('Runtime.evaluate',{expression:'window.__shelfImageTest()',awaitPromise:true,returnByValue:true});
+            const result=response.result?.value;
+            console.log('Offline decoded poster/mobile geometry:',JSON.stringify(result));
+            ws.close();
+            if(!result?.ok)throw Error('Poster decode or mobile text geometry failed');
+          })().catch(e=>{console.error(e);process.exitCode=1});
+          NODE
       - name: Verify researched movie IDs against TMDB (read-only, branch push only)
         continue-on-error: true
         env:
