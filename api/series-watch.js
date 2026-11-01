@@ -74,7 +74,7 @@ module.exports=async(req,res)=>{
         const slot=Math.floor(Date.now()/600000);
         const selected=candidates.length?candidates[slot%candidates.length]:null;
         if(candidates.length){
-          const budget='doko:series-refresh-budget:v1:'+req.query.series+':'+window;
+          const budget='doko:series-refresh-budget:v1:'+req.query.series+':'+window+':'+slot;
           const acquired=await command(['SET',budget,'1','NX','EX',600]);
           if(acquired==='OK'){
             const work=selected;
