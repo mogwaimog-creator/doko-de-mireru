@@ -146,6 +146,25 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install -y --no-install-recommends fonts-noto-cjk
           fc-match 'Noto Sans CJK JP' | grep -i 'NotoSansCJK'
+      - name: Verify all restored editorial fields against the published source
+        run: |
+          node - <<'NODE'
+          const fs=require('node:fs');
+          const {extractLiteral}=require('./scripts/audit-movie-shelf');
+          const source=fs.readFileSync('movie_shelf_1980_1984.html','utf8');
+          const restored=fs.readFileSync('/tmp/shelf-ledger-comparison.html','utf8');
+          let total=0;
+          for(const name of ['memoryFilms','verifiedClassicInfo','approvedAwardStories']){
+            const before=extractLiteral(source,name);
+            const after=extractLiteral(restored,name);
+            if(JSON.stringify(before)!==JSON.stringify(after))throw Error('Editorial content/order changed: '+name);
+            const count=Array.isArray(before)?before.length:Object.keys(before).length;
+            total+=count;
+            console.log(name+': '+count+' entries, exact field/order match');
+          }
+          if(total!==74)throw Error('Expected 74 editorial entries, got '+total);
+          console.log('All 74 editorial entries match original source exactly');
+          NODE
       - name: Emulate exact 390px mobile viewport via Chrome DevTools Protocol
         run: |
           google-chrome --headless --no-sandbox --disable-gpu --disable-dev-shm-usage --remote-debugging-port=9223 --user-data-dir=/tmp/shelf-chrome-cdp about:blank >/tmp/shelf-cdp.log 2>&1 &
