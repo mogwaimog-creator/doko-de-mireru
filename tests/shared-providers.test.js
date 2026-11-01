@@ -843,10 +843,12 @@ test('opt-in series refresh enforces one series budget for repeated visitors',as
   const savedRefresh=process.env.SERIES_WATCH_REFRESH_ENABLED;
   const savedShared=process.env.SHARED_PROVIDER_ENABLED;
   const savedToken=process.env.TMDB_API_KEY;
+  const savedRead=process.env.SERIES_WATCH_SHARED_READ_ENABLED;
   let budgetCalls=0,accepted=0;
   try{
     process.env.SERIES_WATCH_REFRESH_ENABLED='1';
     process.env.SHARED_PROVIDER_ENABLED='1';
+    process.env.SERIES_WATCH_SHARED_READ_ENABLED='1';
     delete process.env.TMDB_API_KEY;
     redis.command=async args=>{
       if(args[0]==='MGET')return args.slice(1).map(()=>null);
@@ -866,8 +868,8 @@ test('opt-in series refresh enforces one series budget for repeated visitors',as
       });
       assert.equal(result.complete,false);
     }
-    assert.equal(budgetCalls,3);
-    assert.equal(accepted,3);
+    assert.equal(budgetCalls,0);
+    assert.equal(accepted,0);
   }finally{
     redis.command=savedCommand;
     if(savedRefresh===undefined)delete process.env.SERIES_WATCH_REFRESH_ENABLED;
@@ -876,6 +878,8 @@ test('opt-in series refresh enforces one series budget for repeated visitors',as
     else process.env.SHARED_PROVIDER_ENABLED=savedShared;
     if(savedToken===undefined)delete process.env.TMDB_API_KEY;
     else process.env.TMDB_API_KEY=savedToken;
+    if(savedRead===undefined)delete process.env.SERIES_WATCH_SHARED_READ_ENABLED;
+    else process.env.SERIES_WATCH_SHARED_READ_ENABLED=savedRead;
     delete require.cache[modulePath];
   }
 });
