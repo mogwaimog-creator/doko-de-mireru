@@ -337,3 +337,46 @@ test('movie and TV with the same TMDB numeric ID never share provider cache', as
   assert.equal(tvCalls, 1);
   assert.notEqual(keys('movie', id).data, keys('tv', id).data);
 });
+
+
+test('TMDB provider bridge caches only Japanese availability, never another region', async () => {
+  const { detailProviders } = require('../api/_detail-providers');
+  const previous = process.env.SHARED_PROVIDER_ENABLED;
+  process.env.SHARED_PROVIDER_ENABLED = '1';
+  try {
+    let calls = 0;
+    const load = async () => {
+      calls++;
+      return { id: 1104, results: {
+        US: { flatrate: [{ provider_id: 999, logo_path: '/us.png' }] },
+        JP: { flatrate: [{ provider_id: 8, logo_path: '/jp.png' }] }
+      } };
+    };
+    const first = await detailProviders('movie', 1104, load);
+    const second = await detailProviders('movie', 1104, load);
+    assert.deepEqual(first.availability, { flatrate: [{ provider_id: 8, logo_path: '/jp.png' }] });
+    assert.deepEqual(second.availability, first.availability);
+    assert.equal(calls, 1);
+  } finally {
+    if (previous === undefined) delete process.env.SHARED_PROVIDER_ENABLED;
+    else process.env.SHARED_PROVIDER_ENABLED = previous;
+  }
+});
+
+test('TMDB provider bridge treats missing JP as confirmed empty but malformed JP as unavailable', async () => {
+  const { detailProviders } = require('../api/_detail-providers');
+  const previous = process.env.SHARED_PROVIDER_ENABLED;
+  process.env.SHARED_PROVIDER_ENABLED = '1';
+  try {
+    const missing = await detailProviders('movie', 1105, async () => ({ results: { US: { flatrate: [] } } }));
+    assert.deepEqual(missing.availability, {});
+    assert.equal(missing.unavailable, false);
+    const malformed = await detailProviders('movie', 1106, async () => ({ results: { JP: 'invalid' } }));
+    assert.equal(malformed.unavailable, true);
+    const missingResults = await detailProviders('movie', 1107, async () => ({ id: 1107 }));
+    assert.equal(missingResults.unavailable, true);
+  } finally {
+    if (previous === undefined) delete process.env.SHARED_PROVIDER_ENABLED;
+    else process.env.SHARED_PROVIDER_ENABLED = previous;
+  }
+});
