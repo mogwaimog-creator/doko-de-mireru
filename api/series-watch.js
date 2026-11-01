@@ -52,6 +52,8 @@ module.exports=async(req,res)=>{
           const stale=entry.window!==current || Date.now()-checked>MAX_AGE_MS;
           // Do not replace a fresh legacy record with older shared data.
           if(stale&&legacy&&!legacy.stale)continue;
+          // Never replace a newer legacy observation with an older shared one.
+          if(legacy&&Number.isFinite(Date.parse(legacy.checkedAt))&&Date.parse(legacy.checkedAt)>checked)continue;
           providers[keys[i]]={flatrate:flat||[],checkedAt:entry.lastSuccessfulAt,stale};
           const at=failures.indexOf(keys[i]);
           if(at>=0)failures.splice(at,1);
