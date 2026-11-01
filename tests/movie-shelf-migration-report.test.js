@@ -74,3 +74,11 @@ test('read-only CLI prints Japanese review by default and supports JSON output',
   assert.equal(json.writes, 0);
   assert.equal(json.readiness.readyForAutomaticImport, false);
 });
+
+test('mismatched fixed overrides are reported rather than silently accepted', () => {
+  const source = html.replace(/(const classicKnownIds=\{)/, '$1"シャイニング":999999,');
+  const result = report(source);
+  assert.ok(result.overrideIdConflicts.some(item => item.title === 'シャイニング'));
+  assert.ok(reviewQueue(result).some(item => item.kind === 'override-id-conflict' && item.title === 'シャイニング'));
+  assert.equal(result.writes, 0);
+});
