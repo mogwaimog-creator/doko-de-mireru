@@ -2602,27 +2602,7 @@ const runtime =
 // ・最大10作品
 // =======================================================
 
-let recommendations = [];
-
-
-try {
-
-  recommendations =
-    await getRecommendations(
-      movie,
-      apiKey
-    );
-
-} catch (error) {
-
-  console.error(
-    "RECOMMENDATIONS ERROR:",
-    error
-  );
-
-  recommendations = [];
-
-}
+let recommendations = []; // Related-title API calls disabled to reduce TMDB usage.
 
   // =======================================================
   // シリーズ
@@ -12202,27 +12182,7 @@ const runtime =
   // ドラマ・TVアニメ共通
   // =======================================================
 
-  let recommendations = [];
-
-
-  try {
-
-    recommendations =
-  await getTvRecommendations(
-    tvId,
-    apiKey
-  );
-
-  } catch (error) {
-
-    console.error(
-      "TV RECOMMENDATIONS ERROR:",
-      error
-    );
-
-    recommendations = [];
-
-  }
+  let recommendations = []; // Related-title API calls disabled to reduce TMDB usage.
   
   // =======================================================
   // 制作者
