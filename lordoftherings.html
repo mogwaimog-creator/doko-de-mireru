@@ -82,7 +82,7 @@ async function loadMedia(box){
   if(!box.isConnected)return;
   const entry=data?.providers?.[type+':'+id];
   if(!entry||!Array.isArray(entry.flatrate)){box.textContent='配信状況は作品詳細でご確認ください';return}
-  if(entry.stale){const warning=document.createElement('span');warning.textContent='配信情報の更新が遅れています（前回取得時の情報）';warning.style.display='block';warning.style.fontSize='14px';box.replaceChildren(warning)}
+  if(entry.stale){const warning=document.createElement('span');warning.textContent='配信情報の更新が遅れています（前回取得時の情報）';warning.style.display='block';warning.style.fontSize='14px';warning.style.color='#b91c1c';box.replaceChildren(warning)}
   const list=dokoNormalizeStreaming(entry.flatrate);
   const unique=list.filter((p,i,a)=>p&&p.logo_path&&a.findIndex(x=>x&&x.provider_id===p.provider_id)===i);
   if(!unique.length){const note=document.createElement('span');note.textContent='見放題の掲載情報なし';box.appendChild(note);return}
