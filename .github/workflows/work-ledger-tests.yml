@@ -56,3 +56,5 @@ jobs:
           done
       - name: Run all work ledger and provider safety tests
         run: node --test tests/*.test.js
+      - name: Verify movie shelf import boundary without writes
+        run: node scripts/preview-movie-shelf-ledger.js --check
