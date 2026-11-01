@@ -58,3 +58,10 @@ jobs:
         run: node --test tests/*.test.js
       - name: Verify movie shelf import boundary without writes
         run: node scripts/preview-movie-shelf-ledger.js --check
+      - name: Verify researched movie IDs against TMDB (read-only, branch push only)
+        if: github.event_name == 'push'
+        continue-on-error: true
+        env:
+          TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
+        run: |
+          node scripts/verify-movie-shelf-tmdb.js
