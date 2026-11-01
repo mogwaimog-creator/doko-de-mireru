@@ -195,6 +195,7 @@ function checkCandidateMerge() {
   assert.equal(conflict.record, null);
   assert.deepEqual(conflict.conflicts, ['memoryFilms']);
   assert.equal(planCandidateMerge(sample, { ...existing, title: '別作品' }).action, 'blocked');
+  assert.equal(planCandidateMerge(sample, { ...existing, pageExtras: { movieShelf: 'invalid' } }).action, 'blocked');
   assert.throws(() => planCandidateMerge({ ...sample, key: 'movie:99' }, existing));
   return true;
 }
