@@ -3,7 +3,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
-const { report, formatReviewSummary, reviewQueue } = require('../scripts/report-movie-shelf-migration');
+const { report, formatReviewSummary, reviewQueue, formatReviewQueue } = require('../scripts/report-movie-shelf-migration');
 
 const html = fs.readFileSync(path.join(__dirname, '../movie_shelf_1980_1984.html'), 'utf8');
 test('read-only migration report accounts for all editorial sections', () => {
@@ -50,4 +50,16 @@ test('review queue contains actionable title-level issues without changing data'
   assert.equal(queue.filter(x => x.kind === 'editorial-id-review').length, result.editorialIdReview.length);
   assert.ok(queue.every(x => typeof x.title === 'string' && x.title.length > 0));
   assert.equal(result.writes, 0);
+});
+
+test('Japanese review checklist is numbered and includes issue categories', () => {
+  const result = report(html);
+  const items = reviewQueue(result);
+  const checklist = formatReviewQueue(result);
+  if (items.length) {
+    assert.match(checklist, /^1\\. /);
+    assert.equal(checklist.split('\\n').length, items.length);
+  } else {
+    assert.equal(checklist, '確認待ちの作品はありません。');
+  }
 });
