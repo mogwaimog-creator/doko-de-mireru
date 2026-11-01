@@ -229,6 +229,11 @@ jobs:
             if(!result?.ok)throw Error('Poster decode or mobile text geometry failed');
           })().catch(e=>{console.error(e);process.exitCode=1});
           NODE
+      - name: Install Japanese fonts for accurate screenshot review
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends fonts-noto-cjk
+          fc-match 'Noto Sans CJK JP' | grep -i 'NotoSansCJK'
       - name: Capture offline desktop shelf screenshot
         run: |
           google-chrome --headless --no-sandbox --disable-gpu --disable-dev-shm-usage --hide-scrollbars --window-size=1280,900 --screenshot=/tmp/shelf-desktop-1280.png file:///tmp/shelf-ledger-comparison.html >/tmp/shelf-desktop.log 2>&1
