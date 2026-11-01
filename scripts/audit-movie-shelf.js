@@ -152,6 +152,12 @@ function audit(html) {
   const conflictingIds = [...titlesById].filter(([, titles]) => titles.size > 1)
     .map(([id, titles]) => ({ id, titles: [...titles] }));
   const missingIds = memory.filter(entry => entry.id == null).map(entry => entry.title);
+  // A fixed override must not silently disagree with a memory-film ID.
+  const overrideIdConflicts = memory.filter(entry =>
+    Number.isSafeInteger(entry.id) && entry.id > 0 &&
+    Number.isSafeInteger(ids[entry.title]) && ids[entry.title] > 0 &&
+    entry.id !== ids[entry.title]
+  ).map(entry => ({ title: entry.title, memoryId: entry.id, overrideId: ids[entry.title] }));
   // Editorial titles from award/history sections may not appear in memoryFilms.
   // Report them separately; absence from one section is not a deletion instruction.
   const titleGroups = {
@@ -173,6 +179,7 @@ function audit(html) {
     duplicateMemoryTitles: duplicates,
     invalidMemoryIds: Array.from(invalidIds),
     conflictingMemoryIds: conflictingIds,
+    overrideIdConflicts,
     missingMemoryIds: missingIds,
     editorialOnlyTitles,
     unlinkedEditorialTitles,
