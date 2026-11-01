@@ -3,7 +3,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
-const { preview, validatePreview } = require('../scripts/preview-movie-shelf-ledger');
+const { preview, validatePreview, toLedgerCandidate } = require('../scripts/preview-movie-shelf-ledger');
 const { extractLiteral } = require('../scripts/audit-movie-shelf');
 const html = fs.readFileSync(path.join(__dirname, '../movie_shelf_1980_1984.html'), 'utf8');
 
@@ -90,4 +90,30 @@ test('preview integrity validator accepts intact candidate and rejects corruptio
   assert.equal(checked.valid, false);
   assert.ok(checked.problems.some(item => item.startsWith('duplicate-key:')));
   assert.ok(checked.problems.includes('coverage-mismatch:memoryFilms'));
+});
+
+test('candidate adapter roundtrips through shared ledger normalization without writing', () => {
+  const { normalizeWork } = require('../api/_work-ledger');
+  const result = preview(html);
+  assert.equal(validatePreview(result).valid, true);
+  for (const item of result.records) {
+    const candidate = toLedgerCandidate(item);
+    const normalized = normalizeWork(candidate.type, candidate.id, candidate);
+    assert.equal(normalized.id, item.tmdbId);
+    assert.equal(normalized.title, item.title);
+    assert.equal(normalized.manualReview, true);
+    assert.deepEqual(normalized.pageExtras.movieShelf, item.pageExtras.movieShelf);
+    assert.equal(normalized.posterPath, null);
+  }
+  assert.equal(result.writes, 0);
+});
+
+test('candidate adapter refuses malformed identity and does not mutate original', () => {
+  const result = preview(html);
+  const original = result.records[0];
+  const before = structuredClone(original);
+  const converted = toLedgerCandidate(original);
+  converted.pageExtras.movieShelf.changed = 'test only';
+  assert.deepEqual(original, before);
+  assert.throws(() => toLedgerCandidate({ ...original, key: 'movie:999999' }));
 });
