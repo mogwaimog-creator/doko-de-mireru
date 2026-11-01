@@ -132,8 +132,8 @@ async function providers(box){
  const record=data?.providers?.[box.dataset.type+':'+box.dataset.id];
  if(!record||!Array.isArray(record.flatrate)){box.textContent='配信情報を取得できませんでした';return;}
  const list=dokoNormalizeStreaming(record.flatrate).filter(p=>p.logo_path);
- if(!list.length){box.replaceChildren();if(record.stale){const warning=document.createElement('span');warning.textContent='更新遅延：前回取得時の配信情報';warning.style.display='block';warning.style.fontSize='14px';box.appendChild(warning)}const note=document.createElement('span');note.textContent='見放題の掲載情報なし';box.appendChild(note);return}
- box.replaceChildren();if(record.stale){let warning=document.createElement('span');warning.textContent='配信情報の更新が遅れています（前回取得時の情報）';warning.style.display='block';warning.style.fontSize='14px';box.append(warning)}let t=document.createElement('span');t.textContent='見放題';box.append(t);
+ if(!list.length){box.replaceChildren();if(record.stale){const warning=document.createElement('span');warning.textContent='更新遅延：前回取得時の配信情報';warning.style.display='block';warning.style.fontSize='14px';warning.style.color='#b91c1c';box.appendChild(warning)}const note=document.createElement('span');note.textContent='見放題の掲載情報なし';box.appendChild(note);return}
+ box.replaceChildren();if(record.stale){let warning=document.createElement('span');warning.textContent='配信情報の更新が遅れています（前回取得時の情報）';warning.style.display='block';warning.style.fontSize='14px';warning.style.color='#b91c1c';box.append(warning)}let t=document.createElement('span');t.textContent='見放題';box.append(t);
  let ids=new Set();for(let p of list){if(!p.logo_path||ids.has(p.provider_id))continue;ids.add(p.provider_id);let im=document.createElement('img');im.src='https://image.tmdb.org/t/p/w92'+p.logo_path;im.alt=p.provider_name||'配信サービス';im.title=im.alt;box.append(im)}
 }
 if('IntersectionObserver'in window){const o=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){o.unobserve(e.target);providers(e.target)}}),{rootMargin:'200px'});document.querySelectorAll('.providers').forEach(b=>o.observe(b))}else document.querySelectorAll('.providers').forEach(providers);
