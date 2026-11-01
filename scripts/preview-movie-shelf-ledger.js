@@ -283,6 +283,31 @@ if (require.main === module) {
     if (research.records.length !== 66 || research.researchRecords.length !== 25 ||
         research.writes !== 0 || research.verifiedByTmdb !== false)
       throw Error('Research preview preflight failed');
+    // Exhaustive preflight: every original editorial entry must survive in the
+    // same section and with identical content, across all 66 candidate records.
+    const source = research.baseline.snapshot.sources;
+    const byTitle = new Map(research.records.map(record => [record.title, record]));
+    if (byTitle.size !== research.records.length) throw Error('Duplicate title across 66 works');
+    const sectionCounts = {};
+    for (const section of ['memoryFilms', 'verifiedClassicInfo', 'approvedAwardStories']) {
+      const entries = section === 'memoryFilms'
+        ? source[section].map(entry => [entry.title, entry])
+        : Object.entries(source[section]);
+      sectionCounts[section] = entries.length;
+      if (new Set(entries.map(([title]) => title)).size !== entries.length)
+        throw Error('Duplicate source title in ' + section);
+      for (const [title, original] of entries) {
+        const saved = byTitle.get(title)?.pageExtras?.movieShelf?.[section];
+        if (JSON.stringify(saved) !== JSON.stringify(original))
+          throw Error('Editorial entry lost or changed: ' + section + ' / ' + title);
+      }
+    }
+    if (research.records.some(record => !Number.isSafeInteger(record.tmdbId) ||
+        record.tmdbId <= 0) ||
+        new Set(research.records.map(record => record.key)).size !== research.records.length)
+      throw Error('Invalid or duplicate work key in 66-work preview');
+    console.log('Full editorial preservation passed: ' +
+      JSON.stringify(sectionCounts) + ', unique works: ' + research.records.length);
     for (const record of research.researchRecords) {
       const normalized = require('../api/_work-ledger').normalizeWork('movie', record.tmdbId, toLedgerCandidate(record));
       if (JSON.stringify(normalized.pageExtras) !== JSON.stringify(record.pageExtras))
