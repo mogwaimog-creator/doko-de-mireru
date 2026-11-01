@@ -656,3 +656,49 @@ test('series-watch marks previous-window shared records stale even when recently
     delete require.cache[seriesPath];
   }
 });
+
+
+test('series provider endpoint stays disabled without opt-in and makes no TMDB request', async () => {
+  const previous = process.env.SHARED_PROVIDER_ENABLED;
+  const oldFetch = global.fetch;
+  try {
+    delete process.env.SHARED_PROVIDER_ENABLED;
+    global.fetch = () => { throw new Error('Unexpected TMDB request'); };
+    const handler = require('../api/series-providers');
+    const headers = {};
+    const res = {
+      code: 0, body: null,
+      setHeader(k,v) { headers[k]=v; },
+      status(code) { this.code=code; return this; },
+      json(body) { this.body=body; return this; }
+    };
+    await handler({ method:'GET', query:{ type:'movie', id:'1771' } },res);
+    assert.equal(res.code,404);
+    assert.equal(headers['Vercel-CDN-Cache-Control'],'s-maxage=60, stale-while-revalidate=60');
+  } finally {
+    global.fetch=oldFetch;
+    if(previous===undefined)delete process.env.SHARED_PROVIDER_ENABLED;
+    else process.env.SHARED_PROVIDER_ENABLED=previous;
+  }
+});
+
+test('series provider endpoint rejects invalid identities before contacting TMDB', async () => {
+  const previous = process.env.SHARED_PROVIDER_ENABLED;
+  const oldFetch = global.fetch;
+  try {
+    process.env.SHARED_PROVIDER_ENABLED='1';
+    global.fetch = () => { throw new Error('Unexpected TMDB request'); };
+    const handler = require('../api/series-providers');
+    const res = {
+      code:0, body:null, setHeader() {},
+      status(code) { this.code=code; return this; },
+      json(body) { this.body=body; return this; }
+    };
+    await handler({method:'GET',query:{type:'movie',id:'not-a-number'}},res);
+    assert.equal(res.code,400);
+  } finally {
+    global.fetch=oldFetch;
+    if(previous===undefined)delete process.env.SHARED_PROVIDER_ENABLED;
+    else process.env.SHARED_PROVIDER_ENABLED=previous;
+  }
+});
