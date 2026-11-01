@@ -18,7 +18,7 @@ function formatReviewQueue(result) {
   return queue.map((entry, index) => {
     const detail = entry.section ? ' [' + entry.section + ']' : '';
     return (index + 1) + '. ' + labels[entry.kind] + ': ' + entry.title + detail;
-  }).join('\\n');
+  }).join('\n');
 }
 
 function reviewQueue(result) {
@@ -49,7 +49,7 @@ function formatReviewSummary(result) {
     '作品紹介のID未登録: ' + counts.missingIds + '件',
     '文章のID確認待ち: ' + counts.editorialIdReview + '件',
     '自動登録: 行いません'
-  ].join('\\n');
+  ].join('\n');
 }
 
 function summarizeReadiness(result) {
