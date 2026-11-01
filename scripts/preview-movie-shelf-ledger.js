@@ -9,11 +9,10 @@ function preview(html) {
   const links = resolveEditorialTitleIds(html);
   const issues = audit(html);
   const memory = snapshot.sources.memoryFilms;
-  const fixed = extractLiteral(html, 'classicKnownIds');
   const byId = new Map();
   const review = [...links.needsReview];
   const blockedIds = new Set(issues.conflictingMemoryIds.map(item => item.id));
-  const blockedTitles = new Set(issues.overrideIdConflicts.map(item => item.title));
+  const blockedTitles = new Set([...issues.overrideIdConflicts.map(item => item.title), ...issues.duplicateMemoryTitles]);
   for (const entry of memory) {
     if (!Number.isSafeInteger(entry.id) || entry.id <= 0) {
       review.push({ section: 'memoryFilms', title: entry.title, reason: 'missing-or-invalid-id' });
@@ -35,7 +34,11 @@ function preview(html) {
   for (const section of ['verifiedClassicInfo', 'approvedAwardStories']) {
     for (const [title, value] of Object.entries(snapshot.sources[section])) {
       const id = links.resolved[section][title];
-      if (!id || blockedIds.has(id) || blockedTitles.has(title)) continue;
+      if (!id || blockedIds.has(id) || blockedTitles.has(title)) {
+        if (id && (blockedIds.has(id) || blockedTitles.has(title)))
+          review.push({ section, title, reason: 'blocked-conflict', candidates: [id] });
+        continue;
+      }
       const key = 'movie:' + id;
       const record = byId.get(key);
       if (record && record.title !== title) {
