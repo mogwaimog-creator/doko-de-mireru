@@ -153,6 +153,9 @@ function planCandidateMerge(candidate, existing) {
   if (existing.title !== incoming.title) {
     return { action: 'blocked', record: null, conflicts: ['title-mismatch'] };
   }
+  if (existing.pageExtras != null && (typeof existing.pageExtras !== 'object' || Array.isArray(existing.pageExtras))) {
+    return { action: 'blocked', record: null, conflicts: ['invalid-existing-extras'] };
+  }
   if (existing.pageExtras?.movieShelf != null && (typeof existing.pageExtras.movieShelf !== 'object' || Array.isArray(existing.pageExtras.movieShelf))) {
     return { action: 'blocked', record: null, conflicts: ['invalid-existing-extras'] };
   }
@@ -196,6 +199,9 @@ function checkCandidateMerge() {
   assert.deepEqual(conflict.conflicts, ['memoryFilms']);
   assert.equal(planCandidateMerge(sample, { ...existing, title: '別作品' }).action, 'blocked');
   assert.equal(planCandidateMerge(sample, { ...existing, pageExtras: { movieShelf: 'invalid' } }).action, 'blocked');
+  assert.equal(planCandidateMerge(sample, { ...existing, pageExtras: 'invalid' }).action, 'blocked');
+  assert.equal(planCandidateMerge(sample, { ...existing, pageExtras: [] }).action, 'blocked');
+  assert.equal(planCandidateMerge(sample, { ...existing, pageExtras: { movieShelf: [] } }).action, 'blocked');
   assert.throws(() => planCandidateMerge({ ...sample, key: 'movie:99' }, existing));
   return true;
 }
@@ -214,6 +220,7 @@ if (require.main === module) {
     }
     console.log('Read-only checks passed for ' + result.records.length + ' candidates');
     console.log('Source coverage: ' + JSON.stringify(result.coverage));
+    console.log('Unique retained titles: ' + JSON.stringify([...new Set(Object.values(result.coverage.retainedEntries).flat().map(entry => entry.title))]));
     console.log('Review reasons: ' + JSON.stringify(result.review.reduce((counts, entry) => {
       const key = entry.reason || 'unknown';
       counts[key] = (counts[key] || 0) + 1;
