@@ -18,10 +18,19 @@ async function metadataWithLedger(type,id,load){
   if(!original||Number(original.id)!==Number(id))return original;
   try{
     const fixed=fixedOnly(original);
-    await putWorkIfAbsent(type,id,{
+    const saved=await putWorkIfAbsent(type,id,{
       ...fromTmdb(type,original),
       extensions:{tmdbDetail:fixed}
     });
+    // Concurrent requests may have registered the canonical metadata first.
+    // Return that shared record when available, without overwriting manual edits.
+    if(saved?.extensions?.tmdbDetail && Number(saved.extensions.tmdbDetail.id)===Number(id)){
+      const canonical=saved.extensions.tmdbDetail;
+      if(original['watch/providers'] && !canonical['watch/providers']){
+        return {...canonical,'watch/providers':original['watch/providers']};
+      }
+      return canonical;
+    }
   }catch(e){console.error('WORK LEDGER WRITE FAILED',e);}
   return original;
 }
