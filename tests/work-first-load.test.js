@@ -133,3 +133,9 @@ test('feature flag off does not touch Redis locking or work ledger',async()=>{
  assert.equal(loads,1);
  assert.equal(calls.length,0);
 });
+
+test('first-load lock TTL covers slow upstream requests and storage writes',async()=>{
+ const source=require('node:fs').readFileSync(require.resolve('../api/_work-first-load'),'utf8');
+ assert.match(source,/LOCK_SECONDS=30/);
+ assert.match(source,/String\(LOCK_SECONDS\)/);
+});
