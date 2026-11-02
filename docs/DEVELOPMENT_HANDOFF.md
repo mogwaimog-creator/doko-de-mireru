@@ -106,3 +106,9 @@
 - Draft PR #10: https://github.com/mogwaimog-creator/doko-de-mireru/pull/10 を作成。未完成でマージ不可と明記。
 - 本番の gundam.html はまだ変更なし。35作品の正確な poster_path は未取得・未照合。GitHubにAPIキーを置かず、Vercelを使わず一回限り取得する環境が必要。
 - 取得とローカルテストが済むまでマージ・デプロイしない。ユーザーは作業続行を許可している。
+
+## 2026-11-03 ガンダム35ポスター固定化の実装
+- ユーザーがローカルでTMDBから35件取得成功・失敗0件を確認。アップロードされた gundam.fixed-preview.html をGitHub作業ブランチの gundam.html と厳密比較し、変更箇所がポスター固定ブロックのみであることを確認。
+- fix/gundam-fixed-poster-paths-20261103 の gundam.html を更新。コミット 5a3d0178835326d485a53069459642ccaf7d4134。
+- 静的検査：35件のパス構文妥当、/api/gundam-poster 呼び出し0、/api/series-watch?series=gundam 維持。6件の劇場版は別途 gundamTheatricalWorks で扱うもので35ポスター固定対象には含めない。
+- 残：実ブラウザ表示・タブ・配信ロゴ・リンク・ネットワークの動作検証、不要APIの他ページ参照確認。PR #10はDraftのまま、mainへのマージとVercelデプロイは未実施。
