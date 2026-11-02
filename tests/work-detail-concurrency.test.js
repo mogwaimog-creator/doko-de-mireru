@@ -25,7 +25,7 @@ test('two simultaneous work-detail requests fetch TMDB once',async()=>{
  global.fetch=async()=>{calls++;await sleep(180);return {ok:true,json:async()=>({id:123,title:'映画A',release_date:'2000-01-01'})};};
  const a=response(),b=response();
  await Promise.all([handler({method:'GET',query:{type:'movie',id:'123'}},a),handler({method:'GET',query:{type:'movie',id:'123'}},b)]);
- assert.equal(calls,1);assert.equal(a.statusCode,200);assert.equal(b.statusCode,200);assert.equal(a.body.work.id,123);assert.equal(b.body.work.id,123);
+ assert.equal(calls,1);assert.equal(a.statusCode,200);assert.equal(b.statusCode,200);assert.equal(a.body.work.id,123);assert.equal(b.body.work.id,123);assert.equal(a.body.work.schemaVersion,1);assert.equal(b.body.work.schemaVersion,1);assert.equal(a.body.work.type,'movie');assert.equal(b.body.work.type,'movie');
 });
 test('work-detail never calls TMDB when feature is disabled',async()=>{
  process.env.WORK_LEDGER_ENABLED='0';let calls=0;global.fetch=async()=>{calls++;throw Error('should not fetch');};
