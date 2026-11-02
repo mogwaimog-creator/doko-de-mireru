@@ -14,3 +14,13 @@ test('records old and observed values for relevant changes',()=>{
 test('movie and tv anomalies are separated',()=>{
  assert.notEqual(anomalyKey('movie',10),anomalyKey('tv',10));
 });
+
+test('detects cast changes beyond the shortened history preview',()=>{
+ const cast=Array.from({length:25},(_,i)=>({name:'出演者'+i,role:'役名'+i}));
+ const revised=cast.map(person=>({...person}));
+ revised[24].role='新しい役名';
+ const changes=differences({cast},{cast:revised});
+ assert.equal(changes.length,1);
+ assert.equal(changes[0].field,'cast');
+ assert.ok(changes[0].previous.length<=351);
+});
