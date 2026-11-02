@@ -27,4 +27,5 @@ jobs:
             tests/work-anomalies.test.js \
             tests/work-review.test.js \
             tests/work-first-load.test.js \
-            tests/work-busy-message.test.js
+            tests/work-busy-message.test.js \
+            tests/detail-providers-concurrency.test.js
