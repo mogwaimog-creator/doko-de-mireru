@@ -15,7 +15,11 @@ const targets=[...known,...seasons];
 const pathPattern=/^\/[a-zA-Z0-9_/-]+\.(?:jpg|jpeg|png|webp)$/;
 async function run(){
  const result={},failures=[];
+ const seen=new Set();
  for(const work of targets){
+  const unique=work.type+':'+work.id+':'+(work.season||0);
+  if(seen.has(unique))throw Error('Duplicate TMDB work/season '+unique);
+  seen.add(unique);
   const route=work.season?`tv/${work.id}/season/${work.season}`:`${work.type}/${work.id}`;
   const url=`https://api.themoviedb.org/3/${route}?language=ja-JP&api_key=${encodeURIComponent(key)}`;
   try{
