@@ -100,3 +100,9 @@
 - fix/gundam-fixed-poster-paths-20261103 の apply-gundam-poster-paths.js を更新。35作品の重複・不足を検査し、配信共通スナップショット処理の存在も確認。
 - 元の gundam.html を直接上書きせず gundam.fixed-preview.html に書き出す方式へ変更。比較・ローカルテスト後にのみ本番反映する。
 - 実TMDB画像パスは未取得。ローカル実行テストも未実施（作業環境からGitHubへのネットワークアクセス不可）。本番デプロイなし。
+
+## 2026-11-03 ガンダム固定ポスター PR #10
+- 作業ブランチ fix/gundam-fixed-poster-paths-20261103 のスクリプトにTMDB type/id/seasonキー重複チェックを追加。
+- Draft PR #10: https://github.com/mogwaimog-creator/doko-de-mireru/pull/10 を作成。未完成でマージ不可と明記。
+- 本番の gundam.html はまだ変更なし。35作品の正確な poster_path は未取得・未照合。GitHubにAPIキーを置かず、Vercelを使わず一回限り取得する環境が必要。
+- 取得とローカルテストが済むまでマージ・デプロイしない。ユーザーは作業続行を許可している。
