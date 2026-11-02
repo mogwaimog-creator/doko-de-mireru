@@ -1,3 +1,4 @@
+const {getDetailProviders}=require('./_detail-providers-cache');
 const {metadataWithLedger}=require('./_detail-metadata-cache');
 // =========================================================
 // doko-de-mireru
@@ -2203,8 +2204,9 @@ async function getMovieDetail(
       encodeURIComponent(apiKey);
 
 
-    const providerData =
-      await fetchJson(providerUrl);
+    const providerData = process.env.WORK_LEDGER_ENABLED==='1'
+      ? (await getDetailProviders('movie',movieId,()=>fetchJson(providerUrl))).data
+      : await fetchJson(providerUrl);
 
 
     if (
@@ -12008,16 +12010,17 @@ async function getTvDetail(tvId, apiKey) {
     "&language=ja-JP" +
     "&append_to_response=credits,watch/providers";
 
-  const tv = await metadataWithLedger('tv',tvId,()=>fetchJson(url));
-  // TMDB embeds providers on the first load; cached metadata excludes them.
-  // Keep the existing detail response contract without mixing streaming into the work ledger.
-  if(process.env.WORK_LEDGER_ENABLED==='1' && !tv['watch/providers']){
+  const fixedTv = await metadataWithLedger('tv',tvId,()=>fetchJson(url));
+  let tv = fixedTv;
+  if(process.env.WORK_LEDGER_ENABLED==='1'){
     const providerUrl='https://api.themoviedb.org/3/tv/'+encodeURIComponent(tvId)+'/watch/providers?api_key='+encodeURIComponent(apiKey);
     try {
-      tv['watch/providers']=await fetchJson(providerUrl);
-    } catch (error) {
+      const cached=await getDetailProviders('tv',tvId,async()=>fixedTv['watch/providers']||fetchJson(providerUrl));
+      // Never mutate the canonical metadata record shared with other requests.
+      tv={...fixedTv,'watch/providers':cached.data};
+    } catch(error){
       console.error('TV PROVIDERS ERROR:',error);
-      tv['watch/providers']={results:{}};
+      tv={...fixedTv,'watch/providers':{results:{}}};
     }
   }
 
