@@ -56,18 +56,17 @@ test('cached work avoids further metadata fetches',async()=>{
  assert.equal(loads,1);
 });
 
-test('waiter times out without waiting forever when lock owner stalls',async()=>{
+test('waiter times out with retryable busy error without duplicate TMDB fetch',async()=>{
  const lockKey='doko:work:v1:movie:404:initial-load-lock';
  values.set(lockKey,'another-worker');
  let fallback=0;
  const started=Date.now();
- const result=await metadataWithLedger('movie',404,async()=>{fallback++;return {id:404,title:'時間切れ作品'};});
+ await assert.rejects(metadataWithLedger('movie',404,async()=>{fallback++;return {id:404,title:'時間切れ作品'};}),error=>error.code==='WORK_METADATA_BUSY');
  const elapsed=Date.now()-started;
- assert.equal(fallback,1);
- assert.equal(result.id,404);
- assert.ok(elapsed>=2400,'waited for the bounded timeout');
- assert.ok(elapsed<6000,'did not wait indefinitely');
- assert.equal(values.get(lockKey),'another-worker','never remove another worker lock');
+ assert.equal(fallback,0);
+ assert.ok(elapsed>=2400);
+ assert.ok(elapsed<6000);
+ assert.equal(values.get(lockKey),'another-worker');
 });
 test('movie and tv with same TMDB number have independent locks',async()=>{
  let movieLoads=0,tvLoads=0;
