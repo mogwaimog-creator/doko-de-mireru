@@ -3,6 +3,7 @@ const test=require('node:test');
 const assert=require('node:assert/strict');
 const {identity,normalizeWork}=require('../api/_work-ledger');
 const {fromTmdb}=require('../api/_work-from-tmdb');
+const {fixedOnly}=require('../api/_detail-metadata-cache');
 
 test('movie and tv use distinct keys for the same numeric ID',()=>{
   assert.notEqual(identity('movie',123).key,identity('tv',123).key);
@@ -39,4 +40,15 @@ test('TMDB conversion excludes streaming and preserves fixed credits',()=>{
   assert.equal(item.directors[0].name,'監督');
   assert.equal(item.cast[0].name,'出演者');
   assert.equal(item['watch/providers'],undefined);
+});
+
+test('full fixed detail keeps editorial fields but never includes streaming',()=>{
+  const original={id:12,title:'映画',created_by:[{name:'制作者'}],seasons:[{season_number:1}],credits:{cast:[]},
+    'watch/providers':{results:{JP:{flatrate:[{provider_id:8}]}}}};
+  const fixed=fixedOnly(original);
+  assert.equal(fixed['watch/providers'],undefined);
+  assert.equal(fixed.created_by[0].name,'制作者');
+  assert.equal(fixed.seasons[0].season_number,1);
+  assert.equal(fixed.credits.cast.length,0);
+  assert.ok(original['watch/providers']);
 });
