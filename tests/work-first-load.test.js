@@ -55,3 +55,30 @@ test('cached work avoids further metadata fetches',async()=>{
  await metadataWithLedger('movie',303,load);
  assert.equal(loads,1);
 });
+
+test('waiter times out without waiting forever when lock owner stalls',async()=>{
+ const lockKey='doko:work:v1:movie:404:initial-load-lock';
+ values.set(lockKey,'another-worker');
+ let fallback=0;
+ const started=Date.now();
+ const result=await metadataWithLedger('movie',404,async()=>{fallback++;return {id:404,title:'時間切れ作品'};});
+ const elapsed=Date.now()-started;
+ assert.equal(fallback,1);
+ assert.equal(result.id,404);
+ assert.ok(elapsed>=2400,'waited for the bounded timeout');
+ assert.ok(elapsed<6000,'did not wait indefinitely');
+ assert.equal(values.get(lockKey),'another-worker','never remove another worker lock');
+});
+test('movie and tv with same TMDB number have independent locks',async()=>{
+ let movieLoads=0,tvLoads=0;
+ const [movie,tv]=await Promise.all([
+  metadataWithLedger('movie',505,async()=>{movieLoads++;return {id:505,title:'映画'};}),
+  metadataWithLedger('tv',505,async()=>{tvLoads++;return {id:505,name:'ドラマ'};})
+ ]);
+ assert.equal(movieLoads,1);
+ assert.equal(tvLoads,1);
+ assert.equal(movie.id,505);
+ assert.equal(tv.id,505);
+ assert.ok(values.has('doko:work:v1:movie:505'));
+ assert.ok(values.has('doko:work:v1:tv:505'));
+});
