@@ -58,3 +58,11 @@
 - セキュリティ設定を無条件に解除しない。まず読み取り専用で GA4 の「セッションの参照元/メディア」「ランディングページ」「direct/(none)」「(not set)」等の変化と、GSC/Bing側のクリック推移、リダイレクト・レスポンスヘッダーを比較。
 - 正規の検索流入や検索エンジンクローラーを妨げない防御と、CDN費用対策を両立させる。GA4の分類問題と実際の流入減少は別問題として検証。
 - 優先順：1) 大量アクセス防御と原因調査（GA4参照元異常も同時に調査）、2) 既存共通台帳の本番完成、3) 効果測定、4) 人物台帳。
+
+## 2026-11-03 読み取り専用の初回コード調査
+- main の vercel.json は /movie/:id → /index.html の rewrite と /api/update-streaming の cron のみ。GA4流入元を直接変更する設定は確認されず。Vercelダッシュボード側のFirewallルールはGitHubからは確認不可。
+- main の index.html に GA4 gtag.js と G-NSB4WM4D7B の設定あり。タグの存在は確認したが、実際の計測成功・Google/Yahooの分類は未検証。
+- main の api/search.js は通常レスポンスに Vercel-CDN-Cache-Control: s-maxage=300, stale-while-revalidate=600 を設定。CDNヒットでもCDNリクエスト数そのものは減らない。
+- index.html の検索入力は keydown と検索ボタンのイベント処理があり、/api/search?query= を呼ぶ箇所を確認。ほかに詳細・人気・ジャンル・人物・高度な検索の API 呼び出しが存在。回数・異常トラフィックはログ未取得のため未確定。
+- 未確認：Vercelの実アクセスログ・Firewallの具体的ルール・Usage内訳、GA4のセッション参照元/メディア別推移、Search Consoleのクリック推移。原因を断定しない。
+- この調査はGitHubの読み取りのみ。Vercelのデプロイ/本番API試験は実施していない。
