@@ -14,8 +14,7 @@ require.cache[redisPath]={id:redisPath,filename:redisPath,loaded:true,exports:{c
   if((a==='NX'||b==='NX')&&data.has(key))return null;
   data.set(key,value);return 'OK';
  }
- if(cmd==='LPUSH'){const items=data.get(key)||[];items.unshift(value);data.set(key,items);return items.length;}
- if(cmd==='LTRIM'){data.set(key,(data.get(key)||[]).slice(Number(value),Number(a)+1));return 'OK';}
+ if(cmd==='EVAL'){const listKey=a;const event=b;const limit=Number(args[5]);const items=data.get(listKey)||[];items.unshift(event);data.set(listKey,items.slice(0,limit));return 1;}
  if(cmd==='LRANGE')return (data.get(key)||[]).slice(Number(value),Number(a)+1);
  if(cmd==='DEL')return data.delete(key)?1:0;
  throw Error('Unexpected Redis command '+cmd);
