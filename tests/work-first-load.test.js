@@ -8,11 +8,16 @@ const metadataPath=require.resolve('../api/_detail-metadata-cache');
 const original=new Map([redisPath,ledgerPath,firstPath,metadataPath].map(p=>[p,require.cache[p]]));
 const values=new Map();
 const calls=[];
+let failLock=false,failWaitRead=false;
 require.cache[redisPath]={id:redisPath,filename:redisPath,loaded:true,exports:{command:async args=>{
  calls.push(args);
  const [cmd,key,value,a,b]=args;
- if(cmd==='GET')return values.get(key)??null;
+ if(cmd==='GET'){
+  if(failWaitRead)throw Error('Simulated Redis read outage');
+  return values.get(key)??null;
+ }
  if(cmd==='SET'){
+  if(failLock && key.endsWith(':initial-load-lock'))throw Error('Simulated Redis lock outage');
   const nx=args.includes('NX');
   if(nx&&values.has(key))return null;
   values.set(key,value);return 'OK';
@@ -27,7 +32,7 @@ require.cache[redisPath]={id:redisPath,filename:redisPath,loaded:true,exports:{c
 for(const p of [ledgerPath,firstPath,metadataPath])delete require.cache[p];
 const {metadataWithLedger}=require('../api/_detail-metadata-cache');
 test.after(()=>{for(const [p,entry] of original){if(entry)require.cache[p]=entry;else delete require.cache[p];}});
-test.beforeEach(()=>{values.clear();calls.length=0;process.env.WORK_LEDGER_ENABLED='1';});
+test.beforeEach(()=>{values.clear();calls.length=0;failLock=false;failWaitRead=false;process.env.WORK_LEDGER_ENABLED='1';});
 const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 test('two simultaneous requests share one first TMDB metadata fetch',async()=>{
  let loads=0;
