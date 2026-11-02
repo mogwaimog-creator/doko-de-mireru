@@ -8,7 +8,9 @@ async function firstWorkLoad(type,id,load){
  const {key}=identity(type,id);
  const lockKey=key+':initial-load-lock';
  const token=require('node:crypto').randomUUID();
- const acquired=await command(['SET',lockKey,token,'EX',String(LOCK_SECONDS),'NX']);
+ let acquired;
+ try{acquired=await command(['SET',lockKey,token,'EX',String(LOCK_SECONDS),'NX']);}
+ catch(error){console.error('WORK LOCK ACQUIRE FAILED',error);return load();}
  if(acquired==='OK'){
   try{return await load();}
   finally{
