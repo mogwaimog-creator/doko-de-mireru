@@ -17,9 +17,9 @@ async function run(){
  const result={},failures=[];
  for(const work of targets){
   const route=work.season?`tv/${work.id}/season/${work.season}`:`${work.type}/${work.id}`;
-  const url=`https://api.themoviedb.org/3/${route}?language=ja-JP`;
+  const url=`https://api.themoviedb.org/3/${route}?language=ja-JP&api_key=${encodeURIComponent(key)}`;
   try{
-   const res=await fetch(url,{headers:{Authorization:`Bearer ${key}`,Accept:'application/json'}});
+   const res=await fetch(url,{headers:{Accept:'application/json'}});
    if(!res.ok)throw Error('HTTP '+res.status);
    const data=await res.json();
    if(!pathPattern.test(data.poster_path||''))throw Error('poster_path missing or invalid');
