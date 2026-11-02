@@ -25,7 +25,7 @@ async function firstWorkLoad(type,id,load){
   let saved;
   try{saved=await getWork(type,id);}
   catch(error){console.error('WORK LOCK WAIT READ FAILED',error);return load();}
-  if(saved?.extensions?.tmdbDetail)return saved.extensions.tmdbDetail;
+  if(saved?.extensions?.tmdbDetail && Number(saved.extensions.tmdbDetail.id)===Number(id))return saved.extensions.tmdbDetail;
  }
  // A busy work should not cause every waiting visitor to hit TMDB.
  const error=new Error('Work metadata is temporarily busy');
