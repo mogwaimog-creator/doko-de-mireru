@@ -75,3 +75,19 @@ test('unknown future fields and page-specific notes do not collide',()=>{
  assert.equal(record.extensions.futureSection.customKey,'保持する');
  assert.equal(record.type,'tv');
 });
+
+test('feature flag off preserves existing detail loading without ledger access',async()=>{
+ const {metadataWithLedger}=require('../api/_detail-metadata-cache');
+ const previous=process.env.WORK_LEDGER_ENABLED;
+ delete process.env.WORK_LEDGER_ENABLED;
+ let calls=0;
+ try{
+   const expected={id:321,title:'従来の作品', 'watch/providers':{results:{JP:{}}}};
+   const result=await metadataWithLedger('movie',321,async()=>{calls++;return expected;});
+   assert.equal(calls,1);
+   assert.strictEqual(result,expected);
+ }finally{
+   if(previous===undefined)delete process.env.WORK_LEDGER_ENABLED;
+   else process.env.WORK_LEDGER_ENABLED=previous;
+ }
+});
