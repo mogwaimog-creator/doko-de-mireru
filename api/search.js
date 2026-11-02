@@ -1,3 +1,4 @@
+const {metadataWithLedger}=require('./_detail-metadata-cache');
 // =========================================================
 // doko-de-mireru
 // api/search.js
@@ -2175,7 +2176,7 @@ async function getMovieDetail(
 
 
   const movie =
-    await fetchJson(movieUrl);
+    await metadataWithLedger('movie',movieId,()=>fetchJson(movieUrl));
 
 
   // =======================================================
@@ -12000,8 +12001,13 @@ async function getTvDetail(tvId, apiKey) {
     "&language=ja-JP" +
     "&append_to_response=credits,watch/providers";
 
-  const tv =
-    await fetchJson(url);
+  const tv = await metadataWithLedger('tv',tvId,()=>fetchJson(url));
+  // TMDB embeds providers on the first load; cached metadata excludes them.
+  // Keep the existing detail response contract without mixing streaming into the work ledger.
+  if(process.env.WORK_LEDGER_ENABLED==='1' && !tv['watch/providers']){
+    const providerUrl='https://api.themoviedb.org/3/tv/'+encodeURIComponent(tvId)+'/watch/providers?api_key='+encodeURIComponent(apiKey);
+    tv['watch/providers']=await fetchJson(providerUrl);
+  }
 
 
   // =======================================================
