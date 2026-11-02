@@ -18,7 +18,9 @@ const titles=[
 ];
 const valid=/^\/[a-zA-Z0-9_/-]+\.(?:jpg|jpeg|png|webp)$/;
 for(const title of titles)if(!valid.test(data.posters[title]||''))throw Error('Missing or invalid path for '+title);
+if(new Set(titles).size!==titles.length)throw Error('Duplicate Gundam titles in mappings');
 if(Object.keys(data.posters).length!==titles.length)throw Error('Unexpected extra poster entries');
+if(!html.includes('const gundamSharedWatch=fetch('))throw Error('Shared streaming snapshot missing; refusing rewrite');
 const start=html.indexOf('const gundamPosterCache=new Map();');
 const end=html.indexOf('const gundamFixedWorks=gundamKnownIds;',start);
 if(start<0||end<0||end<=start)throw Error('Poster function markers changed; refusing rewrite');
@@ -31,5 +33,8 @@ function gundamFixedPoster(title){
 }
 `;
 const updated=html.slice(0,start)+replacement+html.slice(end);
-fs.writeFileSync(file,updated);
-console.log('Applied '+titles.length+' fixed poster paths. Review diff and test before deployment.');
+if(updated.includes("'/api/gundam-poster?")||updated.includes("+'/api/gundam-poster?"))throw Error('Poster API call remains; refusing rewrite');
+const output=process.argv[3]||'gundam.fixed-preview.html';
+if(output===file)throw Error('Refusing to overwrite gundam.html directly; review preview first');
+fs.writeFileSync(output,updated);
+console.log('Wrote '+titles.length+' fixed poster paths to '+output+'. Review diff and test before deployment.');
