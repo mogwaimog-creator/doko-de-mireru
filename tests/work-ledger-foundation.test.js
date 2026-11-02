@@ -61,3 +61,17 @@ test('detail streaming refresh is independent of series refresh windows',()=>{
  assert.equal(nextReviewAt(Date.parse('2026-11-03T02:00:00Z')),Date.parse('2026-11-03T03:00:00Z'));
  assert.equal(nextReviewAt(Date.parse('2026-11-03T04:00:00Z')),Date.parse('2026-11-04T03:00:00Z'));
 });
+
+test('unknown future fields and page-specific notes do not collide',()=>{
+ const record=normalizeWork('tv',77,{
+   title:'作品B',
+   commonNotes:{production:'共通の補足'},
+   pageExtras:{watch_order:{order:1,summary:'順番専用'},movie_shelf:{award:'特集専用'}},
+   extensions:{futureSection:{customKey:'保持する'}}
+ });
+ assert.equal(record.commonNotes.production,'共通の補足');
+ assert.equal(record.pageExtras.watch_order.summary,'順番専用');
+ assert.equal(record.pageExtras.movie_shelf.award,'特集専用');
+ assert.equal(record.extensions.futureSection.customKey,'保持する');
+ assert.equal(record.type,'tv');
+});
