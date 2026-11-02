@@ -6,6 +6,8 @@ const {fromTmdb}=require('./_work-from-tmdb');
 module.exports=async(req,res)=>{
   res.setHeader('Cache-Control','private, no-store');
   if(req.method!=='GET')return res.status(405).json({error:'GET only'});
+  // Keep the new public endpoint dormant until preview verification and explicit release.
+  if(process.env.WORK_LEDGER_ENABLED!=='1')return res.status(503).json({error:'Work ledger not enabled'});
   let work;
   try{work=identity(req.query?.type,req.query?.id);}
   catch{return res.status(400).json({error:'Invalid type or ID'});}
