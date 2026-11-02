@@ -2138,6 +2138,13 @@ return res.status(200).json({
 
   } catch (error) {
 
+    if(error && error.code==='WORK_METADATA_BUSY'){
+      res.setHeader("Cache-Control","no-store");
+      res.setHeader("Vercel-CDN-Cache-Control","no-store");
+      res.setHeader("Retry-After","5");
+      return res.status(503).json({error:"ただいま作品情報の取得が混み合っています。少し時間をおいて、もう一度お試しください。",code:"WORK_METADATA_BUSY"});
+    }
+
     console.error(
       "SEARCH API ERROR:",
       error
