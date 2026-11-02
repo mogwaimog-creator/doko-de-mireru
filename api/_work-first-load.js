@@ -20,7 +20,9 @@ async function firstWorkLoad(type,id,load){
  const deadline=Date.now()+WAIT_MS;
  while(Date.now()<deadline){
   await sleep(Math.min(STEP_MS,Math.max(0,deadline-Date.now())));
-  const saved=await getWork(type,id);
+  let saved;
+  try{saved=await getWork(type,id);}
+  catch(error){console.error('WORK LOCK WAIT READ FAILED',error);return load();}
   if(saved?.extensions?.tmdbDetail)return saved.extensions.tmdbDetail;
  }
  // No indefinite wait. Caller may use a direct TMDB fallback after timeout.
