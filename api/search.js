@@ -2139,6 +2139,13 @@ return res.status(200).json({
 
   } catch (error) {
 
+    if(error && error.code==='DETAIL_PROVIDERS_BUSY'){
+      res.setHeader('Cache-Control','no-store');
+      res.setHeader('Vercel-CDN-Cache-Control','no-store');
+      res.setHeader('Retry-After','5');
+      return res.status(503).json({error:'ただいま配信情報を更新しています。少し時間をおいて、もう一度お試しください。',code:'DETAIL_PROVIDERS_BUSY'});
+    }
+
     if(error && error.code==='WORK_METADATA_BUSY'){
       res.setHeader("Cache-Control","no-store");
       res.setHeader("Vercel-CDN-Cache-Control","no-store");
@@ -2221,6 +2228,8 @@ async function getMovieDetail(
     }
 
   } catch (error) {
+
+    if(error?.code==='DETAIL_PROVIDERS_BUSY')throw error;
 
     console.error(
       "WATCH PROVIDERS ERROR:",
@@ -12019,6 +12028,7 @@ async function getTvDetail(tvId, apiKey) {
       // Never mutate the canonical metadata record shared with other requests.
       tv={...fixedTv,'watch/providers':cached.data};
     } catch(error){
+      if(error?.code==='DETAIL_PROVIDERS_BUSY')throw error;
       console.error('TV PROVIDERS ERROR:',error);
       tv={...fixedTv,'watch/providers':{results:{}}};
     }
