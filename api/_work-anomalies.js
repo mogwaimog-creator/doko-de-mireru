@@ -34,9 +34,9 @@ async function recordAnomaly(type,id,before,after,context={}){
   page:String(context.page||'unknown').slice(0,80),fingerprint:hash,changes
  };
  try{
-  // Bounded history; these are separate commands, not an atomic transaction.
-  await command(['LPUSH',key,JSON.stringify(event)]);
-  await command(['LTRIM',key,'0',String(MAX_EVENTS-1)]);
+  // Redis Lua runs the append and trim atomically even under concurrent reviews.
+  const script='redis.call("LPUSH",KEYS[1],ARGV[1]); redis.call("LTRIM",KEYS[1],0,tonumber(ARGV[2])-1); return 1';
+  await command(['EVAL',script,'1',key,JSON.stringify(event),String(MAX_EVENTS)]);
  }catch(error){
   // Permit another attempt if the history write failed.
   await command(['DEL',dedupKey]).catch(()=>{});
