@@ -17,7 +17,7 @@ async function metadataWithLedger(type,id,load){
   }catch(e){console.error('WORK LEDGER READ FAILED',e);}
   return firstWorkLoad(type,id,async()=>{
   const already=await getWork(type,id).catch(()=>null);
-  if(already?.extensions?.tmdbDetail)return already.extensions.tmdbDetail;
+  if(already?.extensions?.tmdbDetail && Number(already.extensions.tmdbDetail.id)===Number(id))return already.extensions.tmdbDetail;
   const original=await load();
   if(!original||Number(original.id)!==Number(id))return original;
   try{
