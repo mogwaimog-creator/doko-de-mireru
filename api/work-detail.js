@@ -21,7 +21,8 @@ module.exports=async(req,res)=>{
     if(!response.ok)return res.status(response.status===404?404:503).json({error:'Metadata unavailable'});
     const original=await response.json();
     if(Number(original.id)!==work.id)return res.status(502).json({error:'Metadata ID mismatch'});
-    const record=fromTmdb(work.type,original);
+    const {['watch/providers']:ignored,...fixedDetail}=original;
+    const record={...fromTmdb(work.type,original),extensions:{tmdbDetail:fixedDetail}};
     let saved;
     try{saved=await putWorkIfAbsent(work.type,work.id,record);}
     catch(e){console.error('WORK LEDGER WRITE FAILED',e);return res.status(503).json({error:'Metadata storage unavailable'});}
