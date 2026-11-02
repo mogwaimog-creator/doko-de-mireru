@@ -39,7 +39,11 @@ module.exports=async(req,res)=>{
       const record={...fromTmdb(work.type,original),extensions:{tmdbDetail:fixedDetail}};
       return putWorkIfAbsent(work.type,work.id,record);
     });
-    return res.status(200).json({work:saved,source:'ledger'});
+    // firstWorkLoad waiters receive tmdbDetail; the endpoint must always
+    // return the normalized ledger record, not the raw TMDB payload.
+    const canonical=await getWork(work.type,work.id);
+    if(!canonical)throw new Error('Work ledger missing after initial load');
+    return res.status(200).json({work:canonical,source:'ledger'});
   }catch(e){
     console.error('WORK DETAIL FAILED',e);
     if(e?.code==='WORK_METADATA_BUSY'){
