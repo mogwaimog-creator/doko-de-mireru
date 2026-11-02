@@ -12006,7 +12006,12 @@ async function getTvDetail(tvId, apiKey) {
   // Keep the existing detail response contract without mixing streaming into the work ledger.
   if(process.env.WORK_LEDGER_ENABLED==='1' && !tv['watch/providers']){
     const providerUrl='https://api.themoviedb.org/3/tv/'+encodeURIComponent(tvId)+'/watch/providers?api_key='+encodeURIComponent(apiKey);
-    tv['watch/providers']=await fetchJson(providerUrl);
+    try {
+      tv['watch/providers']=await fetchJson(providerUrl);
+    } catch (error) {
+      console.error('TV PROVIDERS ERROR:',error);
+      tv['watch/providers']={results:{}};
+    }
   }
 
 
