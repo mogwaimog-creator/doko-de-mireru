@@ -34,7 +34,7 @@ async function recordAnomaly(type,id,before,after,context={}){
   page:String(context.page||'unknown').slice(0,80),fingerprint:hash,changes
  };
  try{
-  // Keep the event and trim together so parallel reviews cannot leave a partial history.
+  // Bounded history; these are separate commands, not an atomic transaction.
   await command(['LPUSH',key,JSON.stringify(event)]);
   await command(['LTRIM',key,'0',String(MAX_EVENTS-1)]);
  }catch(error){
