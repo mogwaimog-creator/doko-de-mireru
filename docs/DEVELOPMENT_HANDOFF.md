@@ -66,3 +66,11 @@
 - index.html の検索入力は keydown と検索ボタンのイベント処理があり、/api/search?query= を呼ぶ箇所を確認。ほかに詳細・人気・ジャンル・人物・高度な検索の API 呼び出しが存在。回数・異常トラフィックはログ未取得のため未確定。
 - 未確認：Vercelの実アクセスログ・Firewallの具体的ルール・Usage内訳、GA4のセッション参照元/メディア別推移、Search Consoleのクリック推移。原因を断定しない。
 - この調査はGitHubの読み取りのみ。Vercelのデプロイ/本番API試験は実施していない。
+
+## 2026-11-03 続報：共通台帳作業ブランチの比較
+- main と fix/gundam-shared-cache-review-20261102 の差分：作業ブランチは main に対して11コミット先行・4コミット遅延。変更ファイルは api/gundam-poster.js、api/search.js、api/series-watch.js、data/streaming-works.json、detail.html、gundam.html、person.html の7件。
+- api/search.js は main / 作業ブランチ双方で Redis / ledger / streaming-works の直接参照を確認できない。したがって通常検索の永続的な共通台帳利用は未確認・未完成として扱う。
+- api/series-watch.js は両ブランチで同一長のファイルが取得され、配信レジストリ参照が存在。作品の固定メタデータを検索/詳細で共通化する仕組みとは区別する。
+- 作業ブランチを丸ごとmainにマージしない。PR #8/#9 の削除内容が逆戻りしないよう個別差分を精査。
+- Vercel Firewall / GA4 の実測データは未取得。原因を特定したとは言わない。
+- 今回は読み取り専用の比較。Vercelデプロイなし。
