@@ -94,3 +94,21 @@ test('Redis read failure while waiting falls back without infinite wait',async()
  const result=await metadataWithLedger('movie',707,async()=>({id:707,title:'読み取り障害'}));
  assert.equal(result.id,707);
 });
+
+test('release never deletes a lock owned by a different worker',async()=>{
+ const lockKey='doko:work:v1:movie:808:initial-load-lock';
+ const result=await metadataWithLedger('movie',808,async()=>{
+  values.set(lockKey,'replacement-owner');
+  return {id:808,title:'所有権確認'};
+ });
+ assert.equal(result.id,808);
+ assert.equal(values.get(lockKey),'replacement-owner');
+});
+test('feature flag off does not touch Redis locking or work ledger',async()=>{
+ process.env.WORK_LEDGER_ENABLED='0';
+ let loads=0;
+ const result=await metadataWithLedger('movie',909,async()=>{loads++;return {id:909,title:'従来動作'};});
+ assert.equal(result.id,909);
+ assert.equal(loads,1);
+ assert.equal(calls.length,0);
+});
