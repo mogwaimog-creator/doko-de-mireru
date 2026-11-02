@@ -3278,6 +3278,13 @@ async function loadMovie(){
       if(response.status === 503){
         let payload = null;
         try{ payload = JSON.parse(text); }catch(ignore){}
+        if(payload && payload.code === "DETAIL_PROVIDERS_BUSY"){
+          const busyError = new Error(
+            "ただいま配信情報を更新しています。少し時間をおいて、もう一度お試しください。"
+          );
+          busyError.code = "DETAIL_PROVIDERS_BUSY";
+          throw busyError;
+        }
         if(payload && payload.code === "WORK_METADATA_BUSY"){
           const busyError = new Error(
             "ただいま作品情報の取得が混み合っています。少し時間をおいて、もう一度お試しください。"
@@ -3358,7 +3365,7 @@ async function loadMovie(){
 
 
     showError(
-      error && error.code === "WORK_METADATA_BUSY"
+      error && (error.code === "WORK_METADATA_BUSY" || error.code === "DETAIL_PROVIDERS_BUSY")
         ? error.message
         : "作品情報を取得できませんでした。"
     );
