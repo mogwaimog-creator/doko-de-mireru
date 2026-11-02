@@ -41,3 +41,17 @@ test('review keeps original work and saves previous and observed values',async()
 test('reject mismatched TMDB identity before logging',async()=>{
  await assert.rejects(inspectExistingWork('movie',101,{id:999,title:'wrong'}),/ID mismatch/);
 });
+
+test('history remains bounded to 30 events after repeated distinct reviews',async()=>{
+ data.clear();
+ await putWorkIfAbsent('movie',102,{title:'基準作品'});
+ for(let i=0;i<35;i++){
+  const result=await inspectExistingWork('movie',102,{id:102,title:'変更候補'+i});
+  assert.equal(result.recorded,true);
+ }
+ const events=await listAnomalies('movie',102);
+ assert.equal(events.length,30);
+ assert.equal(events[0].changes[0].observed,'"変更候補34"');
+ assert.equal(events[29].changes[0].observed,'"変更候補5"');
+ assert.equal((await getWork('movie',102)).title,'基準作品');
+});
