@@ -82,3 +82,15 @@ test('movie and tv with same TMDB number have independent locks',async()=>{
  assert.ok(values.has('doko:work:v1:movie:505'));
  assert.ok(values.has('doko:work:v1:tv:505'));
 });
+
+test('Redis lock failure falls back to direct metadata fetch',async()=>{
+ failLock=true;
+ const result=await metadataWithLedger('movie',606,async()=>({id:606,title:'取得可能'}));
+ assert.equal(result.id,606);
+});
+test('Redis read failure while waiting falls back without infinite wait',async()=>{
+ values.set('doko:work:v1:movie:707:initial-load-lock','another-worker');
+ failWaitRead=true;
+ const result=await metadataWithLedger('movie',707,async()=>({id:707,title:'読み取り障害'}));
+ assert.equal(result.id,707);
+});
