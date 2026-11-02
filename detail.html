@@ -3275,6 +3275,18 @@ async function loadMovie(){
         text
       );
 
+      if(response.status === 503){
+        let payload = null;
+        try{ payload = JSON.parse(text); }catch(ignore){}
+        if(payload && payload.code === "WORK_METADATA_BUSY"){
+          const busyError = new Error(
+            "ただいま作品情報の取得が混み合っています。少し時間をおいて、もう一度お試しください。"
+          );
+          busyError.code = "WORK_METADATA_BUSY";
+          throw busyError;
+        }
+      }
+
       throw new Error(
         "API ERROR " +
         response.status
@@ -3346,7 +3358,9 @@ async function loadMovie(){
 
 
     showError(
-      "作品情報を取得できませんでした。"
+      error && error.code === "WORK_METADATA_BUSY"
+        ? error.message
+        : "作品情報を取得できませんでした。"
     );
 
   }
