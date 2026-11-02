@@ -397,21 +397,47 @@ function gundamProviderRow(items){
 }
 // Verified Gundam titles use the shared Redis snapshot, not visitor-triggered TMDB.
 // Fixed-ID poster metadata; CDN cache for 30 days, no visitor title search.
-const gundamPosterCache=new Map();
+// Fixed and reviewed TMDB image paths: no per-visitor poster metadata API call.
+const GUNDAM_POSTER_PATHS=Object.freeze({
+ "機動戦士ガンダム": "/11XJ0CUYn06Mht3qeGKJfVuWnYP.jpg",
+ "機動戦士ガンダムUC": "/nfeFXnerb1sacTqTFeYDpgjhpU6.jpg",
+ "機動戦士ガンダム 水星の魔女": "/h1qliYBRsnQdxCbFWQxcnBRW3pm.jpg",
+ "機動戦士ガンダム 鉄血のオルフェンズ": "/8Lw1Y8nMmcvjlB6AdUPL4A0XkcO.jpg",
+ "機動戦士ガンダム 第08MS小隊": "/5AzsnD4spu3oVN8Va8VK6ZOAQUt.jpg",
+ "劇場版 機動戦士ガンダム00 -A wakening of the Trailblazer-": "/jkyd0Wyy1y1uqVJQaC0QPvir24i.jpg",
+ "機動戦士ガンダム00": "/5zej1XYlz6Rq4LS0jnsp9Saee2b.jpg",
+ "機動戦士Ζガンダム": "/mnQ9OFEu2CCoNpQaNPivkObLl7F.jpg",
+ "機動戦士ガンダムΖΖ": "/bjj14Yu1sapTPik54IIBkPlCsXC.jpg",
+ "機動戦士ガンダム 逆襲のシャア": "/u6nYvAViUzqWsfyi948pqiG2c2l.jpg",
+ "機動戦士ガンダム THE ORIGIN": "/iLzfsgJXntGJsU9lcY8emoTpM5v.jpg",
+ "機動戦士ガンダム0080 ポケットの中の戦争": "/3eHNjpxvKa9cjvdhf14pG4s8V4n.jpg",
+ "機動戦士ガンダム ククルス・ドアンの島": "/yWu4qA7B08YOL1eiz5KaUzEFcjU.jpg",
+ "機動戦士ガンダムNT": "/bWyTc1IaH0zGlI1PhWjBadEMaP3.jpg",
+ "機動戦士ガンダム 閃光のハサウェイ": "/rZ0JtG3VUWYGuE7j5JlmCQlcssl.jpg",
+ "機動戦士ガンダム 閃光のハサウェイ キルケーの魔女": "/nc6N2gh2fjlnY6q4R8ufLqDf10X.jpg",
+ "機動戦士ガンダムF91": "/o2wgfzTIfHoyzLWSHM9Pt3wbgpx.jpg",
+ "機動戦士ガンダム0083 STARDUST MEMORY": "/zd36MmPUJtAeL7dUXyVagFAx4sS.jpg",
+ "機動戦士Vガンダム": "/hu9suuSv7lAqcQfqjjAM5tMR5hI.jpg",
+ "機動戦士ガンダムSEED": "/uyUrtOMfgYMDtaxpggZmavWaXSL.jpg",
+ "機動戦士ガンダムSEED FREEDOM": "/cYtvQoVAJulMZQfLkUaoKRDDKTF.jpg",
+ "機動武闘伝Gガンダム": "/inpXutgA9EpMXmRfJfgqWWNxpxC.jpg",
+ "新機動戦記ガンダムW": "/6SmgoFD32LA2utwJhXYLHNviPS.jpg",
+ "機動新世紀ガンダムX": "/cQjdvDKD37aZzqLj6kKzBaXhmOu.jpg",
+ "∀ガンダム": "/A9qBOkOlVe9URj7dsTifv4FbF6T.jpg",
+ "機動戦士ガンダムAGE": "/ApcwLXh9JOf3B5gl4i2Gna9ssc1.jpg",
+ "ガンダム Gのレコンギスタ": "/hUFzdStf1QWgDdHU3Hl1zqgsBLw.jpg",
+ "ガンダムビルドファイターズ": "/cGNPb9BdwWnA0ICNyDRFo55hnPU.jpg",
+ "ガンダムビルドダイバーズ": "/dVcqBeIzOTIGf3CAdHh9lifkNHe.jpg",
+ "SDガンダムワールド 三国創傑伝": "/45tANzlxrGivKoIt5Fg9WD62oXQ.jpg",
+ "SDガンダムワールド ヒーローズ": "/7erAYO2Uj6aKYO3BkcESbGFEs4t.jpg",
+ "新機動戦記ガンダムW Endless Waltz": "/8mM06fjWaVEHmD7xiyDKfKBFOJZ.jpg",
+ "機動戦士ガンダムSEED DESTINY": "/pa2OrWbcyQJjiFcTtQbagcQoaed.jpg",
+ "ガンダムビルドファイターズトライ": "/9G15DNeYautK3999brmF4LPUIo3.jpg",
+ "ガンダムビルドダイバーズRe:RISE": "/7Fg2NYN0VBbNk9e2Gcm5IUP1pUp.jpg"
+});
 function gundamFixedPoster(title){
- const work=gundamSeasonWorks[title]||gundamKnownIds[title];
- if(!work)return Promise.resolve(null);
- const key=work.id+':'+(work.season||0);
- if(!gundamPosterCache.has(key))gundamPosterCache.set(key,(async()=>{
-  try{
-   const url=gundamApiRoot+'/api/gundam-poster?id='+work.id+(work.season?'&season='+work.season:'');
-   const r=await fetch(url);
-   if(!r.ok)throw Error('poster '+r.status);
-   const record=await r.json();
-   return gundamImage(record.poster_path,'w342');
-  }catch(e){console.warn('固定ポスターの取得失敗',title,e);return null}
- })());
- return gundamPosterCache.get(key);
+ const path=GUNDAM_POSTER_PATHS[title];
+ return Promise.resolve(path?gundamImage(path,'w342'):null);
 }
 const gundamFixedWorks=gundamKnownIds;
 const gundamSharedWatch=fetch(gundamApiRoot+'/api/series-watch?series=gundam')
