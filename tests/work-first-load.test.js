@@ -73,6 +73,14 @@ test('waiter times out with retryable busy error without duplicate TMDB fetch',a
  assert.ok(elapsed<6000);
  assert.equal(values.get(lockKey),'another-worker');
 });
+test('waiting request rejects a cached record with mismatched TMDB ID',async()=>{
+ const key='doko:work:v1:movie:414';
+ values.set(key+':initial-load-lock','another-worker');
+ values.set(key,JSON.stringify({schemaVersion:1,type:'movie',id:414,title:'保存された作品',extensions:{tmdbDetail:{id:999,title:'別作品'}}}));
+ let loads=0;
+ await assert.rejects(metadataWithLedger('movie',414,async()=>{loads++;return {id:414,title:'正しい作品'};}),error=>error.code==='WORK_METADATA_BUSY');
+ assert.equal(loads,0);
+});
 test('movie and tv with same TMDB number have independent locks',async()=>{
  let movieLoads=0,tvLoads=0;
  const [movie,tv]=await Promise.all([
