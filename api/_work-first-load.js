@@ -2,7 +2,8 @@
 // Prevent a cache stampede for a first-time work lookup. No background polling.
 const {command}=require('./_redis');
 const {identity,getWork}=require('./_work-ledger');
-const WAIT_MS=2500, STEP_MS=100, LOCK_SECONDS=8;
+// Keep the lock longer than the upstream 7s timeout plus Redis writes.
+const WAIT_MS=2500, STEP_MS=100, LOCK_SECONDS=30;
 const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 async function firstWorkLoad(type,id,load){
  const {key}=identity(type,id);
