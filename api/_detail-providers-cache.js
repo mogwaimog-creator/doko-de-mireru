@@ -5,7 +5,8 @@ const {command}=require('./_redis');
 const {identity}=require('./_work-ledger');
 const PREFIX='doko:detail-providers:v1:';
 const DAY=86400000, WEEK=7*DAY;
-const LOCK_SECONDS=8, WAIT_MS=2500, STEP_MS=100;
+// Keep the lock beyond slow upstream calls to prevent overlapping TMDB refreshes.
+const LOCK_SECONDS=30, WAIT_MS=2500, STEP_MS=100;
 const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 function refreshDue(record,now=Date.now()){
   if(!record||!Number.isFinite(Date.parse(record.checkedAt)))return true;
