@@ -45,3 +45,10 @@ test('failed refresh returns stale cached data',async()=>{
  const result=await getDetailProviders('tv',3,async()=>{throw Error('upstream');},now);
  assert.equal(result.stale,true);assert.ok(result.data.results.JP);
 });
+
+test('provider refresh lock remains valid through slow upstream calls',async()=>{
+ // Guard against accidentally restoring a short lock during refactoring.
+ const cacheSource=require('node:fs').readFileSync(require.resolve('../api/_detail-providers-cache'),'utf8');
+ assert.match(cacheSource,/LOCK_SECONDS=30/);
+ assert.match(cacheSource,/String\(LOCK_SECONDS\)/);
+});
