@@ -15,7 +15,7 @@ function refreshDue(record,now=Date.now()){
 function nextReviewAt(now=Date.now()){
   // Stagger around 12:00 JST by stable caller-provided per-work offset.
   const jst=new Date(now+9*3600000);
-  const start=Date.UTC(jst.getUTCFullYear(),jst.getUTCMonth(),jst.getUTCDate(),3,0,0)-9*3600000;
+  const start=Date.UTC(jst.getUTCFullYear(),jst.getUTCMonth(),jst.getUTCDate(),3,0,0);
   return start<=now?start+DAY:start;
 }
 function parse(raw){try{return typeof raw==='string'?JSON.parse(raw):raw||null;}catch{return null;}}
