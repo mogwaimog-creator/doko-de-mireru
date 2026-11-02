@@ -25,7 +25,9 @@ async function firstWorkLoad(type,id,load){
   catch(error){console.error('WORK LOCK WAIT READ FAILED',error);return load();}
   if(saved?.extensions?.tmdbDetail)return saved.extensions.tmdbDetail;
  }
- // No indefinite wait. Caller may use a direct TMDB fallback after timeout.
- return load();
+ // A busy work should not cause every waiting visitor to hit TMDB.
+ const error=new Error('Work metadata is temporarily busy');
+ error.code='WORK_METADATA_BUSY';
+ throw error;
 }
 module.exports={firstWorkLoad};
