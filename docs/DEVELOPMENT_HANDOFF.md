@@ -81,3 +81,10 @@
 - ユーザー本人も「全く問題ないように思う」と回答。既存デザインを変更する必要なし。
 - ただし全35作品の網羅確認、リンク先、リアルタイムの配信情報の正確性、6/18時更新成功、実際のTMDB呼び出し数までは画像では検証できない。
 - 次は画面修正ではなく、不要な検索API/TMDB通信のコード調査を優先。ユーザーへ同じ表示確認を繰り返し依頼しない。
+
+## 2026-11-03 ガンダム通信経路の詳細確認
+- main/gundam.html の実際の描画経路：choose() → hydrateGundamCards() → gundamFixedPoster() (/api/gundam-poster) と gundamFixedAvailability() (共有 /api/series-watch?series=gundam)。配信一覧タブも同じ共有スナップショットを使用。
+- gundamSearch(), gundamById(), gundamLookup(), gundamVersionLookup(), hydrateGundamVersions() はソースに残るが、現行の描画経路から呼ばれる参照は見つからず、過去実装の未使用コードである可能性が高い。gundamSeasonPoster() も定義のみ。これらの関数が存在するだけではTMDB通信は発生しない。削除前に参照と回帰を再確認する。
+- 実行される gundamFixedPoster() は作品ごとに /api/gundam-poster を呼ぶ。フロントの Map は同じページセッション中の重複を抑えるが、訪問者をまたいだCDNリクエスト数は減らさない。APIはTMDB参照の可能性があり、別途サーバー側キャッシュ条件を確認する。
+- 見放題の共有スナップショット利用は既に実装済み。ガンダムが毎回 /api/search?query= を大量に実行していると断定しない。
+- ユーザーに画面の再確認は求めず、コード側でポスターAPIのキャッシュと共通台帳への固定化を検討する。変更はまだ実施していない。
