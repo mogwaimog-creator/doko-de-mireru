@@ -19,3 +19,14 @@ test('API busy response is not CDN cached and suggests retry',()=>{
  assert.match(search,/Retry-After","5"/);
  assert.match(search,/Vercel-CDN-Cache-Control","no-store"/);
 });
+
+test('detail page explains provider refresh contention instead of generic missing data',()=>{
+ assert.match(detail,/payload\.code === "DETAIL_PROVIDERS_BUSY"/);
+ assert.match(detail,/error\.code === "DETAIL_PROVIDERS_BUSY"/);
+ assert.match(detail,/ただいま配信情報を更新しています/);
+});
+test('API returns uncached retryable response for provider refresh contention',()=>{
+ assert.match(search,/error\.code==='DETAIL_PROVIDERS_BUSY'/);
+ assert.match(search,/code:'DETAIL_PROVIDERS_BUSY'/);
+ assert.match(search,/ただいま配信情報を更新しています/);
+});
