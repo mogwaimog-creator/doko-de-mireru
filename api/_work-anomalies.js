@@ -12,7 +12,7 @@ function clean(value){
  return str.length>MAX_TEXT?str.slice(0,MAX_TEXT)+'…':str;
 }
 function differences(before,after){
- return FIELDS.filter(field=>clean(before?.[field])!==clean(after?.[field]))
+ return FIELDS.filter(field=>JSON.stringify(before?.[field]??null)!==JSON.stringify(after?.[field]??null))
   .map(field=>({field,previous:clean(before?.[field]),observed:clean(after?.[field])}));
 }
 function anomalyKey(type,id){return 'doko:work-anomalies:v1:'+identity(type,id).type+':'+identity(type,id).id;}
@@ -23,7 +23,8 @@ async function recordAnomaly(type,id,before,after,context={}){
  const changes=differences(before,after);
  if(!changes.length)return {recorded:false,changes:[]};
  const key=anomalyKey(type,id);
- const hash=fingerprint(changes);
+ // Hash the complete source values; the history display is intentionally abbreviated.
+ const hash=fingerprint(changes.map(change=>({field:change.field,previous:before?.[change.field]??null,observed:after?.[change.field]??null})));
  const dedupKey=key+':seen:'+hash;
  // A repeated discrepancy is recorded at most once per 30 days.
  const claimed=await command(['SET',dedupKey,'1','EX',2592000,'NX']);
