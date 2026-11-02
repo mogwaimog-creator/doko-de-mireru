@@ -11,7 +11,7 @@ require.cache[redisPath]={id:redisPath,filename:redisPath,loaded:true,exports:{c
  const [cmd,key,value,a,b]=args;
  if(cmd==='GET')return data.get(key)||null;
  if(cmd==='SET'){
-  if((a==='NX'||b==='NX')&&data.has(key))return null;
+  if(args.includes('NX')&&data.has(key))return null;
   data.set(key,value);return 'OK';
  }
  if(cmd==='EVAL'){const listKey=a;const event=b;const limit=Number(args[5]);const items=data.get(listKey)||[];items.unshift(event);data.set(listKey,items.slice(0,limit));return 1;}
