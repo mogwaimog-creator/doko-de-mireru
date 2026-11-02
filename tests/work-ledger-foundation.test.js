@@ -52,3 +52,12 @@ test('full fixed detail keeps editorial fields but never includes streaming',()=
   assert.equal(fixed.credits.cast.length,0);
   assert.ok(original['watch/providers']);
 });
+
+const {refreshDue,nextReviewAt,DAY}=require('../api/_detail-providers-cache');
+test('detail streaming refresh is independent of series refresh windows',()=>{
+ const now=Date.parse('2026-11-03T03:00:00Z');
+ assert.equal(refreshDue({checkedAt:new Date(now-DAY+1000).toISOString()},now),false);
+ assert.equal(refreshDue({checkedAt:new Date(now-DAY-1000).toISOString()},now),true);
+ assert.equal(nextReviewAt(Date.parse('2026-11-03T02:00:00Z')),Date.parse('2026-11-03T03:00:00Z'));
+ assert.equal(nextReviewAt(Date.parse('2026-11-03T04:00:00Z')),Date.parse('2026-11-04T03:00:00Z'));
+});
