@@ -2,6 +2,17 @@ name: Work ledger offline tests
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - feature/work-ledger-foundation-20261103
+    paths:
+      - 'api/_work-*.js'
+      - 'api/_detail-*.js'
+      - 'api/work-detail.js'
+      - 'api/search.js'
+      - 'detail.html'
+      - 'tests/*.test.js'
+      - '.github/workflows/work-ledger-tests.yml'
 
 permissions:
   contents: read
