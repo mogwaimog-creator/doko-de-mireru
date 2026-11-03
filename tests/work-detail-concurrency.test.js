@@ -53,3 +53,21 @@ test('slow initial fetch gives second visitor retryable busy response without du
  release();await pending;
  assert.equal(first.statusCode,200);
 });
+
+test('public work-detail response excludes internal notes and cached TMDB extensions',async()=>{
+ const key='doko:work:v1:movie:321';
+ values.set(key,JSON.stringify({
+  schemaVersion:1,type:'movie',id:321,title:'公開作品',posterPath:'/poster.jpg',
+  commonNotes:{private:'internal note'},pageExtras:{editor:{draft:'private'}},
+  errors:['internal error'],verification:{notes:'private'},extensions:{tmdbDetail:{id:321,title:'公開作品',secret:'internal'}},
+  checkedAt:'2026-11-03T00:00:00Z'
+ }));
+ let calls=0;global.fetch=async()=>{calls++;throw Error('should not fetch');};
+ const r=response();
+ await handler({method:'GET',query:{type:'movie',id:'321'}},r);
+ assert.equal(r.statusCode,200);assert.equal(calls,0);
+ assert.equal(r.body.work.title,'公開作品');assert.equal(r.body.work.posterPath,'/poster.jpg');
+ for(const key of ['commonNotes','pageExtras','errors','verification','extensions','checkedAt']){
+  assert.equal(Object.hasOwn(r.body.work,key),false,key+' should not be public');
+ }
+});
