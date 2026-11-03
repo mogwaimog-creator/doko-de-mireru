@@ -94,3 +94,13 @@ test('Redis lock outage returns stale saved provider data without TMDB fetch',as
  const result=await getDetailProviders('movie',904,async()=>{loads++;return {results:{}};},now);
  assert.equal(result.stale,true);assert.deepEqual(result.data,old);assert.equal(loads,0);
 });
+
+test('corrupt saved provider payload is not served as a valid cache hit',async()=>{
+ const now=Date.now(),key='doko:detail-providers:v1:movie:906';
+ values.set(key,JSON.stringify({data:{status_message:'upstream error'},checkedAt:new Date(now).toISOString()}));
+ let loads=0;
+ const result=await getDetailProviders('movie',906,async()=>{loads++;return {results:{JP:{}}};},now);
+ assert.equal(loads,1);
+ assert.deepEqual(result.data,{results:{JP:{}}});
+ assert.deepEqual(JSON.parse(values.get(key)).data,result.data);
+});
