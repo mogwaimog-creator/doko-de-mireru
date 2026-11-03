@@ -44,7 +44,7 @@ async function getDetailProviders(type,id,load,now=Date.now()){
       try{
         const latest=await read();
         if(latest&&!refreshDue(latest,now))return {data:latest.data,stale:false};
-      }catch(e){console.error('DETAIL PROVIDERS WAIT FAILED',e);break;}
+      }catch(e){console.error('DETAIL PROVIDERS WAIT FAILED',e);const busy=new Error('Streaming storage temporarily unavailable');busy.code='DETAIL_STORAGE_UNAVAILABLE';throw busy;}
     }
     const error=new Error('Streaming data temporarily busy');
     error.code='DETAIL_PROVIDERS_BUSY';
