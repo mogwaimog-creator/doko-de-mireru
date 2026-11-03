@@ -107,13 +107,13 @@ test('movie and tv with same TMDB number have independent locks',async()=>{
 test('Redis lock outage fails closed without fetching TMDB',async()=>{
  failLock=true;
  let loads=0;
- await assert.rejects(metadataWithLedger('movie',606,async()=>{loads++;return {id:606,title:'取得可能'};}),e=>e.code==='WORK_METADATA_BUSY');
+ await assert.rejects(metadataWithLedger('movie',606,async()=>{loads++;return {id:606,title:'取得可能'};}),e=>e.code==='WORK_STORAGE_UNAVAILABLE');
  assert.equal(loads,0);
 });
 test('Redis read outage fails closed without fetching TMDB',async()=>{
  failWaitRead=true;
  let loads=0;
- await assert.rejects(metadataWithLedger('movie',707,async()=>{loads++;return {id:707,title:'読み取り障害'};}),e=>e.code==='WORK_METADATA_BUSY');
+ await assert.rejects(metadataWithLedger('movie',707,async()=>{loads++;return {id:707,title:'読み取り障害'};}),e=>e.code==='WORK_STORAGE_UNAVAILABLE');
  assert.equal(loads,0);
 });
 
