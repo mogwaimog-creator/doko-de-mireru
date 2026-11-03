@@ -1,0 +1,43 @@
+name: Work ledger offline tests
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/work-ledger-foundation-20261103
+    paths:
+      - 'api/_work-*.js'
+      - 'api/_detail-*.js'
+      - 'api/work-detail.js'
+      - 'api/search.js'
+      - 'detail.html'
+      - 'tests/*.test.js'
+      - '.github/workflows/work-ledger-tests.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  work-ledger-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out selected branch
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run isolated ledger tests (no production secrets)
+        env:
+          WORK_LEDGER_ENABLED: '0'
+        run: |
+          node --test \
+            tests/work-ledger-foundation.test.js \
+            tests/work-ledger-redis.test.js \
+            tests/work-anomalies.test.js \
+            tests/work-review.test.js \
+            tests/work-first-load.test.js \
+            tests/work-busy-message.test.js \
+            tests/detail-providers-concurrency.test.js \
+            tests/work-detail-concurrency.test.js

@@ -1,3 +1,5 @@
+const {getDetailProviders}=require('./_detail-providers-cache');
+const {metadataWithLedger}=require('./_detail-metadata-cache');
 // =========================================================
 // doko-de-mireru
 // api/search.js
@@ -2137,6 +2139,34 @@ return res.status(200).json({
 
   } catch (error) {
 
+    if(error && error.code==='DETAIL_STORAGE_UNAVAILABLE'){
+      res.setHeader('Cache-Control','no-store');
+      res.setHeader('Vercel-CDN-Cache-Control','no-store');
+      res.setHeader('Retry-After','5');
+      return res.status(503).json({error:'現在、サーバーとの通信に問題が発生している可能性があります。少し時間をおいてから再度お試しください。',code:'DETAIL_STORAGE_UNAVAILABLE'});
+    }
+
+    if(error && (error.code==='WORK_STORAGE_UNAVAILABLE'||error.code==='WORK_METADATA_INCOMPLETE')){
+      res.setHeader('Cache-Control','no-store');
+      res.setHeader('Vercel-CDN-Cache-Control','no-store');
+      res.setHeader('Retry-After','5');
+      return res.status(503).json({error:'現在、サーバーとの通信に問題が発生している可能性があります。少し時間をおいてから再度お試しください。',code:'WORK_STORAGE_UNAVAILABLE'});
+    }
+
+    if(error && error.code==='DETAIL_PROVIDERS_BUSY'){
+      res.setHeader('Cache-Control','no-store');
+      res.setHeader('Vercel-CDN-Cache-Control','no-store');
+      res.setHeader('Retry-After','5');
+      return res.status(503).json({error:'ただいま配信情報を更新しています。少し時間をおいて、もう一度お試しください。',code:'DETAIL_PROVIDERS_BUSY'});
+    }
+
+    if(error && error.code==='WORK_METADATA_BUSY'){
+      res.setHeader("Cache-Control","no-store");
+      res.setHeader("Vercel-CDN-Cache-Control","no-store");
+      res.setHeader("Retry-After","5");
+      return res.status(503).json({error:"ただいま作品情報の取得が混み合っています。少し時間をおいて、もう一度お試しください。",code:"WORK_METADATA_BUSY"});
+    }
+
     console.error(
       "SEARCH API ERROR:",
       error
@@ -2175,7 +2205,7 @@ async function getMovieDetail(
 
 
   const movie =
-    await fetchJson(movieUrl);
+    await metadataWithLedger('movie',movieId,()=>fetchJson(movieUrl));
 
 
   // =======================================================
@@ -2195,8 +2225,9 @@ async function getMovieDetail(
       encodeURIComponent(apiKey);
 
 
-    const providerData =
-      await fetchJson(providerUrl);
+    const providerData = process.env.WORK_LEDGER_ENABLED==='1'
+      ? (await getDetailProviders('movie',movieId,()=>fetchJson(providerUrl))).data
+      : await fetchJson(providerUrl);
 
 
     if (
@@ -2211,6 +2242,8 @@ async function getMovieDetail(
     }
 
   } catch (error) {
+
+    if(error?.code==='DETAIL_PROVIDERS_BUSY'||error?.code==='DETAIL_STORAGE_UNAVAILABLE')throw error;
 
     console.error(
       "WATCH PROVIDERS ERROR:",
@@ -11998,10 +12031,24 @@ async function getTvDetail(tvId, apiKey) {
     "?api_key=" +
     apiKey +
     "&language=ja-JP" +
-    "&append_to_response=credits,watch/providers";
+    (process.env.WORK_LEDGER_ENABLED==='1'
+      ? "&append_to_response=credits"
+      : "&append_to_response=credits,watch/providers");
 
-  const tv =
-    await fetchJson(url);
+  const fixedTv = await metadataWithLedger('tv',tvId,()=>fetchJson(url));
+  let tv = fixedTv;
+  if(process.env.WORK_LEDGER_ENABLED==='1'){
+    const providerUrl='https://api.themoviedb.org/3/tv/'+encodeURIComponent(tvId)+'/watch/providers?api_key='+encodeURIComponent(apiKey);
+    try {
+      const cached=await getDetailProviders('tv',tvId,async()=>fixedTv['watch/providers']||fetchJson(providerUrl));
+      // Never mutate the canonical metadata record shared with other requests.
+      tv={...fixedTv,'watch/providers':cached.data};
+    } catch(error){
+      if(error?.code==='DETAIL_PROVIDERS_BUSY'||error?.code==='DETAIL_STORAGE_UNAVAILABLE')throw error;
+      console.error('TV PROVIDERS ERROR:',error);
+      tv={...fixedTv,'watch/providers':{results:{}}};
+    }
+  }
 
 
   // =======================================================
