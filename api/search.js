@@ -12042,7 +12042,7 @@ async function getTvDetail(tvId, apiKey) {
       // Never mutate the canonical metadata record shared with other requests.
       tv={...fixedTv,'watch/providers':cached.data};
     } catch(error){
-      if(error?.code==='DETAIL_PROVIDERS_BUSY')throw error;
+      if(error?.code==='DETAIL_PROVIDERS_BUSY'||error?.code==='DETAIL_STORAGE_UNAVAILABLE')throw error;
       console.error('TV PROVIDERS ERROR:',error);
       tv={...fixedTv,'watch/providers':{results:{}}};
     }
