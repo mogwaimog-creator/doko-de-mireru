@@ -6,7 +6,7 @@ const {randomUUID}=require('node:crypto');
 const PREFIX='doko:person:v1:';
 const TWO_MONTHS_MS=60*24*60*60*1000;
 const LOCK_SECONDS=30;
-const WAIT_MS=2500;
+const WAIT_MS=7000;
 const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 function personKey(id){
   const n=Number(id);
