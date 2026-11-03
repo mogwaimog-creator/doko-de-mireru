@@ -14,12 +14,14 @@ async function metadataWithLedger(type,id,load){
     const cached=await getWork(type,id);
     const detail=cached?.extensions?.tmdbDetail;
     if(detail && Number(detail.id)===Number(id))return detail;
-  }catch(e){console.error('WORK LEDGER READ FAILED',e);const busy=new Error('Metadata storage temporarily unavailable');busy.code='WORK_STORAGE_UNAVAILABLE';throw busy;}
+    if(cached){const error=new Error('Existing work ledger is missing usable detail metadata; manual repair required');error.code='WORK_METADATA_INCOMPLETE';throw error;}
+  }catch(e){if(e?.code==='WORK_METADATA_INCOMPLETE')throw e;console.error('WORK LEDGER READ FAILED',e);const busy=new Error('Metadata storage temporarily unavailable');busy.code='WORK_STORAGE_UNAVAILABLE';throw busy;}
   return firstWorkLoad(type,id,async()=>{
   let already;
   try{already=await getWork(type,id);}
   catch(e){console.error('WORK LEDGER LOCKED READ FAILED',e);const busy=new Error('Metadata storage temporarily unavailable');busy.code='WORK_STORAGE_UNAVAILABLE';throw busy;}
   if(already?.extensions?.tmdbDetail && Number(already.extensions.tmdbDetail.id)===Number(id))return already.extensions.tmdbDetail;
+  if(already){const error=new Error('Existing work ledger is missing usable detail metadata; manual repair required');error.code='WORK_METADATA_INCOMPLETE';throw error;}
   const original=await load();
   if(!original||Number(original.id)!==Number(id))return original;
   try{
@@ -37,7 +39,8 @@ async function metadataWithLedger(type,id,load){
       }
       return canonical;
     }
-  }catch(e){console.error('WORK LEDGER WRITE FAILED',e);const busy=new Error('Metadata storage temporarily unavailable');busy.code='WORK_STORAGE_UNAVAILABLE';throw busy;}
+    const error=new Error('Existing work ledger is missing usable detail metadata; manual repair required');error.code='WORK_METADATA_INCOMPLETE';throw error;
+  }catch(e){if(e?.code==='WORK_METADATA_INCOMPLETE')throw e;console.error('WORK LEDGER WRITE FAILED',e);const busy=new Error('Metadata storage temporarily unavailable');busy.code='WORK_STORAGE_UNAVAILABLE';throw busy;}
   return original;
   });
 }
