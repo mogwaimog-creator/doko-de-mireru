@@ -9,7 +9,7 @@ const search=fs.readFileSync(path.join(__dirname,'../api/search.js'),'utf8');
 test('detail page displays busy message only for the dedicated 503 code',()=>{
  assert.match(detail,/response\.status === 503/);
  assert.match(detail,/payload\.code === "WORK_METADATA_BUSY"/);
- assert.match(detail,/error && error\.code === "WORK_METADATA_BUSY"/);
+ assert.match(detail,/error && \(error\.code === "WORK_METADATA_BUSY"/);
  assert.match(detail,/showError\(/);
  assert.match(detail,/errorBox\.textContent\s*=\s*message/);
 });
