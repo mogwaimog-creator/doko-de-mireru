@@ -16,7 +16,9 @@ async function metadataWithLedger(type,id,load){
     if(detail && Number(detail.id)===Number(id))return detail;
   }catch(e){console.error('WORK LEDGER READ FAILED',e);const busy=new Error('Metadata storage temporarily unavailable');busy.code='WORK_STORAGE_UNAVAILABLE';throw busy;}
   return firstWorkLoad(type,id,async()=>{
-  const already=await getWork(type,id);
+  let already;
+  try{already=await getWork(type,id);}
+  catch(e){console.error('WORK LEDGER LOCKED READ FAILED',e);const busy=new Error('Metadata storage temporarily unavailable');busy.code='WORK_STORAGE_UNAVAILABLE';throw busy;}
   if(already?.extensions?.tmdbDetail && Number(already.extensions.tmdbDetail.id)===Number(id))return already.extensions.tmdbDetail;
   const original=await load();
   if(!original||Number(original.id)!==Number(id))return original;
