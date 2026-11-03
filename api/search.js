@@ -2146,7 +2146,7 @@ return res.status(200).json({
       return res.status(503).json({error:'現在、サーバーとの通信に問題が発生している可能性があります。少し時間をおいてから再度お試しください。',code:'DETAIL_STORAGE_UNAVAILABLE'});
     }
 
-    if(error && error.code==='WORK_STORAGE_UNAVAILABLE'){
+    if(error && (error.code==='WORK_STORAGE_UNAVAILABLE'||error.code==='WORK_METADATA_INCOMPLETE')){
       res.setHeader('Cache-Control','no-store');
       res.setHeader('Vercel-CDN-Cache-Control','no-store');
       res.setHeader('Retry-After','5');
