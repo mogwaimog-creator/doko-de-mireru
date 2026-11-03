@@ -2139,6 +2139,20 @@ return res.status(200).json({
 
   } catch (error) {
 
+    if(error && error.code==='DETAIL_STORAGE_UNAVAILABLE'){
+      res.setHeader('Cache-Control','no-store');
+      res.setHeader('Vercel-CDN-Cache-Control','no-store');
+      res.setHeader('Retry-After','5');
+      return res.status(503).json({error:'現在、サーバーとの通信に問題が発生している可能性があります。少し時間をおいてから再度お試しください。',code:'DETAIL_STORAGE_UNAVAILABLE'});
+    }
+
+    if(error && error.code==='WORK_STORAGE_UNAVAILABLE'){
+      res.setHeader('Cache-Control','no-store');
+      res.setHeader('Vercel-CDN-Cache-Control','no-store');
+      res.setHeader('Retry-After','5');
+      return res.status(503).json({error:'現在、サーバーとの通信に問題が発生している可能性があります。少し時間をおいてから再度お試しください。',code:'WORK_STORAGE_UNAVAILABLE'});
+    }
+
     if(error && error.code==='DETAIL_PROVIDERS_BUSY'){
       res.setHeader('Cache-Control','no-store');
       res.setHeader('Vercel-CDN-Cache-Control','no-store');
@@ -2229,7 +2243,7 @@ async function getMovieDetail(
 
   } catch (error) {
 
-    if(error?.code==='DETAIL_PROVIDERS_BUSY')throw error;
+    if(error?.code==='DETAIL_PROVIDERS_BUSY'||error?.code==='DETAIL_STORAGE_UNAVAILABLE')throw error;
 
     console.error(
       "WATCH PROVIDERS ERROR:",
