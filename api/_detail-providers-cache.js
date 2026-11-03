@@ -27,13 +27,13 @@ async function getDetailProviders(type,id,load,now=Date.now()){
   const read=async()=>parse(await command(['GET',key]));
   let cached=null;
   try{cached=await read();}
-  catch(e){console.error('DETAIL PROVIDERS READ FAILED',e);}
+  catch(e){console.error('DETAIL PROVIDERS READ FAILED',e);const busy=new Error('Streaming storage temporarily unavailable');busy.code='DETAIL_PROVIDERS_BUSY';throw busy;}
   if(cached&&!refreshDue(cached,now))return {data:cached.data,stale:false};
 
   const lockKey=key+':refresh-lock', token=require('node:crypto').randomUUID();
   let locked=false,lockFailed=false;
   try{locked=(await command(['SET',lockKey,token,'EX',String(LOCK_SECONDS),'NX']))==='OK';}
-  catch(e){console.error('DETAIL PROVIDERS LOCK FAILED',e);lockFailed=true;}
+  catch(e){console.error('DETAIL PROVIDERS LOCK FAILED',e);if(cached)return {data:cached.data,stale:true};const busy=new Error('Streaming storage temporarily unavailable');busy.code='DETAIL_PROVIDERS_BUSY';throw busy;}
 
   if(!locked&&!lockFailed){
     // A concurrent visitor should use the last known data, not hit TMDB.
@@ -57,13 +57,13 @@ async function getDetailProviders(type,id,load,now=Date.now()){
       try{
         const latest=await read();
         if(latest&&!refreshDue(latest,now))return {data:latest.data,stale:false};
-      }catch(e){console.error('DETAIL PROVIDERS LOCKED READ FAILED',e);}
+      }catch(e){console.error('DETAIL PROVIDERS LOCKED READ FAILED',e);if(cached)return {data:cached.data,stale:true};const busy=new Error('Streaming storage temporarily unavailable');busy.code='DETAIL_PROVIDERS_BUSY';throw busy;}
     }
     const data=await load();
     if(!data||typeof data!=='object'||Array.isArray(data)||!data.results||typeof data.results!=='object'||Array.isArray(data.results))throw new Error('Invalid provider payload');
     const next={data,checkedAt:new Date(now).toISOString(),lastAccessedAt:new Date(now).toISOString()};
     try{await command(['SET',key,JSON.stringify(next)]);}
-    catch(e){console.error('DETAIL PROVIDERS WRITE FAILED',e);}
+    catch(e){console.error('DETAIL PROVIDERS WRITE FAILED',e);if(cached)return {data:cached.data,stale:true};const busy=new Error('Streaming storage temporarily unavailable');busy.code='DETAIL_PROVIDERS_BUSY';throw busy;}
     return {data,stale:false};
   }catch(e){
     if(cached)return {data:cached.data,stale:true};
