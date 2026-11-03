@@ -15,7 +15,7 @@ module.exports=async(req,res)=>{
   try{
     const cached=await getWork(work.type,work.id);
     if(cached)return res.status(200).json({work:cached,source:'ledger'});
-  }catch(e){console.error('WORK LEDGER READ FAILED',e);res.setHeader('Retry-After','5');return res.status(503).json({error:'Metadata storage temporarily unavailable',code:'WORK_METADATA_BUSY'});}
+  }catch(e){console.error('WORK LEDGER READ FAILED',e);res.setHeader('Retry-After','5');return res.status(503).json({error:'Metadata storage temporarily unavailable',code:'WORK_STORAGE_UNAVAILABLE'});}
   const apiKey=process.env.TMDB_API_KEY;
   if(!apiKey)return res.status(503).json({error:'Metadata service unavailable'});
   try{
@@ -46,9 +46,9 @@ module.exports=async(req,res)=>{
     return res.status(200).json({work:canonical,source:'ledger'});
   }catch(e){
     console.error('WORK DETAIL FAILED',e);
-    if(e?.code==='WORK_METADATA_BUSY'){
+    if(e?.code==='WORK_METADATA_BUSY'||e?.code==='WORK_STORAGE_UNAVAILABLE'){
       res.setHeader('Retry-After','5');
-      return res.status(503).json({error:'Metadata temporarily busy',code:'WORK_METADATA_BUSY'});
+      return res.status(503).json({error:'Metadata temporarily unavailable',code:e.code});
     }
     return res.status(e?.httpStatus||503).json({error:'Metadata unavailable'});
   }
