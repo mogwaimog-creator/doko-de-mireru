@@ -21,7 +21,8 @@ function nextReviewAt(now=Date.now()){
   const start=Date.UTC(jst.getUTCFullYear(),jst.getUTCMonth(),jst.getUTCDate(),3,0,0);
   return start<=now?start+DAY:start;
 }
-function parse(raw){try{return typeof raw==='string'?JSON.parse(raw):raw||null;}catch{return null;}}
+function validProviderData(data){return !!data && typeof data==='object' && !Array.isArray(data) && !!data.results && typeof data.results==='object' && !Array.isArray(data.results);}
+function parse(raw){try{const record=typeof raw==='string'?JSON.parse(raw):raw||null;return record && validProviderData(record.data)?record:null;}catch{return null;}}
 async function getDetailProviders(type,id,load,now=Date.now()){
   const w=identity(type,id),key=PREFIX+w.type+':'+w.id;
   const read=async()=>parse(await command(['GET',key]));
@@ -60,7 +61,7 @@ async function getDetailProviders(type,id,load,now=Date.now()){
       }catch(e){console.error('DETAIL PROVIDERS LOCKED READ FAILED',e);if(cached)return {data:cached.data,stale:true};const busy=new Error('Streaming storage temporarily unavailable');busy.code='DETAIL_STORAGE_UNAVAILABLE';throw busy;}
     }
     const data=await load();
-    if(!data||typeof data!=='object'||Array.isArray(data)||!data.results||typeof data.results!=='object'||Array.isArray(data.results))throw new Error('Invalid provider payload');
+    if(!validProviderData(data))throw new Error('Invalid provider payload');
     const next={data,checkedAt:new Date(now).toISOString(),lastAccessedAt:new Date(now).toISOString()};
     try{await command(['SET',key,JSON.stringify(next)]);}
     catch(e){console.error('DETAIL PROVIDERS WRITE FAILED',e);if(cached)return {data:cached.data,stale:true};const busy=new Error('Streaming storage temporarily unavailable');busy.code='DETAIL_STORAGE_UNAVAILABLE';throw busy;}
