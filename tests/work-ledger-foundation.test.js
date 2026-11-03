@@ -91,3 +91,30 @@ test('feature flag off preserves existing detail loading without ledger access',
    else process.env.WORK_LEDGER_ENABLED=previous;
  }
 });
+
+test('incomplete existing ledger never causes another TMDB metadata fetch',async()=>{
+ const redisPath=require.resolve('../api/_redis');
+ const ledgerPath=require.resolve('../api/_work-ledger');
+ const firstPath=require.resolve('../api/_work-first-load');
+ const cachePath=require.resolve('../api/_detail-metadata-cache');
+ const paths=[redisPath,ledgerPath,firstPath,cachePath];
+ const saved=new Map(paths.map(p=>[p,require.cache[p]]));
+ const oldFlag=process.env.WORK_LEDGER_ENABLED;
+ const key='doko:work:v1:movie:712';
+ const stored={schemaVersion:1,type:'movie',id:712,title:'登録済み作品',extensions:{}};
+ let loads=0;
+ try{
+  require.cache[redisPath]={id:redisPath,filename:redisPath,loaded:true,exports:{command:async args=>{
+   if(args[0]==='GET')return args[1]===key?JSON.stringify(stored):null;
+   throw Error('Unexpected Redis command '+args[0]);
+  }}};
+  for(const p of paths.slice(1))delete require.cache[p];
+  process.env.WORK_LEDGER_ENABLED='1';
+  const {metadataWithLedger}=require('../api/_detail-metadata-cache');
+  await assert.rejects(metadataWithLedger('movie',712,async()=>{loads++;return {id:712,title:'新取得'};}),e=>e.code==='WORK_METADATA_INCOMPLETE');
+  assert.equal(loads,0);
+ }finally{
+  for(const [p,v] of saved){if(v)require.cache[p]=v;else delete require.cache[p];}
+  if(oldFlag===undefined)delete process.env.WORK_LEDGER_ENABLED;else process.env.WORK_LEDGER_ENABLED=oldFlag;
+ }
+});
