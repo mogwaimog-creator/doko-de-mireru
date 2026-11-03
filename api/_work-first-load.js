@@ -11,7 +11,7 @@ async function firstWorkLoad(type,id,load){
  const token=require('node:crypto').randomUUID();
  let acquired;
  try{acquired=await command(['SET',lockKey,token,'EX',String(LOCK_SECONDS),'NX']);}
- catch(error){console.error('WORK LOCK ACQUIRE FAILED',error);const busy=new Error('Metadata storage temporarily unavailable');busy.code='WORK_METADATA_BUSY';throw busy;}
+ catch(error){console.error('WORK LOCK ACQUIRE FAILED',error);const busy=new Error('Metadata storage temporarily unavailable');busy.code='WORK_STORAGE_UNAVAILABLE';throw busy;}
  if(acquired==='OK'){
   try{return await load();}
   finally{
@@ -25,7 +25,7 @@ async function firstWorkLoad(type,id,load){
   await sleep(Math.min(STEP_MS,Math.max(0,deadline-Date.now())));
   let saved;
   try{saved=await getWork(type,id);}
-  catch(error){console.error('WORK LOCK WAIT READ FAILED',error);const busy=new Error('Metadata storage temporarily unavailable');busy.code='WORK_METADATA_BUSY';throw busy;}
+  catch(error){console.error('WORK LOCK WAIT READ FAILED',error);const busy=new Error('Metadata storage temporarily unavailable');busy.code='WORK_STORAGE_UNAVAILABLE';throw busy;}
   if(saved?.extensions?.tmdbDetail && Number(saved.extensions.tmdbDetail.id)===Number(id))return saved.extensions.tmdbDetail;
  }
  // A busy work should not cause every waiting visitor to hit TMDB.
