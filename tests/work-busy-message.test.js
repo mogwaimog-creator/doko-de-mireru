@@ -30,3 +30,18 @@ test('API returns uncached retryable response for provider refresh contention',(
  assert.match(search,/code:'DETAIL_PROVIDERS_BUSY'/);
  assert.match(search,/ただいま配信情報を更新しています/);
 });
+
+test('storage outage is distinguishable from contention in the detail page',()=>{
+ assert.match(detail,/payload\.code === "WORK_STORAGE_UNAVAILABLE"/);
+ assert.match(detail,/payload\.code === "DETAIL_STORAGE_UNAVAILABLE"/);
+ assert.match(detail,/サーバーとの通信に問題が発生している可能性があります/);
+ assert.match(detail,/error\.code === "WORK_STORAGE_UNAVAILABLE"/);
+ assert.match(detail,/error\.code === "DETAIL_STORAGE_UNAVAILABLE"/);
+});
+test('storage outage returns retryable non-cacheable response without exposing Redis details',()=>{
+ assert.match(search,/error\.code==='WORK_STORAGE_UNAVAILABLE'/);
+ assert.match(search,/error\.code==='DETAIL_STORAGE_UNAVAILABLE'/);
+ assert.match(search,/code:'WORK_STORAGE_UNAVAILABLE'/);
+ assert.match(search,/code:'DETAIL_STORAGE_UNAVAILABLE'/);
+ assert.doesNotMatch(search,/json\(\{error:'Redis/);
+});
