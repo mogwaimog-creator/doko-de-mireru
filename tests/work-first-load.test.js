@@ -8,12 +8,12 @@ const metadataPath=require.resolve('../api/_detail-metadata-cache');
 const original=new Map([redisPath,ledgerPath,firstPath,metadataPath].map(p=>[p,require.cache[p]]));
 const values=new Map();
 const calls=[];
-let failLock=false,failWaitRead=false;
+let failLock=false,failWaitRead=false,failSecondRead=false;
 require.cache[redisPath]={id:redisPath,filename:redisPath,loaded:true,exports:{command:async args=>{
  calls.push(args);
  const [cmd,key,value,a,b]=args;
  if(cmd==='GET'){
-  if(failWaitRead)throw Error('Simulated Redis read outage');
+  if(failWaitRead || (failSecondRead && calls.filter(a=>a[0]==='GET' && a[1].startsWith('doko:work:v1:')).length===2))throw Error('Simulated Redis read outage');
   return values.get(key)??null;
  }
  if(cmd==='SET'){
@@ -32,7 +32,7 @@ require.cache[redisPath]={id:redisPath,filename:redisPath,loaded:true,exports:{c
 for(const p of [ledgerPath,firstPath,metadataPath])delete require.cache[p];
 const {metadataWithLedger}=require('../api/_detail-metadata-cache');
 test.after(()=>{for(const [p,entry] of original){if(entry)require.cache[p]=entry;else delete require.cache[p];}});
-test.beforeEach(()=>{values.clear();calls.length=0;failLock=false;failWaitRead=false;process.env.WORK_LEDGER_ENABLED='1';});
+test.beforeEach(()=>{values.clear();calls.length=0;failLock=false;failWaitRead=false;failSecondRead=false;process.env.WORK_LEDGER_ENABLED='1';});
 const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 test('two simultaneous requests share one first TMDB metadata fetch',async()=>{
  let loads=0;
@@ -139,4 +139,12 @@ test('first-load lock TTL covers slow upstream requests and storage writes',asyn
  const source=require('node:fs').readFileSync(require.resolve('../api/_work-first-load'),'utf8');
  assert.match(source,/LOCK_SECONDS=30/);
  assert.match(source,/String\(LOCK_SECONDS\)/);
+});
+
+test('Redis read failure after acquiring metadata lock returns storage error without TMDB fetch',async()=>{
+ failSecondRead=true;
+ let loads=0;
+ await assert.rejects(metadataWithLedger('movie',1001,async()=>{loads++;return {id:1001,title:'未取得作品'};}),e=>e.code==='WORK_STORAGE_UNAVAILABLE');
+ assert.equal(loads,0);
+ assert.equal(values.has('doko:work:v1:movie:1001:initial-load-lock'),false);
 });
