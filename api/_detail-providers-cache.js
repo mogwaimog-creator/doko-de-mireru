@@ -60,7 +60,7 @@ async function getDetailProviders(type,id,load,now=Date.now()){
       }catch(e){console.error('DETAIL PROVIDERS LOCKED READ FAILED',e);}
     }
     const data=await load();
-    if(!data||typeof data!=='object')throw new Error('Invalid provider payload');
+    if(!data||typeof data!=='object'||Array.isArray(data)||!data.results||typeof data.results!=='object'||Array.isArray(data.results))throw new Error('Invalid provider payload');
     const next={data,checkedAt:new Date(now).toISOString(),lastAccessedAt:new Date(now).toISOString()};
     try{await command(['SET',key,JSON.stringify(next)]);}
     catch(e){console.error('DETAIL PROVIDERS WRITE FAILED',e);}
