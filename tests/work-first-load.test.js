@@ -78,17 +78,15 @@ test('waiting request rejects a cached record with mismatched TMDB ID',async()=>
  values.set(key+':initial-load-lock','another-worker');
  values.set(key,JSON.stringify({schemaVersion:1,type:'movie',id:414,title:'保存された作品',extensions:{tmdbDetail:{id:999,title:'別作品'}}}));
  let loads=0;
- await assert.rejects(metadataWithLedger('movie',414,async()=>{loads++;return {id:414,title:'正しい作品'};}),error=>error.code==='WORK_METADATA_BUSY');
+ await assert.rejects(metadataWithLedger('movie',414,async()=>{loads++;return {id:414,title:'正しい作品'};}),error=>error.code==='WORK_METADATA_INCOMPLETE');
  assert.equal(loads,0);
 });
 test('wrong-ID saved metadata is not reused after acquiring the lock',async()=>{
  const key='doko:work:v1:movie:415';
  values.set(key,JSON.stringify({schemaVersion:1,type:'movie',id:415,title:'台帳作品',extensions:{tmdbDetail:{id:999,title:'誤登録作品'}}}));
  let loads=0;
- const result=await metadataWithLedger('movie',415,async()=>{loads++;return {id:415,title:'正しい作品'};});
- assert.equal(loads,1);
- assert.equal(result.id,415);
- assert.equal(result.title,'正しい作品');
+ await assert.rejects(metadataWithLedger('movie',415,async()=>{loads++;return {id:415,title:'正しい作品'};}),error=>error.code==='WORK_METADATA_INCOMPLETE');
+ assert.equal(loads,0);
 });
 test('movie and tv with same TMDB number have independent locks',async()=>{
  let movieLoads=0,tvLoads=0;
