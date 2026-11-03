@@ -14,7 +14,7 @@ async function metadataWithLedger(type,id,load){
     const cached=await getWork(type,id);
     const detail=cached?.extensions?.tmdbDetail;
     if(detail && Number(detail.id)===Number(id))return detail;
-  }catch(e){console.error('WORK LEDGER READ FAILED',e);const busy=new Error('Metadata storage temporarily unavailable');busy.code='WORK_METADATA_BUSY';throw busy;}
+  }catch(e){console.error('WORK LEDGER READ FAILED',e);const busy=new Error('Metadata storage temporarily unavailable');busy.code='WORK_STORAGE_UNAVAILABLE';throw busy;}
   return firstWorkLoad(type,id,async()=>{
   const already=await getWork(type,id);
   if(already?.extensions?.tmdbDetail && Number(already.extensions.tmdbDetail.id)===Number(id))return already.extensions.tmdbDetail;
@@ -35,7 +35,7 @@ async function metadataWithLedger(type,id,load){
       }
       return canonical;
     }
-  }catch(e){console.error('WORK LEDGER WRITE FAILED',e);const busy=new Error('Metadata storage temporarily unavailable');busy.code='WORK_METADATA_BUSY';throw busy;}
+  }catch(e){console.error('WORK LEDGER WRITE FAILED',e);const busy=new Error('Metadata storage temporarily unavailable');busy.code='WORK_STORAGE_UNAVAILABLE';throw busy;}
   return original;
   });
 }
