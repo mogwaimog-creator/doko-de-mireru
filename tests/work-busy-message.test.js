@@ -53,3 +53,8 @@ test('TV detail preserves storage outage instead of reporting empty providers',(
  assert.match(tvSection,/if\(error\?\.code==='DETAIL_PROVIDERS_BUSY'\|\|error\?\.code==='DETAIL_STORAGE_UNAVAILABLE'\)throw error;/);
  assert.match(tvSection,/tv=\{\.\.\.fixedTv,'watch\/providers':\{results:\{\}\}\}/);
 });
+
+test('TV metadata fetch excludes duplicate provider append when ledger is enabled',()=>{
+ assert.match(search,/WORK_LEDGER_ENABLED==='1'\s*\? "&append_to_response=credits"\s*:\s*"&append_to_response=credits,watch\/providers"/);
+ assert.match(search,/getDetailProviders\('tv',tvId/);
+});
