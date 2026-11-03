@@ -32,11 +32,11 @@ async function getDetailProviders(type,id,load,now=Date.now()){
   if(cached&&!refreshDue(cached,now))return {data:cached.data,stale:false};
 
   const lockKey=key+':refresh-lock', token=require('node:crypto').randomUUID();
-  let locked=false,lockFailed=false;
+  let locked=false;
   try{locked=(await command(['SET',lockKey,token,'EX',String(LOCK_SECONDS),'NX']))==='OK';}
   catch(e){console.error('DETAIL PROVIDERS LOCK FAILED',e);if(cached)return {data:cached.data,stale:true};const busy=new Error('Streaming storage temporarily unavailable');busy.code='DETAIL_STORAGE_UNAVAILABLE';throw busy;}
 
-  if(!locked&&!lockFailed){
+  if(!locked){
     // A concurrent visitor should use the last known data, not hit TMDB.
     if(cached)return {data:cached.data,stale:true};
     const deadline=Date.now()+WAIT_MS;
