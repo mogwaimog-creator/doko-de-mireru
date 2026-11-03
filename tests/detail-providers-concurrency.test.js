@@ -52,3 +52,19 @@ test('provider refresh lock remains valid through slow upstream calls',async()=>
  assert.match(cacheSource,/LOCK_SECONDS=30/);
  assert.match(cacheSource,/String\(LOCK_SECONDS\)/);
 });
+
+test('malformed upstream response cannot overwrite previously saved availability',async()=>{
+ const now=Date.now(),key='doko:detail-providers:v1:movie:99';
+ const old={results:{JP:{flatrate:[{provider_id:8}]}}};
+ values.set(key,JSON.stringify({data:old,checkedAt:new Date(now-DAY-1000).toISOString()}));
+ const result=await getDetailProviders('movie',99,async()=>({status_message:'TMDB error'}),now);
+ assert.equal(result.stale,true);
+ assert.deepEqual(result.data,old);
+ const saved=JSON.parse(values.get(key));
+ assert.deepEqual(saved.data,old);
+});
+test('valid empty provider results are still cacheable',async()=>{
+ const result=await getDetailProviders('movie',100,async()=>({results:{}}));
+ assert.equal(result.stale,false);
+ assert.deepEqual(result.data.results,{});
+});
