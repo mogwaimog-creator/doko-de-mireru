@@ -1,5 +1,6 @@
 const {getDetailProviders}=require('./_detail-providers-cache');
 const {metadataWithLedger}=require('./_detail-metadata-cache');
+const {withPersonLedger}=require('./_person-ledger');
 // =========================================================
 // doko-de-mireru
 // api/search.js
@@ -384,9 +385,9 @@ if (
 ) {
 
   const person =
-    await getPersonDetail(
+    await withPersonLedger(
       personId,
-      apiKey
+      () => getPersonDetail(personId, apiKey)
     );
 
   return res
