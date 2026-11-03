@@ -12031,7 +12031,9 @@ async function getTvDetail(tvId, apiKey) {
     "?api_key=" +
     apiKey +
     "&language=ja-JP" +
-    "&append_to_response=credits,watch/providers";
+    (process.env.WORK_LEDGER_ENABLED==='1'
+      ? "&append_to_response=credits"
+      : "&append_to_response=credits,watch/providers");
 
   const fixedTv = await metadataWithLedger('tv',tvId,()=>fetchJson(url));
   let tv = fixedTv;
