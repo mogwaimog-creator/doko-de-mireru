@@ -15,10 +15,9 @@ function personSeo(person){
   return {title:`${name}の映画・出演作品一覧｜ドコデミレル？`,description:`${name}の映画・ドラマなど出演作品を一覧で紹介。出演作品から配信情報を確認できます。`,url:`${SITE}/person.html?id=${Number(person.id)}`};
 }
 function replaceOnce(html,re,replacement,label){
-  let count=0;
-  const result=html.replace(re,()=>{count++;return replacement;});
-  if(count!==1)throw Error(`Expected one ${label}, got ${count}`);
-  return result;
+  const matches=html.match(new RegExp(re.source,re.flags.includes('g')?re.flags:re.flags+'g'))||[];
+  if(matches.length!==1)throw Error(`Expected one ${label}, got ${matches.length}`);
+  return html.replace(re,()=>replacement);
 }
 function injectSeo(template,kind,record){
   const seo=kind==='work'?workSeo(record):kind==='person'?personSeo(record):null;
