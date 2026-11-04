@@ -70,3 +70,19 @@ test('generated HTML injects identity before the original page reads query param
  assert.match(injectStaticIdentity(person,{kind:'person',id:42}),/params\.set\("id", staticSeoId\)/);
  assert.throws(()=>injectStaticIdentity('no anchor',{kind:'person',id:42}),/identity anchor/);
 });
+
+test('generated identity script executes with empty query and rejects mismatches',()=>{
+ const vm=require('node:vm');
+ const source='const params = new URLSearchParams(window.location.search); const movieId = params.get("id"); const mediaType = params.get("type") || "movie";';
+ const generated=injectStaticIdentity(source,{kind:'work',type:'tv',id:202879});
+ function evaluate(search){
+  const context={window:{location:{search}},URLSearchParams};
+  vm.runInNewContext(generated+';globalResult={movieId,mediaType};',context,{timeout:1000});
+  return context.globalResult;
+ }
+ assert.equal(evaluate('').movieId,'202879');
+ assert.equal(evaluate('').mediaType,'tv');
+ assert.equal(evaluate('?id=202879&type=tv').movieId,'202879');
+ assert.throws(()=>evaluate('?id=999&type=tv'),/identity mismatch/);
+ assert.throws(()=>evaluate('?id=202879&type=movie'),/type mismatch/);
+});
