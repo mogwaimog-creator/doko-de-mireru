@@ -8,6 +8,7 @@ const {embedFixedMetadata} = require('./embed-seo-fixed-detail');
 const {readFileSync} = require('node:fs');
 const fixedReaderSource = readFileSync(path.join(__dirname,'read-seo-fixed-detail.js'),'utf8');
 const splitContractSource = readFileSync(path.join(__dirname,'seo-detail-response-contract.js'),'utf8');
+const sessionCacheSource = readFileSync(path.join(__dirname,'seo-detail-session-cache.js'),'utf8');
 
 function normalizeRecord(record) {
   if (!record || typeof record !== 'object') throw Error('Invalid record');
@@ -76,8 +77,11 @@ async function build(input, output, templateRoot = path.join(__dirname, '..')) {
       const parseAnchor = '    renderMovie(\n      movie\n    );';
       if (!html.includes(parseAnchor)) throw Error('Missing detail render anchor');
       html = html.replace(parseAnchor, '    if (splitDetailRequest) {\n      if (!movie.fixed || !movie.dynamic) throw new Error("Incomplete split detail response");\n      movie = dokoMergeDetailResponse(movie.fixed, movie.dynamic);\n    }\n\n' + parseAnchor);
+      const detailFetchAnchor = 'await fetch(\n        (splitDetailRequest';
+      if (!html.includes(detailFetchAnchor)) throw Error('Missing split detail fetch call');
+      html = html.replace(detailFetchAnchor, 'await dokoCachedDetailFetch(\n        (splitDetailRequest');
       const browserContract = splitContractSource.replace('module.exports={splitDetailResponse,mergeDetailResponse,PROVIDER_FIELDS,DYNAMIC_FIELDS};', 'window.dokoMergeDetailResponse=mergeDetailResponse;');
-      html = html.replace('</head>', '<script>'+fixedReaderSource+'\n'+browserContract+'</script>\n</head>');
+      html = html.replace('</head>', '<script>'+fixedReaderSource+'\n'+browserContract+'\n'+sessionCacheSource+'</script>\n</head>');
     }
     pages.push({name, html});
   }
