@@ -23,3 +23,14 @@ test('reject missing provider information and mismatched IDs rather than display
  assert.throws(()=>mergeDetailResponse({id:1,title:'X'},{id:2,streaming:[],rental:[],purchase:[]}),/identity/);
  assert.throws(()=>mergeDetailResponse({id:1,streaming:[]},{id:1,streaming:[],rental:[],purchase:[]}),/fixed record/);
 });
+
+test('provider-only updates preserve fixed identity and reject incomplete availability',()=>{
+ const original={id:101,title:'作品',poster_path:'/poster.jpg',streaming:[{provider_id:8}],rental:[],purchase:[]};
+ const {fixed,dynamic}=splitDetailResponse(original);
+ assert.equal(fixed.title,'作品');
+ assert.equal(fixed.poster_path,'/poster.jpg');
+ assert.deepEqual(mergeDetailResponse(fixed,{...dynamic,streaming:[]}),{...original,streaming:[]});
+ assert.throws(()=>mergeDetailResponse(fixed,{...dynamic,id:102}),/identity mismatch/);
+ assert.throws(()=>mergeDetailResponse(fixed,{...dynamic,purchase:null}),/Incomplete dynamic providers/);
+ assert.throws(()=>splitDetailResponse({...original,rental:null}),/Missing or invalid provider field/);
+});
