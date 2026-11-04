@@ -1,0 +1,24 @@
+name: SEO static pilot tests
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'api/_seo-initial-html.js'
+      - 'scripts/build-seo-static.js'
+      - 'scripts/seo-static-route.js'
+      - 'scripts/seo-page-identity.js'
+      - 'tests/seo-*.test.js'
+      - '.github/workflows/seo-static-pilot.yml'
+jobs:
+  node-tests:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run offline SEO tests (no credentials, no deployment)
+        run: node --test tests/seo-initial-html.test.js tests/seo-static-build.test.js tests/seo-static-route.test.js tests/seo-page-identity.test.js
