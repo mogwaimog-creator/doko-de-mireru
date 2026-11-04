@@ -3,12 +3,15 @@ const test=require('node:test');
 const assert=require('node:assert/strict');
 const {splitDetailResponse,mergeDetailResponse}=require('../scripts/seo-detail-response-contract');
 test('full movie response round trips without losing cast, collection or providers',()=>{
- const full={id:77,title:'映画A',cast:[{name:'俳優'}],director:'監督',collection:{id:9},poster_path:'/x.jpg',streaming:[{provider_id:8}],rental:[],purchase:[{provider_id:2}]};
+ const full={id:77,title:'映画A',cast:[{name:'俳優'}],director:'監督',collection:{id:9},poster_path:'/x.jpg',streaming:[{provider_id:8}],rental:[],purchase:[{provider_id:2}],netflix_url:'https://example.com/netflix',amazon:{url:'https://example.com/prime'}};
  const {fixed,dynamic}=splitDetailResponse(full);
  assert.deepEqual(mergeDetailResponse(fixed,dynamic),full);
  assert.equal(Object.hasOwn(fixed,'streaming'),false);
  assert.equal(Object.hasOwn(fixed,'rental'),false);
  assert.equal(Object.hasOwn(fixed,'purchase'),false);
+ assert.equal(Object.hasOwn(fixed,'netflix_url'),false);
+ assert.equal(Object.hasOwn(fixed,'amazon'),false);
+ assert.equal(dynamic.netflix_url,full.netflix_url);
 });
 test('TV response retains season fields and distinct provider arrays',()=>{
  const full={id:9,title:'TV',seasons:[{season_number:1}],media_type:'アニメ',streaming:[],rental:[{provider_id:1}],purchase:[]};
