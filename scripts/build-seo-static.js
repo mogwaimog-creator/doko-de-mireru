@@ -31,12 +31,12 @@ function injectStaticIdentity(html, record) {
   if (count !== 1) throw Error('Expected one identity anchor, got ' + count);
   const id = String(record.id);
   const type = record.kind === 'person' ? 'person' : record.type;
-  const snippet = '\\nconst staticSeoId = ' + JSON.stringify(id) + ';\\n' +
-    'const staticSeoType = ' + JSON.stringify(type) + ';\\n' +
-    'if (params.has("id") && params.get("id") !== staticSeoId) throw new Error("Static SEO identity mismatch");\\n' +
-    'if (params.has("type") && params.get("type") !== staticSeoType) throw new Error("Static SEO type mismatch");\\n' +
-    'params.set("id", staticSeoId);\\n' +
-    (record.kind === 'person' ? '' : 'params.set("type", staticSeoType);\\n');
+  const snippet = '\nconst staticSeoId = ' + JSON.stringify(id) + ';\n' +
+    'const staticSeoType = ' + JSON.stringify(type) + ';\n' +
+    'if (params.has("id") && params.get("id") !== staticSeoId) throw new Error("Static SEO identity mismatch");\n' +
+    'if (params.has("type") && params.get("type") !== staticSeoType) throw new Error("Static SEO type mismatch");\n' +
+    'params.set("id", staticSeoId);\n' +
+    (record.kind === 'person' ? '' : 'params.set("type", staticSeoType);\n');
   return html.replace(anchor, () => snippet + anchor);
 }
 
