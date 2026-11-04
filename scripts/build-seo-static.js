@@ -5,6 +5,8 @@ const fs = require('node:fs/promises');
 const path = require('node:path');
 const {injectSeo} = require('../api/_seo-initial-html');
 const {embedFixedMetadata} = require('./embed-seo-fixed-detail');
+const {readFileSync} = require('node:fs');
+const fixedReaderSource = readFileSync(path.join(__dirname,'read-seo-fixed-detail.js'),'utf8');
 
 function normalizeRecord(record) {
   if (!record || typeof record !== 'object') throw Error('Invalid record');
@@ -59,6 +61,9 @@ async function build(input, output, templateRoot = path.join(__dirname, '..')) {
     // Legacy sample records remain SEO-only; no provider data is embedded.
     if (record.kind === 'work' && raw.schemaVersion === 1 && raw.extensions?.tmdbDetail) {
       html = embedFixedMetadata(html, raw);
+      // Expose a read-only parser to the generated page. Do not alter the
+      // existing API request until the provider-only path is implemented.
+      html = html.replace('</head>', '<script>'+fixedReaderSource+'</script>\n</head>');
     }
     pages.push({name, html});
   }
