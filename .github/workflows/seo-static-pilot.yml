@@ -8,6 +8,7 @@ on:
       - 'scripts/seo-static-route.js'
       - 'scripts/seo-page-identity.js'
       - 'tests/seo-*.test.js'
+      - 'tests/fixtures/seo-static-sample.json'
       - '.github/workflows/seo-static-pilot.yml'
 jobs:
   node-tests:
@@ -22,3 +23,14 @@ jobs:
           node-version: '22'
       - name: Run offline SEO tests (no credentials, no deployment)
         run: node --test tests/seo-initial-html.test.js tests/seo-static-build.test.js tests/seo-static-route.test.js tests/seo-page-identity.test.js
+      - name: Generate sample HTML from existing page templates
+        run: node scripts/build-seo-static.js tests/fixtures/seo-static-sample.json /tmp/doko-seo-static
+      - name: Check generated files and routing manifest
+        run: |
+          node -e "const fs=require('fs'); const p='/tmp/doko-seo-static/'; const files=['movie-50014.html','tv-202879.html','person-1134684.html']; for(const file of files){const html=fs.readFileSync(p+file,'utf8');if(!html.includes('staticSeoId'))throw Error(file+' missing identity');} const routes=JSON.parse(fs.readFileSync(p+'seo-route-manifest.json','utf8'));if(routes.length!==3)throw Error('expected three routes');console.log('Generated pages and route manifest verified');"
+      - name: Upload generated sample for preview inspection only
+        uses: actions/upload-artifact@v4
+        with:
+          name: seo-static-offline-sample
+          path: /tmp/doko-seo-static/
+          retention-days: 3
