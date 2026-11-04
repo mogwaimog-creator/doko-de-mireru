@@ -1,0 +1,19 @@
+[
+  {
+    "schemaVersion": 1,
+    "type": "movie",
+    "id": 50014,
+    "title": "SEO表示検証用映画"
+  },
+  {
+    "schemaVersion": 1,
+    "type": "tv",
+    "id": 202879,
+    "title": "SEO表示検証用ドラマ"
+  },
+  {
+    "kind": "person",
+    "id": 1134684,
+    "name": "SEO表示検証用人物"
+  }
+]
