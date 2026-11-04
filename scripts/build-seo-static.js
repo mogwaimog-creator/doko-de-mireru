@@ -75,8 +75,9 @@ async function build(input, output, templateRoot = path.join(__dirname, '..')) {
       html = html.replace(fetchAnchor, '        (splitDetailRequest ? url + "&detailFormat=split" : url),\n        {');
       const parseAnchor = '    renderMovie(\n      movie\n    );';
       if (!html.includes(parseAnchor)) throw Error('Missing detail render anchor');
-      html = html.replace(parseAnchor, '    if (splitDetailRequest) {\n      if (!movie.fixed || !movie.dynamic) throw new Error("Incomplete split detail response");\n      movie = dokoMergeDetailResponse(movie.fixed, movie.dynamic);\n    }\n\n' + parseAnchor);
-      const browserContract = splitContractSource.replace('module.exports={splitDetailResponse,mergeDetailResponse,PROVIDER_FIELDS,DYNAMIC_FIELDS};', 'window.dokoMergeDetailResponse=mergeDetailResponse;');
+      html = html.replace(parseAnchor, '    if (splitDetailRequest) {
+      if (!movie.fixed || !movie.dynamic) throw new Error("Incomplete split detail response");
+      movie = dokoMergeDetailResponse(movie.fixed, movie.dynamic);\n    }\n\n' + parseAnchor);\n      const browserContract = splitContractSource.replace('module.exports={splitDetailResponse,mergeDetailResponse,PROVIDER_FIELDS,DYNAMIC_FIELDS};', 'window.dokoMergeDetailResponse=mergeDetailResponse;');
       html = html.replace('</head>', '<script>'+fixedReaderSource+'\n'+browserContract+'</script>\n</head>');
     }
     pages.push({name, html});
