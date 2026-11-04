@@ -1,0 +1,36 @@
+'use strict';
+// Server-side SEO metadata rendering. Pure functions: no TMDB, Redis or streaming calls.
+const SITE='https://doko-de-mireru.com';
+const escapeHtml=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[c]));
+function validId(id){return /^\d+$/.test(String(id))&&Number.isSafeInteger(Number(id))&&Number(id)>0;}
+function workSeo(work){
+  if(!work||!['movie','tv'].includes(work.type)||!validId(work.id)||!String(work.title||'').trim())throw Error('Invalid work');
+  const title=String(work.title).trim();
+  const url=`${SITE}/detail.html?id=${Number(work.id)}${work.type==='tv'?'&type=tv':''}`;
+  return {title:`${title}はどこで見れる？配信・サブスク・見放題情報 | ドコデミレル？`,description:`${title}はどこで見れる？作品情報と配信・サブスク・見放題の状況を確認できます。`,url};
+}
+function personSeo(person){
+  if(!person||!validId(person.id)||!String(person.name||'').trim())throw Error('Invalid person');
+  const name=String(person.name).trim();
+  return {title:`${name}の映画・出演作品一覧｜ドコデミレル？`,description:`${name}の映画・ドラマなど出演作品を一覧で紹介。出演作品から配信情報を確認できます。`,url:`${SITE}/person.html?id=${Number(person.id)}`};
+}
+function replaceOnce(html,re,replacement,label){
+  let count=0;
+  const result=html.replace(re,()=>{count++;return replacement;});
+  if(count!==1)throw Error(`Expected one ${label}, got ${count}`);
+  return result;
+}
+function injectSeo(template,kind,record){
+  const seo=kind==='work'?workSeo(record):kind==='person'?personSeo(record):null;
+  if(!seo)throw Error('Unknown page kind');
+  let html=String(template);
+  html=replaceOnce(html,/<title\b[^>]*>[\s\S]*?<\/title>/i,`<title>${escapeHtml(seo.title)}</title>`,'title');
+  html=replaceOnce(html,/<meta\b(?=[^>]*\bname\s*=\s*["']description["'])[^>]*>/i,`<meta id="metaDescription" name="description" content="${escapeHtml(seo.description)}">`,'description');
+  html=replaceOnce(html,/<link\b(?=[^>]*\brel\s*=\s*["']canonical["'])[^>]*>/i,`<link id="${kind==='work'?'canonical':'canonicalLink'}" rel="canonical" href="${escapeHtml(seo.url)}">`,'canonical');
+  for(const [property,id,value] of [['og:title','ogTitle',seo.title],['og:description','ogDescription',seo.description],['og:url','ogUrl',seo.url]]){
+    const re=new RegExp('<meta\\b(?=[^>]*\\bproperty\\s*=\\s*["\\\']'+property+'["\\\'])[^>]*>','i');
+    html=replaceOnce(html,re,`<meta id="${id}" property="${property}" content="${escapeHtml(value)}">`,property);
+  }
+  return html;
+}
+module.exports={workSeo,personSeo,injectSeo,escapeHtml};
