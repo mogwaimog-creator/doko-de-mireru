@@ -19,7 +19,10 @@ test('actual movie and TV response fields include all provider-dependent contrac
   const keys=responseKeys(name);
   for(const key of ['streaming','rental','purchase'])assert.ok(keys.includes(key),name+' missing '+key);
   const fixture={id:77};
-  for(const key of keys)fixture[key]=['streaming','rental','purchase'].includes(key)?[]:null;
+  for(const key of keys){
+   if(key==='id')continue; // Preserve the valid fixture identity.
+   fixture[key]=['streaming','rental','purchase'].includes(key)?[]:null;
+  }
   const {fixed,dynamic}=splitDetailResponse(fixture);
   for(const key of keys.filter(key=>DYNAMIC_FIELDS.includes(key))){
    assert.ok(Object.hasOwn(dynamic,key),name+' failed to split '+key);
