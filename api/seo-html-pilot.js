@@ -27,6 +27,25 @@ module.exports=async function handler(req,res){
   if(req.method!=='GET')return res.status(405).end();
   // Explicitly disabled unless a deployment opts in; avoids accidental production traffic.
   if(process.env.SEO_HTML_PILOT_ENABLED!=='1')return res.status(404).end();
+  // Preview-only bounded diagnostics: no secrets, metadata, or key enumeration exposed.
+  // A single read-only Redis GET checks the exact work-ledger key requested.
+  if(req.query?.kind==='diagnostic'){
+    res.setHeader('Content-Type','application/json; charset=utf-8');
+    res.setHeader('X-Robots-Tag','noindex, nofollow');
+    const diagnosticType=req.query?.type;
+    const diagnosticId=positiveId(req.query?.id);
+    if(!diagnosticId||!['movie','tv'].includes(diagnosticType))
+      return res.status(400).json({error:'invalid_diagnostic_input'});
+    const configured=Boolean((process.env.KV_REST_API_URL||process.env.UPSTASH_REDIS_REST_URL)&&(process.env.KV_REST_API_TOKEN||process.env.UPSTASH_REDIS_REST_TOKEN));
+    if(!configured)return res.status(200).json({pilotEnabled:true,redisConfigured:false,ledgerStatus:'not_checked'});
+    try{
+      const record=await getWork(diagnosticType,diagnosticId);
+      return res.status(200).json({pilotEnabled:true,redisConfigured:true,ledgerStatus:record?'found':'missing_or_invalid'});
+    }catch(error){
+      console.error('SEO HTML PILOT DIAGNOSTIC ERROR',error);
+      return res.status(503).json({pilotEnabled:true,redisConfigured:true,ledgerStatus:'read_error'});
+    }
+  }
   const kind=req.query?.kind;
   const id=positiveId(req.query?.id);
   const type=req.query?.type;
