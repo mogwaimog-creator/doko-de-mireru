@@ -31,7 +31,7 @@ test('generator embeds fixed data for complete ledger but not legacy SEO-only re
   assert.match(movieHtml,/await fetch/);
   assert.match(movieHtml,/detailFormat=split/);
   assert.match(movieHtml,/dokoMergeDetailResponse\(movie.fixed, movie.dynamic\)/);
-  const inlineScripts=[...movieHtml.matchAll(/<script(?:\\s[^>]*)?>([\\s\\S]*?)<\\/script>/g)].map(m=>m[1]).filter(Boolean);
+  const inlineScripts=[...movieHtml.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)].map(m=>m[1]).filter(Boolean);
   for(const script of inlineScripts){
     if(script.includes('const movieId')||script.includes('window.dokoMergeDetailResponse')){
       assert.doesNotThrow(()=>new vm.Script(script), 'Generated browser script must parse');
