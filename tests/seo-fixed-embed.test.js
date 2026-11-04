@@ -4,6 +4,7 @@ const assert=require('node:assert/strict');
 const fs=require('node:fs/promises');
 const os=require('node:os');
 const path=require('node:path');
+const vm=require('node:vm');
 const {embedFixedMetadata}=require('../scripts/embed-seo-fixed-detail');
 const {build}=require('../scripts/build-seo-static');
 const row={schemaVersion:1,type:'movie',id:77,title:'映画A',extensions:{tmdbDetail:{id:77,title:'映画A',overview:'</script><script>alert(1)</script>',poster_path:'/p.jpg','watch/providers':{results:{JP:{flatrate:[{provider_id:8}]}}}}}};
@@ -28,6 +29,14 @@ test('generator embeds fixed data for complete ledger but not legacy SEO-only re
   assert.match(movieHtml,/window.dokoReadFixedDetail=readFixedDetail/);
   assert.match(movieHtml,/async function loadMovie/);
   assert.match(movieHtml,/await fetch/);
+  assert.match(movieHtml,/detailFormat=split/);
+  assert.match(movieHtml,/dokoMergeDetailResponse\(movie.fixed, movie.dynamic\)/);
+  const inlineScripts=[...movieHtml.matchAll(/<script(?:\\s[^>]*)?>([\\s\\S]*?)<\\/script>/g)].map(m=>m[1]).filter(Boolean);
+  for(const script of inlineScripts){
+    if(script.includes('const movieId')||script.includes('window.dokoMergeDetailResponse')){
+      assert.doesNotThrow(()=>new vm.Script(script), 'Generated browser script must parse');
+    }
+  }
   assert.doesNotMatch(await fs.readFile(path.join(output,'tv-9.html'),'utf8'),/doko-fixed-detail/);
  }finally{await fs.rm(dir,{recursive:true,force:true});}
 });
