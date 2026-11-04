@@ -15,6 +15,8 @@ function splitDetailResponse(detail){
   }else fixed[key]=value;
  }
  for(const key of PROVIDER_FIELDS)if(!Object.hasOwn(dynamic,key))throw Error('Missing provider field: '+key);
+ // Fixed identity must never be replaced by a provider payload.
+ if(Object.hasOwn(dynamic,'id')&&String(dynamic.id)!==String(fixed.id))throw Error('Detail identity mismatch');
  return {fixed,dynamic};
 }
 function mergeDetailResponse(fixed,dynamic){
