@@ -29,6 +29,28 @@ module.exports=async function handler(req,res){
   if(process.env.SEO_HTML_PILOT_ENABLED!=='1')return res.status(404).end();
   // Preview-only bounded diagnostics: no secrets, metadata, or key enumeration exposed.
   // A single read-only Redis GET checks the exact work-ledger key requested.
+  // Bounded preview-only HTML fixture. No Redis or TMDB requests.
+  // Never expose this on Production even if a flag is set accidentally.
+  if(req.query?.kind==='fixture'){
+    if(process.env.VERCEL_ENV!=='preview')return res.status(404).end();
+    const type=req.query?.type;
+    if(!['movie','tv','person'].includes(type))return res.status(400).end();
+    const kind=type==='person'?'person':'work';
+    const record=type==='person'?{id:1134684,name:'SEO検証用人物'}:{type,id:type==='tv'?202879:50014,title:'SEO検証用作品'};
+    try{
+      const file=kind==='person'?'person.html':'detail.html';
+      const template=await fs.readFile(path.join(process.cwd(),file),'utf8');
+      const html=injectSeo(template,kind,record);
+      res.setHeader('Content-Type','text/html; charset=utf-8');
+      res.setHeader('Cache-Control',CACHE);
+      res.setHeader('Vercel-CDN-Cache-Control',CDN);
+      res.setHeader('X-Robots-Tag','noindex, nofollow');
+      return res.status(200).send(html);
+    }catch(error){
+      console.error('SEO HTML PILOT FIXTURE ERROR',error);
+      return res.status(503).end();
+    }
+  }
   if(req.query?.kind==='diagnostic'){
     res.setHeader('Content-Type','application/json; charset=utf-8');
     res.setHeader('X-Robots-Tag','noindex, nofollow');
