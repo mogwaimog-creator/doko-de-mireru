@@ -46,3 +46,17 @@ for(const [file,kind,record] of [
    assert.ok(rendered.includes('<body'));
  });
 }
+
+test('movie and TV canonical URLs differ for same ID',()=>{
+ const movie=workSeo({type:'movie',id:77,title:'Example'});
+ const tv=workSeo({type:'tv',id:77,title:'Example'});
+ assert.notEqual(movie.url,tv.url);
+ assert.equal(tv.url,'https://doko-de-mireru.com/detail.html?id=77&type=tv');
+});
+test('person and movie canonical URLs differ for same ID',()=>{
+ assert.notEqual(personSeo({id:77,name:'Example'}).url,workSeo({type:'movie',id:77,title:'Example'}).url);
+});
+test('duplicate canonical and description tags are rejected',()=>{
+ assert.throws(()=>injectSeo(template.replace('</head>','<link rel="canonical"></head>'),'work',{type:'movie',id:1,title:'Example'}));
+ assert.throws(()=>injectSeo(template.replace('</head>','<meta name="description" content="extra"></head>'),'person',{id:1,name:'Example'}));
+});
