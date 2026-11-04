@@ -67,17 +67,17 @@ async function build(input, output, templateRoot = path.join(__dirname, '..')) {
       // Opt-in split response is served by the SAME existing API request.
       // Reassemble the original response before calling renderMovie().
       // This is a compatibility bridge, not a reduction in API requests yet.
-      const requestAnchor = 'encodeURIComponent(\\n    mediaType\\n  );';
+      const requestAnchor = 'encodeURIComponent(\n    mediaType\n  );';
       if (!html.includes(requestAnchor)) throw Error('Missing detail API URL anchor');
-      html = html.replace(requestAnchor, requestAnchor + '\\n    const splitDetailRequest = true;');
-      const fetchAnchor = '        url,\\n        {';
+      html = html.replace(requestAnchor, requestAnchor + '\n    const splitDetailRequest = true;');
+      const fetchAnchor = '        url,\n        {';
       if (!html.includes(fetchAnchor)) throw Error('Missing detail fetch anchor');
-      html = html.replace(fetchAnchor, '        (splitDetailRequest ? url + "&detailFormat=split" : url),\\n        {');
-      const parseAnchor = '    renderMovie(\\n      movie\\n    );';
+      html = html.replace(fetchAnchor, '        (splitDetailRequest ? url + "&detailFormat=split" : url),\n        {');
+      const parseAnchor = '    renderMovie(\n      movie\n    );';
       if (!html.includes(parseAnchor)) throw Error('Missing detail render anchor');
-      html = html.replace(parseAnchor, '    if (splitDetailRequest) {\\n      if (!movie.fixed || !movie.dynamic) throw new Error("Incomplete split detail response");\\n      movie = dokoMergeDetailResponse(movie.fixed, movie.dynamic);\\n    }\\n\\n' + parseAnchor);
+      html = html.replace(parseAnchor, '    if (splitDetailRequest) {\n      if (!movie.fixed || !movie.dynamic) throw new Error("Incomplete split detail response");\n      movie = dokoMergeDetailResponse(movie.fixed, movie.dynamic);\n    }\n\n' + parseAnchor);
       const browserContract = splitContractSource.replace('module.exports={splitDetailResponse,mergeDetailResponse,PROVIDER_FIELDS,DYNAMIC_FIELDS};', 'window.dokoMergeDetailResponse=mergeDetailResponse;');
-      html = html.replace('</head>', '<script>'+fixedReaderSource+'\\n'+browserContract+'</script>\\n</head>');
+      html = html.replace('</head>', '<script>'+fixedReaderSource+'\n'+browserContract+'</script>\n</head>');
     }
     pages.push({name, html});
   }
