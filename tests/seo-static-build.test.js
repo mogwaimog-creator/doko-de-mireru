@@ -18,6 +18,12 @@ test('static SEO generator produces separate movie, TV and person HTML',async()=
   ]));
   const names=await build(input,output);
   assert.deepEqual(names,['movie-77.html','tv-77.html','person-42.html']);
+  const manifest=JSON.parse(await fs.readFile(path.join(output,'seo-route-manifest.json'),'utf8'));
+  assert.deepEqual(manifest,[
+   {url:'/detail.html?id=77',file:'movie-77.html'},
+   {url:'/detail.html?id=77&type=tv',file:'tv-77.html'},
+   {url:'/person.html?id=42',file:'person-42.html'}
+  ]);
   const movie=await fs.readFile(path.join(output,'movie-77.html'),'utf8');
   const tv=await fs.readFile(path.join(output,'tv-77.html'),'utf8');
   const person=await fs.readFile(path.join(output,'person-42.html'),'utf8');
