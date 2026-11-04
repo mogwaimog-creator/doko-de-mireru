@@ -23,7 +23,11 @@ test('generator embeds fixed data for complete ledger but not legacy SEO-only re
   const input=path.join(dir,'records.json'),output=path.join(dir,'out');
   await fs.writeFile(input,JSON.stringify([row,{kind:'work',type:'tv',id:9,title:'TV'}]));
   await build(input,output);
-  assert.match(await fs.readFile(path.join(output,'movie-77.html'),'utf8'),/doko-fixed-detail/);
+  const movieHtml=await fs.readFile(path.join(output,'movie-77.html'),'utf8');
+  assert.match(movieHtml,/doko-fixed-detail/);
+  assert.match(movieHtml,/window.dokoReadFixedDetail=readFixedDetail/);
+  assert.match(movieHtml,/async function loadMovie/);
+  assert.match(movieHtml,/await fetch/);
   assert.doesNotMatch(await fs.readFile(path.join(output,'tv-9.html'),'utf8'),/doko-fixed-detail/);
  }finally{await fs.rm(dir,{recursive:true,force:true});}
 });
