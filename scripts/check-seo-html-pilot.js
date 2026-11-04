@@ -12,6 +12,7 @@ const cases=[
   {url:'/api/seo-html-pilot?kind=person&id=1134684',canonical:'person.html?id=1134684'}
 ];
 (async()=>{
+ let verified=0;
  for(const item of cases){
    const response=await fetch(base+item.url,{redirect:'manual'});
    console.log(response.status,item.url,'cache:',response.headers.get('x-vercel-cache')||'unknown');
@@ -25,5 +26,8 @@ const cases=[
    assert.match(html,/<title>[^<]+<\/title>/);
    assert.match(html,/<meta id="metaDescription" name="description" content="[^"]+">/);
    assert.equal((html.match(/rel="canonical"/g)||[]).length,1);
+   verified++;
  }
+ assert.ok(verified>0,'No rendered HTML was verified: pilot disabled or all ledger records missing');
+ console.log('Verified HTML pages:',verified);
 })().catch(e=>{console.error(e);process.exitCode=1;});
