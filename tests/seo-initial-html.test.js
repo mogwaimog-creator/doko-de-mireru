@@ -29,3 +29,20 @@ test('invalid ids are rejected',()=>{
 test('missing SEO tags fail closed',()=>{
  assert.throws(()=>injectSeo('<html><title>only</title></html>','person',{id:1,name:'A'}));
 });
+
+const fs=require('node:fs');
+const path=require('node:path');
+for(const [file,kind,record] of [
+  ['detail.html','work',{type:'movie',id:50014,title:'実際の作品'}],
+  ['person.html','person',{id:1134684,name:'実際の人物'}]
+]){
+ test('real page template: '+file,()=>{
+   const original=fs.readFileSync(path.join(__dirname,'..',file),'utf8');
+   const rendered=injectSeo(original,kind,record);
+   assert.match(rendered,/実際の(作品|人物)/);
+   assert.match(rendered,/<meta id="ogUrl" property="og:url"/);
+   assert.equal((rendered.match(/<title>/g)||[]).length,1);
+   assert.equal((rendered.match(/rel="canonical"/g)||[]).length,1);
+   assert.ok(rendered.includes('<body'));
+ });
+}
