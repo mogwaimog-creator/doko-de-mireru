@@ -4,6 +4,7 @@
 const fs = require('node:fs/promises');
 const path = require('node:path');
 const {injectSeo} = require('../api/_seo-initial-html');
+const {embedFixedMetadata} = require('./embed-seo-fixed-detail');
 
 function normalizeRecord(record) {
   if (!record || typeof record !== 'object') throw Error('Invalid record');
@@ -53,7 +54,12 @@ async function build(input, output, templateRoot = path.join(__dirname, '..')) {
     const name = filename(record);
     if (seen.has(name)) throw Error('Duplicate page: ' + name);
     seen.add(name);
-    const html = injectStaticIdentity(injectSeo(record.kind === 'person' ? person : detail, record.kind, record), record);
+    let html = injectStaticIdentity(injectSeo(record.kind === 'person' ? person : detail, record.kind, record), record);
+    // Only complete shared ledger records can carry an embedded fixed payload.
+    // Legacy sample records remain SEO-only; no provider data is embedded.
+    if (record.kind === 'work' && raw.schemaVersion === 1 && raw.extensions?.tmdbDetail) {
+      html = embedFixedMetadata(html, raw);
+    }
     pages.push({name, html});
   }
   await fs.mkdir(output,{recursive:true});
