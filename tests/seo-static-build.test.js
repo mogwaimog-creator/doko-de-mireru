@@ -4,7 +4,7 @@ const assert=require('node:assert/strict');
 const fs=require('node:fs/promises');
 const os=require('node:os');
 const path=require('node:path');
-const {build,normalizeRecord,filename}=require('../scripts/build-seo-static');
+const {build,normalizeRecord,filename,injectStaticIdentity}=require('../scripts/build-seo-static');
 
 test('static SEO generator produces separate movie, TV and person HTML',async()=>{
  const dir=await fs.mkdtemp(path.join(os.tmpdir(),'doko-seo-'));
@@ -52,4 +52,15 @@ test('existing shared work-ledger export is accepted without a kind field',async
  const record={schemaVersion:1,type:'movie',id:50014,title:'ゴジラ'};
  assert.deepEqual(normalizeRecord(record),{kind:'work',type:'movie',id:50014,title:'ゴジラ'});
  assert.equal(filename(normalizeRecord(record)),'movie-50014.html');
+});
+
+test('generated HTML injects identity before the original page reads query params',()=>{
+ const detail='const params = new URLSearchParams(window.location.search); const movieId = params.get("id");';
+ const rendered=injectStaticIdentity(detail,{kind:'work',type:'tv',id:202879});
+ assert.ok(rendered.indexOf('params.set("id"') < rendered.indexOf('const movieId ='));
+ assert.match(rendered,/params\.set\("type", staticSeoType\)/);
+ assert.match(rendered,/Static SEO identity mismatch/);
+ const person='const params = new URLSearchParams(window.location.search); const personId = params.get("id");';
+ assert.match(injectStaticIdentity(person,{kind:'person',id:42}),/params\.set\("id", staticSeoId\)/);
+ assert.throws(()=>injectStaticIdentity('no anchor',{kind:'person',id:42}),/identity anchor/);
 });
