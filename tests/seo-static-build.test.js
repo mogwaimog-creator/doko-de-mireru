@@ -30,6 +30,12 @@ test('static SEO generator produces separate movie, TV and person HTML',async()=
   assert.match(movie,/<title>映画Aはどこで見れる/);
   assert.match(tv,/detail\.html\?id=77&amp;type=tv/);
   assert.match(person,/person\.html\?id=42/);
+  // Verify that generated files carry the identity consumed by the original page JS.
+  assert.match(movie,/const staticSeoId = "77";/);
+  assert.match(tv,/const staticSeoType = "tv";/);
+  assert.match(person,/const staticSeoType = "person";/);
+  assert.ok(movie.indexOf('params.set("id", staticSeoId)') < movie.indexOf('const movieId ='));
+  assert.ok(person.indexOf('params.set("id", staticSeoId)') < person.indexOf('const personId ='));
  }finally{await fs.rm(dir,{recursive:true,force:true});}
 });
 test('invalid IDs and duplicate records are rejected',async()=>{
