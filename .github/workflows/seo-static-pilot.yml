@@ -8,6 +8,7 @@ on:
       - 'scripts/seo-static-route.js'
       - 'scripts/seo-page-identity.js'
       - 'scripts/audit-seo-browser-fetches.js'
+      - 'scripts/extract-seo-fixed-detail.js'
       - 'tests/seo-*.test.js'
       - 'tests/fixtures/seo-static-sample.json'
       - '.github/workflows/seo-static-pilot.yml'
@@ -23,7 +24,7 @@ jobs:
         with:
           node-version: '22'
       - name: Run offline SEO tests (no credentials, no deployment)
-        run: node --test tests/seo-initial-html.test.js tests/seo-static-build.test.js tests/seo-static-route.test.js tests/seo-page-identity.test.js
+        run: node --test tests/seo-initial-html.test.js tests/seo-static-build.test.js tests/seo-static-route.test.js tests/seo-page-identity.test.js tests/seo-fixed-detail.test.js
       - name: Generate sample HTML from existing page templates
         run: node scripts/build-seo-static.js tests/fixtures/seo-static-sample.json /tmp/doko-seo-static
       - name: Check generated files and routing manifest
