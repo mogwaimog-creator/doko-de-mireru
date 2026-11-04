@@ -1,6 +1,8 @@
 const {getDetailProviders}=require('./_detail-providers-cache');
 const {metadataWithLedger}=require('./_detail-metadata-cache');
 const {withPersonLedger}=require('./_person-ledger');
+// Optional, backward-compatible detail response format for the SEO pilot.
+const {splitDetailResponse}=require('../scripts/seo-detail-response-contract');
 // =========================================================
 // doko-de-mireru
 // api/search.js
@@ -439,7 +441,7 @@ if (id) {
 
     return res
       .status(200)
-      .json(result);
+      .json(req.query?.detailFormat === 'split' ? splitDetailResponse(result) : result);
   }
 
   // 映画の場合
@@ -449,7 +451,7 @@ if (id) {
       apiKey
     );
 
-  return res.status(200).json(result);
+  return res.status(200).json(req.query?.detailFormat === 'split' ? splitDetailResponse(result) : result);
 }
 
 // =====================================================
