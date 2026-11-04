@@ -41,3 +41,9 @@ test('invalid IDs and duplicate records are rejected',async()=>{
   await assert.rejects(fs.stat(output),{code:'ENOENT'});
  }finally{await fs.rm(dir,{recursive:true,force:true});}
 });
+
+test('existing shared work-ledger export is accepted without a kind field',async()=>{
+ const record={schemaVersion:1,type:'movie',id:50014,title:'ゴジラ'};
+ assert.deepEqual(normalizeRecord(record),{kind:'work',type:'movie',id:50014,title:'ゴジラ'});
+ assert.equal(filename(normalizeRecord(record)),'movie-50014.html');
+});
