@@ -7,6 +7,7 @@ on:
       - 'scripts/build-seo-static.js'
       - 'scripts/seo-static-route.js'
       - 'scripts/seo-page-identity.js'
+      - 'scripts/audit-seo-browser-fetches.js'
       - 'tests/seo-*.test.js'
       - 'tests/fixtures/seo-static-sample.json'
       - '.github/workflows/seo-static-pilot.yml'
@@ -34,3 +35,6 @@ jobs:
           name: seo-static-offline-sample
           path: /tmp/doko-seo-static/
           retention-days: 3
+
+      - name: Audit browser API fetch locations (offline)
+        run: node scripts/audit-seo-browser-fetches.js
