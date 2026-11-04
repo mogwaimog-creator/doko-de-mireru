@@ -49,12 +49,12 @@ async function build(input, output, templateRoot = path.join(__dirname, '..')) {
   // Explicit mapping for a future routing layer. No production rewrites are installed.
   // Preserve the query-based canonical URLs used by the current detail/person JS.
   const manifest = pages.map(page => {
-    const match = /^(movie|tv|person)-(\\d+)\\.html$/.exec(page.name);
+    const match = /^(movie|tv|person)-(\d+)\.html$/.exec(page.name);
     const type = match[1], id = match[2];
     const url = type === 'person' ? '/person.html?id=' + id : '/detail.html?id=' + id + (type === 'tv' ? '&type=tv' : '');
     return {url, file:page.name};
   });
-  await fs.writeFile(path.join(output,'seo-route-manifest.json'),JSON.stringify(manifest,null,2)+'\\n','utf8');
+  await fs.writeFile(path.join(output,'seo-route-manifest.json'),JSON.stringify(manifest,null,2)+'\n','utf8');
   return pages.map(page=>page.name);
 }
 if (require.main === module) {
