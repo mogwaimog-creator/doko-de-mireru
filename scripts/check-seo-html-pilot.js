@@ -35,6 +35,10 @@ const cases=[
  const repeat=await fetch(base+firstSuccessfulUrl,{redirect:'manual'});
  assert.equal(repeat.status,200,'Repeat request failed');
  assert.match(repeat.headers.get('x-robots-tag')||'',/noindex/);
+ assert.match(repeat.headers.get('content-type')||'',/text\/html/);
+ const repeatedHtml=await repeat.text();
+ const expected=cases.find(item=>item.url===firstSuccessfulUrl);
+ assert.ok(repeatedHtml.includes(expected.canonical),'Repeat response has wrong canonical URL');
  const cache=repeat.headers.get('x-vercel-cache')||'unknown';
  console.log('Repeat request cache:',cache);
  if(cache!=='HIT')console.log('CDN HIT not demonstrated; inspect preview cache before rollout');
