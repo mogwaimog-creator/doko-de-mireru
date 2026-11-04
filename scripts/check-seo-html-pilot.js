@@ -1,7 +1,7 @@
 'use strict';
 // Run manually against a Vercel preview deployment after enabling SEO_HTML_PILOT_ENABLED=1.
 // Example: node scripts/check-seo-html-pilot.js https://preview.example.vercel.app
-// Uses only three controlled requests; no crawling or TMDB calls.
+// Uses three controlled requests plus one repeat for cache observation; no crawling or TMDB calls.
 const assert=require('node:assert/strict');
 const origin=process.argv[2];
 if(!origin||!/^https:\/\//.test(origin)){console.error('Usage: node scripts/check-seo-html-pilot.js https://preview-host');process.exit(2);}
@@ -13,6 +13,7 @@ const cases=[
 ];
 (async()=>{
  let verified=0;
+ let firstSuccessfulUrl=null;
  for(const item of cases){
    const response=await fetch(base+item.url,{redirect:'manual'});
    console.log(response.status,item.url,'cache:',response.headers.get('x-vercel-cache')||'unknown');
@@ -27,7 +28,14 @@ const cases=[
    assert.match(html,/<meta id="metaDescription" name="description" content="[^"]+">/);
    assert.equal((html.match(/rel="canonical"/g)||[]).length,1);
    verified++;
+   if(!firstSuccessfulUrl)firstSuccessfulUrl=item.url;
  }
  assert.ok(verified>0,'No rendered HTML was verified: pilot disabled or all ledger records missing');
  console.log('Verified HTML pages:',verified);
+ const repeat=await fetch(base+firstSuccessfulUrl,{redirect:'manual'});
+ assert.equal(repeat.status,200,'Repeat request failed');
+ assert.match(repeat.headers.get('x-robots-tag')||'',/noindex/);
+ const cache=repeat.headers.get('x-vercel-cache')||'unknown';
+ console.log('Repeat request cache:',cache);
+ if(cache!=='HIT')console.log('CDN HIT not demonstrated; inspect preview cache before rollout');
 })().catch(e=>{console.error(e);process.exitCode=1;});
