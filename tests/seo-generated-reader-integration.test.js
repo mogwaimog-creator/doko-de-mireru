@@ -14,7 +14,7 @@ test('generated detail page embeds a usable fixed reader without extra requests'
   await fs.writeFile(input,JSON.stringify([{schemaVersion:1,type:'movie',id:77,title:'映画A',extensions:{tmdbDetail:{id:77,title:'映画A',poster_path:'/poster.jpg',release_date:'2025-01-01'}}}]));
   await build(input,out);
   const html=await fs.readFile(path.join(out,'movie-77.html'),'utf8');
-  const match=html.match(/<script>([\s\S]*?window\.dokoReadFixedDetail=readFixedDetail;[\s\S]*?)<\/script>/);
+  const match=[...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].find(m=>m[1].includes('window.dokoReadFixedDetail=readFixedDetail;'));
   assert.ok(match,'reader must be embedded in the generated HTML');
   const payload=html.match(/<script type="application\/json" id="doko-fixed-detail">([^<]+)<\/script>/);
   assert.ok(payload);
