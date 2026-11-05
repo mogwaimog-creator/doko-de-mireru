@@ -130,3 +130,8 @@ TMDB（初回取得・必要時のみ）
 - `.github/workflows/seo-static-pilot.yml` に、当該JSONからHTML生成後、title・h1・description・OGP・canonical・URL対応表を検証するオフラインステップを追加（commit `f66d8bf38b44c4adcdeaf46a3459fda9d8c996b5`）。
 - GitHub Actions run `42104034385` は `completed/success`。`node-tests` ジョブの **Generate and verify manually entered real-film SEO HTML (offline only)** ステップも `completed/success` と確認。**手動入力→静的SEO HTML生成は実証済み。**
 - 進捗フローチャート③の内訳：**手入力の実在映画→SEO HTML生成は完了**。一方、Redis共通作品台帳への登録・連携は未完了。④の公開URLへの配信検証も未完了。これは本番サイトに反映されていない。
+
+### 2026-11-06 手動映画1件のURL振分テスト
+- コミット `a8fcb8dc838a1b3ecbb9e366d4d80e05abc436dd` に対する GitHub Actions run `42104555601` は success。手動入力した『インターステラー』の生成HTMLについて、隔離プレビューの映画ID・type条件付きURL振分と従来ページへのフォールバックをオフラインで検証し、該当ステップも success。
+- さらにコミット `93e31b35698a95c57f2cf5d3c8b32d92a64b4e47` で、**サイト全体を含む隔離プレビュー**のオフライン検証ステップを追加。従来詳細ページ、検索API、既存の `/movie/:id` 経路、未該当作品のフォールバック維持を確認する。run `42104785286` は確認時 `in_progress` で、成功は未確定。
+- **公開URLの実HTTP検証と本番反映は未実施。** フローチャート④は「隔離プレビューのURL振分テスト成功／全サイト構造テスト実行中／実HTTP未検証」に更新して扱う。
