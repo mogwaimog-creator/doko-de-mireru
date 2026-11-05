@@ -80,3 +80,8 @@ TMDB（初回取得・必要時のみ）
 - GitHub Actions run `42096326759` の `node-tests` は success。各ステップを確認し、**Nodeオフラインテスト、サンプルHTML生成、ルートmanifest確認、隔離プレビュー組み立て、フルサイトプレビュー構造検証、既存ページ依存関係調査、ブラウザAPI fetch箇所監査** がすべて success。
 - これらはfixtureを使うオフライン検証であり、実作品のRedisデータ・プレビューHTTP・本番は未確認。成功済みのオフライン工程を繰り返して実装しない。
 - 次の実務的ブロッカーは実データへの安全なアクセスと保護付きHTTP検証。Vercelの共有リンク生成はアクセス権を拡大するため、無断では行わない。
+
+## 2026-11-06 一時共有リンクによるHTTP検証
+- ユーザーの明示許可を得て、既存のVercel共有リンクを再利用（新規生成ではなく `shareLinkAction: reused`）。リンク自体・トークンは文書に保存しない。
+- Vercelの認証対応fetchを使い、プレビューの `/detail.html?id=50014` と `/api/seo-html-pilot?kind=fixture&type=movie` をGET。**どちらもHTTP 429、title `Vercel Security Checkpoint`**。SEO HTMLの内容は確認できていない。
+- したがって共有リンクだけでは今回のSecurity Checkpointを通過できない。保護解除・Firewall変更・本番変更は未実施。次はプレビューの保護設定と既存のオフライン成果物の検証を分けて対応する。
