@@ -73,3 +73,14 @@ test('real person page includes initial name and biography',()=>{
  assert.ok(html.includes('>俳優A</h1>'));
  assert.ok(html.includes('>人物紹介 &amp; 略歴</p>'));
 });
+
+test('person initial summary is outside hidden content and removed after hydration',()=>{
+ const original=fs.readFileSync(path.join(__dirname,'..','person.html'),'utf8');
+ const html=injectSeo(original,'person',{id:42,name:'俳優A',biography:'人物紹介 & 経歴'});
+ const summary=html.indexOf('id="seoInitialSummary"');
+ const hiddenContent=html.indexOf('id="content"');
+ assert.ok(summary>0 && summary<hiddenContent,'visible summary must precede hidden content');
+ assert.ok(html.includes('<h2>俳優A</h2>'));
+ assert.ok(html.includes('<p>人物紹介 &amp; 経歴</p>'));
+ assert.ok(html.includes('document.getElementById("seoInitialSummary")?.remove()'));
+});
