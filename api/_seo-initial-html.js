@@ -35,7 +35,7 @@ function injectSeo(template,kind,record){
   const setInitialText=(id,value)=>{
     if(typeof value!=='string'||!value.trim())return;
     // Synthetic head-only fixtures do not contain page body slots.
-    const re=new RegExp(String.raw`(<(?:h1|div|p)\\b[^>]*\\bid=["']${id}["'][^>]*>)(\\s*)(<\\/(?:h1|div|p)>)`,'i');
+    const re=new RegExp(String.raw`(<(?:h1|div|p)\b[^>]*\bid=["']${id}["'][^>]*>)(\s*)(<\/(?:h1|div|p)>)`,'i');
     if(!re.test(html))return;
     html=html.replace(re,(_all,open,_space,close)=>open+escapeHtml(value.trim())+close);
   };
