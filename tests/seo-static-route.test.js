@@ -47,3 +47,17 @@ test('offline preview candidates distinguish movie, TV, person and reject unknow
   assert.equal(result.rewrites.some(r=>r.destination.includes('/api/')),false);
  }finally{fs.rmSync(dir,{recursive:true,force:true});}
 });
+
+test('preview routing fails closed on mismatched files, duplicate records and oversized batches',()=>{
+ const fs=require('node:fs'),os=require('node:os'),path=require('node:path');
+ const {previewRules}=require('../scripts/seo-preview-route-candidates');
+ const dir=fs.mkdtempSync(path.join(os.tmpdir(),'doko-route-negative-'));
+ const file=path.join(dir,'seo-route-manifest.json');
+ const check=records=>{fs.writeFileSync(file,JSON.stringify(records));assert.throws(()=>previewRules(dir));};
+ try{
+  check([{url:'/detail.html?id=77&type=tv',file:'movie-77.html'}]);
+  check([{url:'/detail.html?id=77',file:'movie-77.html'},{url:'/detail.html?id=77',file:'movie-77.html'}]);
+  check(Array.from({length:21},(_,i)=>({url:'/person.html?id='+(i+1),file:'person-'+(i+1)+'.html'})));
+  check([{url:'/detail.html?id=77&type=unknown',file:'movie-77.html'}]);
+ }finally{fs.rmSync(dir,{recursive:true,force:true});}
+});
