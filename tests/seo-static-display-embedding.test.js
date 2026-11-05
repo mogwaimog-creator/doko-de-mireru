@@ -17,7 +17,7 @@ test('offline display-fixed payload embeds safely and never freezes providers',a
    displayFixed:{schemaVersion:1,type:'movie',id:77,fixed:{id:77,title,poster_path:'/poster.jpg'}}};
   const input=path.join(dir,'input.json');
   await fs.writeFile(input,JSON.stringify([record]));
-  await build(input,output,templates);
+  await build(input,output);
   const html=await fs.readFile(path.join(output,'movie-77.html'),'utf8');
   const match=html.match(/<script type="application\/json" id="doko-fixed-detail">([^<]*)<\/script>/);
   assert.ok(match,'fixed JSON tag exists');
