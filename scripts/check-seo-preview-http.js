@@ -9,10 +9,10 @@ const origin=new URL(base);
 if(origin.pathname!=='/'||origin.search||origin.hash)throw Error('Use a preview origin, not a page URL');
 if(origin.hostname==='doko-de-mireru.com'||origin.hostname==='www.doko-de-mireru.com')throw Error('Refusing production hostname');
 const cases=[
- {path:'/detail.html?id=50014',expected:'movie-50014'},
- {path:'/detail.html?id=50014&type=movie',expected:'movie-50014'},
- {path:'/detail.html?id=202879&type=tv',expected:'tv-202879'},
- {path:'/person.html?id=1134684',expected:'person-1134684'},
+ {path:'/detail.html?id=50014',expected:'movie-50014',canonical:'/detail.html?id=50014'},
+ {path:'/detail.html?id=50014&type=movie',expected:'movie-50014',canonical:'/detail.html?id=50014'},
+ {path:'/detail.html?id=202879&type=tv',expected:'tv-202879',canonical:'/detail.html?id=202879&amp;type=tv'},
+ {path:'/person.html?id=1134684',expected:'person-1134684',canonical:'/person.html?id=1134684'},
  {path:'/detail.html?id=999999999',fallback:true},
  {path:'/person.html?id=999999999',fallback:true}
 ];
@@ -27,6 +27,8 @@ const cases=[
    assert.match(html,/rel=["']canonical["']/i,c.path+' missing canonical');
    assert.match(html,/<h1\b/i,c.path+' missing heading');
    assert.ok(html.includes('staticSeoId'),c.path+' missing static identity');
+   assert.ok(html.includes(c.canonical),c.path+' missing expected canonical identity');
+   assert.ok(!/<meta[^>]+name=[\"']robots[\"'][^>]+noindex/i.test(html),c.path+' unexpectedly noindex');
   }else{
    assert.ok(!html.includes('staticSeoId'),c.path+' fallback unexpectedly uses static record');
   }
