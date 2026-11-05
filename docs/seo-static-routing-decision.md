@@ -33,3 +33,11 @@ Keep canonical URLs `/detail.html?id=N`, `/detail.html?id=N&type=tv`, and `/pers
 - Before any preview deployment: assemble a complete, isolated build containing the original static assets and API dependencies; relocate the original templates only in that preview build; exclude credentials, private files and build artifacts; preserve the original production `vercel.json` and cron settings in the repository.
 - HTTP acceptance gate: inspect View Source / raw GET for `/detail.html?id=50014`, `/detail.html?id=50014&type=movie`, `/detail.html?id=202879&type=tv`, and `/person.html?id=1134684`; confirm record-specific title, description, canonical, visible heading and correct body. Check an unknown movie, TV and person ID, malformed type, and original JS behavior. Check that `/seo-pages/*` does not become an independently indexable duplicate.
 - No production merge, no per-request Redis/Functions SEO renderer, and no new Vercel deployment until the isolated build is safe and its cost impact is understood.
+
+## Dependency inventory result (CI run 42027290730)
+- Offline tests: 53 passed, 0 failed.
+- Literal local links: 17 in `detail.html`, 3 in `person.html` (these are references, not necessarily unique deployable assets).
+- Missing relative target: `series-streaming.html` from `detail.html`. Investigate whether this is a genuinely missing public page, an intended future route, or a filename mismatch; do not silently create a substitute.
+- Literal API reference: `/api/search`; dynamic JavaScript API calls are not comprehensively captured by this inventory and need separate review.
+- External hosts seen: `doko-de-mireru.com`, `image.tmdb.org`, `www.googletagmanager.com`, `www.themoviedb.org`.
+- This inventory does not establish that a full preview can be safely deployed. Existing HTML still relies on shared scripts, CSS and API behavior. Continue with a complete isolated build and HTTP tests before deploying.
