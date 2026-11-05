@@ -30,6 +30,21 @@ function injectSeo(template,kind,record){
     const re=new RegExp('<meta\\b(?=[^>]*\\bproperty\\s*=\\s*["\\\']'+property+'["\\\'])[^>]*>','i');
     html=replaceOnce(html,re,`<meta id="${id}" property="${property}" content="${escapeHtml(value)}">`,property);
   }
+  // Include source-ledger content in the initial HTML, not just the head.
+  // Existing client-side rendering remains authoritative after hydration.
+  const setInitialText=(id,value)=>{
+    if(typeof value!=='string'||!value.trim())return;
+    const re=new RegExp('(<(?:h1|div|p)\\\\b[^>]*\\\\bid=["\\\']'+id+'["\\\'][^>]*>)(\\\\s*)(<\\\\/(?:h1|div|p)>)','i');
+    html=replaceOnce(html,re,(_match)=>_match,'initial '+id);
+    html=html.replace(re,(_all,open,_space,close)=>open+escapeHtml(value.trim())+close);
+  };
+  if(kind==='work'){
+    setInitialText('title',record.title);
+    setInitialText('overview',record.overview);
+  }else{
+    setInitialText('personName',record.name);
+    setInitialText('personBiography',record.biography);
+  }
   return html;
 }
 module.exports={workSeo,personSeo,injectSeo,escapeHtml};
