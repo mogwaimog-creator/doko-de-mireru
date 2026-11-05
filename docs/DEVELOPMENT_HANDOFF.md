@@ -135,3 +135,5 @@ TMDB（初回取得・必要時のみ）
 - コミット `a8fcb8dc838a1b3ecbb9e366d4d80e05abc436dd` に対する GitHub Actions run `42104555601` は success。手動入力した『インターステラー』の生成HTMLについて、隔離プレビューの映画ID・type条件付きURL振分と従来ページへのフォールバックをオフラインで検証し、該当ステップも success。
 - さらにコミット `93e31b35698a95c57f2cf5d3c8b32d92a64b4e47` で、**サイト全体を含む隔離プレビュー**のオフライン検証ステップを追加。従来詳細ページ、検索API、既存の `/movie/:id` 経路、未該当作品のフォールバック維持を確認する。run `42104785286` は確認時 `in_progress` で、成功は未確定。
 - **公開URLの実HTTP検証と本番反映は未実施。** フローチャート④は「隔離プレビューのURL振分テスト成功／全サイト構造テスト実行中／実HTTP未検証」に更新して扱う。
+
+- **後続確認：** run `42104785286` は `completed/success`。`Generate and verify manually entered real-film SEO HTML`、`Verify real-film URL routing in isolated preview`、`Verify real-film routing in full-site preview` の3ステップとも success。したがって手動映画1件のHTML生成・隔離ルーティング・全サイト構成の**オフライン検証は完了**。実HTTP検証・本番公開は未完了。
