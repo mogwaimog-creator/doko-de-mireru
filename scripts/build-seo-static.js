@@ -15,7 +15,7 @@ function normalizeRecord(record) {
   if (record.kind === 'person') {
     const id = Number(record.id);
     if (!Number.isSafeInteger(id) || id <= 0 || !/^\d+$/.test(String(record.id))) throw Error('Invalid person ID');
-    return {kind:'person', id, name:record.name};
+    return {kind:'person', id, name:record.name, biography:record.biography};
   }
   // Accept the existing shared work-ledger schema without copying fields by hand.
   // This is an offline JSON export, never a live Redis or TMDB request.
@@ -23,7 +23,7 @@ function normalizeRecord(record) {
   if (!['movie','tv'].includes(record.type)) throw Error('Invalid work type');
   const id = Number(record.id);
   if (!Number.isSafeInteger(id) || id <= 0 || !/^\d+$/.test(String(record.id))) throw Error('Invalid work ID');
-  return {kind:'work', type:record.type, id, title:record.title};
+  return {kind:'work', type:record.type, id, title:record.title, overview:record.overview};
 }
 function filename(record) {
   return record.kind === 'person' ? 'person-' + record.id + '.html' : record.type + '-' + record.id + '.html';
