@@ -64,12 +64,10 @@ async function build(input, output, templateRoot = path.join(__dirname, '..')) {
     if (record.kind === 'work' && raw.displayFixed) {
       const fixed = validateFixedDisplayRecord(raw.displayFixed,record.type,record.id);
       const safeJson = JSON.stringify({type:record.type,id:record.id,metadata:fixed})
-        .replace(/[<>&\\u2028\\u2029]/g, ch => ({
-          '<':'\\\\u003c','>':'\\\\u003e','&':'\\\\u0026',
-          '\\u2028':'\\\\u2028','\\u2029':'\\\\u2029'
-        })[ch]);
+        .replace(/</g,'\\u003c').replace(/>/g,'\\u003e').replace(/&/g,'\\u0026')
+        .replace(/\u2028/g,'\\u2028').replace(/\u2029/g,'\\u2029');
       if (html.split('</head>').length !== 2) throw Error('Expected one closing head');
-      html = html.replace('</head>', '<script type="application/json" id="doko-fixed-detail">' + safeJson + '</script>\\n</head>');
+      html = html.replace('</head>', '<script type="application/json" id="doko-fixed-detail">' + safeJson + '</script>\n</head>');
     }
     // Only complete shared ledger records can carry an embedded fixed payload.
     // Legacy sample records remain SEO-only; no provider data is embedded.
