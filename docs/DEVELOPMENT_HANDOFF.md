@@ -75,3 +75,8 @@ TMDB（初回取得・必要時のみ）
 - GitHub `fetch_commit_workflow_runs` でコミット `bfe7e6b0e13c03d7222d807dc6f783e1452c04fb` のPRトリガー `SEO static pilot tests` が `completed / success` と確認できた。**このコミットに対するオフラインCI成功の証拠。**
 - workflow定義 `.github/workflows/seo-static-pilot.yml` にはNodeテスト、サンプルHTML生成、ルートmanifest、プレビュー構成・依存関係検査が含まれる。これはライブHTTP、実Redisレコード、後続コミットのテスト成功を保証しない。
 - `.github/workflows/seo-preview-http-check.yml` も既存。専用プレビューURLに対する読み取り専用HTTP検証だが、現状は429保護がブロッカー。**既存の検証コードを再利用し、新設しない。**
+
+## 2026-11-06 CIジョブ詳細確認
+- GitHub Actions run `42096326759` の `node-tests` は success。各ステップを確認し、**Nodeオフラインテスト、サンプルHTML生成、ルートmanifest確認、隔離プレビュー組み立て、フルサイトプレビュー構造検証、既存ページ依存関係調査、ブラウザAPI fetch箇所監査** がすべて success。
+- これらはfixtureを使うオフライン検証であり、実作品のRedisデータ・プレビューHTTP・本番は未確認。成功済みのオフライン工程を繰り返して実装しない。
+- 次の実務的ブロッカーは実データへの安全なアクセスと保護付きHTTP検証。Vercelの共有リンク生成はアクセス権を拡大するため、無断では行わない。
