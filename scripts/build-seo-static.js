@@ -71,8 +71,8 @@ async function build(input, output, templateRoot = path.join(__dirname, '..')) {
     }
     // Only complete shared ledger records can carry an embedded fixed payload.
     // Legacy sample records remain SEO-only; no provider data is embedded.
-    if (record.kind === 'work' && raw.schemaVersion === 1 && raw.extensions?.tmdbDetail && !raw.displayFixed) {
-      html = embedFixedMetadata(html, raw);
+    if (record.kind === 'work' && (raw.displayFixed || (raw.schemaVersion === 1 && raw.extensions?.tmdbDetail))) {
+      if (!raw.displayFixed) html = embedFixedMetadata(html, raw);
       // Expose a read-only parser to the generated page. Do not alter the
       // existing API request until the provider-only path is implemented.
       // Opt-in split response is served by the SAME existing API request.
@@ -86,7 +86,7 @@ async function build(input, output, templateRoot = path.join(__dirname, '..')) {
       html = html.replace(fetchAnchor, '        (splitDetailRequest ? url + "&detailFormat=split" : url),\n        {');
       const parseAnchor = '    renderMovie(\n      movie\n    );';
       if (!html.includes(parseAnchor)) throw Error('Missing detail render anchor');
-      html = html.replace(parseAnchor, '    if (splitDetailRequest) {\n      if (!movie.fixed || !movie.dynamic) throw new Error("Incomplete split detail response");\n      movie = dokoMergeDetailResponse(movie.fixed, movie.dynamic);\n    }\n\n' + parseAnchor);
+      html = html.replace(parseAnchor, '    if (splitDetailRequest) {\n      if (!movie.fixed || !movie.dynamic) throw new Error("Incomplete split detail response");\n      const embedded = window.dokoReadFixedDetail?.(document, mediaType, movieId);\n      movie = dokoMergeDetailResponse(' + (raw.displayFixed ? 'embedded || movie.fixed' : 'movie.fixed') + ', movie.dynamic);\n    }\n\n' + parseAnchor);
       const detailFetchAnchor = 'await fetch(\n        (splitDetailRequest';
       if (!html.includes(detailFetchAnchor)) throw Error('Missing split detail fetch call');
       html = html.replace(detailFetchAnchor, 'await dokoCachedDetailFetch(\n        (splitDetailRequest');
