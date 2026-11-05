@@ -38,6 +38,10 @@ jobs:
       - name: Check generated files and routing manifest
         run: |
           node -e "const fs=require('fs'); const p='/tmp/doko-seo-static/'; const files=['movie-50014.html','tv-202879.html','person-1134684.html']; for(const file of files){const html=fs.readFileSync(p+file,'utf8');if(!html.includes('staticSeoId'))throw Error(file+' missing identity');} const routes=JSON.parse(fs.readFileSync(p+'seo-route-manifest.json','utf8'));if(routes.length!==3)throw Error('expected three routes');console.log('Generated pages and route manifest verified');"
+      - name: Generate and verify manually entered real-film SEO HTML (offline only)
+        run: |
+          node scripts/build-seo-static.js data/seo-manual-pilot-one-work.json /tmp/doko-seo-manual-one-work
+          node -e "const fs=require('fs');const p='/tmp/doko-seo-manual-one-work/';const html=fs.readFileSync(p+'movie-157336.html','utf8');const manifest=JSON.parse(fs.readFileSync(p+'seo-route-manifest.json','utf8'));for(const value of ['<title>インターステラーはどこで見れる？','<h1','インターステラー','https://doko-de-mireru.com/detail.html?id=157336','property=\"og:title\"','name=\"description\"'])if(!html.includes(value))throw Error('Manual SEO output missing '+value);if(manifest.length!==1||manifest[0].url!=='/detail.html?id=157336'||manifest[0].file!=='movie-157336.html')throw Error('Manual SEO route manifest mismatch');console.log('Manual real-film SEO HTML and manifest verified offline')"
       - name: Stage isolated query-aware routing preview (offline only)
         run: |
           node scripts/stage-seo-preview.js /tmp/doko-seo-static /tmp/doko-seo-preview
