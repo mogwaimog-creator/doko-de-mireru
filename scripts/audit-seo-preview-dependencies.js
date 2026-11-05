@@ -31,7 +31,8 @@ function audit(root=path.resolve(__dirname,'..')){
  report.apiReferences=[...apis].sort();
  report.fetchSites=fetchSites;
  report.previewReady=false;
- report.blockers=['No full-site isolated preview package verified','Query-aware routing not verified by deployed HTTP responses'];
+ report.blockers=['Query-aware routing not verified by deployed HTTP responses'];
+ report.note='Full-site offline staging is checked separately by verify-seo-full-preview.js; this source-dependency audit cannot establish that an artifact was built or that Vercel routing works.';
  report.externalHosts=[...hosts].sort();
  return report;
 }
