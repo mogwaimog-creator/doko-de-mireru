@@ -10,7 +10,7 @@ test('offline display-fixed payload embeds safely and never freezes providers',a
  try{
   const templates=path.join(dir,'templates'),output=path.join(dir,'output');
   await fs.mkdir(templates);
-  await fs.writeFile(path.join(templates,'detail.html'),'<html><head><title>Template</title></head><body><h1 id="title">Template</h1><script>const params = new URLSearchParams(location.search);\nconst movieId = params.get("id");</script></body></html>');
+  await fs.writeFile(path.join(templates,'detail.html'),'<html><head><title>Template</title><meta name="description" content=""><link rel="canonical" href=""><meta property="og:title" content=""><meta property="og:description" content=""><meta property="og:url" content=""></head><body><h1 id="title"></h1><script>const params = new URLSearchParams(location.search);\nconst movieId = params.get("id");</script></body></html>');
   await fs.writeFile(path.join(templates,'person.html'),'<html><head></head><body><script>const params = new URLSearchParams(location.search);\nconst personId = params.get("id");</script></body></html>');
   const title='映画</script><script>alert(1)</script>';
   const record={schemaVersion:1,type:'movie',id:77,title,overview:'概要',
