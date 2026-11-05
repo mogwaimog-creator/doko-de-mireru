@@ -45,6 +45,18 @@ function injectSeo(template,kind,record){
   }else{
     setInitialText('personName',record.name);
     setInitialText('personBiography',record.biography);
+    // Person's main content is hidden until its client request completes.
+    // Keep a small, visible, source-ledger-only summary for initial HTML.
+    // Remove it after the normal client-rendered content becomes visible.
+    const summary='<section id="seoInitialSummary" aria-label="人物紹介"><h2>'+escapeHtml(record.name)+'</h2>'+
+      (typeof record.biography==='string'&&record.biography.trim()?'<p>'+escapeHtml(record.biography.trim())+'</p>':'')+'</section>';
+    const loadingAnchor=/<div\s+id="loading"\s+class="loading"\s*>/;
+    if(loadingAnchor.test(html)){
+      html=html.replace(loadingAnchor,summary+'\n  <div id="loading" class="loading">');
+      const completeAnchor=/content\.hidden\s*=\s*false\s*;/;
+      if(!completeAnchor.test(html))throw Error('Missing person completion anchor');
+      html=html.replace(completeAnchor,match=>match+'\n    document.getElementById("seoInitialSummary")?.remove();');
+    }
   }
   return html;
 }
