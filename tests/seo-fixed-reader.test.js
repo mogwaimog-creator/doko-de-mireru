@@ -16,6 +16,9 @@ test('rejects invalid JSON, script types, and dynamic provider fields',()=>{
  assert.equal(readFixedDetail({getElementById(){return {getAttribute(){return 'application/json';},textContent:'{bad'};}},'movie',77),null);
  assert.equal(readFixedDetail(doc({...payload,metadata:{...payload.metadata,'watch/providers':{}}}),'movie',77),null);
  assert.equal(readFixedDetail(doc({...payload,metadata:{...payload.metadata,streaming:[]}}),'movie',77),null);
+ for(const key of ['netflix','amazon','fod','google_play','netflix_url','amazon_url','unext_url','hulu_url','disney_url','apple_url','apple_tv_url','fod_url','google_play_url']){
+  assert.equal(readFixedDetail(doc({...payload,metadata:{...payload.metadata,[key]:'stale'}}),'movie',77),null,`dynamic key ${key}`);
+ }
  assert.equal(readFixedDetail(doc({...payload,metadata:{...payload.metadata,id:88}}),'movie',77),null);
  assert.equal(readFixedDetail(doc(payload),'movie','../77'),null);
 });
