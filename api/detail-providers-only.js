@@ -19,7 +19,7 @@ function project(data,type,id){
 async function handler(req,res){
   res.setHeader('Cache-Control','no-store');
   if(req.method!=='GET')return res.status(405).json({error:'GET only'});
-  if(process.env.WORK_LEDGER_ENABLED!=='1')
+  if(process.env.SEO_PROVIDER_ONLY_ENABLED!=='1'||process.env.WORK_LEDGER_ENABLED!=='1')
     return res.status(404).json({error:'Provider-only pilot disabled'});
   let work;
   try{
