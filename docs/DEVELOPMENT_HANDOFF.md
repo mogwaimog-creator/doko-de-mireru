@@ -119,3 +119,8 @@ TMDB（初回取得・必要時のみ）
 - Shareable Linkは閲覧共有向けであり、今回のVercel Security Checkpoint 429は解消しなかった。繰り返し同じ匿名GETを実施しない。
 - この実行環境では `vercel` / `vc` CLIが見つからず、認証済みCLIリクエストはまだ実行できていない。ユーザーのWindows PCで実行を依頼する場合は、**既存のVercel CLI認証の有無を先に確認**し、秘密情報の表示・貼付は求めない。
 - VercelのAutomation Bypass secretの新規生成、Firewall設定変更、Deployment Protection Exceptionsはアクセス制御を変えるため実施しない。
+
+### 2026-11-06 手動入力1作品のオフライン試験準備
+- `data/seo-manual-pilot-one-work.json` を作業ブランチに追加（commit `e5e6b29ca345083c2b84f4a253f1e2bcde4307d8`）。映画 `movie:157336`『インターステラー』のID・タイトル・短い紹介文を手入力した**SEO生成検証用**の1件。実在作品だが正式な作品台帳レコードではなく、ポスター・監督・出演・配信などは未登録。
+- このJSONは `scripts/build-seo-static.js` のオフライン入力形式に対応。**生成・HTTP表示・本番ルーティングの成功はまだ未確認。** RedisやTMDBへの書き込み・アクセスは行っていない。
+- 次はこの入力を用いたCI生成・SEO初期HTMLの検証を行い、合格してから共通台帳との接続を検討する。手入力を本番台帳への登録済みと誤認しない。
