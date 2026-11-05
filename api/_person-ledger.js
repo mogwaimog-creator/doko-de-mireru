@@ -20,6 +20,20 @@ async function read(key,id){
   if(!value||value.schemaVersion!==1||Number(value.person?.id)!==Number(id))return null;
   return value;
 }
+// Remove only redundant credit-card fields; preserve profile-level metadata.
+function compactPerson(person){
+  const lists=['cast','voice','directed','documentary_talk','other'];
+  const result={...person};
+  for(const name of lists){
+    if(!Array.isArray(person[name]))continue;
+    result[name]=person[name].map(work=>{
+      if(!work||typeof work!=='object'||Array.isArray(work))return work;
+      const {overview,original_title,popularity,vote_average,...retained}=work;
+      return retained;
+    });
+  }
+  return result;
+}
 async function withPersonLedger(id,load){
   if(process.env.WORK_LEDGER_ENABLED!=='1')return load();
   const key=personKey(id);
@@ -48,9 +62,10 @@ async function withPersonLedger(id,load){
     try{
       const person=await load();
       if(!person||Number(person.id)!==Number(id))throw new Error('Invalid person response');
-      const record={schemaVersion:1,checkedAt:new Date().toISOString(),person};
+      const compacted=compactPerson(person);
+      const record={schemaVersion:1,checkedAt:new Date().toISOString(),person:compacted};
       await command(['SET',key,JSON.stringify(record)]);
-      return person;
+      return compacted;
     }catch(error){
       // Preserve the last successful data if TMDB is temporarily unavailable.
       if(existing){console.error('PERSON LEDGER REFRESH FAILED',error);return existing.person;}
