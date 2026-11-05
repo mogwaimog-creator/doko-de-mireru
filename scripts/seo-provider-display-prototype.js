@@ -6,7 +6,7 @@ function find(items,terms){
  return all.find(p=>terms.some(t=>String(p.provider_name||'').toLowerCase().includes(t)))||null;
 }
 function preferred(provider,domain,fallback){
- const link=provider?.provider_url;
+ const link=provider?.provider_url||provider?.url||provider?.link;
  return typeof link==='string'&&/^https?:\/\//i.test(link)&&link.toLowerCase().includes(domain)?link:fallback;
 }
 function displayProviders(payload,title,type){
@@ -27,7 +27,7 @@ function displayProviders(payload,title,type){
  const huluUrl=hulu?preferred(type==='tv'?hulu:null,'hulu.','https://www.hulu.jp/search?q='+search):null;
  const disneyUrl=disney?preferred(type==='tv'?disney:null,'disneyplus.','https://www.disneyplus.com/ja-jp/search/'+search):null;
  const appleUrl=apple?preferred(type==='tv'?apple:null,'apple.','https://tv.apple.com/jp/search?term='+search):null;
- const fodUrl=fod?preferred(fod,'fod.','https://fod.fujitv.co.jp/search/?keyword='+search):null;
+ const fodUrl=fod?preferred(fod,'fod.','https://fod.fujitv.co.jp/'):null;
  const googleUrl=google?preferred(google,'google.','https://play.google.com/store/search?q='+search+'&c=movies'):null;
  return {id:payload.id,streaming:payload.streaming,rental:payload.rental,purchase:payload.purchase,
   netflix:netflix?{url:netflixUrl,direct:false}:null,netflix_url:netflixUrl,
