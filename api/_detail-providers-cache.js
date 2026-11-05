@@ -22,6 +22,12 @@ function nextReviewAt(now=Date.now()){
   return start<=now?start+DAY:start;
 }
 function validProviderData(data){return !!data && typeof data==='object' && !Array.isArray(data) && !!data.results && typeof data.results==='object' && !Array.isArray(data.results);}
+// Only Japanese availability is displayed by the detail page.
+function japanOnlyProviderData(data){
+  if(!validProviderData(data))throw new Error('Invalid provider payload');
+  const jp=data.results.JP;
+  return {...data,results:jp&&typeof jp==='object'&&!Array.isArray(jp)?{JP:jp}:{}};
+}
 function parse(raw){try{const record=typeof raw==='string'?JSON.parse(raw):raw||null;return record && validProviderData(record.data)?record:null;}catch{return null;}}
 async function getDetailProviders(type,id,load,now=Date.now()){
   const w=identity(type,id),key=PREFIX+w.type+':'+w.id;
@@ -62,10 +68,11 @@ async function getDetailProviders(type,id,load,now=Date.now()){
     }
     const data=await load();
     if(!validProviderData(data))throw new Error('Invalid provider payload');
-    const next={data,checkedAt:new Date(now).toISOString(),lastAccessedAt:new Date(now).toISOString()};
+    const compacted=japanOnlyProviderData(data);
+    const next={data:compacted,checkedAt:new Date(now).toISOString(),lastAccessedAt:new Date(now).toISOString()};
     try{await command(['SET',key,JSON.stringify(next)]);}
     catch(e){console.error('DETAIL PROVIDERS WRITE FAILED',e);if(cached)return {data:cached.data,stale:true};const busy=new Error('Streaming storage temporarily unavailable');busy.code='DETAIL_STORAGE_UNAVAILABLE';throw busy;}
-    return {data,stale:false};
+    return {data:compacted,stale:false};
   }catch(e){
     if(cached)return {data:cached.data,stale:true};
     throw e;
