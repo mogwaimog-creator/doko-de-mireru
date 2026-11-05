@@ -26,3 +26,24 @@ test('generated static paths do not replace existing canonical URL identities',(
   ['/seo-pages/person-42.html','/person.html?id=42']
  ])assert.equal(parseStaticSeoPath(path).legacyUrl,legacy);
 });
+
+test('offline preview candidates distinguish movie, TV, person and reject unknown type',()=>{
+ const fs=require('node:fs'),os=require('node:os'),path=require('node:path');
+ const {previewRules}=require('../scripts/seo-preview-route-candidates');
+ const dir=fs.mkdtempSync(path.join(os.tmpdir(),'doko-route-'));
+ try{
+  fs.writeFileSync(path.join(dir,'seo-route-manifest.json'),JSON.stringify([
+   {url:'/detail.html?id=77',file:'movie-77.html'},
+   {url:'/detail.html?id=77&type=tv',file:'tv-77.html'},
+   {url:'/person.html?id=42',file:'person-42.html'}
+  ]));
+  const result=previewRules(dir);
+  assert.equal(result.deployable,false);
+  assert.equal(result.rewrites.length,4);
+  assert.deepEqual(result.rewrites[0].missing,[{type:'query',key:'type'}]);
+  assert.deepEqual(result.rewrites[1].has,[{type:'query',key:'id',value:'77'},{type:'query',key:'type',value:'movie'}]);
+  assert.deepEqual(result.rewrites[2].has,[{type:'query',key:'id',value:'77'},{type:'query',key:'type',value:'tv'}]);
+  assert.equal(result.rewrites[3].destination,'/seo-pages/person-42.html');
+  assert.equal(result.rewrites.some(r=>r.destination.includes('/api/')),false);
+ }finally{fs.rmSync(dir,{recursive:true,force:true});}
+});
