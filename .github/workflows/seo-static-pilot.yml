@@ -30,6 +30,16 @@ jobs:
       - name: Check generated files and routing manifest
         run: |
           node -e "const fs=require('fs'); const p='/tmp/doko-seo-static/'; const files=['movie-50014.html','tv-202879.html','person-1134684.html']; for(const file of files){const html=fs.readFileSync(p+file,'utf8');if(!html.includes('staticSeoId'))throw Error(file+' missing identity');} const routes=JSON.parse(fs.readFileSync(p+'seo-route-manifest.json','utf8'));if(routes.length!==3)throw Error('expected three routes');console.log('Generated pages and route manifest verified');"
+      - name: Stage isolated query-aware routing preview (offline only)
+        run: |
+          node scripts/stage-seo-preview.js /tmp/doko-seo-static /tmp/doko-seo-preview
+          node -e "const fs=require('fs'); const p='/tmp/doko-seo-preview/'; const c=JSON.parse(fs.readFileSync(p+'vercel.json','utf8')); if(c.rewrites.length!==7)throw Error('expected seven preview routing rules'); for(const f of ['seo-pages/movie-50014.html','seo-pages/tv-202879.html','seo-pages/person-1134684.html','detail-fallback.html','person-fallback.html'])if(!fs.existsSync(p+f))throw Error('missing '+f); console.log('Offline preview staging verified; not deployed')"
+      - name: Upload isolated preview staging artifact (NOT a deployment)
+        uses: actions/upload-artifact@v4
+        with:
+          name: seo-routing-preview-staging
+          path: /tmp/doko-seo-preview/
+          retention-days: 3
       - name: Upload generated sample for preview inspection only
         uses: actions/upload-artifact@v4
         with:
