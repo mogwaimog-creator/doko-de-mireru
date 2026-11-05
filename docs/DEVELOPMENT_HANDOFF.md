@@ -70,3 +70,8 @@ TMDB（初回取得・必要時のみ）
 - ただしプレビューURLへのHTTP GETはVercel Security Checkpointの429で遮断される。**HTTPで動作したとは未確認。**
 - PR #13はopen/draft/unmerged、変更ファイル62、コミット169。過去の試作が大量にあり、再実装より既存実装の検証が先。
 - 次はプレビュー保護を解除・共有リンクを公開せずに、既存の認証済み検証手段を探す。これができない場合はオフライン検証を先に進める。
+
+## 2026-11-06 CI証拠の追加
+- GitHub `fetch_commit_workflow_runs` でコミット `bfe7e6b0e13c03d7222d807dc6f783e1452c04fb` のPRトリガー `SEO static pilot tests` が `completed / success` と確認できた。**このコミットに対するオフラインCI成功の証拠。**
+- workflow定義 `.github/workflows/seo-static-pilot.yml` にはNodeテスト、サンプルHTML生成、ルートmanifest、プレビュー構成・依存関係検査が含まれる。これはライブHTTP、実Redisレコード、後続コミットのテスト成功を保証しない。
+- `.github/workflows/seo-preview-http-check.yml` も既存。専用プレビューURLに対する読み取り専用HTTP検証だが、現状は429保護がブロッカー。**既存の検証コードを再利用し、新設しない。**
