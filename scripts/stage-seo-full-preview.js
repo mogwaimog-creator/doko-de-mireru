@@ -46,11 +46,11 @@ async function build(generated,output,root=path.resolve(__dirname,'..')){
   if(original.functions){
    const functions=JSON.parse(JSON.stringify(original.functions));
    for(const settings of Object.values(functions)){
-    if(typeof settings.includeFiles==='string')settings.includeFiles=settings.includeFiles.replace(/detail\\.html/g,'detail-fallback.html').replace(/person\\.html/g,'person-fallback.html');
+    if(typeof settings.includeFiles==='string')settings.includeFiles=settings.includeFiles.replace(/detail\.html/g,'detail-fallback.html').replace(/person\.html/g,'person-fallback.html');
    }
    config.functions=functions;
   }
-  fs.writeFileSync(path.join(dest,'vercel.json'),JSON.stringify(config,null,2)+'\\n');
+  fs.writeFileSync(path.join(dest,'vercel.json'),JSON.stringify(config,null,2)+'\n');
   fs.writeFileSync(path.join(dest,'PREVIEW-ONLY.txt'),'OFFLINE FULL-SITE SEO PREVIEW CANDIDATE. NOT DEPLOYED OR HTTP VERIFIED. Review rewrites and Vercel billing before any deployment.\n');
   return {deployable:false,trackedFilesCopied:copied.length,hasSearchApi:true,rewrites:config.rewrites.length};
  }finally{fs.rmSync(overlay,{recursive:true,force:true});}
