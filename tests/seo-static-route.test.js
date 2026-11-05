@@ -61,3 +61,33 @@ test('preview routing fails closed on mismatched files, duplicate records and ov
   check([{url:'/detail.html?id=77&type=unknown',file:'movie-77.html'}]);
  }finally{fs.rmSync(dir,{recursive:true,force:true});}
 });
+
+test('isolated preview staging leaves production config untouched and keeps fallbacks',async()=>{
+ const fs=require('node:fs'),os=require('node:os'),path=require('node:path');
+ const {stage}=require('../scripts/stage-seo-preview');
+ const base=fs.mkdtempSync(path.join(os.tmpdir(),'doko-stage-'));
+ const generated=path.join(base,'generated'),output=path.join(base,'preview'),root=path.join(base,'root');
+ try{
+  fs.mkdirSync(generated);fs.mkdirSync(root);
+  fs.writeFileSync(path.join(generated,'seo-route-manifest.json'),JSON.stringify([
+   {url:'/detail.html?id=77',file:'movie-77.html'},
+   {url:'/detail.html?id=77&type=tv',file:'tv-77.html'},
+   {url:'/person.html?id=42',file:'person-42.html'}]));
+  for(const name of ['movie-77.html','tv-77.html','person-42.html'])fs.writeFileSync(path.join(generated,name),name);
+  fs.writeFileSync(path.join(root,'detail.html'),'original detail');
+  fs.writeFileSync(path.join(root,'person.html'),'original person');
+  fs.writeFileSync(path.join(root,'vercel.json'),'{"original":true}');
+  const result=await stage(generated,output,root);
+  assert.equal(result.deployable,false);
+  assert.equal(result.files,3);
+  const config=JSON.parse(fs.readFileSync(path.join(output,'vercel.json'),'utf8'));
+  assert.equal(config.rewrites.length,6);
+  assert.deepEqual(config.rewrites.slice(-2),[
+   {source:'/detail.html',destination:'/detail-fallback.html'},
+   {source:'/person.html',destination:'/person-fallback.html'}]);
+  assert.equal(fs.readFileSync(path.join(root,'vercel.json'),'utf8'),'{"original":true}');
+  assert.equal(fs.readFileSync(path.join(output,'detail-fallback.html'),'utf8'),'original detail');
+  assert.equal(fs.readFileSync(path.join(output,'seo-pages','tv-77.html'),'utf8'),'tv-77.html');
+  await assert.rejects(stage(generated,root,root));
+ }finally{fs.rmSync(base,{recursive:true,force:true});}
+});
