@@ -63,3 +63,10 @@ TMDB（初回取得・必要時のみ）
 
 ## 更新ルール（毎回）
 作業終了時にこの文書の「更新日」「確認した事実」「実装済み／未検証／本番反映済み」「次の作業」「ブロッカー」を更新する。GitHubへの書き込みができない場合は更新できなかったことを明示し、会話内に差分を残す。新しい会話ではまずこの文書を読んでから作業する。
+
+## 2026-11-06 追加検証
+- Vercel deployment `dpl_GTKnvysf1aWbNZNUvuZAtsvebiWM` は `READY`、`target:null`、CLI由来、production aliasなしと再確認。
+- Vercel deployment file treeを直接確認し、`src/api/seo-html-pilot.js`、`src/api/_work-ledger.js`、`src/api/_seo-initial-html.js` が配置されていることを確認。**GitHubにあるだけでなくプレビュー成果物にも存在する。**
+- ただしプレビューURLへのHTTP GETはVercel Security Checkpointの429で遮断される。**HTTPで動作したとは未確認。**
+- PR #13はopen/draft/unmerged、変更ファイル62、コミット169。過去の試作が大量にあり、再実装より既存実装の検証が先。
+- 次はプレビュー保護を解除・共有リンクを公開せずに、既存の認証済み検証手段を探す。これができない場合はオフライン検証を先に進める。
