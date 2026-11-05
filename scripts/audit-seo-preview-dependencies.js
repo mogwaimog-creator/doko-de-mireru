@@ -7,6 +7,7 @@ function audit(root=path.resolve(__dirname,'..')){
  const pages=['detail.html','person.html'];
  const report={pages:[],missingLocal:[],apiReferences:[],externalHosts:[]};
  const apis=new Set(),hosts=new Set();
+ const fetchSites=[];
  for(const page of pages){
   const html=fs.readFileSync(path.join(root,page),'utf8');
   const local=new Set();
@@ -23,9 +24,14 @@ function audit(root=path.resolve(__dirname,'..')){
    if(!fs.existsSync(file))report.missingLocal.push({page,reference:clean});
   }
   for(const match of html.matchAll(/\/api\/[\w/-]+/g))apis.add(match[0]);
+  const lines=html.split('\n');
+  for(let i=0;i<lines.length;i++)if(/\bfetch\s*\(/.test(lines[i]))fetchSites.push({page,line:i+1});
   report.pages.push({page,localReferences:[...local].sort()});
  }
  report.apiReferences=[...apis].sort();
+ report.fetchSites=fetchSites;
+ report.previewReady=false;
+ report.blockers=['No full-site isolated preview package verified','Query-aware routing not verified by deployed HTTP responses'];
  report.externalHosts=[...hosts].sort();
  return report;
 }
