@@ -44,11 +44,12 @@ TMDB（初回取得・必要時のみ）
 ## 直近の調査・詰まり
 - PCには専用のGitリポジトリや `.env.local` が存在するとは限らない。ユーザーはその都度受け取ったPowerShell用ファイルを実行する運用。
 - `export-seo-sample-readonly.cjs` を一時フォルダで実行すると「Missing local Upstash credentials」。PC側に環境変数がないだけで、サイトのRedis障害ではない。
-- 実データを安全に読む手段を未確保。公開 `api/work-detail.js` は未登録時に書き込むため、読み取り専用検証の代替として安易に使用しない。
+- **2026-11-06再確認：作業ブランチには既に `api/seo-html-pilot.js` がある。** `kind=diagnostic&type=movie|tv&id=...` は `getWork()` のGETのみで `found` / `missing_or_invalid` を返し、TMDB呼び出し・Redis書き込みはしない。`kind=work` は既存レコードを読み、SEO初期HTMLを返す。`SEO_HTML_PILOT_ENABLED=1` が必要。**本番ブランチの公開 `api/work-detail.js` とは別物。**
+- ただしプレビューのHTTP応答はVercel Security Checkpointの429で確認できず、台帳の実データ存在確認はまだできていない。保護解除はしない。
 - テスト用 `movie:50014` は実在作品の確認に使わない。
 
 ## 次の作業（順番を守る）
-1. 既存のGitHub/ Vercel機能とAPIを調べ、**GETだけ**で作品台帳の既存レコードを確認できる手段を確立。秘密情報はチャットやGitHubに貼らない。
+1. **読み取り専用の既存経路 `api/seo-html-pilot.js` を再利用する。新しいAPIを作らない。** プレビュー保護を維持したまま認証済みでHTTP 200を取得する方法を確認。秘密情報はチャットやGitHubに貼らない。
 2. 実在する作品を1〜3件だけ対象に、作品ID・固定表示項目・`extensions.tmdbDetail` の有無を確認する。
 3. 欠けているフィールドへの対応を決め、実データでSEO生成をオフライン検証する。
 4. 保護されたプレビューのHTTP検証を適切な認証経路で行う。セキュリティ保護を解除しない。
