@@ -37,7 +37,7 @@ jobs:
       - name: Inventory legacy page dependencies (offline)
         run: | 
           node scripts/audit-seo-preview-dependencies.js > /tmp/seo-preview-dependencies.json
-          node -e "const a=require('/tmp/seo-preview-dependencies.json'); console.log('Preview dependency audit:',JSON.stringify({pages:a.pages.map(p=>({page:p.page,localReferences:p.localReferences.length})),missingLocal:a.missingLocal,apiReferences:a.apiReferences,externalHosts:a.externalHosts}))"
+          node -e "const a=require('/tmp/seo-preview-dependencies.json'); console.log('Preview dependency audit:',JSON.stringify({pages:a.pages.map(p=>({page:p.page,localReferences:p.localReferences.length})),missingLocal:a.missingLocal,apiReferences:a.apiReferences,externalHosts:a.externalHosts,fetchSites:a.fetchSites,previewReady:a.previewReady,blockers:a.blockers}))"
       - name: Upload dependency inventory for review
         uses: actions/upload-artifact@v4
         with:
