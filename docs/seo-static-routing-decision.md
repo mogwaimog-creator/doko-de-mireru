@@ -41,3 +41,8 @@ Keep canonical URLs `/detail.html?id=N`, `/detail.html?id=N&type=tv`, and `/pers
 - Literal API reference: `/api/search`; dynamic JavaScript API calls are not comprehensively captured by this inventory and need separate review.
 - External hosts seen: `doko-de-mireru.com`, `image.tmdb.org`, `www.googletagmanager.com`, `www.themoviedb.org`.
 - This inventory does not establish that a full preview can be safely deployed. Existing HTML still relies on shared scripts, CSS and API behavior. Continue with a complete isolated build and HTTP tests before deploying.
+
+## Manual dependency follow-up (2026-11-05)
+- Confirmed in the PR branch: `series-streaming.html` is absent (GitHub file lookup 404). The link exists in `detail.html` near line 2634. `series.html` exists, but is a different series page and must **not** be substituted without product review. Treat this as a pre-existing broken-link candidate, not an SEO staging failure; do not silently alter the visible page.
+- Confirmed the key dynamic fetch sites: `detail.html` uses `const API_URL = "/api/search"` near line 2826, with `fetch(url,...)` at approximately lines 3251, 7083 and 7858. `person.html` calls `fetch('/api/search?personId=' + ...)` near line 2313. Thus any complete preview must preserve `/api/search` behavior; merely copying static HTML is insufficient.
+- Next safe build step is a full-site preview-only packaging plan with an allowlist of public files and API dependencies, *not* deployment of the current incomplete staging artifact. Verify that the existing Vercel preview branch does not change its production cron/function configuration before a preview routing experiment.
