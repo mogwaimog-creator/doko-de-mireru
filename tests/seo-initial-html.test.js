@@ -84,3 +84,20 @@ test('person initial summary is outside hidden content and removed after hydrati
  assert.ok(html.includes('<p>人物紹介 &amp; 経歴</p>'));
  assert.ok(html.includes('document.getElementById("seoInitialSummary")?.remove()'));
 });
+
+
+test('movie and TV initial HTML carry distinct crawlable metadata and visible work identity',()=>{
+ const original=fs.readFileSync(path.join(__dirname,'..','detail.html'),'utf8');
+ for(const [type,id,title,overview,canonical] of [
+  ['movie',50014,'映画の固有タイトル','映画固有のあらすじ','/detail.html?id=50014'],
+  ['tv',202879,'ドラマの固有タイトル','ドラマ固有のあらすじ','/detail.html?id=202879&amp;type=tv']
+ ]){
+  const html=injectSeo(original,'work',{type,id,title,overview});
+  assert.ok(html.includes('<title>'+title+'はどこで見れる'));
+  assert.ok(html.includes('href="https://doko-de-mireru.com'+canonical+'"'));
+  assert.ok(html.includes('property="og:title" content="'+title+'はどこで見れる'));
+  assert.ok(html.includes('>'+title+'</h1>'));
+  assert.ok(html.includes('>'+overview+'</'));
+  assert.doesNotMatch(html,/<meta[^>]+name=["']robots["'][^>]+content=["']noindex/i);
+ }
+});
