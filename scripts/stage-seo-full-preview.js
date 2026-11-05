@@ -34,6 +34,23 @@ async function build(generated,output,root=path.resolve(__dirname,'..')){
   fs.unlinkSync(path.join(dest,'person.html'));
   const config=JSON.parse(fs.readFileSync(path.join(dest,'vercel.json'),'utf8'));
   if(config.crons||config.functions)throw Error('Preview routing config unexpectedly includes cron/functions overrides');
+  const original=JSON.parse(fs.readFileSync(path.join(project,'vercel.json'),'utf8'));
+  // Retain existing non-SEO routes; keep preview free of production cron.
+  const legacy=original.rewrites||[];
+  for(const rule of legacy){
+   if(config.rewrites.some(candidate=>candidate.source===rule.source))throw Error('Preview rewrite conflicts with existing route: '+rule.source);
+  }
+  config.rewrites.push(...legacy);
+  // Preserve original function configuration only after translating template paths
+  // relocated in this preview. Never silently drop production function settings.
+  if(original.functions){
+   const functions=JSON.parse(JSON.stringify(original.functions));
+   for(const settings of Object.values(functions)){
+    if(typeof settings.includeFiles==='string')settings.includeFiles=settings.includeFiles.replace(/detail\\.html/g,'detail-fallback.html').replace(/person\\.html/g,'person-fallback.html');
+   }
+   config.functions=functions;
+  }
+  fs.writeFileSync(path.join(dest,'vercel.json'),JSON.stringify(config,null,2)+'\\n');
   fs.writeFileSync(path.join(dest,'PREVIEW-ONLY.txt'),'OFFLINE FULL-SITE SEO PREVIEW CANDIDATE. NOT DEPLOYED OR HTTP VERIFIED. Review rewrites and Vercel billing before any deployment.\n');
   return {deployable:false,trackedFilesCopied:copied.length,hasSearchApi:true,rewrites:config.rewrites.length};
  }finally{fs.rmSync(overlay,{recursive:true,force:true});}
