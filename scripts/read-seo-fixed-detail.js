@@ -11,9 +11,10 @@ function readFixedDetail(doc,expectedType,expectedId){
  if(!payload||payload.type!==expectedType||payload.id!==id)return null;
  const fixed=payload.metadata;
  if(!fixed||typeof fixed!=='object'||Array.isArray(fixed)||Number(fixed.id)!==id)return null;
- if(Object.hasOwn(fixed,'watch/providers')||Object.hasOwn(fixed,'streaming')||
-    Object.hasOwn(fixed,'rental')||Object.hasOwn(fixed,'purchase')||
-    Object.hasOwn(fixed,'free'))return null;
+ const dynamicKeys=['streaming','rental','purchase','netflix','amazon','fod','google_play',
+   'netflix_url','amazon_url','unext_url','hulu_url','disney_url','apple_url',
+   'apple_tv_url','fod_url','google_play_url','watch/providers','free'];
+ if(dynamicKeys.some(key=>Object.hasOwn(fixed,key)))return null;
  return fixed;
 }
 if(typeof module!=='undefined'&&module.exports)module.exports={readFixedDetail};
