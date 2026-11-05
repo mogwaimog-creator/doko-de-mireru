@@ -56,7 +56,7 @@ test('invalid IDs and duplicate records are rejected',async()=>{
 
 test('existing shared work-ledger export is accepted without a kind field',async()=>{
  const record={schemaVersion:1,type:'movie',id:50014,title:'ゴジラ'};
- assert.deepEqual(normalizeRecord(record),{kind:'work',type:'movie',id:50014,title:'ゴジラ'});
+ assert.deepEqual(normalizeRecord(record),{kind:'work',type:'movie',id:50014,title:'ゴジラ',overview:undefined});
  assert.equal(filename(normalizeRecord(record)),'movie-50014.html');
 });
 
@@ -85,4 +85,20 @@ test('generated identity script executes with empty query and rejects mismatches
  assert.equal(evaluate('?id=202879&type=tv').movieId,'202879');
  assert.throws(()=>evaluate('?id=999&type=tv'),/identity mismatch/);
  assert.throws(()=>evaluate('?id=202879&type=movie'),/type mismatch/);
+});
+
+test('static generator preserves fixed work overview and person biography',async()=>{
+ const dir=await fs.mkdtemp(path.join(os.tmpdir(),'doko-seo-body-'));
+ try{
+  const input=path.join(dir,'records.json'),output=path.join(dir,'out');
+  await fs.writeFile(input,JSON.stringify([
+   {schemaVersion:1,type:'movie',id:77,title:'映画A',overview:'あらすじ & 物語'},
+   {kind:'person',id:42,name:'俳優A',biography:'人物紹介 & 経歴'}
+  ]));
+  await build(input,output);
+  const movie=await fs.readFile(path.join(output,'movie-77.html'),'utf8');
+  const person=await fs.readFile(path.join(output,'person-42.html'),'utf8');
+  assert.ok(movie.includes('あらすじ &amp; 物語'));
+  assert.ok(person.includes('人物紹介 &amp; 経歴'));
+ }finally{await fs.rm(dir,{recursive:true,force:true});}
 });
