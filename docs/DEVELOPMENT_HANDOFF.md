@@ -124,3 +124,9 @@ TMDB（初回取得・必要時のみ）
 - `data/seo-manual-pilot-one-work.json` を作業ブランチに追加（commit `e5e6b29ca345083c2b84f4a253f1e2bcde4307d8`）。映画 `movie:157336`『インターステラー』のID・タイトル・短い紹介文を手入力した**SEO生成検証用**の1件。実在作品だが正式な作品台帳レコードではなく、ポスター・監督・出演・配信などは未登録。
 - このJSONは `scripts/build-seo-static.js` のオフライン入力形式に対応。**生成・HTTP表示・本番ルーティングの成功はまだ未確認。** RedisやTMDBへの書き込み・アクセスは行っていない。
 - 次はこの入力を用いたCI生成・SEO初期HTMLの検証を行い、合格してから共通台帳との接続を検討する。手入力を本番台帳への登録済みと誤認しない。
+
+### 2026-11-06 手動入力1作品のSEO生成テスト成功
+- `data/seo-manual-pilot-one-work.json` に実在映画 `movie:157336`『インターステラー』の最小限の手入力SEOデータを追加。
+- `.github/workflows/seo-static-pilot.yml` に、当該JSONからHTML生成後、title・h1・description・OGP・canonical・URL対応表を検証するオフラインステップを追加（commit `f66d8bf38b44c4adcdeaf46a3459fda9d8c996b5`）。
+- GitHub Actions run `42104034385` は `completed/success`。`node-tests` ジョブの **Generate and verify manually entered real-film SEO HTML (offline only)** ステップも `completed/success` と確認。**手動入力→静的SEO HTML生成は実証済み。**
+- 進捗フローチャート③の内訳：**手入力の実在映画→SEO HTML生成は完了**。一方、Redis共通作品台帳への登録・連携は未完了。④の公開URLへの配信検証も未完了。これは本番サイトに反映されていない。
