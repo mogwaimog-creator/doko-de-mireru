@@ -3,17 +3,20 @@
     "schemaVersion": 1,
     "type": "movie",
     "id": 50014,
-    "title": "SEO表示検証用映画"
+    "title": "SEO表示検証用映画",
+    "overview": "映画のあらすじ & 見どころ"
   },
   {
     "schemaVersion": 1,
     "type": "tv",
     "id": 202879,
-    "title": "SEO表示検証用ドラマ"
+    "title": "SEO表示検証用ドラマ",
+    "overview": "ドラマのあらすじ"
   },
   {
     "kind": "person",
     "id": 1134684,
-    "name": "SEO表示検証用人物"
+    "name": "SEO表示検証用人物",
+    "biography": "人物の経歴 & 紹介"
   }
 ]
