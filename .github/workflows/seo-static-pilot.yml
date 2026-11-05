@@ -34,6 +34,14 @@ jobs:
         run: |
           node scripts/stage-seo-preview.js /tmp/doko-seo-static /tmp/doko-seo-preview
           node -e "const fs=require('fs'); const p='/tmp/doko-seo-preview/'; const c=JSON.parse(fs.readFileSync(p+'vercel.json','utf8')); if(c.rewrites.length!==6)throw Error('expected six preview routing rules'); for(const f of ['seo-pages/movie-50014.html','seo-pages/tv-202879.html','seo-pages/person-1134684.html','detail-fallback.html','person-fallback.html'])if(!fs.existsSync(p+f))throw Error('missing '+f); console.log('Offline preview staging verified; not deployed')"
+      - name: Inventory legacy page dependencies (offline)
+        run: node scripts/audit-seo-preview-dependencies.js > /tmp/seo-preview-dependencies.json
+      - name: Upload dependency inventory for review
+        uses: actions/upload-artifact@v4
+        with:
+          name: seo-preview-dependency-inventory
+          path: /tmp/seo-preview-dependencies.json
+          retention-days: 3
       - name: Upload isolated preview staging artifact (NOT a deployment)
         uses: actions/upload-artifact@v4
         with:
