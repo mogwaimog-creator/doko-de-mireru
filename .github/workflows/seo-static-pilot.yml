@@ -5,6 +5,7 @@ on:
     paths:
       - 'api/_seo-initial-html.js'
       - 'scripts/build-seo-static.js'
+      - 'api/detail-providers-only.js'
       - 'scripts/seo-normalized-fixed-display.js'
       - 'scripts/prepare-seo-fixed-display.js'
       - 'scripts/audit-seo-display-parity.js'
@@ -30,7 +31,7 @@ jobs:
         with:
           node-version: '22'
       - name: Run offline SEO tests (no credentials, no deployment)
-        run: node --test tests/seo-initial-html.test.js tests/seo-static-build.test.js tests/seo-static-route.test.js tests/seo-page-identity.test.js tests/seo-fixed-detail.test.js tests/seo-fixed-pipeline.test.js tests/seo-ledger-audit.test.js tests/seo-fixed-embed.test.js tests/seo-fixed-reader.test.js tests/seo-generated-reader-integration.test.js tests/seo-detail-response-contract.test.js tests/seo-live-response-shape.test.js tests/seo-split-api-optin.test.js tests/seo-session-cache-behavior.test.js tests/seo-normalized-fixed-display.test.js tests/prepare-seo-fixed-display.test.js tests/audit-seo-display-parity.test.js tests/seo-static-display-embedding.test.js
+        run: node --test tests/seo-initial-html.test.js tests/seo-static-build.test.js tests/seo-static-route.test.js tests/seo-page-identity.test.js tests/seo-fixed-detail.test.js tests/seo-fixed-pipeline.test.js tests/seo-ledger-audit.test.js tests/seo-fixed-embed.test.js tests/seo-fixed-reader.test.js tests/seo-generated-reader-integration.test.js tests/seo-detail-response-contract.test.js tests/seo-live-response-shape.test.js tests/seo-split-api-optin.test.js tests/seo-session-cache-behavior.test.js tests/seo-normalized-fixed-display.test.js tests/prepare-seo-fixed-display.test.js tests/audit-seo-display-parity.test.js tests/seo-static-display-embedding.test.js tests/seo-provider-only.test.js
       - name: Generate sample HTML from existing page templates
         run: node scripts/build-seo-static.js tests/fixtures/seo-static-sample.json /tmp/doko-seo-static
       - name: Check generated files and routing manifest
