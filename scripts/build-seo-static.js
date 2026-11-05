@@ -87,7 +87,8 @@ async function build(input, output, templateRoot = path.join(__dirname, '..')) {
       const parseAnchor = '    renderMovie(\n      movie\n    );';
       if (!html.includes(parseAnchor)) throw Error('Missing detail render anchor');
       html = html.replace(parseAnchor, '    if (splitDetailRequest) {\n      if (!movie.fixed || !movie.dynamic) throw new Error("Incomplete split detail response");\n      const embedded = window.dokoReadFixedDetail?.(document, mediaType, movieId);\n      movie = dokoMergeDetailResponse(' + (raw.displayFixed ? 'embedded || movie.fixed' : 'movie.fixed') + ', movie.dynamic);\n    }\n\n' + parseAnchor);
-      // Split payload has no top-level id; validate it only after merging.\n      const earlyValidation = '    if(\n      !movie ||\n      !movie.id\n    ){';
+      // Split payload has no top-level id; validate it only after merging.
+      const earlyValidation = '    if(\n      !movie ||\n      !movie.id\n    ){';
       if (!html.includes(earlyValidation)) throw Error('Missing early detail validation');
       html = html.replace(earlyValidation, '    if(\n      !movie ||\n      (!splitDetailRequest && !movie.id)\n    ){');
       const detailFetchAnchor = 'await fetch(\n        (splitDetailRequest';
