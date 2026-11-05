@@ -102,3 +102,27 @@ test('static generator preserves fixed work overview and person biography',async
   assert.ok(person.includes('人物紹介 &amp; 経歴'));
  }finally{await fs.rm(dir,{recursive:true,force:true});}
 });
+
+test('publication audit accepts legacy canonical but blocks unverified routing',async()=>{
+ const {audit}=require('../scripts/audit-seo-publish-readiness');
+ const dir=await fs.mkdtemp(path.join(os.tmpdir(),'doko-seo-audit-'));
+ try{
+  const input=path.join(dir,'records.json'),output=path.join(dir,'out');
+  await fs.writeFile(input,JSON.stringify([
+   {kind:'work',type:'movie',id:77,title:'映画A'},
+   {kind:'work',type:'tv',id:77,title:'ドラマA'},
+   {kind:'person',id:42,name:'俳優A'}
+  ]));
+  await build(input,output);
+  const result=audit(output);
+  assert.equal(result.generated,3);
+  assert.deepEqual(result.issues,[]);
+  assert.equal(result.htmlReady,true);
+  assert.equal(result.routingVerified,false);
+  assert.equal(result.ready,false);
+  const tv=path.join(output,'tv-77.html');
+  const html=await fs.readFile(tv,'utf8');
+  await fs.writeFile(tv,html.replace('detail.html?id=77&amp;type=tv','detail.html?id=999&amp;type=tv'));
+  assert.equal(audit(output).htmlReady,false);
+ }finally{await fs.rm(dir,{recursive:true,force:true});}
+});
