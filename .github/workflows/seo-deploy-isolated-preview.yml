@@ -1,0 +1,39 @@
+name: SEO isolated preview deployment (manual only)
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  deploy-preview:
+    if: ${{ github.ref_name == 'seo/initial-html-metadata-pilot' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Require existing Vercel credentials
+        run: |
+          test -n "$VERCEL_TOKEN" || { echo "Missing VERCEL_TOKEN; no deployment"; exit 1; }
+          test -n "$VERCEL_ORG_ID" || { echo "Missing VERCEL_ORG_ID; no deployment"; exit 1; }
+          test -n "$VERCEL_PROJECT_ID" || { echo "Missing VERCEL_PROJECT_ID; no deployment"; exit 1; }
+      - name: Generate offline SEO records and isolated site
+        run: |
+          node scripts/build-seo-static.js tests/fixtures/seo-static-sample.json /tmp/doko-seo-static
+          node scripts/stage-seo-full-preview.js /tmp/doko-seo-static /tmp/doko-seo-full-preview
+          node scripts/verify-seo-full-preview.js /tmp/doko-seo-full-preview
+      - name: Bind to existing project without modifying its settings
+        run: |
+          mkdir -p /tmp/doko-seo-full-preview/.vercel
+          node -e 'const fs=require("fs");fs.writeFileSync("/tmp/doko-seo-full-preview/.vercel/project.json",JSON.stringify({orgId:process.env.VERCEL_ORG_ID,projectId:process.env.VERCEL_PROJECT_ID}))'
+      - name: Deploy isolated preview (never production)
+        run: |
+          npx --yes vercel@latest deploy /tmp/doko-seo-full-preview --yes --scope mogwaimog-1706 --token "$VERCEL_TOKEN" > /tmp/seo-preview-url.txt
+          echo "Preview deployment URL:"
+          cat /tmp/seo-preview-url.txt
+          echo "HTTP routing verification must still be run against this URL before production promotion."
