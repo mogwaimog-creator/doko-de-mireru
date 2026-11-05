@@ -87,7 +87,7 @@ async function build(input, output, templateRoot = path.join(__dirname, '..')) {
       const parseAnchor = '    renderMovie(\n      movie\n    );';
       if (!html.includes(parseAnchor)) throw Error('Missing detail render anchor');
       html = html.replace(parseAnchor, '    if (splitDetailRequest) {\n      if (!movie.fixed || !movie.dynamic) throw new Error("Incomplete split detail response");\n      const embedded = window.dokoReadFixedDetail?.(document, mediaType, movieId);\n      movie = dokoMergeDetailResponse(' + (raw.displayFixed ? 'embedded || movie.fixed' : 'movie.fixed') + ', movie.dynamic);\n    }\n\n' + parseAnchor);
-      const detailFetchAnchor = 'await fetch(\n        (splitDetailRequest';
+      // Split payload has no top-level id; validate it only after merging.\n      const earlyValidation = '    if(\\n      !movie ||\\n      !movie.id\\n    ){';\n      if (!html.includes(earlyValidation)) throw Error('Missing early detail validation');\n      html = html.replace(earlyValidation, '    if(\\n      !movie ||\\n      (!splitDetailRequest && !movie.id)\\n    ){');\n      const detailFetchAnchor = 'await fetch(\n        (splitDetailRequest';
       if (!html.includes(detailFetchAnchor)) throw Error('Missing split detail fetch call');
       html = html.replace(detailFetchAnchor, 'await dokoCachedDetailFetch(\n        (splitDetailRequest');
       const browserContract = splitContractSource.replace('module.exports={splitDetailResponse,mergeDetailResponse,PROVIDER_FIELDS,DYNAMIC_FIELDS};', 'window.dokoMergeDetailResponse=mergeDetailResponse;');
