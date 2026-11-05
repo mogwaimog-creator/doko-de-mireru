@@ -5,6 +5,7 @@ const fs = require('node:fs/promises');
 const path = require('node:path');
 const {injectSeo} = require('../api/_seo-initial-html');
 const {embedFixedMetadata} = require('./embed-seo-fixed-detail');
+const {validateFixedDisplayRecord} = require('./seo-normalized-fixed-display');
 const {readFileSync} = require('node:fs');
 const fixedReaderSource = readFileSync(path.join(__dirname,'read-seo-fixed-detail.js'),'utf8');
 const splitContractSource = readFileSync(path.join(__dirname,'seo-detail-response-contract.js'),'utf8');
@@ -59,9 +60,20 @@ async function build(input, output, templateRoot = path.join(__dirname, '..')) {
     if (seen.has(name)) throw Error('Duplicate page: ' + name);
     seen.add(name);
     let html = injectStaticIdentity(injectSeo(record.kind === 'person' ? person : detail, record.kind, record), record);
+    // Accept offline-prepared display-ready fixed metadata; no live API/Redis calls.
+    if (record.kind === 'work' && raw.displayFixed) {
+      const fixed = validateFixedDisplayRecord(raw.displayFixed,record.type,record.id);
+      const safeJson = JSON.stringify({type:record.type,id:record.id,metadata:fixed})
+        .replace(/[<>&\\u2028\\u2029]/g, ch => ({
+          '<':'\\\\u003c','>':'\\\\u003e','&':'\\\\u0026',
+          '\\u2028':'\\\\u2028','\\u2029':'\\\\u2029'
+        })[ch]);
+      if (html.split('</head>').length !== 2) throw Error('Expected one closing head');
+      html = html.replace('</head>', '<script type="application/json" id="doko-fixed-detail">' + safeJson + '</script>\\n</head>');
+    }
     // Only complete shared ledger records can carry an embedded fixed payload.
     // Legacy sample records remain SEO-only; no provider data is embedded.
-    if (record.kind === 'work' && raw.schemaVersion === 1 && raw.extensions?.tmdbDetail) {
+    if (record.kind === 'work' && raw.schemaVersion === 1 && raw.extensions?.tmdbDetail && !raw.displayFixed) {
       html = embedFixedMetadata(html, raw);
       // Expose a read-only parser to the generated page. Do not alter the
       // existing API request until the provider-only path is implemented.
