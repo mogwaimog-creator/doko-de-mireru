@@ -38,6 +38,8 @@ jobs:
         run: |
           node scripts/stage-seo-full-preview.js /tmp/doko-seo-static /tmp/doko-seo-full-preview
           node -e "const fs=require('fs');const p='/tmp/doko-seo-full-preview/';for(const f of ['api/search.js','seo-pages/movie-50014.html','seo-pages/tv-202879.html','seo-pages/person-1134684.html','detail-fallback.html','person-fallback.html','index.html'])if(!fs.existsSync(p+f))throw Error('missing '+f);for(const f of ['detail.html','person.html'])if(fs.existsSync(p+f))throw Error('legacy path shadows preview rewrite: '+f);console.log('Complete tracked-site preview candidate verified; not deployed')"
+      - name: Verify full-site preview structure and SEO tags (offline only)
+        run: node scripts/verify-seo-full-preview.js /tmp/doko-seo-full-preview
       - name: Upload complete preview candidate (NOT a deployment)
         uses: actions/upload-artifact@v4
         with:
