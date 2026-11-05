@@ -61,8 +61,17 @@ module.exports=async function handler(req,res){
     const configured=Boolean((process.env.KV_REST_API_URL||process.env.UPSTASH_REDIS_REST_URL)&&(process.env.KV_REST_API_TOKEN||process.env.UPSTASH_REDIS_REST_TOKEN));
     if(!configured)return res.status(200).json({pilotEnabled:true,redisConfigured:false,ledgerStatus:'not_checked'});
     try{
-      const record=await getWork(diagnosticType,diagnosticId);
-      return res.status(200).json({pilotEnabled:true,redisConfigured:true,ledgerStatus:record?'found':'missing_or_invalid'});
+      const key='doko:work:v1:'+diagnosticType+':'+diagnosticId;
+      const raw=await command(['GET',key]);
+      let ledgerStatus='missing';
+      if(raw!==null&&raw!==undefined){
+        ledgerStatus='invalid';
+        try{
+          const record=typeof raw==='string'?JSON.parse(raw):raw;
+          if(record&&record.schemaVersion===1&&record.type===diagnosticType&&record.id===diagnosticId&&typeof record.title==='string'&&record.title.trim())ledgerStatus='found';
+        }catch{ /* malformed JSON: report invalid without exposing contents */ }
+      }
+      return res.status(200).json({pilotEnabled:true,redisConfigured:true,ledgerStatus});
     }catch(error){
       console.error('SEO HTML PILOT DIAGNOSTIC ERROR',error);
       return res.status(503).json({pilotEnabled:true,redisConfigured:true,ledgerStatus:'read_error'});
