@@ -85,3 +85,9 @@ TMDB（初回取得・必要時のみ）
 - ユーザーの明示許可を得て、既存のVercel共有リンクを再利用（新規生成ではなく `shareLinkAction: reused`）。リンク自体・トークンは文書に保存しない。
 - Vercelの認証対応fetchを使い、プレビューの `/detail.html?id=50014` と `/api/seo-html-pilot?kind=fixture&type=movie` をGET。**どちらもHTTP 429、title `Vercel Security Checkpoint`**。SEO HTMLの内容は確認できていない。
 - したがって共有リンクだけでは今回のSecurity Checkpointを通過できない。保護解除・Firewall変更・本番変更は未実施。次はプレビューの保護設定と既存のオフライン成果物の検証を分けて対応する。
+
+## 2026-11-06 429の安全な解決経路（公式資料確認）
+- Vercel公式ガイド `https://vercel.com/docs/cli/curl` および保護プレビュー用Vercel skillにより、**HTTP確認は認証済みの `vercel curl <preview-url>` が第一候補**と確認。必要なら同一プロジェクトの短命OIDC tokenによるTrusted Sources経路を利用する。保護を解除しない。
+- Shareable Linkは閲覧共有向けであり、今回のVercel Security Checkpoint 429は解消しなかった。繰り返し同じ匿名GETを実施しない。
+- この実行環境では `vercel` / `vc` CLIが見つからず、認証済みCLIリクエストはまだ実行できていない。ユーザーのWindows PCで実行を依頼する場合は、**既存のVercel CLI認証の有無を先に確認**し、秘密情報の表示・貼付は求めない。
+- VercelのAutomation Bypass secretの新規生成、Firewall設定変更、Deployment Protection Exceptionsはアクセス制御を変えるため実施しない。
