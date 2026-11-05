@@ -6,6 +6,7 @@ on:
       - 'api/_seo-initial-html.js'
       - 'scripts/build-seo-static.js'
       - 'api/detail-providers-only.js'
+      - 'scripts/seo-provider-display-prototype.js'
       - 'scripts/seo-normalized-fixed-display.js'
       - 'scripts/prepare-seo-fixed-display.js'
       - 'scripts/audit-seo-display-parity.js'
