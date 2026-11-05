@@ -13,6 +13,8 @@ function previewRules(output){
   const u=new URL(entry.url,'https://doko-de-mireru.com');
   const id=u.searchParams.get('id');
   const type=u.searchParams.get('type');
+  if(type!==null&&!['movie','tv'].includes(type))throw Error('Unknown type');
+  if(u.pathname==='/person.html'&&type!==null)throw Error('Person route cannot carry media type');
   if(!/^\d{1,10}$/.test(id||'')||Number(id)<=0)throw Error('Invalid ID');
   if(!/^((movie|tv|person)-\d{1,10})\.html$/.test(entry.file))throw Error('Invalid file');
   const category=u.pathname==='/person.html'?'person':u.pathname==='/detail.html'?(type==='tv'?'tv':'movie'):null;
