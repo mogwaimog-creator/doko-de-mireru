@@ -15,8 +15,8 @@ async function exportRecords(spec,read=getWork){
   if(!record)throw Error('Ledger record missing: '+key);
   if(record.type!==type||Number(record.id)!==id)throw Error('Ledger identity mismatch: '+key);
   if(record.schemaVersion!==1||typeof record.title!=='string'||!record.title.trim())throw Error('Incomplete ledger metadata: '+key);
-  // Export only SEO-relevant public fields. No internal extensions, notes or tokens.
-  const fields=['schemaVersion','type','id','title','overview','posterPath'];
+  // Public fixed metadata only. Keep provider data, raw TMDB snapshots and notes private.
+  const fields=['schemaVersion','type','id','title','originalTitle','releaseDate','overview','runtimeMinutes','genres','posterPath','backdropPath','directors','cast','collectionId','collectionName','seasons','status','voteAverage','voteCount'];
   records.push(Object.fromEntries(fields.map(field=>[field,record[field]??null])));
  }
  return records;
