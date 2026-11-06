@@ -18,3 +18,27 @@ jobs:
         run: node scripts/test-seo-route-resolver.js
       - name: Test static route generator
         run: node scripts/test-seo-vercel-routes.js
+      - name: Verify static-only preview staging (no deploy, no credentials)
+        run: |
+          node scripts/build-seo-static.js tests/fixtures/seo-static-sample.json /tmp/doko-seo-ci-static
+          node scripts/stage-seo-preview.js /tmp/doko-seo-ci-static /tmp/doko-seo-ci-preview
+          node - <<'NODE'
+          const fs = require('node:fs');
+          const p = '/tmp/doko-seo-ci-preview';
+          const c = JSON.parse(fs.readFileSync(p + '/vercel.json', 'utf8'));
+          for (const name of ['api', 'detail.html', 'person.html', '.env', '.vercel']) {
+            if (fs.existsSync(p + '/' + name)) throw Error('Unexpected preview content: ' + name);
+          }
+          if (c.crons || c.functions || !Array.isArray(c.rewrites) || c.rewrites.length !== 6) {
+            throw Error('Unsafe or incomplete isolated preview config');
+          }
+          for (const rule of c.rewrites) {
+            if (!rule.destination.startsWith('/seo-pages/') && !['/detail-fallback.html','/person-fallback.html'].includes(rule.destination)) {
+              throw Error('Unexpected rewrite destination: ' + rule.destination);
+            }
+          }
+          for (const file of ['movie-50014.html','tv-202879.html','person-1134684.html']) {
+            if (!fs.existsSync(p + '/seo-pages/' + file)) throw Error('Missing static page: ' + file);
+          }
+          console.log('Static-only preview staging verified; no deployment');
+          NODE
