@@ -56,7 +56,7 @@ test('invalid IDs and duplicate records are rejected',async()=>{
 
 test('existing shared work-ledger export is accepted without a kind field',async()=>{
  const record={schemaVersion:1,type:'movie',id:50014,title:'ゴジラ'};
- assert.deepEqual(normalizeRecord(record),{kind:'work',type:'movie',id:50014,title:'ゴジラ',overview:undefined});
+ assert.deepEqual(normalizeRecord(record),{kind:'work',type:'movie',id:50014,title:'ゴジラ',overview:undefined,posterPath:undefined});
  assert.equal(filename(normalizeRecord(record)),'movie-50014.html');
 });
 
@@ -137,5 +137,17 @@ test('mismatched saved detail ID blocks SEO generation before writing files',asy
   ]));
   await assert.rejects(build(input,output),/Ledger\/detail identity mismatch: movie:157336/);
   await assert.rejects(fs.stat(output),{code:'ENOENT'});
+ }finally{await fs.rm(dir,{recursive:true,force:true});}
+});
+
+test('offline static generator retains poster image from work ledger',async()=>{
+ const dir=await fs.mkdtemp(path.join(os.tmpdir(),'doko-seo-poster-'));
+ try{
+  const input=path.join(dir,'records.json'),output=path.join(dir,'out');
+  await fs.writeFile(input,JSON.stringify([{schemaVersion:1,type:'movie',id:157336,title:'インターステラー',posterPath:'/abc123.jpg'}]));
+  await build(input,output);
+  const html=await fs.readFile(path.join(output,'movie-157336.html'),'utf8');
+  assert.match(html,/property="og:image" content="https:\/\/image\.tmdb\.org\/t\/p\/w780\/abc123\.jpg"/);
+  assert.match(html,/id="poster"[^>]*src="https:\/\/image\.tmdb\.org\/t\/p\/w780\/abc123\.jpg"/);
  }finally{await fs.rm(dir,{recursive:true,force:true});}
 });
