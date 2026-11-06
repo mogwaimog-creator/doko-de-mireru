@@ -126,3 +126,16 @@ test('publication audit accepts legacy canonical but blocks unverified routing',
   assert.equal(audit(output).htmlReady,false);
  }finally{await fs.rm(dir,{recursive:true,force:true});}
 });
+
+test('mismatched saved detail ID blocks SEO generation before writing files',async()=>{
+ const dir=await fs.mkdtemp(path.join(os.tmpdir(),'doko-seo-id-'));
+ try{
+  const input=path.join(dir,'records.json'),output=path.join(dir,'out');
+  await fs.writeFile(input,JSON.stringify([
+   {schemaVersion:1,type:'movie',id:157336,title:'インターステラー',
+    extensions:{tmdbDetail:{id:999999,title:'別の作品'}}}
+  ]));
+  await assert.rejects(build(input,output),/Ledger\/detail identity mismatch: movie:157336/);
+  await assert.rejects(fs.stat(output),{code:'ENOENT'});
+ }finally{await fs.rm(dir,{recursive:true,force:true});}
+});
