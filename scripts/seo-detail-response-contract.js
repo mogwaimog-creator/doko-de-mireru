@@ -3,7 +3,7 @@
 const PROVIDER_FIELDS=['streaming','rental','purchase'];
 // The existing API also derives service links and service-specific objects
 // from provider availability. They must not be frozen into static HTML.
-const DYNAMIC_FIELDS=[...PROVIDER_FIELDS,'netflix','amazon','fod','google_play','netflix_url','amazon_url','unext_url','hulu_url','disney_url','apple_url','apple_tv_url','fod_url','google_play_url'];
+const DYNAMIC_FIELDS=[...PROVIDER_FIELDS,'link','netflix','amazon','fod','google_play','netflix_url','amazon_url','unext_url','hulu_url','disney_url','apple_url','apple_tv_url','fod_url','google_play_url'];
 function splitDetailResponse(detail){
  if(!detail||typeof detail!=='object'||Array.isArray(detail))throw Error('Invalid detail');
  if(!Number.isSafeInteger(Number(detail.id))||Number(detail.id)<=0)throw Error('Invalid detail ID');
