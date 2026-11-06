@@ -16,7 +16,12 @@
 - 検証：Nodeテスト39ファイル合格。実api/searchを模擬TMDB応答で実行し、映画・TV・アニメをChromiumでPC幅1280／スマホ幅390の6ケース比較。本文・リンク・画像・描画後SEO・JSON-LDが従来ページと一致。詳細APIは各1回、JavaScript例外0件。外部画像・外部通信は模擬／遮断しており、実サービスの疎通証明ではない。
 - 全サイト組立て：既存verify-seo-full-preview合格。旧 /movie/:id、未知IDのfallback、画像ファイル、function includeFiles、公開候補のCron保持を確認。移動後pilotのmovie/tv/person fixtureもHTTPハンドラ200相当。これらはオフライン結果。
 - **ユーザーPCの認証済みVercel CLIによる実台帳GET結果**：movie:157336 found、tv:1429 missing、tv:1399 接続タイムアウトで未判定。foundはschemaVersion/type/id/titleの簡易確認であり、verificationやtmdbDetailの完全性を保証しない。
-- **残作業**：既存認証環境から少数の台帳をread-only exportし、確認済み状態と固定情報を確認。適格な実映画・TV・アニメで生成→既存URLの認証付きHTTP→ブラウザ表示を照合。初期パイロットの振分は既存の20作品上限を保持する。未登録／未確認は従来表示。対象追加の書込み・追加課金・新規デプロイ・本番反映は必ず事前確認。
+- **ローカル実台帳アクセスのブロッカー追記**：ユーザーPCの `env run` は子コマンドに進めずCLIのパス検証で停止。`env pull` 自体は成功したが、Redis URL・通常token・read-only tokenの存在確認は全てfalse。Vercel変数メタデータ（値は復号せず）を照合し、3変数ともpreview/production対象のsensitiveであることを確認。Preview Secretの値はpullできないため、同じCLI操作の再試行やローカルSEOコード修正では解消しない。既存Upstash DBのread-only認証をPC内だけで一時利用できるか確認中。書込み用tokenの共有、Secret設定変更、新規デプロイは行わない。
+- **実台帳エクスポート成功（ユーザーPC）**：既存Upstash Read-Only TokenをPCプロセス内で一時利用し、movie:157336をGETのみで取得。scannedKeys:1 / exported:1 / problems:0 / readOnly:true。既存select結果はapprovedCount:0、skipped理由はNOT_VERIFIEDだけ、blocked:null。認証・取得・固定情報の機械的検査は通ったが、明示的確認済み状態は未充足。確認フラグの無断変更・再GET・Redis書込みは行わず、取得済みJSONの公開項目を照合する段階。
+- **実台帳の公開項目からHTML生成成功**：ユーザーから受領したmovie:157336の公開項目（タイトル・概要・posterPath等）をそのまま既存build-seo-staticに入力。初期title/H1/概要/canonical/OGP/Twitter/ポスター、従来API要求の維持、既存HTML監査のhtmlReady:trueを確認。verificationはnot_recorded/not_checkedのまま、releaseReady:false。手入力の仮概要ではなく実台帳から受領した概要を使用。公開TMDBページ（https://www.themoviedb.org/movie/157336?language=ja-JP）で概要全文・監督ID525・主要キャスト5名のID/名前・ポスターを照合。2014-11-04は同ページのUS表記と一致。画像も目視確認。この時点では全キャスト等が未完了だったが、下記追記で映画1件の照合を完了。TV/アニメの実データ検証は未完了。
+- **映画1件の固定項目照合完了／保存は未承認**：movie:157336の原題Interstellar、169分、genres12/18/878、背景パスを公開TMDBと照合。保存済みcast30件のID・名前・役名・profilePath・順序を公開クレジット全37名の先頭30名と機械照合し一致（台帳上限30名）。movieのseasons:[]/status:nullは既存fromTmdb仕様どおり。確認結果の保存案はidentity/metadataをverified、verification.items.initialHtmlSeoReviewに確認日時・参照URL・castCount30・releaseDateCountryUSを追記するだけ。他の固定情報は変更しない。
+- **既存保存関数の競合保護を追加**：putWorkの任意options.expected指定時だけ、既存JSONとの一致をRedis内で比較してからSETする。変更・削除・表現差があればWORK_REVIEW_CONFLICTで中止し、無条件再試行しない。従来呼出しは互換維持。模擬Redisによる既存テストに、確認状態以外の保持・競合・削除・誤IDのケースを追加して合格。実Redis書込みは未実行。ユーザーの事前承認後のみ映画1件の確認状態を保存する。
+- **残作業**：映画1件の確認結果を保存してよいかユーザーに事前確認。TV/アニメの少数台帳をread-onlyで確認し、固定情報を照合。適格な実映画・TV・アニメで生成→既存URLの認証付きHTTP→ブラウザ表示を照合。初期パイロットの振分は既存の20作品上限を保持する。未登録／未確認は従来表示。対象追加の書込み・追加課金・新規デプロイ・本番反映は必ず事前確認。
 
 ## 最初に読むこと
 1. この文書と `docs/WORK_LEDGER_TEST_PLAN.md`、`docs/WORK_ANOMALY_REVIEW.md` を読む。
