@@ -33,7 +33,7 @@ function injectSeo(template,kind,record){
   // The fixed work ledger stores TMDB poster paths, never streaming data.
   // Only accept a TMDB-style relative image path; do not embed arbitrary URLs.
   if(kind==='work' && typeof record.posterPath==='string' &&
-     /^\\/[a-zA-Z0-9_-]+\\.(?:jpg|jpeg|png|webp)$/i.test(record.posterPath)){
+     /^\/[a-zA-Z0-9_-]+\.(?:jpg|jpeg|png|webp)$/i.test(record.posterPath)){
     const posterUrl='https://image.tmdb.org/t/p/w780'+record.posterPath;
     for(const [property,id] of [['og:image','ogImage']]){
       const re=new RegExp('<meta\\b(?=[^>]*\\bproperty\\s*=\\s*["\\\']'+property+'["\\\'])[^>]*>','i');
