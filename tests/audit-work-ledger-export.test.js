@@ -41,3 +41,10 @@ test('missing detail or poster is reported without mutating original',()=>{
  assert.ok(report.issues.some(x=>x.code==='MISSING_POSTER'));
  assert.equal(JSON.stringify(r),before);
 });
+
+test('actual read-only export envelope can be audited without dropping scan problems',()=>{
+ const report=audit({records:[good()],problems:[{key:'doko:work:v1:movie:123',code:'INVALID_JSON'}],readOnly:true});
+ assert.equal(report.stats.total,1);
+ assert.ok(report.issues.some(x=>x.code==='INVALID_JSON'));
+ assert.ok(report.issues.some(x=>x.code==='NOT_VERIFIED'));
+});
