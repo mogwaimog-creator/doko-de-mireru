@@ -38,6 +38,8 @@ async function withPersonLedger(id,load){
   if(process.env.WORK_LEDGER_ENABLED!=='1')return load();
   const key=personKey(id);
   let existing=await read(key,id);
+  // Emergency storage freeze: keep reading saved records, but never create or refresh person records.
+  if(process.env.LEDGER_WRITES_RESUME!=='1')return existing?existing.person:load();
   if(existing&&Date.now()-Date.parse(existing.checkedAt)<TWO_MONTHS_MS)return existing.person;
   const lockKey=key+':refresh-lock',token=randomUUID();
   const locked=await command(['SET',lockKey,token,'EX',String(LOCK_SECONDS),'NX']);
