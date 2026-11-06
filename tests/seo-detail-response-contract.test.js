@@ -34,3 +34,12 @@ test('provider-only updates preserve fixed identity and reject incomplete availa
  assert.throws(()=>mergeDetailResponse(fixed,{...dynamic,purchase:null}),/Incomplete dynamic providers/);
  assert.throws(()=>splitDetailResponse({...original,rental:null}),/Missing or invalid provider field/);
 });
+
+test('TMDB watch link follows refreshed provider data and is not frozen in SEO',()=>{
+ const detail={id:44,title:'作品',poster_path:'/poster.jpg',link:'https://www.themoviedb.org/movie/44/watch?locale=JP',streaming:[],rental:[],purchase:[]};
+ const {fixed,dynamic}=splitDetailResponse(detail);
+ assert.equal(Object.hasOwn(fixed,'link'),false);
+ assert.equal(dynamic.link,detail.link);
+ assert.deepEqual(mergeDetailResponse(fixed,dynamic),detail);
+ assert.throws(()=>mergeDetailResponse({...fixed,link:detail.link},dynamic),/Provider data in fixed record/);
+});
