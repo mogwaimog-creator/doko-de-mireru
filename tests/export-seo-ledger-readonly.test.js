@@ -11,8 +11,10 @@ test('explicit movie and TV export excludes internal and provider data',async()=
  assert.deepEqual(calls,['movie:50014','tv:202879']);
  assert.equal(records.length,2);
  for(const record of records){
-  assert.deepEqual(Object.keys(record),['schemaVersion','type','id','title','overview','posterPath']);
+  assert.deepEqual(Object.keys(record),['schemaVersion','type','id','title','originalTitle','releaseDate','overview','runtimeMinutes','genres','posterPath','backdropPath','directors','cast','collectionId','collectionName','seasons','status','voteAverage','voteCount']);
   assert.equal(record.title,'タイトル');
+  assert.equal(record.directors,null);
+  assert.equal(record.cast,null);
   assert.equal(JSON.stringify(record).includes('secret'),false);
   assert.equal(JSON.stringify(record).includes('streaming'),false);
  }
