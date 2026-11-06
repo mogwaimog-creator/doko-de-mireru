@@ -30,6 +30,11 @@ function injectSeo(template,kind,record){
     const re=new RegExp('<meta\\b(?=[^>]*\\bproperty\\s*=\\s*["\\\']'+property+'["\\\'])[^>]*>','i');
     html=replaceOnce(html,re,`<meta id="${id}" property="${property}" content="${escapeHtml(value)}">`,property);
   }
+  // Keep social metadata consistent in the first response, before client rendering.
+  for(const [name,id,value] of [['twitter:title','twitterTitle',seo.title],['twitter:description','twitterDescription',seo.description]]){
+    const re=new RegExp('<meta\\b(?=[^>]*\\bname\\s*=\\s*["\']'+name+'["\'])[^>]*>','i');
+    if(re.test(html))html=replaceOnce(html,re,`<meta id="${id}" name="${name}" content="${escapeHtml(value)}">`,name);
+  }
   // The fixed work ledger stores TMDB poster paths, never streaming data.
   // Only accept a TMDB-style relative image path; do not embed arbitrary URLs.
   if(kind==='work' && typeof record.posterPath==='string' &&

@@ -185,7 +185,7 @@ test('offline integration: normalized movie and TV ledger records generate SEO w
    assert.equal(payload.metadata.id,item.id);
    assert.equal(payload.metadata.title,item.title);
    for(const key of ['streaming','rental','purchase'])assert.equal(Object.hasOwn(payload.metadata,key),false);
-   assert.ok(html.includes('detailFormat=split'));
+   assert.doesNotMatch(html,/detailFormat=split|await dokoCachedDetailFetch/);
   }
  }finally{await fs.rm(dir,{recursive:true,force:true});}
 });

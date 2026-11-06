@@ -15,5 +15,10 @@
     "api/seo-html-pilot.js": {
       "includeFiles": "{detail.html,person.html}"
     }
+  },
+  "git": {
+    "deploymentEnabled": {
+      "seo/initial-html-metadata-pilot": false
+    }
   }
 }

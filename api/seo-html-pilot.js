@@ -15,6 +15,14 @@ function positiveId(v){
   const id=Number(v);
   return Number.isSafeInteger(id)&&id>0?id:null;
 }
+async function loadTemplate(file){
+  try{return await fs.readFile(path.join(process.cwd(),file),'utf8');}
+  catch(error){
+    if(error.code!=='ENOENT')throw error;
+    // Full-site staging relocates physical templates so rewrites can match.
+    return fs.readFile(path.join(process.cwd(),file.replace('.html','-fallback.html')),'utf8');
+  }
+}
 async function loadPerson(id){
   const raw=await command(['GET',PERSON_PREFIX+id]);
   if(!raw)return null;
@@ -39,7 +47,7 @@ module.exports=async function handler(req,res){
     const record=type==='person'?{id:1134684,name:'SEO検証用人物'}:{type,id:type==='tv'?202879:50014,title:'SEO検証用作品'};
     try{
       const file=kind==='person'?'person.html':'detail.html';
-      const template=await fs.readFile(path.join(process.cwd(),file),'utf8');
+      const template=await loadTemplate(file);
       const html=injectSeo(template,kind,record);
       res.setHeader('Content-Type','text/html; charset=utf-8');
       res.setHeader('Cache-Control',CACHE);
@@ -92,7 +100,7 @@ module.exports=async function handler(req,res){
       if(!record)return res.status(404).end();
     }
     const file=kind==='work'?'detail.html':'person.html';
-    const template=await fs.readFile(path.join(process.cwd(),file),'utf8');
+    const template=await loadTemplate(file);
     const html=injectSeo(template,kind,record);
     res.setHeader('Content-Type','text/html; charset=utf-8');
     res.setHeader('Cache-Control',CACHE);

@@ -90,12 +90,15 @@ test('movie and TV initial HTML carry distinct crawlable metadata and visible wo
  const original=fs.readFileSync(path.join(__dirname,'..','detail.html'),'utf8');
  for(const [type,id,title,overview,canonical] of [
   ['movie',50014,'映画の固有タイトル','映画固有のあらすじ','/detail.html?id=50014'],
-  ['tv',202879,'ドラマの固有タイトル','ドラマ固有のあらすじ','/detail.html?id=202879&amp;type=tv']
+  ['tv',202879,'ドラマの固有タイトル','ドラマ固有のあらすじ','/detail.html?id=202879&amp;type=tv'],
+  ['tv',1429,'アニメの固有タイトル','アニメ固有のあらすじ','/detail.html?id=1429&amp;type=tv']
  ]){
   const html=injectSeo(original,'work',{type,id,title,overview});
   assert.ok(html.includes('<title>'+title+'はどこで見れる'));
   assert.ok(html.includes('href="https://doko-de-mireru.com'+canonical+'"'));
   assert.ok(html.includes('property="og:title" content="'+title+'はどこで見れる'));
+  assert.ok(html.includes('name="twitter:title" content="'+title+'はどこで見れる'));
+  assert.ok(html.includes('name="twitter:description" content="'+title+'はどこで見れる'));
   assert.ok(html.includes('>'+title+'</h1>'));
   assert.ok(html.includes('>'+overview+'</'));
   assert.doesNotMatch(html,/<meta[^>]+name=["']robots["'][^>]+content=["']noindex/i);

@@ -4,6 +4,20 @@
 保存先：GitHub `mogwaimog-creator/doko-de-mireru` / `seo/initial-html-metadata-pilot`
 状態：作業記録。**この文書だけでは実装完了・本番反映を意味しない。**
 
+## 2026-11-06 今回の実装修正と公開判定
+
+- **判定：実装とオフライン受入は完了。実台帳の適格性と全サイトの実HTTP検証が残るため、本番公開は保留。** 本番デプロイ・Redis書込み・TMDB実呼出しは今回実施していない。
+- main の3コミットを差分確認して統合。新規作品・人物保存の停止、日本向け配信キャッシュの縮小を保持。競合した隔離デプロイworkflowは作業ブランチの手動実行・静的限定版を維持。mainに既存の upstash-compact テストを再利用し、保存再開フラグをテスト環境だけ明示。
+- 公開用は既存 build-seo-from-ledger-export → select-seo-verified-works → build-seo-static を使用。確認済み・欠損なし・ID一致の作品だけ選別し、既存 normalizeRecord でSEO固定項目のみに絞る。生TMDB、内部メモ、配信データは初期HTMLに複製しない。元台帳の確認状態は変更しない。
+- 生成ページは従来の /api/search 詳細リクエスト・描画を維持。生成時の自動split応答・sessionStorageキャッシュ組込みを除去。Twitter title/descriptionも初期HTMLへ反映。新しいAPI・別の生成プログラム・別の監査文書は作成していない。
+- 既存 export-work-ledger-readonly に任意のIDリスト入力を追加。指定時は最大20件、GETのみ、SCANなし。未指定時の従来全件エクスポートは維持。実検証はまず少数だけ行う。
+- 既存 stage-seo-full-preview の --release-candidate は、既存ルートmanifestに ledgerVerified:true がある入力だけ受理する。fixtureや手入力由来は拒否。プレビューはCronを除外、公開候補は既存Cron・プロジェクト設定を保持。いずれも自動デプロイしない。移動したfallbackテンプレートを既存pilot APIが読めるよう修正。
+- 作業ブランチだけ git.deploymentEnabled:false を設定。GitHubへの保存でVercel自動ビルドを発生させない。mainの自動デプロイ可否や本番設定は変更しない。
+- 検証：Nodeテスト39ファイル合格。実api/searchを模擬TMDB応答で実行し、映画・TV・アニメをChromiumでPC幅1280／スマホ幅390の6ケース比較。本文・リンク・画像・描画後SEO・JSON-LDが従来ページと一致。詳細APIは各1回、JavaScript例外0件。外部画像・外部通信は模擬／遮断しており、実サービスの疎通証明ではない。
+- 全サイト組立て：既存verify-seo-full-preview合格。旧 /movie/:id、未知IDのfallback、画像ファイル、function includeFiles、公開候補のCron保持を確認。移動後pilotのmovie/tv/person fixtureもHTTPハンドラ200相当。これらはオフライン結果。
+- **ユーザーPCの認証済みVercel CLIによる実台帳GET結果**：movie:157336 found、tv:1429 missing、tv:1399 接続タイムアウトで未判定。foundはschemaVersion/type/id/titleの簡易確認であり、verificationやtmdbDetailの完全性を保証しない。
+- **残作業**：既存認証環境から少数の台帳をread-only exportし、確認済み状態と固定情報を確認。適格な実映画・TV・アニメで生成→既存URLの認証付きHTTP→ブラウザ表示を照合。初期パイロットの振分は既存の20作品上限を保持する。未登録／未確認は従来表示。対象追加の書込み・追加課金・新規デプロイ・本番反映は必ず事前確認。
+
 ## 最初に読むこと
 1. この文書と `docs/WORK_LEDGER_TEST_PLAN.md`、`docs/WORK_ANOMALY_REVIEW.md` を読む。
 2. GitHubの**本番ブランチ**と作業ブランチの実コード、PR、デプロイ状況を確認する。

@@ -26,9 +26,7 @@ test('offline display-fixed payload embeds safely and never freezes providers',a
   assert.equal(payload.metadata.poster_path,'/poster.jpg');
   assert.ok(!Object.hasOwn(payload.metadata,'streaming'));
   assert.ok(!html.includes('<script>alert(1)</script>'));
-  assert.ok(html.includes('(!splitDetailRequest && !movie.id)'), 'split response must not be rejected before merging');
-  assert.ok(html.includes('embedded || movie.fixed'), 'generated page must prefer validated embedded fixed data');
-  assert.ok(html.includes('dokoMergeDetailResponse('), 'dynamic provider data must be merged before rendering');
-  assert.ok(html.includes('detailFormat=split'), 'legacy API compatibility path remains explicit');
+  assert.doesNotMatch(html,/detailFormat=split|splitDetailRequest|dokoMergeDetailResponse/);
+
  }finally{await fs.rm(dir,{recursive:true,force:true});}
 });

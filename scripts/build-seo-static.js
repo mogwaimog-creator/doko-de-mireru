@@ -8,8 +8,6 @@ const {embedFixedMetadata} = require('./embed-seo-fixed-detail');
 const {validateFixedDisplayRecord} = require('./seo-normalized-fixed-display');
 const {readFileSync} = require('node:fs');
 const fixedReaderSource = readFileSync(path.join(__dirname,'read-seo-fixed-detail.js'),'utf8');
-const splitContractSource = readFileSync(path.join(__dirname,'seo-detail-response-contract.js'),'utf8');
-const sessionCacheSource = readFileSync(path.join(__dirname,'seo-detail-session-cache.js'),'utf8');
 
 function normalizeRecord(record) {
   if (!record || typeof record !== 'object') throw Error('Invalid record');
@@ -82,29 +80,10 @@ async function build(input, output, templateRoot = path.join(__dirname, '..')) {
     // Legacy sample records remain SEO-only; no provider data is embedded.
     if (record.kind === 'work' && (raw.displayFixed || (raw.schemaVersion === 1 && raw.extensions?.tmdbDetail))) {
       if (!raw.displayFixed) html = embedFixedMetadata(html, raw);
-      // Expose a read-only parser to the generated page. Do not alter the
-      // existing API request until the provider-only path is implemented.
-      // Opt-in split response is served by the SAME existing API request.
-      // Reassemble the original response before calling renderMovie().
-      // This is a compatibility bridge, not a reduction in API requests yet.
-      const requestAnchor = 'encodeURIComponent(\n    mediaType\n  );';
-      if (!html.includes(requestAnchor)) throw Error('Missing detail API URL anchor');
-      html = html.replace(requestAnchor, requestAnchor + '\n    const splitDetailRequest = true;');
-      const fetchAnchor = '        url,\n        {';
-      if (!html.includes(fetchAnchor)) throw Error('Missing detail fetch anchor');
-      html = html.replace(fetchAnchor, '        (splitDetailRequest ? url + "&detailFormat=split" : url),\n        {');
-      const parseAnchor = '    renderMovie(\n      movie\n    );';
-      if (!html.includes(parseAnchor)) throw Error('Missing detail render anchor');
-      html = html.replace(parseAnchor, '    if (splitDetailRequest) {\n      if (!movie.fixed || !movie.dynamic) throw new Error("Incomplete split detail response");\n      const embedded = window.dokoReadFixedDetail?.(document, mediaType, movieId);\n      movie = dokoMergeDetailResponse(' + (raw.displayFixed ? 'embedded || movie.fixed' : 'movie.fixed') + ', movie.dynamic);\n    }\n\n' + parseAnchor);
-      // Split payload has no top-level id; validate it only after merging.
-      const earlyValidation = '    if(\n      !movie ||\n      !movie.id\n    ){';
-      if (!html.includes(earlyValidation)) throw Error('Missing early detail validation');
-      html = html.replace(earlyValidation, '    if(\n      !movie ||\n      (!splitDetailRequest && !movie.id)\n    ){');
-      const detailFetchAnchor = 'await fetch(\n        (splitDetailRequest';
-      if (!html.includes(detailFetchAnchor)) throw Error('Missing split detail fetch call');
-      html = html.replace(detailFetchAnchor, 'await dokoCachedDetailFetch(\n        (splitDetailRequest');
-      const browserContract = splitContractSource.replace('module.exports={splitDetailResponse,mergeDetailResponse,PROVIDER_FIELDS,DYNAMIC_FIELDS};', 'window.dokoMergeDetailResponse=mergeDetailResponse;');
-      html = html.replace('</head>', '<script>'+fixedReaderSource+'\n'+browserContract+'\n'+sessionCacheSource+'</script>\n</head>');
+      // Initial HTML SEO does not change the detail request or rendering contract.
+      // Raw tmdbDetail is not a normalized /api/search response. Keep it inert;
+      // the existing API continues to supply fixed display data and live providers.
+      html = html.replace('</head>', '<script>'+fixedReaderSource+'</script>\n</head>');
     }
     pages.push({name, html});
   }

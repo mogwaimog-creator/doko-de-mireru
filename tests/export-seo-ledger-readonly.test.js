@@ -21,7 +21,7 @@ test('explicit movie and TV export excludes internal and provider data',async()=
 });
 test('missing, duplicate, mismatched or excessive IDs fail closed',async()=>{
  await assert.rejects(exportRecords([{type:'movie',id:1}],async()=>null),/missing/);
- await assert.rejects(exportRecords([{type:'movie',id:1},{type:'movie',id:1}],async(type,id)=>({type,id})),/Duplicate/);
+ await assert.rejects(exportRecords([{type:'movie',id:1},{type:'movie',id:1}],async(type,id)=>({schemaVersion:1,type,id,title:'作品'})),/Duplicate/);
  await assert.rejects(exportRecords([{type:'tv',id:1}],async()=>({type:'movie',id:1})),/mismatch/);
  await assert.rejects(exportRecords(Array.from({length:21},(_,i)=>({type:'movie',id:i+1}))),/1-20/);
 });
@@ -46,7 +46,23 @@ test('read-only export feeds static SEO builder without provider calls',async()=
    const html=await fs.readFile(path.join(output,item.type+'-'+item.id+'.html'),'utf8');
    assert.match(html,/<title>/);
    assert.match(html,/固定の紹介文/);
-   assert.doesNotMatch(html,/provider_id/);
+   assert.doesNotMatch(html,/<script type="application\/json" id="doko-fixed-detail">/);
+   assert.doesNotMatch(html,/\"provider_id\":8/);
   }
  }finally{await fs.rm(dir,{recursive:true,force:true});}
+});
+
+
+test('existing work export accepts bounded IDs with GET only and retains review state',async()=>{
+ const {exportLedger}=require('../scripts/export-work-ledger-readonly');
+ const calls=[];
+ const run=async args=>{calls.push(args);assert.equal(args[0],'GET');return JSON.stringify({schemaVersion:1,type:'movie',id:157336,title:'映画',verification:{identity:'verified',metadata:'verified'},extensions:{tmdbDetail:{id:157336}}});};
+ const result=await exportLedger(run,[{type:'movie',id:157336}]);
+ assert.deepEqual(calls,[['GET','doko:work:v1:movie:157336']]);
+ assert.equal(result.records[0].verification.metadata,'verified');
+ assert.equal(result.records[0].extensions.tmdbDetail.id,157336);
+ assert.equal(result.readOnly,true);
+ await assert.rejects(exportLedger(run,[{type:'movie',id:1},{type:'movie',id:1}]),/Duplicate/);
+ await assert.rejects(exportLedger(run,[]),/1-20/);
+ assert.equal(calls.length,1,'invalid input performs no Redis request');
 });

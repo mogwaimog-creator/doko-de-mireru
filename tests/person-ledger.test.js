@@ -6,8 +6,11 @@ const redisPath = require.resolve('../api/_redis');
 const ledgerPath = require.resolve('../api/_person-ledger');
 const previousRedis = require.cache[redisPath];
 const previousFlag = process.env.WORK_LEDGER_ENABLED;
+const previousResume = process.env.LEDGER_WRITES_RESUME;
 
 afterEach(() => {
+  if (previousResume === undefined) delete process.env.LEDGER_WRITES_RESUME;
+  else process.env.LEDGER_WRITES_RESUME = previousResume;
   if (previousFlag === undefined) delete process.env.WORK_LEDGER_ENABLED;
   else process.env.WORK_LEDGER_ENABLED = previousFlag;
   delete require.cache[ledgerPath];
@@ -16,6 +19,7 @@ afterEach(() => {
 });
 
 function setup() {
+  process.env.LEDGER_WRITES_RESUME = '1';
   const values = new Map();
   const calls = [];
   require.cache[redisPath] = {

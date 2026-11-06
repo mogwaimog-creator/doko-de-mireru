@@ -16,6 +16,8 @@ async function metadataWithLedger(type,id,load){
     if(detail && Number(detail.id)===Number(id))return detail;
     if(cached){const error=new Error('Existing work ledger is missing usable detail metadata; manual repair required');error.code='WORK_METADATA_INCOMPLETE';throw error;}
   }catch(e){if(e?.code==='WORK_METADATA_INCOMPLETE')throw e;console.error('WORK LEDGER READ FAILED',e);const busy=new Error('Metadata storage temporarily unavailable');busy.code='WORK_STORAGE_UNAVAILABLE';throw busy;}
+  // Emergency storage freeze: existing work records remain readable; missing works load without saving.
+  if(process.env.LEDGER_WRITES_RESUME!=='1')return load();
   return firstWorkLoad(type,id,async()=>{
   let already;
   try{already=await getWork(type,id);}

@@ -16,4 +16,4 @@ jobs:
         with:
           node-version: '22'
       - name: Run offline SEO and ledger tests
-        run: node --test tests/seo-static-build.test.js tests/seo-detail-response-contract.test.js tests/work-ledger-foundation.test.js tests/detail-provider-failure-contract.test.js tests/export-seo-ledger-readonly.test.js
+        run: node --test tests/*.test.js
