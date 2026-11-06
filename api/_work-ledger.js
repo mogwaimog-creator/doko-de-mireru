@@ -5,7 +5,7 @@
 const { command } = require('./_redis');
 
 const PREFIX = 'doko:work:v1';
-const MAX_CAST = 30;
+const MAX_CAST = 8;
 
 function identity(type, id) {
   if (!['movie', 'tv'].includes(type)) throw new Error('Invalid work type');
@@ -18,8 +18,7 @@ function textOrNull(value) {
   return typeof value === 'string' && value.trim() ? value.trim() : null;
 }
 
-// Page-specific additions are stored by page key and can grow without changing
-// the shared metadata schema. Preserve unknown fields within each page's extras.
+// Approved manual page-specific additions only. Do not overwrite editorial data on automatic refresh.
 function plainObject(value) {
   return value && typeof value === 'object' && !Array.isArray(value) ? value : {};
 }
@@ -37,7 +36,7 @@ function normalizeWork(type, id, source) {
   if (!source || typeof source !== 'object' || Array.isArray(source)) {
     throw new Error('Invalid work payload');
   }
-  const cast = Array.isArray(source.cast) ? source.cast.slice(0, MAX_CAST) : [];
+  const cast = Array.isArray(source.cast) ? source.cast.slice(0, MAX_CAST).map(p => ({ id: p.id, name: p.name })) : [];
   const record = {
     schemaVersion: 1,
     type: work.type,
@@ -49,15 +48,13 @@ function normalizeWork(type, id, source) {
     runtimeMinutes: Number.isFinite(source.runtimeMinutes) ? source.runtimeMinutes : null,
     genres: Array.isArray(source.genres) ? source.genres.slice(0, 20) : [],
     posterPath: textOrNull(source.posterPath),
-    backdropPath: textOrNull(source.backdropPath),
-    directors: Array.isArray(source.directors) ? source.directors.slice(0, 10) : [],
+    directors: Array.isArray(source.directors) ? source.directors.slice(0, 1).map(p => ({ id: p.id, name: p.name })) : [],
     cast,
     collectionId: Number.isSafeInteger(source.collectionId) ? source.collectionId : null,
     collectionName: textOrNull(source.collectionName),
     seasons: Array.isArray(source.seasons) ? source.seasons.slice(0, 100) : [],
     status: textOrNull(source.status),
     voteAverage: Number.isFinite(source.voteAverage) ? source.voteAverage : null,
-    voteCount: Number.isSafeInteger(source.voteCount) ? source.voteCount : null,
     checkedAt: textOrNull(source.checkedAt) || new Date().toISOString(),
     nextCheckAt: textOrNull(source.nextCheckAt),
     manualReview: source.manualReview === true,
@@ -71,8 +68,7 @@ function normalizeWork(type, id, source) {
     errors: Array.isArray(source.errors) ? source.errors : [],
     // Supplemental fields per page; not limited to a predefined list.
     pageExtras: normalizePageExtras(source.pageExtras),
-    commonNotes: plainObject(source.commonNotes),
-    extensions: plainObject(source.extensions)
+    extensions: Object.fromEntries(Object.entries(plainObject(source.extensions)).filter(([key]) => key !== 'tmdbDetail'))
   };
   if (!record.title) throw new Error('Work title is required');
   return record;
