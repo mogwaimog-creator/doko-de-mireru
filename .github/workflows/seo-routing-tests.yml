@@ -1,0 +1,20 @@
+name: SEO routing offline tests
+on:
+  push:
+    branches:
+      - seo/initial-html-metadata-pilot
+  workflow_dispatch:
+jobs:
+  seo-routing:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Test URL identity resolver
+        run: node scripts/test-seo-route-resolver.js
+      - name: Test static route generator
+        run: node scripts/test-seo-vercel-routes.js
