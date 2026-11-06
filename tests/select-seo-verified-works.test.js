@@ -25,3 +25,17 @@ test('export scan problem fails closed and never publishes a partial set',()=>{
  assert.equal(r.approved.length,0);
  assert.equal(r.blocked,'EXPORT_PROBLEMS');
 });
+
+test('verified flag does not override title/date/poster mismatches or provider contamination',()=>{
+ const a=work(10),b=work(11),c=work(12),d=work(13);
+ a.extensions.tmdbDetail.title='別作品';
+ b.extensions.tmdbDetail.release_date='1999-01-01';
+ c.extensions.tmdbDetail.poster_path='/wrong.jpg';
+ d.extensions.tmdbDetail['watch/providers']={results:{JP:{}}};
+ const r=select([a,b,c,d]);
+ assert.equal(r.approved.length,0);
+ assert.ok(r.skipped[0].reasons.includes('TITLE_MISMATCH'));
+ assert.ok(r.skipped[1].reasons.includes('DATE_MISMATCH'));
+ assert.ok(r.skipped[2].reasons.includes('POSTER_MISMATCH'));
+ assert.ok(r.skipped[3].reasons.includes('PROVIDER_DATA_IN_FIXED'));
+});
