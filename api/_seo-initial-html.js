@@ -39,10 +39,10 @@ function injectSeo(template,kind,record){
       const re=new RegExp('<meta\\b(?=[^>]*\\bproperty\\s*=\\s*["\\\']'+property+'["\\\'])[^>]*>','i');
       html=replaceOnce(html,re,`<meta id="${id}" property="${property}" content="${escapeHtml(posterUrl)}">`,property);
     }
-    const twitter=/<meta\\b(?=[^>]*\\bname\\s*=\\s*["']twitter:image["'])[^>]*>/i;
+    const twitter=/<meta\b(?=[^>]*\bname\s*=\s*["']twitter:image["'])[^>]*>/i;
     html=replaceOnce(html,twitter,`<meta id="twitterImage" name="twitter:image" content="${escapeHtml(posterUrl)}">`,'twitter:image');
     // Keep existing client-side poster logic; this only supplies initial markup.
-    const poster=/<img\\b(?=[^>]*\\bid\\s*=\\s*["']poster["'])[^>]*>/i;
+    const poster=/<img\b(?=[^>]*\bid\s*=\s*["']poster["'])[^>]*>/i;
     html=replaceOnce(html,poster,`<img id="poster" class="poster" src="${escapeHtml(posterUrl)}" alt="${escapeHtml(record.title)}のポスター" loading="eager">`,'poster');
   }
   // Include source-ledger content in the initial HTML, not just the head.
