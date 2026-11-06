@@ -43,3 +43,19 @@ test('TMDB watch link follows refreshed provider data and is not frozen in SEO',
  assert.deepEqual(mergeDetailResponse(fixed,dynamic),detail);
  assert.throws(()=>mergeDetailResponse({...fixed,link:detail.link},dynamic),/Provider data in fixed record/);
 });
+
+test('refreshing provider-only fields preserves movie and TV fixed metadata',()=>{
+ for(const [id,title] of [[50014,'映画'],[202879,'TV']]){
+  const original={id,title,poster_path:'/poster.jpg',overview:'固定紹介文',cast:[{name:'出演者'}],streaming:[{provider_id:8}],rental:[],purchase:[],link:'https://www.themoviedb.org/watch/old'};
+  const {fixed,dynamic}=splitDetailResponse(original);
+  const refreshed={...dynamic,streaming:[{provider_id:9}],link:'https://www.themoviedb.org/watch/new'};
+  const merged=mergeDetailResponse(fixed,refreshed);
+  assert.equal(merged.id,id);
+  assert.equal(merged.title,title);
+  assert.equal(merged.overview,original.overview);
+  assert.deepEqual(merged.cast,original.cast);
+  assert.deepEqual(merged.streaming,[{provider_id:9}]);
+  assert.equal(merged.link,refreshed.link);
+  assert.equal(Object.hasOwn(fixed,'link'),false);
+ }
+});
