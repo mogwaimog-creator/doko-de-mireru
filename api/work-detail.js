@@ -20,6 +20,12 @@ module.exports=async(req,res)=>{
     const cached=await getWork(work.type,work.id);
     if(cached)return res.status(200).json({work:publicWork(cached),source:'ledger'});
   }catch(e){console.error('WORK LEDGER READ FAILED',e);res.setHeader('Retry-After','5');return res.status(503).json({error:'Metadata storage temporarily unavailable',code:'WORK_STORAGE_UNAVAILABLE'});}
+  // Honor the shared emergency write freeze for first-time work lookups.
+  // Existing ledger entries remain readable; no new Redis records are created.
+  if(process.env.LEDGER_WRITES_RESUME!=='1'){
+    res.setHeader('Retry-After','60');
+    return res.status(503).json({error:'New work registration temporarily paused',code:'WORK_LEDGER_WRITES_PAUSED'});
+  }
   const apiKey=process.env.TMDB_API_KEY;
   if(!apiKey)return res.status(503).json({error:'Metadata service unavailable'});
   try{
