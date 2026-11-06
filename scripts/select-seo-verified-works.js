@@ -5,14 +5,14 @@ const fs=require('node:fs/promises');
 function select(records){
  const source=Array.isArray(records)?{records,problems:[]}:records;
  if(!source||!Array.isArray(source.records))throw Error('Expected ledger export records');
- const approved=[],skipped=[],seen=new Set();
+ const approved=[],skipped=[],counts=new Map();
+ for(const r of source.records){const k='doko:work:v1:'+r?.type+':'+r?.id;counts.set(k,(counts.get(k)||0)+1);}
  const compromised=new Set((source.problems||[]).map(p=>p.key));
  for(const r of source.records){
   const key='doko:work:v1:'+r?.type+':'+r?.id;
   const reasons=[];
   if(!['movie','tv'].includes(r?.type)||!Number.isSafeInteger(r?.id)||r.id<=0)reasons.push('INVALID_IDENTITY');
-  if(seen.has(key))reasons.push('DUPLICATE_IDENTITY');
-  seen.add(key);
+  if(counts.get(key)>1)reasons.push('DUPLICATE_IDENTITY');
   if(compromised.has(key))reasons.push('EXPORT_PROBLEM');
   if(r?.schemaVersion!==1)reasons.push('INVALID_SCHEMA');
   if(r?.verification?.identity!=='verified'||r?.verification?.metadata!=='verified')reasons.push('NOT_VERIFIED');
