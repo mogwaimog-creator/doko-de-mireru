@@ -1,5 +1,8 @@
 'use strict';
-// Offline generator: query-aware Vercel rewrites to prebuilt static HTML.
+// EXPERIMENTAL ONLY: query-aware Vercel rewrites to prebuilt static HTML.
+// IMPORTANT: Vercel filesystem routes take precedence over rewrites. Existing
+// detail.html/person.html may prevent these rules from ever matching.
+// Do not deploy generated config without a real preview deployment test.
 // No runtime function, Redis read, TMDB request or URL change per page view.
 // Only generate routes for records present in the audited manifest.
 const fs=require('node:fs');
@@ -31,6 +34,7 @@ function makeRewrites(manifest) {
   return routes;
 }
 function build(manifestPath,baseConfigPath,outputPath){
+  if(process.env.SEO_ALLOW_UNVERIFIED_REWRITES!=='1')throw Error('Unverified: existing detail.html/person.html may shadow rewrites; preview test required');
   const manifest=JSON.parse(fs.readFileSync(manifestPath,'utf8'));
   const base=JSON.parse(fs.readFileSync(baseConfigPath,'utf8'));
   const generated=makeRewrites(manifest);
