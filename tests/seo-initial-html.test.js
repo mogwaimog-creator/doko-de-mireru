@@ -101,3 +101,16 @@ test('movie and TV initial HTML carry distinct crawlable metadata and visible wo
   assert.doesNotMatch(html,/<meta[^>]+name=["']robots["'][^>]+content=["']noindex/i);
  }
 });
+
+test('verified-format poster path populates initial poster and social images',()=>{
+ const original=fs.readFileSync(path.join(__dirname,'..','detail.html'),'utf8');
+ const html=injectSeo(original,'work',{type:'movie',id:157336,title:'インターステラー',posterPath:'/abc123.jpg'});
+ assert.match(html,/property="og:image" content="https:\/\/image\.tmdb\.org\/t\/p\/w780\/abc123\.jpg"/);
+ assert.match(html,/name="twitter:image" content="https:\/\/image\.tmdb\.org\/t\/p\/w780\/abc123\.jpg"/);
+ assert.match(html,/id="poster"[^>]*src="https:\/\/image\.tmdb\.org\/t\/p\/w780\/abc123\.jpg"/);
+});
+test('invalid poster paths are never embedded in HTML',()=>{
+ const original=fs.readFileSync(path.join(__dirname,'..','detail.html'),'utf8');
+ const html=injectSeo(original,'work',{type:'movie',id:157336,title:'映画',posterPath:'https://example.com/a.jpg'});
+ assert.doesNotMatch(html,/example\.com\/a\.jpg/);
+});
