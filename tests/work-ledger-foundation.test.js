@@ -23,7 +23,7 @@ test('metadata, review fields, errors and extensible page fields remain separate
   assert.equal(item.title,'映画A');
   assert.equal(item.verification.items.poster,true);
   assert.equal(item.errors[0].area,'poster');
-  assert.equal(item.commonNotes.note,'shared');
+  assert.equal(item.commonNotes,undefined);
   assert.equal(item.pageExtras.mcu.order,3);
   assert.equal(item.pageExtras.movie_shelf.award,'sample');
   assert.equal(item.extensions.futureField.enabled,true);
@@ -69,7 +69,7 @@ test('unknown future fields and page-specific notes do not collide',()=>{
    pageExtras:{watch_order:{order:1,summary:'順番専用'},movie_shelf:{award:'特集専用'}},
    extensions:{futureSection:{customKey:'保持する'}}
  });
- assert.equal(record.commonNotes.production,'共通の補足');
+ assert.equal(record.commonNotes,undefined);
  assert.equal(record.pageExtras.watch_order.summary,'順番専用');
  assert.equal(record.pageExtras.movie_shelf.award,'特集専用');
  assert.equal(record.extensions.futureSection.customKey,'保持する');
@@ -117,4 +117,11 @@ test('incomplete existing ledger never causes another TMDB metadata fetch',async
   for(const [p,v] of saved){if(v)require.cache[p]=v;else delete require.cache[p];}
   if(oldFlag===undefined)delete process.env.WORK_LEDGER_ENABLED;else process.env.WORK_LEDGER_ENABLED=oldFlag;
  }
+});
+
+test('compact ledger drops unused fields and limits directors and cast',()=>{
+ const record=normalizeWork('movie',123,{title:'映画',backdropPath:'/backdrop',voteCount:999,commonNotes:{private:true},directors:[{id:1},{id:2}],cast:Array.from({length:20},(_,i)=>({id:i+1}))});
+ assert.equal(record.directors.length,1);
+ assert.equal(record.cast.length,8);
+ for(const key of ['backdropPath','voteCount','commonNotes'])assert.equal(Object.hasOwn(record,key),false);
 });
