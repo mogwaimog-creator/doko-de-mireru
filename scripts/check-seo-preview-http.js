@@ -8,6 +8,8 @@ if(!base||!/^https:\/\//.test(base)){console.error('Provide an explicit HTTPS pr
 const origin=new URL(base);
 if(origin.pathname!=='/'||origin.search||origin.hash)throw Error('Use a preview origin, not a page URL');
 if(!origin.hostname.endsWith('.vercel.app'))throw Error('Use a dedicated Vercel preview hostname, never production or another website');
+const previewBypass = process.env.VERCEL_AUTOMATION_BYPASS_SECRET || '';
+if (previewBypass && /[\r\n]/.test(previewBypass)) throw Error('Invalid bypass credential');
 const cases=[
  {path:'/detail.html?id=50014',expected:'movie-50014',canonical:'/detail.html?id=50014'},
  {path:'/detail.html?id=50014&type=movie',expected:'movie-50014',canonical:'/detail.html?id=50014'},
@@ -18,7 +20,10 @@ const cases=[
 ];
 (async()=>{
  for(const c of cases){
-  const response=await fetch(new URL(c.path,origin),{redirect:'manual',headers:{'user-agent':'doko-seo-preview-readonly-check/1.0'},signal:AbortSignal.timeout(12000)});
+  const response=await fetch(new URL(c.path,origin),{redirect:'manual',headers:{
+  'user-agent':'doko-seo-preview-readonly-check/1.0',
+  ...(previewBypass ? {'x-vercel-protection-bypass':previewBypass} : {})
+},signal:AbortSignal.timeout(12000)});
   if(response.status===401||response.status===403)throw Error(c.path+' is protected ('+response.status+'); use authenticated preview access, do not disable protection');
   assert.equal(response.status,200,c.path+' status '+response.status);
   const html=await response.text();
