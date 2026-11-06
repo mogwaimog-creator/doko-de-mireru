@@ -13,8 +13,8 @@ function workToLegacyDetail(work) {
   const credits = {
     cast: cast.map(p => ({
       id: p.id, name: p.name,
-      character: p.character ?? null,
-      profile_path: p.profilePath ?? p.profile_path ?? null
+      character: null,
+      profile_path: null
     })),
     crew: directors.map(p => ({id:p.id,name:p.name,job:'Director'}))
   };
