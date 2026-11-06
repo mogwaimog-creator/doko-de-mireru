@@ -2,7 +2,7 @@
 // Pure routing decision for the existing query-based canonical URLs.
 // No network, Redis, TMDB, filesystem access, or writes.
 function positiveId(value) {
-  if (typeof value !== 'string' || !/^[1-9]\\d{0,9}$/.test(value)) return null;
+  if (typeof value !== 'string' || !/^[1-9]\d{0,9}$/.test(value)) return null;
   const id=Number(value);
   return Number.isSafeInteger(id) ? String(id) : null;
 }
