@@ -6,7 +6,7 @@ const {fromTmdb}=require('./_work-from-tmdb');
 const {firstWorkLoad}=require('./_work-first-load');
 // Expose only display-safe fixed metadata. Internal review notes and cached
 // TMDB payloads stay in Redis and must never be returned to visitors.
-const PUBLIC_FIELDS=['schemaVersion','type','id','title','originalTitle','releaseDate','overview','runtimeMinutes','genres','posterPath','backdropPath','directors','cast','collectionId','collectionName','seasons','status','voteAverage','voteCount'];
+const PUBLIC_FIELDS=['schemaVersion','type','id','title','originalTitle','releaseDate','overview','runtimeMinutes','genres','posterPath','directors','cast','collectionId','collectionName','seasons','status','voteAverage'];
 function publicWork(record){return Object.fromEntries(PUBLIC_FIELDS.map(key=>[key,record[key]??null]));}
 module.exports=async(req,res)=>{
   res.setHeader('Cache-Control','private, no-store');
