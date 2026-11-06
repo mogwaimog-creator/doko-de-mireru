@@ -33,7 +33,7 @@ jobs:
           for (const name of ['api', 'detail.html', 'person.html', '.env', '.vercel']) {
             if (fs.existsSync(path + '/' + name)) throw Error('Unexpected preview content: ' + name);
           }
-          if (config.crons || config.functions || !Array.isArray(config.rewrites) || config.rewrites.length !== 7) {
+          if (config.crons || config.functions || !Array.isArray(config.rewrites) || config.rewrites.length !== 6) {
             throw Error('Unsafe or incomplete isolated preview config');
           }
           for (const rule of config.rewrites) {
