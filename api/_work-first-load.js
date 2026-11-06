@@ -2,6 +2,7 @@
 // Prevent a cache stampede for a first-time work lookup. No background polling.
 const {command}=require('./_redis');
 const {identity,getWork}=require('./_work-ledger');
+const {workToLegacyDetail}=require('./_work-to-legacy-detail');
 // Keep the lock longer than the upstream 7s timeout plus Redis writes.
 const WAIT_MS=2500, STEP_MS=100, LOCK_SECONDS=30;
 const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
@@ -27,6 +28,7 @@ async function firstWorkLoad(type,id,load){
   try{saved=await getWork(type,id);}
   catch(error){console.error('WORK LOCK WAIT READ FAILED',error);const busy=new Error('Metadata storage temporarily unavailable');busy.code='WORK_STORAGE_UNAVAILABLE';throw busy;}
   if(saved?.extensions?.tmdbDetail && Number(saved.extensions.tmdbDetail.id)===Number(id))return saved.extensions.tmdbDetail;
+  if(process.env.COMPACT_WORK_READ_ENABLED==='1' && saved?.type===type && Number(saved.id)===Number(id))return workToLegacyDetail(saved);
  }
  // A busy work should not cause every waiting visitor to hit TMDB.
  const error=new Error('Work metadata is temporarily busy');
