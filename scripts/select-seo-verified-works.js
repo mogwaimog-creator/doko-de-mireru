@@ -2,13 +2,17 @@
 // Offline-only selection of explicitly reviewed ledger records for SEO generation.
 // Does not change verification flags, read Redis, or call TMDB.
 const fs=require('node:fs/promises');
+const {audit}=require('./audit-work-ledger-export');
 function select(records){
  const source=Array.isArray(records)?{records,problems:[]}:records;
  if(!source||!Array.isArray(source.records))throw Error('Expected ledger export records');
  const approved=[],skipped=[],counts=new Map();
+ const audited=audit(source);
+ const auditReasons=new Map();
+ for(const issue of audited.issues){if(issue.index===null)continue;const reasons=auditReasons.get(issue.index)||[];reasons.push(issue.code);auditReasons.set(issue.index,reasons);}
  for(const r of source.records){const k='doko:work:v1:'+r?.type+':'+r?.id;counts.set(k,(counts.get(k)||0)+1);}
  const compromised=new Set((source.problems||[]).map(p=>p.key));
- for(const r of source.records){
+ for(const [index,r] of source.records.entries()){
   const key='doko:work:v1:'+r?.type+':'+r?.id;
   const reasons=[];
   if(!['movie','tv'].includes(r?.type)||!Number.isSafeInteger(r?.id)||r.id<=0)reasons.push('INVALID_IDENTITY');
@@ -19,6 +23,7 @@ function select(records){
   if(Array.isArray(r?.errors)&&r.errors.length)reasons.push('RECORDED_ERRORS');
   if(!r?.title||!r?.releaseDate||!r?.posterPath||!r?.overview)reasons.push('INCOMPLETE_FIXED_METADATA');
   if(!r?.extensions?.tmdbDetail||Number(r.extensions.tmdbDetail.id)!==r.id)reasons.push('MISSING_OR_MISMATCHED_DETAIL');
+  for(const code of auditReasons.get(index)||[])if(!reasons.includes(code))reasons.push(code);
   if(reasons.length)skipped.push({key,reasons});
   else approved.push(r);
  }
