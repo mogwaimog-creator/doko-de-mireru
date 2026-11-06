@@ -4,7 +4,7 @@
 // This does not decide whether a record is verified or safe to migrate.
 function workToLegacyDetail(work) {
   if (!work || !['movie','tv'].includes(work.type) ||
-      !Number.isSafeInteger(Number(work.id)) || !work.title) {
+      !Number.isSafeInteger(Number(work.id)) || Number(work.id)<=0 || !work.title) {
     throw new Error('Invalid compact work record');
   }
   const tv = work.type === 'tv';
