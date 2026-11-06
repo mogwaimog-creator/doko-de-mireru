@@ -22,16 +22,32 @@ jobs:
           test -n "$VERCEL_TOKEN" || { echo "Missing VERCEL_TOKEN; no deployment"; exit 1; }
           test -n "$VERCEL_ORG_ID" || { echo "Missing VERCEL_ORG_ID; no deployment"; exit 1; }
           test -n "$VERCEL_PROJECT_ID" || { echo "Missing VERCEL_PROJECT_ID; no deployment"; exit 1; }
-      - name: Generate offline SEO records and isolated site
+      - name: Generate and validate static-only SEO preview
         run: |
           node scripts/build-seo-static.js tests/fixtures/seo-static-sample.json /tmp/doko-seo-static
-          node scripts/stage-seo-full-preview.js /tmp/doko-seo-static /tmp/doko-seo-full-preview
-          node scripts/verify-seo-full-preview.js /tmp/doko-seo-full-preview
+          node scripts/stage-seo-preview.js /tmp/doko-seo-static /tmp/doko-seo-full-preview
+          node - <<'NODE'
+          const fs = require('node:fs');
+          const path = '/tmp/doko-seo-full-preview';
+          const config = JSON.parse(fs.readFileSync(path + '/vercel.json', 'utf8'));
+          for (const name of ['api', 'detail.html', 'person.html', '.env', '.vercel']) {
+            if (fs.existsSync(path + '/' + name)) throw Error('Unexpected preview content: ' + name);
+          }
+          if (config.crons || config.functions || !Array.isArray(config.rewrites) || config.rewrites.length !== 7) {
+            throw Error('Unsafe or incomplete isolated preview config');
+          }
+          for (const rule of config.rewrites) {
+            if (!rule.destination.startsWith('/seo-pages/') && !['/detail-fallback.html','/person-fallback.html'].includes(rule.destination)) {
+              throw Error('Unexpected rewrite destination: ' + rule.destination);
+            }
+          }
+          console.log('Isolated static-only preview validated; no API or Cron files');
+          NODE
       - name: Bind to existing project without modifying its settings
         run: |
           mkdir -p /tmp/doko-seo-full-preview/.vercel
           node -e 'const fs=require("fs");fs.writeFileSync("/tmp/doko-seo-full-preview/.vercel/project.json",JSON.stringify({orgId:process.env.VERCEL_ORG_ID,projectId:process.env.VERCEL_PROJECT_ID}))'
-      - name: Deploy isolated preview (never production)
+      - name: Deploy static-only preview (never production)
         run: |
           npx --yes vercel@latest deploy /tmp/doko-seo-full-preview --yes --scope mogwaimog-1706 --token "$VERCEL_TOKEN" > /tmp/seo-preview-url.txt
           echo "Preview deployment URL:"
