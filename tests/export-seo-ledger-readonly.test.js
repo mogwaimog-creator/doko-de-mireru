@@ -66,3 +66,37 @@ test('existing work export accepts bounded IDs with GET only and retains review 
  await assert.rejects(exportLedger(run,[]),/1-20/);
  assert.equal(calls.length,1,'invalid input performs no Redis request');
 });
+
+test('display capture reuses saved movie and TV data with bounded reads and excludes internal fields',async()=>{
+ const {exportDisplayInputs}=require('../scripts/export-work-ledger-readonly');
+ const movie={schemaVersion:1,type:'movie',id:157336,title:'保存済み映画',overview:'概要',posterPath:'/p.jpg',verification:{metadata:'not_checked'},commonNotes:{private:'do not export'},extensions:{tmdbDetail:{id:157336,title:'保存済み映画',runtime:169,internalSecret:'omit','watch/providers':{results:{US:{}}}}}};
+ const before=JSON.stringify(movie),calls=[];
+ const result=await exportDisplayInputs({records:[movie]},async args=>{
+  calls.push(args);assert.ok(['SCAN','GET'].includes(args[0]));
+  if(args[0]==='SCAN')return ['123',['other:key','doko:work:v1:tv:1','doko:work:v1:tv:1','doko:work:v1:tv:2','doko:work:v1:tv:3','doko:work:v1:tv:4']];
+  if(args[1].startsWith('doko:work:')){const id=Number(args[1].split(':').pop());return JSON.stringify({schemaVersion:1,type:'tv',id,title:'保存済みTV'+id,genres:[{id:id===1?16:18}],extensions:{tmdbDetail:{id,name:'保存済みTV'+id,seasons:[],number_of_episodes:10}}});}
+  return JSON.stringify({checkedAt:'2026-11-06T00:00:00Z',data:{results:{JP:{flatrate:[{provider_id:8}],rent:[],buy:[]},US:{flatrate:[{provider_id:99}]}}}});
+ });
+ assert.equal(calls.length,6,'one scan, at most three TV reads, two provider reads');
+ assert.equal(calls.filter(a=>a[0]==='SCAN').length,1);
+ assert.deepEqual(result.works.map(w=>[w.type,w.id]),[['movie',157336],['tv',2]]);
+ assert.equal(result.works[0].snapshot.runtime,169);
+ assert.equal(result.works[1].snapshot.number_of_episodes,10);
+ assert.deepEqual(result.works[0].providers.results.JP.flatrate,[{provider_id:8}]);
+ for(const key of ['commonNotes','verification','internalSecret','watch/providers'])assert.equal(JSON.stringify(result).includes(key),false);
+ assert.deepEqual(Object.keys(result.works[0].providers.results),['JP']);
+ assert.equal(JSON.stringify(movie),before,'capture never changes local review flags or work data');
+});
+test('display capture stops after one empty scan and does not invent a missing provider cache',async()=>{
+ const {exportDisplayInputs}=require('../scripts/export-work-ledger-readonly');
+ const source={records:[{schemaVersion:1,type:'movie',id:157336,title:'映画',extensions:{tmdbDetail:{id:157336,title:'映画'}}}]};
+ let calls=0;
+ await assert.rejects(exportDisplayInputs(source,async()=>{calls++;return ['456',[]];}),/cursor=456/);
+ assert.equal(calls,1);
+ const result=await exportDisplayInputs(source,async args=>{
+  if(args[0]==='SCAN')return ['0',['doko:work:v1:tv:7']];
+  if(args[1].startsWith('doko:work:'))return JSON.stringify({schemaVersion:1,type:'tv',id:7,title:'TV',extensions:{tmdbDetail:{id:7,name:'TV'}}});
+  return null;
+ });
+ assert.ok(result.works.every(w=>w.providers===null));
+});

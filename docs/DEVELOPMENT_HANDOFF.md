@@ -21,7 +21,8 @@
 - **実台帳の公開項目からHTML生成成功**：ユーザーから受領したmovie:157336の公開項目（タイトル・概要・posterPath等）をそのまま既存build-seo-staticに入力。初期title/H1/概要/canonical/OGP/Twitter/ポスター、従来API要求の維持、既存HTML監査のhtmlReady:trueを確認。verificationはnot_recorded/not_checkedのまま、releaseReady:false。手入力の仮概要ではなく実台帳から受領した概要を使用。公開TMDBページ（https://www.themoviedb.org/movie/157336?language=ja-JP）で概要全文・監督ID525・主要キャスト5名のID/名前・ポスターを照合。2014-11-04は同ページのUS表記と一致。画像も目視確認。この時点では全キャスト等が未完了だったが、下記追記で映画1件の照合を完了。TV/アニメの実データ検証は未完了。
 - **映画1件の固定項目照合完了／保存は未承認**：movie:157336の原題Interstellar、169分、genres12/18/878、背景パスを公開TMDBと照合。保存済みcast30件のID・名前・役名・profilePath・順序を公開クレジット全37名の先頭30名と機械照合し一致（台帳上限30名）。movieのseasons:[]/status:nullは既存fromTmdb仕様どおり。確認結果の保存案はidentity/metadataをverified、verification.items.initialHtmlSeoReviewに確認日時・参照URL・castCount30・releaseDateCountryUSを追記するだけ。他の固定情報は変更しない。
 - **既存保存関数の競合保護を追加**：putWorkの任意options.expected指定時だけ、既存JSONとの一致をRedis内で比較してからSETする。変更・削除・表現差があればWORK_REVIEW_CONFLICTで中止し、無条件再試行しない。従来呼出しは互換維持。模擬Redisによる既存テストに、確認状態以外の保持・競合・削除・誤IDのケースを追加して合格。実Redis書込みは未実行。ユーザーの事前承認後のみ映画1件の確認状態を保存する。
-- **残作業**：映画1件の確認結果を保存してよいかユーザーに事前確認。TV/アニメの少数台帳をread-onlyで確認し、固定情報を照合。適格な実映画・TV・アニメで生成→既存URLの認証付きHTTP→ブラウザ表示を照合。初期パイロットの振分は既存の20作品上限を保持する。未登録／未確認は従来表示。対象追加の書込み・追加課金・新規デプロイ・本番反映は必ず事前確認。
+- **PCでの表示確認データ取得を短縮**：長いPowerShellヒアストリングの貼付が途中で途切れ、入力待ちのままで取得処理は未実行。既存export-work-ledger-readonlyに `output.json --display-from existing-private-export.json` を追加。既存映画のローカルデータを再利用し、SCAN1ページ・TV最大3GET・配信キャッシュ2GET（最大6読み取り）に限定。公開メタデータの許可項目とJP配信キャッシュだけを出力し、確認フラグ・内部メモ・未知のトップレベル項目を含めない。キャッシュ欠損はnullで記録し、空配信を捏造しない。新しいスクリプト/APIは追加していない。実取得・実データブラウザ比較は入力待ち。
+- **現在のユーザー指示**：Redisへの確認結果保存は保留。映画・TVの保存済み作品データと既存詳細ページを使い、表示と初期HTMLの作品固有SEOを先に確認する。確認フラグは変更しない。本番APIへのアクセスでキャッシュ書込みが起き得るため、既存の読み取り専用取得データをローカルの既存比較手順に渡し、外部通信を遮断して検証する。既存の公開候補用確認済みゲートは維持する。TV実レコードと保存済み配信ペイロードの取得が次の不足入力。
 
 ## 最初に読むこと
 1. この文書と `docs/WORK_LEDGER_TEST_PLAN.md`、`docs/WORK_ANOMALY_REVIEW.md` を読む。

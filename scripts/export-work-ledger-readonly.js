@@ -2,6 +2,7 @@
 // Explicit, local, read-only export of work metadata for offline SEO validation.
 // Run only in a trusted environment with existing Upstash credentials.
 // Usage: node scripts/export-work-ledger-readonly.js output.json [ids.json]
+// Display capture: output.json --display-from existing-private-export.json
 // Redis commands: SCAN and GET only. Never modifies production data.
 const fs=require('node:fs/promises');
 const path=require('node:path');
@@ -39,8 +40,47 @@ async function exportLedger(run=command,spec=null){
  }while(cursor!=='0');
  return {records,problems,scannedKeys:seen.size,readOnly:true,consistentSnapshot:false};
 }
-async function main(output,ids){
+const PUBLIC_DETAIL_FIELDS=['id','title','name','original_title','original_name','release_date','first_air_date','overview','runtime','episode_run_time','genres','genre_ids','poster_path','backdrop_path','vote_average','vote_count','popularity','original_language','credits','belongs_to_collection','created_by','number_of_seasons','number_of_episodes','status','seasons'];
+async function exportDisplayInputs(source,run=command){
+ const movie=source?.records?.find(r=>r.schemaVersion===1&&r.type==='movie'&&r.id===157336);
+ if(!movie?.extensions?.tmdbDetail)throw Error('Saved movie:157336 detail is missing from the local export');
+ // One bounded scan only; never loop over the database for a display check.
+ const scan=await run(['SCAN','0','MATCH',PREFIX+'tv:*','COUNT','1000']);
+ if(!Array.isArray(scan)||scan.length!==2||!Array.isArray(scan[1]))throw Error('Unexpected SCAN response');
+ const ids=[...new Set(scan[1].filter(k=>typeof k==='string'&&/^doko:work:v1:tv:[1-9]\d*$/.test(k)))].slice(0,3)
+  .map(key=>({type:'tv',id:Number(key.split(':').pop())}));
+ if(!ids.length)throw Error('No TV keys in this scan page; cursor='+String(scan[0]));
+ const exported=await exportLedger(run,ids);
+ const candidates=exported.records.filter(r=>r.schemaVersion===1&&r.extensions?.tmdbDetail);
+ const tv=candidates.find(r=>!r.genres?.some(g=>Number(g.id)===16))||candidates[0];
+ if(!tv)throw Error('No usable saved TV detail in the bounded sample');
+ const works=[];
+ for(const r of [movie,tv]){
+  const detail=r.extensions.tmdbDetail;
+  if(detail.id!==r.id)throw Error('Saved detail identity mismatch');
+  const raw=await run(['GET','doko:detail-providers:v1:'+r.type+':'+r.id]);
+  const cache=typeof raw==='string'?JSON.parse(raw):raw;
+  const results=cache?.data?.results;
+  const providers=results&&typeof results==='object'&&!Array.isArray(results)
+   ?{results:results.JP?{JP:results.JP}:{}}:null;
+  works.push({type:r.type,id:r.id,
+   seo:{title:r.title,overview:r.overview,posterPath:r.posterPath},
+   snapshot:Object.fromEntries(PUBLIC_DETAIL_FIELDS.filter(k=>Object.hasOwn(detail,k)).map(k=>[k,detail[k]])),
+   providers,providerCheckedAt:cache?.checkedAt??null});
+ }
+ return {forDisplayCheckOnly:true,readOnly:true,works};
+}
+async function main(output,ids,sourceFile){
  if(!output)throw Error('Usage: node scripts/export-work-ledger-readonly.js output.json [ids.json]');
+ if(ids==='--display-from'){
+  if(!sourceFile)throw Error('Provide the existing private export after --display-from');
+  const source=JSON.parse(await fs.readFile(sourceFile,'utf8'));
+  const result=await exportDisplayInputs(source);
+  const dest=path.resolve(output);
+  await fs.writeFile(dest,JSON.stringify(result,null,2)+'\n',{flag:'wx',mode:0o600});
+  console.log(JSON.stringify({output:dest,readOnly:true,works:result.works.map(w=>({type:w.type,id:w.id,title:w.seo.title,providerCacheFound:!!w.providers}))}));
+  return;
+ }
  const spec=ids?JSON.parse(await fs.readFile(ids,'utf8')):null;
  const result=await exportLedger(command,spec);
  // Private ledger contents stay on the local machine; never upload to CI/artifacts.
@@ -48,5 +88,5 @@ async function main(output,ids){
  await fs.writeFile(dest,JSON.stringify(result,null,2)+'\n',{flag:'wx',mode:0o600});
  console.log(JSON.stringify({output:dest,scannedKeys:result.scannedKeys,exported:result.records.length,problems:result.problems.length,readOnly:true}));
 }
-if(require.main===module)main(process.argv[2],process.argv[3]).catch(e=>{console.error(e.message);process.exitCode=1;});
-module.exports={exportLedger};
+if(require.main===module)main(...process.argv.slice(2)).catch(e=>{console.error(e.message);process.exitCode=1;});
+module.exports={exportLedger,exportDisplayInputs};
