@@ -171,3 +171,12 @@ TMDB（初回取得・必要時のみ）
 - 既存の確認済み固定情報は通常の自動処理で上書きしない方針。putWorkIfAbsent のほか putWork もあるため全書込経路の確認が必要。配信情報は別管理で従来の6時・18時更新を維持。
 - 公開後しばらく毎日1回、全作品の確認状態・エラー一覧を点検し、新規・未確認・異常を優先して台帳整備。既存の毎朝点検への組み込みは未実装。
 - この合意を今後のフローチャートから省略しない。今回の変更は引継ぎ文書のみ。本番変更なし。
+
+
+### 2026-11-06 SEO実台帳エクスポート連携のオフラインCI
+- Redis読み取り専用 `scripts/export-work-ledger-readonly.js`（SCAN/GETのみ、実Redis未実行）の出力 `{records,problems,...}` を `scripts/audit-work-ledger-export.js` が受け取れるよう修正。読み取り異常を監査報告へ引き継ぐ。
+- `scripts/select-seo-verified-works.js` は `verification.identity === 'verified'` と `verification.metadata === 'verified'`、必要固定項目、埋め込み詳細ID一致、エラーなしを満たすレコードだけ選択。重複IDは両方除外。エクスポート異常時は全件生成を止める。確認済み状態は自動で付与しない。
+- `scripts/build-seo-from-ledger-export.js` は監査→選別→既存の静的SEO生成を接続。サンプルのインターステラー1件と未確認レコード除外のテストを追加。
+- GitHub Actions `42176368757` の `node-tests` ジョブが success。**テスト用データでのオフライン成功であり、実Redisからの読み取り・実台帳の確認済み件数・実サイトでのHTTP・全サイトブラウザ動作は未検証。**
+- **次のブロッカー：** 実Redisの確認済み作品が何件あるか不明。従来の初期値 `not_recorded/not_checked` のままならSEO候補は0件になる。確認済みフラグを無条件に書き換えて解消してはいけない。
+- 実データ検証は秘密情報をGitHub/チャットに貼らず、認証済みの読み取り専用経路から既存作品1〜3件を確認する。ユーザーの追加課金禁止方針により、新規全サイトデプロイは引き続き保留。本番は未変更。
