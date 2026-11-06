@@ -32,7 +32,7 @@ function normalizeWorkV2(type,id,input){
     cast:(Array.isArray(x.cast)?x.cast:[]).map(person).filter(Boolean).slice(0,MAX_CAST),
     rating:num(x.rating??x.voteAverage),ratingCheckedAt:str(x.ratingCheckedAt),
     verification:{identity:str(x.verification?.identity)||'not_recorded',metadata:str(x.verification?.metadata)||'not_checked'},
-    confirmed:x.confirmed===true,locked:x.locked===true,
+    confirmed:x.confirmed===true||x.verification?.metadata==='confirmed',locked:x.locked===true||x.confirmed===true||x.verification?.metadata==='confirmed',
     pageExtras:obj(x.pageExtras)
   };
   if(type==='tv'){
@@ -48,6 +48,14 @@ function normalizeWorkV2(type,id,input){
 // A confirmed/locked record must never be overwritten by automation.
 function acceptAutomaticUpdate(existing,candidate){
   if(existing?.locked||existing?.confirmed)return existing;
-  return candidate;
+  if(!existing)return candidate;
+  // Page-specific editorial text and verification must survive routine refreshes.
+  return {...candidate,
+    pageExtras:existing.pageExtras||{},
+    verification:existing.verification||candidate.verification,
+    errors:existing.errors||candidate.errors,
+    confirmed:existing.confirmed===true,
+    locked:existing.locked===true
+  };
 }
 module.exports={SCHEMA_VERSION,identity,normalizeWorkV2,acceptAutomaticUpdate};
