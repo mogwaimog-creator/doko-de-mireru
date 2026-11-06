@@ -137,3 +137,9 @@ TMDB（初回取得・必要時のみ）
 - **公開URLの実HTTP検証と本番反映は未実施。** フローチャート④は「隔離プレビューのURL振分テスト成功／全サイト構造テスト実行中／実HTTP未検証」に更新して扱う。
 
 - **後続確認：** run `42104785286` は `completed/success`。`Generate and verify manually entered real-film SEO HTML`、`Verify real-film URL routing in isolated preview`、`Verify real-film routing in full-site preview` の3ステップとも success。したがって手動映画1件のHTML生成・隔離ルーティング・全サイト構成の**オフライン検証は完了**。実HTTP検証・本番公開は未完了。
+
+### 2026-11-06 隔離静的プレビューを実際にデプロイ
+- ユーザーの許可後、Vercelの同一プロジェクトに**非本番・静的3ファイルだけ**の隔離プレビュー `dpl_C9Fm6HY79G5NcxAxVoP1uRRvCRxW` を作成。URL `https://doko-de-mireru-lnepaulan-mogwaimog-1706.vercel.app/`。状態 `READY`、`target:null`、production aliasなし。
+- デプロイファイル一覧で `seo-pages/movie-157336.html`、`detail-fallback.html`、`vercel.json` の配置を確認。これは**全サイトプレビューではなく、SEO URL振分専用の隔離試験**。JSが参照する通常のAPI等は含まないため、サイト全機能の表示テストとは区別する。
+- 匿名の外部HTTP検証はアクセス不可。**認証済みの実HTTPレスポンス検証は未完了**。共有リンク作成などアクセス権変更は行わない。次は既存の認証済みCLI `vercel.cmd curl` などで `detail.html?id=157336` の初期HTMLと、未登録IDのフォールバックを検証。
+- 本番設定・Redis・TMDB・本番URLの書き換えはしていない。進捗図④：隔離プレビュー配置済み／実HTTP未検証。
