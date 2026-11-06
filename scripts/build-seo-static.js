@@ -56,6 +56,15 @@ async function build(input, output, templateRoot = path.join(__dirname, '..')) {
   const seen = new Set();
   for (const raw of records) {
     const record = normalizeRecord(raw);
+    // Never generate an SEO page from a ledger record whose saved detail
+    // belongs to a different TMDB identity. Keep the legacy SEO-only pilot
+    // fixture supported until real ledger export is connected.
+    if (record.kind === 'work' && raw.schemaVersion === 1 && raw.extensions?.tmdbDetail) {
+      const snapshotId = Number(raw.extensions.tmdbDetail.id);
+      if (!Number.isSafeInteger(snapshotId) || snapshotId !== record.id) {
+        throw Error('Ledger/detail identity mismatch: ' + record.type + ':' + record.id);
+      }
+    }
     const name = filename(record);
     if (seen.has(name)) throw Error('Duplicate page: ' + name);
     seen.add(name);
