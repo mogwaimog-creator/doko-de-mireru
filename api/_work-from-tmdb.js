@@ -27,7 +27,7 @@ function fromTmdb(type, item) {
       id: s.id, seasonNumber: s.season_number, name: s.name,
       episodeCount: s.episode_count, airDate: s.air_date, posterPath: s.poster_path
     })) : [],
-    status: isTv ? item.status : null,
+    status: item.status || null,
     voteAverage: item.vote_average
   };
 }
