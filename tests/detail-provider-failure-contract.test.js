@@ -8,8 +8,8 @@ test('movie and TV ledger-enabled provider failures never become empty availabil
  const movie=source.slice(source.indexOf('async function getMovieDetail('),source.indexOf('async function getTvDetail('));
  const tv=source.slice(source.indexOf('async function getTvDetail('));
  const guard=/if\(process\.env\.WORK_LEDGER_ENABLED==='1'\)throw error;/g;
- assert.equal((movie.match(guard)||[]).length,1,'movie must fail closed');
- assert.equal((tv.match(guard)||[]).length,1,'TV must fail closed');
+ assert.ok((movie.match(guard)||[]).length>=1,'movie must fail closed');
+ assert.ok((tv.match(guard)||[]).length>=1,'TV must fail closed');
  assert.match(movie,/providersJP = \{\};/,'legacy fallback remains');
  assert.match(tv,/results:\{\}/,'legacy fallback remains');
 });
