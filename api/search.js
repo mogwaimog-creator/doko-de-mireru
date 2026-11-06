@@ -2246,7 +2246,8 @@ async function getMovieDetail(
 
   } catch (error) {
 
-    if(error?.code==='DETAIL_PROVIDERS_BUSY'||error?.code==='DETAIL_STORAGE_UNAVAILABLE')throw error;
+    // An enabled ledger must not turn a provider outage into a false 'not available'.
+    if(process.env.WORK_LEDGER_ENABLED==='1')throw error;
 
     console.error(
       "WATCH PROVIDERS ERROR:",
@@ -12047,7 +12048,8 @@ async function getTvDetail(tvId, apiKey) {
       // Never mutate the canonical metadata record shared with other requests.
       tv={...fixedTv,'watch/providers':cached.data};
     } catch(error){
-      if(error?.code==='DETAIL_PROVIDERS_BUSY'||error?.code==='DETAIL_STORAGE_UNAVAILABLE')throw error;
+      // An enabled ledger must not turn a provider outage into a false 'not available'.
+    if(process.env.WORK_LEDGER_ENABLED==='1')throw error;
       console.error('TV PROVIDERS ERROR:',error);
       tv={...fixedTv,'watch/providers':{results:{}}};
     }
