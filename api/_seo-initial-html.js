@@ -30,6 +30,21 @@ function injectSeo(template,kind,record){
     const re=new RegExp('<meta\\b(?=[^>]*\\bproperty\\s*=\\s*["\\\']'+property+'["\\\'])[^>]*>','i');
     html=replaceOnce(html,re,`<meta id="${id}" property="${property}" content="${escapeHtml(value)}">`,property);
   }
+  // The fixed work ledger stores TMDB poster paths, never streaming data.
+  // Only accept a TMDB-style relative image path; do not embed arbitrary URLs.
+  if(kind==='work' && typeof record.posterPath==='string' &&
+     /^\\/[a-zA-Z0-9_-]+\\.(?:jpg|jpeg|png|webp)$/i.test(record.posterPath)){
+    const posterUrl='https://image.tmdb.org/t/p/w780'+record.posterPath;
+    for(const [property,id] of [['og:image','ogImage']]){
+      const re=new RegExp('<meta\\b(?=[^>]*\\bproperty\\s*=\\s*["\\\']'+property+'["\\\'])[^>]*>','i');
+      html=replaceOnce(html,re,`<meta id="${id}" property="${property}" content="${escapeHtml(posterUrl)}">`,property);
+    }
+    const twitter=/<meta\\b(?=[^>]*\\bname\\s*=\\s*["']twitter:image["'])[^>]*>/i;
+    html=replaceOnce(html,twitter,`<meta id="twitterImage" name="twitter:image" content="${escapeHtml(posterUrl)}">`,'twitter:image');
+    // Keep existing client-side poster logic; this only supplies initial markup.
+    const poster=/<img\\b(?=[^>]*\\bid\\s*=\\s*["']poster["'])[^>]*>/i;
+    html=replaceOnce(html,poster,`<img id="poster" class="poster" src="${escapeHtml(posterUrl)}" alt="${escapeHtml(record.title)}のポスター" loading="eager">`,'poster');
+  }
   // Include source-ledger content in the initial HTML, not just the head.
   // Existing client-side rendering remains authoritative after hydration.
   const setInitialText=(id,value)=>{
