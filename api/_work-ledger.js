@@ -87,10 +87,28 @@ async function getWork(type, id) {
   return parsed;
 }
 
-async function putWork(type, id, source) {
+async function putWork(type, id, source, options = {}) {
   const record = normalizeWork(type, id, source);
   const { key } = identity(type, id);
-  await command(['SET', key, JSON.stringify(record)]);
+  if (options.expected !== undefined) {
+    const expected = options.expected;
+    if (!expected || expected.schemaVersion !== 1 || expected.type !== type || expected.id !== Number(id)) {
+      throw new Error('Expected work identity mismatch');
+    }
+    // Explicit editorial updates must not overwrite changes made after review.
+    // Existing records are JSON.stringify payloads; a different representation
+    // also fails closed rather than permitting an unconditional retry.
+    const saved = await command(['EVAL',
+      "if redis.call('GET',KEYS[1]) ~= ARGV[1] then return 0 end redis.call('SET',KEYS[1],ARGV[2]) return 1",
+      '1', key, JSON.stringify(expected), JSON.stringify(record)]);
+    if (saved !== 1) {
+      const error = new Error('Work changed since review; no update was written');
+      error.code = 'WORK_REVIEW_CONFLICT';
+      throw error;
+    }
+  } else {
+    await command(['SET', key, JSON.stringify(record)]);
+  }
   return record;
 }
 

@@ -50,7 +50,7 @@ test('TV detail preserves storage outage instead of reporting empty providers',(
  const tvSection=search.slice(search.indexOf("const providerUrl='https://api.themoviedb.org/3/tv/"));
  assert.ok(tvSection.length>0,'TV provider code exists');
  assert.match(tvSection,/getDetailProviders\('tv',tvId/);
- assert.match(tvSection,/if\(error\?\.code==='DETAIL_PROVIDERS_BUSY'\|\|error\?\.code==='DETAIL_STORAGE_UNAVAILABLE'\)throw error;/);
+ assert.match(tvSection,/if\(process\.env\.WORK_LEDGER_ENABLED==='1'\)throw error;/);
  assert.match(tvSection,/tv=\{\.\.\.fixedTv,'watch\/providers':\{results:\{\}\}\}/);
 });
 
