@@ -24,7 +24,7 @@ function normalizeRecord(record) {
   if (!['movie','tv'].includes(record.type)) throw Error('Invalid work type');
   const id = Number(record.id);
   if (!Number.isSafeInteger(id) || id <= 0 || !/^\d+$/.test(String(record.id))) throw Error('Invalid work ID');
-  return {kind:'work', type:record.type, id, title:record.title, overview:record.overview};
+  return {kind:'work', type:record.type, id, title:record.title, overview:record.overview, posterPath:record.posterPath};
 }
 function filename(record) {
   return record.kind === 'person' ? 'person-' + record.id + '.html' : record.type + '-' + record.id + '.html';
