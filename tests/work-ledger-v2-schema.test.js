@@ -1,0 +1,18 @@
+'use strict';
+const assert=require('node:assert/strict');
+const {normalizeWorkV2,acceptAutomaticUpdate}=require('../api/_work-ledger-v2-schema');
+const input={title:'作品A',cast:Array.from({length:12},(_,i)=>({id:i+1,name:'出演者'+i,character:'保存しない'})),directors:[{id:99,name:'監督'}],backdropPath:'/discard',voteCount:100,verification:{metadata:'confirmed'},pageExtras:{godzilla:{comment:'手書き'}}};
+const work=normalizeWorkV2('movie',123,input);
+assert.equal(work.cast.length,8);
+assert.equal(work.cast[0].character,undefined);
+assert.equal(work.director.name,'監督');
+assert.equal(work.backdropPath,undefined);
+assert.equal(work.voteCount,undefined);
+assert.equal(work.locked,true);
+assert.deepEqual(acceptAutomaticUpdate(work,normalizeWorkV2('movie',123,{title:'上書き'})),work);
+const draft=normalizeWorkV2('tv',456,{title:'ドラマ',seasons:[{seasonNumber:1,name:'第1期',episodeCount:12,posterPath:'/discard'}],pageExtras:{series:{comment:'保持'}}});
+const refreshed=acceptAutomaticUpdate(draft,normalizeWorkV2('tv',456,{title:'更新後'}));
+assert.equal(refreshed.pageExtras.series.comment,'保持');
+assert.equal(refreshed.seasons[0].posterPath,undefined);
+assert.throws(()=>normalizeWorkV2('movie',-1,{title:'不正'}));
+console.log('work ledger v2 schema tests: PASS');
