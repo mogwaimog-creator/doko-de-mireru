@@ -5,7 +5,9 @@
 const fs = require('node:fs');
 const path = require('node:path');
 function audit(records) {
-  if (!Array.isArray(records)) throw Error('Expected an array of work records');
+  const exportProblems = Array.isArray(records?.problems) ? records.problems : [];
+  if (!Array.isArray(records) && !Array.isArray(records?.records)) throw Error('Expected an array or a read-only ledger export');
+  records = Array.isArray(records) ? records : records.records;
   const issues = [], seen = new Set(), stats = {total:records.length,verified:0,unverified:0,errors:0};
   const add = (index, key, code, detail) => issues.push({index,key,code,detail});
   records.forEach((r,index) => {
@@ -36,6 +38,7 @@ function audit(records) {
     else {stats.unverified++;add(index,key,'NOT_VERIFIED','Identity and metadata are not both explicitly verified');}
     // Never mark records verified here. Review must be separately approved.
   });
+  for (const problem of exportProblems) add(null,problem.key||'unknown',problem.code||'EXPORT_PROBLEM','Problem detected while reading the ledger');
   return {stats,issueCount:issues.length,issues,readOnly:true,automaticVerification:false};
 }
 if (require.main===module) {
