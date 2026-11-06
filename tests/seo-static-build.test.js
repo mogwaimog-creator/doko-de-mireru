@@ -151,3 +151,41 @@ test('offline static generator retains poster image from work ledger',async()=>{
   assert.match(html,/id="poster"[^>]*src="https:\/\/image\.tmdb\.org\/t\/p\/w780\/abc123\.jpg"/);
  }finally{await fs.rm(dir,{recursive:true,force:true});}
 });
+
+
+test('offline integration: normalized movie and TV ledger records generate SEO without freezing providers',async()=>{
+ const {normalizeWork}=require('../api/_work-ledger');
+ const {normalizeFixedDisplayRecord}=require('../scripts/seo-normalized-fixed-display');
+ const dir=await fs.mkdtemp(path.join(os.tmpdir(),'doko-seo-ledger-integration-'));
+ try{
+  const cases=[
+   {type:'movie',id:50014,title:'映画テスト',overview:'映画の紹介',posterPath:'/movie.jpg'},
+   {type:'tv',id:202879,title:'TVテスト',overview:'番組の紹介',posterPath:'/tv.jpg'}
+  ];
+  const records=cases.map(item=>{
+   const ledger=normalizeWork(item.type,item.id,item);
+   const detail={
+    id:item.id,title:item.title,overview:item.overview,poster_path:item.posterPath,
+    cast:[{name:'出演者'}],streaming:[{provider_id:8}],rental:[],purchase:[]
+   };
+   return {...ledger,displayFixed:normalizeFixedDisplayRecord(item.type,item.id,detail)};
+  });
+  const input=path.join(dir,'ledger-export.json'),output=path.join(dir,'out');
+  await fs.writeFile(input,JSON.stringify(records));
+  assert.deepEqual(await build(input,output),['movie-50014.html','tv-202879.html']);
+  for(const item of cases){
+   const html=await fs.readFile(path.join(output,item.type+'-'+item.id+'.html'),'utf8');
+   assert.ok(html.includes(item.title));
+   assert.ok(html.includes('id="doko-fixed-detail"'));
+   const embedded=html.match(/<script type="application\/json" id="doko-fixed-detail">([^<]+)<\/script>/);
+   assert.ok(embedded,'fixed display payload must be embedded');
+   const payload=JSON.parse(embedded[1]);
+   assert.equal(payload.type,item.type);
+   assert.equal(payload.id,item.id);
+   assert.equal(payload.metadata.id,item.id);
+   assert.equal(payload.metadata.title,item.title);
+   for(const key of ['streaming','rental','purchase'])assert.equal(Object.hasOwn(payload.metadata,key),false);
+   assert.ok(html.includes('detailFormat=split'));
+  }
+ }finally{await fs.rm(dir,{recursive:true,force:true});}
+});
