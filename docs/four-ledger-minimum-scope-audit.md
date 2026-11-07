@@ -1,5 +1,8 @@
 # 4台帳の最小構成・静的監査（2026-11-07）
 
+> **確定仕様の最優先参照先:** [`FOUR_LEDGERS_CANONICAL_SPEC.md`](./FOUR_LEDGERS_CANONICAL_SPEC.md)。この文書中の古い監査記述・旧コードの動作は、確定仕様を上書きしません。
+
+
 対象: 開発ブランチ `work/four-ledgers-20261107`。静的監査と開発ブランチでのコード修正。本番Redis・TMDB・Vercelへの接続なし。
 
 ## 引き継ぎの最優先ルール（ユーザー指示）
