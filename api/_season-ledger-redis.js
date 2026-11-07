@@ -18,6 +18,11 @@ function decode(raw,type,id,seasonNumber){
  !Array.isArray(value.episodes))throw Error('Invalid stored season record');
  return value;
 }
+// Strip legacy episode synopses at the storage boundary, including injected callers.
+function compactRecord(record){
+ if(!record||!Array.isArray(record.episodes))throw Error('Invalid season record');
+ return {...record,episodes:record.episodes.map(({overview,...episode})=>episode)};
+}
 function createSeasonRedisAdapter(command){
  if(typeof command!=='function')throw Error('Redis command function required');
  async function getRecord(type,id,seasonNumber){
@@ -28,10 +33,10 @@ function createSeasonRedisAdapter(command){
   if(!record||!valid(record.type,record.id,record.seasonNumber)||!Array.isArray(record.episodes))
    throw Error('Invalid season record');
   assertSeasonWritesAllowed();
-  const saved=await command(['SET',key(record.type,record.id,record.seasonNumber),JSON.stringify(record),'NX']);
+  const saved=await command(['SET',key(record.type,record.id,record.seasonNumber),JSON.stringify(compactRecord(record)),'NX']);
   return saved==='OK';
  }
  return {getRecord,putRecordIfAbsent};
 }
 const {getRecord,putRecordIfAbsent}=createSeasonRedisAdapter(redisCommand);
-module.exports={PREFIX,key,decode,createSeasonRedisAdapter,getRecord,putRecordIfAbsent};
+module.exports={PREFIX,key,decode,compactRecord,createSeasonRedisAdapter,getRecord,putRecordIfAbsent};
