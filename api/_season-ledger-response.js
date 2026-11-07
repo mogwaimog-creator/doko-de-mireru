@@ -9,7 +9,7 @@ function seasonResponse(record){
    const n=Number(e.episodeNumber);
    if(!Number.isSafeInteger(n)||n<=0)throw Error('Invalid episode number');
    return {episode_number:n,name:e.title||'',air_date:e.airDate||null,
-     runtime:e.runtimeMinutes??null,overview:e.overview||''};
+     runtime:e.runtimeMinutes??null};
  });
  return {season_number:record.seasonNumber,season_name:record.seasonName||'',episodes};
 }
