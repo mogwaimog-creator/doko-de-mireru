@@ -13,6 +13,7 @@ assert.deepEqual(acceptAutomaticUpdate(work,normalizeWorkV2('movie',123,{title:'
 const draft=normalizeWorkV2('tv',456,{title:'ドラマ',seasons:[{seasonNumber:1,name:'第1期',episodeCount:12,posterPath:'/discard'}],pageExtras:{series:{comment:'保持'}}});
 const refreshed=acceptAutomaticUpdate(draft,normalizeWorkV2('tv',456,{title:'更新後'}));
 assert.equal(refreshed.pageExtras.series.comment,'保持');
-assert.equal(refreshed.seasons[0].posterPath,undefined);
+assert.equal(draft.seasons[0].posterPath,undefined);
+assert.equal(refreshed.seasons.length,0); // Candidate omitted seasons; current draft refresh replaces them.
 assert.throws(()=>normalizeWorkV2('movie',-1,{title:'不正'}));
 console.log('work ledger v2 schema tests: PASS');
