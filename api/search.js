@@ -425,7 +425,7 @@ if (id) {
         const seasonHandler = makeSeasonSearchBranch({ fetchJson, apiKey });
         // The new parser requires a numeric ID and normalized TV identity.
         // Legacy behavior remains the fallback for nonstandard inputs.
-        if (/^[1-9]\\d*$/.test(id) && Number.isSafeInteger(Number(id))) {
+        if (/^[1-9]\d*$/.test(id) && Number.isSafeInteger(Number(id))) {
           const newReq = { ...req, query: { ...req.query, id, type: "tv", season: String(season) } };
           let newStatus = 200;
           let newBody;
