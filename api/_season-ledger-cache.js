@@ -24,7 +24,15 @@ async function getCachedSeason({type,id,seasonNumber,getRecord,putRecordIfAbsent
  const fetched=await fetchSeason(id,seasonNumber);
  const candidate=fromTmdbSeason(id,seasonNumber,fetched);
  // NX only; a concurrent winner is preferred when available.
- const inserted=await putRecordIfAbsent(candidate);
+ let inserted;
+ try{
+  inserted=await putRecordIfAbsent(candidate);
+ }catch(error){
+  // Storage freeze is intentional: show valid fetched data without persisting it.
+  // Other Redis failures must still surface to the legacy fallback.
+  if(error?.code==='SEASON_LEDGER_WRITES_FROZEN')return seasonResponse(candidate);
+  throw error;
+ }
  if(inserted===false){
   const winner=await getRecord(type,id,seasonNumber);
   if(winner)return seasonResponse(winner);
