@@ -14,6 +14,13 @@ const draft=normalizeWorkV2('tv',456,{title:'ドラマ',seasons:[{seasonNumber:1
 const refreshed=acceptAutomaticUpdate(draft,normalizeWorkV2('tv',456,{title:'更新後'}));
 assert.equal(refreshed.pageExtras.series.comment,'保持');
 assert.equal(draft.seasons[0].posterPath,undefined);
-assert.equal(refreshed.seasons.length,0); // Candidate omitted seasons; current draft refresh replaces them.
+assert.equal(refreshed.seasons.length,1); // Missing candidate seasons preserve saved seasons.
+assert.equal(refreshed.seasons[0].name,'第1期');
+const existingTv=normalizeWorkV2('tv',789,{title:'TV',seasonCount:3,episodeCount:30,status:'Ended',seasons:[{seasonNumber:1,name:'S1',episodeCount:10}]});
+const refreshedTv=acceptAutomaticUpdate(existingTv,normalizeWorkV2('tv',789,{title:'TV更新'}));
+assert.equal(refreshedTv.seasonCount,3);
+assert.equal(refreshedTv.episodeCount,30);
+assert.equal(refreshedTv.status,'Ended');
+assert.equal(refreshedTv.seasons.length,1);
 assert.throws(()=>normalizeWorkV2('movie',-1,{title:'不正'}));
 console.log('work ledger v2 schema tests: PASS');
