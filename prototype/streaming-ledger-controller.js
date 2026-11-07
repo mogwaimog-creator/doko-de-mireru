@@ -13,7 +13,7 @@ function controller(ledger,fetchProviders,{timeoutMs=10000,maxConcurrency=3,dist
   if(!decisionResult.fetch)return {key:k,updated:false,reason:decisionResult.reason};
   if(inFlight.has(k))return {key:k,updated:false,reason:'in-flight'};
   inFlight.add(k);
-  const perform=async()=>{
+  const perform=async({commit}={})=>{
   try{
    // A timeout must not be treated as a successful refresh. The fetcher should
    // accept AbortSignal to cancel external requests.
@@ -24,9 +24,13 @@ function controller(ledger,fetchProviders,{timeoutMs=10000,maxConcurrency=3,dist
      Promise.resolve().then(()=>fetchProviders(type,id,{signal:ac.signal})),
      new Promise((_,reject)=>{timer=setTimeout(()=>{ac.abort();reject(Error('timeout'))},timeoutMs)})
     ]);
-    ledger.success(type,id,response,now);
-    ledger.resolve(type,id);
-    if(trigger==='cron')current.lastSeriesRunDay=jstDay(now);
+    const write=()=>{
+     ledger.success(type,id,response,now);
+     ledger.resolve(type,id);
+     if(trigger==='cron')current.lastSeriesRunDay=jstDay(now);
+    };
+    if(commit){if(!await commit(write))return {key:k,updated:false,reason:'lease-expired'};}
+    else write();
     return {key:k,updated:true,reason:decisionResult.reason};
    }finally{clearTimeout(timer)}
   }catch(e){
