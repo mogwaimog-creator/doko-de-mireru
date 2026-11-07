@@ -19,7 +19,7 @@ function memoryAdapter(){
  return {
   async acquire(key,token,ttl){const now=Date.now(),entry=entries.get(key);if(entry&&entry.until>now)return false;entries.set(key,{token,until:now+ttl});return true},
   async release(key,token){if(entries.get(key)?.token!==token)return false;entries.delete(key);return true},
-  async commitIfOwner(key,token,write){const entry=entries.get(key);if(!entry||entry.token!==token||entry.until<=Date.now())return false;await write();return true},
+  async commitIfOwner(key,token,write){const entry=entries.get(key);if(!entry||entry.token!==token||entry.until<=Date.now())return false;return (await write())!==false},
   inspect(key){return entries.get(key)||null}
  };
 }
