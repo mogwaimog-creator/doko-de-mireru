@@ -4,12 +4,12 @@
 const {membershipSet,decision,jstDay}=require('./streaming-ledger-schedule');
 function controller(ledger,fetchProviders,{timeoutMs=10000,maxConcurrency=3}={}){
  if(typeof fetchProviders!=='function'||!Number.isInteger(maxConcurrency)||maxConcurrency<1||!Number.isFinite(timeoutMs)||timeoutMs<1)throw Error('invalid options');
- const inFlight=new Set(),seriesProcessed=new Map();
+ const inFlight=new Set();
  async function update(type,id,now,trigger,seriesKeys){
   const k=type+':'+Number(id),record=ledger.get(type,id);
   if(!record)ledger.register(type,id);
   const current=ledger.get(type,id);
-  const decisionResult=decision({type,id,lastSuccessAt:current.lastSuccessAt,now,seriesKeys,trigger,lastSeriesRunDay:seriesProcessed.get(k)});
+  const decisionResult=decision({type,id,lastSuccessAt:current.lastSuccessAt,now,seriesKeys,trigger,lastSeriesRunDay:current.lastSeriesRunDay});
   if(!decisionResult.fetch)return {key:k,updated:false,reason:decisionResult.reason};
   if(inFlight.has(k))return {key:k,updated:false,reason:'in-flight'};
   inFlight.add(k);
@@ -25,7 +25,7 @@ function controller(ledger,fetchProviders,{timeoutMs=10000,maxConcurrency=3}={})
     ]);
     ledger.success(type,id,response,now);
     ledger.resolve(type,id);
-    if(trigger==='cron')seriesProcessed.set(k,jstDay(now));
+    if(trigger==='cron')current.lastSeriesRunDay=jstDay(now);
     return {key:k,updated:true,reason:decisionResult.reason};
    }finally{clearTimeout(timer)}
   }catch(e){
