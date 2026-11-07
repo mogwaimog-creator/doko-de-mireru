@@ -28,7 +28,7 @@ const context={
  fetchJson:async()=>{},
 };
 vm.createContext(context);
-vm.runInContext(header+'\n}',context,{filename:'search-handler-excerpt.js'});
+vm.runInContext(header+'\n}catch(error){throw error;} };',context,{filename:'search-handler-excerpt.js'});
 const handler=moduleObj.exports;
 function res(){return {headers:{},code:200,setHeader(k,v){this.headers[k]=v;},status(n){this.code=n;return this;},json(v){this.body=v;return this;},end(){this.ended=true;return this;}};}
 (async()=>{
