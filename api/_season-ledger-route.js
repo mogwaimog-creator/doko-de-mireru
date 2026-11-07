@@ -15,6 +15,6 @@ function parseSeasonRequest(query){
 async function handleSeasonLedgerRequest(query,deps){
  const identity=parseSeasonRequest(query);
  if(!identity)throw Error('Invalid season query');
- return getCachedSeason({...identity,...deps});
+ return getCachedSeason({...deps,...identity});
 }
 module.exports={parseSeasonRequest,handleSeasonLedgerRequest};
