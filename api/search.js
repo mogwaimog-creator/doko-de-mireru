@@ -424,7 +424,9 @@ if (id) {
         let seasonHandler;
         try {
           const { makeSeasonSearchBranch } = require("./_season-search-branch");
-          seasonHandler = makeSeasonSearchBranch({ fetchJson, apiKey });
+          const { optionalSeasonRefreshRecord } = require("./_season-refresh-opt-in");
+          const refreshRecord = optionalSeasonRefreshRecord();
+          seasonHandler = makeSeasonSearchBranch({ fetchJson, apiKey, ...(refreshRecord ? { refreshRecord } : {}) });
         } catch (error) {
           console.error("SEASON LEDGER INIT FALLBACK:", error?.message || "unknown");
         }
