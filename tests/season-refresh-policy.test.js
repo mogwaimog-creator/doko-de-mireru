@@ -1,0 +1,15 @@
+'use strict';
+const assert=require('node:assert/strict');
+const {DAY,seasonRefreshDue}=require('../api/_season-refresh-policy');
+const now=Date.parse('2026-11-07T00:00:00.000Z');
+const ago=days=>new Date(now-days*DAY).toISOString();
+assert.equal(seasonRefreshDue({now}),true);
+assert.equal(seasonRefreshDue({checkedAt:ago(6),status:'airing',now}),false);
+assert.equal(seasonRefreshDue({checkedAt:ago(7),status:'airing',now}),true);
+assert.equal(seasonRefreshDue({checkedAt:ago(8),status:'unknown',now}),true);
+assert.equal(seasonRefreshDue({checkedAt:ago(89),status:'completed',now}),false);
+assert.equal(seasonRefreshDue({checkedAt:ago(90),status:'completed',now}),true);
+assert.equal(seasonRefreshDue({checkedAt:'invalid',status:'completed',now}),true);
+assert.equal(seasonRefreshDue({checkedAt:new Date(now+DAY).toISOString(),now}),true);
+assert.throws(()=>seasonRefreshDue({now:NaN}),/Invalid current time/);
+console.log('season refresh policy pure tests passed');
