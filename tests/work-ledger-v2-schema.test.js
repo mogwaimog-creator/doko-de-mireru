@@ -22,5 +22,8 @@ assert.equal(refreshedTv.seasonCount,3);
 assert.equal(refreshedTv.episodeCount,30);
 assert.equal(refreshedTv.status,'Ended');
 assert.equal(refreshedTv.seasons.length,1);
+assert.throws(()=>acceptAutomaticUpdate(draft,normalizeWorkV2('tv',999,{title:'別作品'})),/identity mismatch/);
+assert.throws(()=>acceptAutomaticUpdate(draft,normalizeWorkV2('movie',456,{title:'別タイプ'})),/identity mismatch/);
+assert.throws(()=>acceptAutomaticUpdate(work,normalizeWorkV2('movie',999,{title:'ロック済み別作品'})),/identity mismatch/);
 assert.throws(()=>normalizeWorkV2('movie',-1,{title:'不正'}));
 console.log('work ledger v2 schema tests: PASS');
