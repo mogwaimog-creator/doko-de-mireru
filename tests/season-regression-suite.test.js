@@ -10,6 +10,7 @@ const tests=[
  'season-refresh-writer.test.js',
  'season-refresh-integration.test.js',
  'season-record-schema-compatibility.test.js',
+ 'season-storage-compaction.test.js',
  'season-api-refresh-integration.test.js',
  'season-refresh-safety-edge.test.js',
  'season-detail-renderer-contract.test.js',
