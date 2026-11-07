@@ -226,3 +226,8 @@
 - 開発ブランチに `prototype/streaming-ledger-redis.js` を追加。Redis `SET NX PX` による取得ロック、所有者トークンを検証する `EVAL` での単一JSONレコード保存、所有者照合による解除、読取を実装。新規キーは試作専用 `doko:stream:prototype:v1:`。**本番Redisには接続・書込していない**。
 - `tests/streaming-ledger-redis.test.js` に3テスト追加。V8互換ハーネス＋模擬Redisで3件通過（Node.js本来の `node --test` は未実行）。実RedisでのLua互換性や競合テストは未実施。
 - **重要な未接続箇所:** 現行 `prototype/streaming-ledger-controller.js` の `distributedLease.run/commit` はローカルメモリ台帳を更新する試作インターフェース。今回の `redisStreamingStore.saveIfOwner` はRedisへJSONを原子保存する独立したインターフェース。両者はまだ統合されておらず、本番の同時更新安全性を保証しない。統合には保存レコード生成、保存成功後のローカル反映、失敗時の保持、更新条件の再判定、書込停止フラグを揃える必要がある。
+
+## 共通配信台帳とRedis原子保存の接続試作（2026-11-07）
+- 開発ブランチの `prototype/streaming-ledger-service.js` に、`redisStreamingStore`、`store`、`decision`、`fromTmdb` をつなぐ独立試作を追加。保存済みレコードを読んで更新判定→所有者ロック取得→再読込・再判定→TMDBレスポンスを日本のみ正規化→所有者確認つきRedis原子保存。ロック取得不可なら既存レコードを返し、TMDB再取得しない。
+- `tests/streaming-ledger-service.test.js` の4件（初回取得・24時間キャッシュ、シリーズ06時、書込停止、失敗時旧データ保持）をV8互換ハーネスの模擬Redisで実行し4件通過。**実Node.jsテストおよび実Redis接続テストは未実施**。
+- **残課題:** Cron試作は全対象を一度にPromise.allしており本番の同時実行上限・処理時間制限をまだ実装していない。取得タイムアウト・再試行上限・エラー台帳への記録、期限切れロックの実Redis検証、既存画面APIレスポンスの統合、書込停止環境変数の配線、バックアップ・移行・切替検証も未実施。新規試作は本番APIからimportされず、本番サイト・Redis・Cronを変更しない。
