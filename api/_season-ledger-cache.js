@@ -7,7 +7,9 @@ function valid(type,id,seasonNumber){
  Number.isSafeInteger(seasonNumber)&&seasonNumber>=0;
 }
 function fromTmdbSeason(id,seasonNumber,data){
- if(!data||!Array.isArray(data.episodes)||\n  !Number.isSafeInteger(data.season_number)||data.season_number!==seasonNumber)\n  throw Error('Invalid or mismatched TMDB season payload');
+ if(!data||!Array.isArray(data.episodes)||
+  !Number.isSafeInteger(data.season_number)||data.season_number!==seasonNumber)
+  throw Error('Invalid or mismatched TMDB season payload');
  return {type:'tv',id,seasonNumber,seasonName:data.name||'',
  episodes:data.episodes.filter(e=>Number.isSafeInteger(e.episode_number)&&e.episode_number>0)
  .map(e=>({episodeNumber:e.episode_number,title:e.name||'',airDate:e.air_date||null,
