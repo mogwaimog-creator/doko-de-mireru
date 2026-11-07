@@ -7426,33 +7426,6 @@ function renderEpisodes(data){
     }
 
 
-    /*
-       あらすじ
-    */
-
-    if(episode.overview){
-
-      const overview =
-        document.createElement(
-          "div"
-        );
-
-
-      overview.className =
-        "episode-overview";
-
-
-      overview.textContent =
-        episode.overview;
-
-
-      content.appendChild(
-        overview
-      );
-
-    }
-
-
     item.appendChild(
       content
     );
