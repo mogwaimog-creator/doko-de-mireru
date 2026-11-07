@@ -2,7 +2,7 @@
 // Offline integration of the streaming ledger and schedule policy.
 // Caller owns membership list and fetch function. No network or production writes.
 const {membershipSet,decision,jstDay}=require('./streaming-ledger-schedule');
-function controller(ledger,fetchProviders,{timeoutMs=10000,maxConcurrency=3}={}){
+function controller(ledger,fetchProviders,{timeoutMs=10000,maxConcurrency=3,distributedLease=null}={}){
  if(typeof fetchProviders!=='function'||!Number.isInteger(maxConcurrency)||maxConcurrency<1||!Number.isFinite(timeoutMs)||timeoutMs<1)throw Error('invalid options');
  const inFlight=new Set();
  async function update(type,id,now,trigger,seriesKeys){
@@ -13,6 +13,7 @@ function controller(ledger,fetchProviders,{timeoutMs=10000,maxConcurrency=3}={})
   if(!decisionResult.fetch)return {key:k,updated:false,reason:decisionResult.reason};
   if(inFlight.has(k))return {key:k,updated:false,reason:'in-flight'};
   inFlight.add(k);
+  const perform=async()=>{
   try{
    // A timeout must not be treated as a successful refresh. The fetcher should
    // accept AbortSignal to cancel external requests.
@@ -31,6 +32,14 @@ function controller(ledger,fetchProviders,{timeoutMs=10000,maxConcurrency=3}={})
   }catch(e){
    ledger.failure(type,id,e?.message||'fetch failed',now);
    return {key:k,updated:false,reason:'failed',error:String(e?.message||e)};
+  }
+  };
+  try{
+   if(distributedLease){
+    const result=await distributedLease.run('streaming:'+k,perform);
+    return result.acquired?result.value:{key:k,updated:false,reason:'distributed-in-flight'};
+   }
+   return await perform();
   }finally{inFlight.delete(k)}
  }
  async function visit(type,id,now,works){return update(type,id,now,'visit',membershipSet(works))}
