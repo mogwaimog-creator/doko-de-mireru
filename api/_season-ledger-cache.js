@@ -16,14 +16,21 @@ function fromTmdbSeason(id,seasonNumber,data){
  .map(e=>({episodeNumber:e.episode_number,title:e.name||'',airDate:e.air_date||null,
  runtimeMinutes:Number.isFinite(e.runtime)?e.runtime:null,overview:e.overview||''}))};
 }
-async function getCachedSeason({type,id,seasonNumber,getRecord,putRecordIfAbsent,fetchSeason}){
+async function getCachedSeason({type,id,seasonNumber,getRecord,putRecordIfAbsent,fetchSeason,refreshRecord,now=Date.now()}){
  if(!valid(type,id,seasonNumber))throw Error('Invalid season identity');
  if(typeof getRecord!=='function'||typeof putRecordIfAbsent!=='function'||typeof fetchSeason!=='function')
   throw Error('Missing season dependencies');
  const saved=await getRecord(type,id,seasonNumber);
- if(saved)return seasonResponse(saved);
+ if(saved){
+  if(typeof refreshRecord==='function'){
+   const {refreshCachedSeason}=require('./_season-ledger-refresh');
+   return refreshCachedSeason({saved,id,seasonNumber,fetchSeason,refreshRecord,now});
+  }
+  return seasonResponse(saved);
+ }
  const fetched=await coalesceSeasonFetch(type+':'+id+':'+seasonNumber,()=>fetchSeason(id,seasonNumber));
- const candidate=fromTmdbSeason(id,seasonNumber,fetched);
+ const candidate={...fromTmdbSeason(id,seasonNumber,fetched),
+  checkedAt:new Date(now).toISOString(),status:'unknown'};
  // NX only; a concurrent winner is preferred when available.
  let inserted;
  try{
