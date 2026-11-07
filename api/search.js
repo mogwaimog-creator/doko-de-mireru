@@ -435,7 +435,7 @@ if (id) {
           };
           await seasonHandler(newReq, capture);
           if (newStatus === 200) return res.status(200).json(newBody);
-          // Do not cache the transient error: use the original season path.
+          // Do not cache a transient error or its legacy fallback response.\n          res.setHeader("Cache-Control", "no-store");\n          res.setHeader("Vercel-CDN-Cache-Control", "no-store");
         }
       }
 
