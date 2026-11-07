@@ -25,14 +25,14 @@ const record={type:'tv',id:123,seasonNumber:1,seasonName:'第1期',episodes:[]};
  assert.equal(storage.size,1);
  let fetches=0;
  const deps={type:'tv',id:123,seasonNumber:1,...adapter,fetchSeason:async()=>{
-  fetches++;return {name:'取得',episodes:[]};
+  fetches++;return {season_number:1,name:'取得',episodes:[]};
  }};
  const hit=await getCachedSeason(deps);
  assert.equal(hit.season_name,'第1期');
  assert.equal(fetches,0,'cache hit must not fetch TMDB');
  // Concurrent cache misses: both may fetch, but NX allows only one stored winner.
  const concurrent={...deps,id:456,fetchSeason:async()=>{
-  fetches++;return {name:'取得',episodes:[]};
+  fetches++;return {season_number:1,name:'取得',episodes:[]};
  }};
  const results=await Promise.all([getCachedSeason(concurrent),getCachedSeason(concurrent)]);
  assert.equal(results.length,2);
