@@ -215,3 +215,9 @@
 - 現行 `api/update-streaming.js` は `data/streaming-works.json` を対象に `doko:watch:v3:` に見放題だけ保存し、Cronは `vercel.json` の `0 21 * * *`（JST06:00）。現在は共通台帳と未接続で、古い別キャッシュを更新している。
 - 互換変換用の純粋関数 `prototype/streaming-ledger-compat.js` を追加。TMDBの `results.JP` を1件の共通台帳形式に正規化し、既存詳細の `data.results.JP` と見る順番の `flatrate` 形式へ変換。JP未掲載と未取得は区別。テスト `tests/streaming-ledger-compat.test.js` 4件を追加、**未実行**。
 - **重要:** この時点では既存APIの切替・データ移行・Redis新キー作成・本番Cron変更は実施していない。次はRedis原子的保存のオフラインアダプターと実Nodeテスト、旧APIレスポンス互換を確認する。
+
+## Redis原子的保存アダプター試作（2026-11-07 夜）
+- `prototype/streaming-ledger-redis-adapter.js` を開発ブランチに追加。既存 `api/_redis.js` の `command(args)` 形式を想定し、`SET NX PX` でロック取得、Lua `EVAL` でロック所有者とTTLを確認した上で共通レコードを同じ操作内で保存、トークン一致時のみロック解除する試作。
+- `tests/streaming-ledger-redis-adapter.test.js` のモックRedisテスト3件をV8互換ハーネスで実行し、**3件成功・失敗0**。未承認の本番Redisへのコマンド送信は一切していない。
+- **重要な未完了事項:** 現行コントローラーの `distributedLease.run(...commit(callback))` とRedisアダプターの `commitRecordIfOwner(key,token,record)` はまだ直結していない。Luaの原子的な保存を実現するため、保存レコードを組み立ててLuaへ渡す統合が必要。書込停止フラグは現状JavaScriptで事前判定するのみで、Redis側での停止と原子判定は未実装。モックはTTLの実時間挙動や実UpstashのLua対応を再現しない。実Nodeテスト、Redisサンドボックス検証、既存詳細/12シリーズの接続も未実施。
+- 本番サイト、Redis、Vercel Cron、既存キャッシュの変更なし。
