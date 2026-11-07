@@ -14,5 +14,13 @@ const {parseSeasonRequest,handleSeasonLedgerRequest}=require('../api/_season-led
  const data=await handleSeasonLedgerRequest({type:'tv',id:'123',season:'1'},deps);
  assert.equal(data.season_name,'第1期');
  assert.equal(reads,1);assert.equal(fetches,0);
+ // Caller-supplied dependencies must never override validated request identity.
+ let observed;
+ const spoofed={...deps,type:'movie',id:999,seasonNumber:88,getRecord:async(type,id,seasonNumber)=>{
+  observed={type,id,seasonNumber};
+  return {type:'tv',id:123,seasonNumber:1,seasonName:'第1期',episodes:[]};
+ }};
+ await handleSeasonLedgerRequest({type:'tv',id:'123',season:'1'},spoofed);
+ assert.deepEqual(observed,{type:'tv',id:123,seasonNumber:1});
  console.log('season ledger route tests passed');
 })().catch(e=>{console.error(e);process.exitCode=1});
