@@ -19,18 +19,15 @@ function fromTmdb(type, item) {
     runtimeMinutes: isTv ? (item.episode_run_time || [])[0] : item.runtime,
     genres: (item.genres || []).map(g => ({ id: g.id, name: g.name })),
     posterPath: item.poster_path,
-    backdropPath: item.backdrop_path,
     directors,
     cast,
     collectionId: collection && collection.id || null,
-    collectionName: collection && collection.name || null,
     seasons: isTv ? (item.seasons || []).map(s => ({
       id: s.id, seasonNumber: s.season_number, name: s.name,
       episodeCount: s.episode_count, airDate: s.air_date, posterPath: s.poster_path
     })) : [],
     status: isTv ? item.status : null,
-    voteAverage: item.vote_average,
-    voteCount: item.vote_count
+    voteAverage: item.vote_average
   };
 }
 
