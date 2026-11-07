@@ -16,7 +16,8 @@ const season=routing.indexOf('if (season > 0)');
 assert.ok(personSearch>=0&&personDetail>personSearch&&detail>personDetail&&season>detail,
  'person routes must remain ahead of work and season detail');
 assert.match(routing,/if \(process\.env\.SEASON_LEDGER_ENABLED === "1"\)/);
-assert.match(routing,/makeSeasonSearchBranch\(\{ fetchJson, apiKey \}\)/);
+assert.match(routing,/optionalSeasonRefreshRecord\(\)/);
+assert.match(routing,/makeSeasonSearchBranch\(\{ fetchJson, apiKey,/);
 assert.match(routing,/if \(newStatus === 200\) return res\.status\(200\)\.json\(newBody\)/);
 assert.match(routing,/res\.setHeader\("Vercel-CDN-Cache-Control", "no-store"\)/);
 assert.match(routing,/if \(req\.method !== "GET"\)/);
