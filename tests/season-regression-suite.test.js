@@ -5,6 +5,7 @@ const path=require('node:path');
 const tests=[
  'season-fetch-coalescer.test.js',
  'season-stale-refresh.test.js',
+ 'season-refresh-policy-boundaries.test.js',
  'season-refresh-writer.test.js',
  'season-refresh-integration.test.js',
  'season-record-schema-compatibility.test.js',
