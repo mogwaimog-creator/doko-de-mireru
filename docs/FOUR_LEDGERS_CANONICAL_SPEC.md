@@ -221,3 +221,8 @@
 - `tests/streaming-ledger-redis-adapter.test.js` のモックRedisテスト3件をV8互換ハーネスで実行し、**3件成功・失敗0**。未承認の本番Redisへのコマンド送信は一切していない。
 - **重要な未完了事項:** 現行コントローラーの `distributedLease.run(...commit(callback))` とRedisアダプターの `commitRecordIfOwner(key,token,record)` はまだ直結していない。Luaの原子的な保存を実現するため、保存レコードを組み立ててLuaへ渡す統合が必要。書込停止フラグは現状JavaScriptで事前判定するのみで、Redis側での停止と原子判定は未実装。モックはTTLの実時間挙動や実UpstashのLua対応を再現しない。実Nodeテスト、Redisサンドボックス検証、既存詳細/12シリーズの接続も未実施。
 - 本番サイト、Redis、Vercel Cron、既存キャッシュの変更なし。
+
+## Redis原子保存・オフライン試作（2026-11-07）
+- 開発ブランチに `prototype/streaming-ledger-redis.js` を追加。Redis `SET NX PX` による取得ロック、所有者トークンを検証する `EVAL` での単一JSONレコード保存、所有者照合による解除、読取を実装。新規キーは試作専用 `doko:stream:prototype:v1:`。**本番Redisには接続・書込していない**。
+- `tests/streaming-ledger-redis.test.js` に3テスト追加。V8互換ハーネス＋模擬Redisで3件通過（Node.js本来の `node --test` は未実行）。実RedisでのLua互換性や競合テストは未実施。
+- **重要な未接続箇所:** 現行 `prototype/streaming-ledger-controller.js` の `distributedLease.run/commit` はローカルメモリ台帳を更新する試作インターフェース。今回の `redisStreamingStore.saveIfOwner` はRedisへJSONを原子保存する独立したインターフェース。両者はまだ統合されておらず、本番の同時更新安全性を保証しない。統合には保存レコード生成、保存成功後のローカル反映、失敗時の保持、更新条件の再判定、書込停止フラグを揃える必要がある。
