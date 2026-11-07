@@ -1,6 +1,6 @@
 'use strict';
 // Standalone offline prototype: no Redis, TMDB, Vercel or production imports.
-const FIELDS=['title','originalTitle','releaseDate','posterPath','voteAverage','runtimeMinutes','genres','overview','directors','cast','collectionId','seasonCount','episodeCount','status'];
+const FIELDS=['title','originalTitle','releaseDate','posterPath','voteAverage','runtimeMinutes','genres','overview','directors','cast','collectionId','status'];
 const MANUAL=['note','shortIntro','order','section'];
 const LIMIT=4000;
 function key(type,id){if(!['movie','tv'].includes(type)||!Number.isSafeInteger(Number(id))||Number(id)<1)throw Error('invalid identity');return type+':'+Number(id)}
