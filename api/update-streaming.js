@@ -12,7 +12,7 @@ const WORK_BUDGET_MS=240000;
 function windowJST(now=Date.now()){
  const d=new Date(now+9*3600000);const hour=d.getUTCHours();
  const day=(hour<6?new Date(d.getTime()-86400000):d).toISOString().slice(0,10);
- return `${day}-${hour<6?'18':hour<18?'06':'18'}`;
+ return `${day}-06`;
 }
 function needsRefresh(record,win,now=Date.now()){
  const checked=Date.parse(record?.checkedAt);
