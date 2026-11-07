@@ -14,7 +14,7 @@ function fromTmdbSeason(id,seasonNumber,data){
  return {type:'tv',id,seasonNumber,seasonName:data.name||'',
  episodes:data.episodes.filter(e=>Number.isSafeInteger(e.episode_number)&&e.episode_number>0)
  .map(e=>({episodeNumber:e.episode_number,title:e.name||'',airDate:e.air_date||null,
- runtimeMinutes:Number.isFinite(e.runtime)?e.runtime:null,overview:e.overview||''}))};
+ runtimeMinutes:Number.isFinite(e.runtime)?e.runtime:null}))};
 }
 async function getCachedSeason({type,id,seasonNumber,getRecord,putRecordIfAbsent,fetchSeason,refreshRecord,now=Date.now()}){
  if(!valid(type,id,seasonNumber))throw Error('Invalid season identity');
