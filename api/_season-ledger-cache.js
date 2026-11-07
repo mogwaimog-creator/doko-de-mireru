@@ -2,6 +2,7 @@
 // Future season-ledger cache orchestration. Dependency-injected; no live Redis/TMDB calls.
 // fetchSeason must retrieve only TMDB /tv/{id}/season/{number} (no work/provider fetch).
 const {seasonResponse}=require('./_season-ledger-response');
+const {coalesceSeasonFetch}=require('./_season-fetch-coalescer');
 function valid(type,id,seasonNumber){
  return type==='tv'&&Number.isSafeInteger(id)&&id>0&&
  Number.isSafeInteger(seasonNumber)&&seasonNumber>=0;
@@ -21,7 +22,7 @@ async function getCachedSeason({type,id,seasonNumber,getRecord,putRecordIfAbsent
   throw Error('Missing season dependencies');
  const saved=await getRecord(type,id,seasonNumber);
  if(saved)return seasonResponse(saved);
- const fetched=await fetchSeason(id,seasonNumber);
+ const fetched=await coalesceSeasonFetch(type+':'+id+':'+seasonNumber,()=>fetchSeason(id,seasonNumber));
  const candidate=fromTmdbSeason(id,seasonNumber,fetched);
  // NX only; a concurrent winner is preferred when available.
  let inserted;
