@@ -8,7 +8,12 @@ const tests=[
  'season-refresh-writer.test.js',
  'season-refresh-integration.test.js',
  'season-record-schema-compatibility.test.js',
- 'season-api-refresh-integration.test.js'
+ 'season-api-refresh-integration.test.js',
+ 'season-refresh-safety-edge.test.js',
+ 'season-detail-renderer-contract.test.js',
+ 'season-refresh-opt-in.test.js',
+ 'search-routing-static-regression.test.js',
+ 'search-handler-offline-behavior.test.js'
 ];
 let failures=0;
 for(const file of tests){
