@@ -4,6 +4,7 @@ const {spawnSync}=require('node:child_process');
 const path=require('node:path');
 const tests=[
  'season-fetch-coalescer.test.js',
+ 'season-frozen-miss-load.test.js',
  'season-stale-refresh.test.js',
  'season-refresh-policy-boundaries.test.js',
  'season-refresh-writer.test.js',
