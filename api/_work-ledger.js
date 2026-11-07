@@ -3,6 +3,7 @@
 // Shared work metadata ledger (not streaming availability).
 // This module is opt-in: existing pages and API routes are unchanged.
 const { command } = require('./_redis');
+const {normalizeLinks,normalizeEditorial} = require('./_work-ledger-editorial');
 
 const PREFIX = 'doko:work:v1';
 const MAX_CAST = 30;
@@ -64,7 +65,9 @@ function normalizeWork(type, id, source) {
     },
     errors: Array.isArray(source.errors) ? source.errors : [],
     // Supplemental fields per page; not limited to a predefined list.
-    pageExtras: normalizePageExtras(source.pageExtras)
+    pageExtras: normalizePageExtras(source.pageExtras),
+    relatedWorkIds: normalizeLinks(source.relatedWorkIds),
+    editorial: normalizeEditorial(source.editorial)
   };
   if (!record.title) throw new Error('Work title is required');
   return record;
