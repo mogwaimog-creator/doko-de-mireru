@@ -17,14 +17,19 @@ function decode(raw,type,id,seasonNumber){
  !Array.isArray(value.episodes))throw Error('Invalid stored season record');
  return value;
 }
-async function getRecord(type,id,seasonNumber){
- const raw=await redisCommand(['GET',key(type,id,seasonNumber)]);
- return decode(raw,type,id,seasonNumber);
+function createSeasonRedisAdapter(command){
+ if(typeof command!=='function')throw Error('Redis command function required');
+ async function getRecord(type,id,seasonNumber){
+  const raw=await command(['GET',key(type,id,seasonNumber)]);
+  return decode(raw,type,id,seasonNumber);
+ }
+ async function putRecordIfAbsent(record){
+  if(!record||!valid(record.type,record.id,record.seasonNumber)||!Array.isArray(record.episodes))
+   throw Error('Invalid season record');
+  const saved=await command(['SET',key(record.type,record.id,record.seasonNumber),JSON.stringify(record),'NX']);
+  return saved==='OK';
+ }
+ return {getRecord,putRecordIfAbsent};
 }
-async function putRecordIfAbsent(record){
- if(!record||!valid(record.type,record.id,record.seasonNumber)||!Array.isArray(record.episodes))
- throw Error('Invalid season record');
- const saved=await redisCommand(['SET',key(record.type,record.id,record.seasonNumber),JSON.stringify(record),'NX']);
- return saved==='OK';
-}
-module.exports={PREFIX,key,decode,getRecord,putRecordIfAbsent};
+const {getRecord,putRecordIfAbsent}=createSeasonRedisAdapter(redisCommand);
+module.exports={PREFIX,key,decode,createSeasonRedisAdapter,getRecord,putRecordIfAbsent};
