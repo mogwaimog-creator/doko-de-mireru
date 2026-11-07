@@ -208,3 +208,10 @@
 - GitHub開発ブランチ上の配信台帳試作5モジュールとテスト9ファイルをV8 JavaScript互換ハーネスに読み込み、計27ケースを実行。最初はハーネス側のNode環境API不足を修正し、26件成功・1件失敗。残る1件はロック期限切れ時の理由文字列がテストの旧期待値 `lease-expired` と実装の `lease-expired-or-disabled` で異なるため、期待値を現行仕様に修正し該当2件を再実行して成功。**結果として27ケースの成功を確認**。
 - **注意:** Node.js本来の `node --test` 実行ではなく、V8互換ハーネスでの動作確認。実Node環境での再実行、本番Redisの原子性・複数サーバー負荷・実TMDB取得の検証は未実施。試作の `commitIfOwner` は共有メモリ上の模擬であり、実Redisの原子的保存実装とは異なる。
 - 開発ブランチのみ変更。本番サイト、Redis、Cron、Vercelへの反映なし。
+
+## 既存APIとの配信互換性・読み取り調査（2026-11-07 夜）
+- 現行 `api/_redis.js` はUpstash RESTの `command(args)` を使用。原子的な保存・ロック所有者確認には `EVAL` 等の共有Redis操作が必要だが、現時点で新保存先への書込は未実装。
+- 現行 `api/_detail-providers-cache.js` は `doko:detail-providers:v1:movie|tv:id`、レコード `{data:{results:{JP:...}},checkedAt,...}`。旧コードには新規作品の書込停止中でもTMDBを呼ぶ分岐がある。配信台帳一本化時はその動作を確定仕様に合わせて置き換える。
+- 現行 `api/update-streaming.js` は `data/streaming-works.json` を対象に `doko:watch:v3:` に見放題だけ保存し、Cronは `vercel.json` の `0 21 * * *`（JST06:00）。現在は共通台帳と未接続で、古い別キャッシュを更新している。
+- 互換変換用の純粋関数 `prototype/streaming-ledger-compat.js` を追加。TMDBの `results.JP` を1件の共通台帳形式に正規化し、既存詳細の `data.results.JP` と見る順番の `flatrate` 形式へ変換。JP未掲載と未取得は区別。テスト `tests/streaming-ledger-compat.test.js` 4件を追加、**未実行**。
+- **重要:** この時点では既存APIの切替・データ移行・Redis新キー作成・本番Cron変更は実施していない。次はRedis原子的保存のオフラインアダプターと実Nodeテスト、旧APIレスポンス互換を確認する。
