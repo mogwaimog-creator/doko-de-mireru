@@ -1,0 +1,18 @@
+'use strict';
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const path=require('node:path');
+const {fromTmdbSeason}=require('../api/_season-ledger-cache');
+const {seasonResponse}=require('../api/_season-ledger-response');
+const html=fs.readFileSync(path.join(__dirname,'../detail.html'),'utf8');
+const begin=html.indexOf('function renderEpisodes(data){');
+const end=html.indexOf('\n/* =========================================================',begin+30);
+assert.ok(begin>=0&&end>begin,'renderEpisodes function not found');
+const renderer=html.slice(begin,end);
+const consumed=[...renderer.matchAll(/episode\.(\w+)/g)].map(m=>m[1]);
+const record=fromTmdbSeason(123,1,{season_number:1,name:'シーズン1',episodes:[{episode_number:1,name:'第一話',air_date:'2026-01-01',runtime:25,overview:'紹介'}]});
+const response=seasonResponse(record);
+for(const field of new Set(consumed))assert.ok(Object.hasOwn(response.episodes[0],field),'detail.html expects missing episode field: '+field);
+assert.ok(Object.hasOwn(response,'season_name'));
+assert.ok(Object.hasOwn(response,'season_number'));
+console.log('season detail renderer field compatibility tests passed');
