@@ -2,7 +2,7 @@
 // Isolated season refresh lock adapter. Not wired to production.
 // Redis commands are dependency-injected; no network on import.
 const {randomUUID}=require('node:crypto');
-const {key,decode}=require('./_season-ledger-redis');
+const {key,decode,compactRecord}=require('./_season-ledger-redis');
 const {assertSeasonWritesAllowed}=require('./_season-write-guard');
 const {seasonRefreshDue}=require('./_season-refresh-policy');
 const UNLOCK='if redis.call("GET",KEYS[1])==ARGV[1] then return redis.call("DEL",KEYS[1]) else return 0 end';
@@ -29,8 +29,8 @@ function createSeasonRefreshWriter(command,{now=()=>Date.now(),token=()=>randomU
    assertSeasonWritesAllowed();
    // Lock ownership is checked atomically with write. Never overwrite after lock expiry.
    const script='if redis.call("GET",KEYS[2])==ARGV[1] then return redis.call("SET",KEYS[1],ARGV[2]) else return nil end';
-   const written=await command(['EVAL',script,'2',dataKey,lockKey,owner,JSON.stringify(next)]);
-   return written==='OK'?next:null;
+   const written=await command(['EVAL',script,'2',dataKey,lockKey,owner,JSON.stringify(compactRecord(next))]);
+   return written==='OK'?compactRecord(next):null;
   }finally{
    await command(['EVAL',UNLOCK,'1',lockKey,owner]);
   }
