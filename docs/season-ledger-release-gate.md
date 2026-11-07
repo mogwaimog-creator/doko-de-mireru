@@ -52,3 +52,11 @@
 3. 更新処理の接続は別の明示的フラグ・書き込み停止ガード付きで実装し、模擬テストする。
 4. API負荷・Redis容量・CDNキャッシュ・失敗時の切り戻しを確認する。
 5. 本番接続/デプロイ/書き込みはユーザーの明示的な承認まで行わない。
+
+## 2026-11-07 更新接続後の再テスト結果
+- `season-refresh-opt-in.test.js`：PASS（更新と書き込みの二重許可が必要）
+- `search-routing-static-regression.test.js`：PASS（検索・人物・詳細・シーズンの分岐）
+- `search-handler-offline-behavior.test.js`：PASS（既存ハンドラ模擬動作）
+- 上記は利用者PCで実行したオフライン結果。実Redis・本番API・ブラウザ・費用は未検証。
+- 更新接続済みでも、`SEASON_LEDGER_REFRESH_ENABLED` と `LEDGER_WRITES_RESUME` は明示的に両方 `1` としなければ更新書き込みを許可しない。
+- 本番デプロイ・フラグ変更は未実施。公開判定は引き続き保留。
