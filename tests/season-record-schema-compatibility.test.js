@@ -15,6 +15,8 @@ const raw={season_number:2,name:'第2シーズン',episodes:[{episode_number:1,n
  assert.equal(fetchCount,1);
  assert.equal(stored.checkedAt,new Date(now).toISOString());
  assert.equal(stored.status,'unknown');
+ assert.ok(!Object.hasOwn(stored.episodes[0],'overview'),'episode synopsis must not be stored');
+ assert.ok(!Object.hasOwn(first.episodes[0],'overview'),'episode synopsis must not be returned');
  assert.deepEqual(first,seasonResponse(stored));
  const later=fromTmdbSeason(88,2,{...raw,name:'更新済み',episodes:[{...raw.episodes[0],name:'更新した第1話'}]});
  const updated={...later,checkedAt:new Date(now+8*86400000).toISOString(),status:stored.status};
