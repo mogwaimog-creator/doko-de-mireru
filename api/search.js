@@ -421,11 +421,16 @@ if (id) {
       // Opt-in only: disabled by default. Keep the legacy path unchanged
       // until live integration and rollback checks have been approved.
       if (process.env.SEASON_LEDGER_ENABLED === "1") {
-        const { makeSeasonSearchBranch } = require("./_season-search-branch");
-        const seasonHandler = makeSeasonSearchBranch({ fetchJson, apiKey });
+        let seasonHandler;
+        try {
+          const { makeSeasonSearchBranch } = require("./_season-search-branch");
+          seasonHandler = makeSeasonSearchBranch({ fetchJson, apiKey });
+        } catch (error) {
+          console.error("SEASON LEDGER INIT FALLBACK:", error?.message || "unknown");
+        }
         // The new parser requires a numeric ID and normalized TV identity.
         // Legacy behavior remains the fallback for nonstandard inputs.
-        if (/^[1-9]\d*$/.test(id) && Number.isSafeInteger(Number(id))) {
+        if (seasonHandler && /^[1-9]\d*$/.test(id) && Number.isSafeInteger(Number(id))) {
           const newReq = { ...req, query: { ...req.query, id, type: "tv", season: String(season) } };
           let newStatus = 200;
           let newBody;
