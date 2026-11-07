@@ -51,6 +51,13 @@ function acceptAutomaticUpdate(existing,candidate){
   if(!existing)return candidate;
   // Page-specific editorial text and verification must survive routine refreshes.
   return {...candidate,
+    // Missing TV season data must not erase previously saved seasons.
+    ...(candidate.type==='tv' && existing.type==='tv' ? {
+      seasons:Array.isArray(candidate.seasons)&&candidate.seasons.length?candidate.seasons:(existing.seasons||[]),
+      seasonCount:candidate.seasonCount??existing.seasonCount??null,
+      episodeCount:candidate.episodeCount??existing.episodeCount??null,
+      status:candidate.status??existing.status??null
+    } : {}),
     pageExtras:existing.pageExtras||{},
     verification:existing.verification||candidate.verification,
     errors:existing.errors||candidate.errors,
