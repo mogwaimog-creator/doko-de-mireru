@@ -6,7 +6,11 @@ function toBasicTmdbDetail(work){
  if(!work||work.schemaVersion!==2||!['movie','tv'].includes(work.type)||!Number.isSafeInteger(work.id))throw Error('Invalid v2 work');
  const tv=work.type==='tv';
  const credits={cast:(work.cast||[]).map(p=>({id:p.id,name:p.name})),crew:work.director?[{...work.director,job:'Director'}]:[]};
- const detail={id:work.id,overview:work.overview||'',poster_path:work.posterPath||null,
+ const detail={id:work.id,
+  // detail.html consumes normalized fields, not only native TMDB fields.
+  title:work.title,release_date:work.releaseDate||'',runtime:work.runtimeMinutes??null,
+  director:work.director||null,cast:(work.cast||[]).map(p=>({id:p.id,name:p.name})),
+  overview:work.overview||'',poster_path:work.posterPath||null,
   genres:(work.genres||[]).map(name=>({name})),credits,vote_average:work.rating??0,
   ...(tv?{name:work.title,original_name:work.originalTitle||work.title,
     first_air_date:work.releaseDate||'',episode_run_time:work.runtimeMinutes==null?[]:[work.runtimeMinutes],
