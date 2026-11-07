@@ -18,7 +18,8 @@ assert.equal(response.episodes[0].episode_number,1);
 assert.equal(response.episodes[0].name,'第1話');
 assert.equal(response.episodes[0].air_date,'2026-11-01');
 assert.equal(response.episodes[0].runtime,42);
-assert.equal(response.episodes[0].overview,'あらすじ');
+assert.ok(!Object.hasOwn(response.episodes[0],'overview'),'episode synopsis must not be returned');
+assert.ok(!renderer.includes('episode.overview'),'episode synopsis must not be rendered');
 const accessed=[...renderer.matchAll(/(?:data|episode)\.([a-z_]+)/g)].map(m=>m[1]);
 const required=[...new Set(accessed.filter(x=>!['length','forEach'].includes(x)))];
 for(const field of required){
