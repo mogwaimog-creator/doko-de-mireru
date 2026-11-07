@@ -17,6 +17,7 @@ const context={
  module:moduleObj,process:{env:{TMDB_API_KEY:'TEST'}},
  console:{error:()=>{}},
  require:(name)=>{
+  if(name==='./_season-refresh-opt-in')return {optionalSeasonRefreshRecord:()=>undefined};
   if(name==='./_season-search-branch')return {makeSeasonSearchBranch:()=>async(req,res)=>res.status(503).json({error:'mock unavailable'})};
   return {};
  },
