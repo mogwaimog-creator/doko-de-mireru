@@ -4,6 +4,7 @@
 // Load Redis lazily so pure validation tests do not require Redis configuration.
 function redisCommand(args){return require('./_redis').command(args);}
 const {valid}=require('./_season-ledger-cache');
+const {assertSeasonWritesAllowed}=require('./_season-write-guard');
 const PREFIX='doko:season:v1';
 function key(type,id,seasonNumber){
  if(!valid(type,id,seasonNumber))throw Error('Invalid season identity');
@@ -26,6 +27,7 @@ function createSeasonRedisAdapter(command){
  async function putRecordIfAbsent(record){
   if(!record||!valid(record.type,record.id,record.seasonNumber)||!Array.isArray(record.episodes))
    throw Error('Invalid season record');
+  assertSeasonWritesAllowed();
   const saved=await command(['SET',key(record.type,record.id,record.seasonNumber),JSON.stringify(record),'NX']);
   return saved==='OK';
  }
