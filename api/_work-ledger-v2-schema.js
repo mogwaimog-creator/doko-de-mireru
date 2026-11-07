@@ -47,6 +47,12 @@ function normalizeWorkV2(type,id,input){
 // Editorial updates are separate from automated metadata ingestion.
 // A confirmed/locked record must never be overwritten by automation.
 function acceptAutomaticUpdate(existing,candidate){
+  if(!candidate || !['movie','tv'].includes(candidate.type))throw new Error('Invalid update candidate');
+  identity(candidate.type,candidate.id);
+  if(existing){
+    identity(existing.type,existing.id);
+    if(existing.type!==candidate.type || Number(existing.id)!==Number(candidate.id))throw new Error('Work identity mismatch');
+  }
   if(existing?.locked||existing?.confirmed)return existing;
   if(!existing)return candidate;
   // Page-specific editorial text and verification must survive routine refreshes.
