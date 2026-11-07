@@ -418,6 +418,27 @@ if (id) {
 
     if (season > 0) {
 
+      // Opt-in only: disabled by default. Keep the legacy path unchanged
+      // until live integration and rollback checks have been approved.
+      if (process.env.SEASON_LEDGER_ENABLED === "1") {
+        const { makeSeasonSearchBranch } = require("./_season-search-branch");
+        const seasonHandler = makeSeasonSearchBranch({ fetchJson, apiKey });
+        // The new parser requires a numeric ID and normalized TV identity.
+        // Legacy behavior remains the fallback for nonstandard inputs.
+        if (/^[1-9]\\d*$/.test(id) && Number.isSafeInteger(Number(id))) {
+          const newReq = { ...req, query: { ...req.query, id, type: "tv", season: String(season) } };
+          let newStatus = 200;
+          let newBody;
+          const capture = {
+            status(code) { newStatus = code; return this; },
+            json(body) { newBody = body; return this; }
+          };
+          await seasonHandler(newReq, capture);
+          if (newStatus === 200) return res.status(200).json(newBody);
+          // Do not cache the transient error: use the original season path.
+        }
+      }
+
       const result =
         await getTvSeason(
           id,
