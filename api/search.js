@@ -433,8 +433,13 @@ if (id) {
             status(code) { newStatus = code; return this; },
             json(body) { newBody = body; return this; }
           };
-          await seasonHandler(newReq, capture);
-          if (newStatus === 200) return res.status(200).json(newBody);
+          try {
+            await seasonHandler(newReq, capture);
+            if (newStatus === 200) return res.status(200).json(newBody);
+          } catch (error) {
+            // An unexpected ledger failure must not disable the legacy season API.
+            console.error("SEASON LEDGER FALLBACK:", error?.message || "unknown");
+          }
           // Do not cache a transient error or its legacy fallback response.
           res.setHeader("Cache-Control", "no-store");
           res.setHeader("Vercel-CDN-Cache-Control", "no-store");
