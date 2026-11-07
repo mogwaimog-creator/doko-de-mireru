@@ -20,3 +20,12 @@
 3. 映画・TV の実データを使い、表示比較と自動化テストを実行する。
 
 本番の Redis キー・API・ページは未変更。
+
+## 既存 API 経路の追加調査
+- `detail.html` は `API_URL="/api/search"` に `?id=...&type=tv&season=...` を付けてリクエストし、`renderEpisodes(data)` へ渡す。
+- `api/search.js` の `getTvSeason` は TMDB `/tv/{id}/season/{number}` を取得するだけでなく、毎回 `/tv/{id}?append_to_response=watch/providers` も取得している。エピソード一覧表示では `streaming/rental/purchase` を参照しない。
+- `renderEpisodes` の使用フィールドは `data.season_name`、`data.season_number`、`data.episodes[].episode_number/name/air_date/runtime/overview`。既存の `still_path` は使っていない。
+- 作成済み `api/_season-ledger-response.js` は必要な応答形式だけを生成する純粋関数であり、Redis にはまだ接続していない。
+- **推奨実装順**: (1) 既存 API のシーズン分岐の入口・バリデーション確認 (2) 台帳キャッシュ読み込み (3) 未保存時のみ TMDB シーズン1回取得 (4) 正常時に台帳保存 (5) 応答を変換して返す (6) エラー時は既存データを保持。訪問者ごとの作品本体/配信再取得は不要。
+- 作品・配信台帳の更新ルール（シリーズは朝6時、一般作品は24時間経過後の次アクセス）をシーズン閲覧が変更してはならない。
+- **未実施**: 実データ照合、シーズン分岐の書き換え、Redis 接続、負荷テスト、追加テスト実行。
