@@ -6,6 +6,8 @@ const PREFIX='doko:person:v2:';
 const SIXTY_DAYS=60*86400000;
 const LOCK_SECONDS=30;
 const WAIT_MS=7000;
+// Reject oversized records rather than silently discarding filmography entries.
+const MAX_RECORD_BYTES=1024*1024;
 const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 function keyFor(id){const n=Number(id);if(!Number.isSafeInteger(n)||n<=0)throw Error('invalid person id');return PREFIX+n;}
 function parseRecord(raw,id){
@@ -54,7 +56,14 @@ async function preparePerson({command,id,load,now=()=>Date.now(),allowWrites=fal
    const person=normalizePerson(fetched);
    if(person.id!==Number(id))throw Error('person id mismatch');
    const stamp=now();
+   if(existing&&stamp<Date.parse(existing.checkedAt))throw Error('person refresh clock moved backwards');
    const record=makeRecord(person,existing,stamp);
+   const payload=JSON.stringify(record);
+   if(Buffer.byteLength(payload,'utf8')>MAX_RECORD_BYTES){
+    const error=new Error('Person ledger record exceeds safe size; no credits were truncated');
+    error.code='PERSON_METADATA_TOO_LARGE';
+    throw error;
+   }
    // Reuse the existing record on identical content, updating only the check date.
    // A Redis hash is deliberately avoided: one strict JSON record per person.
    // Only the lock owner may write. If the lease expired while TMDB was loading,
@@ -69,7 +78,7 @@ async function preparePerson({command,id,load,now=()=>Date.now(),allowWrites=fal
    // Atomic ownership check and write: a late worker must not overwrite a
    // newer record saved by the next lock owner.
    const script='if redis.call("GET",KEYS[1])==ARGV[1] then redis.call("SET",KEYS[2],ARGV[2]); return 1 else return 0 end';
-   const saved=await command(['EVAL',script,'2',lockKey,key,token,JSON.stringify(record)]);
+   const saved=await command(['EVAL',script,'2',lockKey,key,token,payload]);
    if(saved!==1){
     const current=await readPerson(command,id);
     if(current)return {person:current.person,record:current,source:'cache'};
@@ -87,4 +96,4 @@ async function preparePerson({command,id,load,now=()=>Date.now(),allowWrites=fal
   await command(['EVAL',script,'1',lockKey,token]).catch(()=>{});
  }
 }
-module.exports={PREFIX,keyFor,parseRecord,readPerson,isFresh,makeRecord,preparePerson};
+module.exports={PREFIX,MAX_RECORD_BYTES,keyFor,parseRecord,readPerson,isFresh,makeRecord,preparePerson};
