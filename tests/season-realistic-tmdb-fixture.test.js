@@ -19,7 +19,7 @@ const {seasonResponse}=require('../api/_season-ledger-response');
  assert.equal(record.episodes[1].title,'');
  assert.equal(record.episodes[1].airDate,null);
  assert.equal(record.episodes[2].runtimeMinutes,null);
- assert.equal(record.episodes[2].overview,'');
+ assert.equal(Object.hasOwn(record.episodes[2],'overview'),false);
  const json=JSON.stringify(record);
  for(const field of ['still_path','poster_path','vote_average','crew','_id'])assert.ok(!json.includes(field),field+' must not be stored');
  const view=seasonResponse(record);

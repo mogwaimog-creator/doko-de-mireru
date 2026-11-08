@@ -12,16 +12,19 @@ const tmdb={season_number:1,name:'第1期',air_date:'2024-01-01',
 const legacy={id:123,title:'テスト作品',season_number:1,season_name:'第1期',
  poster_path:null,air_date:'2024-01-01',episode_count:2,
  episodes:tmdb.episodes.map(e=>({episode_number:e.episode_number,name:e.name,
- air_date:e.air_date||'',runtime:Number(e.runtime||0),overview:e.overview||'',
+ air_date:e.air_date||'',runtime:Number(e.runtime||0),
  still_path:e.still_path||null})),
  streaming:[],rental:[],purchase:[]};
 const modern=seasonResponse(fromTmdbSeason(123,1,tmdb));
 function visibleShape(data){
  return {season_number:data.season_number,season_name:data.season_name,
  episodes:data.episodes.map(e=>({episode_number:e.episode_number,name:e.name,
- air_date:e.air_date||'',runtime:Number(e.runtime||0),overview:e.overview||''}))};
+ air_date:e.air_date||'',runtime:Number(e.runtime||0)}))};
 }
 assert.deepEqual(visibleShape(modern),visibleShape(legacy));
+const html=require('node:fs').readFileSync(require('node:path').join(__dirname,'../detail.html'),'utf8');
+assert.doesNotMatch(html.slice(html.indexOf('function renderEpisodes('),html.indexOf('function renderSeries(')),/episode\.overview/);
+assert(modern.episodes.every(e=>!Object.hasOwn(e,'overview')));
 assert.equal(modern.episodes[0].still_path,undefined);
 assert.equal(modern.streaming,undefined);
 assert.equal(modern.rental,undefined);

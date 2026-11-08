@@ -3,6 +3,7 @@
 const {sharedStore}=require('./_shared-streaming-store');
 const {store,key}=require('../prototype/streaming-ledger');
 const {toDetail,toWatch}=require('../prototype/streaming-ledger-compat');
+const {detailState,selectWatch}=require('./_streaming-state');
 function enabled(){return process.env.SHARED_STREAMING_READ_ENABLED==='1'&&process.env.VERCEL_ENV!=='production'&&process.env.NODE_ENV!=='production'}
 async function devCommand(args){
  const url=new URL(process.env.SHARED_LEDGER_DEV_URL||'http://127.0.0.1:16380');
@@ -22,15 +23,36 @@ function compatible(raw,type,id,now=Date.now()){
 async function readMany(works,{command=devCommand,now=Date.now()}={}){
  const s=sharedStore(command),keys=[...new Set(works.map(w=>key(w.type,w.id)))];if(!keys.length)return {};
  const values=await command(['MGET',...keys.map(s.keys.dataKey)]);if(!Array.isArray(values)||values.length!==keys.length)throw Error('invalid batch result');
- const out={};keys.forEach((k,i)=>{try{const [type,id]=k.split(':');const r=compatible(JSON.parse(values[i]),type,Number(id),now);if(r)out[k]=r}catch{}});return out;
+ const out={};keys.forEach((k,i)=>{try{const [type,id]=k.split(':');const r=compatible(JSON.parse(values[i]),type,Number(id),now);if(r)out[k]=r;else{const raw=JSON.parse(values[i]);if(raw?.type===type&&raw.id===Number(id)&&raw.schemaVersion===1)out[k]={detail:null,watch:null}};const raw=JSON.parse(values[i]);if(out[k])out[k].attempt={failed:Array.isArray(raw.errors)&&raw.errors.some(e=>e.status==='open'),at:raw.lastAttemptAt}}catch{}});return out;
 }
-async function readDetail(type,id,now){if(!enabled())return null;try{const r=(await readMany([{type,id}],{now}))[key(type,id)];return r?.detail?{data:r.detail.data,stale:r.watch.stale}:null}catch{return null}}
+async function readDetail(type,id,now=Date.now()){
+ if(!enabled())return null;
+ const k=key(type,id),s=sharedStore(devCommand);
+ try{
+  const values=await devCommand(['MGET',s.keys.dataKey(k),'doko:dev:legacy-watch:v3:'+k,'doko:dev:legacy-detail:v1:'+k]);
+  if(!Array.isArray(values)||values.length!==3)throw Error('invalid detail batch');
+  let raw;try{raw=JSON.parse(values[0])}catch{}
+  let refreshProblem=null;
+  if(process.env.DEV_STREAMING_REFRESH_ENABLED==='1'){
+    try{
+      const endpoint=new URL(process.env.SHARED_LEDGER_DEV_URL||'http://127.0.0.1:16380');
+      if(endpoint.protocol!=='http:'||!['127.0.0.1','localhost','[::1]'].includes(endpoint.hostname)||endpoint.username||endpoint.password)throw Error('local refresh required');
+      endpoint.pathname='/refresh';endpoint.search='';endpoint.hash='';
+      const response=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type,id:Number(id),at:new Date(now).toISOString(),trigger:'visit'}),signal:AbortSignal.timeout(8000)});
+      if(!response.ok)throw Error('refresh unavailable');const result=await response.json();if(result.record)raw=result.record;if(['save-failed','storage-read-failed','infrastructure-error'].includes(result.reason))refreshProblem=result.reason;
+    }catch{refreshProblem='refresh-unavailable'}
+  }
+  let shared=compatible(raw,type,id,now);
+  if(raw?.type===type&&raw.id===Number(id)&&raw.schemaVersion===1){shared=shared||{};shared.attempt={failed:Array.isArray(raw.errors)&&raw.errors.some(e=>e.status==='open'),at:raw.lastAttemptAt}}
+  const detail=detailState(shared,values[1],values[2],now);if(refreshProblem){detail.meta.storageUnavailable=true;detail.meta.status=detail.meta.lastSuccessAt?'stale':'failed';detail.stale=!!detail.meta.lastSuccessAt;}return detail;
+ }catch{return {data:{results:{}},stale:false,meta:{status:'failed',lastSuccessAt:null,coverage:[],storageUnavailable:true}}}
+}
 async function attachRelated(detail){
  if(!enabled()||!detail||typeof detail!=='object')return detail;
  const items=Array.isArray(detail.series)?detail.series:detail.series?.movies||[];
  const works=items.filter(w=>w?.title&&Number.isSafeInteger(Number(w.id))&&Number(w.id)>0).map(w=>({type: ['tv','tv_drama','anime_tv'].includes(w.content_type)||['TVシリーズ','TV','TVアニメ'].includes(w.media_type)?'tv':'movie',id:Number(w.id)}));
- if(!works.length||works.length>100)return detail;
- try{const records=await readMany(works),byWork={};for(const [k,r] of Object.entries(records))if(!r.watch.stale)byWork[k]=r.watch.flatrate;
- return {...detail,seriesStreamingByWork:byWork};}catch{return detail}
+ if(!works.length||works.length>100)return {...detail,seriesStreamingManaged:true};
+ try{const records=await readMany(works),byWork={};for(const [k,r] of Object.entries(records))if(r.watch&&!r.watch.stale)byWork[k]=r.watch.flatrate;
+ return {...detail,seriesStreamingByWork:byWork,seriesStreamingManaged:true};}catch{return {...detail,seriesStreamingManaged:true}}
 }
-module.exports={enabled,devCommand,compatible,readMany,readDetail,attachRelated};
+module.exports={enabled,devCommand,compatible,readMany,readDetail,attachRelated,selectWatch};

@@ -7,7 +7,8 @@ const response=seasonResponse({type:'tv',id:101,seasonNumber:1,seasonName:'第1�
 ]});
 assert.equal(response.season_number,1);
 assert.equal(response.season_name,'第1期');
-assert.deepEqual(response.episodes[0],{episode_number:1,name:'始まり',air_date:'2024-01-01',runtime:24,overview:'説明'});
+assert.deepEqual(response.episodes[0],{episode_number:1,name:'始まり',air_date:'2024-01-01',runtime:24});
+assert.equal(Object.hasOwn(response.episodes[0],'overview'),false);
 assert.equal(response.episodes[1].episode_number,2);
 assert.equal(response.episodes[1].runtime,null);
 assert.throws(()=>seasonResponse({type:'movie',id:101,seasonNumber:1,episodes:[]}),/Invalid/);

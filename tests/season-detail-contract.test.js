@@ -17,5 +17,5 @@ assert.equal(response.episodes[0].episode_number,1);
 assert.equal(response.episodes[0].name,'はじまり');
 assert.equal(response.episodes[0].air_date,'2024-01-01');
 assert.equal(response.episodes[0].runtime,24);
-assert.equal(response.episodes[0].overview,'第1話');
+assert.equal(Object.hasOwn(response.episodes[0],'overview'),false);
 console.log('season detail compatibility contract tests passed');

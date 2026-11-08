@@ -6,8 +6,11 @@ const redisPath = require.resolve('../api/_redis');
 const ledgerPath = require.resolve('../api/_person-ledger');
 const previousRedis = require.cache[redisPath];
 const previousFlag = process.env.WORK_LEDGER_ENABLED;
+const previousWriteFlag=process.env.LEDGER_WRITES_RESUME;
+require('node:test').beforeEach(()=>{process.env.LEDGER_WRITES_RESUME='1'});
 
 afterEach(() => {
+  if(previousWriteFlag===undefined)delete process.env.LEDGER_WRITES_RESUME;else process.env.LEDGER_WRITES_RESUME=previousWriteFlag;
   if (previousFlag === undefined) delete process.env.WORK_LEDGER_ENABLED;
   else process.env.WORK_LEDGER_ENABLED = previousFlag;
   delete require.cache[ledgerPath];

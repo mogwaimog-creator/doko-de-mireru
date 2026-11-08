@@ -3356,6 +3356,7 @@ async function loadMovie(){
     renderMovie(
       movie
     );
+    renderStreamingFreshness(movie.streamingMeta);
 
     setupFavoriteButton(
   movie
@@ -4631,6 +4632,37 @@ function isGodzillaGuideWork(movie){
    作品情報表示
 ========================================================= */
 
+function renderStreamingFreshness(meta){
+  let notice=document.getElementById('streamingFreshness');
+  if(!meta){if(notice)notice.remove();return;}
+  const section=document.getElementById('providersSection');
+  if(!section)return;
+  if(!notice){notice=document.createElement('p');notice.id='streamingFreshness';notice.setAttribute('role','status');section.prepend(notice);}
+  const date=meta.lastSuccessAt?new Date(meta.lastSuccessAt):null;
+  const checked=date&&Number.isFinite(date.getTime())?date.toLocaleString('ja-JP',{timeZone:'Asia/Tokyo'})+'（日本時間）':null;
+  let text=meta.status==='failed'?'配信情報を取得できていません。':meta.status==='unknown'?'配信情報はまだ取得していません。':meta.status==='stale'?'古い配信情報です。':'保存済みの配信情報です。';
+  if(meta.storageUnavailable)text+=' 配信情報の保存・読込を完了できていません。';
+  if(checked)text+=' 最終正常取得：'+checked+'。';
+  if(meta.refreshFailed)text+=' 更新に失敗したため、前回の正常情報を表示しています。';
+  if(meta.coverage&&!['flatrate','rent','buy'].every(k=>meta.coverage.includes(k))&&checked)text+=' 一部の配信区分は未取得です。';
+  notice.textContent=text;
+  const description=document.getElementById('providersDescription');if(description)description.textContent=meta.status==='unknown'||meta.status==='failed'?'現在の配信状況は確認できていません。公式サイトをご確認ください。':meta.status==='stale'?'以下は前回の正常取得情報です。現在の提供状況は公式サイトでご確認ください。':meta.coverage?.length===3?'日本向けの見放題・レンタル・購入情報を表示しています。':'取得済みの配信区分のみを表示しています。';
+  if(meta.status==='unknown'||meta.status==='failed'){
+    const providers=document.getElementById('providers');if(providers)providers.textContent='取得失敗・未取得は「配信なし」を意味しません。';
+  }
+  const empty=document.querySelector('#providers .provider-empty-message');
+  if(empty&&checked){empty.textContent=meta.status==='stale'?'前回正常取得時点では配信情報は0件でした。現在の状況は未確認です。':meta.coverage?.length===3?'最終正常取得時点では、日本向けの見放題・レンタル・購入は0件でした。':'保存情報では見放題は0件です。レンタル・購入は未取得です。';}
+  const unknown=meta.status==='unknown'||meta.status==='failed';
+  for(const item of document.querySelectorAll('#faqList .faq-item')){
+    const question=item.querySelector('.faq-question'),answer=item.querySelector('.faq-answer');
+    if(answer&&question&&unknown&&/配信|見放題|Netflix|Amazon|レンタル|購入|Hulu|Disney|U-NEXT/i.test(question.textContent))answer.textContent='配信情報は未取得、または取得失敗のため、公式サイトでご確認ください。';
+  }
+  if(meta.status!=='fresh'){
+    const faq=document.getElementById('faqList');
+    if(faq){const walker=document.createTreeWalker(faq,NodeFilter.SHOW_TEXT);let node;while((node=walker.nextNode()))node.nodeValue=node.nodeValue.replace(/現在/g,'保存情報では');}
+  }
+}
+
 function renderMovie(movie){
 
   loading.style.display =
@@ -5157,7 +5189,8 @@ if(
 
   renderSeries(
     movie.series,
-    movie.seriesStreamingByWork
+    movie.seriesStreamingByWork,
+    movie.seriesStreamingManaged
   );
 
 
@@ -7473,7 +7506,7 @@ function renderEpisodes(data){
    シリーズ作品
 ========================================================= */
 
-function renderSeries(series, streamingByWork){
+function renderSeries(series, streamingByWork, managed=false){
 
   const section =
     document.getElementById(
@@ -7809,6 +7842,9 @@ const sharedStreaming =
 
 if(Array.isArray(sharedStreaming)){
   renderSeriesStreamingProviders(streamingStatus, sharedStreaming);
+}else if(managed){
+  streamingStatus.className = "series-streaming-status unknown";
+  streamingStatus.textContent = "配信情報は未取得、または更新待ちです";
 }else{
   loadSeriesStreamingStatus(streamingStatus, movie.id, isTv);
 }

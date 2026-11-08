@@ -3,6 +3,8 @@
 // continue to use their own 06:00/18:00 schedule and keys.
 const {command}=require('./_redis');
 const {identity}=require('./_work-ledger');
+const {createFrozenLoader}=require('./_frozen-load');
+const frozen=createFrozenLoader();
 const PREFIX='doko:detail-providers:v1:';
 const DAY=86400000, WEEK=7*DAY;
 // Keep the lock beyond slow upstream calls to prevent overlapping TMDB refreshes.
@@ -36,11 +38,11 @@ async function getDetailProviders(type,id,load,now=Date.now()){
   try{cached=await read();}
   catch(e){console.error('DETAIL PROVIDERS READ FAILED',e);const busy=new Error('Streaming storage temporarily unavailable');busy.code='DETAIL_STORAGE_UNAVAILABLE';throw busy;}
   if(cached&&!refreshDue(cached,now))return {data:cached.data,stale:false};
-  // Only previously saved works may persist streaming updates during the storage freeze.
-  // New works can still display current JP streaming data, but are not added to Redis.
-  if(!cached&&process.env.LEDGER_WRITES_RESUME!=='1'){
-    const data=await load();
-    return {data:japanOnlyProviderData(data),stale:false};
+  // Frozen means NO durable writes, including refresh locks. Cached successes survive.
+  if(process.env.LEDGER_WRITES_RESUME!=='1'){
+    if(cached)return {data:cached.data,stale:true,checkedAt:cached.checkedAt,persisted:true};
+    const data=await frozen.run(w.type+':'+w.id,async()=>japanOnlyProviderData(await load()));
+    return {data,stale:false,checkedAt:new Date(now).toISOString(),persisted:false};
   }
 
   const lockKey=key+':refresh-lock', token=require('node:crypto').randomUUID();
@@ -90,4 +92,4 @@ async function getDetailProviders(type,id,load,now=Date.now()){
   }
 }
 
-module.exports={getDetailProviders,refreshDue,nextReviewAt,DAY,WEEK};
+module.exports={getDetailProviders,refreshDue,nextReviewAt,DAY,WEEK,_frozen:frozen};

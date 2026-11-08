@@ -6,8 +6,8 @@ async function run({enabled=false,newRecords={},readFails=false,env='development
  const oldRedis=cache[redisPath],oldReader=cache[readerPath],oldHandler=cache[handlerPath],oldEnv={...process.env};let calls=[];
  try{
   process.env.SHARED_STREAMING_READ_ENABLED=enabled?'1':'0';process.env.VERCEL_ENV=env;
-  cache[redisPath]={exports:{command:async args=>{calls.push(args);assert.equal(args[0],'MGET');return args.slice(1).map(()=>JSON.stringify({flatrate:[],checkedAt:new Date().toISOString()}))}}};
-  cache[readerPath]={exports:{enabled:actualReader.enabled,readMany:async()=>{if(readFails)throw Error('local unavailable');return newRecords}}};
+  cache[redisPath]={exports:{command:async args=>{calls.push(args);assert.equal(args[0],'MGET');return args.slice(1).map(()=>JSON.stringify({flatrate:[],checkedAt:new Date(Date.now()-60000).toISOString()}))}}};
+  cache[readerPath]={exports:{enabled:actualReader.enabled,selectWatch:actualReader.selectWatch,readMany:async()=>{if(readFails)throw Error('local unavailable');return newRecords}}};
   delete cache[handlerPath];const handler=require(handlerPath);
   const response={setHeader(){},status(code){this.code=code;return this},json(body){this.body=body;return this}};
   await handler({method:'GET',query:{series:'kimetsu'}},response);return {response,calls};
@@ -25,4 +25,10 @@ test('shared Redis outage rolls back to saved legacy records',async()=>{
 });
 test('production environment ignores the development flag',async()=>{
  const {response}=await run({enabled:true,env:'production',newRecords:{'movie:635302':{watch:{flatrate:[{provider_id:999}]}}}});assert.deepEqual(response.body.providers['movie:635302'].flatrate,[]);
+});
+
+test('stale shared availability cannot hide a newer successful empty legacy result',async()=>{
+ const watch={flatrate:[{provider_id:8}],checkedAt:new Date(Date.now()-2*86400000).toISOString(),stale:true};
+ const {response}=await run({enabled:true,newRecords:{'movie:635302':{watch}}});
+ assert.deepEqual(response.body.providers['movie:635302'].flatrate,[]);assert.equal(response.body.providers['movie:635302'].stale,false);
 });

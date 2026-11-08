@@ -47,7 +47,7 @@ local('real Redis: all 13 series actual IDs deduplicate, six JST boundary and no
 });
 local('real Redis: save outage is distinct from fetch error and cannot erase stored success',async db=>{
  let fail=false;
- const wrapped={...db,saveIfOwner:async(...args)=>{if(fail)throw Error('simulated Redis disconnect');return db.saveIfOwner(...args)}};
+ const wrapped={...db,saveAndRelease:async(...args)=>{if(fail)throw Error('simulated Redis disconnect');return db.saveAndRelease(...args)}};
  const s=service(wrapped,async()=>fixture());await s.visit('movie',1771,at,[]);const before=await db.read('movie:1771');fail=true;
  assert.equal((await s.visit('movie',1771,'2026-11-10T00:00:00Z',[])).reason,'save-failed');assert.deepEqual(await db.read('movie:1771'),before);
 });
@@ -90,4 +90,32 @@ local('real Redis: failed daily attempt is not retried until the next JST day',a
  const s=service(db,async()=>{calls++;throw Error('fixture failure')});
  await s.cron('2026-11-08T21:00:00Z',works);await s.cron('2026-11-09T09:00:00Z',works);assert.equal(calls,1);
  await s.cron('2026-11-09T21:00:00Z',works);assert.equal(calls,2);assert.equal((await db.read('tv:85937')).lastSuccessAt,null);
+});
+local('optimized claim and combined commit fence expired owners, preserve empty arrays, and release atomically',async db=>{
+ const k='movie:635302';assert.equal((await db.claimAndRead(k,'old',30)).acquired,true);await new Promise(r=>setTimeout(r,50));
+ const next=await db.claimAndRead(k,'new',30000);assert.equal(next.acquired,true);assert.equal(next.record,null);
+ const l=store();l.register('movie',635302);l.success('movie',635302,{JP:{}},at);const record=l.get('movie',635302);
+ assert.equal(await db.saveAndRelease(k,'old',record,0),false);assert.equal(await db.release(k,'old'),false);
+ assert.equal(await db.saveAndRelease(k,'new',record,0),true);assert.equal((await command(['GET',db.keys.lockKey(k)])),null);
+ const raw=await db.read(k);assert.deepEqual(raw.japan,{flatrate:[],rent:[],buy:[]});assert.equal(raw.revision,1);
+ await db.claimAndRead(k,'wrong-version',30000);assert.equal(await db.saveAndRelease(k,'wrong-version',record,0),false);assert.equal((await db.read(k)).revision,1);
+});
+local('lost commit acknowledgement remains retry-safe without falsely recording a fetch failure',async(db,prefix)=>{
+ let lost=true,loads=0;
+ const storeWithLostAck=sharedStore(async args=>{
+  const value=await command(args);if(lost&&args[0]==='EVAL'&&args[1]===require('../api/_shared-streaming-store').COMMIT_RELEASE){lost=false;throw Error('lost acknowledgement')}return value;
+ },{prefix});
+ const s=service(storeWithLostAck,async()=>{loads++;return empty()});
+ assert.equal((await s.visit('movie',635302,at,[])).reason,'save-failed');assert((await db.read('movie:635302')).lastSuccessAt);
+ assert.equal((await s.visit('movie',635302,at,[])).reason,'cached');assert.equal(loads,1);assert.deepEqual((await db.read('movie:635302')).errors,[]);
+});
+local('backwards caller clock cannot replace a later successful record',async db=>{
+ let calls=0;const s=service(db,async()=>{calls++;return empty()});await s.visit('movie',635302,at,[]);const before=await db.read('movie:635302');
+ const works=[{type:'movie',id:635302,memberships:[{kind:'watchOrder',scope:'kimetsu'}]}];
+ assert.equal((await s.update('movie',635302,'2026-11-08T00:00:00Z','cron',works)).reason,'clock-moved-backwards');assert.equal(calls,1);assert.deepEqual(await db.read('movie:635302'),before);
+});
+local('optimized refresh returns the committed schema and revision immediately, including failure records',async db=>{
+ let fail=false;const s=service(db,async()=>{if(fail)throw Error('upstream fixture failure');return empty()});
+ const first=await s.visit('movie',635302,at,[]);assert.equal(first.record.schemaVersion,1);assert.equal(first.record.revision,1);assert.deepEqual(first.record,await db.read('movie:635302'));
+ fail=true;const second=await s.visit('movie',635302,'2026-11-10T00:00:00Z',[]);assert.equal(second.record.revision,2);assert.deepEqual(second.record,await db.read('movie:635302'));
 });

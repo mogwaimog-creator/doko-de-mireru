@@ -12,14 +12,14 @@ function fakeRedis(){
    values.set(key,rest[0]);return 'OK';
   }
   if(op==='EVAL'){
-   const keys=Number(rest[1]),lock=rest[2];
+   const keys=Number(rest[0]),lock=rest[1];
    if(keys===1){
-    const token=rest[3];
+    const token=rest[2];
     if(values.get(lock)===token){values.delete(lock);return 1;}
     return 0;
    }
    if(keys===2){
-    const destination=rest[3],token=rest[4],value=rest[5];
+    const destination=rest[2],token=rest[3],value=rest[4];
     if(values.get(lock)===token){values.set(destination,value);return 1;}
     return 0;
    }

@@ -13,7 +13,7 @@ async function run({enabled,newStatus=200,id='123',throwNew=false,throwInit=fals
  const res={setHeader(k,v){headers[k]=v;return this;},status(n){this.code=n;return this;},json(v){returned=v;return this;}};
  const context={season:1,id,apiKey:'TEST',fetchJson:async()=>{},console:{error:()=>{}},req:{method:'GET',query:{id,type:'tv',season:'1'}},res,
  process:{env:{SEASON_LEDGER_ENABLED:enabled?'1':'0'}},
- require(name){assert.equal(name,'./_season-search-branch');return {makeSeasonSearchBranch(){if(throwInit)throw Error('mock init failure');return async(req,capture)=>{modern++;if(throwNew)throw Error('mock ledger failure');capture.status(newStatus).json({source:'new'});};}};},
+ require(name){if(name==='./_season-refresh-opt-in')return {optionalSeasonRefreshRecord:()=>undefined};assert.equal(name,'./_season-search-branch');return {makeSeasonSearchBranch(){if(throwInit)throw Error('mock init failure');return async(req,capture)=>{modern++;if(throwNew)throw Error('mock ledger failure');capture.status(newStatus).json({source:'new'});};}};},
  async getTvSeason(){legacy++;return {source:'legacy'};}
  };
  const code='(async()=>{'+block+'})()';

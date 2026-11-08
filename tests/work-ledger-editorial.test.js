@@ -33,5 +33,5 @@ test('removal plan does not mutate source',()=>{
  const plan=removalPlan(source);
  assert.equal(plan.length,2);
  assert.equal(source.seasons.length,1);
- assert.equal(plan[0].action,'move-to-season-ledger-before-removal');
+ assert.equal(plan.find(x=>x.field==='seasons').action,'move-to-season-ledger-before-removal');
 });

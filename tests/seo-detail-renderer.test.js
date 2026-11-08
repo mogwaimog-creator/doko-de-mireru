@@ -17,7 +17,7 @@ test('server response has unique SEO and visible H1 before JS runs',()=>{
  const record=createSeoRecord({type:'movie',id:321,title:'映画A',overview:'あらすじ',posterPath:'/abc.jpg'});
  const html=renderDetailHtml(template,record);
  assert.match(html,/<title>映画A/);
- assert.match(html,/canonical" href="https:\/\/doko-de-mireru.com\/detail.html\?id=321&amp;type=movie"/);
+ assert.match(html,/canonical" href="https:\/\/doko-de-mireru.com\/detail.html\?id=321"/);
  assert.match(html,/<h1 id="title">映画A<\/h1>/);
  assert.match(html,/og:image" content="https:\/\/image.tmdb.org/);
  assert.doesNotMatch(html,/<title>共通タイトル/);
@@ -40,4 +40,9 @@ test('actual detail.html template gets crawler-visible title, H1, canonical and 
  assert.match(html,/name="twitter:title"[\s\S]*?content="テストドラマ/);
  assert.match(html,/property="og:image"[\s\S]*?content="https:\/\/image.tmdb.org/);
  assert.equal((html.match(/<h1\b/gi)||[]).length,(realTemplate.match(/<h1\b/gi)||[]).length);
+});
+
+test('same numeric movie and TV IDs have distinct canonical URLs',()=>{
+ const movie=createSeoRecord({type:'movie',id:321,title:'映画'}),tv=createSeoRecord({type:'tv',id:321,title:'TV'});
+ assert.notEqual(movie.canonical,tv.canonical);assert.equal(movie.canonical,'https://doko-de-mireru.com/detail.html?id=321');assert.match(renderDetailHtml(template,tv),/id=321&amp;type=tv/);
 });

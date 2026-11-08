@@ -29,7 +29,7 @@ module.exports=async(req,res)=>{
     const sharedReader=require('./_shared-streaming-read');
     let shared={};
     if(sharedReader.enabled()){try{shared=await sharedReader.readMany(works)}catch{}}
-    const fallbackKeys=keys.filter(k=>!shared[k]);
+    const fallbackKeys=keys; // Coexistence: compare BOTH sources by successful acquisition time.
     let values=[];
     if(fallbackKeys.length){
       try{values=await command(['MGET',...fallbackKeys.map(k=>KEYPREFIX+k)])}
@@ -38,7 +38,7 @@ module.exports=async(req,res)=>{
     const legacy=Object.fromEntries(fallbackKeys.map((k,i)=>[k,values?.[i]]));
     const providers={},failures=[];
     for(let i=0;i<keys.length;i++){
-      if(shared[keys[i]]){providers[keys[i]]=shared[keys[i]].watch;continue;}
+      if(sharedReader.enabled()){const chosen=sharedReader.selectWatch(shared[keys[i]]?.watch,legacy[keys[i]]);if(chosen){providers[keys[i]]=chosen;continue;}}
       if(legacy[keys[i]]){
         try{const record=JSON.parse(legacy[keys[i]]);if(Array.isArray(record.flatrate)){const checked=Date.parse(record.checkedAt);
           const stale=!Number.isFinite(checked)||Date.now()-checked>MAX_AGE_MS||checked>Date.now()+60000;

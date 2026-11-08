@@ -1,5 +1,7 @@
 'use strict';
 const test=require('node:test');
+const previousWriteFlag=process.env.LEDGER_WRITES_RESUME;
+test.after(()=>{if(previousWriteFlag===undefined)delete process.env.LEDGER_WRITES_RESUME;else process.env.LEDGER_WRITES_RESUME=previousWriteFlag});
 const assert=require('node:assert/strict');
 const redisPath=require.resolve('../api/_redis');
 const ledgerPath=require.resolve('../api/_work-ledger');
@@ -32,7 +34,7 @@ require.cache[redisPath]={id:redisPath,filename:redisPath,loaded:true,exports:{c
 for(const p of [ledgerPath,firstPath,metadataPath])delete require.cache[p];
 const {metadataWithLedger}=require('../api/_detail-metadata-cache');
 test.after(()=>{for(const [p,entry] of original){if(entry)require.cache[p]=entry;else delete require.cache[p];}});
-test.beforeEach(()=>{values.clear();calls.length=0;failLock=false;failWaitRead=false;failSecondRead=false;process.env.WORK_LEDGER_ENABLED='1';});
+test.beforeEach(()=>{process.env.LEDGER_WRITES_RESUME='1';values.clear();calls.length=0;failLock=false;failWaitRead=false;failSecondRead=false;process.env.WORK_LEDGER_ENABLED='1';});
 const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 test('two simultaneous requests share one first TMDB metadata fetch',async()=>{
  let loads=0;

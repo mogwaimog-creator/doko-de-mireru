@@ -1,5 +1,7 @@
 'use strict';
 const assert=require('node:assert/strict');
+const previousWriteFlag=process.env.LEDGER_WRITES_RESUME;
+process.env.LEDGER_WRITES_RESUME='1';
 const {createSeasonRedisAdapter}=require('../api/_season-ledger-redis');
 const {getCachedSeason}=require('../api/_season-ledger-cache');
 const storage=new Map();
@@ -41,4 +43,4 @@ const record={type:'tv',id:123,seasonNumber:1,seasonName:'第1期',episodes:[]};
  assert.equal((await adapter.getRecord('tv',456,1)).seasonName,'取得');
  assert.throws(()=>createSeasonRedisAdapter(null),/required/);
  console.log('season ledger mocked Redis NX/concurrency tests passed');
-})().catch(e=>{console.error(e);process.exitCode=1});
+})().catch(e=>{console.error(e);process.exitCode=1}).finally(()=>{if(previousWriteFlag===undefined)delete process.env.LEDGER_WRITES_RESUME;else process.env.LEDGER_WRITES_RESUME=previousWriteFlag});

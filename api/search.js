@@ -386,6 +386,8 @@ if (
   personId
 ) {
 
+  if(process.env.DEV_CONTENT_LEDGER_ENABLED==='1'){const dev=require('./_dev-content-ledgers');if(dev.enabled())return res.status(200).json(await dev.readPerson(Number(personId)));}
+
   // Disabled by default. Demo-only v2 switch; never touches v1 keys.
   // Enabling this flag requires a reviewed demo deployment.
   const isPersonV2Demo = process.env.VERCEL_ENV === 'preview' &&
@@ -436,6 +438,7 @@ if (id) {
     // ===================================================
 
     if (season > 0) {
+      if(process.env.DEV_CONTENT_LEDGER_ENABLED==='1'){const dev=require('./_dev-content-ledgers');if(dev.enabled())return res.status(200).json(await dev.readSeason(Number(id),season));}
 
       // Opt-in only: disabled by default. Keep the legacy path unchanged
       // until live integration and rollback checks have been approved.
@@ -2222,6 +2225,7 @@ return res.status(200).json({
       return res.status(503).json({error:"ただいま作品情報の取得が混み合っています。少し時間をおいて、もう一度お試しください。",code:"WORK_METADATA_BUSY"});
     }
 
+    if(['FROZEN_LOOKUP_BUSY','FROZEN_LOOKUP_TIMEOUT'].includes(error?.code)){res.setHeader('Retry-After','30');return res.status(503).json({error:'作品情報を確認しています。しばらくして再度お試しください。'});}
     console.error(
       "SEARCH API ERROR:",
       error
@@ -2268,6 +2272,7 @@ async function getMovieDetail(
   // =======================================================
 
   let providersJP = {};
+  let streamingMeta;
 
 
   try {
@@ -2281,6 +2286,7 @@ async function getMovieDetail(
 
 
     const sharedProviders=await require('./_shared-streaming-read').readDetail('movie',movieId);
+    streamingMeta=sharedProviders?.meta;
     const providerData = sharedProviders ? sharedProviders.data : process.env.WORK_LEDGER_ENABLED==='1'
       ? (await getDetailProviders('movie',movieId,()=>fetchJson(providerUrl))).data
       : await fetchJson(providerUrl);
@@ -2734,6 +2740,7 @@ let recommendations = []; // Disable detail recommendations API calls.
 // =======================================================
 
 return {
+  ...(streamingMeta?{streamingMeta}:{}),
 
   id:
     movie.id,
@@ -4955,6 +4962,18 @@ async function getCollection(
 // =========================================================
 
 async function fetchJson(url) {
+  const sharedReader=require('./_shared-streaming-read');
+  let removedProviderIdentity=null;
+  if(sharedReader.enabled()){
+    const parsed=new URL(url),match=parsed.pathname.match(/^\/3\/(movie|tv)\/([1-9][0-9]*)(\/watch\/providers)?$/);
+    if(match&&match[3])return (await sharedReader.readDetail(match[1],Number(match[2]))).data;
+    const append=parsed.searchParams.get('append_to_response');
+    if(match&&append?.split(',').includes('watch/providers')){
+      const keep=append.split(',').filter(x=>x!=='watch/providers');
+      if(keep.length)parsed.searchParams.set('append_to_response',keep.join(','));else parsed.searchParams.delete('append_to_response');
+      url=parsed.toString();removedProviderIdentity={type:match[1],id:Number(match[2])};
+    }
+  }
 
   const response =
     await fetch(
@@ -5028,6 +5047,7 @@ async function fetchJson(url) {
   }
 
 
+  if(removedProviderIdentity){const r=await sharedReader.readDetail(removedProviderIdentity.type,removedProviderIdentity.id);data={...data,'watch/providers':r.data};}
   return data;
 
 }
@@ -12087,7 +12107,7 @@ async function getTvDetail(tvId, apiKey) {
     "?api_key=" +
     apiKey +
     "&language=ja-JP" +
-    (process.env.WORK_LEDGER_ENABLED==='1'
+    (process.env.WORK_LEDGER_ENABLED==='1'||require('./_shared-streaming-read').enabled()
       ? "&append_to_response=credits"
       : "&append_to_response=credits,watch/providers");
 
@@ -12645,6 +12665,7 @@ const googlePlay =
     // 配信情報
     // ===================================================
 
+    ...(sharedProviders?.meta?{streamingMeta:sharedProviders.meta}:{}),
     streaming:
       streaming,
 
