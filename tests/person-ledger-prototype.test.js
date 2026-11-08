@@ -69,3 +69,11 @@ test('unknown source fields are ignored, never saved',()=>{
  assert.equal(s.save().includes('unknownProfile'),false);
  assert.equal(s.save().includes('unused'),false);
 });
+
+test('large filmographies are never silently truncated at 500 credits',()=>{
+ const cast=Array.from({length:1201},(_,i)=>({id:i+1,media_type:'movie',title:'Film '+i,release_date:'2024-01-01'}));
+ const p=normalizePerson({id:1813,cast});
+ assert.equal(p.cast.length,1201);
+ assert.equal(p.cast[1200].id,1201);
+ assert.deepEqual(Object.keys(p.cast[1200]),['id','media_type','title','year','poster_path']);
+});
