@@ -1,6 +1,5 @@
 'use strict';
 // Offline-only person ledger prototype. No Redis, TMDB, or production imports.
-const MAX_CREDITS=500;
 const LISTS=['cast','voice','directed','documentary_talk','other'];
 const PROFILE_FIELDS=['id','name','biography','profile_path','original_name','known_for_department','birthday','deathday','place_of_birth',...LISTS];
 const WORK_FIELDS=['id','media_type','title','year','poster_path'];
@@ -44,7 +43,6 @@ function normalizePerson(input){
    const poster_path=safeText(credit.poster_path,200);
    const year=yearFrom(credit.year)||yearFrom(type==='movie'?credit.release_date:credit.first_air_date)||yearFrom(credit.release_date)||yearFrom(credit.first_air_date);
    out[list].push({id:workId,media_type:type,title,year,poster_path});
-   if(out[list].length>=MAX_CREDITS)break;
   }
  }
  return out;
