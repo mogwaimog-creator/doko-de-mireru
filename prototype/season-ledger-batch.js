@@ -20,7 +20,7 @@ function createSeasonBatch({loadStage,saveStage,clearStage,fetchSeason,commit,ma
     if(fetched>=maxPerRun)break;
     const detail=await fetchSeason(tvId,n);
     if(!detail||!Array.isArray(detail.episodes))throw Error('invalid season response');
-    completed[n]=detail;
+    completed[n]={episodes:detail.episodes.map(e=>({episode_number:e.episode_number,name:e.name,air_date:e.air_date??null,runtime:e.runtime??null}))};
     fetched++;
     // Checkpoint each completed season so a later fetch failure does not lose progress.
     await saveStage(tvId,{tvId,revision,completed});
