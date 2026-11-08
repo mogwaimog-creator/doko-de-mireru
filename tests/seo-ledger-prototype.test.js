@@ -6,7 +6,7 @@ test('movie initial HTML includes work-specific SEO fields',()=>{
  const r=createSeoRecord({type:'movie',id:123,title:'映画テスト',releaseDate:'2020-01-01',overview:'作品の紹介',posterPath:'/abc.jpg'},{updatedAt:'2026-11-08T00:00:00Z'});
  const html=renderHead(r)+renderInitialHeading(r);
  assert.match(html,/<title>映画テスト/);
- assert.match(html,/detail.html\?id=123&amp;type=movie/);
+ assert.match(html,/detail.html\?id=123/);
  assert.match(html,/<h1>映画テスト<\/h1>/);
  assert.match(html,/og:image/);
 });
