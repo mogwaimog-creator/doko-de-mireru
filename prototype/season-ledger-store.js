@@ -17,6 +17,13 @@ function createSeasonStore({read,write,fetchShow,fetchSeason,now=()=>new Date(),
    const cadence=ledger.refreshDays(show.status,Boolean(show.hasPlannedContinuation));
    const previousByNumber=new Map((old?.seasons||[]).map(s=>[s.seasonNumber,s]));
    const entries=ledger.normalizeSeasons(show.seasons);
+   // Avoid API calls for a batch that cannot be committed atomically.
+   const due=entries.filter(entry=>{
+    const previous=previousByNumber.get(entry.seasonNumber);
+    const completed=previous?.episodes!==null&&previous?.episodes?.length===previous?.episodeCount;
+    return !previous||previous.episodes===null||ledger.isDue(previous.episodesCheckedAt||old?.checkedAt||'1970-01-01',today,completed?90:7);
+   });
+   if(due.length>maxFetches)return {record:old||null,source:'batch-limit',required:due.length,limit:maxFetches};
    let fetched=0,partial=false;
    for(const entry of entries){
     const previous=previousByNumber.get(entry.seasonNumber);
