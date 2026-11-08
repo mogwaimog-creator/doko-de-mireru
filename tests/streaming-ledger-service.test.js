@@ -37,3 +37,37 @@ test('failed refresh preserves previously saved data',async()=>{
  assert.equal((await s.visit('movie',6,'2026-11-07T01:00:00Z',[])).reason,'failed');
  assert.equal((await db.read('movie:6')).lastSuccessAt,a.record.lastSuccessAt);
 });
+
+test('cron isolates a Redis read failure and processes remaining series works',async()=>{
+ const db=mock(),read=db.read;let calls=0;
+ db.read=async key=>{if(key==='movie:1')throw Error('temporary Redis outage');return read(key)};
+ const works=[1,2,3].map(id=>({type:'movie',id,memberships:[{kind:'watchOrder'}]}));
+ const s=service(db,async()=>{calls++;return payload},{maxConcurrency:2});
+ const results=await s.cron('2026-11-06T21:00:00Z',works);
+ assert.equal(results.length,3);
+ assert.equal(results[0].reason,'infrastructure-error');
+ assert.equal(results[1].updated,true);
+ assert.equal(results[2].updated,true);
+ assert.equal(calls,2);
+ assert.ok(await db.read('movie:2'));
+ assert.ok(await db.read('movie:3'));
+});
+test('release failure cannot mask successful saved streaming data',async()=>{
+ const db=mock(),release=db.release;
+ db.release=async()=>{throw Error('unlock unavailable')};
+ const s=service(db,async()=>payload);
+ const result=await s.visit('movie',8,'2026-11-06T00:00:00Z',[]);
+ assert.equal(result.updated,true);
+ assert.equal((await db.read('movie:8')).lastSuccessAt,result.record.lastSuccessAt);
+ db.release=release;
+});
+test('release failure cannot mask original fetch error or replace old data',async()=>{
+ const db=mock();let fail=false;
+ const s=service(db,async()=>{if(fail)throw Error('TMDB unavailable');return payload});
+ const first=await s.visit('movie',9,'2026-11-06T00:00:00Z',[]);
+ db.release=async()=>{throw Error('unlock unavailable')};fail=true;
+ const second=await s.visit('movie',9,'2026-11-07T01:00:00Z',[]);
+ assert.equal(second.reason,'failed');
+ assert.match(second.error,/TMDB unavailable/);
+ assert.equal((await db.read('movie:9')).lastSuccessAt,first.record.lastSuccessAt);
+});
