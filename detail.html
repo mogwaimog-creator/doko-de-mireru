@@ -7795,12 +7795,22 @@ container.appendChild(
 );
 
 
-/* 配信情報はカード表示後に取得 */
-loadSeriesStreamingStatus(
-  streamingStatus,
-  movie.id,
-  isTv
-);
+/* 共通配信台帳から取得済みの見放題情報があれば追加API呼び出しを省略。
+   null/未指定は未取得として従来の取得経路を維持する。 */
+const sharedStreaming =
+  series && series.streamingByWork &&
+  Object.prototype.hasOwnProperty.call(
+    series.streamingByWork,
+    (isTv ? "tv:" : "movie:") + movie.id
+  )
+    ? series.streamingByWork[(isTv ? "tv:" : "movie:") + movie.id]
+    : null;
+
+if(Array.isArray(sharedStreaming)){
+  renderSeriesStreamingProviders(streamingStatus, sharedStreaming);
+}else{
+  loadSeriesStreamingStatus(streamingStatus, movie.id, isTv);
+}
 
     }
   );
@@ -7811,6 +7821,34 @@ loadSeriesStreamingStatus(
    関連シリーズ 配信状況取得
    ※ 見放題のみ表示
 ========================================================= */
+
+/* 共通台帳の取得済み見放題情報を従来カード形式で表示 */
+function renderSeriesStreamingProviders(element, values){
+  const streaming = normalizeProviders(values);
+  if(streaming.length === 0){
+    element.className = "series-streaming-status none";
+    element.textContent = "配信情報なし";
+    return;
+  }
+  const providers = streaming.filter(function(p){ return p && p.logo_path; }).slice(0,3);
+  element.className = "series-streaming-status streaming";
+  element.innerHTML = "";
+  const label = document.createElement("div");
+  label.className = "series-streaming-label";
+  label.textContent = "配信中";
+  element.appendChild(label);
+  const logos = document.createElement("div");
+  logos.className = "series-streaming-logos";
+  providers.forEach(function(p){
+    const img = document.createElement("img");
+    img.src = "https://image.tmdb.org/t/p/w92" + p.logo_path;
+    img.alt = p.provider_name || "配信サービス";
+    img.title = p.provider_name || "";
+    img.loading = "lazy";
+    logos.appendChild(img);
+  });
+  element.appendChild(logos);
+}
 
 async function loadSeriesStreamingStatus(
   element,
