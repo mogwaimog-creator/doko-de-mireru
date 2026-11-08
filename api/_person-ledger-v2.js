@@ -53,8 +53,23 @@ async function preparePerson({command,id,load,now=()=>Date.now(),allowWrites=fal
   existing=latest||existing;
   try{
    const fetched=await load();
+   // A malformed or incomplete upstream response must not erase saved credits.
+   if(!fetched||typeof fetched!=='object'||Array.isArray(fetched))throw Error('invalid person response');
+   const groups=['cast','voice','directed','documentary_talk','other'];
+   for(const group of groups){
+    if(!Array.isArray(fetched[group]))throw Error('missing or invalid person credits: '+group);
+   }
    const person=normalizePerson(fetched);
    if(person.id!==Number(id))throw Error('person id mismatch');
+   for(const group of groups){
+    const incoming=fetched[group];
+    if(incoming.length>0&&person[group].length===0)throw Error('invalid person credits: '+group);
+    if(existing?.person[group]?.length>0&&incoming.length===0){
+     const error=new Error('Person credits unexpectedly empty: '+group);
+     error.code='PERSON_CREDITS_SUSPICIOUS_EMPTY';
+     throw error;
+    }
+   }
    const stamp=now();
    if(existing&&stamp<Date.parse(existing.checkedAt))throw Error('person refresh clock moved backwards');
    const record=makeRecord(person,existing,stamp);
