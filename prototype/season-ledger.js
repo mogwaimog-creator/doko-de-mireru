@@ -1,6 +1,6 @@
 'use strict';
 // Offline-only season ledger foundation. Does not access TMDB, Redis, or live routes.
-const FIELDS=['tvId','seasons','createdAt','checkedAt','schemaVersion'];
+const FIELDS=['tvId','seasons','createdAt','checkedAt','schemaVersion','refreshDays'];
 const SEASON_FIELDS=['seasonNumber','name','episodeCount','airDate','posterPath','episodes','episodesCheckedAt'];
 const EPISODE_FIELDS=['episodeNumber','name','airDate','runtime'];
 const DAY=86400000;
@@ -44,6 +44,7 @@ function normalizeSeasons(input){
 function validate(record){
  exact(record,FIELDS);id(record.tvId);
  if(record.schemaVersion!==1)throw Error('invalid schema version');
+ if(record.refreshDays!==7&&record.refreshDays!==90)throw Error('invalid refresh cadence');
  if(!Array.isArray(record.seasons))throw Error('invalid seasons');
  const seen=new Set();
  for(const s of record.seasons){exact(s,SEASON_FIELDS);if(!Number.isSafeInteger(s.seasonNumber)||s.seasonNumber<0||seen.has(s.seasonNumber))throw Error('invalid season number');seen.add(s.seasonNumber);if(s.episodes!==null){if(!Array.isArray(s.episodes))throw Error('invalid episodes');const nums=new Set();for(const e of s.episodes){exact(e,EPISODE_FIELDS);if(!Number.isSafeInteger(e.episodeNumber)||e.episodeNumber<1||nums.has(e.episodeNumber))throw Error('invalid episode');nums.add(e.episodeNumber);}}if(s.episodesCheckedAt!==null&&!Number.isFinite(Date.parse(s.episodesCheckedAt)))throw Error('invalid episode timestamp');}
@@ -51,9 +52,9 @@ function validate(record){
  if(!Number.isFinite(created)||!Number.isFinite(checked)||created>checked)throw Error('invalid timestamps');
  return record;
 }
-function makeRecord(tvId,seasons,at,previous=null){
+function makeRecord(tvId,seasons,at,previous=null,days=7){
  const stamp=new Date(at).toISOString();
- const record={tvId:id(tvId),seasons:normalizeSeasons(seasons),createdAt:previous?.createdAt||stamp,checkedAt:stamp,schemaVersion:1};
+ const record={tvId:id(tvId),seasons:normalizeSeasons(seasons),createdAt:previous?.createdAt||stamp,checkedAt:stamp,schemaVersion:1,refreshDays:days};
  return validate(record);
 }
 function toDetailEpisodes(record,seasonNumber){
