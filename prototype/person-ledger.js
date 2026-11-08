@@ -2,6 +2,24 @@
 // Offline-only person ledger prototype. No Redis, TMDB, or production imports.
 const MAX_CREDITS=500;
 const LISTS=['cast','voice','directed','documentary_talk','other'];
+const PROFILE_FIELDS=['id','name','biography','profile_path','original_name','known_for_department','birthday','deathday','place_of_birth',...LISTS];
+const WORK_FIELDS=['id','media_type','title','year','poster_path'];
+const RECORD_FIELDS=['schemaVersion','person','createdAt','checkedAt'];
+function exactFields(value,allowed,context){
+ if(!value||typeof value!=='object'||Array.isArray(value))throw Error(context+': invalid object');
+ const actual=Object.keys(value),extra=actual.filter(k=>!allowed.includes(k)),missing=allowed.filter(k=>!Object.hasOwn(value,k));
+ if(extra.length||missing.length)throw Error(context+': unexpected or missing fields: '+[...extra,...missing].join(','));
+}
+function validateRecord(record){
+ exactFields(record,RECORD_FIELDS,'record');
+ if(record.schemaVersion!==2)throw Error('unsupported schema version');
+ exactFields(record.person,PROFILE_FIELDS,'person');
+ for(const list of LISTS){
+  if(!Array.isArray(record.person[list]))throw Error(list+': expected array');
+  for(const item of record.person[list])exactFields(item,WORK_FIELDS,list+' card');
+ }
+ return record;
+}
 function personId(id){const n=Number(id);if(!Number.isSafeInteger(n)||n<1)throw Error('invalid person ID');return n}
 function safeText(v,n){return typeof v==='string'?v.slice(0,n):null}
 function yearFrom(value){if(typeof value!=='string')return null;const m=/^(\d{4})(?:-|$)/.exec(value);return m?m[1]:null}
@@ -39,6 +57,7 @@ function store(){
   if(!Number.isFinite(time))throw Error('invalid date');
   const previous=records.get(person.id);
   const record={schemaVersion:2,person,createdAt:previous?.createdAt||new Date(time).toISOString(),checkedAt:new Date(time).toISOString()};
+  validateRecord(record);
   records.set(person.id,record);
   return record;
  }
@@ -49,7 +68,7 @@ function store(){
   return when-Date.parse(record.checkedAt)>=60*86400000;
  }
  function failure(id){return get(id)}
- function save(){return JSON.stringify({version:2,records:[...records.values()]})}
+ function save(){for(const record of records.values())validateRecord(record);return JSON.stringify({version:2,records:[...records.values()]})}
  function load(serialized){
   const data=JSON.parse(serialized);
   if(![1,2].includes(data.version)||!Array.isArray(data.records))throw Error('invalid snapshot');
@@ -61,10 +80,10 @@ function store(){
    if(next.has(p.id))throw Error('duplicate person');
    const created=Date.parse(item.createdAt||item.checkedAt);
    if(!Number.isFinite(created)||created>time)throw Error('invalid creation date');
-   next.set(p.id,{schemaVersion:2,person:p,createdAt:new Date(created).toISOString(),checkedAt:new Date(time).toISOString()});
+   next.set(p.id,validateRecord({schemaVersion:2,person:p,createdAt:new Date(created).toISOString(),checkedAt:new Date(time).toISOString()}));
   }
   records.clear();for(const [id,record] of next)records.set(id,record);
  }
  return {get,success,eligible,failure,save,load,count:()=>records.size};
 }
-module.exports={normalizePerson,store};
+module.exports={normalizePerson,store,validateRecord};
