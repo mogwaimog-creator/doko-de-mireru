@@ -8,6 +8,7 @@ async function measure(){
  const identities=[...report.records.map(r=>({type:r.type,id:r.id})),{type:'movie',id:862}];
  const groups={streaming:identities.map(w=>'doko:dev:shared-stream:v1:record:'+w.type+':'+w.id),legacyWatchCopies:report.records.map(w=>'doko:dev:legacy-watch:v3:'+w.type+':'+w.id),work:[...known.map(w=>keys.work(w.type,w.id)),keys.work('movie',862)],person:[keys.person(1813)],season:known.filter(w=>w.type==='tv').map(w=>keys.season(w.id)),seo:known.map(w=>keys.seo(w.type,w.id))};
  groups.contentMeta=[...groups.work,...groups.person,...groups.season,...groups.seo].map(k=>k+':meta');
+ groups.searchCatalog=[require('../api/_dev-ledger-search').CATALOG];
  const measured={};
  for(const [group,names] of Object.entries(groups)){
   const raws=await command(['MGET',...names]);let redisBytes=0,jsonBytes=0,count=0;

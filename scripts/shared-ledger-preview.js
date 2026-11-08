@@ -79,8 +79,8 @@ async function start(){
       const title=saved.get(args.type+':'+Number(args.id));if(!title)throw Error('unavailable offline work');
       result=await contentUpdates.work(args.type,args.id,async()=>({id:Number(args.id),title}),at,{force:args.force===true});
     }else if(args.kind==='person'&&Number(args.id)===1813)result=await contentUpdates.person(1813,async()=>person.person,at);
-    else if(args.kind==='season')result=await contentUpdates.seasons(args.id,async()=>({tvId:Number(args.id),seasons:[{seasonNumber:1,name:'隔離試験シーズン',episodeCount:1}]}),at);
-    else if(args.kind==='episode')result=await contentUpdates.episode(args.id,Number(args.number),async()=>({tvId:Number(args.id),seasonNumber:Number(args.number),episodes:[{episodeNumber:1,name:'隔離試験エピソード',runtime:24}]}),at);
+    else if(args.kind==='season')result=await contentUpdates.seasons(args.id,async()=>require('../api/_content-source-adapters').seasonSource(Number(args.id),{id:Number(args.id),seasons:[{season_number:1,name:'隔離試験シーズン',episode_count:1}]}),at);
+    else if(args.kind==='episode')result=await contentUpdates.episode(args.id,Number(args.number),async()=>require('../api/_content-source-adapters').episodeSource(Number(args.id),Number(args.number),{tvId:Number(args.id),seasonNumber:Number(args.number),data:{season_number:Number(args.number),episodes:[{episode_number:1,name:'隔離試験エピソード',runtime:24}]}}),at);
     else throw Error('unsupported offline fixture');
     res.setHeader('Content-Type','application/json');return res.end(JSON.stringify(result));
    }

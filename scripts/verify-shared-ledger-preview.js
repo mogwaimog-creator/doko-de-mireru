@@ -30,6 +30,16 @@ async function main(){
     results.push({test:width+' detail '+type,passed:true,initialSeo:true});
    }
   }
+  const searchBefore=await (await context.request.get('http://127.0.0.1:16381/__metrics')).json();
+  for(const type of ['movie','tv','all']){const r=await context.request.get('http://127.0.0.1:16381/api/search?query='+encodeURIComponent('鬼滅')+'&type='+type);assert.equal(r.status(),200);const body=await r.json();assert(body.results.length>0);assert.equal(body.scope,'saved-only');if(type==='tv')assert(body.results.every(w=>w.content_type!=='movie'))}
+  const ps=await (await context.request.get('http://127.0.0.1:16381/api/search?personSearch='+encodeURIComponent('隔離試験用人物'))).json();assert.equal(ps.results[0].id,1813);
+  const unknown=await (await context.request.get('http://127.0.0.1:16381/api/search?query=nonexistent-saved-work')).json();assert.equal(unknown.results.length,0);
+  const searchAfter=await (await context.request.get('http://127.0.0.1:16381/__metrics')).json();assert.equal(searchAfter.upstreamFixtureCalls,searchBefore.upstreamFixtureCalls);assert.equal(searchAfter.providerFixtureLoads,searchBefore.providerFixtureLoads);
+  results.push({test:'normal movie/TV/all and person saved search, no-hit, zero upstream calls',passed:true});
+  await page.setViewportSize({width:390,height:900});await page.goto('http://127.0.0.1:16381/index.html',{waitUntil:'networkidle'});
+  await page.locator('#personSearchInput').fill('隔離試験用人物');await page.locator('#personSearchButton').click();await page.waitForFunction(()=>document.querySelector('#personSearchResults')?.textContent.includes('隔離試験用人物'));
+  assert(await page.locator('#personSearchResults a[href*="person.html?id=1813"]').count());results.push({test:'mobile person search UI links to canonical saved person',passed:true});
+  await page.locator('#query').fill('鬼滅');await page.locator('#searchButton').click();await page.waitForFunction(()=>document.querySelector('#results')?.textContent.includes('鬼滅'));assert(await page.locator('#results a[href*="detail.html?id="]').count());results.push({test:'mobile normal work search UI links to canonical saved details',passed:true});
   // Explicit local refresh endpoint -> atomic saved work/SEO -> normal API and initial HTML.
   const refreshed=await context.request.post('http://127.0.0.1:16380/content-refresh',{data:{kind:'work',type:'movie',id:635302,force:true}});assert.equal(refreshed.status(),200);assert.equal((await refreshed.json()).status,'saved');
   const savedDetail=await context.request.get('http://127.0.0.1:16381/api/search?id=635302&type=movie');assert.equal(savedDetail.status(),200);assert((await savedDetail.json()).title.includes('無限列車編'));

@@ -62,3 +62,5 @@ node scripts/verify-shared-ledger-preview.js
 プレビューはfixtureである。実作品名・IDと架空の配信情報を使う。`api/_redis.js` はプロセス内で読み取り専用fixtureへ差し替え、TMDB呼び出しもfixture応答にする。本番にこのプレビューサーバーを公開しない。
 
 最新の継続実装・隔離検証は [SHARED_LEDGER_COMPLETION_REPORT.md](SHARED_LEDGER_COMPLETION_REPORT.md) を参照。production無効・旧データ保持・本番承認待ちの条件は継続。
+
+2026-11-09 継続: 検索・共有排他・圧縮日次記録の最新結果は [SHARED_LEDGER_OPERATION_REPORT_20261109.md](SHARED_LEDGER_OPERATION_REPORT_20261109.md) を参照。新規v2記録だけ14日TTL、既存記録は無変更、本番未承認。

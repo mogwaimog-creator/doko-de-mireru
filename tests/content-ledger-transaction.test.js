@@ -4,7 +4,8 @@ const {command}=require('./helpers/local-redis');
 const {contentStore,digest}=require('../api/_dev-content-store');
 const {coordinator}=require('../api/_content-ledger-coordinator');
 const at='2026-01-01T00:00:00Z',later='2026-04-02T00:00:00Z';
-function local(name,fn){test(name,{skip:!process.env.REDIS_TEST_CLI},async()=>{const id=800000000+process.pid*100+Math.floor(Math.random()*90);await fn(contentStore(command),id)})}
+let sequence=0;
+function local(name,fn){test(name,{skip:!process.env.REDIS_TEST_CLI},async()=>{const id=800000000+process.pid*100+(sequence+=10);await fn(contentStore(command),id)})}
 local('work and SEO publish one CAS generation; stale contender cannot publish either',async(store,id)=>{
  const c=coordinator(store);assert.equal((await c.work('movie',id,async()=>({id,title:'manual',cast:[]}),at)).status,'saved');
  const wk=store.keys.work('movie',id),sk=store.keys.seo('movie',id),snap=await store.read([wk,sk]);assert.equal(snap[sk].meta.sourceDigest,digest(snap[wk].data));

@@ -36,7 +36,7 @@ function coordinator(store,{failureCooldownMs=30*60000,guarded=false,leaseMs=300
    const entries=[entry(wk,old,next,{lastAttemptAt:at,lastError:null}),entry(sk,snapshots[sk],seo,{sourceDigest:digest(next),lastAttemptAt:at,lastError:null})];
    const result=await store.commit(entries);
    return {status:result.saved?'saved':'conflict',record:result.saved?next:old.data,reason:result.reason};
-  }catch(error){return failure(wk,old,error,at)}
+  }catch(error){if(error.code==='CONTENT_STORAGE_UNAVAILABLE')throw error;return failure(wk,old,error,at)}
  }
  async function confirmWork(type,id,at){
   const wk=keys.work(type,id),sk=keys.seo(type,id),snapshot=await store.read([wk,sk]);const old=snapshot[wk];if(!old.data)throw Error('work missing');
@@ -57,7 +57,7 @@ function coordinator(store,{failureCooldownMs=30*60000,guarded=false,leaseMs=300
    }
    const temp=person.store();if(old.data)temp.load(JSON.stringify({version:2,records:[old.data]}));const next=temp.success(raw,at);
    const result=await store.commit([entry(key,old,next,{lastAttemptAt:at,lastError:null})]);return {status:result.saved?'saved':'conflict',record:result.saved?next:old.data};
-  }catch(error){return failure(key,old,error,at)}
+  }catch(error){if(error.code==='CONTENT_STORAGE_UNAVAILABLE')throw error;return failure(key,old,error,at)}
  }
  async function refreshSeasons(id,load,at,{status='unknown'}={}){
   const key=keys.season(id),old=(await store.read([key]))[key],days=season.refreshDays(status);
@@ -67,9 +67,10 @@ function coordinator(store,{failureCooldownMs=30*60000,guarded=false,leaseMs=300
   try{
    const raw=await load();if(raw?.tvId!==Number(id)||!Array.isArray(raw.seasons))throw Error('season source identity mismatch');
    if(old.data?.seasons.length&&!raw.seasons.length)throw Error('unexpected empty season manifest');
+   if(old.data?.seasons.some(prior=>!raw.seasons.some(s=>(s.seasonNumber??s.season_number)===prior.seasonNumber)))throw Error('unexpected removed season');
    const merged=raw.seasons.map(s=>{const prior=old.data?.seasons.find(x=>x.seasonNumber===(s.seasonNumber??s.season_number));return s.episodes==null&&prior?{...s,episodes:prior.episodes,episodesCheckedAt:prior.episodesCheckedAt}:s});
    const next=season.makeRecord(id,merged,at,old.data,days),result=await store.commit([entry(key,old,next,{lastAttemptAt:at,lastError:null})]);return {status:result.saved?'saved':'conflict',record:result.saved?next:old.data};
-  }catch(error){return failure(key,old,error,at)}
+  }catch(error){if(error.code==='CONTENT_STORAGE_UNAVAILABLE')throw error;return failure(key,old,error,at)}
  }
  async function refreshEpisode(id,number,load,at){
   const key=keys.season(id),old=(await store.read([key]))[key];if(!old.data)throw Error('season manifest required');
@@ -80,10 +81,11 @@ function coordinator(store,{failureCooldownMs=30*60000,guarded=false,leaseMs=300
   try{
    const raw=await load();if(raw?.tvId!==Number(id)||raw.seasonNumber!==number||!Array.isArray(raw.episodes))throw Error('episode source identity mismatch');
    if(previous.episodes?.length&&!raw.episodes.length)throw Error('unexpected empty episodes');
+   if(previous.episodes?.some(prior=>!raw.episodes.some(e=>(e.episodeNumber??e.episode_number)===prior.episodeNumber)))throw Error('unexpected removed episode');
    const updated={...previous,...raw,episodeCount:raw.episodeCount??raw.episodes.length,episodesCheckedAt:at};
    const next=season.makeRecord(id,old.data.seasons.map(s=>s.seasonNumber===number?updated:s),at,old.data,old.data.refreshDays);next.checkedAt=old.data.checkedAt;
    const result=await store.commit([entry(key,old,next,{lastAttemptAt:at,lastError:null})]);return {status:result.saved?'saved':'conflict',record:result.saved?next:old.data};
-  }catch(error){return failure(key,old,error,at)}
+  }catch(error){if(error.code==='CONTENT_STORAGE_UNAVAILABLE')throw error;return failure(key,old,error,at)}
  }
  const methods={work,confirmWork,person:refreshPerson,seasons:refreshSeasons,episode:refreshEpisode};
  if(guarded||!store.claimLease)return methods;
@@ -91,7 +93,7 @@ function coordinator(store,{failureCooldownMs=30*60000,guarded=false,leaseMs=300
  return Object.fromEntries(Object.keys(methods).map(name=>[name,async(...args)=>{
   const key=name==='work'||name==='confirmWork'?keys.work(args[0],args[1]):name==='person'?keys.person(args[0]):keys.season(args[0]);
   const token=require('node:crypto').randomUUID(),lease={key,token};
-  if(!await store.claimLease(key,token,leaseMs))return {status:'in-flight',record:(await store.read([key]))[key].data};
+  if(!await store.claimLease(key,token,leaseMs)){const control=await store.readControl?.();return {status:control?'paused':'in-flight',reason:control?'storage-safety-stop':'lease-busy',record:(await store.read([key]))[key].data};}
   try{
    const scoped={...store,commit:(entries,options)=>store.commit(entries,{...options,lease}),noteFailure:(k,v,meta)=>store.noteFailure(k,v,meta,lease)};
    const loadIndex=name==='work'||name==='episode'?2:1;
@@ -99,7 +101,7 @@ function coordinator(store,{failureCooldownMs=30*60000,guarded=false,leaseMs=300
     const original=args[loadIndex];args[loadIndex]=async()=>{const ac=new AbortController();let timer;try{return await Promise.race([Promise.resolve().then(()=>original(ac.signal)),new Promise((_,reject)=>{timer=setTimeout(()=>{ac.abort();reject(Error('content upstream timeout'))},timeoutMs)})])}finally{clearTimeout(timer)}};
    }
    return await coordinator(scoped,{failureCooldownMs,guarded:true})[name](...args);
-  }finally{try{await store.releaseLease(key,token)}catch{/* TTL releases only our abandoned lease. */}}
+  }catch(error){if(error.code!=='CONTENT_STORAGE_UNAVAILABLE')throw error;try{await store.tripCircuit(error)}catch{/* Storage remains unavailable; next worker cannot safely claim/read. */}return {status:'storage-error',record:null,error:'Content storage unavailable; updates stopped'};}finally{try{await store.releaseLease(key,token)}catch{/* TTL releases only our abandoned lease. */}}
  }]));
 }
 module.exports={coordinator};

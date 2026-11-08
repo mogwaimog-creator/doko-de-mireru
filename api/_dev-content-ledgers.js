@@ -25,7 +25,8 @@ async function readWork(type,id,{command=devCommand}={}){
  }
 
  if(type==='tv'){
-  const seasons=decode(raw[1]);if(!seasons||seasons.tvId!==Number(id))throw unavailable();
+  let seasons=decode(raw[1]);
+  if(process.env.DEV_CONTENT_REFRESH_ENABLED==='1'&&(!seasons||Date.now()-Date.parse(seasons.checkedAt)>=seasons.refreshDays*86400000)){try{await require('./_dev-content-refresh').refresh({kind:'season',id:Number(id)});seasons=decode(await command(['GET',keys.season(id)]))}catch{/* Retain prior manifest. */}}if(!seasons||seasons.tvId!==Number(id))throw unavailable();
   const list=season.toDetailSeasons(seasons);
   result.seasons=list;result.number_of_seasons=list.length;
   result.number_of_episodes=list.every(s=>Number.isSafeInteger(s.episode_count))?list.reduce((n,s)=>n+s.episode_count,0):null;
@@ -34,14 +35,17 @@ async function readWork(type,id,{command=devCommand}={}){
 }
 async function readPerson(id,{command=devCommand}={}){
  if(!enabled())return null;
- const record=decode(await command(['GET',keys.person(id)]));
+ let record=decode(await command(['GET',keys.person(id)]));
+ if(process.env.DEV_CONTENT_REFRESH_ENABLED==='1'&&(!record||Date.now()-Date.parse(record.checkedAt)>=60*86400000)){try{await require('./_dev-content-refresh').refresh({kind:'person',id:Number(id)});record=decode(await command(['GET',keys.person(id)]))}catch{/* Preserve saved content on refresh outage. */}}
  require('../prototype/person-ledger').validateRecord(record);
  if(record.person.id!==Number(id))throw unavailable();return record.person;
 }
 async function readSeason(id,number,{command=devCommand}={}){
  if(!enabled())return null;
  if(!Number.isSafeInteger(number)||number<1)throw unavailable();
- const record=decode(await command(['GET',keys.season(id)]));
+ let record=decode(await command(['GET',keys.season(id)]));
+ const saved=record?.seasons?.find(s=>s.seasonNumber===number);
+ if(process.env.DEV_CONTENT_REFRESH_ENABLED==='1'&&(!saved||saved.episodes===null||!saved.episodesCheckedAt||Date.now()-Date.parse(saved.episodesCheckedAt)>=record.refreshDays*86400000)){try{await require('./_dev-content-refresh').refresh({kind:'episode',id:Number(id),number});record=decode(await command(['GET',keys.season(id)]))}catch{/* Retain prior success. */}}
  if(!record||record.tvId!==Number(id))throw unavailable();const response=season.toDetailEpisodes(record,number);
  if(!response)throw unavailable();return response;
 }

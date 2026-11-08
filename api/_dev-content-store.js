@@ -30,8 +30,9 @@ function validateEntry(k,data){
  else if(k.includes(':season:v1:')){require('../prototype/season-ledger').validate(data);if(data.tvId!==Number(k.split(':').at(-1)))throw Error('invalid season identity')}
  else if(k.includes(':seo:v1:')){require('../prototype/seo-ledger').validateSeoRecord(data);if(data.key!==k.split(':').slice(-2).join(':'))throw Error('invalid SEO identity')}
 }
-function contentStore(command){
- if(typeof command!=='function')throw Error('content command required');
+function contentStore(command,{controlKey='doko:dev:content-control:v1'}={}){
+ if(typeof command!=='function'||!/^doko:dev:[a-z0-9:-]+$/.test(controlKey))throw Error('local content command/control required');
+ const transport=command;command=async args=>{try{return await transport(args)}catch(cause){const error=Error('Content storage unavailable');error.code='CONTENT_STORAGE_UNAVAILABLE';error.cause=cause;throw error}};
  return {
   async read(names){if(!names.length)return {};names.forEach(validateKey);const values=await command(['MGET',...names.flatMap(k=>[k,k+':meta'])]);if(!Array.isArray(values)||values.length!==names.length*2)throw Error('invalid content batch');return Object.fromEntries(names.map((k,i)=>[k,{data:values[2*i]===null?null:JSON.parse(values[2*i]),meta:values[2*i+1]===null?{revision:0}:JSON.parse(values[2*i+1])}]))},
   async commit(entries,{mode='automatic',lease=null}={}){
@@ -42,7 +43,9 @@ function contentStore(command){
    const result=await command(['EVAL',COMMIT,String(entries.length*2+(lease?1:0)),...entries.flatMap(e=>[e.key,e.key+':meta']),...(lease?[lease.key+':lease']:[]),...args]);
    return {saved:Number(result[0])===1,reason:result[1]};
   },
-  async claimLease(key,token,ttlMs){validateKey(key);if(!token||!Number.isSafeInteger(ttlMs)||ttlMs<1)throw Error('invalid content lease');return await command(['SET',key+':lease',token,'NX','PX',String(ttlMs)])==='OK'},
+  async claimLease(key,token,ttlMs){validateKey(key);if(!token||!Number.isSafeInteger(ttlMs)||ttlMs<1)throw Error('invalid content lease');return Number(await command(['EVAL',"if redis.call('EXISTS',KEYS[1])==1 then return 0 end;if redis.call('SET',KEYS[2],ARGV[1],'NX','PX',ARGV[2]) then return 1 else return 0 end",'2',controlKey,key+':lease',token,String(ttlMs)]))===1},
+  async tripCircuit(error){await command(['SET',controlKey,JSON.stringify({status:'paused',reason:String(error.message||error).slice(0,300),at:new Date().toISOString()}),'NX'])},
+  async readControl(){const raw=await command(['GET',controlKey]);return raw===null?null:JSON.parse(raw)},
   async releaseLease(key,token){validateKey(key);return Number(await command(['EVAL',"if redis.call('GET',KEYS[1])==ARGV[1] then return redis.call('DEL',KEYS[1]) else return 0 end",'1',key+':lease',token]))===1},
   async noteFailure(key,revision,meta,lease){validateKey(key);const json=JSON.stringify({...meta,revision:revision+1});return Number(await command(['EVAL',"if redis.call('GET',KEYS[1])~=ARGV[1] or redis.call('PTTL',KEYS[1])<=0 then return 0 end;local raw=redis.call('GET',KEYS[2]);local v=0;if raw then v=cjson.decode(raw).revision end;if v~=tonumber(ARGV[2]) then return 0 end;redis.call('SET',KEYS[2],ARGV[3]);return 1",'2',key+':lease',key+':meta',lease?.token||'',String(revision),json]))===1},keys
  };

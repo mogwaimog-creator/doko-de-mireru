@@ -2,7 +2,8 @@
 const {test}=require('node:test'),assert=require('node:assert/strict');
 const {command}=require('./helpers/local-redis'),{contentStore}=require('../api/_dev-content-store'),{coordinator}=require('../api/_content-ledger-coordinator');
 const at='2026-11-09T00:00:00Z';
-function local(name,fn){test(name,{skip:!process.env.REDIS_TEST_CLI},async()=>{const id=600000000+process.pid*200+Math.floor(Math.random()*100);await fn(contentStore(command),id)})}
+let sequence=0;
+function local(name,fn){test(name,{skip:!process.env.REDIS_TEST_CLI},async()=>{const id=600000000+process.pid*200+(++sequence);await fn(contentStore(command),id)})}
 local('independent content workers share a lease; person, season and episode calls fetch once',async(store,id)=>{
  const a=coordinator(store),b=coordinator(contentStore(command));let loads=0;let entered,finish;const ready=new Promise(r=>entered=r),gate=new Promise(r=>finish=r);
  const load=async()=>{loads++;entered();await gate;return {id,name:'person',cast:[],voice:[],directed:[],documentary_talk:[],other:[]}};
@@ -31,4 +32,9 @@ test('saved search filters canonical records, normalizes names, paginates and ne
  assert.equal((await search('ｽﾀｰｳｫｰｽﾞ',{command})).results.length,20);const second=await search('スターウォーズ',{page:2,command});assert.equal(second.results.length,5);assert(!second.hasMore);assert.equal((await search('試験人物',{kind:'person',command})).results[0].id,1813);assert.equal((await search('missing',{command})).total,0);assert.equal(calls,8);
  process.env.NODE_ENV='production';assert.equal(await search('x',{command:()=>{throw Error('must not connect')}}),null);
  }finally{process.env=previous}
+});
+local('storage write failure latches a shared stop before another worker fetches',async(store,id)=>{
+ const controlKey=`doko:dev:content-control:test:${id}`;let loads=0;const broken=async args=>{if(args[0]==='EVAL'&&args[1].includes("redis.call('MSET'"))throw Error('simulated write outage');return command(args)};
+ const a=coordinator(contentStore(broken,{controlKey})),b=coordinator(contentStore(command,{controlKey}));const load=async()=>{loads++;return {id,name:'fixture',cast:[],voice:[],directed:[],documentary_talk:[],other:[]}};
+ assert.equal((await a.person(id,load,at)).status,'storage-error');assert.equal((await b.person(id,load,at)).status,'paused');assert.equal(loads,1);assert.equal((await contentStore(command,{controlKey}).readControl()).status,'paused');
 });
