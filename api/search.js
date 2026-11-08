@@ -388,12 +388,21 @@ if (
 
   // Disabled by default. Demo-only v2 switch; never touches v1 keys.
   // Enabling this flag requires a reviewed demo deployment.
-  const person = process.env.PERSON_LEDGER_V2_DEMO === '1'
+  const isPersonV2Demo = process.env.VERCEL_ENV === 'preview' &&
+    process.env.PERSON_LEDGER_V2_DEMO === '1';
+  // Explicitly reject a misconfigured production deployment rather than silently
+  // switching the live person route to the experimental ledger.
+  if (process.env.PERSON_LEDGER_V2_DEMO === '1' && !isPersonV2Demo) {
+    res.setHeader('Cache-Control', 'no-store');
+    return res.status(503).json({error:'人物台帳デモはプレビュー環境のみ利用できます。'});
+  }
+  const person = isPersonV2Demo
     ? (await preparePersonV2({
         command: personLedgerCommand,
         id: personId,
         load: () => getPersonDetail(personId, apiKey),
-        allowWrites: process.env.PERSON_LEDGER_V2_DEMO_WRITES === '1'
+        // No demo writes until the isolated Redis and backup checks are complete.
+        allowWrites: false
       })).person
     : await withPersonLedger(
         personId,
