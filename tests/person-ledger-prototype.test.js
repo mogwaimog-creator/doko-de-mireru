@@ -49,3 +49,23 @@ test('old version 1 snapshots can be loaded without extra work-card fields',()=>
  assert.equal(restored.get(1813).createdAt,'2026-11-01T00:00:00.000Z');
  assert.deepEqual(Object.keys(restored.get(1813).person.cast[0]),['id','media_type','title','year','poster_path']);
 });
+
+test('strict stored schema rejects unknown fields at every level',()=>{
+ const {validateRecord}=require('../prototype/person-ledger');
+ const s=store();s.success(person,'2026-11-01T00:00:00Z');
+ const record=JSON.parse(JSON.stringify(s.get(1813)));
+ validateRecord(record);
+ record.person.cast[0].unused='must not persist';
+ assert.throws(()=>validateRecord(record),/unexpected or missing fields/);
+ delete record.person.cast[0].unused;
+ record.person.unknownProfile='no';
+ assert.throws(()=>validateRecord(record),/unexpected or missing fields/);
+ delete record.person.unknownProfile;
+ record.unknownRecord='no';
+ assert.throws(()=>validateRecord(record),/unexpected or missing fields/);
+});
+test('unknown source fields are ignored, never saved',()=>{
+ const s=store();s.success({...person,unknownProfile:{x:1},cast:[{...person.cast[0],unused:'no'}]},'2026-11-01T00:00:00Z');
+ assert.equal(s.save().includes('unknownProfile'),false);
+ assert.equal(s.save().includes('unused'),false);
+});
