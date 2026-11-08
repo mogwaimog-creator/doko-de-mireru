@@ -21,6 +21,9 @@ function renderDetailHtml(template,record){
  validateSeoRecord(record);
  if(typeof template!=='string'||!template.includes('</head>'))throw Error('invalid detail template');
  let html=template;
+ // Marks server-rendered SEO so legacy client JS leaves initial metadata intact.
+ if(!/<html\b/i.test(html))throw Error('missing html element');
+ html=html.replace(/<html\b/i,'<html data-seo-ledger="1"');
  if(!/<title>[\s\S]*?<\/title>/i.test(html))throw Error('missing title');
  html=html.replace(/<title>[\s\S]*?<\/title>/i,'<title>'+esc(record.title)+'</title>');
  for(const [attribute,value,content] of [
