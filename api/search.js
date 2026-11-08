@@ -1,6 +1,8 @@
 const {getDetailProviders}=require('./_detail-providers-cache');
 const {metadataWithLedger}=require('./_detail-metadata-cache');
 const {withPersonLedger}=require('./_person-ledger');
+const {preparePerson: preparePersonV2}=require('./_person-ledger-v2');
+const {command: personLedgerCommand}=require('./_redis');
 // =========================================================
 // doko-de-mireru
 // api/search.js
@@ -384,11 +386,19 @@ if (
   personId
 ) {
 
-  const person =
-    await withPersonLedger(
-      personId,
-      () => getPersonDetail(personId, apiKey)
-    );
+  // Disabled by default. Demo-only v2 switch; never touches v1 keys.
+  // Enabling this flag requires a reviewed demo deployment.
+  const person = process.env.PERSON_LEDGER_V2_DEMO === '1'
+    ? (await preparePersonV2({
+        command: personLedgerCommand,
+        id: personId,
+        load: () => getPersonDetail(personId, apiKey),
+        allowWrites: process.env.PERSON_LEDGER_V2_DEMO_WRITES === '1'
+      })).person
+    : await withPersonLedger(
+        personId,
+        () => getPersonDetail(personId, apiKey)
+      );
 
   return res
     .status(200)
