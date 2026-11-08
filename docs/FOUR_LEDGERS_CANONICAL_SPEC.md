@@ -274,3 +274,14 @@
 - 新試作の `prototype/streaming-ledger-compat.js` は `toDetail` で `{data:{results:{JP:{flatrate,rent,buy}}},checkedAt}`、`toWatch` で `{flatrate,checkedAt}` を返す。`tests/streaming-ledger-display-compat.test.js` を4ケース追加し、V8互換ハーネスで **4件成功・失敗0**。映画・TVのID分離、初回失敗と正常な空配信の区別も確認。
 - **未統合**：既存の `api/search.js`、12本の見る順番ページ、旧 `doko:watch:v3:` Redisキーの読み取り・切替処理は未変更。表示が完全に一致するかのE2E、実Nodeテスト、ページごとのロゴ表示とUI文言、旧キー移行は未検証。特に初回失敗の `null` をUIで『配信なし』扱いしない表示側対応が必要。
 - 本番サイト・本番Redis・Cron・デプロイへの変更なし。
+
+## 全サイトの配信情報取得元・移行対象の棚卸し（2026-11-08）
+- 開発ブランチの主要ページ/APIとGitHubコード検索を**読み取り専用**で照合。これまでの「作品詳細・12シリーズ・比較表・検索結果」だけでは不十分。下記も接続・回帰テスト対象。
+- `api/search.js`: 作品詳細（映画・TV）は `getDetailProviders` またはTMDBから `results.JP` を読み、`flatrate/rent/buy` を正規化。検索・サービス別結果も `streaming` 配列を表示する経路がある。既存の `/api/search` JSON契約を変える場合は全呼び出し元の確認が必要。
+- `api/series-watch.js`: 12シリーズ別の対象IDを保持し、`doko:watch:v3:` キーを `MGET`。返却は `{providers:{'movie:ID':{flatrate,checkedAt,stale}},failures,complete}`。更新は `api/update-streaming.js` のCronで実施。**新台帳からの読み替え時もこのJSON契約と既存の失敗・stale判定を維持する必要がある**。
+- `streaming.html`: 埋込スナップショットを初期表示し、表示行の作品を `/api/search?id=...&type=...` で最大6並列取得。新台帳への統合後も比較表の行集計・未取得表現・初期スナップショットを壊さないこと。配信情報だけの軽量一括読み取り導線は**提案段階**であり未実装。
+- `index.html`（検索結果）、`detail.html`、サービス紹介 `netflix.html`/`prime.html`/`unext.html`/`hulu.html`/`disney.html`、`movie_shelf_1980_1984.html`、`kimetsu.html`、`gundam.html`、`shelf-check.html` も `/api/search` を参照。名作棚はポスター取得など配信以外の用途もあり、API廃止は不可。
+- `mcu.html` と `godzilla.html` は `/api/series-watch` を参照。その他のシリーズページも同APIの参照状況を全件チェックすること。`ghibli.html` は今回の文字列確認範囲では配信取得API呼び出しを検出せず、静的な案内文を含め別途目視点検。
+- **重要な互換条件**：①共通キーは `movie/tv + TMDB ID`、②日本のみ、③取得失敗と正常な空配信を区別、④見放題とレンタル/購入を用途別に出し分け、⑤旧保存済みデータを移行前に消さない、⑥比較表・サービス別一覧・名作棚の既存機能を維持、⑦配信情報の一括取得とページ別の表示契約を維持。
+- この棚卸しは主要コードと検索結果によるもので、**全ファイル・全実行経路の網羅性を保証しない**。今後の開発ではAPI参照箇所の網羅的検索、画面回帰テスト、旧キー移行設計を必須とする。
+- 本番コード・本番Redis・Cron・デプロイは変更していない。
