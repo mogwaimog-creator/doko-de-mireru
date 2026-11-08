@@ -17,7 +17,7 @@ test('successful refresh persists confirmed empty and 24h eligibility',async()=>
  const io=setup({lastSuccessAt:null,lastAttemptAt:null,japan:{flatrate:[],rent:[],buy:[]},errors:[]});
  const out=await refreshFlow({...io,type:'movie',id:42,at,token:'unique-token-worker-01'});
  assert.equal(out.status,'success');assert.equal(io.calls(),1);
- assert.equal(io.get().lastSuccessAt,at);
+ assert.equal(io.get().lastSuccessAt,'2026-11-09T00:00:00.000Z');
  assert.equal(io.get().nextEligibleAt,'2026-11-10T00:00:00.000Z');
 });
 test('failed fetch preserves last success and providers',async()=>{
