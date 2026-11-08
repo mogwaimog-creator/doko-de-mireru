@@ -37,7 +37,8 @@ function store(){
  function success(input,at){
   const person=normalizePerson(input),time=Date.parse(at);
   if(!Number.isFinite(time))throw Error('invalid date');
-  const record={person,checkedAt:new Date(time).toISOString()};
+  const previous=records.get(person.id);
+  const record={schemaVersion:2,person,createdAt:previous?.createdAt||new Date(time).toISOString(),checkedAt:new Date(time).toISOString()};
   records.set(person.id,record);
   return record;
  }
@@ -48,17 +49,19 @@ function store(){
   return when-Date.parse(record.checkedAt)>=60*86400000;
  }
  function failure(id){return get(id)}
- function save(){return JSON.stringify({version:1,records:[...records.values()]})}
+ function save(){return JSON.stringify({version:2,records:[...records.values()]})}
  function load(serialized){
   const data=JSON.parse(serialized);
-  if(data.version!==1||!Array.isArray(data.records))throw Error('invalid snapshot');
+  if(![1,2].includes(data.version)||!Array.isArray(data.records))throw Error('invalid snapshot');
   const next=new Map();
   for(const item of data.records){
    const p=normalizePerson(item.person);
    const time=Date.parse(item.checkedAt);
    if(!Number.isFinite(time))throw Error('invalid date');
    if(next.has(p.id))throw Error('duplicate person');
-   next.set(p.id,{person:p,checkedAt:new Date(time).toISOString()});
+   const created=Date.parse(item.createdAt||item.checkedAt);
+   if(!Number.isFinite(created)||created>time)throw Error('invalid creation date');
+   next.set(p.id,{schemaVersion:2,person:p,createdAt:new Date(created).toISOString(),checkedAt:new Date(time).toISOString()});
   }
   records.clear();for(const [id,record] of next)records.set(id,record);
  }
