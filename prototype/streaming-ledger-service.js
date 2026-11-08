@@ -75,7 +75,12 @@ function service(redis,fetchTmdb,{writesEnabled=()=>true,ttlMs=30000,timeoutMs=6
     const i=cursor++;
     if(Date.now()>=deadline){results[i]={updated:false,reason:'deferred-budget'};continue}
     const [type,id]=keys[i].split(':');
-    results[i]=await update(type,Number(id),now,'cron',works);
+    // A Redis read/lock/release failure must not abort the remaining batch.
+    try{
+     results[i]=await update(type,Number(id),now,'cron',works);
+    }catch(e){
+     results[i]={updated:false,reason:'infrastructure-error',key:keys[i],error:String(e?.message||e).slice(0,200)};
+    }
    }
   }
   await Promise.all(Array.from({length:Math.min(maxConcurrency,keys.length)},worker));
