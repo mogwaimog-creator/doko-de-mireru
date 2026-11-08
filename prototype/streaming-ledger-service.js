@@ -39,7 +39,31 @@ function service(redis,fetchTmdb,{writesEnabled=()=>true,ttlMs=30000,timeoutMs=6
    if(!writesEnabled())return {updated:false,reason:'writes-disabled',record:existing};
    if(!await redis.saveIfOwner(k,token,record))return {updated:false,reason:'lease-expired',record:existing};
    return {updated:true,reason:plan.reason,record};
-  }catch(e){return {updated:false,reason:'failed',error:String(e?.message||e),record:existing}}
+  }catch(e){
+   const message=String(e?.message||e).slice(0,500);
+   // Persist a bounded failure summary under the SAME lease, without touching cached JP data.
+   // Failure recording must never turn a fetch failure into an empty streaming result.
+   let record=existing,recorded=false;
+   if(writesEnabled()){
+    try{
+     const draft=store();draft.register(type,id);
+     if(existing)draft.load(JSON.stringify({version:1,records:[existing]}));
+     draft.failure(type,id,message,now);
+     const r=draft.get(type,id);
+     // Count repeated failures in one entry; retain only recent resolved history.
+     const open=r.errors.filter(x=>x.status==='open');
+     if(open.length>1){
+      const latest=open[open.length-1];
+      r.errors=r.errors.filter(x=>x.status!=='open'||x===latest);
+     }
+     r.errors=r.errors.filter(x=>x.status==='open').concat(r.errors.filter(x=>x.status==='resolved').slice(-5));
+     if(trigger==='cron')r.lastSeriesRunDay=jstDay(now);
+     const candidate=JSON.parse(draft.save()).records[0];
+     if(writesEnabled()&&await redis.saveIfOwner(k,token,candidate)){record=candidate;recorded=true}
+    }catch(recordError){/* Preserve the original upstream error. */}
+   }
+   return {updated:false,reason:'failed',error:message,record,errorRecorded:recorded};
+  }
   finally{await redis.release(k,token)}
  }
  async function cron(now,works){
