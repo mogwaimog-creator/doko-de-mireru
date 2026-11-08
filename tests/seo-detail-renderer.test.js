@@ -11,7 +11,7 @@ const template=`<!doctype html><html lang="ja"><head>
 <meta property="og:title" content="作品情報">
 <meta property="og:description" content="共通説明">
 <meta property="og:url" content="">
-<meta property="og:image" content="">
+<meta property="og:image" content="">\n<meta name="twitter:title" content="共通タイトル">\n<meta name="twitter:description" content="共通説明">\n<meta name="twitter:image" content="">
 </head><body><h1 id="title"></h1></body></html>`;
 test('server response has unique SEO and visible H1 before JS runs',()=>{
  const record=createSeoRecord({type:'movie',id:321,title:'映画A',overview:'あらすじ',posterPath:'/abc.jpg'});
