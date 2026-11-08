@@ -8,7 +8,7 @@ function yearFrom(value){if(typeof value!=='string')return null;const m=/^(\d{4}
 function normalizePerson(input){
  if(!input||typeof input!=='object'||Array.isArray(input))throw Error('invalid person');
  const id=personId(input.id);
- const out={id,name:safeText(input.name,200),biography:safeText(input.biography,4000),profile_path:safeText(input.profile_path,200),birthday:safeText(input.birthday,30),deathday:safeText(input.deathday,30),place_of_birth:safeText(input.place_of_birth,200)};
+ const out={id,name:safeText(input.name,200),biography:safeText(input.biography,4000),profile_path:safeText(input.profile_path,200),original_name:safeText(input.original_name,200),known_for_department:safeText(input.known_for_department,100),birthday:safeText(input.birthday,30),deathday:safeText(input.deathday,30),place_of_birth:safeText(input.place_of_birth,200)};
  for(const list of LISTS){
   const seen=new Set();
   out[list]=[];
