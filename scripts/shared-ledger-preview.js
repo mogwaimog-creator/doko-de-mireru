@@ -41,7 +41,7 @@ async function start(){
  const s=service(native,async()=>{providerFixtureLoads++;return fixture});
  for(const w of Object.values(catalog).flat()){await s.visit(w.type,w.id,now,[]);await command(['SET','doko:dev:legacy-watch:v3:'+w.type+':'+w.id,JSON.stringify({flatrate:fixture.results.JP.flatrate,checkedAt:now}),'NX']);}
  const content=require('../api/_dev-content-ledgers');
- const daily=require('../api/_streaming-daily-job').dailyJob(native,require('../api/_dev-daily-job-store').dailyJobStore(command),async()=>{providerFixtureLoads++;return fixture});
+ const daily=require('../api/_streaming-daily-job').dailyJob(native,require('../api/_compact-daily-job-store').compactDailyJobStore(command),async()=>{providerFixtureLoads++;return fixture});
  const contentUpdates=require('../api/_content-ledger-coordinator').coordinator(require('../api/_dev-content-store').contentStore(command));
  const {normalizeWorkV2}=require('../api/_work-ledger-v2-schema');
  for(const row of rows){
@@ -63,11 +63,13 @@ async function start(){
  const person=personStore.success({id:1813,name:'隔離試験用人物',cast:[{id:635302,media_type:'movie',title:saved.get('movie:635302')}],voice:[],directed:[],documentary_talk:[],other:[]},now);
  await command(['SET',content.keys.person(1813),JSON.stringify(person),'NX']);
 
+ await command(['SET',require('../api/_dev-ledger-search').CATALOG,JSON.stringify({schemaVersion:1,works:rows.map(w=>({type:w.type,id:w.id})),people:[1813]}),'NX']);
+
  http.createServer(async(req,res)=>{
   try{let body='';for await(const chunk of req)body+=chunk;if(body.length>1000000)throw Error('large body');const args=JSON.parse(body);
    if(req.url==='/refresh'){
     if(process.env.DEV_STREAMING_REFRESH_ENABLED!=='1')throw Error('development refresh disabled');
-    let result;if(args.trigger==='cron')result=await daily.run(args.at,works,{maxItems:args.maxItems??1000});else if(args.trigger==='visit')result=await s.visit(args.type,args.id,args.at,works);else throw Error('invalid trigger');
+    let result;if(args.trigger==='cron')result=await daily.run(args.at,works,{maxItems:args.maxItems??1000});else if(args.trigger==='auto')result=await require('../api/_daily-job-supervisor').supervisor(daily).run(args.at,works,{maxItems:args.maxItems??24});else if(args.trigger==='visit')result=await s.visit(args.type,args.id,args.at,works);else throw Error('invalid trigger');
     res.setHeader('Content-Type','application/json');return res.end(JSON.stringify(result));
    }
    if(req.url==='/content-refresh'){
@@ -83,7 +85,7 @@ async function start(){
     res.setHeader('Content-Type','application/json');return res.end(JSON.stringify(result));
    }
    // This bridge serves reads only. Seed/update operations stay in this process.
-   if(!Array.isArray(args)||!['GET','MGET'].includes(args[0])||!args.slice(1).every(k=>/^doko:dev:(?:shared-stream:v1:record:(?:movie|tv):[1-9][0-9]*|legacy-watch:v3:(?:movie|tv):[1-9][0-9]*|legacy-detail:v1:(?:movie|tv):[1-9][0-9]*|work:v2:(?:movie|tv):[1-9][0-9]*|legacy-work:v1:(?:movie|tv):[1-9][0-9]*|season:v1:tv:[1-9][0-9]*|person:v2:[1-9][0-9]*|seo:v1:(?:movie|tv):[1-9][0-9]*)(?::meta)?$/.test(k)))throw Error('read-only namespace');
+   if(!Array.isArray(args)||!['GET','MGET'].includes(args[0])||!args.slice(1).every(k=>/^doko:dev:(?:search:v1:catalog|shared-stream:v1:record:(?:movie|tv):[1-9][0-9]*|legacy-watch:v3:(?:movie|tv):[1-9][0-9]*|legacy-detail:v1:(?:movie|tv):[1-9][0-9]*|work:v2:(?:movie|tv):[1-9][0-9]*|legacy-work:v1:(?:movie|tv):[1-9][0-9]*|season:v1:tv:[1-9][0-9]*|person:v2:[1-9][0-9]*|seo:v1:(?:movie|tv):[1-9][0-9]*)(?::meta)?$/.test(k)))throw Error('read-only namespace');
    res.setHeader('Content-Type','application/json');res.end(JSON.stringify({result:await command(args)}));
   }catch{res.statusCode=400;res.end(JSON.stringify({error:'isolated bridge rejected request'}))}
  }).listen(16380,'127.0.0.1');

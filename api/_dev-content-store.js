@@ -2,9 +2,10 @@
 // Local-only content CAS. One MSET publishes work/season/SEO together after all checks.
 const {createHash}=require('node:crypto');
 const {keys}=require('./_dev-content-ledgers');
-const COMMIT=`local n=#KEYS/2;local mode=ARGV[1];local values={}
+const COMMIT=`local extra=0;if ARGV[2]~='' then extra=1;if redis.call('GET',KEYS[#KEYS])~=ARGV[2] or redis.call('PTTL',KEYS[#KEYS])<=0 then return {0,'lease-lost'} end end
+local n=(#KEYS-extra)/2;local mode=ARGV[1];local values={}
 for i=1,n do
- local p=2+3*(i-1);local raw=redis.call('GET',KEYS[2*i-1]);local meta=redis.call('GET',KEYS[2*i]);local revision=0
+ local p=3+3*(i-1);local raw=redis.call('GET',KEYS[2*i-1]);local meta=redis.call('GET',KEYS[2*i]);local revision=0
  if meta then revision=cjson.decode(meta).revision end
  if revision~=tonumber(ARGV[p]) then return {0,'version-conflict'} end
  local next=cjson.decode(ARGV[p+1]);local nextmeta=cjson.decode(ARGV[p+2]);if nextmeta.revision~=revision+1 then return {0,'invalid-version'} end
@@ -33,14 +34,17 @@ function contentStore(command){
  if(typeof command!=='function')throw Error('content command required');
  return {
   async read(names){if(!names.length)return {};names.forEach(validateKey);const values=await command(['MGET',...names.flatMap(k=>[k,k+':meta'])]);if(!Array.isArray(values)||values.length!==names.length*2)throw Error('invalid content batch');return Object.fromEntries(names.map((k,i)=>[k,{data:values[2*i]===null?null:JSON.parse(values[2*i]),meta:values[2*i+1]===null?{revision:0}:JSON.parse(values[2*i+1])}]))},
-  async commit(entries,{mode='automatic'}={}){
+  async commit(entries,{mode='automatic',lease=null}={}){
    if(!['automatic','reviewed'].includes(mode)||!Array.isArray(entries)||!entries.length||entries.length>12||new Set(entries.map(e=>e.key)).size!==entries.length)throw Error('invalid content transaction');
-   let bytes=0;const args=[mode];
+   let bytes=0;const args=[mode,lease?.token||''];if(lease){validateKey(lease.key);if(!entries.some(e=>e.key===lease.key))throw Error('lease key outside transaction');}
    for(const e of entries){validateEntry(e.key,e.data);if(!Number.isSafeInteger(e.revision)||e.revision<0)throw Error('invalid expected revision');const json=JSON.stringify(e.data),meta=JSON.stringify({...e.meta,revision:e.revision+1});bytes+=Buffer.byteLength(json)+Buffer.byteLength(meta);args.push(String(e.revision),json,meta)}
    if(bytes>1024*1024)throw Error('content bundle too large; preserved old records');
-   const result=await command(['EVAL',COMMIT,String(entries.length*2),...entries.flatMap(e=>[e.key,e.key+':meta']),...args]);
+   const result=await command(['EVAL',COMMIT,String(entries.length*2+(lease?1:0)),...entries.flatMap(e=>[e.key,e.key+':meta']),...(lease?[lease.key+':lease']:[]),...args]);
    return {saved:Number(result[0])===1,reason:result[1]};
-  },keys
+  },
+  async claimLease(key,token,ttlMs){validateKey(key);if(!token||!Number.isSafeInteger(ttlMs)||ttlMs<1)throw Error('invalid content lease');return await command(['SET',key+':lease',token,'NX','PX',String(ttlMs)])==='OK'},
+  async releaseLease(key,token){validateKey(key);return Number(await command(['EVAL',"if redis.call('GET',KEYS[1])==ARGV[1] then return redis.call('DEL',KEYS[1]) else return 0 end",'1',key+':lease',token]))===1},
+  async noteFailure(key,revision,meta,lease){validateKey(key);const json=JSON.stringify({...meta,revision:revision+1});return Number(await command(['EVAL',"if redis.call('GET',KEYS[1])~=ARGV[1] or redis.call('PTTL',KEYS[1])<=0 then return 0 end;local raw=redis.call('GET',KEYS[2]);local v=0;if raw then v=cjson.decode(raw).revision end;if v~=tonumber(ARGV[2]) then return 0 end;redis.call('SET',KEYS[2],ARGV[3]);return 1",'2',key+':lease',key+':meta',lease?.token||'',String(revision),json]))===1},keys
  };
 }
 module.exports={contentStore,digest,COMMIT};

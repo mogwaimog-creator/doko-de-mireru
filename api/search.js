@@ -364,6 +364,8 @@ if (
   personSearch
 ) {
 
+  if(process.env.DEV_CONTENT_LEDGER_ENABLED==='1'){const dev=require('./_dev-content-ledgers');if(dev.enabled())return res.status(200).json(await require('./_dev-ledger-search').search(personSearch,{kind:'person'}));}
+
   const people =
     await searchPeople(
       personSearch,
@@ -1114,6 +1116,8 @@ if (provider === "disney") {
           "映画名を入力してください。"
       });
     }
+
+if(process.env.DEV_CONTENT_LEDGER_ENABLED==='1'){const dev=require('./_dev-content-ledgers');if(dev.enabled())return res.status(200).json(await require('./_dev-ledger-search').search(query,{type,page}));}
 
 // =====================================================
 // ドラマ・アニメ検索

@@ -2,12 +2,12 @@
 const {createHash,randomUUID}=require('node:crypto');
 const {membershipSet,jstDay}=require('../prototype/streaming-ledger-schedule');
 const {service}=require('../prototype/streaming-ledger-service');
-function dailyJob(records,jobs,fetchProviders,{chunkSize=12,maxConcurrency=3,budgetMs=200000,leaseMs=300000,maxDispatchesPerWork=2,clock=Date.now,onCheckpoint=async()=>{},...serviceOptions}={}){
+function dailyJob(records,jobs,fetchProviders,{chunkSize=12,maxConcurrency=3,budgetMs=200000,leaseMs=300000,maxDispatchesPerWork=2,maxJobInvocations=48,clock=Date.now,onCheckpoint=async()=>{},...serviceOptions}={}){
  if(!records?.readMany||!jobs?.claim||!jobs?.checkpoint||!jobs?.release||typeof fetchProviders!=='function')throw Error('daily job dependencies required');
- if(!Number.isSafeInteger(chunkSize)||chunkSize<1||chunkSize>48||!Number.isSafeInteger(maxConcurrency)||maxConcurrency<1||maxConcurrency>6||!Number.isSafeInteger(maxDispatchesPerWork)||maxDispatchesPerWork<1||maxDispatchesPerWork>5||!Number.isFinite(budgetMs)||budgetMs<1||!Number.isSafeInteger(leaseMs)||leaseMs<1)throw Error('invalid job limits');
+ if(!Number.isSafeInteger(maxJobInvocations)||maxJobInvocations<1||maxJobInvocations>100||!Number.isSafeInteger(chunkSize)||chunkSize<1||chunkSize>48||!Number.isSafeInteger(maxConcurrency)||maxConcurrency<1||maxConcurrency>6||!Number.isSafeInteger(maxDispatchesPerWork)||maxDispatchesPerWork<1||maxDispatchesPerWork>5||!Number.isFinite(budgetMs)||budgetMs<1||!Number.isSafeInteger(leaseMs)||leaseMs<1)throw Error('invalid job limits');
  const engine=service(records,fetchProviders,{maxConcurrency,...serviceOptions});
  function terminal(record,day){if(record?.lastSeriesRunDay!==day)return null;return record.errors?.some(e=>e.status==='open')?'failed':'success'}
- function summary(job,reason){const values=Object.values(job.completed),done=values.length;return {status:job.status,reason,day:job.day,total:job.keys.length,attempted:done,succeeded:values.filter(v=>v==='success').length,failed:values.filter(v=>v==='failed').length,pending:job.keys.length-done,dispatches:Object.values(job.dispatches).reduce((n,v)=>n+v,0),revision:job.revision}}
+ function summary(job,reason){const values=Object.values(job.completed),done=values.length;return {status:job.status,reason,day:job.day,total:job.keys.length,attempted:done,succeeded:values.filter(v=>v==='success').length,failed:values.filter(v=>v==='failed').length,pending:job.keys.length-done,dispatches:Object.values(job.dispatches).reduce((n,v)=>n+v,0),revision:job.revision,invocations:job.invocations}}
  async function run(at,works,{maxItems=1000,signal}={}){
   const time=Date.parse(at);if(!Number.isFinite(time)||!Number.isSafeInteger(maxItems)||maxItems<0)throw Error('invalid job request');
   const day=jstDay(at),keys=[...membershipSet(works)].sort();
@@ -28,6 +28,7 @@ function dailyJob(records,jobs,fetchProviders,{chunkSize=12,maxConcurrency=3,bud
    if(job.manifestHash!==manifestHash||job.day!==day||JSON.stringify(job.keys)!==JSON.stringify(keys))throw Error('daily roster changed; existing manifest preserved');
    if(Object.entries(job.completed).some(([k,v])=>!keys.includes(k)||!['success','failed'].includes(v))||Object.entries(job.dispatches).some(([k,v])=>!keys.includes(k)||!Number.isSafeInteger(v)||v<1))throw Error('invalid daily progress; preserved for review');
    if(job.status==='complete'||job.status==='complete-with-errors'){await jobs.release(day,token);released=true;return summary(job,'already-finished')}
+   if(job.invocations>=maxJobInvocations){await jobs.release(day,token);released=true;return summary({...job,status:'paused'},'invocation-budget')}
    job={...job,completed:{...job.completed},dispatches:{...job.dispatches},invocations:job.invocations+1};
    // Native per-work markers reconcile commits made before a crash/checkpoint failure.
    const snapshot=await records.readMany(keys.filter(k=>!job.completed[k]));

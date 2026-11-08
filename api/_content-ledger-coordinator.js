@@ -4,12 +4,12 @@ const {createSeoRecord}=require('../prototype/seo-ledger');
 const person=require('../prototype/person-ledger'),season=require('../prototype/season-ledger');
 const {digest}=require('./_dev-content-store');
 const DAY=86400000;
-function coordinator(store,{failureCooldownMs=30*60000}={}){
+function coordinator(store,{failureCooldownMs=30*60000,guarded=false,leaseMs=30000,timeoutMs=6500}={}){
  const {keys}=store;
  const stale=(at,now,days)=>!Number.isFinite(Date.parse(at))||Date.parse(at)>Date.parse(now)+60000||Date.parse(now)-Date.parse(at)>=days*DAY;
  const entry=(key,snapshot,data,meta={})=>({key,revision:snapshot?.meta.revision||0,data,meta:{...snapshot?.meta,...meta}});
  async function failure(key,old,error,at){
-  if(!old?.data)return {status:'failed',record:null,error:String(error.message||error).slice(0,500)};
+  if(!old?.data){if(store.noteFailure)await store.noteFailure(key,old?.meta.revision||0,{...old?.meta,lastAttemptAt:at,lastError:String(error.message||error).slice(0,500)});return {status:'failed',record:null,error:String(error.message||error).slice(0,500)}};
   const result=await store.commit([entry(key,old,old.data,{lastAttemptAt:at,lastError:String(error.message||error).slice(0,500)})]);
   return {status:result.saved?'stale-error':'conflict',record:old.data,error:String(error.message||error).slice(0,500)};
  }
@@ -85,6 +85,21 @@ function coordinator(store,{failureCooldownMs=30*60000}={}){
    const result=await store.commit([entry(key,old,next,{lastAttemptAt:at,lastError:null})]);return {status:result.saved?'saved':'conflict',record:result.saved?next:old.data};
   }catch(error){return failure(key,old,error,at)}
  }
- return {work,confirmWork,person:refreshPerson,seasons:refreshSeasons,episode:refreshEpisode};
+ const methods={work,confirmWork,person:refreshPerson,seasons:refreshSeasons,episode:refreshEpisode};
+ if(guarded||!store.claimLease)return methods;
+ if(!Number.isSafeInteger(leaseMs)||!Number.isFinite(timeoutMs)||timeoutMs<1||leaseMs<=timeoutMs)throw Error('invalid content limits');
+ return Object.fromEntries(Object.keys(methods).map(name=>[name,async(...args)=>{
+  const key=name==='work'||name==='confirmWork'?keys.work(args[0],args[1]):name==='person'?keys.person(args[0]):keys.season(args[0]);
+  const token=require('node:crypto').randomUUID(),lease={key,token};
+  if(!await store.claimLease(key,token,leaseMs))return {status:'in-flight',record:(await store.read([key]))[key].data};
+  try{
+   const scoped={...store,commit:(entries,options)=>store.commit(entries,{...options,lease}),noteFailure:(k,v,meta)=>store.noteFailure(k,v,meta,lease)};
+   const loadIndex=name==='work'||name==='episode'?2:1;
+   if(name!=='confirmWork'){
+    const original=args[loadIndex];args[loadIndex]=async()=>{const ac=new AbortController();let timer;try{return await Promise.race([Promise.resolve().then(()=>original(ac.signal)),new Promise((_,reject)=>{timer=setTimeout(()=>{ac.abort();reject(Error('content upstream timeout'))},timeoutMs)})])}finally{clearTimeout(timer)}};
+   }
+   return await coordinator(scoped,{failureCooldownMs,guarded:true})[name](...args);
+  }finally{try{await store.releaseLease(key,token)}catch{/* TTL releases only our abandoned lease. */}}
+ }]));
 }
 module.exports={coordinator};
