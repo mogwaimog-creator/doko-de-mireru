@@ -20,7 +20,7 @@ function decide(record,{at,watchOrder=false,scheduled=false}={}){
  // Only throttle when the latest attempt failed after the last success.
  // Do not let a failed refresh overwrite lastSuccessAt or nextEligibleAt.
  const attempted=record.lastAttemptAt?Date.parse(record.lastAttemptAt):NaN;
- if(Number.isFinite(attempted)&&attempted<=now&&(!Number.isFinite(last)||attempted>last)&&now-attempted<RETRY_MS)
+ if(Number.isFinite(attempted)&&attempted<=now&&(!Number.isFinite(last)||attempted>last||(attempted===last&&(Array.isArray(record.errors)&&record.errors.some(e=>e.status==='open'))))&&now-attempted<RETRY_MS)
   return {due:false,reason:'retry-cooldown',retryAt:new Date(attempted+RETRY_MS).toISOString()};
  return {due:true,reason:Number.isFinite(last)?'24h-after-success':'never-succeeded'};
 }

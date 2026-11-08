@@ -26,11 +26,21 @@ module.exports=async(req,res)=>{
   const works=req.query.series==='kimetsu'?kimetsuWorks:req.query.series==='godzilla'?godzillaWorks:req.query.series==='mcu'?mcuWorks:req.query.series==='jurassic'?jurassicWorks:req.query.series==='harrypotter'?harrypotterWorks:req.query.series==='lordoftherings'?lordoftheringsWorks:req.query.series==='starwars'?starwarsWorks:req.query.series==='wildspeed'?wildspeedWorks:req.query.series==='minions'?minionsWorks:req.query.series==='odoru'?odoruWorks:req.query.series==='eva'?evaWorks:req.query.series==='gundam'?gundamWorks:conanWorks;
   try{
     const keys=works.map(w=>`${w.type}:${w.id}`);
-    const values=await command(['MGET',...keys.map(k=>KEYPREFIX+k)]);
+    const sharedReader=require('./_shared-streaming-read');
+    let shared={};
+    if(sharedReader.enabled()){try{shared=await sharedReader.readMany(works)}catch{}}
+    const fallbackKeys=keys.filter(k=>!shared[k]);
+    let values=[];
+    if(fallbackKeys.length){
+      try{values=await command(['MGET',...fallbackKeys.map(k=>KEYPREFIX+k)])}
+      catch(e){if(!Object.keys(shared).length)throw e;}
+    }
+    const legacy=Object.fromEntries(fallbackKeys.map((k,i)=>[k,values?.[i]]));
     const providers={},failures=[];
     for(let i=0;i<keys.length;i++){
-      if(values?.[i]){
-        try{const record=JSON.parse(values[i]);if(Array.isArray(record.flatrate)){const checked=Date.parse(record.checkedAt);
+      if(shared[keys[i]]){providers[keys[i]]=shared[keys[i]].watch;continue;}
+      if(legacy[keys[i]]){
+        try{const record=JSON.parse(legacy[keys[i]]);if(Array.isArray(record.flatrate)){const checked=Date.parse(record.checkedAt);
           const stale=!Number.isFinite(checked)||Date.now()-checked>MAX_AGE_MS||checked>Date.now()+60000;
           providers[keys[i]]={flatrate:record.flatrate,checkedAt:record.checkedAt,stale};continue;}}catch{}
       }

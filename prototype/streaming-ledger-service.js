@@ -19,7 +19,7 @@ function service(redis,fetchTmdb,{writesEnabled=()=>true,ttlMs=30000,timeoutMs=6
   if(!await redis.acquire(k,token,ttlMs))return {updated:false,reason:'in-flight',record:existing};
   try{
    // Re-read AFTER locking; a different worker may have finished in between.
-   existing=await redis.read(k);
+   try{existing=await redis.read(k)}catch(e){return {updated:false,reason:'storage-read-failed',error:String(e?.message||e).slice(0,200),record:existing}}
    plan=decision({...existing,type,id,now,trigger,seriesKeys,lastSuccessAt:existing?.lastSuccessAt||null,lastSeriesRunDay:existing?.lastSeriesRunDay||null});
    if(!plan.fetch)return {updated:false,reason:plan.reason,record:existing};
    if(!writesEnabled())return {updated:false,reason:'writes-disabled',record:existing};
@@ -37,7 +37,9 @@ function service(redis,fetchTmdb,{writesEnabled=()=>true,ttlMs=30000,timeoutMs=6
    if(trigger==='cron')draft.get(type,id).lastSeriesRunDay=jstDay(now);
    const record=JSON.parse(draft.save()).records[0];
    if(!writesEnabled())return {updated:false,reason:'writes-disabled',record:existing};
-   if(!await redis.saveIfOwner(k,token,record))return {updated:false,reason:'lease-expired',record:existing};
+   let saved;
+   try{saved=await redis.saveIfOwner(k,token,record,existing?.revision||0)}catch(e){return {updated:false,reason:'save-failed',error:String(e?.message||e).slice(0,200),record:existing}}
+   if(!saved)return {updated:false,reason:'lease-expired',record:existing};
    return {updated:true,reason:plan.reason,record};
   }catch(e){
    const message=String(e?.message||e).slice(0,500);
@@ -59,7 +61,7 @@ function service(redis,fetchTmdb,{writesEnabled=()=>true,ttlMs=30000,timeoutMs=6
      r.errors=r.errors.filter(x=>x.status==='open').concat(r.errors.filter(x=>x.status==='resolved').slice(-5));
      if(trigger==='cron')r.lastSeriesRunDay=jstDay(now);
      const candidate=JSON.parse(draft.save()).records[0];
-     if(writesEnabled()&&await redis.saveIfOwner(k,token,candidate)){record=candidate;recorded=true}
+     if(writesEnabled()&&await redis.saveIfOwner(k,token,candidate,existing?.revision||0)){record=candidate;recorded=true}
     }catch(recordError){/* Preserve the original upstream error. */}
    }
    return {updated:false,reason:'failed',error:message,record,errorRecorded:recorded};

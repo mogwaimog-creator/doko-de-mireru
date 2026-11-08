@@ -1,5 +1,6 @@
 'use strict';
 // Standalone Japanese streaming ledger. No production imports or network calls.
+const {decide}=require('./streaming-update-schedule');
 const VALID=new Set(['movie','tv']);
 const KINDS=['flatrate','rent','buy'];
 function key(type,id){const n=Number(id);if(!VALID.has(type)||!Number.isSafeInteger(n)||n<1)throw Error('invalid identity');return type+':'+n}
@@ -18,7 +19,7 @@ function store(io){
  const records=new Map();
  function get(type,id){return records.get(key(type,id))||null}
  function register(type,id){const k=key(type,id);if(records.has(k))return false;records.set(k,{type,id:Number(id),japan:{flatrate:[],rent:[],buy:[]},lastSuccessAt:null,nextEligibleAt:null,lastAttemptAt:null,lastSeriesRunDay:null,errors:[]});return true}
- function eligible(type,id,at,isSeries){const r=get(type,id);if(!r)throw Error('not found');if(isSeries)return true;return !r.lastSuccessAt||Date.parse(at)>=Date.parse(r.nextEligibleAt)}
+ function eligible(type,id,at,isSeries,scheduled=false){const r=get(type,id);if(!r)throw Error('not found');return decide(r,{at,watchOrder:!!isSeries,scheduled}).due}
  function success(type,id,source,at){const r=get(type,id);if(!r)throw Error('not found');const when=iso(at);const jp=source?.JP??source?.jp;if(!jp||typeof jp!=='object'||Array.isArray(jp))throw Error('missing Japan data');const normalized=providers(jp);r.japan=normalized;r.lastSuccessAt=when;r.lastAttemptAt=when;r.nextEligibleAt=new Date(Date.parse(when)+86400000).toISOString();return true}
  function failure(type,id,message,at){const r=get(type,id);if(!r)throw Error('not found');const msg=String(message??'').trim().slice(0,500);if(!msg)throw Error('empty error');r.lastAttemptAt=iso(at);const previous=r.errors.find(e=>e.status==='open'&&e.message===msg);if(previous){previous.lastAt=r.lastAttemptAt;previous.count=(Number.isSafeInteger(previous.count)&&previous.count>0?previous.count:1)+1}else r.errors.push({message:msg,status:'open',at:r.lastAttemptAt,lastAt:r.lastAttemptAt,count:1});return false}
  function resolve(type,id){const r=get(type,id);if(!r)throw Error('not found');for(const e of r.errors)if(e.status==='open')e.status='resolved'}

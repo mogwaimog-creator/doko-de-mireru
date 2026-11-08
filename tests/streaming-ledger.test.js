@@ -6,7 +6,7 @@ test('single Japanese provider record reused for detail and watch order',()=>{
  s.success('movie',1,{JP:{flatrate:[{providerId:8,name:'Netflix',logoPath:'/n.png'},{providerId:8,name:'duplicate'}],rent:[{providerId:2,name:'Rental'}],buy:[{providerId:3,name:'Purchase'}]},US:{flatrate:[{providerId:999,name:'US'}]}},'2026-11-07T00:00:00Z');
  assert.deepEqual(s.watchOrder('movie',1).map(x=>x.providerId),[8]);assert.equal(s.detail('movie',1).japan.rent[0].providerId,2);assert.equal(s.save().includes('US'),false);
  assert.equal(s.eligible('movie',1,'2026-11-07T12:00:00Z',false),false);assert.equal(s.eligible('movie',1,'2026-11-08T00:00:00Z',false),true);
- assert.equal(s.eligible('movie',1,'2026-11-07T12:00:00Z',true),true);
+ assert.equal(s.eligible('movie',1,'2026-11-07T12:00:00Z',true),false);
 });
 test('failed update keeps last successful data and timestamp; reload reuses same record',()=>{
  const s=store();s.register('tv',7);s.success('tv',7,{JP:{flatrate:[{providerId:8,name:'A'}]}},'2026-11-07T00:00:00Z');

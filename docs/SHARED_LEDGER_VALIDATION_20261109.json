@@ -1,0 +1,339 @@
+{
+  "dateJST": "2026-11-09",
+  "branch": "work/four-ledgers-20261107",
+  "sourceCommit": "786ac18",
+  "mainReadOnlyReference": "332843235960714d38abcc1c0590ed1f834ed6ca",
+  "baseline": {
+    "tests": 298,
+    "pass": 265,
+    "fail": 33,
+    "skipped": 0
+  },
+  "final": {
+    "tests": 315,
+    "pass": 285,
+    "fail": 30,
+    "skipped": 0
+  },
+  "newFailures": [],
+  "fixedFailures": [
+    "metadata, review fields, errors and extensible page fields remain separate",
+    "two simultaneous work-detail requests fetch TMDB once",
+    "unknown future fields and page-specific notes do not collide"
+  ],
+  "remainingFailures": [
+    "two simultaneous first requests fetch providers once",
+    "Redis lock outage does not trigger TMDB provider fetch",
+    "Redis write outage never reports uncached data as safely cached",
+    "corrupt saved provider payload is not served as a valid cache hit",
+    "related-series rendering currently launches one streaming request per rendered card",
+    "first access saves v2 record, subsequent access reuses without upstream call",
+    "60 day refresh keeps initial creation timestamp",
+    "failed refresh preserves existing record and its checkedAt",
+    "oversized refresh retains prior record and timestamp",
+    "incomplete upstream credits do not erase previously saved filmography",
+    "unexpected empty filmography cannot overwrite populated credits",
+    "first request stores person and second request reuses it without loading upstream",
+    "stale data refreshes after sixty days",
+    "invalid upstream identity is rejected and lock released",
+    "tests/season-detail-contract.test.js",
+    "tests/season-ledger-redis-mock.test.js",
+    "tests/season-ledger-response.test.js",
+    "tests/season-legacy-compatibility.test.js",
+    "tests/season-realistic-tmdb-fixture.test.js",
+    "tests/season-search-switch-behavior.test.js",
+    "server response has unique SEO and visible H1 before JS runs",
+    "person ledger saves compact credits, retains profile, reuses cache",
+    "detail provider cache saves JP only, reuses cache",
+    "two simultaneous requests share one first TMDB metadata fetch",
+    "cached work avoids further metadata fetches",
+    "waiter times out with retryable busy error without duplicate TMDB fetch",
+    "movie and tv with same TMDB number have independent locks",
+    "Redis lock outage fails closed without fetching TMDB",
+    "Redis read failure after acquiring metadata lock returns storage error without TMDB fetch",
+    "removal plan does not mutate source"
+  ],
+  "capacity": {
+    "scope": "local Redis 7.2.6 MEMORY USAGE; fictional one-provider JP fixture; static repository metadata only",
+    "realHistoricalSample": {
+      "records": 152,
+      "rejected": 51,
+      "legacyBytes": 67088,
+      "newBytes": 111040
+    },
+    "productionCurrent": "unmeasured: no credentials or billing/usage information",
+    "measured": {
+      "legacyWatch": {
+        "keys": 271,
+        "redisBytes": 75832,
+        "jsonBytes": 44444,
+        "MB": 0.075832
+      },
+      "legacyDetail": {
+        "keys": 266,
+        "redisBytes": 91664,
+        "jsonBytes": 60116,
+        "MB": 0.091664
+      },
+      "newStream": {
+        "keys": 266,
+        "redisBytes": 125984,
+        "jsonBytes": 91675,
+        "MB": 0.125984
+      },
+      "work": {
+        "keys": 266,
+        "redisBytes": 104288,
+        "jsonBytes": 74735,
+        "MB": 0.104288
+      },
+      "seo": {
+        "keys": 223,
+        "redisBytes": 150200,
+        "jsonBytes": 125347,
+        "MB": 0.1502
+      }
+    },
+    "backupBytes": 155728,
+    "backupJsonBytes": 152397,
+    "incrementBytes": 380472,
+    "model": {
+      "current": {
+        "bytes": 167496,
+        "MB": 0.167496,
+        "changePercent": 0
+      },
+      "peak": {
+        "bytes": 703696,
+        "MB": 0.703696,
+        "changePercent": 320.12704781009694
+      },
+      "afterWithOldDataRetained": {
+        "bytes": 547968,
+        "MB": 0.547968,
+        "changePercent": 227.15288723312796
+      },
+      "targetOnlyAfterSeparateDeletionApproval": {
+        "bytes": 380472,
+        "MB": 0.380472,
+        "changePercent": 127.15288723312797
+      }
+    },
+    "assumptions": {
+      "watchWorks": 271,
+      "detailWorks": 266,
+      "newStreamWorks": 266,
+      "metadataWorks": 266,
+      "metadataTitlesKnown": 223,
+      "seoWorks": 223,
+      "personSeasonBytes": "not measured; snapshots unavailable",
+      "backup": "one backup key in isolated Redis containing modeled old provider keys; no production backup",
+      "excluded": "Redis process overhead, TLS/network overhead, fragmentation, actual full fixed metadata, people, seasons, future growth; add measured sizes before production"
+    },
+    "productionFormula": {
+      "current": "P (unknown)",
+      "peak": "P + new ledgers delta + backup B + active locks + allocator headroom",
+      "afterRetainingOld": "P + new ledgers delta",
+      "changePercent": "(delta / P) * 100; cannot calculate until P and coverage are measured"
+    }
+  },
+  "browser": {
+    "results": [
+      {
+        "test": "series API godzilla",
+        "passed": true,
+        "works": 47
+      },
+      {
+        "test": "series API mcu",
+        "passed": true,
+        "works": 54
+      },
+      {
+        "test": "series API jurassic",
+        "passed": true,
+        "works": 7
+      },
+      {
+        "test": "series API harrypotter",
+        "passed": true,
+        "works": 11
+      },
+      {
+        "test": "series API lordoftherings",
+        "passed": true,
+        "works": 8
+      },
+      {
+        "test": "series API starwars",
+        "passed": true,
+        "works": 28
+      },
+      {
+        "test": "series API wildspeed",
+        "passed": true,
+        "works": 11
+      },
+      {
+        "test": "series API minions",
+        "passed": true,
+        "works": 7
+      },
+      {
+        "test": "series API odoru",
+        "passed": true,
+        "works": 16
+      },
+      {
+        "test": "series API eva",
+        "passed": true,
+        "works": 6
+      },
+      {
+        "test": "series API conan",
+        "passed": true,
+        "works": 30
+      },
+      {
+        "test": "series API gundam",
+        "passed": true,
+        "works": 38
+      },
+      {
+        "test": "series API kimetsu",
+        "passed": true,
+        "works": 3
+      },
+      {
+        "test": "1280 kimetsu.html",
+        "passed": true,
+        "seriesReads": 1,
+        "horizontalOverflow": false
+      },
+      {
+        "test": "1280 streaming.html",
+        "passed": true,
+        "seriesReads": 1,
+        "horizontalOverflow": false
+      },
+      {
+        "test": "1280 detail movie",
+        "passed": true,
+        "initialSeo": true
+      },
+      {
+        "test": "1280 detail tv",
+        "passed": true,
+        "initialSeo": true
+      },
+      {
+        "test": "390 kimetsu.html",
+        "passed": true,
+        "seriesReads": 1,
+        "horizontalOverflow": false
+      },
+      {
+        "test": "390 streaming.html",
+        "passed": true,
+        "seriesReads": 1,
+        "horizontalOverflow": false
+      },
+      {
+        "test": "390 detail movie",
+        "passed": true,
+        "initialSeo": true
+      },
+      {
+        "test": "390 detail tv",
+        "passed": true,
+        "initialSeo": true
+      }
+    ],
+    "errors": [],
+    "externalRequestsBlocked": 24,
+    "liveExternalRequests": 0
+  },
+  "inventory": {
+    "seriesCounts": {
+      "godzilla": 47,
+      "mcu": 54,
+      "jurassic": 7,
+      "harrypotter": 11,
+      "lordoftherings": 8,
+      "starwars": 28,
+      "wildspeed": 11,
+      "minions": 7,
+      "odoru": 16,
+      "eva": 6,
+      "conan": 30,
+      "gundam": 38,
+      "kimetsu": 3
+    },
+    "appearances": 266,
+    "uniqueWorks": 266,
+    "duplicateAppearances": 0,
+    "oldUpdateWorks": 271,
+    "missingFromOldUpdate": [],
+    "extraInOldUpdate": [
+      "tv:93741",
+      "tv:237512",
+      "movie:335797",
+      "movie:862",
+      "movie:808"
+    ],
+    "historicalProviderSnapshots": 203,
+    "historicalSnapshotDate": "2026-10-05",
+    "titlesFound": 223,
+    "missingTitles": [
+      "tv:117678",
+      "movie:36243",
+      "movie:15767",
+      "movie:19742",
+      "tv:202879",
+      "tv:21731",
+      "tv:45500",
+      "tv:196400",
+      "tv:64375",
+      "tv:43887",
+      "movie:37048",
+      "tv:21732",
+      "tv:13674",
+      "tv:5660",
+      "movie:16157",
+      "tv:88865",
+      "tv:46512",
+      "movie:883768",
+      "movie:553610",
+      "movie:685274",
+      "movie:910850",
+      "movie:16308",
+      "tv:72677",
+      "tv:25797",
+      "tv:20111",
+      "movie:1146972",
+      "tv:30093",
+      "tv:21730",
+      "tv:25504",
+      "tv:37546",
+      "tv:45835",
+      "tv:61414",
+      "tv:60667",
+      "tv:76821",
+      "tv:91566",
+      "tv:122468",
+      "movie:22914",
+      "movie:39228",
+      "movie:39229",
+      "movie:39230",
+      "movie:19256",
+      "movie:19257",
+      "movie:30606"
+    ],
+    "metadataBytes": 75002,
+    "seoBytes": 125571,
+    "source": "repository static page text; no live TMDB metadata/provider snapshot"
+  },
+  "productionChanged": false,
+  "pushed": false,
+  "productionReady": false
+}

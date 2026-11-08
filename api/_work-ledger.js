@@ -65,6 +65,8 @@ function normalizeWork(type, id, source) {
     },
     errors: Array.isArray(source.errors) ? source.errors : [],
     // Supplemental fields per page; not limited to a predefined list.
+    commonNotes: plainObject(source.commonNotes),
+    extensions: plainObject(source.extensions),
     pageExtras: normalizePageExtras(source.pageExtras),
     relatedWorkIds: normalizeLinks(source.relatedWorkIds),
     editorial: normalizeEditorial(source.editorial)

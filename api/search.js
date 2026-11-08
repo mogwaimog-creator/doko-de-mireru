@@ -493,7 +493,7 @@ if (id) {
 
     return res
       .status(200)
-      .json(result);
+      .json(process.env.SHARED_STREAMING_READ_ENABLED==='1' ? await require('./_shared-streaming-read').attachRelated(result) : result);
   }
 
   // 映画の場合
@@ -503,7 +503,7 @@ if (id) {
       apiKey
     );
 
-  return res.status(200).json(result);
+  return res.status(200).json(process.env.SHARED_STREAMING_READ_ENABLED==='1' ? await require('./_shared-streaming-read').attachRelated(result) : result);
 }
 
 // =====================================================
@@ -2280,7 +2280,8 @@ async function getMovieDetail(
       encodeURIComponent(apiKey);
 
 
-    const providerData = process.env.WORK_LEDGER_ENABLED==='1'
+    const sharedProviders=await require('./_shared-streaming-read').readDetail('movie',movieId);
+    const providerData = sharedProviders ? sharedProviders.data : process.env.WORK_LEDGER_ENABLED==='1'
       ? (await getDetailProviders('movie',movieId,()=>fetchJson(providerUrl))).data
       : await fetchJson(providerUrl);
 
@@ -12092,7 +12093,9 @@ async function getTvDetail(tvId, apiKey) {
 
   const fixedTv = await metadataWithLedger('tv',tvId,()=>fetchJson(url));
   let tv = fixedTv;
-  if(process.env.WORK_LEDGER_ENABLED==='1'){
+  const sharedProviders=await require('./_shared-streaming-read').readDetail('tv',tvId);
+  if(sharedProviders){tv={...fixedTv,'watch/providers':sharedProviders.data};}
+  else if(process.env.WORK_LEDGER_ENABLED==='1'){
     const providerUrl='https://api.themoviedb.org/3/tv/'+encodeURIComponent(tvId)+'/watch/providers?api_key='+encodeURIComponent(apiKey);
     try {
       const cached=await getDetailProviders('tv',tvId,async()=>fixedTv['watch/providers']||fetchJson(providerUrl));

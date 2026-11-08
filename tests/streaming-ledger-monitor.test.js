@@ -14,3 +14,7 @@ test('report distinguishes lock contention from failure',()=>{
 });
 test('empty batch is healthy and safe',()=>{const r=summarize([],[]);assert.equal(r.processed,0);assert.equal(r.healthy,true)});
 test('unexpected results are explicitly counted',()=>{const r=summarize([{}],[{type:'movie',id:1}]);assert.equal(r.counts.unknown,1);assert.equal(r.healthy,false)});
+test('storage failure is reported separately from upstream failure',()=>{
+ const r=summarize([{reason:'save-failed',error:'write disconnected'}],[{type:'movie',id:635302}]);
+ assert.equal(r.counts.storageFailed,1);assert.equal(r.counts.failed,0);assert.equal(r.healthy,false);assert.equal(r.needsAttention[0].error,'write disconnected');
+});
