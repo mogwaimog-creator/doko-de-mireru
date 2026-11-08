@@ -5156,7 +5156,8 @@ if(
   );
 
   renderSeries(
-    movie.series
+    movie.series,
+    movie.seriesStreamingByWork
   );
 
 
@@ -7472,7 +7473,7 @@ function renderEpisodes(data){
    シリーズ作品
 ========================================================= */
 
-function renderSeries(series){
+function renderSeries(series, streamingByWork){
 
   const section =
     document.getElementById(
@@ -7798,12 +7799,12 @@ container.appendChild(
 /* 共通配信台帳から取得済みの見放題情報があれば追加API呼び出しを省略。
    null/未指定は未取得として従来の取得経路を維持する。 */
 const sharedStreaming =
-  series && series.streamingByWork &&
+  streamingByWork &&
   Object.prototype.hasOwnProperty.call(
-    series.streamingByWork,
+    streamingByWork,
     (isTv ? "tv:" : "movie:") + movie.id
   )
-    ? series.streamingByWork[(isTv ? "tv:" : "movie:") + movie.id]
+    ? streamingByWork[(isTv ? "tv:" : "movie:") + movie.id]
     : null;
 
 if(Array.isArray(sharedStreaming)){
