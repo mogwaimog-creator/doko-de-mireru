@@ -292,3 +292,10 @@
 - 配信情報は `kimetsu.html` の `showProviders` が作品ID・typeごとに `/api/search?id=...&type=...` を呼び、返却の `streaming`（見放題）を表示。ページ内 `providerCache` で同一閲覧中の再呼び出しを抑止。
 - 現行 `api/series-watch.js` の対象12シリーズには `kimetsu` が含まれず、旧シリーズ用 `doko:watch:v3:` の一括取得には未接続。`/api/search` 経由の既存詳細用配信キャッシュが有効な環境では、その経路を利用し得るため、必ずTMDB直呼びという意味ではない。
 - 新共通配信台帳への移行では、**鬼滅を13本目として接続対象に追加**。手書きの作品内容は変更せず、配信情報の取得元だけを切り替える。未取得と正常な見放題なしを区別する。現時点で本番ページや旧APIは未変更。
+
+## 鬼滅の刃の既存12シリーズ方式への接続（開発ブランチ実装 2026-11-08）
+- `api/series-watch.js`: `series=kimetsu` を追加。対象は `tv:85937`, `movie:635302`, `movie:1311031`。既存の `doko:watch:v3:` を一括 `MGET` する読み取り専用方式で、他12シリーズと同じ `{providers,failures,complete}` を返す。
+- 上記3キーは既存の `data/streaming-works.json` に全て登録済み。Cron設定・取得件数・本番Redisデータの変更なし。
+- `kimetsu.html`: 見放題ロゴ取得を作品ごとの `/api/search` から1回の `/api/series-watch?series=kimetsu` に切替。手書きの `works`、ポスター、見る順番、文章、既存の見放題ロゴ描画・TV版注記を維持。未保存/取得失敗は詳細ページへの案内を維持。
+- 開発ブランチでV8模擬環境の6項目をPASS（3IDのCron登録、旧呼出除去、編集内容、HTTP200、MGET3キー、JSON契約）。**実サイト・実Redis・ブラウザの統合テストは未実施**。公開デプロイはしていない。
+- これは旧12シリーズ方式への接続であり、将来の新共通配信台帳への本格移行は別工程。新台帳への移行時も `kimetsu` を必ず含める。
