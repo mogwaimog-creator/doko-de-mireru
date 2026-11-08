@@ -37,7 +37,7 @@ test('actual detail.html template gets crawler-visible title, H1, canonical and 
  assert.match(html,/<title>テストドラマ/);
  assert.match(html,/<h1 id="title">テストドラマ<\/h1>/);
  assert.match(html,/rel="canonical" href="https:\/\/doko-de-mireru.com\/detail.html\?id=202879&amp;type=tv"/);
- assert.match(html,/name="twitter:title"[\\s\\S]*?content="テストドラマ/);
- assert.match(html,/property="og:image"[\\s\\S]*?content="https:\/\/image.tmdb.org/);
- assert.equal((html.match(/<h1\\b/gi)||[]).length,(realTemplate.match(/<h1\\b/gi)||[]).length);
+ assert.match(html,/name="twitter:title"[\s\S]*?content="テストドラマ/);
+ assert.match(html,/property="og:image"[\s\S]*?content="https:\/\/image.tmdb.org/);
+ assert.equal((html.match(/<h1\b/gi)||[]).length,(realTemplate.match(/<h1\b/gi)||[]).length);
 });
