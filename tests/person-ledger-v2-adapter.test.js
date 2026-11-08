@@ -12,9 +12,18 @@ function fakeRedis(){
    values.set(key,rest[0]);return 'OK';
   }
   if(op==='EVAL'){
-   const lock=rest[2],token=rest[3];
-   if(values.get(lock)===token){values.delete(lock);return 1;}
-   return 0;
+   const keys=Number(rest[1]),lock=rest[2];
+   if(keys===1){
+    const token=rest[3];
+    if(values.get(lock)===token){values.delete(lock);return 1;}
+    return 0;
+   }
+   if(keys===2){
+    const destination=rest[3],token=rest[4],value=rest[5];
+    if(values.get(lock)===token){values.set(destination,value);return 1;}
+    return 0;
+   }
+   throw Error('unsupported EVAL key count');
   }
   throw Error('unsupported command: '+op);
  };
@@ -53,4 +62,18 @@ test('read-only preview does not write even when record is missing',async()=>{
  const db=fakeRedis();
  const result=await preparePerson({command:db.command,id:1813,load:async()=>sample,allowWrites:false});
  assert.equal(result.source,'upstream-unsaved');assert.equal(db.values.size,0);
+});
+
+test('lost refresh lease cannot overwrite another worker record',async()=>{
+ const db=fakeRedis();const stamp=()=>Date.parse('2026-01-01T00:00:00Z');
+ const load=async()=>{
+  // Simulate lease expiration and a newer worker acquiring the lock.
+  for(const key of [...db.values.keys()])if(key.endsWith(':refresh-lock'))db.values.delete(key);
+  return sample;
+ };
+ await assert.rejects(
+  preparePerson({command:db.command,id:1813,load,now:stamp,allowWrites:true}),
+  /lock expired/
+ );
+ assert.equal(db.values.has(keyFor(1813)),false);
 });
