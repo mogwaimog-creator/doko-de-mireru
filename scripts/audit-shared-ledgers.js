@@ -9,6 +9,7 @@ function inventory(){
  const comparisonHtml=fs.readFileSync(path.join(root,'streaming.html'),'utf8');
  const comparison=JSON.parse(comparisonHtml.match(/<script type="application\/json" id="series-comparison-data">([\s\S]*?)<\/script>/)[1]);
  const titles=new Map(comparison.rows.flatMap(r=>r.works.map(w=>[w.type+':'+w.id,w.title])));
+ const explicit=require('./repository-work-evidence').evidence();
  const rows=new Map(),unresolved=[];
  const ledger=store();let appearances=0;
  for(const [scope,works] of Object.entries(catalog)){
@@ -21,6 +22,7 @@ function inventory(){
    const links=[...html.matchAll(/<a\b[^>]*href=["']detail\.html\?id=(\d+)(?:&(?:amp;)?type=(tv|movie))?[^"']*["'][^>]*>([\s\S]*?)<\/a>/gi)];
    const match=links.find(m=>Number(m[1])===w.id&&(m[2]||'movie')===w.type&&m[3].replace(/<[^>]*>/g,'').trim()&&!/作品詳細を見る|詳細を見る/.test(m[3]));
    if(titles.has(k))row.pageSources['comparison']={title:titles.get(k),source:'streaming.html:series-comparison-data'};
+   if(explicit.has(k))row.pageSources['explicit-id-map']=explicit.get(k);
    if(match){const title=match[3].replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim();if(title.length<=160)row.pageSources[scope]={title,source:scope+'.html'}}
   }
  }

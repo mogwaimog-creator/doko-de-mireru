@@ -13,6 +13,8 @@ function validateRecord(record){
  exactFields(record,RECORD_FIELDS,'record');
  if(record.schemaVersion!==2)throw Error('unsupported schema version');
  exactFields(record.person,PROFILE_FIELDS,'person');
+ personId(record.person.id);
+ const created=Date.parse(record.createdAt),checked=Date.parse(record.checkedAt);if(!Number.isFinite(created)||!Number.isFinite(checked)||created>checked)throw Error('invalid person timestamps');
  for(const list of LISTS){
   if(!Array.isArray(record.person[list]))throw Error(list+': expected array');
   for(const item of record.person[list])exactFields(item,WORK_FIELDS,list+' card');

@@ -10,10 +10,20 @@ function decode(raw){return raw===null?null:JSON.parse(raw)}
 function unavailable(){const e=Error('Saved development content unavailable');e.code='WORK_METADATA_INCOMPLETE';return e}
 async function readWork(type,id,{command=devCommand}={}){
  if(!enabled())return null;
- const names=[keys.work(type,id),...(type==='tv'?[keys.season(id)]:[])];
+ const names=[keys.work(type,id),...(type==='tv'?[keys.season(id)]:[]),'doko:dev:legacy-work:v1:'+type+':'+Number(id)];
  const raw=await command(['MGET',...names]);if(!Array.isArray(raw)||raw.length!==names.length)throw unavailable();
  const work=decode(raw[0]);if(!work||work.type!==type||work.id!==Number(id)||work.schemaVersion!==2)throw unavailable();
- const result=toBasicTmdbDetail(work);
+ const legacy=decode(raw.at(-1));
+ const result=require('./_work-v2-legacy-compat').enrich({...toBasicTmdbDetail(work),ledgerManaged:true},work,legacy);
+ // Explicit related/collection links only. Editorial watch-order membership is not a collection.
+ const links=require('./_work-ledger-editorial').normalizeLinks(legacy?.relatedWorkIds).filter(w=>['related','collection'].includes(w.kind)&&!(w.type===type&&w.id===Number(id)));
+ if(links.length>100)throw unavailable();
+ if(links.length){
+  const selected=[...new Map(links.map(w=>[w.type+':'+w.id,w])).values()];
+  const related=await command(['MGET',...selected.map(w=>keys.work(w.type,w.id))]);if(!Array.isArray(related)||related.length!==selected.length)throw unavailable();
+  result.savedRelated=related.flatMap((value,i)=>{const target=decode(value),ref=selected[i];if(!target)return [];if(target.schemaVersion!==2||target.type!==ref.type||target.id!==ref.id)throw unavailable();return [{id:target.id,title:target.title,poster_path:target.posterPath,release_date:target.releaseDate||'',content_type:target.type,media_type:target.type==='tv'?'TVシリーズ':'映画'}]});
+ }
+
  if(type==='tv'){
   const seasons=decode(raw[1]);if(!seasons||seasons.tvId!==Number(id))throw unavailable();
   const list=season.toDetailSeasons(seasons);
@@ -37,7 +47,11 @@ async function readSeason(id,number,{command=devCommand}={}){
 }
 async function readSeo(type,id,{command=devCommand}={}){
  if(!enabled())return null;
- const r=decode(await command(['GET',keys.seo(type,id)]));require('../prototype/seo-ledger').validateSeoRecord(r);
- if(r.type!==type||r.id!==Number(id))throw unavailable();return r;
+ const raw=await command(['MGET',keys.seo(type,id),keys.work(type,id),keys.seo(type,id)+':meta']);
+ if(!Array.isArray(raw)||raw.length!==3)throw unavailable();
+ const r=decode(raw[0]),work=decode(raw[1]),meta=decode(raw[2]);require('../prototype/seo-ledger').validateSeoRecord(r);
+ if(r.type!==type||r.id!==Number(id))throw unavailable();
+ if(meta?.sourceDigest&&(!work||require('./_dev-content-store').digest(work)!==meta.sourceDigest))throw unavailable();
+ return r;
 }
 module.exports={enabled,keys,readWork,readPerson,readSeason,readSeo};

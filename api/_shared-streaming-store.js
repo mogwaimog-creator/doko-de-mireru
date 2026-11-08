@@ -19,7 +19,7 @@ function sharedStore(command,{prefix='doko:dev:shared-stream:v1:'}={}){
  return {
   keys:{dataKey,lockKey},
   async read(k){const raw=await command(['GET',dataKey(k)]);return raw===null?null:JSON.parse(raw)},
-  async readMany(keys){const raw=await command(['MGET',...keys.map(dataKey)]);if(!Array.isArray(raw)||raw.length!==keys.length)throw Error('invalid Redis batch');return Object.fromEntries(keys.map((k,i)=>[k,raw[i]===null?null:JSON.parse(raw[i])]))},
+  async readMany(keys){if(!keys.length)return {};const raw=await command(['MGET',...keys.map(dataKey)]);if(!Array.isArray(raw)||raw.length!==keys.length)throw Error('invalid Redis batch');return Object.fromEntries(keys.map((k,i)=>[k,raw[i]===null?null:JSON.parse(raw[i])]))},
   async claimAndRead(k,token,ttlMs){
    if(!token||!Number.isSafeInteger(ttlMs)||ttlMs<1)throw Error('invalid lease');
    const result=await command(['EVAL',CLAIM_READ,'2',lockKey(k),dataKey(k),token,String(ttlMs)]);

@@ -31,3 +31,8 @@ test('13-series membership inventory exactly matches the protected existing API 
  const serialized=vm.runInNewContext(source+';JSON.stringify(Object.fromEntries('+JSON.stringify(names)+'.map(n=>[n,eval(n+"Works")])))',{require:createRequire(file),process});
  assert.deepEqual(JSON.parse(serialized),catalog);
 });
+test('all 266 repository titles resolve from explicit ID evidence without inventing full release dates',()=>{
+ const audit=inventory();assert.equal(audit.titlesFound,266);assert.deepEqual(audit.missingTitles,[]);assert.equal(audit.seo.length,266);
+ const evidence=require('../scripts/repository-work-evidence').evidence();assert(evidence.size>0);
+ for(const [key,row] of evidence){assert(row.title);assert.match(key,/^(movie|tv):[1-9][0-9]*$/);assert(!Object.hasOwn(row,'releaseDate'));}
+});

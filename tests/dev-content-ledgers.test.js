@@ -19,11 +19,22 @@ test('saved compact movie/TV identity, separate season manifest, counts, and epi
 test('saved person and SEO validate identity and never fetch or write missing content',()=>enabled(async()=>{
  const person=require('../prototype/person-ledger').store().success({id:1813,name:'person fixture',cast:[],voice:[],directed:[],documentary_talk:[],other:[]},'2026-11-09T00:00:00Z');
  const seo=createSeoRecord({type:'tv',id:85937,title:'鬼滅の刃'});
- const command=async args=>JSON.stringify(args[1].includes(':person:')?person:seo);
+ const command=async args=>args[0]==='MGET'?[JSON.stringify(seo),null,null]:JSON.stringify(person);
  assert.equal((await dev.readPerson(1813,{command})).name,'person fixture');assert.match((await dev.readSeo('tv',85937,{command})).canonical,/type=tv/);
  await assert.rejects(dev.readPerson(500,{command}));await assert.rejects(dev.readSeo('movie',85937,{command}));await assert.rejects(dev.readWork('movie',635302,{command:async()=>[null]}));
 }));
 test('production ignores all development content flags without issuing any commands',()=>enabled(async()=>{
  process.env.VERCEL_ENV='production';const command=async()=>{throw Error('must not connect')};
  assert.equal(await dev.readWork('movie',635302,{command}),null);assert.equal(await dev.readPerson(1813,{command}),null);assert.equal(await dev.readSeason(85937,1,{command}),null);assert.equal(await dev.readSeo('movie',635302,{command}),null);
+}));
+test('SEO refuses a saved generation that no longer matches its work while keeping legacy records readable',()=>enabled(async()=>{
+ const work=normalizeWorkV2('movie',635302,{title:'correct'}),seo=createSeoRecord(work),meta={sourceDigest:require('../api/_dev-content-store').digest(work)};
+ const command=async()=>[JSON.stringify(seo),JSON.stringify(work),JSON.stringify(meta)];assert.equal((await dev.readSeo('movie',635302,{command})).id,635302);
+ await assert.rejects(dev.readSeo('movie',635302,{command:async()=>[JSON.stringify(seo),JSON.stringify({...work,title:'changed'}),JSON.stringify(meta)]}),/unavailable/);
+}));
+test('explicit saved related links resolve canonical work keys; watch-order membership does not invent a collection',()=>enabled(async()=>{
+ const w=normalizeWorkV2('movie',635302,{title:'primary'}),other=normalizeWorkV2('movie',1311031,{title:'related'}),legacy={schemaVersion:1,type:'movie',id:635302,relatedWorkIds:[{kind:'related',type:'movie',id:1311031},{kind:'watchOrder',type:'movie',id:1771,scope:'mcu'}]};
+ const records=new Map([[dev.keys.work('movie',635302),w],['doko:dev:legacy-work:v1:movie:635302',legacy],[dev.keys.work('movie',1311031),other]]),calls=[];
+ const command=async args=>{calls.push(args);return args.slice(1).map(k=>records.has(k)?JSON.stringify(records.get(k)):null)};
+ const result=await dev.readWork('movie',635302,{command});assert.equal(result.savedRelated.length,1);assert.equal(result.savedRelated[0].id,1311031);assert.equal(calls.length,2);assert(!calls[1].some(k=>k.endsWith(':1771')));
 }));

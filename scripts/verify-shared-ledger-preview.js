@@ -13,11 +13,12 @@ async function main(){
   }
   for(const width of [1280,390]){
    await page.setViewportSize({width,height:900});
-   for(const file of ['kimetsu.html','streaming.html']){
+   for(const file of [...Object.keys(catalog).map(n=>n+'.html'),'streaming.html']){
     const responses=[];const listener=res=>{if(res.url().includes('/api/series-watch'))responses.push(res.status())};page.on('response',listener);
     await page.goto('http://127.0.0.1:16381/'+file+(file==='streaming.html'?'?view=series':''),{waitUntil:'networkidle'});
-    if(file==='streaming.html'){await page.locator('#series-table-scroll').scrollIntoViewIfNeeded();await page.waitForTimeout(600)}
-    assert(responses.length>0);assert(responses.every(x=>x===200));
+    if(file==='streaming.html'){await page.locator('#row-0').scrollIntoViewIfNeeded();await page.waitForFunction(()=>document.querySelector('#row-0 button[data-provider="0"] strong')?.textContent.trim()==='1 / 1');assert((await page.locator('#row-0 button[data-provider="0"] small').innerText()).includes('見放題'))}
+    if(!responses.length){const lazy=page.locator('.providers:visible').first();if(await lazy.count())await lazy.scrollIntoViewIfNeeded();else await page.evaluate(()=>scrollTo(0,document.body.scrollHeight));await page.waitForTimeout(800)}
+    assert(responses.length>0,file+' did not read series API');assert(responses.every(x=>x===200));
     const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1);
     results.push({test:width+' '+file,passed:true,seriesReads:responses.length,horizontalOverflow:overflow});
     await page.screenshot({path:`/workspace/work/${width}-${file}.png`,fullPage:false});page.off('response',listener);
@@ -29,6 +30,10 @@ async function main(){
     results.push({test:width+' detail '+type,passed:true,initialSeo:true});
    }
   }
+  // Explicit local refresh endpoint -> atomic saved work/SEO -> normal API and initial HTML.
+  const refreshed=await context.request.post('http://127.0.0.1:16380/content-refresh',{data:{kind:'work',type:'movie',id:635302,force:true}});assert.equal(refreshed.status(),200);assert.equal((await refreshed.json()).status,'saved');
+  const savedDetail=await context.request.get('http://127.0.0.1:16381/api/search?id=635302&type=movie');assert.equal(savedDetail.status(),200);assert((await savedDetail.json()).title.includes('無限列車編'));
+  const savedHtml=await (await context.request.get('http://127.0.0.1:16381/detail.html?id=635302')).text();assert(savedHtml.includes('data-seo-ledger="1"'));assert(savedHtml.includes('無限列車編'));results.push({test:'local explicit refresh publishes work and SEO through normal detail API and initial HTML',passed:true});
   // Saved content traverses real API handlers without any TMDB request, even a fixture one.
   const metricsBefore=await (await context.request.get('http://127.0.0.1:16381/__metrics')).json();
   const person=await (await context.request.get('http://127.0.0.1:16381/api/search?personId=1813')).json();assert.equal(person.id,1813);assert.equal(person.cast.length,1);
@@ -51,6 +56,10 @@ async function main(){
   const known=require('./audit-shared-ledgers').inventory().seo;
   for(const record of known){const response=await context.request.get(`http://127.0.0.1:16381/detail.html?id=${record.id}&type=${record.type}`);assert.equal(response.status(),200);const html=await response.text();assert(html.includes('data-seo-ledger="1"'));assert(html.includes('<h1 id="title">'));assert(html.includes(record.canonical.replaceAll('&','&amp;')))}
   results.push({test:'all '+known.length+' known-title works return saved SEO in initial HTML',passed:true,works:known.length});
+  const fullBefore=await (await context.request.get('http://127.0.0.1:16381/__metrics')).json();
+  for(const record of known){const response=await context.request.get(`http://127.0.0.1:16381/api/search?id=${record.id}&type=${record.type}`);assert.equal(response.status(),200);const detail=await response.json();assert.equal(detail.id,record.id);assert(detail.title);if(record.type==='tv'){assert(Array.isArray(detail.seasons));assert.equal(detail.seasons.length,1)}}
+  const fullAfter=await (await context.request.get('http://127.0.0.1:16381/__metrics')).json();assert.equal(fullAfter.upstreamFixtureCalls,fullBefore.upstreamFixtureCalls);assert.equal(fullAfter.providerFixtureLoads,fullBefore.providerFixtureLoads);
+  results.push({test:'all 266 actual IDs traverse saved detail API with zero upstream loads',passed:true,works:known.length,metadata:'repository names only; seasons/providers are fixtures'});
   const original=await (await context.request.get('http://127.0.0.1:16381/api/search?id=635302')).json();
   const requests=[];page.on('request',r=>{if(r.url().includes('/api/search'))requests.push(r.url())});
   let activeMeta;

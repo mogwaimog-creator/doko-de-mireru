@@ -4,6 +4,7 @@ const {sharedStore}=require('./_shared-streaming-store');
 const {store,key}=require('../prototype/streaming-ledger');
 const {toDetail,toWatch}=require('../prototype/streaming-ledger-compat');
 const {detailState,selectWatch}=require('./_streaming-state');
+const watchOrderKeys=new Set(Object.values(require('../data/watch-order-memberships.json')).flat().map(w=>w.type+':'+w.id));
 function enabled(){return process.env.SHARED_STREAMING_READ_ENABLED==='1'&&process.env.VERCEL_ENV!=='production'&&process.env.NODE_ENV!=='production'}
 async function devCommand(args){
  const url=new URL(process.env.SHARED_LEDGER_DEV_URL||'http://127.0.0.1:16380');
@@ -33,7 +34,7 @@ async function readDetail(type,id,now=Date.now()){
   if(!Array.isArray(values)||values.length!==3)throw Error('invalid detail batch');
   let raw;try{raw=JSON.parse(values[0])}catch{}
   let refreshProblem=null;
-  if(process.env.DEV_STREAMING_REFRESH_ENABLED==='1'){
+  if(process.env.DEV_STREAMING_REFRESH_ENABLED==='1'&&!watchOrderKeys.has(k)){
     try{
       const endpoint=new URL(process.env.SHARED_LEDGER_DEV_URL||'http://127.0.0.1:16380');
       if(endpoint.protocol!=='http:'||!['127.0.0.1','localhost','[::1]'].includes(endpoint.hostname)||endpoint.username||endpoint.password)throw Error('local refresh required');

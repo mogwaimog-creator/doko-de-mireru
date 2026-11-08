@@ -2705,10 +2705,11 @@ let recommendations = []; // Disable detail recommendations API calls.
   // TMDBのコレクション情報
   // =======================================================
 
-  let series = null;
+  let series = movie.ledgerManaged && movie.savedRelated?.length ? {name:movie.belongs_to_collection?.name||"関連作品",movies:movie.savedRelated}:null;
 
 
   if (
+    !movie.ledgerManaged &&
     movie.belongs_to_collection &&
     movie.belongs_to_collection.id
   ) {
@@ -5104,6 +5105,7 @@ async function getRecommendations(
   // =======================================================
 
   const collectionId =
+    !movie.ledgerManaged &&
     movie.belongs_to_collection &&
     movie.belongs_to_collection.id
       ? String(
@@ -5166,7 +5168,7 @@ async function getRecommendations(
   let collectionMovies = [];
 
 
-  if (collectionId) {
+  if (collectionId && !movie.ledgerManaged) {
 
     try {
 
@@ -12249,12 +12251,14 @@ const runtime =
   // → これまで通り関連TVシリーズを取得
   // =======================================================
 
-  let series = [];
+  let series = tv.ledgerManaged ? (tv.savedRelated||[]) : [];
 
 
   try {
 
-    if (isAnime) {
+    if(tv.ledgerManaged){
+      series=tv.savedRelated||[];
+    } else if (isAnime) {
 
       // ===================================================
       // TVアニメの場合
