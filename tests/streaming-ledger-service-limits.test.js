@@ -13,7 +13,13 @@ test('timed-out TMDB request does not save empty or false success',async()=>{
  const database=db();let signal;
  const s=service(database,async(t,id,options)=>{signal=options.signal;return new Promise(()=>{})},{timeoutMs:5,ttlMs:100});
  const result=await s.visit('movie',9,'2026-11-07T00:00:00Z',[]);
- assert.equal(result.reason,'failed');assert.equal(signal.aborted,true);assert.equal(await database.read('movie:9'),null);
+ assert.equal(result.reason,'failed');assert.equal(signal.aborted,true);
+ const saved=await database.read('movie:9');
+ // A failed first fetch may persist error metadata, but must never claim a successful empty JP result.
+ assert.equal(saved.lastSuccessAt,null);
+ assert.equal(saved.nextEligibleAt,null);
+ assert.deepEqual(saved.japan,{flatrate:[],rent:[],buy:[]});
+ assert.equal(saved.errors.some(e=>e.status==='open'&&/upstream timeout/.test(e.message)),true);
 });
 test('cron defers remaining works when time budget expires',async()=>{
  const s=service(db(),async()=>{await new Promise(r=>setTimeout(r,10));return payload},{maxConcurrency:1,cronBudgetMs:1});
