@@ -19,22 +19,20 @@ async function refreshFlow({type,id,at,watchOrder=false,scheduled=false,read,wri
   const when=new Date(at).toISOString();
   next.lastAttemptAt=when;
   if(watchOrder)next.lastSeriesRunDay=check.runDay;
-  try{
-   const jp=await fetchJapan(type,id);
+  let jp;
+  try{jp=await fetchJapan(type,id);
    if(!jp||typeof jp!=='object'||Array.isArray(jp)||!['flatrate','rent','buy'].every(k=>Array.isArray(jp[k])))throw Error('invalid JP streaming payload');
-   next.japan={flatrate:jp.flatrate,rent:jp.rent,buy:jp.buy};
-   next.lastSuccessAt=when;
-   next.nextEligibleAt=new Date(Date.parse(when)+86400000).toISOString();
-   next.errors=[];
-   await write(type,id,next);
-   return {status:'success',record:next};
   }catch(error){
-   // Do not turn a failed write of a successful fetch into a false fetch failure.
-   if(error&&error.message==='write failed')throw error;
    next.errors=[...(current.errors||[]),{message:String(error?.message||error).slice(0,500),status:'open',at:when}];
    await write(type,id,next);
    return {status:'failed',record:next};
   }
+  next.japan={flatrate:jp.flatrate,rent:jp.rent,buy:jp.buy};
+  next.lastSuccessAt=when;
+  next.nextEligibleAt=new Date(Date.parse(when)+86400000).toISOString();
+  next.errors=[];
+  await write(type,id,next);
+  return {status:'success',record:next};
  }});
  if(outcome.status==='busy')return {status:'busy',record:before};
  return outcome.value;
