@@ -36,3 +36,18 @@ test('fetch failure does not commit incomplete data',async()=>{
  assert.equal(result.status,'failed');assert.equal(commits,0);assert.deepEqual(result.record,{old:true});
  assert.ok(stage.completed[1]);
 });
+
+test('staging strips synopsis and other unused episode payload fields',async()=>{
+ let stage=null;
+ const run=createSeasonBatch({
+  loadStage:async()=>stage,saveStage:async(_,s)=>{stage=structuredClone(s)},
+  clearStage:async()=>{stage=null},
+  fetchSeason:async()=>({episodes:[{episode_number:1,name:'第1話',air_date:'2026-01-01',runtime:25,overview:'保存しないあらすじ',guest_stars:[{id:1}]}]}),
+  commit:async()=>{throw Error('should not commit partial batch')},
+  maxPerRun:1
+ });
+ assert.equal((await run({tvId:12,seasonNumbers:[1,2],revision:'rev1'})).status,'pending');
+ assert.equal(stage.completed[1].episodes[0].name,'第1話');
+ assert.equal(stage.completed[1].episodes[0].overview,undefined);
+ assert.equal(stage.completed[1].episodes[0].guest_stars,undefined);
+});
