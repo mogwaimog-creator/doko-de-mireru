@@ -29,3 +29,19 @@ test('JST day boundary is not UTC day boundary',()=>{
  const record={lastSeriesRunDay:'2026-11-08'};
  assert.equal(decide(record,{at:'2026-11-08T21:00:00Z',watchOrder:true,scheduled:true}).runDay,'2026-11-09');
 });
+
+test('failed first fetch waits 30 minutes before retry',()=>{
+ const r={lastSuccessAt:null,lastAttemptAt:'2026-11-08T00:00:00Z'};
+ assert.equal(decide(r,{at:'2026-11-08T00:29:59Z'}).reason,'retry-cooldown');
+ assert.equal(decide(r,{at:'2026-11-08T00:30:00Z'}).due,true);
+});
+test('failed refresh retains stale success but throttles immediate retry',()=>{
+ const r={lastSuccessAt:'2026-11-07T00:00:00Z',lastAttemptAt:'2026-11-08T00:01:00Z'};
+ const d=decide(r,{at:'2026-11-08T00:02:00Z'});
+ assert.equal(d.reason,'retry-cooldown');
+ assert.equal(d.retryAt,'2026-11-08T00:31:00.000Z');
+});
+test('fresh success overrides old failed attempt',()=>{
+ const r={lastSuccessAt:'2026-11-08T00:05:00Z',lastAttemptAt:'2026-11-08T00:01:00Z'};
+ assert.equal(decide(r,{at:'2026-11-08T00:06:00Z'}).reason,'fresh');
+});
