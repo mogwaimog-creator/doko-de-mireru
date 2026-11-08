@@ -2039,23 +2039,9 @@ function createWorkCard(work){
   const title =
     work.title || "タイトル不明";
 
-  const year =
-    work.release_date
-      ? String(
-          work.release_date
-        ).slice(0,4)
-      : "";
-
-  let yearLabel =
-    year
-      ? year + "年"
-      : "公開年不明";
-
-  if (
-    work.release_status === "upcoming"
-  ) {
-    yearLabel += "・公開予定";
-  }
+  // Compact ledger cards use year; legacy records use release_date.
+  const year = work.year || (work.release_date ? String(work.release_date).slice(0, 4) : "");
+  const yearLabel = year ? String(year) + "年" : "公開年不明";
 
   let detailUrl =
     "detail.html?id=" +
@@ -2064,7 +2050,7 @@ function createWorkCard(work){
     );
 
   if (
-    work.content_type === "tv"
+    (work.media_type || work.content_type) === "tv"
   ) {
     detailUrl +=
       "&type=tv";
