@@ -40,3 +40,16 @@ test('fresh cached empty result remains confirmed no streaming',async()=>{
  const out=await attachCachedSeriesStreaming(detail,{now:Date.parse('2026-11-08T12:00:00Z'),command:async()=>[record([])]});
  assert.deepEqual(out.seriesStreamingByWork['movie:42'],[]);
 });
+
+test('missing flatrate field is unknown, not confirmed empty',async()=>{
+ const detail={series:[{id:42,title:'映画'}]};
+ const raw=JSON.stringify({checkedAt:'2026-11-08T06:00:00Z',data:{results:{JP:{rent:[]}}}});
+ const out=await attachCachedSeriesStreaming(detail,{now:Date.parse('2026-11-08T12:00:00Z'),command:async()=>[raw]});
+ assert.equal(Object.prototype.hasOwnProperty.call(out.seriesStreamingByWork,'movie:42'),false);
+});
+test('future timestamp outside tolerance is unknown',async()=>{
+ const detail={series:[{id:42,title:'映画'}]};
+ const raw=JSON.stringify({checkedAt:'2026-11-09T06:00:00Z',data:{results:{JP:{flatrate:[]}}}});
+ const out=await attachCachedSeriesStreaming(detail,{now:Date.parse('2026-11-08T12:00:00Z'),command:async()=>[raw]});
+ assert.equal(Object.prototype.hasOwnProperty.call(out.seriesStreamingByWork,'movie:42'),false);
+});
