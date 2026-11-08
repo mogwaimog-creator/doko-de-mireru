@@ -32,6 +32,7 @@ module.exports=async(req,res)=>{
  if(req.method!=='GET')return res.status(405).json({error:'GET only'});
  const secret=process.env.CRON_SECRET;
  if(!secret||req.headers.authorization!==`Bearer ${secret}`)return res.status(401).json({error:'Unauthorized'});
+ if(process.env.DEV_SHARED_CRON_ENABLED==='1'&&process.env.NODE_ENV!=='production'&&process.env.VERCEL_ENV!=='production')return require('./_ledger-scheduler-dev').handle(req,res);
  const token=`${Date.now()}:${Math.random()}`;
  let acquired=false;
  try{

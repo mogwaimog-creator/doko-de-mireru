@@ -6325,6 +6325,7 @@ const clearSearchButton =
   );
   
 let currentPage = 1;
+let currentLedgerCursor = null;
 let currentQuery = "";
 let isLoadingMore = false;
 
@@ -6437,6 +6438,7 @@ async function searchMovies(){
     queryInput.value.trim();
 
   currentPage = 1;
+  currentLedgerCursor = null;
 currentQuery = query;   
 
 
@@ -6635,6 +6637,7 @@ if(
        結果
     ----------------------------------------------------- */
 
+    currentLedgerCursor = data.nextCursor || null;
     let movies =
   Array.isArray(
     data.results
@@ -6674,7 +6677,12 @@ if(currentSearchType === "anime"){
        0件
     ----------------------------------------------------- */
 
-    if(!movies.length){
+    if(!movies.length && data.hasMore && data.nextCursor){
+  results.innerHTML = '<div class="empty">検索は続いています。</div><div class="load-more-wrapper"><button id="loadMoreButton" type="button" class="load-more-button" onclick="loadMoreMovies()">続きを検索</button></div>';
+  return;
+}
+
+if(!movies.length){
 
   searchResultsHeading.textContent =
     '🔍「' + query + '」の検索結果（0件）';
@@ -7026,7 +7034,9 @@ if(currentSearchType === "anime"){
       .join("");
 
 }
-if(data.hasMore){
+if(data.hasMore && data.scope === 'saved-only'){
+  results.insertAdjacentHTML('beforeend','<div class="load-more-wrapper"><button id="loadMoreButton" type="button" class="load-more-button" onclick="loadMoreMovies()">さらに20件表示</button></div>');
+}else if(data.hasMore){
 
   results.insertAdjacentHTML(
     "beforeend",
@@ -7346,6 +7356,7 @@ async function loadMoreMovies() {
   // 次のページ
   // =======================================================
 
+  const previousLedgerCursor = currentLedgerCursor;
   currentPage++;
 
 
@@ -7394,6 +7405,8 @@ if(
 }
 
 
+    if(currentSearchType === 'all')apiUrl += '&type=all';
+    if(currentLedgerCursor)apiUrl += '&cursor=' + encodeURIComponent(currentLedgerCursor);
     const response =
       await fetch(
         apiUrl
@@ -7404,6 +7417,7 @@ if(
       await response.json();
 
 
+    if(response.ok)currentLedgerCursor = data.nextCursor || null;
     if (
       !response.ok ||
       !Array.isArray(
@@ -7500,6 +7514,7 @@ if(
 
 
     currentPage--;
+    currentLedgerCursor = previousLedgerCursor;
 
 
     button.disabled = false;
@@ -8504,6 +8519,7 @@ if(clearSearchButton){
       /* 検索情報をリセット */
 
       currentPage = 1;
+  currentLedgerCursor = null;
       currentQuery = "";
 
 

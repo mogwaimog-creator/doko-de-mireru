@@ -4,10 +4,11 @@ const {enabled,keys}=require('./_dev-content-ledgers');
 const {devCommand}=require('./_shared-streaming-read');
 const CATALOG='doko:dev:search:v1:catalog';
 const fold=s=>String(s||'').normalize('NFKC').toLowerCase().replace(/[\s・･.\-_'’]/g,'');
-async function search(query,{kind='work',type='movie',page=1,command=devCommand}={}){
+async function search(query,{kind='work',type='movie',page=1,cursor=null,command=devCommand}={}){
  if(!enabled())return null;
- if(!['person','work'].includes(kind)||!['movie','tv','all','anime','drama'].includes(type)||!Number.isSafeInteger(page)||page<1||page>1000||!fold(query)||String(query).length>200)throw Error('invalid saved search');
+ if(!['person','work'].includes(kind)||!['movie','tv','all','anime','drama'].includes(type)||!Number.isSafeInteger(page)||page<1||page>1000000||!fold(query)||String(query).length>200)throw Error('invalid saved search');
  const fail=()=>{const e=Error('Saved search catalog unavailable');e.code='WORK_METADATA_INCOMPLETE';return e};
+ if(await command(['GET',require('./_search-index-v2').READY])==='1')return require('./_indexed-search').indexedSearch(query,{kind,type,page,cursor,command});
  const raw=await command(['GET',CATALOG]);if(raw===null)throw fail();const catalog=JSON.parse(raw);
  if(catalog.schemaVersion!==1||!Array.isArray(catalog.works)||!Array.isArray(catalog.people)||catalog.works.length+catalog.people.length>1000)throw fail();
  const refs=kind==='person'?catalog.people.map(id=>({id,key:keys.person(id)})):catalog.works.filter(w=>type==='all'||w.type===(['tv','anime','drama'].includes(type)?'tv':'movie')).map(w=>({...w,key:keys.work(w.type,w.id)}));

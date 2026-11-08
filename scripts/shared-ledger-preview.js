@@ -34,7 +34,8 @@ require.cache[require.resolve('../api/_redis')]={exports:{command:async args=>{
  if(args[0]==='GET')return null;throw Error('legacy fixture is read-only');
 }}};
 process.env.DEV_CONTENT_LEDGER_ENABLED='1';process.env.TMDB_API_KEY='local-fixture';process.env.SHARED_STREAMING_READ_ENABLED='1';process.env.SHARED_LEDGER_DEV_URL='http://127.0.0.1:16380';
-const handlers={search:require('../api/search'),'series-watch':require('../api/series-watch')};
+process.env.DEV_SHARED_CRON_ENABLED='1';process.env.CRON_SECRET='local-fixture-cron';
+const handlers={'update-streaming':require('../api/update-streaming'),search:require('../api/search'),'series-watch':require('../api/series-watch')};
 async function start(){
  const works=rows.map(r=>({type:r.type,id:r.id,memberships:r.memberships}));
  const native=sharedStore(command);
@@ -65,10 +66,14 @@ async function start(){
 
  await command(['SET',require('../api/_dev-ledger-search').CATALOG,JSON.stringify({schemaVersion:1,works:rows.map(w=>({type:w.type,id:w.id})),people:[1813]}),'NX']);
 
+ const searchIndex=require('../api/_search-index-v2');
+ for(const key of [...rows.map(w=>content.keys.work(w.type,w.id)),content.keys.person(1813)]){const raw=await command(['GET',key]);if(raw)await searchIndex.seed(command,key,raw)}
+ await command(['SET',searchIndex.READY,'1']);
  http.createServer(async(req,res)=>{
   try{let body='';for await(const chunk of req)body+=chunk;if(body.length>1000000)throw Error('large body');const args=JSON.parse(body);
    if(req.url==='/refresh'){
     if(process.env.DEV_STREAMING_REFRESH_ENABLED!=='1')throw Error('development refresh disabled');
+    const control=await require('../api/_dev-content-store').contentStore(command).readControl();if(control&&control.status!=='ready'){res.setHeader('Content-Type','application/json');return res.end(JSON.stringify({status:'paused',reason:'shared-pause'}))}
     let result;if(args.trigger==='cron')result=await daily.run(args.at,works,{maxItems:args.maxItems??1000});else if(args.trigger==='auto')result=await require('../api/_daily-job-supervisor').supervisor(daily).run(args.at,works,{maxItems:args.maxItems??24});else if(args.trigger==='visit')result=await s.visit(args.type,args.id,args.at,works);else throw Error('invalid trigger');
     res.setHeader('Content-Type','application/json');return res.end(JSON.stringify(result));
    }
@@ -84,8 +89,10 @@ async function start(){
     else throw Error('unsupported offline fixture');
     res.setHeader('Content-Type','application/json');return res.end(JSON.stringify(result));
    }
+   if(Array.isArray(args)&&args[0]==='EVAL'&&args[1]===searchIndex.SELECT&&args[2]==='1'&&/^doko:dev:search:v2:grams:(work|person)$/.test(args[3])&&args.length>=5&&args.length<=20&&args.slice(4).every(x=>/^[a-f0-9]{2,16}$/.test(x))){res.setHeader('Content-Type','application/json');return res.end(JSON.stringify({result:await command(args)}))}
+   if(Array.isArray(args)&&args[0]==='EVAL'&&args[1]===require('../api/_indexed-search').READ&&Number(args[2])>=1&&Number(args[2])<=32&&args.length===Number(args[2])+3&&args.slice(3).every(k=>/^doko:dev:(?:work:v2:(movie|tv):[1-9][0-9]*|person:v2:[1-9][0-9]*)$/.test(k))){res.setHeader('Content-Type','application/json');return res.end(JSON.stringify({result:await command(args)}))}
    // This bridge serves reads only. Seed/update operations stay in this process.
-   if(!Array.isArray(args)||!['GET','MGET'].includes(args[0])||!args.slice(1).every(k=>/^doko:dev:(?:search:v1:catalog|shared-stream:v1:record:(?:movie|tv):[1-9][0-9]*|legacy-watch:v3:(?:movie|tv):[1-9][0-9]*|legacy-detail:v1:(?:movie|tv):[1-9][0-9]*|work:v2:(?:movie|tv):[1-9][0-9]*|legacy-work:v1:(?:movie|tv):[1-9][0-9]*|season:v1:tv:[1-9][0-9]*|person:v2:[1-9][0-9]*|seo:v1:(?:movie|tv):[1-9][0-9]*)(?::meta)?$/.test(k)))throw Error('read-only namespace');
+   if(!Array.isArray(args)||!['GET','MGET','ZRANGEBYLEX'].includes(args[0])||!(args[0]==='ZRANGEBYLEX'?(/^doko:dev:search:v2:grams:(work|person)$/.test(args[1])&&args.length===7&&args[4]==='LIMIT'&&args[5]==='0'&&Number(args[6])<=32):args.slice(1).every(k=>/^doko:dev:(?:search:v1:catalog|search:v2:ready|shared-stream:v1:record:(?:movie|tv):[1-9][0-9]*|legacy-watch:v3:(?:movie|tv):[1-9][0-9]*|legacy-detail:v1:(?:movie|tv):[1-9][0-9]*|work:v2:(?:movie|tv):[1-9][0-9]*|legacy-work:v1:(?:movie|tv):[1-9][0-9]*|season:v1:tv:[1-9][0-9]*|person:v2:[1-9][0-9]*|seo:v1:(?:movie|tv):[1-9][0-9]*)(?::meta)?$/.test(k))))throw Error('read-only namespace');
    res.setHeader('Content-Type','application/json');res.end(JSON.stringify({result:await command(args)}));
   }catch{res.statusCode=400;res.end(JSON.stringify({error:'isolated bridge rejected request'}))}
  }).listen(16380,'127.0.0.1');

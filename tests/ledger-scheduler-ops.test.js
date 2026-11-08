@@ -1,0 +1,22 @@
+'use strict';
+const {test}=require('node:test'),assert=require('node:assert/strict'),{command}=require('./helpers/local-redis'),{scheduler}=require('../api/_ledger-scheduler-dev'),{sharedStore}=require('../api/_shared-streaming-store'),{compactDailyJobStore}=require('../api/_compact-daily-job-store'),{dailyJob}=require('../api/_streaming-daily-job');
+const at='2026-11-09T00:00:00Z',works=[{type:'movie',id:635302,memberships:[{kind:'watchOrder',scope:'test'}]}];let seq=0;
+function local(name,fn){test(name,{skip:!process.env.REDIS_TEST_CLI},async()=>{const prefix=`doko:dev:scheduler-test:${process.pid}:${++seq}:`;await fn(prefix)})}
+local('authenticated-cron adapter runner completes, monitors success and emits no external notifications',async prefix=>{
+ let loads=0;const job=dailyJob(sharedStore(command,{prefix:prefix+'records:'}),compactDailyJobStore(command,{prefix:prefix+'jobs:',clock:()=>Date.parse(at)}),async()=>{loads++;return {results:{JP:{flatrate:[],rent:[],buy:[]}}}}),ops=scheduler(command,job,{prefix:prefix+'ops:',controlKey:prefix+'control',clock:()=>Date.parse(at)});
+ assert.equal((await ops.run(works)).status,'complete');assert.equal((await ops.health()).overdue,false);assert.equal(loads,1);await ops.run(works);assert.equal(loads,1);assert.equal(await command(['GET',prefix+'ops:alert:1']),null);
+});
+local('failed and paused runs stop, persist bounded deduplicated local alerts and report overdue',async prefix=>{
+ let loads=0;const job=dailyJob(sharedStore(command,{prefix:prefix+'records:'}),compactDailyJobStore(command,{prefix:prefix+'jobs:',clock:()=>Date.parse(at)}),async()=>{loads++;throw Error('fixture upstream failure')}),ops=scheduler(command,job,{prefix:prefix+'ops:',controlKey:prefix+'control',clock:()=>Date.parse(at)});
+ assert.equal((await ops.run(works)).status,'complete-with-errors');await ops.run(works);assert.equal(loads,1);assert(await command(['GET',prefix+'ops:alert:1']));assert.equal(await command(['GET',prefix+'ops:alert:2']),null);assert((await ops.health()).overdue);
+ await command(['SET',prefix+'control',JSON.stringify({status:'paused'})]);assert.equal((await ops.run(works)).reason,'shared-pause');assert.equal(loads,1);assert((await ops.health()).control);
+});
+test('existing cron auth stays mandatory and production ignores the isolated adapter flag',async()=>{
+ const old={...process.env},redisPath=require.resolve('../api/_redis'),handlerPath=require.resolve('../api/update-streaming'),adapter=require('../api/_ledger-scheduler-dev'),previous=adapter.handle,cache=require.cache[redisPath];let calls=0,devCalls=0;
+ try{process.env.CRON_SECRET='fixture';process.env.DEV_SHARED_CRON_ENABLED='1';delete process.env.NODE_ENV;delete process.env.VERCEL_ENV;require.cache[redisPath]={exports:{command:async()=>{calls++;return null}}};delete require.cache[handlerPath];adapter.handle=async(req,res)=>{devCalls++;return res.status(200).json({isolated:true})};const handler=require(handlerPath);const response=()=>({setHeader(){},status(n){this.code=n;return this},json(x){this.body=x;return this}});let res=response();await handler({method:'GET',headers:{}},res);assert.equal(res.code,401);assert.equal(devCalls,0);res=response();await handler({method:'GET',headers:{authorization:'Bearer fixture'}},res);assert.equal(res.code,200);assert.equal(devCalls,1);process.env.NODE_ENV='production';res=response();await handler({method:'GET',headers:{authorization:'Bearer fixture'}},res);assert.equal(res.code,409);assert.equal(devCalls,1);assert.equal(calls,1)}finally{process.env=old;adapter.handle=previous;if(cache)require.cache[redisPath]=cache;else delete require.cache[redisPath];delete require.cache[handlerPath]}
+});
+test('local operation CLIs refuse production before loading storage or creating backup files',async()=>{
+ const {execFile}=require('node:child_process'),path=require('node:path');for(const script of ['ledger-admin-dev.js','run-ledger-worker-dev.js']){
+ const result=await new Promise(resolve=>execFile(process.execPath,[path.join(__dirname,'../scripts',script),'health'],{env:{...process.env,NODE_ENV:'production',DEV_ISOLATED_ADMIN:'1',DEV_ISOLATED_WORKER:'1',REDIS_TEST_CLI:'/missing/must-not-run'}},(error,stdout,stderr)=>resolve({error,stdout,stderr})));assert(result.error);assert.equal(result.stdout,'');assert.match(result.stderr,/explicit (isolated administrator|local fixture worker)/);assert(!result.stderr.includes('ENOENT'));
+ }
+});

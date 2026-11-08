@@ -93,7 +93,7 @@ function coordinator(store,{failureCooldownMs=30*60000,guarded=false,leaseMs=300
  return Object.fromEntries(Object.keys(methods).map(name=>[name,async(...args)=>{
   const key=name==='work'||name==='confirmWork'?keys.work(args[0],args[1]):name==='person'?keys.person(args[0]):keys.season(args[0]);
   const token=require('node:crypto').randomUUID(),lease={key,token};
-  if(!await store.claimLease(key,token,leaseMs)){const control=await store.readControl?.();return {status:control?'paused':'in-flight',reason:control?'storage-safety-stop':'lease-busy',record:(await store.read([key]))[key].data};}
+  if(!await store.claimLease(key,token,leaseMs)){const control=await store.readControl?.();return {status:control?.status==='paused'?'paused':'in-flight',reason:control?.status==='paused'?'storage-safety-stop':'lease-busy',record:(await store.read([key]))[key].data};}
   try{
    const scoped={...store,commit:(entries,options)=>store.commit(entries,{...options,lease}),noteFailure:(k,v,meta)=>store.noteFailure(k,v,meta,lease)};
    const loadIndex=name==='work'||name==='episode'?2:1;
@@ -101,7 +101,7 @@ function coordinator(store,{failureCooldownMs=30*60000,guarded=false,leaseMs=300
     const original=args[loadIndex];args[loadIndex]=async()=>{const ac=new AbortController();let timer;try{return await Promise.race([Promise.resolve().then(()=>original(ac.signal)),new Promise((_,reject)=>{timer=setTimeout(()=>{ac.abort();reject(Error('content upstream timeout'))},timeoutMs)})])}finally{clearTimeout(timer)}};
    }
    return await coordinator(scoped,{failureCooldownMs,guarded:true})[name](...args);
-  }catch(error){if(error.code!=='CONTENT_STORAGE_UNAVAILABLE')throw error;try{await store.tripCircuit(error)}catch{/* Storage remains unavailable; next worker cannot safely claim/read. */}return {status:'storage-error',record:null,error:'Content storage unavailable; updates stopped'};}finally{try{await store.releaseLease(key,token)}catch{/* TTL releases only our abandoned lease. */}}
+  }catch(error){if(error.code!=='CONTENT_STORAGE_UNAVAILABLE')throw error;try{await store.tripCircuit(error,{key})}catch{/* Storage remains unavailable; next worker cannot safely claim/read. */}return {status:'storage-error',record:null,error:'Content storage unavailable; updates stopped'};}finally{try{await store.releaseLease(key,token)}catch{/* TTL releases only our abandoned lease. */}}
  }]));
 }
 module.exports={coordinator};

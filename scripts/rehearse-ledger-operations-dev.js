@@ -1,0 +1,15 @@
+'use strict';
+// Full known fixture rehearsal, not production export. Leave originals intact.
+if(process.env.DEV_ISOLATED_ADMIN!=='1'||process.env.NODE_ENV==='production'||process.env.VERCEL_ENV==='production')throw Error('explicit isolated administrator mode required');
+const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),{randomUUID}=require('node:crypto'),{command}=require('../tests/helpers/local-redis'),{admin}=require('../api/_ledger-admin-dev'),{contentStore}=require('../api/_dev-content-store');
+async function main(){
+ const store=contentStore(command),ops=admin(command),control=await store.readControl();if(control?.status==='paused')throw Error('pre-existing pause requires review; do not auto-clear');
+ const rows=require('./audit-shared-ledgers').inventory().records,identities=[...rows,{type:'movie',id:862}],names=[...identities.map(w=>store.keys.work(w.type,w.id)),...identities.map(w=>'doko:dev:shared-stream:v1:record:'+w.type+':'+w.id),...rows.map(w=>store.keys.seo(w.type,w.id)),...rows.filter(w=>w.type==='tv').map(w=>store.keys.season(w.id)),store.keys.person(1813)];
+ await ops.pause('isolated full known-fixture backup/restore rehearsal');
+ const bundle=await ops.backup(names),id=randomUUID(),dir=path.resolve(__dirname,'../../ledger-admin-artifacts');fs.mkdirSync(dir,{recursive:true,mode:0o700});const file=path.join(dir,'known-fixture-'+id+'.json'),text=JSON.stringify(bundle);fs.writeFileSync(file,text,{mode:0o600,flag:'wx'});
+ const restored=await ops.restore(JSON.parse(fs.readFileSync(file,'utf8')),{prefix:'doko:dev:restore:rehearsal-'+id+':'});let restoredRedisBytes=await command(['MEMORY','USAGE',restored.prefix+'manifest','SAMPLES','0']);
+ for(let i=0;i<bundle.entries.length;i+=32){const batch=bundle.entries.slice(i,i+32),raw=await command(['MGET',...batch.map(e=>e.key)]);assert(batch.every((e,j)=>e.raw===raw[j]));for(const e of batch)restoredRedisBytes+=await command(['MEMORY','USAGE',restored.prefix+e.key,'SAMPLES','0'])}
+ const review=await ops.prepareResume([store.keys.work('movie',635302),store.keys.seo('movie',635302)],{reason:'known canonical hashes unchanged; local file and separate restore verified'}),resumed=await ops.resume(review,{acknowledge:true});assert(resumed.resumed);
+ return {scope:'known local fixture data only; no production services',sourceKeys:bundle.entries.length,backupJsonBytes:Buffer.byteLength(text),backupSHA256:bundle.sha256,fileMode:'0600',fileLocation:'local execution workspace only; not a user PC backup',restoredRedisBytes,verified:restored.verified,originalsUnchanged:true,resumed:resumed.resumed,controlStatus:(await store.readControl()).status,excludes:'unknown live keys, legacy compatibility copies, real complete population and cloud recovery'};
+}
+if(require.main===module)main().then(r=>console.log(JSON.stringify(r,null,2))).catch(e=>{console.error(e.message);console.error('If paused, inspect/review before resuming. No automatic unlock on failure.');process.exitCode=2});module.exports={main};

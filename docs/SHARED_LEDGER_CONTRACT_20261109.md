@@ -64,3 +64,5 @@ node scripts/verify-shared-ledger-preview.js
 最新の継続実装・隔離検証は [SHARED_LEDGER_COMPLETION_REPORT.md](SHARED_LEDGER_COMPLETION_REPORT.md) を参照。production無効・旧データ保持・本番承認待ちの条件は継続。
 
 2026-11-09 継続: 検索・共有排他・圧縮日次記録の最新結果は [SHARED_LEDGER_OPERATION_REPORT_20261109.md](SHARED_LEDGER_OPERATION_REPORT_20261109.md) を参照。新規v2記録だけ14日TTL、既存記録は無変更、本番未承認。
+
+2026-11-09 管理運用の続報: [SHARED_LEDGER_ADMIN_REPORT_20261109.md](SHARED_LEDGER_ADMIN_REPORT_20261109.md) と [管理手順](SHARED_LEDGER_ADMIN_RUNBOOK.md)。自動索引・ローカル管理/監視/復元を追加。すべて開発専用、本番未承認、14日等は暫定。

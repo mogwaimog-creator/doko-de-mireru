@@ -40,6 +40,8 @@ async function main(){
   await page.locator('#personSearchInput').fill('隔離試験用人物');await page.locator('#personSearchButton').click();await page.waitForFunction(()=>document.querySelector('#personSearchResults')?.textContent.includes('隔離試験用人物'));
   assert(await page.locator('#personSearchResults a[href*="person.html?id=1813"]').count());results.push({test:'mobile person search UI links to canonical saved person',passed:true});
   await page.locator('#query').fill('鬼滅');await page.locator('#searchButton').click();await page.waitForFunction(()=>document.querySelector('#results')?.textContent.includes('鬼滅'));assert(await page.locator('#results a[href*="detail.html?id="]').count());results.push({test:'mobile normal work search UI links to canonical saved details',passed:true});
+  await page.locator('#query').fill('ガンダム');await page.locator('#allSearchButton').click();await page.waitForSelector('#loadMoreButton');
+  const savedLinks=()=>page.locator('#results a[href*="detail.html?id="]').evaluateAll(links=>[...new Set(links.map(a=>a.href))]);const firstPage=await savedLinks();assert.equal(firstPage.length,20);await page.locator('#loadMoreButton').click();await page.waitForFunction(()=>new Set([...document.querySelectorAll('#results a[href*="detail.html?id="]')].map(a=>a.href)).size>20);const expanded=await savedLinks();assert(expanded.length>20);assert.equal(expanded.length,new Set(expanded).size);results.push({test:'mobile saved search follows cursor to more than 20 Gundam titles',passed:true,works:expanded.length});
   // Explicit local refresh endpoint -> atomic saved work/SEO -> normal API and initial HTML.
   const refreshed=await context.request.post('http://127.0.0.1:16380/content-refresh',{data:{kind:'work',type:'movie',id:635302,force:true}});assert.equal(refreshed.status(),200);assert.equal((await refreshed.json()).status,'saved');
   const savedDetail=await context.request.get('http://127.0.0.1:16381/api/search?id=635302&type=movie');assert.equal(savedDetail.status(),200);assert((await savedDetail.json()).title.includes('無限列車編'));
@@ -91,6 +93,8 @@ async function main(){
       results.push({test:width+' freshness '+status+' and managed related misses',passed:true});
     }
   }
+  const cronUnauthorized=await context.request.get('http://127.0.0.1:16381/api/update-streaming');assert.equal(cronUnauthorized.status(),401);results.push({test:'existing cron route rejects missing administrator bearer token',passed:true});
+  const cronAuthorized=await context.request.get('http://127.0.0.1:16381/api/update-streaming',{headers:{Authorization:'Bearer local-fixture-cron'}});assert.equal(cronAuthorized.status(),200);const cronBody=await cronAuthorized.json();assert(['complete','not-due','busy'].includes(cronBody.status));results.push({test:'authenticated existing cron route traverses isolated real Redis adapter',passed:true,status:cronBody.status});
   assert.equal(errors.length,0);
   fs.writeFileSync('/workspace/work/browser-results.json',JSON.stringify({results,errors,externalRequestsBlocked:external.length,liveExternalRequests:0},null,2));
   console.log(JSON.stringify({checks:results.length,errors:errors.length,externalRequestsBlocked:external.length,overflow:results.filter(r=>r.horizontalOverflow).map(r=>r.test)}));

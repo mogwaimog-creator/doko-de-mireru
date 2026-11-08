@@ -5,4 +5,4 @@ const {command}=require('../tests/helpers/local-redis'),{sharedStore}=require('.
 const at=new Date().toISOString(),works=require('./audit-shared-ledgers').inventory().records;
 const job=dailyJob(sharedStore(command),compactDailyJobStore(command),async()=>({results:{JP:{flatrate:[],rent:[],buy:[]}}}));
 const stop=new AbortController();process.once('SIGINT',()=>stop.abort());process.once('SIGTERM',()=>stop.abort());
-supervisor(job).run(at,works,{maxItems:24,signal:stop.signal}).then(result=>{console.log(JSON.stringify({scope:'loopback fixture data only; never live availability',...result},null,2));if(result.status==='stopped')process.exitCode=2}).catch(e=>{console.error(e.message);process.exitCode=2});
+require('../api/_ledger-scheduler-dev').scheduler(command,job).run(works,{signal:stop.signal}).then(result=>{console.log(JSON.stringify({scope:'loopback fixture data only; never live availability',...result},null,2));if(['stopped','complete-with-errors'].includes(result.status))process.exitCode=2}).catch(e=>{console.error(e.message);process.exitCode=2});
