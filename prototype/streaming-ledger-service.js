@@ -64,7 +64,10 @@ function service(redis,fetchTmdb,{writesEnabled=()=>true,ttlMs=30000,timeoutMs=6
    }
    return {updated:false,reason:'failed',error:message,record,errorRecorded:recorded};
   }
-  finally{await redis.release(k,token)}
+  finally{
+   // A transient unlock failure must not mask a completed save or the original fetch error.
+   try{await redis.release(k,token)}catch(_releaseError){/* Lease expires by TTL. */}
+  }
  }
  async function cron(now,works){
   const keys=[...membershipSet(works)],results=new Array(keys.length);
