@@ -21,7 +21,7 @@ function createSeoRecord(work,{updatedAt=new Date().toISOString()}={}){
  const intro=plain(work.shortIntro||work.overview,180);
  const pageTitle=plain(title+(year?'（'+year+'年）':'')+'の配信・作品情報 | '+BRAND,200);
  const description=plain(title+'の作品情報と日本国内の配信状況を確認。'+(intro?intro+' ':'')+'見放題・レンタル・購入の最新情報は作品ページでご確認ください。',260);
- const canonical=SITE+'/detail.html?id='+id+'&type='+type;
+ const canonical=SITE+'/detail.html?id='+id+(type==='tv'?'&type=tv':'');
  const poster=typeof work.posterPath==='string'&&/^\/[a-zA-Z0-9_./-]+$/.test(work.posterPath)?'https://image.tmdb.org/t/p/w780'+work.posterPath:null;
  const stamp=new Date(updatedAt).toISOString();
  return {key:type+':'+id,type,id,title:pageTitle,description,canonical,ogType:'video.'+(type==='movie'?'movie':'tv_show'),ogImage:poster,h1:title,sourceUpdatedAt:stamp,schemaVersion:1};
@@ -30,7 +30,7 @@ function validateSeoRecord(record){
  const expected=['key','type','id','title','description','canonical','ogType','ogImage','h1','sourceUpdatedAt','schemaVersion'];
  if(!record||typeof record!=='object'||Array.isArray(record)||Object.keys(record).sort().join('|')!==expected.sort().join('|'))throw Error('unexpected SEO fields');
  const {type,id}=identity(record.type,record.id);
- if(record.key!==type+':'+id||record.canonical!==SITE+'/detail.html?id='+id+'&type='+type||record.schemaVersion!==1)throw Error('invalid SEO identity');
+ if(record.key!==type+':'+id||record.canonical!==SITE+'/detail.html?id='+id+(type==='tv'?'&type=tv':'')||record.schemaVersion!==1)throw Error('invalid SEO identity');
  if(!record.title||!record.h1||!Number.isFinite(Date.parse(record.sourceUpdatedAt)))throw Error('invalid SEO metadata');
  return record;
 }
