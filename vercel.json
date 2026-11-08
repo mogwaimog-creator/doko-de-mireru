@@ -1,4 +1,19 @@
 {
-  "rewrites": [{"source":"/movie/:id","destination":"/index.html"}],
-  "crons": [{"path":"/api/update-streaming","schedule":"0 21 * * *"}]
+  "rewrites": [
+    {
+      "source": "/movie/:id",
+      "destination": "/index.html"
+    }
+  ],
+  "crons": [
+    {
+      "path": "/api/update-streaming",
+      "schedule": "0 21 * * *"
+    }
+  ],
+  "git": {
+    "deploymentEnabled": {
+      "work/four-ledgers-20261107": false
+    }
+  }
 }
