@@ -262,3 +262,9 @@
 - `tests/streaming-ledger-concurrency.test.js` を追加。①同じ作品への同時初回訪問は取得1回・後続は `in-flight`、②期限切れキャッシュの同時訪問は更新中も旧成功データを返す、③保存・復元後に配信データ・失敗時刻・未解決エラーを維持、④リース失効後の古い成功結果は新しい成功結果を上書きしない、の4ケース。
 - 開発ブランチのモジュールとテストをV8互換ハーネスで実行し **4件成功・失敗0**。**実Node `node --test`、本物のRedis、実TMDB通信、Vercel複数インスタンス、本番アクセス負荷では未検証**。同時アクセスでのコスト削減は模擬条件で確認しただけで、本番効果を保証しない。
 - 本番コード・本番Redis・Vercel Cron・デプロイは変更していない。次工程は実NodeでのテストとRedisコマンド互換、API/画面との結合検証。
+
+## Upstash RESTコマンド形式とロック契約の確認（2026-11-08）
+- 本番既存の `api/_redis.js`、`api/_detail-providers-cache.js`、`api/update-streaming.js` を**読み取りのみ**で確認。既存Redisは `command(['GET',...])` 等の配列形式でUpstash RESTへ送信。新しい `prototype/streaming-ledger-redis.js` は同形式を使う独立試作であり、本番APIからは呼び出されない。
+- `tests/streaming-ledger-redis-contract.test.js` を追加。コマンド配列と試作用キーの分離、ロック所有者のみの保存と古い所有者による上書き拒否、import時の非接続と読み取り専用を3ケースで検証。V8互換ハーネスで **3件成功・失敗0**。
+- **未検証:** 実Upstash RESTでのLua `EVAL` の動作、TTLの実時間経過、ネットワーク断、Node本来の `node --test`、実Redisの並列競合、本番ページのレスポンス互換。テストモックはLuaそのものを実行せず、期待するコマンド意味を模擬するだけ。
+- 本番サイト・本番Redis・Cron・デプロイへの変更は一切なし。実Redis接続は承認前に行わない。
