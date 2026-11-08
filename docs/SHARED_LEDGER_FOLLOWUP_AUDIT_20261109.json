@@ -1,0 +1,383 @@
+{
+  "dateJST": "2026-11-09",
+  "implementationCommit": "2b3a0c9",
+  "deploymentGuardCommit": "476e704",
+  "mainReadOnlySha": "332843235960714d38abcc1c0590ed1f834ed6ca",
+  "defaultRerun": {
+    "tests": 315,
+    "pass": 285,
+    "fail": 30,
+    "skipped": 0,
+    "sameFailureSetAsPrevious": true
+  },
+  "diagnosticOnly": {
+    "tests": 42,
+    "pass": 42,
+    "fail": 0,
+    "scope": "detached local copy; correct EVAL mock argument indexes and explicitly enable mocked writes only; no product changes or production settings"
+  },
+  "groups": {
+    "A": 16,
+    "B": 6,
+    "C": 4,
+    "D": 4
+  },
+  "failures": [
+    {
+      "number": 1,
+      "test": "two simultaneous first requests fetch providers once",
+      "group": "A",
+      "cause": "保存凍結では未保存作品を永続化せずloadを返すため、同時2アクセスで取得2回。試験は取得1回を期待。",
+      "relationTo2b3a0c9": "同一失敗を変更前ログで確認。今回の新規失敗ではない。",
+      "migrationImpact": "移行に影響あり。凍結は維持しつつ、未保存作品の同時取得抑制・ID検証・未保存状態の返却を別設計。書込みONだけで解決扱いにしない。"
+    },
+    {
+      "number": 2,
+      "test": "Redis lock outage does not trigger TMDB provider fetch",
+      "group": "A",
+      "cause": "凍結時の未保存経路はロックを使わずloadへ進み、ロック障害による拒否を期待した試験と一致しない。",
+      "relationTo2b3a0c9": "同一失敗を変更前ログで確認。今回の新規失敗ではない。",
+      "migrationImpact": "移行に影響あり。凍結は維持しつつ、未保存作品の同時取得抑制・ID検証・未保存状態の返却を別設計。書込みONだけで解決扱いにしない。"
+    },
+    {
+      "number": 3,
+      "test": "Redis write outage never reports uncached data as safely cached",
+      "group": "A",
+      "cause": "凍結時はSETしないので、保存障害を期待した拒否が起こらない。",
+      "relationTo2b3a0c9": "同一失敗を変更前ログで確認。今回の新規失敗ではない。",
+      "migrationImpact": "移行に影響あり。凍結は維持しつつ、未保存作品の同時取得抑制・ID検証・未保存状態の返却を別設計。書込みONだけで解決扱いにしない。"
+    },
+    {
+      "number": 4,
+      "test": "corrupt saved provider payload is not served as a valid cache hit",
+      "group": "A",
+      "cause": "破損キャッシュを有効として返したわけではない。取得応答は正常だが、凍結で破損した保存値を置換しないため保存値の比較が失敗。",
+      "relationTo2b3a0c9": "同一失敗を変更前ログで確認。今回の新規失敗ではない。",
+      "migrationImpact": "移行に影響あり。凍結は維持しつつ、未保存作品の同時取得抑制・ID検証・未保存状態の返却を別設計。書込みONだけで解決扱いにしない。"
+    },
+    {
+      "number": 5,
+      "test": "related-series rendering currently launches one streaming request per rendered card",
+      "group": "C",
+      "cause": "変更済みHTMLから旧コメントを文字検索しており見つからない。共有ヒット時も全カードが個別取得するという旧前提。",
+      "relationTo2b3a0c9": "同一失敗を変更前ログで確認。今回の新規失敗ではない。",
+      "migrationImpact": "旧前提/モックを更新して再試験。文字検索だけで通信削減や表示互換を保証しない。"
+    },
+    {
+      "number": 6,
+      "test": "first access saves v2 record, subsequent access reuses without upstream call",
+      "group": "B",
+      "cause": "EVALを分解したrestのkey countはrest[0]なのにrest[1]（lock key）を数値化するモックの誤り。",
+      "relationTo2b3a0c9": "同一失敗を変更前ログで確認。今回の新規失敗ではない。",
+      "migrationImpact": "モック修正候補。実Redisでの人物v2の原子保存・期限切れ・失敗保持は別途必須。"
+    },
+    {
+      "number": 7,
+      "test": "60 day refresh keeps initial creation timestamp",
+      "group": "B",
+      "cause": "同じEVALモックの引数位置誤りで初回保存を準備できず、60日更新の検証に到達しない。",
+      "relationTo2b3a0c9": "同一失敗を変更前ログで確認。今回の新規失敗ではない。",
+      "migrationImpact": "モック修正候補。実Redisでの人物v2の原子保存・期限切れ・失敗保持は別途必須。"
+    },
+    {
+      "number": 8,
+      "test": "failed refresh preserves existing record and its checkedAt",
+      "group": "B",
+      "cause": "同じEVALモックの誤りで旧データの初期保存に失敗。失敗時保持の本体の証明にはなっていない。",
+      "relationTo2b3a0c9": "同一失敗を変更前ログで確認。今回の新規失敗ではない。",
+      "migrationImpact": "モック修正候補。実Redisでの人物v2の原子保存・期限切れ・失敗保持は別途必須。"
+    },
+    {
+      "number": 9,
+      "test": "oversized refresh retains prior record and timestamp",
+      "group": "B",
+      "cause": "同じEVALモックの誤りで事前保存を用意できず、過大応答時保持を検証できない。",
+      "relationTo2b3a0c9": "同一失敗を変更前ログで確認。今回の新規失敗ではない。",
+      "migrationImpact": "モック修正候補。実Redisでの人物v2の原子保存・期限切れ・失敗保持は別途必須。"
+    },
+    {
+      "number": 10,
+      "test": "incomplete upstream credits do not erase previously saved filmography",
+      "group": "B",
+      "cause": "同じEVALモックの誤りで旧出演作品を保存できず、欠損応答防止の検証に到達しない。",
+      "relationTo2b3a0c9": "同一失敗を変更前ログで確認。今回の新規失敗ではない。",
+      "migrationImpact": "モック修正候補。実Redisでの人物v2の原子保存・期限切れ・失敗保持は別途必須。"
+    },
+    {
+      "number": 11,
+      "test": "unexpected empty filmography cannot overwrite populated credits",
+      "group": "B",
+      "cause": "同じEVALモックの誤りで旧出演作品を保存できず、不自然な空配列防止の検証に到達しない。",
+      "relationTo2b3a0c9": "同一失敗を変更前ログで確認。今回の新規失敗ではない。",
+      "migrationImpact": "モック修正候補。実Redisでの人物v2の原子保存・期限切れ・失敗保持は別途必須。"
+    },
+    {
+      "number": 12,
+      "test": "first request stores person and second request reuses it without loading upstream",
+      "group": "A",
+      "cause": "人物v1の保存凍結により新規人物を保存しない。2回のアクセスに取得1回を期待する試験と不一致。",
+      "relationTo2b3a0c9": "同一失敗を変更前ログで確認。今回の新規失敗ではない。",
+      "migrationImpact": "移行に影響あり。凍結は維持しつつ、未保存作品の同時取得抑制・ID検証・未保存状態の返却を別設計。書込みONだけで解決扱いにしない。"
+    },
+    {
+      "number": 13,
+      "test": "stale data refreshes after sixty days",
+      "group": "A",
+      "cause": "人物v1の凍結中は古い保存データを返し、60日を過ぎても更新しない。試験は更新を期待。",
+      "relationTo2b3a0c9": "同一失敗を変更前ログで確認。今回の新規失敗ではない。",
+      "migrationImpact": "移行に影響あり。凍結は維持しつつ、未保存作品の同時取得抑制・ID検証・未保存状態の返却を別設計。書込みONだけで解決扱いにしない。"
+    },
+    {
+      "number": 14,
+      "test": "invalid upstream identity is rejected and lock released",
+      "group": "A",
+      "cause": "人物v1の凍結・未保存経路はloadのID検証を通らない。拒否を期待する試験と不一致。ID照合の移行上の穴でもある。",
+      "relationTo2b3a0c9": "同一失敗を変更前ログで確認。今回の新規失敗ではない。",
+      "migrationImpact": "移行に影響あり。凍結は維持しつつ、未保存作品の同時取得抑制・ID検証・未保存状態の返却を別設計。書込みONだけで解決扱いにしない。"
+    },
+    {
+      "number": 15,
+      "test": "tests/season-detail-contract.test.js",
+      "group": "D",
+      "cause": "新しいシーズン応答はエピソードoverviewを出さないが、試験は第1話のあらすじを期待する。",
+      "relationTo2b3a0c9": "同一失敗を変更前ログで確認。今回の新規失敗ではない。",
+      "migrationImpact": "省容量方針と外部消費者の契約を確定するまで切替しない。現detail.htmlのrenderEpisodesはoverviewを表示しないことはコード確認済み。"
+    },
+    {
+      "number": 16,
+      "test": "tests/season-ledger-redis-mock.test.js",
+      "group": "A",
+      "cause": "シーズン保存ガードはLEDGER_WRITES_RESUMEが1以外なら拒否。試験が書込み許可を指定せずNX保存を期待。",
+      "relationTo2b3a0c9": "同一失敗を変更前ログで確認。今回の新規失敗ではない。",
+      "migrationImpact": "移行に影響あり。凍結は維持しつつ、未保存作品の同時取得抑制・ID検証・未保存状態の返却を別設計。書込みONだけで解決扱いにしない。"
+    },
+    {
+      "number": 17,
+      "test": "tests/season-ledger-response.test.js",
+      "group": "D",
+      "cause": "seasonResponseが返す4フィールドにoverviewがなく、旧期待オブジェクトと不一致。",
+      "relationTo2b3a0c9": "同一失敗を変更前ログで確認。今回の新規失敗ではない。",
+      "migrationImpact": "省容量方針と外部消費者の契約を確定するまで切替しない。現detail.htmlのrenderEpisodesはoverviewを表示しないことはコード確認済み。"
+    },
+    {
+      "number": 18,
+      "test": "tests/season-legacy-compatibility.test.js",
+      "group": "D",
+      "cause": "旧・新の比較用visibleShapeがoverviewを含むが、新しい省容量形式はあらすじを保存しない。",
+      "relationTo2b3a0c9": "同一失敗を変更前ログで確認。今回の新規失敗ではない。",
+      "migrationImpact": "省容量方針と外部消費者の契約を確定するまで切替しない。現detail.htmlのrenderEpisodesはoverviewを表示しないことはコード確認済み。"
+    },
+    {
+      "number": 19,
+      "test": "tests/season-realistic-tmdb-fixture.test.js",
+      "group": "D",
+      "cause": "fromTmdbSeasonがoverviewを省くのに、試験は空文字列のoverviewを期待している。",
+      "relationTo2b3a0c9": "同一失敗を変更前ログで確認。今回の新規失敗ではない。",
+      "migrationImpact": "省容量方針と外部消費者の契約を確定するまで切替しない。現detail.htmlのrenderEpisodesはoverviewを表示しないことはコード確認済み。"
+    },
+    {
+      "number": 20,
+      "test": "tests/season-search-switch-behavior.test.js",
+      "group": "C",
+      "cause": "実searchの追加require(_season-refresh-opt-in)を許さないモックが初期化失敗を起こし、旧経路へ戻る。期待は新経路。",
+      "relationTo2b3a0c9": "同一失敗を変更前ログで確認。今回の新規失敗ではない。",
+      "migrationImpact": "旧前提/モックを更新して再試験。文字検索だけで通信削減や表示互換を保証しない。"
+    },
+    {
+      "number": 21,
+      "test": "server response has unique SEO and visible H1 before JS runs",
+      "group": "C",
+      "cause": "映画canonicalは現行契約では?id=321、TVのみ&type=tv。試験は映画にも&type=movieを期待。",
+      "relationTo2b3a0c9": "同一失敗を変更前ログで確認。今回の新規失敗ではない。",
+      "migrationImpact": "旧前提/モックを更新して再試験。文字検索だけで通信削減や表示互換を保証しない。"
+    },
+    {
+      "number": 22,
+      "test": "person ledger saves compact credits, retains profile, reuses cache",
+      "group": "A",
+      "cause": "VM内envに書込み再開指定がないため人物を保存しない。未定義の保存値をJSON.parseして失敗。",
+      "relationTo2b3a0c9": "同一失敗を変更前ログで確認。今回の新規失敗ではない。",
+      "migrationImpact": "移行に影響あり。凍結は維持しつつ、未保存作品の同時取得抑制・ID検証・未保存状態の返却を別設計。書込みONだけで解決扱いにしない。"
+    },
+    {
+      "number": 23,
+      "test": "detail provider cache saves JP only, reuses cache",
+      "group": "A",
+      "cause": "VM内envに書込み再開指定がないため詳細配信を保存しない。保存済み応答を読む試験と不一致。",
+      "relationTo2b3a0c9": "同一失敗を変更前ログで確認。今回の新規失敗ではない。",
+      "migrationImpact": "移行に影響あり。凍結は維持しつつ、未保存作品の同時取得抑制・ID検証・未保存状態の返却を別設計。書込みONだけで解決扱いにしない。"
+    },
+    {
+      "number": 24,
+      "test": "two simultaneous requests share one first TMDB metadata fetch",
+      "group": "A",
+      "cause": "作品固定情報の凍結・未保存経路はloadを直接呼ぶため、2要求で取得2回。取得1回を期待。",
+      "relationTo2b3a0c9": "同一失敗を変更前ログで確認。今回の新規失敗ではない。",
+      "migrationImpact": "移行に影響あり。凍結は維持しつつ、未保存作品の同時取得抑制・ID検証・未保存状態の返却を別設計。書込みONだけで解決扱いにしない。"
+    },
+    {
+      "number": 25,
+      "test": "cached work avoids further metadata fetches",
+      "group": "A",
+      "cause": "作品固定情報を保存しないため、2回目もTMDB相当loadを呼び、取得1回を期待する試験が失敗。",
+      "relationTo2b3a0c9": "同一失敗を変更前ログで確認。今回の新規失敗ではない。",
+      "migrationImpact": "移行に影響あり。凍結は維持しつつ、未保存作品の同時取得抑制・ID検証・未保存状態の返却を別設計。書込みONだけで解決扱いにしない。"
+    },
+    {
+      "number": 26,
+      "test": "waiter times out with retryable busy error without duplicate TMDB fetch",
+      "group": "A",
+      "cause": "凍結中は初回ロードロック経路に入らず、待機→busy拒否を期待する試験に一致しない。",
+      "relationTo2b3a0c9": "同一失敗を変更前ログで確認。今回の新規失敗ではない。",
+      "migrationImpact": "移行に影響あり。凍結は維持しつつ、未保存作品の同時取得抑制・ID検証・未保存状態の返却を別設計。書込みONだけで解決扱いにしない。"
+    },
+    {
+      "number": 27,
+      "test": "movie and tv with same TMDB number have independent locks",
+      "group": "A",
+      "cause": "凍結中は初回ロードロックを取得しないため、movie/tv別ロックの試験期待に一致しない。",
+      "relationTo2b3a0c9": "同一失敗を変更前ログで確認。今回の新規失敗ではない。",
+      "migrationImpact": "移行に影響あり。凍結は維持しつつ、未保存作品の同時取得抑制・ID検証・未保存状態の返却を別設計。書込みONだけで解決扱いにしない。"
+    },
+    {
+      "number": 28,
+      "test": "Redis lock outage fails closed without fetching TMDB",
+      "group": "A",
+      "cause": "凍結中は初回ロードロックを取得しないため、ロック障害によるfail-closedの試験に一致しない。",
+      "relationTo2b3a0c9": "同一失敗を変更前ログで確認。今回の新規失敗ではない。",
+      "migrationImpact": "移行に影響あり。凍結は維持しつつ、未保存作品の同時取得抑制・ID検証・未保存状態の返却を別設計。書込みONだけで解決扱いにしない。"
+    },
+    {
+      "number": 29,
+      "test": "Redis read failure after acquiring metadata lock returns storage error without TMDB fetch",
+      "group": "A",
+      "cause": "凍結中はロック後の再読取りをしないため、2回目GET障害の試験に一致しない。",
+      "relationTo2b3a0c9": "同一失敗を変更前ログで確認。今回の新規失敗ではない。",
+      "migrationImpact": "移行に影響あり。凍結は維持しつつ、未保存作品の同時取得抑制・ID検証・未保存状態の返却を別設計。書込みONだけで解決扱いにしない。"
+    },
+    {
+      "number": 30,
+      "test": "removal plan does not mutate source",
+      "group": "C",
+      "cause": "removalPlanはextensionsをseasonsより先に列挙する。試験は先頭をseasonsと決めつけている。seasonsのaction自体は正しい。",
+      "relationTo2b3a0c9": "同一失敗を変更前ログで確認。今回の新規失敗ではない。",
+      "migrationImpact": "旧前提/モックを更新して再試験。文字検索だけで通信削減や表示互換を保証しない。"
+    }
+  ],
+  "additionalIsolatedReproduction": {
+    "status": 200,
+    "returnedMovie": {
+      "flatrate": [
+        {
+          "provider_id": 8,
+          "provider_name": "stale-test"
+        }
+      ],
+      "checkedAt": "2026-10-05T00:00:00Z",
+      "stale": true
+    },
+    "legacyQueriedMovie": false,
+    "meaning": "stale shared record takes precedence over potentially fresh legacy record; isolated mocked reproduction, no network"
+  },
+  "productionRedis": {
+    "connected": false,
+    "currentMB": null,
+    "migrationPeakMB": null,
+    "afterMB": null,
+    "plan": null,
+    "freeHeadroom": null
+  },
+  "localReferenceModel": {
+    "scope": "local Redis 7.2.6 MEMORY USAGE; fictional one-provider JP fixture; static repository metadata only",
+    "realHistoricalSample": {
+      "records": 152,
+      "rejected": 51,
+      "legacyBytes": 67088,
+      "newBytes": 111040
+    },
+    "productionCurrent": "unmeasured: no credentials or billing/usage information",
+    "measured": {
+      "legacyWatch": {
+        "keys": 271,
+        "redisBytes": 75832,
+        "jsonBytes": 44444,
+        "MB": 0.075832
+      },
+      "legacyDetail": {
+        "keys": 266,
+        "redisBytes": 91664,
+        "jsonBytes": 60116,
+        "MB": 0.091664
+      },
+      "newStream": {
+        "keys": 266,
+        "redisBytes": 125984,
+        "jsonBytes": 91675,
+        "MB": 0.125984
+      },
+      "work": {
+        "keys": 266,
+        "redisBytes": 104288,
+        "jsonBytes": 74735,
+        "MB": 0.104288
+      },
+      "seo": {
+        "keys": 223,
+        "redisBytes": 150200,
+        "jsonBytes": 125347,
+        "MB": 0.1502
+      }
+    },
+    "backupBytes": 155728,
+    "backupJsonBytes": 152397,
+    "incrementBytes": 380472,
+    "model": {
+      "current": {
+        "bytes": 167496,
+        "MB": 0.167496,
+        "changePercent": 0
+      },
+      "peak": {
+        "bytes": 703696,
+        "MB": 0.703696,
+        "changePercent": 320.12704781009694
+      },
+      "afterWithOldDataRetained": {
+        "bytes": 547968,
+        "MB": 0.547968,
+        "changePercent": 227.15288723312796
+      },
+      "targetOnlyAfterSeparateDeletionApproval": {
+        "bytes": 380472,
+        "MB": 0.380472,
+        "changePercent": 127.15288723312797
+      }
+    },
+    "assumptions": {
+      "watchWorks": 271,
+      "detailWorks": 266,
+      "newStreamWorks": 266,
+      "metadataWorks": 266,
+      "metadataTitlesKnown": 223,
+      "seoWorks": 223,
+      "personSeasonBytes": "not measured; snapshots unavailable",
+      "backup": "one backup key in isolated Redis containing modeled old provider keys; no production backup",
+      "excluded": "Redis process overhead, TLS/network overhead, fragmentation, actual full fixed metadata, people, seasons, future growth; add measured sizes before production"
+    },
+    "productionFormula": {
+      "current": "P (unknown)",
+      "peak": "P + new ledgers delta + backup B + active locks + allocator headroom",
+      "afterRetainingOld": "P + new ledgers delta",
+      "changePercent": "(delta / P) * 100; cannot calculate until P and coverage are measured"
+    }
+  },
+  "publicPricingReference": {
+    "url": "https://upstash.com/docs/redis/overall/pricing",
+    "freeDataSizeMBConservative": 250,
+    "freeMonthlyCommands": 500000,
+    "freeMonthlyBandwidthGB": 10,
+    "appliesToActualDatabase": "unknown"
+  },
+  "privateBillingExported": false,
+  "productionChanges": false
+}
