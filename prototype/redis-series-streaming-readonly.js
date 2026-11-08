@@ -8,10 +8,14 @@ function typeFor(item){
  ['TVシリーズ','TV','TVアニメ'].includes(item?.media_type)?'tv':'movie';
 }
 function itemsOf(series){return Array.isArray(series)?series:Array.isArray(series?.movies)?series.movies:[];}
-function parse(raw){
+function parse(raw,now=Date.now()){
+ // This legacy cache is on-demand with a 24-hour refresh policy.
+ // Stale data must not be treated as a confirmed current no-streaming result.
  try{
   const r=typeof raw==='string'?JSON.parse(raw):raw;
   if(!r||typeof r!=='object'||!r.data||!r.data.results||!r.checkedAt||!Number.isFinite(Date.parse(r.checkedAt)))return null;
+  const checked=Date.parse(r.checkedAt);
+  if(checked>now+60000||now-checked>=86400000)return null;
   const jp=r.data.results.JP;
   if(!jp||typeof jp!=='object'||Array.isArray(jp))return null;
   return Array.isArray(jp.flatrate)?jp.flatrate:[];
@@ -28,7 +32,7 @@ function convert(values){
  }
  return out;
 }
-async function attachCachedSeriesStreaming(detail,{command}={}){
+async function attachCachedSeriesStreaming(detail,{command,now=Date.now()}={}){
  if(!detail||typeof detail!=='object'||Array.isArray(detail))throw Error('invalid detail');
  if(typeof command!=='function')throw Error('missing read-only Redis command');
  const keys=[],seen=new Set();
@@ -46,7 +50,7 @@ async function attachCachedSeriesStreaming(detail,{command}={}){
  catch{return detail;} // Legacy per-card path remains available.
  if(!Array.isArray(values)||values.length!==keys.length)return detail;
  const byWork=Object.create(null);
- keys.forEach((k,i)=>{const data=parse(values[i]);if(data!==null)byWork[k]=convert(data);});
+ keys.forEach((k,i)=>{const data=parse(values[i],now);if(data!==null)byWork[k]=convert(data);});
  return {...detail,seriesStreamingByWork:byWork};
 }
 module.exports={attachCachedSeriesStreaming,parse,convert,MAX_ITEMS};
