@@ -129,7 +129,27 @@ function card(w,i,deep){
  return a;
 }
 for(const [id,deep] of [['shortCards',false],['deepCards',true]]){const el=document.getElementById(id);works.forEach((w,i)=>el.appendChild(card(w,i,deep)))}
-const providerCache=new Map();const apiBase=location.protocol==='file:'?'https://doko-de-mireru.com':'';async function showProviders(box){const key=box.dataset.id+'-'+box.dataset.type;if(!providerCache.has(key))providerCache.set(key,fetch(`${apiBase}/api/search?id=${box.dataset.id}&type=${box.dataset.type}`).then(r=>{if(!r.ok)throw Error('取得失敗');return r.json()}).then(d=>Array.isArray(d.streaming)?dokoNormalizeStreaming(d.streaming):[]).catch(()=>null));const list=await providerCache.get(key);if(!box.isConnected)return;box.replaceChildren();const label=document.createElement('strong');label.textContent='見放題';box.appendChild(label);if(list===null){label.textContent='配信情報は作品詳細でご確認ください';return}const unique=list.filter((p,i,arr)=>p?.logo_path&&arr.findIndex(x=>x?.provider_id===p.provider_id)===i);if(!unique.length){label.textContent='見放題情報は未確認です';return}unique.forEach(p=>{const img=document.createElement('img');img.src='https://image.tmdb.org/t/p/w92'+p.logo_path;img.alt=p.provider_name||'配信サービス';img.title=p.provider_name||'配信サービス';img.loading='lazy';box.appendChild(img)});if(box.dataset.type==='tv'){const note=document.createElement('span');note.className='provider-note';note.textContent='シリーズ全体の配信先です。各編の取扱いはサービスでご確認ください。';box.appendChild(note)}}document.querySelectorAll('.providers').forEach(showProviders);
+// Read the same cached series availability as the other viewing-order guides.
+// No visitor-triggered TMDB fetch; the existing 06:00 JST Cron owns refreshes.
+const kimetsuCachedProviders=fetch((location.protocol==='file:'?'https://doko-de-mireru.com':'')+'/api/series-watch?series=kimetsu',{cache:'no-store'})
+ .then(r=>{if(!r.ok)throw Error('配信共有API HTTP '+r.status);return r.json()})
+ .then(d=>d.providers||{}).catch(()=>null);
+async function showProviders(box){
+ const providers=await kimetsuCachedProviders;
+ if(!box.isConnected)return;
+ box.replaceChildren();
+ const label=document.createElement('strong');label.textContent='見放題';box.appendChild(label);
+ const record=providers?.[box.dataset.type+':'+box.dataset.id];
+ if(!record||!Array.isArray(record.flatrate)){
+  label.textContent='配信情報は作品詳細でご確認ください';return;
+ }
+ const list=dokoNormalizeStreaming(record.flatrate);
+ const unique=list.filter((p,i,arr)=>p?.logo_path&&arr.findIndex(x=>x?.provider_id===p.provider_id)===i);
+ if(!unique.length){label.textContent='見放題情報は未確認です';return;}
+ unique.forEach(p=>{const img=document.createElement('img');img.src='https://image.tmdb.org/t/p/w92'+p.logo_path;img.alt=p.provider_name||'配信サービス';img.title=p.provider_name||'配信サービス';img.loading='lazy';box.appendChild(img)});
+ if(box.dataset.type==='tv'){const note=document.createElement('span');note.className='provider-note';note.textContent='シリーズ全体の配信先です。各編の取扱いはサービスでご確認ください。';box.appendChild(note)}
+}
+document.querySelectorAll('.providers').forEach(showProviders);
 function refresh(){document.querySelectorAll('.watch').forEach(b=>{const on=watched.includes(b.dataset.key);b.setAttribute('aria-pressed',String(on));b.textContent=on?'♥ 見た！':'♡ これはもう見た！'})}document.addEventListener('click',e=>{const b=e.target.closest('.watch');if(!b)return;watched=watched.includes(b.dataset.key)?watched.filter(x=>x!==b.dataset.key):[...watched,b.dataset.key];try{localStorage.setItem(storageKey,JSON.stringify(watched))}catch(e){}refresh()});refresh();
 document.querySelectorAll('[data-tab]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('[data-tab]').forEach(x=>x.setAttribute('aria-selected',String(x===b)));document.querySelectorAll('.panel').forEach(p=>p.hidden=p.id!==b.dataset.tab)}));
 
