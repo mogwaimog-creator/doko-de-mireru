@@ -27,3 +27,17 @@ test('missing required head tags fails closed',()=>{
  assert.throws(()=>renderDetailHtml('<html></html>',record));
  assert.throws(()=>renderDetailHtml(template.replace('<h1 id="title"></h1>',''),record),/missing title heading/);
 });
+
+test('actual detail.html template gets crawler-visible title, H1, canonical and social metadata',()=>{
+ const fs=require('node:fs');
+ const path=require('node:path');
+ const realTemplate=fs.readFileSync(path.join(__dirname,'..','detail.html'),'utf8');
+ const record=createSeoRecord({type:'tv',id:202879,title:'テストドラマ',overview:'番組の説明',posterPath:'/poster.jpg'});
+ const html=renderDetailHtml(realTemplate,record);
+ assert.match(html,/<title>テストドラマ/);
+ assert.match(html,/<h1 id="title">テストドラマ<\/h1>/);
+ assert.match(html,/rel="canonical" href="https:\/\/doko-de-mireru.com\/detail.html\?id=202879&amp;type=tv"/);
+ assert.match(html,/name="twitter:title"[\\s\\S]*?content="テストドラマ/);
+ assert.match(html,/property="og:image"[\\s\\S]*?content="https:\/\/image.tmdb.org/);
+ assert.equal((html.match(/<h1\\b/gi)||[]).length,(realTemplate.match(/<h1\\b/gi)||[]).length);
+});
