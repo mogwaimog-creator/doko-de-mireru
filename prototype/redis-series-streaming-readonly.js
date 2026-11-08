@@ -18,7 +18,9 @@ function parse(raw,now=Date.now()){
   if(checked>now+60000||now-checked>=86400000)return null;
   const jp=r.data.results.JP;
   if(!jp||typeof jp!=='object'||Array.isArray(jp))return null;
-  return Array.isArray(jp.flatrate)?jp.flatrate:[];
+  // A missing or malformed flatrate field is not proof of zero providers.
+  if(!Array.isArray(jp.flatrate))return null;
+  return jp.flatrate;
  }catch{return null}
 }
 function convert(values){
