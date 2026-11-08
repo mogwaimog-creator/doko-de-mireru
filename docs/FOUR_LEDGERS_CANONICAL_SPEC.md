@@ -268,3 +268,9 @@
 - `tests/streaming-ledger-redis-contract.test.js` を追加。コマンド配列と試作用キーの分離、ロック所有者のみの保存と古い所有者による上書き拒否、import時の非接続と読み取り専用を3ケースで検証。V8互換ハーネスで **3件成功・失敗0**。
 - **未検証:** 実Upstash RESTでのLua `EVAL` の動作、TTLの実時間経過、ネットワーク断、Node本来の `node --test`、実Redisの並列競合、本番ページのレスポンス互換。テストモックはLuaそのものを実行せず、期待するコマンド意味を模擬するだけ。
 - 本番サイト・本番Redis・Cron・デプロイへの変更は一切なし。実Redis接続は承認前に行わない。
+
+## 既存詳細画面・見る順番とのデータ形状互換性（2026-11-08）
+- 既存 `api/search.js` の映画・TV詳細で配信情報を読む構造を読み取り確認。映画は `providerData.results.JP` の `flatrate/rent/buy`、TVは `'watch/providers':{results:{JP:...}}` を利用する。既存 `api/update-streaming.js` は `doko:watch:v3:` の `flatrate` を使用する。
+- 新試作の `prototype/streaming-ledger-compat.js` は `toDetail` で `{data:{results:{JP:{flatrate,rent,buy}}},checkedAt}`、`toWatch` で `{flatrate,checkedAt}` を返す。`tests/streaming-ledger-display-compat.test.js` を4ケース追加し、V8互換ハーネスで **4件成功・失敗0**。映画・TVのID分離、初回失敗と正常な空配信の区別も確認。
+- **未統合**：既存の `api/search.js`、12本の見る順番ページ、旧 `doko:watch:v3:` Redisキーの読み取り・切替処理は未変更。表示が完全に一致するかのE2E、実Nodeテスト、ページごとのロゴ表示とUI文言、旧キー移行は未検証。特に初回失敗の `null` をUIで『配信なし』扱いしない表示側対応が必要。
+- 本番サイト・本番Redis・Cron・デプロイへの変更なし。
