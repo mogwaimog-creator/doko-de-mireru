@@ -77,3 +77,19 @@ test('lost refresh lease cannot overwrite another worker record',async()=>{
  );
  assert.equal(db.values.has(keyFor(1813)),false);
 });
+
+test('oversized filmography is rejected without partial save or truncation',async()=>{
+ const db=fakeRedis();
+ const huge={...sample,cast:Array.from({length:7000},(_,i)=>({id:i+1,media_type:'movie',title:'x'.repeat(190),poster_path:'/'.concat('p'.repeat(190))}))};
+ await assert.rejects(preparePerson({command:db.command,id:1813,load:async()=>huge,allowWrites:true}),/exceeds safe size/);
+ assert.equal(db.values.has(keyFor(1813)),false);
+});
+test('oversized refresh retains prior record and timestamp',async()=>{
+ const db=fakeRedis();
+ await preparePerson({command:db.command,id:1813,load:async()=>sample,now:()=>Date.parse('2026-01-01T00:00:00Z'),allowWrites:true});
+ const prior=db.values.get(keyFor(1813));
+ const huge={...sample,cast:Array.from({length:7000},(_,i)=>({id:i+1,media_type:'movie',title:'x'.repeat(190),poster_path:'/'.concat('p'.repeat(190))}))};
+ const result=await preparePerson({command:db.command,id:1813,load:async()=>huge,now:()=>Date.parse('2026-03-02T00:00:00Z'),allowWrites:true});
+ assert.equal(result.source,'stale-cache');
+ assert.equal(db.values.get(keyFor(1813)),prior);
+});
