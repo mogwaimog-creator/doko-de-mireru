@@ -3092,7 +3092,10 @@ const movieId =
   params.get("id");
 
 const mediaType =
-  params.get("type") || "movie";  
+  params.get("type") || "movie";
+
+// Server-rendered SEO is authoritative; legacy client updates remain for static pages.
+const hasServerSeo = document.documentElement.getAttribute("data-seo-ledger") === "1";  
 
 /* =========================================================
    詳細ページの正規URL作成
@@ -3207,7 +3210,7 @@ const canonical =
   );
 
 
-if(canonical){
+if(canonical && !hasServerSeo){
 
   canonical.href =
     initialCanonicalUrl;
@@ -3219,11 +3222,13 @@ if(canonical){
    初期OGP URL
 ========================================================= */
 
+if(!hasServerSeo){
 setMetaProperty(
   "ogUrl",
   "content",
   initialCanonicalUrl
 );
+}
 
 
 /* =========================================================
@@ -3390,6 +3395,8 @@ async function loadMovie(){
 ========================================================= */
 
 function updateSeo(movie){
+
+  if(hasServerSeo)return;
 
   if(!movie){
 
