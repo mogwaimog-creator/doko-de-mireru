@@ -2,7 +2,7 @@
 // Offline-only person ledger prototype. No Redis, TMDB, or production imports.
 const MAX_CREDITS=500;
 const LISTS=['cast','voice','directed','documentary_talk','other'];
-const cardFields=['id','media_type','title','name','release_date','first_air_date','poster_path','character','job'];
+const cardFields=['id','media_type','title','name','release_date','first_air_date','poster_path'];
 function personId(id){const n=Number(id);if(!Number.isSafeInteger(n)||n<1)throw Error('invalid person ID');return n}
 function text(v,n){return typeof v==='string'?v.slice(0,n):null}
 function normalizePerson(input){
@@ -24,7 +24,8 @@ function normalizePerson(input){
    for(const field of cardFields){
     if(field==='id')c.id=workId;
     else if(field==='media_type')c.media_type=type;
-    else if(typeof credit[field]==='string')c[field]=credit[field].slice(0,200);
+    else if(field==='release_date'||field==='first_air_date'){if(typeof credit[field]==='string')c.year=credit[field].slice(0,4)}
+    else if(typeof credit[field]==='string')c[field==='name'?'title':field]=credit[field].slice(0,200);
    }
    out[list].push(c);
    if(out[list].length>=MAX_CREDITS)break;
