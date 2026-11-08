@@ -57,7 +57,26 @@ async function preparePerson({command,id,load,now=()=>Date.now(),allowWrites=fal
    const record=makeRecord(person,existing,stamp);
    // Reuse the existing record on identical content, updating only the check date.
    // A Redis hash is deliberately avoided: one strict JSON record per person.
-   await command(['SET',key,JSON.stringify(record)]);
+   // Only the lock owner may write. If the lease expired while TMDB was loading,
+   // preserve the currently stored record rather than overwrite another refresh.
+   if(await command(['GET',lockKey])!==token){
+    const current=await readPerson(command,id);
+    if(current)return {person:current.person,record:current,source:'cache'};
+    const error=new Error('Person ledger refresh lock expired');
+    error.code='PERSON_METADATA_LOCK_EXPIRED';
+    throw error;
+   }
+   // Atomic ownership check and write: a late worker must not overwrite a
+   // newer record saved by the next lock owner.
+   const script='if redis.call("GET",KEYS[1])==ARGV[1] then redis.call("SET",KEYS[2],ARGV[2]); return 1 else return 0 end';
+   const saved=await command(['EVAL',script,'2',lockKey,key,token,JSON.stringify(record)]);
+   if(saved!==1){
+    const current=await readPerson(command,id);
+    if(current)return {person:current.person,record:current,source:'cache'};
+    const error=new Error('Person ledger refresh lock expired');
+    error.code='PERSON_METADATA_LOCK_EXPIRED';
+    throw error;
+   }
    return {person:record.person,record,source:existing?'refreshed':'created'};
   }catch(error){
    if(existing)return {person:existing.person,record:existing,source:'stale-cache'};
