@@ -32,3 +32,20 @@ test('snapshot reload and duplicate detection',()=>{
  assert.throws(()=>restored.load(JSON.stringify(raw)),/duplicate/);
  assert.equal(restored.count(),1);
 });
+
+test('first saved date persists across refresh and restore',()=>{
+ const s=store();s.success(person,'2026-11-01T00:00:00Z');
+ s.success({...person,name:'changed'},'2027-01-02T00:00:00Z');
+ assert.equal(s.get(1813).createdAt,'2026-11-01T00:00:00.000Z');
+ assert.equal(s.get(1813).checkedAt,'2027-01-02T00:00:00.000Z');
+ assert.equal(s.get(1813).schemaVersion,2);
+ const restored=store();restored.load(s.save());
+ assert.equal(restored.get(1813).createdAt,'2026-11-01T00:00:00.000Z');
+});
+test('old version 1 snapshots can be loaded without extra work-card fields',()=>{
+ const s=store();s.success(person,'2026-11-01T00:00:00Z');
+ const old=JSON.parse(s.save());old.version=1;delete old.records[0].createdAt;
+ const restored=store();restored.load(JSON.stringify(old));
+ assert.equal(restored.get(1813).createdAt,'2026-11-01T00:00:00.000Z');
+ assert.deepEqual(Object.keys(restored.get(1813).person.cast[0]),['id','media_type','title','year','poster_path']);
+});
