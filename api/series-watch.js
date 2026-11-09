@@ -28,8 +28,8 @@ module.exports=async(req,res)=>{
     const keys=works.map(w=>`${w.type}:${w.id}`);
     const sharedReader=require('./_shared-streaming-read');
     let shared={};
-    if(sharedReader.enabled()){try{shared=await sharedReader.readMany(works)}catch{}}
-    const fallbackKeys=keys; // Coexistence: compare BOTH sources by successful acquisition time.
+    if(sharedReader.enabled()){try{shared=await sharedReader.readMany(works)}catch(error){if(sharedReader.recoveryOnly())throw error;}}
+    const fallbackKeys=sharedReader.recoveryOnly()?[]:keys; // Coexistence: compare BOTH sources by successful acquisition time.
     let values=[];
     if(fallbackKeys.length){
       try{values=await command(['MGET',...fallbackKeys.map(k=>KEYPREFIX+k)])}

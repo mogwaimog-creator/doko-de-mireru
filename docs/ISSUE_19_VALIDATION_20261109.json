@@ -1,0 +1,45 @@
+{
+  "date": "2026-11-09",
+  "branch": "work/four-ledgers-20261107",
+  "previousCommit": "c9429b1",
+  "connections": {
+    "productionRedis": false,
+    "Upstash": false,
+    "Vercel": false,
+    "TMDB": false,
+    "localRedis": true
+  },
+  "node": {
+    "tests": 431,
+    "pass": 431,
+    "fail": 0,
+    "skipped": 0,
+    "logSha256": "1e3e36bc780eb65675e9fb55cd5b0bc03674215ad196a86a59263fb2d82d6263"
+  },
+  "browser": {
+    "existing": 68,
+    "recovery": 26,
+    "scope": "loopback fixture only"
+  },
+  "protectedUnchanged": {
+    "godzilla.html": "a977bb0f4e1859f191ec0cac310f4d7377d4ee2355cf9a62be53839c855574d5",
+    "mcu.html": "06a22b9968fde0263f76c19e039acb7cf3d2878c23e71afd0af04157452b8a56",
+    "jurassic.html": "0682639700951bdf9ee795070f94a98c45749d1f9c8c5bf46e76a9b12df5a8ac",
+    "harrypotter.html": "853c185511f942ce773d968fbff7075f6c98f276fd20400a62587a93b342f16f",
+    "lordoftherings.html": "e4510d9ea538408ed4a6a4bef8559b000cf9771b8f8f0f412d0525974100ada0",
+    "starwars.html": "88365c0ec71cd69291bbb3a4dc62322a4b0cbbb1ad0c44774753b4ac62041012",
+    "wildspeed.html": "f79f395ff124e24898f89ada42b8c733786dd636fe7956a8aadf6e1a34e7eb48",
+    "minions.html": "032fc68729663a3360ca385be30db2246094d5a3a52495fab44e30f8650fff04",
+    "odoru.html": "ac05233c7d069473db7aa56335bca35d6019a8cae0a965cf87463fa0f2d0b4f0",
+    "eva.html": "faa2c4a437922b59db392e0d9971f102d1d4fa30e683dd35d04653d5e25075e2",
+    "conan.html": "4aa40e41ff0cdf99031210b744ae91468410f667d4d5d78aff020580eaf85317",
+    "gundam.html": "ce3d3d1d9f5a20e9ba83a1de09fd20987272b2677eb17ec064bfb625530a3d20",
+    "kimetsu.html": "b046f4d3393d0e5b6167f3debc761949cabab0c911c57a279ea528a8c2db6a88",
+    "streaming.html": "3e450856186db8b5c2fca950bd6262edebdbe0b02dc940b5cdf35bee8dd6f94d",
+    "ghibli.html": "c2cebc073be1c0f7757885d51468e4b6564ffba18cb3d15ffb27d2bece47718e",
+    "movie_shelf_1980_1984.html": "a0fc33bad5f6ed85ec176c52359c825ef42a00064adfc244a0acb61171d36f8d",
+    "detail.html": "2263f460d1647af1b7634f5536777b55fff780ff0567bcb9594e967d18045df9",
+    "person.html": "60b397cf377e193a7470a8c7d0e51bf3aeb153613c0e213dd7150cfec9f40041",
+    "vercel.json": "730ec955b8e706ac6974323cc8b3c0537e1c6de07d9adcc4dd643706dc7f0377"
+  }
+}

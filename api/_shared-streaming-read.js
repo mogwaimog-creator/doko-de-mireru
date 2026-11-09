@@ -6,6 +6,7 @@ const {toDetail,toWatch}=require('../prototype/streaming-ledger-compat');
 const {detailState,selectWatch}=require('./_streaming-state');
 const watchOrderKeys=new Set(Object.values(require('../data/watch-order-memberships.json')).flat().map(w=>w.type+':'+w.id));
 function enabled(){return process.env.SHARED_STREAMING_READ_ENABLED==='1'&&process.env.VERCEL_ENV!=='production'&&process.env.NODE_ENV!=='production'}
+function recoveryOnly(){return enabled()&&process.env.DEV_LEAN_SERIES_ENABLED==='1'}
 async function devCommand(args){
  const url=new URL(process.env.SHARED_LEDGER_DEV_URL||'http://127.0.0.1:16380');
  if(url.protocol!=='http:'||!['127.0.0.1','localhost','[::1]'].includes(url.hostname)||url.username||url.password)throw Error('local isolated Redis required');
@@ -30,8 +31,8 @@ async function readDetail(type,id,now=Date.now()){
  if(!enabled())return null;
  const k=key(type,id),s=sharedStore(devCommand);
  try{
-  const values=await devCommand(['MGET',s.keys.dataKey(k),'doko:dev:legacy-watch:v3:'+k,'doko:dev:legacy-detail:v1:'+k]);
-  if(!Array.isArray(values)||values.length!==3)throw Error('invalid detail batch');
+  const values=await devCommand(['MGET',s.keys.dataKey(k),...(recoveryOnly()?[]:['doko:dev:legacy-watch:v3:'+k,'doko:dev:legacy-detail:v1:'+k])]);
+  if(!Array.isArray(values)||values.length!==(recoveryOnly()?1:3))throw Error('invalid detail batch');
   let raw;try{raw=JSON.parse(values[0])}catch{}
   let refreshProblem=null;
   if(process.env.DEV_STREAMING_REFRESH_ENABLED==='1'&&!watchOrderKeys.has(k)){
@@ -56,4 +57,4 @@ async function attachRelated(detail){
  try{const records=await readMany(works),byWork={};for(const [k,r] of Object.entries(records))if(r.watch&&!r.watch.stale)byWork[k]=r.watch.flatrate;
  return {...detail,seriesStreamingByWork:byWork,seriesStreamingManaged:true};}catch{return {...detail,seriesStreamingManaged:true}}
 }
-module.exports={enabled,devCommand,compatible,readMany,readDetail,attachRelated,selectWatch};
+module.exports={recoveryOnly,enabled,devCommand,compatible,readMany,readDetail,attachRelated,selectWatch};

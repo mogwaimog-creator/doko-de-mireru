@@ -9,7 +9,7 @@ async function benchmark(){
   let rpcs=0,requestArgumentBytes=0,loads=0;const send=args=>{rpcs++;requestArgumentBytes+=args.reduce((n,a)=>n+Buffer.byteLength(String(a)),0);return command(args)},prefix=`doko:dev:packed-benchmark:${Date.now()}:${compact?'packed':'old'}:`;
   const records=sharedStore(send,{prefix:prefix+'records:'}),jobs=compact?compactDailyJobStore(send,{prefix:prefix+'jobs:',clock:()=>Date.parse(at)}):dailyJobStore(send,{prefix:prefix+'jobs:'});const before=await stats(),start=Date.now();
   const result=await dailyJob(records,jobs,async()=>{loads++;return {results:{JP:{flatrate:[],rent:[],buy:[]}}}}).run(at,works);const elapsedMs=Date.now()-start,after=await stats(),commands=Object.fromEntries(names.map(k=>[k,after[k]-before[k]])),operations=Object.values(commands).reduce((a,b)=>a+b,0);
-  if(result.status!=='complete'||loads!==266||rpcs!==580||operations!==(compact?2724:2630))throw Error('incomplete or contaminated benchmark '+JSON.stringify({result,loads,rpcs,operations}));
+  if(result.status!=='complete'||loads!==266||rpcs!==580||operations!==(compact?2990:2896))throw Error('incomplete or contaminated benchmark '+JSON.stringify({result,loads,rpcs,operations}));
   const journalRedisBytes=await command(['MEMORY','USAGE',jobs.keys.dayKey(result.day)]),ttl=await command(['TTL',jobs.keys.dayKey(result.day)]);
   results[compact?'packedV2':'jsonV1']={works:266,result,clientRedisRPCs:rpcs,redisOperationsIncludingLua:operations,requestArgumentBytes,upstreamFixtureLoads:loads,commands,elapsedMs,journalRedisBytes,ttlSeconds:ttl};
  }

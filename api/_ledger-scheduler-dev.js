@@ -2,11 +2,12 @@
 // Adapter for the existing authenticated cron shape, with local-only dependencies.
 const {supervisor}=require('./_daily-job-supervisor'),{jstDay}=require('../prototype/streaming-ledger-schedule');
 const ROOT='doko:dev:ops:v1:';
-function scheduler(command,job,{controlKey='doko:dev:content-control:v1',prefix=ROOT,clock=Date.now}={}){
+function scheduler(command,job,{controlKey='doko:dev:content-control:v1',prefix=ROOT,clock=Date.now,lean=false}={}){
  if(!/^doko:dev:[a-z0-9:-]+$/.test(controlKey)||!/^doko:dev:[a-z0-9:-]+:$/.test(prefix))throw Error('local control required');
  async function run(works,{signal}={}){
   const at=new Date(clock()).toISOString(),day=jstDay(at),control=await command(['GET',controlKey]);let result;
   if(control&&JSON.parse(control).status!=='ready')result={status:'stopped',reason:'shared-pause'};
+  else if(lean){try{const last=await job.run(at,works,{maxItems:1000,signal});result={...last,last};if(!['complete','complete-with-errors','not-due','busy'].includes(result.status))result={...result,status:'stopped'}}catch{result={status:'stopped',reason:'storage-or-journal-error'}}}
   else result=await supervisor(job).run(at,works,{maxItems:24,signal});
   const event={day,at,status:result.status,reason:result.reason||null,last:result.last||null};
   const writes=[prefix+'last-attempt',JSON.stringify(event)];if(result.status==='complete')writes.push(prefix+'last-success',JSON.stringify(event));
@@ -27,6 +28,6 @@ async function handle(req,res){
  const {command}=require('../tests/helpers/local-redis'),{sharedStore}=require('./_shared-streaming-store'),{compactDailyJobStore}=require('./_compact-daily-job-store'),{dailyJob}=require('./_streaming-daily-job');
  const works=require('../scripts/audit-shared-ledgers').inventory().records;
  const fixture={results:{JP:{flatrate:[{provider_id:8,provider_name:'Netflix（隔離試験用）',logo_path:'/test-fixture.png'}],rent:[],buy:[]}}};
- try{const runner=scheduler(command,dailyJob(sharedStore(command),compactDailyJobStore(command),async()=>fixture));const result=await runner.run(works);return res.status(['stopped','complete-with-errors'].includes(result.status)?503:200).json(result)}catch{console.error('isolated ledger cron storage/monitoring failed');return res.status(503).json({error:'isolated update stopped; monitoring storage unavailable'})}
+ try{const lean=process.env.DEV_LEAN_SERIES_ENABLED==='1';const job=lean?require('./_lean-series-refresh').leanSeriesRefresh(command,async()=>fixture):dailyJob(sharedStore(command),compactDailyJobStore(command),async()=>fixture);const runner=scheduler(command,job,{lean});const result=await runner.run(works);return res.status(['stopped','complete-with-errors'].includes(result.status)?503:200).json(result)}catch{console.error('isolated ledger cron storage/monitoring failed');return res.status(503).json({error:'isolated update stopped; monitoring storage unavailable'})}
 }
 module.exports={scheduler,handle,ROOT};

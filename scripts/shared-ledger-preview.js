@@ -21,7 +21,9 @@ global.fetch=async(url,options)=>{
  if(new URL(url).hostname==='api.themoviedb.org'){
   upstreamCalls++;upstreamUrls.push(String(url).replace(/api_key=[^&]*/g,'api_key=fixture'));const u=new URL(url),parts=u.pathname.split('/'),id=Number(parts[3]),type=parts[2];
   let data;
-  if(u.pathname.endsWith('/watch/providers'))data=fixture;
+  if(u.pathname.startsWith('/3/search/'))data={page:1,total_pages:1,total_results:1,results:[{id:12345678,title:'Issue19Fixture',name:'Issue19Fixture',media_type:parts[3]==='person'?'person':parts[3]==='tv'?'tv':'movie',release_date:'2020-01-01',first_air_date:'2020-01-01',genre_ids:[],popularity:100,vote_count:100,vote_average:8,poster_path:'/fixture.jpg'}]};
+  else if(u.pathname.endsWith('/watch/providers'))data=fixture;
+  else if(/\/season\/[0-9]+$/.test(u.pathname))data={id:12345,season_number:Number(parts.at(-1)),name:'隔離試験シーズン',episodes:[{episode_number:1,name:'隔離試験エピソード',runtime:24}]};
   else if(parts.length>4)data={results:[],cast:[],crew:[]};
   else data={id,title:saved.get(type+':'+id)||'隔離試験用作品',name:saved.get(type+':'+id)||'隔離試験用作品',overview:'ローカル隔離検証用の説明。配信情報は試験データです。',release_date:'2020-10-16',first_air_date:'2019-04-06',genres:[],credits:{cast:[],crew:[]},seasons:[],production_countries:[],production_companies:[],spoken_languages:[],vote_average:8,vote_count:100,runtime:117,number_of_seasons:0,number_of_episodes:0,status:'Released','watch/providers':fixture};
   return {ok:true,status:200,json:async()=>data,text:async()=>JSON.stringify(data)};
@@ -42,7 +44,7 @@ async function start(){
  const s=service(native,async()=>{providerFixtureLoads++;return fixture});
  for(const w of Object.values(catalog).flat()){await s.visit(w.type,w.id,now,[]);await command(['SET','doko:dev:legacy-watch:v3:'+w.type+':'+w.id,JSON.stringify({flatrate:fixture.results.JP.flatrate,checkedAt:now}),'NX']);}
  const content=require('../api/_dev-content-ledgers');
- const daily=require('../api/_streaming-daily-job').dailyJob(native,require('../api/_compact-daily-job-store').compactDailyJobStore(command),async()=>{providerFixtureLoads++;return fixture});
+ const daily=process.env.DEV_LEAN_SERIES_ENABLED==='1'?require('../api/_lean-series-refresh').leanSeriesRefresh(command,async()=>{providerFixtureLoads++;return fixture}):require('../api/_streaming-daily-job').dailyJob(native,require('../api/_compact-daily-job-store').compactDailyJobStore(command),async()=>{providerFixtureLoads++;return fixture});
  const contentUpdates=require('../api/_content-ledger-coordinator').coordinator(require('../api/_dev-content-store').contentStore(command));
  const {normalizeWorkV2}=require('../api/_work-ledger-v2-schema');
  for(const row of rows){
@@ -67,10 +69,11 @@ async function start(){
  await command(['SET',require('../api/_dev-ledger-search').CATALOG,JSON.stringify({schemaVersion:1,works:rows.map(w=>({type:w.type,id:w.id})),people:[1813]}),'NX']);
 
  const searchIndex=require('../api/_search-index-v2');
- for(const key of [...rows.map(w=>content.keys.work(w.type,w.id)),content.keys.person(1813)]){const raw=await command(['GET',key]);if(raw)await searchIndex.seed(command,key,raw)}
- await command(['SET',searchIndex.READY,'1']);
+ if(process.env.DEV_LEAN_SERIES_ENABLED!=='1')for(const key of [...rows.map(w=>content.keys.work(w.type,w.id)),content.keys.person(1813)]){const raw=await command(['GET',key]);if(raw)await searchIndex.seed(command,key,raw)}
+ if(process.env.DEV_LEAN_SERIES_ENABLED!=='1')await command(['SET',searchIndex.READY,'1']);
  http.createServer(async(req,res)=>{
   try{let body='';for await(const chunk of req)body+=chunk;if(body.length>1000000)throw Error('large body');const args=JSON.parse(body);
+   if(req.url==='/recovery-cache'){if(process.env.DEV_LEAN_SERIES_ENABLED!=='1')throw Error('recovery disabled');const cache=require('../api/_recovery-fetch-cache');if(!Array.isArray(args)||args[0]!=='EVAL'||![cache.CLAIM,cache.SAVE,cache.RELEASE].includes(args[1]))throw Error('recovery operation not allowed');const n=Number(args[2]);if(!Number.isInteger(n)||n<1||n>4||!args.slice(3,3+n).every(k=>k==='doko:dev:content-control:v1'||/^doko:dev:recovery:v1:(?:query:[0-9]+|content:[a-f0-9]{64})(?::lock)?$/.test(k)||k==='doko:dev:recovery:v1:content-bytes'))throw Error('recovery namespace');res.setHeader('Content-Type','application/json');return res.end(JSON.stringify({result:await command(args)}))}
    if(req.url==='/refresh'){
     if(process.env.DEV_STREAMING_REFRESH_ENABLED!=='1')throw Error('development refresh disabled');
     const control=await require('../api/_dev-content-store').contentStore(command).readControl();if(control&&control.status!=='ready'){res.setHeader('Content-Type','application/json');return res.end(JSON.stringify({status:'paused',reason:'shared-pause'}))}

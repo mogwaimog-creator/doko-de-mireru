@@ -2,12 +2,12 @@
 const {test}=require('node:test'),assert=require('node:assert/strict');
 const cache=require.cache,redisPath=require.resolve('../api/_redis'),readerPath=require.resolve('../api/_shared-streaming-read'),handlerPath=require.resolve('../api/series-watch');
 const actualReader=require(readerPath);
-async function run({enabled=false,newRecords={},readFails=false,env='development'}={}){
+async function run({enabled=false,newRecords={},readFails=false,env='development',recovery=false}={}){
  const oldRedis=cache[redisPath],oldReader=cache[readerPath],oldHandler=cache[handlerPath],oldEnv={...process.env};let calls=[];
  try{
   process.env.SHARED_STREAMING_READ_ENABLED=enabled?'1':'0';process.env.VERCEL_ENV=env;
   cache[redisPath]={exports:{command:async args=>{calls.push(args);assert.equal(args[0],'MGET');return args.slice(1).map(()=>JSON.stringify({flatrate:[],checkedAt:new Date(Date.now()-60000).toISOString()}))}}};
-  cache[readerPath]={exports:{enabled:actualReader.enabled,selectWatch:actualReader.selectWatch,readMany:async()=>{if(readFails)throw Error('local unavailable');return newRecords}}};
+  cache[readerPath]={exports:{recoveryOnly:()=>recovery&&actualReader.enabled(),enabled:actualReader.enabled,selectWatch:actualReader.selectWatch,readMany:async()=>{if(readFails)throw Error('local unavailable');return newRecords}}};
   delete cache[handlerPath];const handler=require(handlerPath);
   const response={setHeader(){},status(code){this.code=code;return this},json(body){this.body=body;return this}};
   await handler({method:'GET',query:{series:'kimetsu'}},response);return {response,calls};
@@ -31,4 +31,8 @@ test('stale shared availability cannot hide a newer successful empty legacy resu
  const watch={flatrate:[{provider_id:8}],checkedAt:new Date(Date.now()-2*86400000).toISOString(),stale:true};
  const {response}=await run({enabled:true,newRecords:{'movie:635302':{watch}}});
  assert.deepEqual(response.body.providers['movie:635302'].flatrate,[]);assert.equal(response.body.providers['movie:635302'].stale,false);
+});
+
+test('recovery mode uses new records only with no legacy Redis read, and fails closed on outage',async()=>{
+ const watch={flatrate:[],checkedAt:new Date().toISOString(),stale:false};const {response,calls}=await run({enabled:true,recovery:true,newRecords:{'movie:635302':{watch}}});assert.equal(response.code,200);assert.equal(calls.length,0);assert.equal(response.body.complete,false);assert.deepEqual(response.body.providers['movie:635302'].flatrate,[]);assert.equal((await run({enabled:true,recovery:true,readFails:true})).response.code,503);
 });

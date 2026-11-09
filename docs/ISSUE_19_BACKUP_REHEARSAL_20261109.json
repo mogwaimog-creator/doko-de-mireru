@@ -1,0 +1,12 @@
+{
+  "scope": "local loopback fixtures only; not real data or user PC",
+  "file": "/tmp/issue19-backup-1794203986083.json",
+  "fileBytes": 789,
+  "fileSha256": "3fa25196cb4b94df967be499d5182ecae88be72b176b39fae4e877bac09d695c",
+  "manifestSha256": "b2959095b58f879ddab5279787d9045b65cf04eb41ea64005e1a82f18529deb1",
+  "count": 2,
+  "result": {
+    "restored": 2,
+    "expired": 0
+  }
+}

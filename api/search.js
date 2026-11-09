@@ -364,7 +364,8 @@ if (
   personSearch
 ) {
 
-  if(process.env.DEV_CONTENT_LEDGER_ENABLED==='1'){const dev=require('./_dev-content-ledgers');if(dev.enabled())return res.status(200).json(await require('./_dev-ledger-search').search(personSearch,{kind:'person',cursor:req.query.cursor||null}));}
+  if(process.env.DEV_LEAN_SERIES_ENABLED==='1'&&require('./_recovery-fetch-cache').enabled())return res.status(200).json(await require('./_recovery-search').search(personSearch,{kind:'person',page,apiKey,fetchJson}));
+  if(process.env.DEV_CONTENT_LEDGER_ENABLED==='1'&&!require('./_recovery-fetch-cache').enabled()){const dev=require('./_dev-content-ledgers');if(dev.enabled())return res.status(200).json(await require('./_dev-ledger-search').search(personSearch,{kind:'person',cursor:req.query.cursor||null}));}
 
   const people =
     await searchPeople(
@@ -388,7 +389,7 @@ if (
   personId
 ) {
 
-  if(process.env.DEV_CONTENT_LEDGER_ENABLED==='1'){const dev=require('./_dev-content-ledgers');if(dev.enabled())return res.status(200).json(await dev.readPerson(Number(personId)));}
+  if(process.env.DEV_CONTENT_LEDGER_ENABLED==='1'){const dev=require('./_dev-content-ledgers');if(dev.enabled()&&(!require('./_recovery-fetch-cache').enabled()||await require('./_shared-streaming-read').devCommand(['GET',dev.keys.person(Number(personId))])!==null))return res.status(200).json(await dev.readPerson(Number(personId)));}
 
   // Disabled by default. Demo-only v2 switch; never touches v1 keys.
   // Enabling this flag requires a reviewed demo deployment.
@@ -440,7 +441,7 @@ if (id) {
     // ===================================================
 
     if (season > 0) {
-      if(process.env.DEV_CONTENT_LEDGER_ENABLED==='1'){const dev=require('./_dev-content-ledgers');if(dev.enabled())return res.status(200).json(await dev.readSeason(Number(id),season));}
+      if(process.env.DEV_CONTENT_LEDGER_ENABLED==='1'){const dev=require('./_dev-content-ledgers');if(dev.enabled()&&(!require('./_recovery-fetch-cache').enabled()||await require('./_shared-streaming-read').devCommand(['GET',dev.keys.season(Number(id))])!==null))return res.status(200).json(await dev.readSeason(Number(id),season));}
 
       // Opt-in only: disabled by default. Keep the legacy path unchanged
       // until live integration and rollback checks have been approved.
@@ -1117,7 +1118,8 @@ if (provider === "disney") {
       });
     }
 
-if(process.env.DEV_CONTENT_LEDGER_ENABLED==='1'){const dev=require('./_dev-content-ledgers');if(dev.enabled())return res.status(200).json(await require('./_dev-ledger-search').search(query,{type,page,cursor:req.query.cursor||null}));}
+if(process.env.DEV_LEAN_SERIES_ENABLED==='1'&&require('./_recovery-fetch-cache').enabled())return res.status(200).json(await require('./_recovery-search').search(query,{type,page,apiKey,fetchJson}));
+if(process.env.DEV_CONTENT_LEDGER_ENABLED==='1'&&!require('./_recovery-fetch-cache').enabled()){const dev=require('./_dev-content-ledgers');if(dev.enabled())return res.status(200).json(await require('./_dev-ledger-search').search(query,{type,page,cursor:req.query.cursor||null}));}
 
 // =====================================================
 // ドラマ・アニメ検索
@@ -4967,6 +4969,15 @@ async function getCollection(
 // =========================================================
 
 async function fetchJson(url) {
+  const recovery=require('./_recovery-fetch-cache');if(recovery.enabled()){
+    const parsed=new URL(url),match=parsed.pathname.match(/^\/3\/(movie|tv)\/([1-9][0-9]*)$/),append=parsed.searchParams.get('append_to_response'),attach=match&&append?.split(',').includes('watch/providers');
+    if(attach){const keep=append.split(',').filter(x=>x!=='watch/providers');if(keep.length)parsed.searchParams.set('append_to_response',keep.join(','));else parsed.searchParams.delete('append_to_response')}
+    const result=await recovery.cache(recovery.devCommand).load(parsed.toString(),()=>fetchJsonNetwork(parsed.toString()));
+    if(attach)return {...result,'watch/providers':(await require('./_shared-streaming-read').readDetail(match[1],Number(match[2]))).data};return result;
+  }
+  return fetchJsonNetwork(url);
+}
+async function fetchJsonNetwork(url) {
   const sharedReader=require('./_shared-streaming-read');
   let removedProviderIdentity=null;
   if(sharedReader.enabled()){
@@ -4985,6 +4996,7 @@ async function fetchJson(url) {
       url,
       {
         method: "GET",
+        ...(require('./_recovery-fetch-cache').enabled()?{signal:AbortSignal.timeout(6500)}:{}),
 
         headers: {
           "Accept":
