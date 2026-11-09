@@ -146,6 +146,7 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
 #sw-tabs.sw-tabs-fixed .tabs{max-width:1056px;margin:0 auto}
 @media(max-width:760px){#sw-tabs.sw-tabs-fixed{padding:6px 12px 8px}}
 </style>
+<script src="series-ledger-view.js" data-series="starwars"></script>
 </head>
 <body>
 <header class="hero"><div class="wrap">
@@ -291,7 +292,7 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
   }
   // Shared cached watch data: no per-title /api/search calls.
   const apiBase=location.protocol==='file:'?'https://doko-de-mireru.com':'';
-  const sharedProviders=fetch(apiBase+'/api/series-watch?series=starwars')
+  const sharedProviders=dokoSeriesFetch(apiBase+'/api/series-watch?series=starwars')
     .then(r=>{if(!r.ok)throw Error('配信キャッシュ取得失敗');return r.json()})
     .catch(()=>null);
   async function loadProviders(box){

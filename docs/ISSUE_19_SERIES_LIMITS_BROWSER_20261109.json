@@ -1,0 +1,116 @@
+{
+  "scope": "loopback and unique preview fixture namespace; no external services",
+  "passed": 19,
+  "checks": [
+    {
+      "series": "godzilla",
+      "panels": 103,
+      "snapshotRequests": 1,
+      "canonicalTitlesVerified": true,
+      "renderedReferencesChecked": 775,
+      "tabChangesChecked": 6
+    },
+    {
+      "series": "mcu",
+      "panels": 229,
+      "snapshotRequests": 1,
+      "canonicalTitlesVerified": true,
+      "renderedReferencesChecked": 371,
+      "tabChangesChecked": 0
+    },
+    {
+      "series": "jurassic",
+      "panels": 7,
+      "snapshotRequests": 1,
+      "canonicalTitlesVerified": true,
+      "renderedReferencesChecked": 7,
+      "tabChangesChecked": 0
+    },
+    {
+      "series": "harrypotter",
+      "panels": 11,
+      "snapshotRequests": 1,
+      "canonicalTitlesVerified": true,
+      "renderedReferencesChecked": 33,
+      "tabChangesChecked": 0
+    },
+    {
+      "series": "lordoftherings",
+      "panels": 8,
+      "snapshotRequests": 1,
+      "canonicalTitlesVerified": true,
+      "renderedReferencesChecked": 80,
+      "tabChangesChecked": 4
+    },
+    {
+      "series": "starwars",
+      "panels": 9,
+      "snapshotRequests": 1,
+      "canonicalTitlesVerified": true,
+      "renderedReferencesChecked": 258,
+      "tabChangesChecked": 4
+    },
+    {
+      "series": "wildspeed",
+      "panels": 22,
+      "snapshotRequests": 1,
+      "canonicalTitlesVerified": true,
+      "renderedReferencesChecked": 66,
+      "tabChangesChecked": 2
+    },
+    {
+      "series": "minions",
+      "panels": 14,
+      "snapshotRequests": 1,
+      "canonicalTitlesVerified": true,
+      "renderedReferencesChecked": 56,
+      "tabChangesChecked": 3
+    },
+    {
+      "series": "odoru",
+      "panels": 34,
+      "snapshotRequests": 1,
+      "canonicalTitlesVerified": true,
+      "renderedReferencesChecked": 544,
+      "tabChangesChecked": 3
+    },
+    {
+      "series": "eva",
+      "panels": 6,
+      "snapshotRequests": 1,
+      "canonicalTitlesVerified": true,
+      "renderedReferencesChecked": 18,
+      "tabChangesChecked": 0
+    },
+    {
+      "series": "conan",
+      "panels": 76,
+      "snapshotRequests": 1,
+      "canonicalTitlesVerified": true,
+      "renderedReferencesChecked": 1140,
+      "tabChangesChecked": 14
+    },
+    {
+      "series": "gundam",
+      "panels": 21,
+      "snapshotRequests": 1,
+      "canonicalTitlesVerified": true,
+      "renderedReferencesChecked": 59,
+      "tabChangesChecked": 4
+    },
+    {
+      "series": "kimetsu",
+      "panels": 14,
+      "snapshotRequests": 1,
+      "canonicalTitlesVerified": true,
+      "renderedReferencesChecked": 280,
+      "tabChangesChecked": 9
+    },
+    "all 13 page visits read saved metadata/providers, no upstream retrieval",
+    "editorial headings, explicit locks, escaping and later-rendered cards protected",
+    "snapshot outage keeps editorial content and never loops or claims a ready shared view",
+    "UI daily limit allows one new work then stops before upstream; saved HTML/API keep SEO and reuse",
+    "acquisition-only pause keeps saved works and series visible",
+    "operator secret is not retained after page reload"
+  ]
+}

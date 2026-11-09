@@ -1,0 +1,7 @@
+'use strict';
+const {test}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),{createHash}=require('node:crypto');
+const names=Object.keys(require('../data/watch-order-memberships.json'));
+test('all 13 pages keep exact editorial markup, arrays and ordering; only shared loader and snapshot call change',()=>{
+ for(const name of names){const current=fs.readFileSync(name+'.html','utf8'),prior=require('../docs/ISSUE_19_EDITORIAL_PROTECTION_20261109.json').series.find(row=>row.series===name).sha256;const restored=current.replace('<script src="series-ledger-view.js" data-series="'+name+'"></script>\n','').replace("for(const box of boxes)resolve(box).then(work=>{if(work)dokoSeriesBind(box,work.type,work.id)});",'').replace(/dokoSeriesFetch(?=\([^\n;]{0,240}\/api\/series-watch\?series=)/,'fetch');assert.equal(createHash('sha256').update(restored).digest('hex'),prior,name);assert.equal((current.match(/src="series-ledger-view.js"/g)||[]).length,1)}
+});
+test('shared snapshot exposes fixed fields separately and preserves explicit all/poster overrides',()=>{const source=fs.readFileSync('series-ledger-view.js','utf8');assert(source.includes("data-ledger-lock=\"all\""));assert(source.includes("data-ledger-lock=\"poster\""));assert(source.includes("panel.textContent=text"));assert(!source.includes('innerHTML'));assert(!source.includes('api.themoviedb.org'));assert(source.includes('response.clone()'))});

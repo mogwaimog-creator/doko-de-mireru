@@ -8270,6 +8270,7 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
  box-shadow:0 0 12px rgba(167,139,250,.90),0 0 24px rgba(124,58,237,.48);
 }
 </style>
+<script src="series-ledger-view.js" data-series="mcu"></script>
 </head>
 <body>
 <div class="page-wrap">
@@ -14854,7 +14855,7 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
 
 <script>
 /* MCU配信ロゴ：Redisの保存済み情報を一括取得。訪問者からTMDBへ問い合わせない */
-const mcuCachedRecords=fetch('/api/series-watch?series=mcu',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('配信API '+r.status);return r.json();}).then(d=>d.providers||{});
+const mcuCachedRecords=dokoSeriesFetch('/api/series-watch?series=mcu',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('配信API '+r.status);return r.json();}).then(d=>d.providers||{});
 async function getMcuCachedRecord(id,type){const records=await mcuCachedRecords;return records[type+':'+id]||null;}
 async function loadMcuProviderBox(box){
  if(!box||box.dataset.loaded||box.dataset.loading)return;

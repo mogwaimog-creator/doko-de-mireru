@@ -133,7 +133,8 @@ body{font-size:16px}.kicker{font-size:16px}.char-layout p,.compact p,.film p{fon
 .conan-faq-link{display:inline-block;font-size:15px;line-height:1.6;font-weight:700;color:#164b94;text-decoration:underline;text-underline-offset:3px}
 .conan-faq-link:hover{color:#0b3265}
 @media(max-width:600px){.conan-faq{padding:14px;margin:20px 0}.conan-faq h2{font-size:19px}.conan-faq-item{padding:12px}.conan-faq-item h3{font-size:16px}}
-</style></head><body><header class="hero"><div class="wrap"><nav class="backlinks"><a href="series.html">← シリーズ一覧に戻る</a><a href="index.html">ドコデミレル？ホームへ</a></nav><div class="eyebrow">DETECTIVE CONAN · SERIES GUIDE</div><h1><span class="bowtie">◆◆</span>名探偵コナン、どこから見る？<span class="bowtie bowtie-end" aria-hidden="true">◆◆</span></h1><p>映画からでも楽しめます。気になる人物や黒ずくめの組織の背景は、TVアニメで深掘り。見たい目的から、次の一作を選びましょう。</p><p class="conan-quote">「見た目は子供、頭脳は大人！ その名は、名探偵コナン！」</p></div></header><main class="wrap"><section class="conan-start" aria-labelledby="conan-start-heading">
+</style><script src="series-ledger-view.js" data-series="conan"></script>
+</head><body><header class="hero"><div class="wrap"><nav class="backlinks"><a href="series.html">← シリーズ一覧に戻る</a><a href="index.html">ドコデミレル？ホームへ</a></nav><div class="eyebrow">DETECTIVE CONAN · SERIES GUIDE</div><h1><span class="bowtie">◆◆</span>名探偵コナン、どこから見る？<span class="bowtie bowtie-end" aria-hidden="true">◆◆</span></h1><p>映画からでも楽しめます。気になる人物や黒ずくめの組織の背景は、TVアニメで深掘り。見たい目的から、次の一作を選びましょう。</p><p class="conan-quote">「見た目は子供、頭脳は大人！ その名は、名探偵コナン！」</p></div></header><main class="wrap"><section class="conan-start" aria-labelledby="conan-start-heading">
 <h2 id="conan-start-heading">🔍 名探偵コナンとは？</h2>
 <p>ある事件をきっかけに子供の姿になってしまった高校生探偵・工藤新一。江戸川コナンとして難事件に挑む、推理ミステリーです。</p>
 <p class="conan-why"><strong>なぜ長年こんなに人気なの？</strong> 謎解きだけでなく、迫力のアクション、友情や恋愛、少しずつ深まる物語の謎。いろいろな楽しみ方があるのも魅力です。</p>
@@ -184,7 +185,7 @@ function paintProviders(id,items,error=false,stale=false){
 // One shared Redis-only request for all films and the TV series.
 async function loadConanProviders(){
  let data=null;
- try{const r=await fetch(apiRoot+'/api/series-watch?series=conan');if(!r.ok)throw Error('cache unavailable');data=await r.json()}catch(e){console.warn('Conan cached providers unavailable',e)}
+ try{const r=await dokoSeriesFetch(apiRoot+'/api/series-watch?series=conan');if(!r.ok)throw Error('cache unavailable');data=await r.json()}catch(e){console.warn('Conan cached providers unavailable',e)}
  document.querySelectorAll('.providers[data-tmdb]').forEach(box=>{
    const id=box.dataset.tmdb;
    const record=data?.providers?.['movie:'+id];

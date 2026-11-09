@@ -1,0 +1,145 @@
+{
+  "scope": "loopback fixture values; JSON-serialized Redis results, read-core response sizes excluding HTTP/RESP headers; native command deltas include existing entry tickets and Lua internals; run without concurrent tests; not production measurements",
+  "previewScope": "issue19-series-20261109",
+  "rows": [
+    {
+      "series": "godzilla",
+      "works": 47,
+      "providerOnlyCommands": 1,
+      "combinedCommands": 3,
+      "nativeWithEntryTickets": 8,
+      "providerOnlySerializedResponseBytes": 18753,
+      "combinedSerializedResponseBytes": 38659,
+      "apiFixedFieldBytes": 6571
+    },
+    {
+      "series": "mcu",
+      "works": 54,
+      "providerOnlyCommands": 1,
+      "combinedCommands": 3,
+      "nativeWithEntryTickets": 8,
+      "providerOnlySerializedResponseBytes": 21539,
+      "combinedSerializedResponseBytes": 45272,
+      "apiFixedFieldBytes": 8218
+    },
+    {
+      "series": "jurassic",
+      "works": 7,
+      "providerOnlyCommands": 1,
+      "combinedCommands": 2,
+      "nativeWithEntryTickets": 7,
+      "providerOnlySerializedResponseBytes": 2793,
+      "combinedSerializedResponseBytes": 5865,
+      "apiFixedFieldBytes": 1090
+    },
+    {
+      "series": "harrypotter",
+      "works": 11,
+      "providerOnlyCommands": 1,
+      "combinedCommands": 2,
+      "nativeWithEntryTickets": 7,
+      "providerOnlySerializedResponseBytes": 4381,
+      "combinedSerializedResponseBytes": 9288,
+      "apiFixedFieldBytes": 1785
+    },
+    {
+      "series": "lordoftherings",
+      "works": 8,
+      "providerOnlyCommands": 1,
+      "combinedCommands": 2,
+      "nativeWithEntryTickets": 7,
+      "providerOnlySerializedResponseBytes": 3186,
+      "combinedSerializedResponseBytes": 6746,
+      "apiFixedFieldBytes": 1273
+    },
+    {
+      "series": "starwars",
+      "works": 28,
+      "providerOnlyCommands": 1,
+      "combinedCommands": 2,
+      "nativeWithEntryTickets": 7,
+      "providerOnlySerializedResponseBytes": 11135,
+      "combinedSerializedResponseBytes": 23537,
+      "apiFixedFieldBytes": 4200
+    },
+    {
+      "series": "wildspeed",
+      "works": 11,
+      "providerOnlyCommands": 1,
+      "combinedCommands": 2,
+      "nativeWithEntryTickets": 7,
+      "providerOnlySerializedResponseBytes": 4391,
+      "combinedSerializedResponseBytes": 9182,
+      "apiFixedFieldBytes": 1679
+    },
+    {
+      "series": "minions",
+      "works": 7,
+      "providerOnlyCommands": 1,
+      "combinedCommands": 2,
+      "nativeWithEntryTickets": 7,
+      "providerOnlySerializedResponseBytes": 2800,
+      "combinedSerializedResponseBytes": 5805,
+      "apiFixedFieldBytes": 1030
+    },
+    {
+      "series": "odoru",
+      "works": 16,
+      "providerOnlyCommands": 1,
+      "combinedCommands": 2,
+      "nativeWithEntryTickets": 7,
+      "providerOnlySerializedResponseBytes": 6398,
+      "combinedSerializedResponseBytes": 13492,
+      "apiFixedFieldBytes": 2563
+    },
+    {
+      "series": "eva",
+      "works": 6,
+      "providerOnlyCommands": 1,
+      "combinedCommands": 2,
+      "nativeWithEntryTickets": 7,
+      "providerOnlySerializedResponseBytes": 2391,
+      "combinedSerializedResponseBytes": 5046,
+      "apiFixedFieldBytes": 937
+    },
+    {
+      "series": "conan",
+      "works": 30,
+      "providerOnlyCommands": 1,
+      "combinedCommands": 2,
+      "nativeWithEntryTickets": 7,
+      "providerOnlySerializedResponseBytes": 11986,
+      "combinedSerializedResponseBytes": 24983,
+      "apiFixedFieldBytes": 4506
+    },
+    {
+      "series": "gundam",
+      "works": 38,
+      "providerOnlyCommands": 1,
+      "combinedCommands": 3,
+      "nativeWithEntryTickets": 8,
+      "providerOnlySerializedResponseBytes": 15101,
+      "combinedSerializedResponseBytes": 31853,
+      "apiFixedFieldBytes": 5567
+    },
+    {
+      "series": "kimetsu",
+      "works": 3,
+      "providerOnlyCommands": 1,
+      "combinedCommands": 2,
+      "nativeWithEntryTickets": 7,
+      "providerOnlySerializedResponseBytes": 1198,
+      "combinedSerializedResponseBytes": 2512,
+      "apiFixedFieldBytes": 449
+    }
+  ],
+  "total": {
+    "providerOnlyCommands": 13,
+    "combinedCommands": 29,
+    "nativeWithEntryTickets": 94,
+    "combinedSerializedResponseBytes": 222240
+  },
+  "sameApiReadPlanAsCommit": "1d00fcc",
+  "clientSnapshotRequestsPerPage": 1,
+  "productionReady": false
+}

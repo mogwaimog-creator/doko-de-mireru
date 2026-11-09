@@ -1,7 +1,8 @@
 'use strict';
 // Loopback-only preview. All upstream metadata/providers are explicit fixtures.
 const http=require('node:http'),fs=require('node:fs'),path=require('node:path');
-const {command}=require('../tests/helpers/local-redis');
+const {command:localCommand}=require('../tests/helpers/local-redis');
+const command=args=>localCommand(require('./lib/preview-namespace').mapArgs(args));
 const {sharedStore}=require('../api/_shared-streaming-store');
 const {service}=require('../prototype/streaming-ledger-service');
 const {inventory}=require('./audit-shared-ledgers');

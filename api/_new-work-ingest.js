@@ -17,13 +17,13 @@ async function ingest(type,id,{command,load,clock=Date.now,controlKey='doko:dev:
  identity(type,id);if(process.env.NODE_ENV==='production'||process.env.VERCEL_ENV==='production'||!/^doko:dev:[a-z0-9:-]+:$/.test(prefix))throw Error('development acquisition only');
  const store=contentStore(command,{controlKey}),wk=store.keys.work(type,id),sk=store.keys.seo(type,id),tk=type==='tv'?store.keys.season(id):null,names=[wk,sk,...(tk?[tk]:[])];
  const before=await store.read(names);if(before[wk].data)return before[wk].data;
- const token=randomUUID(),lease={key:wk,token};if(!await store.claimLease(wk,token,15000))throw Error('work acquisition busy or paused');
+ const token=randomUUID(),lease={key:wk,token};if(!await store.claimLease(wk,token,15000))throw Object.assign(Error('work acquisition busy or paused'),{code:'WORK_ACQUISITION_STOPPED'});
  try{
   const current=await store.read(names);if(current[wk].data)return current[wk].data;if(names.some(k=>k!==wk&&current[k].data))throw Error('orphan SEO/season requires review');
   const now=clock(),at=new Date(now).toISOString(),day=new Date(now+9*3600000).toISOString().slice(0,10),deadline=Date.parse(day+'T00:00:00+09:00')+2*86400000;
   // Conservative fixed reservation includes work, SEO, manifest, metadata and search index.
   // Failed attempts keep their reservation; never refund/retry blindly.
-  const reserved=await command(['EVAL',RESERVE,'3',controlKey,prefix+'attempts:'+day,prefix+'reserved-bytes','262144',String(deadline)]);if(Number(reserved[0])!==1)throw Error('work acquisition '+reserved[1]);
+  const reserved=await command(['EVAL',RESERVE,'3',controlKey,prefix+'attempts:'+day,prefix+'reserved-bytes','262144',String(deadline)]);if(Number(reserved[0])!==1)throw Object.assign(Error('work acquisition '+reserved[1]),{code:'WORK_ACQUISITION_STOPPED'});
   let timer;const ac=new AbortController();const raw=await Promise.race([Promise.resolve().then(()=>load(ac.signal)),new Promise((_,reject)=>{timer=setTimeout(()=>{ac.abort();reject(Error('work acquisition timeout'))},6500)})]).finally(()=>clearTimeout(timer));
   const work=canonical(type,id,raw);if(type==='tv'){delete work.seasons;delete work.seasonCount;delete work.episodeCount}
   const seo=createSeoRecord(work,{updatedAt:at}),entries=[{key:wk,data:work,revision:current[wk].meta.revision},{key:sk,data:seo,revision:current[sk].meta.revision,meta:{sourceDigest:digest(work)}}];

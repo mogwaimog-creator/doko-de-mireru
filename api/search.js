@@ -2231,6 +2231,7 @@ return res.status(200).json({
       return res.status(503).json({error:"ただいま作品情報の取得が混み合っています。少し時間をおいて、もう一度お試しください。",code:"WORK_METADATA_BUSY"});
     }
 
+    if(error?.code==='WORK_ACQUISITION_STOPPED'){res.setHeader('Retry-After','30');res.setHeader('Vercel-CDN-Cache-Control','no-store');return res.status(503).json({error:'新しい作品の取得を制限しています。登録済み作品は引き続き表示できます。',code:error.code});}
     if(['FROZEN_LOOKUP_BUSY','FROZEN_LOOKUP_TIMEOUT'].includes(error?.code)){res.setHeader('Retry-After','30');return res.status(503).json({error:'作品情報を確認しています。しばらくして再度お試しください。'});}
     console.error(
       "SEARCH API ERROR:",
