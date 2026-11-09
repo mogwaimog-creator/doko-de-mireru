@@ -24,6 +24,8 @@ redis.call('MSET',unpack(values));
 for _,item in ipairs(indexed) do if item.old then local keep={};for _,m in ipairs(item.doc.members) do keep[m]=true end;local remove={};for _,m in ipairs(cjson.decode(item.old).members) do if not keep[m] then remove[#remove+1]=m end end;if #remove>0 then redis.call('ZREM',item.index,unpack(remove)) end end end;return {1,'saved'}`;
 const CLAIM_LEASE="local control=redis.call('GET',KEYS[1]);if control and cjson.decode(control).status~='ready' then return 0 end;if redis.call('SET',KEYS[2],ARGV[1],'NX','PX',ARGV[2]) then return 1 else return 0 end";
 const RELEASE_LEASE="if redis.call('GET',KEYS[1])==ARGV[1] then return redis.call('DEL',KEYS[1]) else return 0 end";
+const CIRCUIT_PAUSE="local old=redis.call('GET',KEYS[1]);local revision=0;if old then local value=cjson.decode(old);if value.status=='paused' then return 0 end;revision=value.revision or 0 end;local tail=',\"revision\":'..tostring(revision+1);if old then local prior=cjson.decode(old);for _,name in ipairs({'newWorkDailyLimit','newWorkAcquisitionPaused'}) do if prior[name]~=nil then tail=tail..','..cjson.encode(name)..':'..cjson.encode(prior[name]) end end end;redis.call('SET',KEYS[1],string.sub(ARGV[1],1,-2)..tail..'}');return 1";
+const NOTE_FAILURE="if redis.call('GET',KEYS[1])~=ARGV[1] or redis.call('PTTL',KEYS[1])<=0 then return 0 end;local raw=redis.call('GET',KEYS[2]);local v=0;if raw then v=cjson.decode(raw).revision end;if v~=tonumber(ARGV[2]) then return 0 end;redis.call('SET',KEYS[2],ARGV[3]);return 1";
 function digest(value){return createHash('sha256').update(JSON.stringify(value)).digest('hex')}
 function validateKey(k){if(!/^doko:dev:(?:(?:work:v2|seo:v1|legacy-work:v1):(movie|tv):[1-9][0-9]*|person:v2:[1-9][0-9]*|season:v1:tv:[1-9][0-9]*)$/.test(k))throw Error('development content key required');return k}
 function validateEntry(k,data){
@@ -51,10 +53,10 @@ function contentStore(command,{controlKey='doko:dev:content-control:v1'}={}){
    return {saved:Number(result[0])===1,reason:result[1]};
   },
   async claimLease(key,token,ttlMs){validateKey(key);if(!token||!Number.isSafeInteger(ttlMs)||ttlMs<1)throw Error('invalid content lease');return Number(await command(['EVAL',CLAIM_LEASE,'2',controlKey,key+':lease',token,String(ttlMs)]))===1},
-  async tripCircuit(error,{key}={}){if(key)validateKey(key);await command(['EVAL',"local old=redis.call('GET',KEYS[1]);local revision=0;if old then local value=cjson.decode(old);if value.status=='paused' then return 0 end;revision=value.revision or 0 end;local tail=',\"revision\":'..tostring(revision+1);if old then local prior=cjson.decode(old);for _,name in ipairs({'newWorkDailyLimit','newWorkAcquisitionPaused'}) do if prior[name]~=nil then tail=tail..','..cjson.encode(name)..':'..cjson.encode(prior[name]) end end end;redis.call('SET',KEYS[1],string.sub(ARGV[1],1,-2)..tail..'}');return 1",'1',controlKey,JSON.stringify({status:'paused',affectedKeys:key?[key]:[],reason:String(error.message||error).slice(0,300),at:new Date().toISOString()})])},
+  async tripCircuit(error,{key}={}){if(key)validateKey(key);await command(['EVAL',CIRCUIT_PAUSE,'1',controlKey,JSON.stringify({status:'paused',affectedKeys:key?[key]:[],reason:String(error.message||error).slice(0,300),at:new Date().toISOString()})])},
   async readControl(){const raw=await command(['GET',controlKey]);return raw===null?null:JSON.parse(raw)},
   async releaseLease(key,token){validateKey(key);return Number(await command(['EVAL',RELEASE_LEASE,'1',key+':lease',token]))===1},
-  async noteFailure(key,revision,meta,lease){validateKey(key);const json=JSON.stringify({...meta,revision:revision+1});return Number(await command(['EVAL',"if redis.call('GET',KEYS[1])~=ARGV[1] or redis.call('PTTL',KEYS[1])<=0 then return 0 end;local raw=redis.call('GET',KEYS[2]);local v=0;if raw then v=cjson.decode(raw).revision end;if v~=tonumber(ARGV[2]) then return 0 end;redis.call('SET',KEYS[2],ARGV[3]);return 1",'2',key+':lease',key+':meta',lease?.token||'',String(revision),json]))===1},keys
+  async noteFailure(key,revision,meta,lease){validateKey(key);const json=JSON.stringify({...meta,revision:revision+1});return Number(await command(['EVAL',NOTE_FAILURE,'2',key+':lease',key+':meta',lease?.token||'',String(revision),json]))===1},keys
  };
 }
-module.exports={contentStore,digest,COMMIT,CLAIM_LEASE,RELEASE_LEASE};
+module.exports={contentStore,digest,COMMIT,CLAIM_LEASE,RELEASE_LEASE,CIRCUIT_PAUSE,NOTE_FAILURE};

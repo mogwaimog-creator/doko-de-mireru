@@ -1,0 +1,5 @@
+'use strict';
+// Requires a private prepared package. Pure estimates; never executes instructions.
+const fs=require('node:fs'),{estimate,releaseGate}=require('./lib/cutover/budget');
+function calculate(plan){return {scope:'illustrative demand, user-reported remaining170000, no whole old-data restore',scenarios:[{name:'low',seriesOriginRequests:1000,seoHtmlRequests:1000,seoColdRequests:10},{name:'middle',seriesOriginRequests:5000,seoHtmlRequests:5000,seoColdRequests:50},{name:'high',seriesOriginRequests:10000,seoHtmlRequests:5000,seoColdRequests:50}].map(p=>({name:p.name,assumptions:{...p,otherCommands:30000,destructiveOperationCommands:2},result:estimate(plan,{...p,otherCommands:30000,destructiveOperationCommands:2})})),gate:releaseGate({}),servicesContacted:false};}
+if(require.main===module){if(!process.argv[2])throw Error('private seed-package.json path required');console.log(JSON.stringify(calculate(JSON.parse(fs.readFileSync(process.argv[2],'utf8'))),null,2))}module.exports={calculate};

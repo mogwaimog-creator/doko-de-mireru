@@ -1,0 +1,9 @@
+{
+  "scope": "synthetic private offline review and loopback shelf only; no external services",
+  "passed": 3,
+  "checks": [
+    "private offline HTML exports decisions bound to the original snapshot without external requests",
+    "confirmed fields, 30 cast and two directors survive browser review and package building",
+    "static shelf stops after one fixed-ID lookup on 503 and 429, without extra title searches"
+  ]
+}

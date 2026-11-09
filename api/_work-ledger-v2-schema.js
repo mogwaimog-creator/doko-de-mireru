@@ -58,7 +58,7 @@ function acceptAutomaticUpdate(existing,candidate){
   if(existing?.locked||existing?.confirmed)return existing;
   if(!existing)return candidate;
   // Page-specific editorial text and verification must survive routine refreshes.
-  const updated={...candidate,
+  const updated={...existing,...candidate,
     // Missing TV season data must not erase previously saved seasons.
     ...(candidate.type==='tv' && existing.type==='tv' ? {
       seasons:Array.isArray(candidate.seasons)&&candidate.seasons.length?candidate.seasons:(existing.seasons||[]),

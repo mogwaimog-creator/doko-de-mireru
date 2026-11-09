@@ -10,6 +10,7 @@ function currentWindow(){
   return day+'-06';
 }
 module.exports=async(req,res)=>{
+ if(process.env.LEDGER_RELEASE_MODE!==undefined&&require('./_release-legacy-gate').blocked(res))return;
   res.setHeader('Cache-Control','public, max-age=0, s-maxage=300, stale-while-revalidate=60');
   if(req.method!=='GET')return res.status(405).json({error:'GET only'});
   try{

@@ -20,6 +20,7 @@ const kimetsuWorks=[{type:'tv',id:85937},{type:'movie',id:635302},{type:'movie',
 const KEYPREFIX='doko:watch:v3:';
 const MAX_AGE_MS=36*60*60*1000; // Daily Hobby updates plus scheduling tolerance.
 module.exports=async(req,res)=>{
+ if(process.env.LEDGER_RELEASE_MODE!==undefined&&require('./_release-legacy-gate').blocked(res))return;
   res.setHeader('Cache-Control','public, max-age=0, s-maxage=120, stale-while-revalidate=60');
   if(req.method!=='GET')return res.status(405).json({error:'GET only'});
   if(!['godzilla','mcu','jurassic','harrypotter','lordoftherings','starwars','wildspeed','minions','odoru','eva','conan','gundam','kimetsu'].includes(req.query.series))return res.status(400).json({error:'Unknown series'});

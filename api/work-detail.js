@@ -10,6 +10,7 @@ const {metadataWithLedger,fixedOnly}=require('./_detail-metadata-cache');
 const PUBLIC_FIELDS=['schemaVersion','type','id','title','originalTitle','releaseDate','overview','runtimeMinutes','genres','posterPath','backdropPath','directors','cast','collectionId','collectionName','seasons','status','voteAverage','voteCount'];
 function publicWork(record){return Object.fromEntries(PUBLIC_FIELDS.map(key=>[key,record[key]??null]));}
 module.exports=async(req,res)=>{
+ if(process.env.LEDGER_RELEASE_MODE!==undefined&&require('./_release-legacy-gate').blocked(res))return;
   res.setHeader('Cache-Control','private, no-store');
   if(req.method!=='GET')return res.status(405).json({error:'GET only'});
   // Keep the new public endpoint dormant until preview verification and explicit release.

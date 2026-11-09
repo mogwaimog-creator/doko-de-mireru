@@ -214,6 +214,7 @@ async function loadMemoryPoster(m){
   let poster='';
   if(m.id){
    const res=await fetch(base+'/api/search?id='+encodeURIComponent(m.id)+'&type=movie');
+   if(res.status===503||res.status===429)return;
    if(res.ok){const data=await res.json();const exact=Number(data?.id??data?.tmdb_id)===Number(m.id)?data:getItems(data).find(x=>Number(x.id??x.tmdb_id)===Number(m.id));poster=posterUrl(exact);}
   }
   if(!poster){
@@ -274,6 +275,7 @@ async function fetchClassicFilm(item){
    try{
     const endpoint=(location.protocol==='file:'?'https://doko-de-mireru.com':'')+'/api/search?id='+encodeURIComponent(fixedId)+'&type=movie';
     const res=await fetch(endpoint);
+    if(res.status===503||res.status===429)return null;
     if(res.ok){
      const data=await res.json();
      if(Number(data?.id)===Number(fixedId))return data;

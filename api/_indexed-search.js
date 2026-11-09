@@ -3,7 +3,7 @@ const idx=require('./_search-index-v2'),{keys}=require('./_dev-content-ledgers')
 function card(kind,ref,row,needle,type){
  if(kind==='person'){require('../prototype/person-ledger').validateRecord(row);if(row.person.id!==Number(ref.id))throw Error('indexed person identity mismatch');const p=row.person;if(![p.name,p.original_name].some(x=>idx.fold(x).includes(needle)))return null;return {id:p.id,name:p.name,profile_path:p.profile_path,known_for_department:p.known_for_department,known_for:[...p.cast,...p.voice,...p.directed].slice(0,3)}}
  if(row.schemaVersion!==2||row.id!==Number(ref.id)||row.type!==ref.type)throw Error('indexed work identity mismatch');
- const anime=(row.genres||[]).some(g=>/アニメ|animation/i.test(g));if(type==='movie'&&row.type!=='movie')return null;if(['tv','drama'].includes(type)&&row.type!=='tv')return null;if(type==='anime'&&!anime)return null;if(type==='drama'&&(anime||!row.genres?.length))return null;
+ const anime=(row.genres||[]).some(g=>/アニメ|animation/i.test(typeof g==='string'?g:g?.name||'')||g?.id===16);if(type==='movie'&&row.type!=='movie')return null;if(['tv','drama'].includes(type)&&row.type!=='tv')return null;if(type==='anime'&&!anime)return null;if(type==='drama'&&(anime||!row.genres?.length))return null;
  if(![row.title,row.originalTitle].some(x=>idx.fold(x).includes(needle)))return null;
  return {id:row.id,title:row.title,original_title:row.originalTitle||'',poster_path:row.posterPath,overview:row.overview||'',release_date:row.releaseDate||'',date:row.releaseDate||'',vote_average:row.rating||0,content_type:row.type==='tv'?(anime?'anime_tv':'tv_drama'):'movie',media_type:row.type==='tv'?'TVシリーズ':'映画'};
 }

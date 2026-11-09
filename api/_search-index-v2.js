@@ -23,4 +23,4 @@ async function candidates(command,query,{kind,type,page,cursor,prefix=PREFIX}){
  else token=await command(['EVAL',SELECT,'1',index,...tokens]);
  if(!tokens.includes(token))throw Error('invalid search selector');return {hash,token,after,offset:cursor?0:(page-1)*20,index};
 }
-module.exports={PREFIX,READY,fold,document,seed,candidates,PREPARE,SELECT};
+module.exports={PREFIX,READY,fold,document,seed,candidates,PREPARE,SELECT,SEED};

@@ -23,6 +23,7 @@
 // =========================================================
 
 module.exports = async function handler(req, res) {
+ if(process.env.LEDGER_RELEASE_MODE!==undefined&&require('./_release-legacy-gate').blocked(res))return;
 
   try {
 
