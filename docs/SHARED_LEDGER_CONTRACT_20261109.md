@@ -68,3 +68,5 @@ node scripts/verify-shared-ledger-preview.js
 2026-11-09 管理運用の続報: [SHARED_LEDGER_ADMIN_REPORT_20261109.md](SHARED_LEDGER_ADMIN_REPORT_20261109.md) と [管理手順](SHARED_LEDGER_ADMIN_RUNBOOK.md)。自動索引・ローカル管理/監視/復元を追加。すべて開発専用、本番未承認、14日等は暫定。
 
 2026-11-09 移行準備の読取監査: [本番移行の準備状況](PRODUCTION_MIGRATION_READINESS_20261109.md)、[容量・停止基準案](PRODUCTION_MIGRATION_BUDGET_20261109.md)、[利用者向け確認ガイド](OWNER_PRE_MIGRATION_CHECKLIST_20261109.md)。機能追加なし。原本保護と実データ照合・契約確認が未完了のため移行開始条件未達。本番未接続・未反映。
+
+2026-11-09 初期対象の追加指定: [移行範囲と保護対象](INITIAL_MIGRATION_SCOPE_20261109.md)。13シリーズ・ジブリ・現在公開中の名作映画の棚が必須。それ以外の過去蓄積は原則移行対象外、削除未承認。公開依存があれば削除前に報告。

@@ -1,0 +1,3341 @@
+{
+  "dateJST": "2026-11-09",
+  "sourceCommit": "b81b4a0c82dce5e3dd1222fa6c4d95c9f8d2365e",
+  "authorization": "initial scope and preservation only; no production write/delete/deploy approval",
+  "mandatorySubjects": [
+    "13 watch-order series",
+    "Ghibli feature including shorts/extras/editorial content",
+    "all currently published movie-shelf periods and entries"
+  ],
+  "defaultExcluded": "other historical accumulation; retain old data, do not migrate in bulk or delete",
+  "canonicalIdentity": "verified media type + verified TMDB ID; never title-only",
+  "livePublishedScopeVerified": false,
+  "featureRuntimeCodeChanged": false,
+  "externalOrRedisCallsThisTask": false,
+  "series": {
+    "pages": [
+      "godzilla",
+      "mcu",
+      "jurassic",
+      "harrypotter",
+      "lordoftherings",
+      "starwars",
+      "wildspeed",
+      "minions",
+      "odoru",
+      "eva",
+      "conan",
+      "gundam",
+      "kimetsu"
+    ],
+    "uniqueRepositoryIdentities": 266
+  },
+  "ghibli": {
+    "scope": "static page cards, not resolved canonical works",
+    "records": [
+      {
+        "class": "work",
+        "section": "d1980",
+        "title": "風の谷のナウシカ",
+        "links": [
+          "./detail.html?id=81"
+        ]
+      },
+      {
+        "class": "work",
+        "section": "d1980",
+        "title": "天空の城ラピュタ",
+        "links": [
+          "./detail.html?id=10515"
+        ]
+      },
+      {
+        "class": "work",
+        "section": "d1980",
+        "title": "となりのトトロ",
+        "links": [
+          "./detail.html?id=8392"
+        ]
+      },
+      {
+        "class": "work",
+        "section": "d1980",
+        "title": "火垂るの墓",
+        "links": [
+          "./detail.html?id=12477"
+        ]
+      },
+      {
+        "class": "work",
+        "section": "d1980",
+        "title": "魔女の宅急便",
+        "links": [
+          "./detail.html?id=16859"
+        ]
+      },
+      {
+        "class": "work",
+        "section": "d1990",
+        "title": "おもひでぽろぽろ",
+        "links": [
+          "./detail.html?id=15080"
+        ]
+      },
+      {
+        "class": "work",
+        "section": "d1990",
+        "title": "紅の豚",
+        "links": [
+          "./detail.html?id=11621"
+        ]
+      },
+      {
+        "class": "work",
+        "section": "d1990",
+        "title": "海がきこえる",
+        "links": [
+          "./detail.html?id=21057"
+        ]
+      },
+      {
+        "class": "work",
+        "section": "d1990",
+        "title": "平成狸合戦ぽんぽこ",
+        "links": [
+          "./detail.html?id=15283"
+        ]
+      },
+      {
+        "class": "work",
+        "section": "d1990",
+        "title": "耳をすませば",
+        "links": [
+          "./detail.html?id=37797"
+        ]
+      },
+      {
+        "class": "work",
+        "section": "d1990",
+        "title": "もののけ姫",
+        "links": [
+          "./detail.html?id=128"
+        ]
+      },
+      {
+        "class": "work",
+        "section": "d1990",
+        "title": "ホーホケキョ となりの山田くん",
+        "links": [
+          "./detail.html?id=16198"
+        ]
+      },
+      {
+        "class": "work",
+        "section": "d2000",
+        "title": "千と千尋の神隠し",
+        "links": [
+          "./detail.html?id=129"
+        ]
+      },
+      {
+        "class": "work",
+        "section": "d2000",
+        "title": "猫の恩返し",
+        "links": [
+          "./detail.html?id=15370"
+        ]
+      },
+      {
+        "class": "work",
+        "section": "d2000",
+        "title": "ハウルの動く城",
+        "links": [
+          "./detail.html?id=4935"
+        ]
+      },
+      {
+        "class": "work",
+        "section": "d2000",
+        "title": "ゲド戦記",
+        "links": [
+          "./detail.html?id=37933"
+        ]
+      },
+      {
+        "class": "work",
+        "section": "d2000",
+        "title": "崖の上のポニョ",
+        "links": [
+          "./detail.html?id=12429"
+        ]
+      },
+      {
+        "class": "work",
+        "section": "d2010",
+        "title": "借りぐらしのアリエッティ",
+        "links": [
+          "./detail.html?id=51739"
+        ]
+      },
+      {
+        "class": "work",
+        "section": "d2010",
+        "title": "コクリコ坂から",
+        "links": [
+          "./detail.html?id=83389"
+        ]
+      },
+      {
+        "class": "work",
+        "section": "d2010",
+        "title": "風立ちぬ",
+        "links": [
+          "./detail.html?id=149870"
+        ]
+      },
+      {
+        "class": "work",
+        "section": "d2010",
+        "title": "かぐや姫の物語",
+        "links": [
+          "./detail.html?id=149871"
+        ]
+      },
+      {
+        "class": "work",
+        "section": "d2010",
+        "title": "思い出のマーニー",
+        "links": [
+          "./detail.html?id=242828"
+        ]
+      },
+      {
+        "class": "work",
+        "section": "d2010",
+        "title": "レッドタートル ある島の物語",
+        "links": [
+          "./detail.html?id=337703"
+        ]
+      },
+      {
+        "class": "work",
+        "section": "d2020",
+        "title": "アーヤと魔女",
+        "links": [
+          "./detail.html?id=683127"
+        ]
+      },
+      {
+        "class": "work",
+        "section": "d2020",
+        "title": "君たちはどう生きるか",
+        "links": [
+          "./detail.html?id=508883"
+        ]
+      },
+      {
+        "class": "mini-card",
+        "section": "shorts",
+        "title": "On Your Mark",
+        "links": []
+      },
+      {
+        "class": "mini-card",
+        "section": "shorts",
+        "title": "ギブリーズ episode2",
+        "links": []
+      },
+      {
+        "class": "mini-card",
+        "section": "extras",
+        "title": "未来少年コナン",
+        "links": [
+          "./index.html?q=%E6%9C%AA%E6%9D%A5%E5%B0%91%E5%B9%B4%E3%82%B3%E3%83%8A%E3%83%B3"
+        ]
+      },
+      {
+        "class": "mini-card",
+        "section": "extras",
+        "title": "ルパン三世 カリオストロの城",
+        "links": [
+          "./index.html?q=%E3%83%AB%E3%83%91%E3%83%B3%E4%B8%89%E4%B8%96%20%E3%82%AB%E3%83%AA%E3%82%AA%E3%82%B9%E3%83%88%E3%83%AD%E3%81%AE%E5%9F%8E"
+        ]
+      }
+    ]
+  },
+  "shelf": {
+    "scope": "static repository only, not live publication or TMDB verification",
+    "file": "movie_shelf_1980_1984.html",
+    "sections": {
+      "films": {
+        "records": 32,
+        "literalSHA256": "0736a3c19c3f7b1346351602384b0c1a3884a9abda9f22c10e40148267161469"
+      },
+      "rankingData": {
+        "records": 88,
+        "literalSHA256": "2445407f2b42aa2a75eabd2d8aa6f220d2703ceda4132fd3cc4e1666c4209ead"
+      },
+      "memoryFilms": {
+        "records": 34,
+        "literalSHA256": "cf5c28a83c8425ba5532c4326632d8755e0ad05018edc323940c91a426d2650c"
+      },
+      "verifiedClassicInfo": {
+        "records": 8,
+        "literalSHA256": "f296f33f5754de5e8391a3ae897968e25d9296da4fb9f8be2ae02563aee04bb6"
+      },
+      "extendedClassicInfo": {
+        "records": 106,
+        "literalSHA256": "693725c2fb9755a0407ebae0863c010b83c32824b7b13751c1df2211d10f2aab"
+      },
+      "classic1980Notes": {
+        "records": 8,
+        "literalSHA256": "6849aef4b01ae92b13eb5cdb22c1c0ea05ea387c197f96984494bff62047d0e6"
+      },
+      "classicKnownIds": {
+        "records": 25,
+        "literalSHA256": "1a3aa099b0692a8da8f47c2163beaba86e27fac8f368f91175f0f28f1a435e39"
+      },
+      "approvedAwardStories": {
+        "records": 32,
+        "literalSHA256": "4a60d8d20608aeb043d193535ed305856a6f357077b76f5b8a51f06f1f44a8c6"
+      },
+      "parts": {
+        "records": 5,
+        "literalSHA256": "62331d6b99672d71a4ae35f498ed867252563d0d9c1c62a1a017deb185f9f35b"
+      }
+    },
+    "listedRows": 154,
+    "distinctTitleLabels": 143,
+    "years": [
+      1980,
+      1981,
+      1982,
+      1983,
+      1984
+    ],
+    "rows": [
+      {
+        "source": "films",
+        "position": 1,
+        "title": "オール・ザット・ジャズ",
+        "year": 1980,
+        "idCandidates": []
+      },
+      {
+        "source": "films",
+        "position": 2,
+        "title": "アトランティック・シティ",
+        "year": 1980,
+        "idCandidates": []
+      },
+      {
+        "source": "films",
+        "position": 3,
+        "title": "歌え！ロレッタ 愛のために",
+        "year": 1980,
+        "idCandidates": []
+      },
+      {
+        "source": "films",
+        "position": 4,
+        "title": "グロリア",
+        "year": 1980,
+        "idCandidates": [
+          10889
+        ]
+      },
+      {
+        "source": "films",
+        "position": 5,
+        "title": "ハートランド",
+        "year": 1980,
+        "idCandidates": []
+      },
+      {
+        "source": "films",
+        "position": 6,
+        "title": "影武者",
+        "year": 1980,
+        "idCandidates": [
+          11953
+        ]
+      },
+      {
+        "source": "films",
+        "position": 7,
+        "title": "普通の人々",
+        "year": 1980,
+        "idCandidates": []
+      },
+      {
+        "source": "films",
+        "position": 8,
+        "title": "パレルモ、あるいはヴォルフスブルク",
+        "year": 1980,
+        "idCandidates": [
+          130544
+        ]
+      },
+      {
+        "source": "films",
+        "position": 9,
+        "title": "ミスター・アーサー",
+        "year": 1981,
+        "idCandidates": [
+          13665
+        ]
+      },
+      {
+        "source": "films",
+        "position": 10,
+        "title": "炎のランナー",
+        "year": 1981,
+        "idCandidates": []
+      },
+      {
+        "source": "films",
+        "position": 11,
+        "title": "急げ、急げ",
+        "year": 1981,
+        "idCandidates": []
+      },
+      {
+        "source": "films",
+        "position": 12,
+        "title": "鉄の男",
+        "year": 1981,
+        "idCandidates": []
+      },
+      {
+        "source": "films",
+        "position": 13,
+        "title": "鉛の時代",
+        "year": 1981,
+        "idCandidates": []
+      },
+      {
+        "source": "films",
+        "position": 14,
+        "title": "黄昏",
+        "year": 1981,
+        "idCandidates": [
+          11816
+        ]
+      },
+      {
+        "source": "films",
+        "position": 15,
+        "title": "E.T.",
+        "year": 1982,
+        "idCandidates": [
+          601
+        ]
+      },
+      {
+        "source": "films",
+        "position": 16,
+        "title": "ガンジー",
+        "year": 1982,
+        "idCandidates": []
+      },
+      {
+        "source": "films",
+        "position": 17,
+        "title": "ミッシング",
+        "year": 1982,
+        "idCandidates": []
+      },
+      {
+        "source": "films",
+        "position": 18,
+        "title": "ことの次第",
+        "year": 1982,
+        "idCandidates": []
+      },
+      {
+        "source": "films",
+        "position": 19,
+        "title": "トッツィー",
+        "year": 1982,
+        "idCandidates": []
+      },
+      {
+        "source": "films",
+        "position": 20,
+        "title": "ベロニカ・フォスのあこがれ",
+        "year": 1982,
+        "idCandidates": []
+      },
+      {
+        "source": "films",
+        "position": 21,
+        "title": "路（みち）",
+        "year": 1982,
+        "idCandidates": []
+      },
+      {
+        "source": "films",
+        "position": 22,
+        "title": "アセンダンシー",
+        "year": 1983,
+        "idCandidates": []
+      },
+      {
+        "source": "films",
+        "position": 23,
+        "title": "カルメンという名の女",
+        "year": 1983,
+        "idCandidates": []
+      },
+      {
+        "source": "films",
+        "position": 24,
+        "title": "愛と追憶の日々",
+        "year": 1983,
+        "idCandidates": []
+      },
+      {
+        "source": "films",
+        "position": 25,
+        "title": "楢山節考",
+        "year": 1983,
+        "idCandidates": [
+          42113
+        ]
+      },
+      {
+        "source": "films",
+        "position": 26,
+        "title": "蜂の巣",
+        "year": 1983,
+        "idCandidates": []
+      },
+      {
+        "source": "films",
+        "position": 27,
+        "title": "愛のイエントル",
+        "year": 1983,
+        "idCandidates": []
+      },
+      {
+        "source": "films",
+        "position": 28,
+        "title": "太陽の年",
+        "year": 1984,
+        "idCandidates": []
+      },
+      {
+        "source": "films",
+        "position": 29,
+        "title": "アマデウス",
+        "year": 1984,
+        "idCandidates": []
+      },
+      {
+        "source": "films",
+        "position": 30,
+        "title": "ラヴ・ストリームス",
+        "year": 1984,
+        "idCandidates": []
+      },
+      {
+        "source": "films",
+        "position": 31,
+        "title": "パリ、テキサス",
+        "year": 1984,
+        "idCandidates": []
+      },
+      {
+        "source": "films",
+        "position": 32,
+        "title": "ロマンシング・ストーン／秘宝の谷",
+        "year": 1984,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 1,
+        "title": "スター・ウォーズ／帝国の逆襲",
+        "year": null,
+        "idCandidates": [
+          1891
+        ]
+      },
+      {
+        "source": "rankingData",
+        "position": 2,
+        "title": "影武者",
+        "year": null,
+        "idCandidates": [
+          11953
+        ]
+      },
+      {
+        "source": "rankingData",
+        "position": 3,
+        "title": "復活の日",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 4,
+        "title": "007／ムーンレイカー",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 5,
+        "title": "地獄の黙示録",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 6,
+        "title": "9時から5時まで",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 7,
+        "title": "スター・クレイジー",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 8,
+        "title": "フライングハイ",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 9,
+        "title": "ダーティファイター／燃えよ鉄拳",
+        "year": null,
+        "idCandidates": [
+          17169
+        ]
+      },
+      {
+        "source": "rankingData",
+        "position": 10,
+        "title": "ツィゴイネルワイゼン",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 11,
+        "title": "ヒポクラテスたち",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 12,
+        "title": "神様のくれた赤ん坊",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 13,
+        "title": "遙かなる山の呼び声",
+        "year": null,
+        "idCandidates": [
+          73324
+        ]
+      },
+      {
+        "source": "rankingData",
+        "position": 14,
+        "title": "クレイマー、クレイマー",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 15,
+        "title": "ルードウィヒ／神々の黄昏",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 16,
+        "title": "大理石の男",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 17,
+        "title": "マンハッタン",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 18,
+        "title": "エレファント・マン",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 19,
+        "title": "007／ユア・アイズ・オンリー",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 20,
+        "title": "連合艦隊",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 21,
+        "title": "ドラえもん のび太の宇宙開拓史／怪物くん 怪物ランドへの招待",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 22,
+        "title": "スーパーマンII／冒険篇",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 23,
+        "title": "レイダース／失われたアーク《聖櫃》",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 24,
+        "title": "黄昏",
+        "year": null,
+        "idCandidates": [
+          11816
+        ]
+      },
+      {
+        "source": "rankingData",
+        "position": 25,
+        "title": "パラダイス・アーミー",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 26,
+        "title": "ミスター・アーサー",
+        "year": null,
+        "idCandidates": [
+          13665
+        ]
+      },
+      {
+        "source": "rankingData",
+        "position": 27,
+        "title": "泥の河",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 28,
+        "title": "遠雷",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 29,
+        "title": "陽炎座",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 30,
+        "title": "駅 STATION",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 31,
+        "title": "嗚呼！おんなたち 猥歌",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 32,
+        "title": "ブリキの太鼓",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 33,
+        "title": "秋のソナタ",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 34,
+        "title": "普通の人々",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 35,
+        "title": "約束の土地",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 36,
+        "title": "グロリア",
+        "year": null,
+        "idCandidates": [
+          10889
+        ]
+      },
+      {
+        "source": "rankingData",
+        "position": 37,
+        "title": "ブッシュマン",
+        "year": null,
+        "idCandidates": [
+          8393
+        ]
+      },
+      {
+        "source": "rankingData",
+        "position": 38,
+        "title": "セーラー服と機関銃／燃える勇者",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 39,
+        "title": "キャノンボール",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 40,
+        "title": "ハイティーン・ブギ",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 41,
+        "title": "ロッキー3",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 42,
+        "title": "E.T.",
+        "year": null,
+        "idCandidates": [
+          601
+        ]
+      },
+      {
+        "source": "rankingData",
+        "position": 43,
+        "title": "トッツィー",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 44,
+        "title": "愛と青春の旅だち",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 45,
+        "title": "ポーキーズ",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 46,
+        "title": "蒲田行進曲",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 47,
+        "title": "さらば愛しき大地",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 48,
+        "title": "転校生",
+        "year": null,
+        "idCandidates": [
+          129689
+        ]
+      },
+      {
+        "source": "rankingData",
+        "position": 49,
+        "title": "疑惑",
+        "year": null,
+        "idCandidates": [
+          335390
+        ]
+      },
+      {
+        "source": "rankingData",
+        "position": 50,
+        "title": "ニッポン国 古屋敷村",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 51,
+        "title": "1900年",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 52,
+        "title": "炎のランナー",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 53,
+        "title": "アレクサンダー大王",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 54,
+        "title": "南極物語",
+        "year": null,
+        "idCandidates": [
+          17895
+        ]
+      },
+      {
+        "source": "rankingData",
+        "position": 55,
+        "title": "スター・ウォーズ／ジェダイの復讐",
+        "year": null,
+        "idCandidates": [
+          1892
+        ]
+      },
+      {
+        "source": "rankingData",
+        "position": 56,
+        "title": "フラッシュダンス",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 57,
+        "title": "探偵物語／時をかける少女",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 58,
+        "title": "愛と追憶の日々",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 59,
+        "title": "大逆転",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 60,
+        "title": "ウォー・ゲーム",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 61,
+        "title": "家族ゲーム",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 62,
+        "title": "細雪",
+        "year": null,
+        "idCandidates": [
+          42116
+        ]
+      },
+      {
+        "source": "rankingData",
+        "position": 63,
+        "title": "戦場のメリークリスマス",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 64,
+        "title": "東京裁判",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 65,
+        "title": "楢山節考",
+        "year": null,
+        "idCandidates": [
+          42113
+        ]
+      },
+      {
+        "source": "rankingData",
+        "position": 66,
+        "title": "ソフィーの選択",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 67,
+        "title": "ガープの世界",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 68,
+        "title": "ガンジー",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 69,
+        "title": "エボリ",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 70,
+        "title": "フィツカラルド",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 71,
+        "title": "インディ・ジョーンズ／魔宮の伝説",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 72,
+        "title": "里見八犬伝",
+        "year": null,
+        "idCandidates": [
+          47578
+        ]
+      },
+      {
+        "source": "rankingData",
+        "position": 73,
+        "title": "キャノンボール2",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 74,
+        "title": "メイン・テーマ／愛情物語",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 75,
+        "title": "ドラえもん のび太の魔界大冒険／忍者ハットリくん＋パーマン 超能力ウォーズ",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 76,
+        "title": "ゴーストバスターズ",
+        "year": null,
+        "idCandidates": [
+          620
+        ]
+      },
+      {
+        "source": "rankingData",
+        "position": 77,
+        "title": "ビバリーヒルズ・コップ",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 78,
+        "title": "グレムリン",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 79,
+        "title": "ベスト・キッド",
+        "year": null,
+        "idCandidates": [
+          1885
+        ]
+      },
+      {
+        "source": "rankingData",
+        "position": 80,
+        "title": "お葬式",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 81,
+        "title": "Wの悲劇",
+        "year": null,
+        "idCandidates": [
+          326598
+        ]
+      },
+      {
+        "source": "rankingData",
+        "position": 82,
+        "title": "瀬戸内少年野球団",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 83,
+        "title": "麻雀放浪記",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 84,
+        "title": "さらば箱舟",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 85,
+        "title": "ワンス・アポン・ア・タイム・イン・アメリカ",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 86,
+        "title": "ライトスタッフ",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 87,
+        "title": "ナチュラル",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "rankingData",
+        "position": 88,
+        "title": "カメレオンマン",
+        "year": null,
+        "idCandidates": []
+      },
+      {
+        "source": "memoryFilms",
+        "position": 1,
+        "title": "シャイニング",
+        "year": 1980,
+        "idCandidates": [
+          694
+        ]
+      },
+      {
+        "source": "memoryFilms",
+        "position": 2,
+        "title": "13日の金曜日",
+        "year": 1980,
+        "idCandidates": [
+          4488
+        ]
+      },
+      {
+        "source": "memoryFilms",
+        "position": 3,
+        "title": "ブルース・ブラザース",
+        "year": 1980,
+        "idCandidates": [
+          525
+        ]
+      },
+      {
+        "source": "memoryFilms",
+        "position": 4,
+        "title": "フラッシュ・ゴードン",
+        "year": 1980,
+        "idCandidates": [
+          3604
+        ]
+      },
+      {
+        "source": "memoryFilms",
+        "position": 5,
+        "title": "青い珊瑚礁",
+        "year": 1980,
+        "idCandidates": [
+          5689
+        ]
+      },
+      {
+        "source": "memoryFilms",
+        "position": 6,
+        "title": "レイジング・ブル",
+        "year": 1980,
+        "idCandidates": [
+          1578
+        ]
+      },
+      {
+        "source": "memoryFilms",
+        "position": 7,
+        "title": "ニューヨーク1997",
+        "year": 1981,
+        "idCandidates": [
+          1103
+        ]
+      },
+      {
+        "source": "memoryFilms",
+        "position": 8,
+        "title": "死霊のはらわた",
+        "year": 1981,
+        "idCandidates": [
+          764
+        ]
+      },
+      {
+        "source": "memoryFilms",
+        "position": 9,
+        "title": "狼男アメリカン",
+        "year": 1981,
+        "idCandidates": [
+          814
+        ]
+      },
+      {
+        "source": "memoryFilms",
+        "position": 10,
+        "title": "タイム・バンディット",
+        "year": 1981,
+        "idCandidates": [
+          36819
+        ]
+      },
+      {
+        "source": "memoryFilms",
+        "position": 11,
+        "title": "スキャナーズ",
+        "year": 1981,
+        "idCandidates": [
+          9538
+        ]
+      },
+      {
+        "source": "memoryFilms",
+        "position": 12,
+        "title": "マッドマックス2",
+        "year": 1981,
+        "idCandidates": [
+          8810
+        ]
+      },
+      {
+        "source": "memoryFilms",
+        "position": 13,
+        "title": "U・ボート",
+        "year": 1981,
+        "idCandidates": [
+          387
+        ]
+      },
+      {
+        "source": "memoryFilms",
+        "position": 14,
+        "title": "アウトランド",
+        "year": 1981,
+        "idCandidates": [
+          10540
+        ]
+      },
+      {
+        "source": "memoryFilms",
+        "position": 15,
+        "title": "遊星からの物体X",
+        "year": 1982,
+        "idCandidates": [
+          1091
+        ]
+      },
+      {
+        "source": "memoryFilms",
+        "position": 16,
+        "title": "ブレードランナー",
+        "year": 1982,
+        "idCandidates": [
+          78
+        ]
+      },
+      {
+        "source": "memoryFilms",
+        "position": 17,
+        "title": "ポルターガイスト",
+        "year": 1982,
+        "idCandidates": [
+          609
+        ]
+      },
+      {
+        "source": "memoryFilms",
+        "position": 18,
+        "title": "トロン",
+        "year": 1982,
+        "idCandidates": [
+          97
+        ]
+      },
+      {
+        "source": "memoryFilms",
+        "position": 19,
+        "title": "ランボー",
+        "year": 1982,
+        "idCandidates": [
+          1368
+        ]
+      },
+      {
+        "source": "memoryFilms",
+        "position": 20,
+        "title": "コナン・ザ・グレート",
+        "year": 1982,
+        "idCandidates": [
+          9387
+        ]
+      },
+      {
+        "source": "memoryFilms",
+        "position": 21,
+        "title": "ダーククリスタル",
+        "year": 1982,
+        "idCandidates": [
+          11639
+        ]
+      },
+      {
+        "source": "memoryFilms",
+        "position": 22,
+        "title": "48時間",
+        "year": 1982,
+        "idCandidates": [
+          150
+        ]
+      },
+      {
+        "source": "memoryFilms",
+        "position": 23,
+        "title": "スカーフェイス",
+        "year": 1983,
+        "idCandidates": [
+          111
+        ]
+      },
+      {
+        "source": "memoryFilms",
+        "position": 24,
+        "title": "クリスティーン",
+        "year": 1983,
+        "idCandidates": [
+          8769
+        ]
+      },
+      {
+        "source": "memoryFilms",
+        "position": 25,
+        "title": "デッドゾーン",
+        "year": 1983,
+        "idCandidates": [
+          11336
+        ]
+      },
+      {
+        "source": "memoryFilms",
+        "position": 26,
+        "title": "キング・オブ・コメディ",
+        "year": 1983,
+        "idCandidates": [
+          262
+        ]
+      },
+      {
+        "source": "memoryFilms",
+        "position": 27,
+        "title": "アウトサイダー",
+        "year": 1983,
+        "idCandidates": [
+          227
+        ]
+      },
+      {
+        "source": "memoryFilms",
+        "position": 28,
+        "title": "ランブルフィッシュ",
+        "year": 1983,
+        "idCandidates": [
+          232
+        ]
+      },
+      {
+        "source": "memoryFilms",
+        "position": 29,
+        "title": "ビデオドローム",
+        "year": 1983,
+        "idCandidates": [
+          837
+        ]
+      },
+      {
+        "source": "memoryFilms",
+        "position": 30,
+        "title": "ターミネーター",
+        "year": 1984,
+        "idCandidates": [
+          218
+        ]
+      },
+      {
+        "source": "memoryFilms",
+        "position": 31,
+        "title": "エルム街の悪夢",
+        "year": 1984,
+        "idCandidates": [
+          377
+        ]
+      },
+      {
+        "source": "memoryFilms",
+        "position": 32,
+        "title": "ネバーエンディング・ストーリー",
+        "year": 1984,
+        "idCandidates": [
+          34584
+        ]
+      },
+      {
+        "source": "memoryFilms",
+        "position": 33,
+        "title": "フットルース",
+        "year": 1984,
+        "idCandidates": [
+          1788
+        ]
+      },
+      {
+        "source": "memoryFilms",
+        "position": 34,
+        "title": "ストリート・オブ・ファイヤー",
+        "year": 1984,
+        "idCandidates": [
+          14746
+        ]
+      }
+    ],
+    "labels": [
+      {
+        "title": "オール・ザット・ジャズ",
+        "rows": [
+          {
+            "source": "films",
+            "position": 1,
+            "year": 1980
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "アトランティック・シティ",
+        "rows": [
+          {
+            "source": "films",
+            "position": 2,
+            "year": 1980
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "歌え！ロレッタ 愛のために",
+        "rows": [
+          {
+            "source": "films",
+            "position": 3,
+            "year": 1980
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "グロリア",
+        "rows": [
+          {
+            "source": "films",
+            "position": 4,
+            "year": 1980
+          },
+          {
+            "source": "rankingData",
+            "position": 36,
+            "year": null
+          }
+        ],
+        "idCandidates": [
+          10889
+        ]
+      },
+      {
+        "title": "ハートランド",
+        "rows": [
+          {
+            "source": "films",
+            "position": 5,
+            "year": 1980
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "影武者",
+        "rows": [
+          {
+            "source": "films",
+            "position": 6,
+            "year": 1980
+          },
+          {
+            "source": "rankingData",
+            "position": 2,
+            "year": null
+          }
+        ],
+        "idCandidates": [
+          11953
+        ]
+      },
+      {
+        "title": "普通の人々",
+        "rows": [
+          {
+            "source": "films",
+            "position": 7,
+            "year": 1980
+          },
+          {
+            "source": "rankingData",
+            "position": 34,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "パレルモ、あるいはヴォルフスブルク",
+        "rows": [
+          {
+            "source": "films",
+            "position": 8,
+            "year": 1980
+          }
+        ],
+        "idCandidates": [
+          130544
+        ]
+      },
+      {
+        "title": "ミスター・アーサー",
+        "rows": [
+          {
+            "source": "films",
+            "position": 9,
+            "year": 1981
+          },
+          {
+            "source": "rankingData",
+            "position": 26,
+            "year": null
+          }
+        ],
+        "idCandidates": [
+          13665
+        ]
+      },
+      {
+        "title": "炎のランナー",
+        "rows": [
+          {
+            "source": "films",
+            "position": 10,
+            "year": 1981
+          },
+          {
+            "source": "rankingData",
+            "position": 52,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "急げ、急げ",
+        "rows": [
+          {
+            "source": "films",
+            "position": 11,
+            "year": 1981
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "鉄の男",
+        "rows": [
+          {
+            "source": "films",
+            "position": 12,
+            "year": 1981
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "鉛の時代",
+        "rows": [
+          {
+            "source": "films",
+            "position": 13,
+            "year": 1981
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "黄昏",
+        "rows": [
+          {
+            "source": "films",
+            "position": 14,
+            "year": 1981
+          },
+          {
+            "source": "rankingData",
+            "position": 24,
+            "year": null
+          }
+        ],
+        "idCandidates": [
+          11816
+        ]
+      },
+      {
+        "title": "E.T.",
+        "rows": [
+          {
+            "source": "films",
+            "position": 15,
+            "year": 1982
+          },
+          {
+            "source": "rankingData",
+            "position": 42,
+            "year": null
+          }
+        ],
+        "idCandidates": [
+          601
+        ]
+      },
+      {
+        "title": "ガンジー",
+        "rows": [
+          {
+            "source": "films",
+            "position": 16,
+            "year": 1982
+          },
+          {
+            "source": "rankingData",
+            "position": 68,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "ミッシング",
+        "rows": [
+          {
+            "source": "films",
+            "position": 17,
+            "year": 1982
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "ことの次第",
+        "rows": [
+          {
+            "source": "films",
+            "position": 18,
+            "year": 1982
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "トッツィー",
+        "rows": [
+          {
+            "source": "films",
+            "position": 19,
+            "year": 1982
+          },
+          {
+            "source": "rankingData",
+            "position": 43,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "ベロニカ・フォスのあこがれ",
+        "rows": [
+          {
+            "source": "films",
+            "position": 20,
+            "year": 1982
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "路（みち）",
+        "rows": [
+          {
+            "source": "films",
+            "position": 21,
+            "year": 1982
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "アセンダンシー",
+        "rows": [
+          {
+            "source": "films",
+            "position": 22,
+            "year": 1983
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "カルメンという名の女",
+        "rows": [
+          {
+            "source": "films",
+            "position": 23,
+            "year": 1983
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "愛と追憶の日々",
+        "rows": [
+          {
+            "source": "films",
+            "position": 24,
+            "year": 1983
+          },
+          {
+            "source": "rankingData",
+            "position": 58,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "楢山節考",
+        "rows": [
+          {
+            "source": "films",
+            "position": 25,
+            "year": 1983
+          },
+          {
+            "source": "rankingData",
+            "position": 65,
+            "year": null
+          }
+        ],
+        "idCandidates": [
+          42113
+        ]
+      },
+      {
+        "title": "蜂の巣",
+        "rows": [
+          {
+            "source": "films",
+            "position": 26,
+            "year": 1983
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "愛のイエントル",
+        "rows": [
+          {
+            "source": "films",
+            "position": 27,
+            "year": 1983
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "太陽の年",
+        "rows": [
+          {
+            "source": "films",
+            "position": 28,
+            "year": 1984
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "アマデウス",
+        "rows": [
+          {
+            "source": "films",
+            "position": 29,
+            "year": 1984
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "ラヴ・ストリームス",
+        "rows": [
+          {
+            "source": "films",
+            "position": 30,
+            "year": 1984
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "パリ、テキサス",
+        "rows": [
+          {
+            "source": "films",
+            "position": 31,
+            "year": 1984
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "ロマンシング・ストーン／秘宝の谷",
+        "rows": [
+          {
+            "source": "films",
+            "position": 32,
+            "year": 1984
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "スター・ウォーズ／帝国の逆襲",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 1,
+            "year": null
+          }
+        ],
+        "idCandidates": [
+          1891
+        ]
+      },
+      {
+        "title": "復活の日",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 3,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "007／ムーンレイカー",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 4,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "地獄の黙示録",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 5,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "9時から5時まで",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 6,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "スター・クレイジー",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 7,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "フライングハイ",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 8,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "ダーティファイター／燃えよ鉄拳",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 9,
+            "year": null
+          }
+        ],
+        "idCandidates": [
+          17169
+        ]
+      },
+      {
+        "title": "ツィゴイネルワイゼン",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 10,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "ヒポクラテスたち",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 11,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "神様のくれた赤ん坊",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 12,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "遙かなる山の呼び声",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 13,
+            "year": null
+          }
+        ],
+        "idCandidates": [
+          73324
+        ]
+      },
+      {
+        "title": "クレイマー、クレイマー",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 14,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "ルードウィヒ／神々の黄昏",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 15,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "大理石の男",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 16,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "マンハッタン",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 17,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "エレファント・マン",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 18,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "007／ユア・アイズ・オンリー",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 19,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "連合艦隊",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 20,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "ドラえもん のび太の宇宙開拓史／怪物くん 怪物ランドへの招待",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 21,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "スーパーマンII／冒険篇",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 22,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "レイダース／失われたアーク《聖櫃》",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 23,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "パラダイス・アーミー",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 25,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "泥の河",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 27,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "遠雷",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 28,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "陽炎座",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 29,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "駅 STATION",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 30,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "嗚呼！おんなたち 猥歌",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 31,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "ブリキの太鼓",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 32,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "秋のソナタ",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 33,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "約束の土地",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 35,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "ブッシュマン",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 37,
+            "year": null
+          }
+        ],
+        "idCandidates": [
+          8393
+        ]
+      },
+      {
+        "title": "セーラー服と機関銃／燃える勇者",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 38,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "キャノンボール",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 39,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "ハイティーン・ブギ",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 40,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "ロッキー3",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 41,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "愛と青春の旅だち",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 44,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "ポーキーズ",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 45,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "蒲田行進曲",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 46,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "さらば愛しき大地",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 47,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "転校生",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 48,
+            "year": null
+          }
+        ],
+        "idCandidates": [
+          129689
+        ]
+      },
+      {
+        "title": "疑惑",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 49,
+            "year": null
+          }
+        ],
+        "idCandidates": [
+          335390
+        ]
+      },
+      {
+        "title": "ニッポン国 古屋敷村",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 50,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "1900年",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 51,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "アレクサンダー大王",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 53,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "南極物語",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 54,
+            "year": null
+          }
+        ],
+        "idCandidates": [
+          17895
+        ]
+      },
+      {
+        "title": "スター・ウォーズ／ジェダイの復讐",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 55,
+            "year": null
+          }
+        ],
+        "idCandidates": [
+          1892
+        ]
+      },
+      {
+        "title": "フラッシュダンス",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 56,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "探偵物語／時をかける少女",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 57,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "大逆転",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 59,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "ウォー・ゲーム",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 60,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "家族ゲーム",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 61,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "細雪",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 62,
+            "year": null
+          }
+        ],
+        "idCandidates": [
+          42116
+        ]
+      },
+      {
+        "title": "戦場のメリークリスマス",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 63,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "東京裁判",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 64,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "ソフィーの選択",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 66,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "ガープの世界",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 67,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "エボリ",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 69,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "フィツカラルド",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 70,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "インディ・ジョーンズ／魔宮の伝説",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 71,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "里見八犬伝",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 72,
+            "year": null
+          }
+        ],
+        "idCandidates": [
+          47578
+        ]
+      },
+      {
+        "title": "キャノンボール2",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 73,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "メイン・テーマ／愛情物語",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 74,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "ドラえもん のび太の魔界大冒険／忍者ハットリくん＋パーマン 超能力ウォーズ",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 75,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "ゴーストバスターズ",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 76,
+            "year": null
+          }
+        ],
+        "idCandidates": [
+          620
+        ]
+      },
+      {
+        "title": "ビバリーヒルズ・コップ",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 77,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "グレムリン",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 78,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "ベスト・キッド",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 79,
+            "year": null
+          }
+        ],
+        "idCandidates": [
+          1885
+        ]
+      },
+      {
+        "title": "お葬式",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 80,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "Wの悲劇",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 81,
+            "year": null
+          }
+        ],
+        "idCandidates": [
+          326598
+        ]
+      },
+      {
+        "title": "瀬戸内少年野球団",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 82,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "麻雀放浪記",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 83,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "さらば箱舟",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 84,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "ワンス・アポン・ア・タイム・イン・アメリカ",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 85,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "ライトスタッフ",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 86,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "ナチュラル",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 87,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "カメレオンマン",
+        "rows": [
+          {
+            "source": "rankingData",
+            "position": 88,
+            "year": null
+          }
+        ],
+        "idCandidates": []
+      },
+      {
+        "title": "シャイニング",
+        "rows": [
+          {
+            "source": "memoryFilms",
+            "position": 1,
+            "year": 1980
+          }
+        ],
+        "idCandidates": [
+          694
+        ]
+      },
+      {
+        "title": "13日の金曜日",
+        "rows": [
+          {
+            "source": "memoryFilms",
+            "position": 2,
+            "year": 1980
+          }
+        ],
+        "idCandidates": [
+          4488
+        ]
+      },
+      {
+        "title": "ブルース・ブラザース",
+        "rows": [
+          {
+            "source": "memoryFilms",
+            "position": 3,
+            "year": 1980
+          }
+        ],
+        "idCandidates": [
+          525
+        ]
+      },
+      {
+        "title": "フラッシュ・ゴードン",
+        "rows": [
+          {
+            "source": "memoryFilms",
+            "position": 4,
+            "year": 1980
+          }
+        ],
+        "idCandidates": [
+          3604
+        ]
+      },
+      {
+        "title": "青い珊瑚礁",
+        "rows": [
+          {
+            "source": "memoryFilms",
+            "position": 5,
+            "year": 1980
+          }
+        ],
+        "idCandidates": [
+          5689
+        ]
+      },
+      {
+        "title": "レイジング・ブル",
+        "rows": [
+          {
+            "source": "memoryFilms",
+            "position": 6,
+            "year": 1980
+          }
+        ],
+        "idCandidates": [
+          1578
+        ]
+      },
+      {
+        "title": "ニューヨーク1997",
+        "rows": [
+          {
+            "source": "memoryFilms",
+            "position": 7,
+            "year": 1981
+          }
+        ],
+        "idCandidates": [
+          1103
+        ]
+      },
+      {
+        "title": "死霊のはらわた",
+        "rows": [
+          {
+            "source": "memoryFilms",
+            "position": 8,
+            "year": 1981
+          }
+        ],
+        "idCandidates": [
+          764
+        ]
+      },
+      {
+        "title": "狼男アメリカン",
+        "rows": [
+          {
+            "source": "memoryFilms",
+            "position": 9,
+            "year": 1981
+          }
+        ],
+        "idCandidates": [
+          814
+        ]
+      },
+      {
+        "title": "タイム・バンディット",
+        "rows": [
+          {
+            "source": "memoryFilms",
+            "position": 10,
+            "year": 1981
+          }
+        ],
+        "idCandidates": [
+          36819
+        ]
+      },
+      {
+        "title": "スキャナーズ",
+        "rows": [
+          {
+            "source": "memoryFilms",
+            "position": 11,
+            "year": 1981
+          }
+        ],
+        "idCandidates": [
+          9538
+        ]
+      },
+      {
+        "title": "マッドマックス2",
+        "rows": [
+          {
+            "source": "memoryFilms",
+            "position": 12,
+            "year": 1981
+          }
+        ],
+        "idCandidates": [
+          8810
+        ]
+      },
+      {
+        "title": "U・ボート",
+        "rows": [
+          {
+            "source": "memoryFilms",
+            "position": 13,
+            "year": 1981
+          }
+        ],
+        "idCandidates": [
+          387
+        ]
+      },
+      {
+        "title": "アウトランド",
+        "rows": [
+          {
+            "source": "memoryFilms",
+            "position": 14,
+            "year": 1981
+          }
+        ],
+        "idCandidates": [
+          10540
+        ]
+      },
+      {
+        "title": "遊星からの物体X",
+        "rows": [
+          {
+            "source": "memoryFilms",
+            "position": 15,
+            "year": 1982
+          }
+        ],
+        "idCandidates": [
+          1091
+        ]
+      },
+      {
+        "title": "ブレードランナー",
+        "rows": [
+          {
+            "source": "memoryFilms",
+            "position": 16,
+            "year": 1982
+          }
+        ],
+        "idCandidates": [
+          78
+        ]
+      },
+      {
+        "title": "ポルターガイスト",
+        "rows": [
+          {
+            "source": "memoryFilms",
+            "position": 17,
+            "year": 1982
+          }
+        ],
+        "idCandidates": [
+          609
+        ]
+      },
+      {
+        "title": "トロン",
+        "rows": [
+          {
+            "source": "memoryFilms",
+            "position": 18,
+            "year": 1982
+          }
+        ],
+        "idCandidates": [
+          97
+        ]
+      },
+      {
+        "title": "ランボー",
+        "rows": [
+          {
+            "source": "memoryFilms",
+            "position": 19,
+            "year": 1982
+          }
+        ],
+        "idCandidates": [
+          1368
+        ]
+      },
+      {
+        "title": "コナン・ザ・グレート",
+        "rows": [
+          {
+            "source": "memoryFilms",
+            "position": 20,
+            "year": 1982
+          }
+        ],
+        "idCandidates": [
+          9387
+        ]
+      },
+      {
+        "title": "ダーククリスタル",
+        "rows": [
+          {
+            "source": "memoryFilms",
+            "position": 21,
+            "year": 1982
+          }
+        ],
+        "idCandidates": [
+          11639
+        ]
+      },
+      {
+        "title": "48時間",
+        "rows": [
+          {
+            "source": "memoryFilms",
+            "position": 22,
+            "year": 1982
+          }
+        ],
+        "idCandidates": [
+          150
+        ]
+      },
+      {
+        "title": "スカーフェイス",
+        "rows": [
+          {
+            "source": "memoryFilms",
+            "position": 23,
+            "year": 1983
+          }
+        ],
+        "idCandidates": [
+          111
+        ]
+      },
+      {
+        "title": "クリスティーン",
+        "rows": [
+          {
+            "source": "memoryFilms",
+            "position": 24,
+            "year": 1983
+          }
+        ],
+        "idCandidates": [
+          8769
+        ]
+      },
+      {
+        "title": "デッドゾーン",
+        "rows": [
+          {
+            "source": "memoryFilms",
+            "position": 25,
+            "year": 1983
+          }
+        ],
+        "idCandidates": [
+          11336
+        ]
+      },
+      {
+        "title": "キング・オブ・コメディ",
+        "rows": [
+          {
+            "source": "memoryFilms",
+            "position": 26,
+            "year": 1983
+          }
+        ],
+        "idCandidates": [
+          262
+        ]
+      },
+      {
+        "title": "アウトサイダー",
+        "rows": [
+          {
+            "source": "memoryFilms",
+            "position": 27,
+            "year": 1983
+          }
+        ],
+        "idCandidates": [
+          227
+        ]
+      },
+      {
+        "title": "ランブルフィッシュ",
+        "rows": [
+          {
+            "source": "memoryFilms",
+            "position": 28,
+            "year": 1983
+          }
+        ],
+        "idCandidates": [
+          232
+        ]
+      },
+      {
+        "title": "ビデオドローム",
+        "rows": [
+          {
+            "source": "memoryFilms",
+            "position": 29,
+            "year": 1983
+          }
+        ],
+        "idCandidates": [
+          837
+        ]
+      },
+      {
+        "title": "ターミネーター",
+        "rows": [
+          {
+            "source": "memoryFilms",
+            "position": 30,
+            "year": 1984
+          }
+        ],
+        "idCandidates": [
+          218
+        ]
+      },
+      {
+        "title": "エルム街の悪夢",
+        "rows": [
+          {
+            "source": "memoryFilms",
+            "position": 31,
+            "year": 1984
+          }
+        ],
+        "idCandidates": [
+          377
+        ]
+      },
+      {
+        "title": "ネバーエンディング・ストーリー",
+        "rows": [
+          {
+            "source": "memoryFilms",
+            "position": 32,
+            "year": 1984
+          }
+        ],
+        "idCandidates": [
+          34584
+        ]
+      },
+      {
+        "title": "フットルース",
+        "rows": [
+          {
+            "source": "memoryFilms",
+            "position": 33,
+            "year": 1984
+          }
+        ],
+        "idCandidates": [
+          1788
+        ]
+      },
+      {
+        "title": "ストリート・オブ・ファイヤー",
+        "rows": [
+          {
+            "source": "memoryFilms",
+            "position": 34,
+            "year": 1984
+          }
+        ],
+        "idCandidates": [
+          14746
+        ]
+      }
+    ],
+    "explicitGroupedRows": {
+      "セーラー服と機関銃／燃える勇者": [
+        "セーラー服と機関銃",
+        "燃える勇者"
+      ],
+      "探偵物語／時をかける少女": [
+        "探偵物語",
+        "時をかける少女"
+      ],
+      "メイン・テーマ／愛情物語": [
+        "メイン・テーマ",
+        "愛情物語"
+      ],
+      "ドラえもん のび太の宇宙開拓史／怪物くん 怪物ランドへの招待": [
+        "ドラえもん のび太の宇宙開拓史",
+        "怪物くん 怪物ランドへの招待"
+      ],
+      "ドラえもん のび太の魔界大冒険／忍者ハットリくん＋パーマン 超能力ウォーズ": [
+        "ドラえもん のび太の魔界大冒険",
+        "忍者ハットリくん＋パーマン 超能力ウォーズ"
+      ]
+    },
+    "labelsContainingFullwidthSlash": [
+      "ロマンシング・ストーン／秘宝の谷",
+      "スター・ウォーズ／帝国の逆襲",
+      "007／ムーンレイカー",
+      "ダーティファイター／燃えよ鉄拳",
+      "ルードウィヒ／神々の黄昏",
+      "007／ユア・アイズ・オンリー",
+      "ドラえもん のび太の宇宙開拓史／怪物くん 怪物ランドへの招待",
+      "スーパーマンII／冒険篇",
+      "レイダース／失われたアーク《聖櫃》",
+      "セーラー服と機関銃／燃える勇者",
+      "スター・ウォーズ／ジェダイの復讐",
+      "探偵物語／時をかける少女",
+      "インディ・ジョーンズ／魔宮の伝説",
+      "メイン・テーマ／愛情物語",
+      "ドラえもん のび太の魔界大冒険／忍者ハットリくん＋パーマン 超能力ウォーズ"
+    ]
+  },
+  "candidateCountCautions": {
+    "shelfLabelIDs": 54,
+    "overlapWithSeries": 2,
+    "partialSeriesPlusLabelCandidateUnion": 318,
+    "unresolvedShelfTitleLabels": 89,
+    "conflictingShelfLabelIDs": 0,
+    "initialCanonicalWorkTotal": null,
+    "reason": "Ghibli IDs/types, unresolved labels, grouped components, aliases and actual published periods are not verified; static IDs are candidates, not live TMDB checks"
+  },
+  "protectedRawFileSHA256": {
+    "index.html": "321d505a85c1e7880e317481e676e6e50e2ca25334e01be15339608ff5f4b5c5",
+    "ghibli.html": "c2cebc073be1c0f7757885d51468e4b6564ffba18cb3d15ffb27d2bece47718e",
+    "movie_shelf_1980_1984.html": "a0fc33bad5f6ed85ec176c52359c825ef42a00064adfc244a0acb61171d36f8d",
+    "detail.html": "2263f460d1647af1b7634f5536777b55fff780ff0567bcb9594e967d18045df9",
+    "streaming.html": "3e450856186db8b5c2fca950bd6262edebdbe0b02dc940b5cdf35bee8dd6f94d",
+    "person.html": "60b397cf377e193a7470a8c7d0e51bf3aeb153613c0e213dd7150cfec9f40041",
+    "data/watch-order-memberships.json": "148863d182f46eb2ed53d9302ffe724f2149b96992ebcdc9577f0c432195bd2c",
+    "godzilla.html": "a977bb0f4e1859f191ec0cac310f4d7377d4ee2355cf9a62be53839c855574d5",
+    "mcu.html": "06a22b9968fde0263f76c19e039acb7cf3d2878c23e71afd0af04157452b8a56",
+    "jurassic.html": "0682639700951bdf9ee795070f94a98c45749d1f9c8c5bf46e76a9b12df5a8ac",
+    "harrypotter.html": "853c185511f942ce773d968fbff7075f6c98f276fd20400a62587a93b342f16f",
+    "lordoftherings.html": "e4510d9ea538408ed4a6a4bef8559b000cf9771b8f8f0f412d0525974100ada0",
+    "starwars.html": "88365c0ec71cd69291bbb3a4dc62322a4b0cbbb1ad0c44774753b4ac62041012",
+    "wildspeed.html": "f79f395ff124e24898f89ada42b8c733786dd636fe7956a8aadf6e1a34e7eb48",
+    "minions.html": "032fc68729663a3360ca385be30db2246094d5a3a52495fab44e30f8650fff04",
+    "odoru.html": "ac05233c7d069473db7aa56335bca35d6019a8cae0a965cf87463fa0f2d0b4f0",
+    "eva.html": "faa2c4a437922b59db392e0d9971f102d1d4fa30e683dd35d04653d5e25075e2",
+    "conan.html": "4aa40e41ff0cdf99031210b744ae91468410f667d4d5d78aff020580eaf85317",
+    "gundam.html": "ce3d3d1d9f5a20e9ba83a1de09fd20987272b2677eb17ec064bfb625530a3d20",
+    "kimetsu.html": "b046f4d3393d0e5b6167f3debc761949cabab0c911c57a279ea528a8c2db6a88"
+  },
+  "preserveAtLeast": [
+    "manual descriptions and presentation",
+    "publication order and membership",
+    "award categories/year/source",
+    "box-office territory/basis/units/grouped films",
+    "rankings by year and category",
+    "confirmation provenance and field locks",
+    "unknown fields in originals until mapped"
+  ],
+  "needsDependencyReviewBeforeAnyDeletion": [
+    "shared series comparison availability",
+    "work/detail/search/person/season/SEO paths",
+    "Ghibli title-search links",
+    "shelf ID/title lookup and grouped row components",
+    "old compatibility caches and out-of-scope related links"
+  ]
+}
