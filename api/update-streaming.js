@@ -28,7 +28,7 @@ async function provider(work){
  return Array.isArray(jp.flatrate)?jp.flatrate.filter(p=>p&&Number.isInteger(p.provider_id)&&typeof p.logo_path==='string'):[];
 }
 module.exports=async(req,res)=>{
- if(process.env.LEDGER_RELEASE_MODE!==undefined&&require('./_release-legacy-gate').blocked(res))return;
+ if(process.env.LEDGER_RELEASE_MODE!==undefined&&await require('./_release-dispatch').dispatch('update-streaming',req,res))return;
  res.setHeader('Cache-Control','private, no-store');
  if(req.method!=='GET')return res.status(405).json({error:'GET only'});
  const secret=process.env.CRON_SECRET;

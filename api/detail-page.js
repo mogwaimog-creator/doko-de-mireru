@@ -28,4 +28,4 @@ function createHandler({active=enabled,template=()=>fs.readFileSync(path.join(__
   }catch(error){res.setHeader('X-Robots-Tag','noindex');if(error.httpStatus===404)return res.status(404).end('作品情報が見つかりません。');res.setHeader('Retry-After','5');return res.status(503).end('作品情報を読み込めません。時間をおいて再度お試しください。')}
  };
 }
-module.exports=createHandler();module.exports.createHandler=createHandler;module.exports.enabled=enabled;
+const legacyHandler=createHandler();module.exports=async(req,res)=>{if(process.env.LEDGER_RELEASE_MODE!==undefined&&await require('./_release-dispatch').dispatch('detail-page',req,res))return;if(!enabled()){res.setHeader('Content-Type','text/html; charset=utf-8');return res.status(200).end(req.method==='HEAD'?'':fs.readFileSync(path.join(__dirname,'../detail.html'),'utf8'))}return legacyHandler(req,res)};module.exports.createHandler=createHandler;module.exports.enabled=enabled;

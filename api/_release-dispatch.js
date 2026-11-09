@@ -1,0 +1,4 @@
+'use strict';
+// Public entry points delegate here before touching any legacy cache or writer.
+async function dispatch(name,req,res){const mode=process.env.LEDGER_RELEASE_MODE;if(mode===undefined||mode==='legacy')return false;try{if(!['new','paused'].includes(mode))throw Error('invalid release mode');const {config,command,adminCommand}=require('./_release-connection').connect();config.resumeApproved=mode==='new';const source=require('./_release-source').source({command,apiKey:config.apiKey,dailyLimit:config.upstreamDailyLimit});await require('./_release-application').application({command,adminCommand,config,source,active:mode==='new'}).handle(name,req,res)}catch{if(!res.writableEnded){res.setHeader('Cache-Control','private, no-store');res.setHeader('X-Robots-Tag','noindex');res.setHeader('Retry-After','30');res.status(503).end('保存情報を読み込めません。更新と保存を停止しています。')}}return true}
+module.exports={dispatch};

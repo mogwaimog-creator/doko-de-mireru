@@ -1,5 +1,6 @@
 'use strict';
 async function command(args) {
+  if(process.env.LEDGER_RELEASE_MODE!==undefined&&require('./_release-query-context').active())throw Error('legacy Redis is forbidden during new query handling');
   const url=process.env.KV_REST_API_URL||process.env.UPSTASH_REDIS_REST_URL;
   const token=process.env.KV_REST_API_TOKEN||process.env.UPSTASH_REDIS_REST_TOKEN;
   if(!url||!token) throw new Error('Redis credentials unavailable');

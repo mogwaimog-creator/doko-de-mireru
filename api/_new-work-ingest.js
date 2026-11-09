@@ -14,7 +14,7 @@ function canonical(type,id,raw){
  const tv=type==='tv';return normalizeWorkV2(type,id,{title:tv?raw.name:raw.title,originalTitle:tv?raw.original_name:raw.original_title,releaseDate:tv?raw.first_air_date:raw.release_date,posterPath:raw.poster_path,overview:raw.overview,runtimeMinutes:tv?raw.episode_run_time?.[0]:raw.runtime,genres:raw.genres,director:raw.credits?.crew?.find(p=>p.job==='Director'),cast:raw.credits?.cast,rating:raw.vote_average,status:raw.status});
 }
 async function ingest(type,id,{command,load,clock=Date.now,controlKey='doko:dev:content-control:v1',prefix='doko:dev:acquisition:v1:'}={}){
- identity(type,id);if(process.env.NODE_ENV==='production'||process.env.VERCEL_ENV==='production'||!/^doko:dev:[a-z0-9:-]+:$/.test(prefix))throw Error('development acquisition only');
+ identity(type,id);if(((process.env.NODE_ENV==='production'||process.env.VERCEL_ENV==='production')&&!require('./_release-connection').approvedCommand(command))||!/^doko:dev:[a-z0-9:-]+:$/.test(prefix))throw Error('development acquisition only');
  const store=contentStore(command,{controlKey}),wk=store.keys.work(type,id),sk=store.keys.seo(type,id),tk=type==='tv'?store.keys.season(id):null,names=[wk,sk,...(tk?[tk]:[])];
  const before=await store.read(names);if(before[wk].data)return before[wk].data;
  const token=randomUUID(),lease={key:wk,token};if(!await store.claimLease(wk,token,15000))throw Object.assign(Error('work acquisition busy or paused'),{code:'WORK_ACQUISITION_STOPPED'});

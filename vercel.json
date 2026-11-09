@@ -1,6 +1,10 @@
 {
   "rewrites": [
     {
+      "source": "/detail.html",
+      "destination": "/api/detail-page"
+    },
+    {
       "source": "/movie/:id",
       "destination": "/index.html"
     }
@@ -14,6 +18,14 @@
   "git": {
     "deploymentEnabled": {
       "work/four-ledgers-20261107": false
+    }
+  },
+  "functions": {
+    "api/detail-page.js": {
+      "includeFiles": "detail.html"
+    },
+    "api/update-streaming.js": {
+      "maxDuration": 300
     }
   }
 }

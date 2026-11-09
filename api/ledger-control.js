@@ -10,4 +10,4 @@ function createHandler({ops,active=require('./_cutover-runtime-dev').enabled,tok
  }catch{return res.status(409).json({error:'operation blocked; inspect writers, record errors and review freshness'})}
  };
 }
-module.exports=createHandler();module.exports.createHandler=createHandler;
+const legacyHandler=createHandler();module.exports=async(req,res)=>{if(process.env.LEDGER_RELEASE_MODE!==undefined&&await require('./_release-dispatch').dispatch('ledger-control',req,res))return;return legacyHandler(req,res)};module.exports.createHandler=createHandler;

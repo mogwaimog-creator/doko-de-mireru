@@ -41,7 +41,7 @@ const {command: personLedgerCommand}=require('./_redis');
 // =========================================================
 
 module.exports = async function handler(req, res) {
- if(process.env.LEDGER_RELEASE_MODE!==undefined&&require('./_release-legacy-gate').blocked(res))return;
+ if(process.env.LEDGER_RELEASE_MODE!==undefined&&!require('./_release-query-context').active()&&await require('./_release-dispatch').dispatch('search',req,res))return;
 
   // =======================================================
   // CORS
@@ -4971,6 +4971,7 @@ async function getCollection(
 // =========================================================
 
 async function fetchJson(url,{rawWork=false}={}) {
+  if(process.env.LEDGER_RELEASE_MODE!==undefined&&require('./_release-query-context').active())return require('./_release-query-context').json(url);
   const recovery=require('./_recovery-fetch-cache');if(recovery.enabled()){
     const parsed=new URL(url),match=parsed.pathname.match(/^\/3\/(movie|tv)\/([1-9][0-9]*)$/),append=parsed.searchParams.get('append_to_response'),attach=match&&append?.split(',').includes('watch/providers');
     if(attach){const keep=append.split(',').filter(x=>x!=='watch/providers');if(keep.length)parsed.searchParams.set('append_to_response',keep.join(','));else parsed.searchParams.delete('append_to_response')}
@@ -4994,7 +4995,7 @@ async function fetchJsonNetwork(url) {
   }
 
   const response =
-    await fetch(
+    await (process.env.LEDGER_RELEASE_MODE!==undefined?require('./_release-query-context').request:fetch)(
       url,
       {
         method: "GET",
@@ -8761,7 +8762,7 @@ if(
   // ===================================================
 
   const movieResponse =
-    await fetch(
+    await (process.env.LEDGER_RELEASE_MODE!==undefined?require('./_release-query-context').request:fetch)(
       movieUrl
     );
 
@@ -8772,7 +8773,7 @@ if(
     includeTv
   ){
     tvResponse =
-      await fetch(
+      await (process.env.LEDGER_RELEASE_MODE!==undefined?require('./_release-query-context').request:fetch)(
         tvUrl
       );
   }
