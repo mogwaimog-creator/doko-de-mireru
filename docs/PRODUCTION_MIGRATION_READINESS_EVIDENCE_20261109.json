@@ -1,0 +1,121 @@
+{
+  "dateJST": "2026-11-09",
+  "reviewedCommit": "1e647c87c40e470252af5e89ad89072add26e8e5",
+  "scope": "documentation/read-only source audit and pure conversion example; no feature changes or Redis/TMDB/Vercel operations; GitHub development-branch save only",
+  "connectionsThisTask": {
+    "productionRedis": false,
+    "Upstash": false,
+    "Vercel": false,
+    "TMDB": false,
+    "localRedis": false
+  },
+  "previousTests": {
+    "reference": "SHARED_LEDGER_ADMIN_EVIDENCE_20261109.json",
+    "commit": "1e647c8",
+    "node": {
+      "tests": 403,
+      "pass": 403,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "browserChecks": 68,
+    "rerunThisTask": false
+  },
+  "pureSourceChecks": {
+    "scope": "pure local source checks; no production data, network or storage commands",
+    "sample": {
+      "oldCast": 10,
+      "newCast": 8,
+      "oldDirectors": 2,
+      "newDirectors": 1,
+      "inputLocks": [
+        "title",
+        "directors",
+        "collectionId"
+      ],
+      "newLocks": [
+        "title",
+        "director"
+      ],
+      "compactHasCollectionId": false,
+      "compactHasCommonNotes": false,
+      "compactHasRelatedLinks": false,
+      "compactHasVerificationItems": false,
+      "pageExtrasPreserved": true
+    },
+    "normalizedComparison": {
+      "works": 266,
+      "legacyClientRPCs": 269,
+      "newClientRPCs": 580,
+      "legacyOperationsIncludingLua": 271,
+      "newOperationsIncludingLua": 2724,
+      "withNormalMonitorOperations": 2726,
+      "defaultSupervisorItemsPerRun": 24,
+      "defaultSupervisorRuns": 12,
+      "chunksOf12": 23,
+      "defaultSupervisorClientRPCsEstimated": 602,
+      "defaultSupervisorWithMonitorRPCsEstimated": 604,
+      "defaultSupervisorRPCIncreasePercentVsLegacy": 124.53531598513013,
+      "productionLegacy271WorksClientRPCsEstimated": 274,
+      "singleRunWithMonitorRPCIncreasePercentVsLegacy": 116.35687732342008,
+      "singleRunWithNormalMonitorRPCs": 582
+    },
+    "note": "Legacy counts derived from current source for one successful run: lock SET + MGET + N successful SETs + release EVAL. Excludes retries, visits and all real billing.",
+    "notes": [
+      "580 is measured for one direct daily-job invocation, not the default 12 internal invocations.",
+      "604 is a source-derived estimate for default successful 266-work splitting plus normal monitoring, not a live measurement.",
+      "Internal job invocations are not necessarily separate Vercel invocations.",
+      "The repository declares one 21:00 UTC cron (06:00 JST next day); deployed and external schedules are unverified."
+    ]
+  },
+  "capacities": {
+    "reference": "SHARED_LEDGER_ADMIN_EVIDENCE_20261109.json; not newly measured",
+    "knownLocalCoreMB": 0.535592,
+    "isolatedDerivedIndexMB": 0.963128,
+    "productionCurrentMB": null,
+    "productionPeakMB": null,
+    "productionAfterMB": null,
+    "productionFreeHeadroom": null,
+    "fees": null
+  },
+  "proposedNotImplementedOrApproved": {
+    "startPeakAtMostCapacityFraction": 0.7,
+    "pauseBeforeNextBatchAtCapacityFraction": 0.8,
+    "emergencyAtCapacityFraction": 0.9,
+    "unknownPlanOrUsage": "do not begin",
+    "automaticDeletion": false,
+    "automaticPaidPlanChange": false
+  },
+  "sourceSHA256": {
+    "api/_content-ledger-import.js": "66dcbbad11dbd16d51e2bd14336eabf37c6e48b96a20a9eb09e6e56673c00b72",
+    "api/_work-ledger-v2-schema.js": "1d2c37731065760ff55e5a405ddbd92e802fb0947c43b1728b28d0b2fb6f1403",
+    "api/_work-ledger-editorial.js": "a0c4e9e09f8321569eddb2f2f936173e52b3026aa556f768864ce5cb1a615dd1",
+    "api/_work-v2-legacy-compat.js": "5e1ef237450d5d20d366d4bdbcd9e41a189d58296ea6c44fae66fc69bcf969e5",
+    "api/_dev-content-ledgers.js": "61cad7949e40446994a6c7295ff80df519068a914a4dd62978beaa777f93e58f",
+    "api/_person-ledger.js": "2760e5d39194871400615f837b1542852f3e0625720eeaf1aca70dbc5d2b324b",
+    "api/_person-ledger-v2.js": "6307c0a9e2e523ceb6e7997d19fd8707577f82569f0930c842ad2e68021542bb",
+    "prototype/person-ledger.js": "fb7634819468bed81aac1f72b5dbc7fd7166f442623e1b3435f747a5d7ba3022",
+    "prototype/season-ledger.js": "514371f6496622b7cc745d90a1c489cfcb6929920d0cde62da296a4a4f4bee7d",
+    "api/_season-ledger-redis.js": "782c77d99679f4d4f8f44516344b42d7e6e146ecb33b35a97b1964661e8eacd7",
+    "api/update-streaming.js": "76fe3f1b67c500505847333bfce10e8c575b26ef30f0b7a9041ae005b629e5e6",
+    "api/_daily-job-supervisor.js": "a1c96ec855666995b15b8f9ea86bdf3b3c83f0c82320cef1d65684c37842fc2e",
+    "api/_streaming-daily-job.js": "1575c93f95c7e3ff67b75a659c1bd0e2cdfc8ccc56f3d6924e3af9588c043a4e",
+    "api/_compact-daily-job-store.js": "78876d787e6e858b05cd5f26db9ec2e5b26ec328c8620598ae6f4b4ff3ccc758",
+    "api/_search-index-v2.js": "4cb663ac020f6ef786f1bee26f231c892fc5f32004aad888831cc96015e2c927",
+    "vercel.json": "730ec955b8e706ac6974323cc8b3c0537e1c6de07d9adcc4dd643706dc7f0377",
+    "data/streaming-works.json": "27ed32b6c0ba590a9c344bf6f139f85fd59517d7c07ac8e3463252764a360da4",
+    "data/watch-order-memberships.json": "148863d182f46eb2ed53d9302ffe724f2149b96992ebcdc9577f0c432195bd2c",
+    "api/_ledger-admin-dev.js": "c203125100cff73ae6b92e6a70972ff7feeb5910f18ca79d7e955bb6010c82a2",
+    "api/_dev-content-store.js": "4b371cbafb93e62bb5972eb7c3e2a54cda105163c92e8409ddeafc42c8c2fb94",
+    "api/_indexed-search.js": "ada922d5b4889546921c22255dae2821e20432368aa9e7cd612168d5f8edc9d4"
+  },
+  "blockers": [
+    "lossless protection/display mapping for manual fields and unsupported locks",
+    "safe real-data copy and whole-population inventory",
+    "current production version, schedules and contract/usage unknown",
+    "production connection/namespaces and resource limits not wired/verified",
+    "external monitoring/notification and full recovery coverage incomplete"
+  ]
+}
