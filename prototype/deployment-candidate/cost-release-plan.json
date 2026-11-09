@@ -1,0 +1,25 @@
+{
+  "status": "draft-only; production operations forbidden",
+  "usageSnapshot": "docs/ISSUE_19_USAGE_INPUT_20261109.json",
+  "targetNewBuilds": 1,
+  "conservativeBudgetNewBuilds": 2,
+  "strategy": "production-target staged artifact, tested before assigning public domain",
+  "previewPromotion": "requires a production rebuild; budget two builds",
+  "singleBuildConditions": [
+    "production transport, credentials and guards fully reviewed before artifact creation",
+    "production environment finalized before build",
+    "legacy writer shutdown or same-artifact legacy/paused/new mode proven",
+    "staged deployment cannot start writes or scheduled jobs before authorized cutover",
+    "full backup is retained on user PC; full restore rehearsal stays local",
+    "all quota, traffic and build-CPU checks pass with rollback reserve",
+    "explicit future user authorization for every production operation"
+  ],
+  "currentConditionsVerified": false,
+  "automaticRedeployOrRetry": false,
+  "remoteBuildOrDeployExecuted": false,
+  "notes": [
+    "No GitHub workflow, root vercel.json, production environment or billing settings changed",
+    "This file is consumed only as a reviewable plan; it cannot execute a deployment",
+    "Do not turn the current development-only adapters on in production"
+  ]
+}

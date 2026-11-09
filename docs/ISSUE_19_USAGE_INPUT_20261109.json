@@ -1,0 +1,47 @@
+{
+  "source": "user-reported console values; no account/API access by agent",
+  "calculationDate": "2026-11-09",
+  "upstash": {
+    "plan": "Free",
+    "storageUsedMB": 201,
+    "storageLimitMB": 250,
+    "commandsUsed": 330000,
+    "commandsLimit": 500000,
+    "bandwidthUsedGB": 2,
+    "bandwidthLimitGB": 10,
+    "displayedUSD": 0,
+    "quotaResetDate": null,
+    "keyCount": null,
+    "exportWireBytes": null,
+    "luaBillingVerified": false,
+    "overageBehaviorVerified": false
+  },
+  "vercel": {
+    "plan": "Pro",
+    "periodStart": "2026-10-29",
+    "periodEnd": "2026-11-29",
+    "usedUSD": 13.87,
+    "creditUSD": 20,
+    "buildCPUHours": 58,
+    "buildUSD": 12.25,
+    "functionInvocations": 81940,
+    "invocationsUSD": 0.05,
+    "activeCPUMinutes": 38,
+    "activeCPUUSD": 0.08,
+    "memoryGBHours": 12.18,
+    "memoryUSD": 0.13,
+    "originTransferMB": 418,
+    "originUSD": 0.03,
+    "observabilityEvents": 543120,
+    "observabilityUSD": 0.49,
+    "usageScope": null,
+    "detailHTMLRequestsRemaining": null,
+    "cpuMinutesPerDeployment": null
+  },
+  "notes": [
+    "MB/GB interpreted as decimal for scenarios; exact provider units and displayed rounding remain unverified",
+    "11 elapsed days / 20 remaining days assumes these values describe 2026-11-09",
+    "Upstash quota reset date is not assumed to match Vercel billing period",
+    "A displayed zero price is not a verified automatic-overage policy"
+  ]
+}

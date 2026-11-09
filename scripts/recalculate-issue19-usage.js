@@ -1,0 +1,11 @@
+'use strict';
+// Offline scenarios from the user snapshot; no external requests or builds.
+const fs=require('node:fs'),path=require('node:path'),input=require('../docs/ISSUE_19_USAGE_INPUT_20261109.json'),{summarize,redisPlan,vercelPlan,releaseGate,buildPlan}=require('./lib/migration-usage-plan');
+function calculate(){const summary=summarize(input),htmlBytes=fs.statSync(path.join(__dirname,'../detail.html')).size+8192;
+ const base={transferOverheadFactor:1.25,seedRecords:857,upstashDaysRemaining:31,otherRemainingCommands:30000,seoHTMLRequests:5000,seoColdRequests:50,dailyUpdateOperations:133,validationOperations:2000,compatibilityOperations:200,controlOperations:20,resetAndRollbackClearOperations:2,seoAdmissionTracking:false,backupDownloadBytes:270.2e6,rollbackUploadBytes:270.2e6,rollbackVerificationDownloadBytes:270.2e6,seedWireBytes:2e6,validationWireBytes:10e6,otherRemainingTransferBytes:500e6,dailyUpdateWireBytes:317020};
+ const redisScenarios=[];for(const n of [5000,10000,15000,20000])for(const h of [1000,5000,10000]){const p={...base,keyCount:n,scanCallsPerPass:Math.ceil(n/100),seoHTMLRequests:h,seoColdRequests:Math.ceil(h*0.01)};redisScenarios.push({assumptions:p,result:redisPlan(input,p)})}
+ const seoBase={cpuMsPerHTML:20,memoryGB:1,wallMsPerHTML:500,htmlBytes,eventsPerHTML:5},vercelScenarios=[];
+ for(const h of [10000,50000,100000])for(const builds of [1,2])for(const minutes of [60,300]){const p={builds,cpuMinutesPerBuild:minutes,reserveUSD:2,seo:{...seoBase,htmlRequests:h}};vercelScenarios.push({assumptions:p,result:vercelPlan(input,p)})}
+ const buildMinutes=[10,30,60,300].map(cpuMinutes=>({cpuMinutes,costUSD:cpuMinutes*summary.rates.buildCPUPerMinute}));
+ return {source:input.source,summary,assumptions:'All scenario N/H/S/export sizes/days/baseline traffic/render costs are illustrative. Upstash period is unknown; 31 days conservatively reserves a whole month and is not a verified remainder. Seed857 is a fixture model, not the measured real seed.',redisScenarios,vercelScenarios,buildMinutes,gate:releaseGate({freePlanConfirmed:input.upstash.plan==='Free'}),releaseBuildPlan:buildPlan({strategy:'staged-production'}),servicesContacted:false};}
+if(require.main===module)console.log(JSON.stringify(calculate(),null,2));module.exports={calculate};

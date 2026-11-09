@@ -1,0 +1,1198 @@
+{
+  "source": "user-reported console values; no account/API access by agent",
+  "summary": {
+    "upstash": {
+      "remainingCommands": 170000,
+      "remainingTransferBytes": 8000000000,
+      "storageHeadroomBytes": 49000000,
+      "storageUtilization": 0.804
+    },
+    "vercel": {
+      "remainingCreditUSD": 6.130000000000001,
+      "buildShare": 0.8832011535688536,
+      "nonBuildUSD": 1.6199999999999992,
+      "unitemizedUSD": 0.8399999999999981,
+      "periodDays": 31,
+      "elapsedDays": 11,
+      "remainingDays": 20,
+      "projectedTotalAtSamePaceUSD": 39.088181818181816,
+      "projectedRemainingNonBuildUSD": 2.945454545454544,
+      "creditForAdditionalWorkAfterBaselineUSD": 3.184545454545457
+    },
+    "rates": {
+      "buildCPUPerMinute": 0.0035201149425287356,
+      "invocation": 6.1020258725897e-7,
+      "activeCPUPerMinute": 0.002105263157894737,
+      "memoryGBHour": 0.010673234811165846,
+      "originMB": 0.00007177033492822967,
+      "event": 9.021947267638827e-7
+    },
+    "notice": "Rates are ratios of rounded observed amounts, not verified contractual marginal prices. Linear projections assume snapshot date and unchanged scope."
+  },
+  "assumptions": "All scenario N/H/S/export sizes/days/baseline traffic/render costs are illustrative. Upstash period is unknown; 31 days conservatively reserves a whole month and is not a verified remainder. Seed857 is a fixture model, not the measured real seed.",
+  "redisScenarios": [
+    {
+      "assumptions": {
+        "transferOverheadFactor": 1.25,
+        "seedRecords": 857,
+        "upstashDaysRemaining": 31,
+        "otherRemainingCommands": 30000,
+        "seoHTMLRequests": 1000,
+        "seoColdRequests": 10,
+        "dailyUpdateOperations": 133,
+        "validationOperations": 2000,
+        "compatibilityOperations": 200,
+        "controlOperations": 20,
+        "resetAndRollbackClearOperations": 2,
+        "seoAdmissionTracking": false,
+        "backupDownloadBytes": 270200000,
+        "rollbackUploadBytes": 270200000,
+        "rollbackVerificationDownloadBytes": 270200000,
+        "seedWireBytes": 2000000,
+        "validationWireBytes": 10000000,
+        "otherRemainingTransferBytes": 500000000,
+        "dailyUpdateWireBytes": 317020,
+        "keyCount": 5000,
+        "scanCallsPerPass": 50
+      },
+      "result": {
+        "productionReady": false,
+        "backupOperations": 20100,
+        "localRestoreOperations": 20000,
+        "localRestoreUpstashOperations": 0,
+        "rollbackReserveOperations": 20000,
+        "seedOperations": 135,
+        "batches": 27,
+        "seedRPCs": 81,
+        "migrationRPCsExcludingUnknownValidation": 25181,
+        "seoHTMLOperations": 3150,
+        "allReservedOperations": 79730,
+        "commandAllowance": 136000,
+        "commandMargin": 56270,
+        "payloadTransferBytes": 1332427620,
+        "transferBytes": 1665534525,
+        "transferAllowance": 6400000000,
+        "transferMargin": 4734465475,
+        "missing": [],
+        "withinProposedBudget": true,
+        "notice": "Scenario only. Includes one old-data rollback; full restore rehearsal stays local. No extra complete backup/retry is included. Upstash metering, reset implementation and request overhead require verification."
+      }
+    },
+    {
+      "assumptions": {
+        "transferOverheadFactor": 1.25,
+        "seedRecords": 857,
+        "upstashDaysRemaining": 31,
+        "otherRemainingCommands": 30000,
+        "seoHTMLRequests": 5000,
+        "seoColdRequests": 50,
+        "dailyUpdateOperations": 133,
+        "validationOperations": 2000,
+        "compatibilityOperations": 200,
+        "controlOperations": 20,
+        "resetAndRollbackClearOperations": 2,
+        "seoAdmissionTracking": false,
+        "backupDownloadBytes": 270200000,
+        "rollbackUploadBytes": 270200000,
+        "rollbackVerificationDownloadBytes": 270200000,
+        "seedWireBytes": 2000000,
+        "validationWireBytes": 10000000,
+        "otherRemainingTransferBytes": 500000000,
+        "dailyUpdateWireBytes": 317020,
+        "keyCount": 5000,
+        "scanCallsPerPass": 50
+      },
+      "result": {
+        "productionReady": false,
+        "backupOperations": 20100,
+        "localRestoreOperations": 20000,
+        "localRestoreUpstashOperations": 0,
+        "rollbackReserveOperations": 20000,
+        "seedOperations": 135,
+        "batches": 27,
+        "seedRPCs": 81,
+        "migrationRPCsExcludingUnknownValidation": 25181,
+        "seoHTMLOperations": 15750,
+        "allReservedOperations": 92330,
+        "commandAllowance": 136000,
+        "commandMargin": 43670,
+        "payloadTransferBytes": 1332427620,
+        "transferBytes": 1665534525,
+        "transferAllowance": 6400000000,
+        "transferMargin": 4734465475,
+        "missing": [],
+        "withinProposedBudget": true,
+        "notice": "Scenario only. Includes one old-data rollback; full restore rehearsal stays local. No extra complete backup/retry is included. Upstash metering, reset implementation and request overhead require verification."
+      }
+    },
+    {
+      "assumptions": {
+        "transferOverheadFactor": 1.25,
+        "seedRecords": 857,
+        "upstashDaysRemaining": 31,
+        "otherRemainingCommands": 30000,
+        "seoHTMLRequests": 10000,
+        "seoColdRequests": 100,
+        "dailyUpdateOperations": 133,
+        "validationOperations": 2000,
+        "compatibilityOperations": 200,
+        "controlOperations": 20,
+        "resetAndRollbackClearOperations": 2,
+        "seoAdmissionTracking": false,
+        "backupDownloadBytes": 270200000,
+        "rollbackUploadBytes": 270200000,
+        "rollbackVerificationDownloadBytes": 270200000,
+        "seedWireBytes": 2000000,
+        "validationWireBytes": 10000000,
+        "otherRemainingTransferBytes": 500000000,
+        "dailyUpdateWireBytes": 317020,
+        "keyCount": 5000,
+        "scanCallsPerPass": 50
+      },
+      "result": {
+        "productionReady": false,
+        "backupOperations": 20100,
+        "localRestoreOperations": 20000,
+        "localRestoreUpstashOperations": 0,
+        "rollbackReserveOperations": 20000,
+        "seedOperations": 135,
+        "batches": 27,
+        "seedRPCs": 81,
+        "migrationRPCsExcludingUnknownValidation": 25181,
+        "seoHTMLOperations": 31500,
+        "allReservedOperations": 108080,
+        "commandAllowance": 136000,
+        "commandMargin": 27920,
+        "payloadTransferBytes": 1332427620,
+        "transferBytes": 1665534525,
+        "transferAllowance": 6400000000,
+        "transferMargin": 4734465475,
+        "missing": [],
+        "withinProposedBudget": true,
+        "notice": "Scenario only. Includes one old-data rollback; full restore rehearsal stays local. No extra complete backup/retry is included. Upstash metering, reset implementation and request overhead require verification."
+      }
+    },
+    {
+      "assumptions": {
+        "transferOverheadFactor": 1.25,
+        "seedRecords": 857,
+        "upstashDaysRemaining": 31,
+        "otherRemainingCommands": 30000,
+        "seoHTMLRequests": 1000,
+        "seoColdRequests": 10,
+        "dailyUpdateOperations": 133,
+        "validationOperations": 2000,
+        "compatibilityOperations": 200,
+        "controlOperations": 20,
+        "resetAndRollbackClearOperations": 2,
+        "seoAdmissionTracking": false,
+        "backupDownloadBytes": 270200000,
+        "rollbackUploadBytes": 270200000,
+        "rollbackVerificationDownloadBytes": 270200000,
+        "seedWireBytes": 2000000,
+        "validationWireBytes": 10000000,
+        "otherRemainingTransferBytes": 500000000,
+        "dailyUpdateWireBytes": 317020,
+        "keyCount": 10000,
+        "scanCallsPerPass": 100
+      },
+      "result": {
+        "productionReady": false,
+        "backupOperations": 40200,
+        "localRestoreOperations": 40000,
+        "localRestoreUpstashOperations": 0,
+        "rollbackReserveOperations": 40000,
+        "seedOperations": 135,
+        "batches": 27,
+        "seedRPCs": 81,
+        "migrationRPCsExcludingUnknownValidation": 50281,
+        "seoHTMLOperations": 3150,
+        "allReservedOperations": 119830,
+        "commandAllowance": 136000,
+        "commandMargin": 16170,
+        "payloadTransferBytes": 1332427620,
+        "transferBytes": 1665534525,
+        "transferAllowance": 6400000000,
+        "transferMargin": 4734465475,
+        "missing": [],
+        "withinProposedBudget": true,
+        "notice": "Scenario only. Includes one old-data rollback; full restore rehearsal stays local. No extra complete backup/retry is included. Upstash metering, reset implementation and request overhead require verification."
+      }
+    },
+    {
+      "assumptions": {
+        "transferOverheadFactor": 1.25,
+        "seedRecords": 857,
+        "upstashDaysRemaining": 31,
+        "otherRemainingCommands": 30000,
+        "seoHTMLRequests": 5000,
+        "seoColdRequests": 50,
+        "dailyUpdateOperations": 133,
+        "validationOperations": 2000,
+        "compatibilityOperations": 200,
+        "controlOperations": 20,
+        "resetAndRollbackClearOperations": 2,
+        "seoAdmissionTracking": false,
+        "backupDownloadBytes": 270200000,
+        "rollbackUploadBytes": 270200000,
+        "rollbackVerificationDownloadBytes": 270200000,
+        "seedWireBytes": 2000000,
+        "validationWireBytes": 10000000,
+        "otherRemainingTransferBytes": 500000000,
+        "dailyUpdateWireBytes": 317020,
+        "keyCount": 10000,
+        "scanCallsPerPass": 100
+      },
+      "result": {
+        "productionReady": false,
+        "backupOperations": 40200,
+        "localRestoreOperations": 40000,
+        "localRestoreUpstashOperations": 0,
+        "rollbackReserveOperations": 40000,
+        "seedOperations": 135,
+        "batches": 27,
+        "seedRPCs": 81,
+        "migrationRPCsExcludingUnknownValidation": 50281,
+        "seoHTMLOperations": 15750,
+        "allReservedOperations": 132430,
+        "commandAllowance": 136000,
+        "commandMargin": 3570,
+        "payloadTransferBytes": 1332427620,
+        "transferBytes": 1665534525,
+        "transferAllowance": 6400000000,
+        "transferMargin": 4734465475,
+        "missing": [],
+        "withinProposedBudget": true,
+        "notice": "Scenario only. Includes one old-data rollback; full restore rehearsal stays local. No extra complete backup/retry is included. Upstash metering, reset implementation and request overhead require verification."
+      }
+    },
+    {
+      "assumptions": {
+        "transferOverheadFactor": 1.25,
+        "seedRecords": 857,
+        "upstashDaysRemaining": 31,
+        "otherRemainingCommands": 30000,
+        "seoHTMLRequests": 10000,
+        "seoColdRequests": 100,
+        "dailyUpdateOperations": 133,
+        "validationOperations": 2000,
+        "compatibilityOperations": 200,
+        "controlOperations": 20,
+        "resetAndRollbackClearOperations": 2,
+        "seoAdmissionTracking": false,
+        "backupDownloadBytes": 270200000,
+        "rollbackUploadBytes": 270200000,
+        "rollbackVerificationDownloadBytes": 270200000,
+        "seedWireBytes": 2000000,
+        "validationWireBytes": 10000000,
+        "otherRemainingTransferBytes": 500000000,
+        "dailyUpdateWireBytes": 317020,
+        "keyCount": 10000,
+        "scanCallsPerPass": 100
+      },
+      "result": {
+        "productionReady": false,
+        "backupOperations": 40200,
+        "localRestoreOperations": 40000,
+        "localRestoreUpstashOperations": 0,
+        "rollbackReserveOperations": 40000,
+        "seedOperations": 135,
+        "batches": 27,
+        "seedRPCs": 81,
+        "migrationRPCsExcludingUnknownValidation": 50281,
+        "seoHTMLOperations": 31500,
+        "allReservedOperations": 148180,
+        "commandAllowance": 136000,
+        "commandMargin": -12180,
+        "payloadTransferBytes": 1332427620,
+        "transferBytes": 1665534525,
+        "transferAllowance": 6400000000,
+        "transferMargin": 4734465475,
+        "missing": [],
+        "withinProposedBudget": false,
+        "notice": "Scenario only. Includes one old-data rollback; full restore rehearsal stays local. No extra complete backup/retry is included. Upstash metering, reset implementation and request overhead require verification."
+      }
+    },
+    {
+      "assumptions": {
+        "transferOverheadFactor": 1.25,
+        "seedRecords": 857,
+        "upstashDaysRemaining": 31,
+        "otherRemainingCommands": 30000,
+        "seoHTMLRequests": 1000,
+        "seoColdRequests": 10,
+        "dailyUpdateOperations": 133,
+        "validationOperations": 2000,
+        "compatibilityOperations": 200,
+        "controlOperations": 20,
+        "resetAndRollbackClearOperations": 2,
+        "seoAdmissionTracking": false,
+        "backupDownloadBytes": 270200000,
+        "rollbackUploadBytes": 270200000,
+        "rollbackVerificationDownloadBytes": 270200000,
+        "seedWireBytes": 2000000,
+        "validationWireBytes": 10000000,
+        "otherRemainingTransferBytes": 500000000,
+        "dailyUpdateWireBytes": 317020,
+        "keyCount": 15000,
+        "scanCallsPerPass": 150
+      },
+      "result": {
+        "productionReady": false,
+        "backupOperations": 60300,
+        "localRestoreOperations": 60000,
+        "localRestoreUpstashOperations": 0,
+        "rollbackReserveOperations": 60000,
+        "seedOperations": 135,
+        "batches": 27,
+        "seedRPCs": 81,
+        "migrationRPCsExcludingUnknownValidation": 75381,
+        "seoHTMLOperations": 3150,
+        "allReservedOperations": 159930,
+        "commandAllowance": 136000,
+        "commandMargin": -23930,
+        "payloadTransferBytes": 1332427620,
+        "transferBytes": 1665534525,
+        "transferAllowance": 6400000000,
+        "transferMargin": 4734465475,
+        "missing": [],
+        "withinProposedBudget": false,
+        "notice": "Scenario only. Includes one old-data rollback; full restore rehearsal stays local. No extra complete backup/retry is included. Upstash metering, reset implementation and request overhead require verification."
+      }
+    },
+    {
+      "assumptions": {
+        "transferOverheadFactor": 1.25,
+        "seedRecords": 857,
+        "upstashDaysRemaining": 31,
+        "otherRemainingCommands": 30000,
+        "seoHTMLRequests": 5000,
+        "seoColdRequests": 50,
+        "dailyUpdateOperations": 133,
+        "validationOperations": 2000,
+        "compatibilityOperations": 200,
+        "controlOperations": 20,
+        "resetAndRollbackClearOperations": 2,
+        "seoAdmissionTracking": false,
+        "backupDownloadBytes": 270200000,
+        "rollbackUploadBytes": 270200000,
+        "rollbackVerificationDownloadBytes": 270200000,
+        "seedWireBytes": 2000000,
+        "validationWireBytes": 10000000,
+        "otherRemainingTransferBytes": 500000000,
+        "dailyUpdateWireBytes": 317020,
+        "keyCount": 15000,
+        "scanCallsPerPass": 150
+      },
+      "result": {
+        "productionReady": false,
+        "backupOperations": 60300,
+        "localRestoreOperations": 60000,
+        "localRestoreUpstashOperations": 0,
+        "rollbackReserveOperations": 60000,
+        "seedOperations": 135,
+        "batches": 27,
+        "seedRPCs": 81,
+        "migrationRPCsExcludingUnknownValidation": 75381,
+        "seoHTMLOperations": 15750,
+        "allReservedOperations": 172530,
+        "commandAllowance": 136000,
+        "commandMargin": -36530,
+        "payloadTransferBytes": 1332427620,
+        "transferBytes": 1665534525,
+        "transferAllowance": 6400000000,
+        "transferMargin": 4734465475,
+        "missing": [],
+        "withinProposedBudget": false,
+        "notice": "Scenario only. Includes one old-data rollback; full restore rehearsal stays local. No extra complete backup/retry is included. Upstash metering, reset implementation and request overhead require verification."
+      }
+    },
+    {
+      "assumptions": {
+        "transferOverheadFactor": 1.25,
+        "seedRecords": 857,
+        "upstashDaysRemaining": 31,
+        "otherRemainingCommands": 30000,
+        "seoHTMLRequests": 10000,
+        "seoColdRequests": 100,
+        "dailyUpdateOperations": 133,
+        "validationOperations": 2000,
+        "compatibilityOperations": 200,
+        "controlOperations": 20,
+        "resetAndRollbackClearOperations": 2,
+        "seoAdmissionTracking": false,
+        "backupDownloadBytes": 270200000,
+        "rollbackUploadBytes": 270200000,
+        "rollbackVerificationDownloadBytes": 270200000,
+        "seedWireBytes": 2000000,
+        "validationWireBytes": 10000000,
+        "otherRemainingTransferBytes": 500000000,
+        "dailyUpdateWireBytes": 317020,
+        "keyCount": 15000,
+        "scanCallsPerPass": 150
+      },
+      "result": {
+        "productionReady": false,
+        "backupOperations": 60300,
+        "localRestoreOperations": 60000,
+        "localRestoreUpstashOperations": 0,
+        "rollbackReserveOperations": 60000,
+        "seedOperations": 135,
+        "batches": 27,
+        "seedRPCs": 81,
+        "migrationRPCsExcludingUnknownValidation": 75381,
+        "seoHTMLOperations": 31500,
+        "allReservedOperations": 188280,
+        "commandAllowance": 136000,
+        "commandMargin": -52280,
+        "payloadTransferBytes": 1332427620,
+        "transferBytes": 1665534525,
+        "transferAllowance": 6400000000,
+        "transferMargin": 4734465475,
+        "missing": [],
+        "withinProposedBudget": false,
+        "notice": "Scenario only. Includes one old-data rollback; full restore rehearsal stays local. No extra complete backup/retry is included. Upstash metering, reset implementation and request overhead require verification."
+      }
+    },
+    {
+      "assumptions": {
+        "transferOverheadFactor": 1.25,
+        "seedRecords": 857,
+        "upstashDaysRemaining": 31,
+        "otherRemainingCommands": 30000,
+        "seoHTMLRequests": 1000,
+        "seoColdRequests": 10,
+        "dailyUpdateOperations": 133,
+        "validationOperations": 2000,
+        "compatibilityOperations": 200,
+        "controlOperations": 20,
+        "resetAndRollbackClearOperations": 2,
+        "seoAdmissionTracking": false,
+        "backupDownloadBytes": 270200000,
+        "rollbackUploadBytes": 270200000,
+        "rollbackVerificationDownloadBytes": 270200000,
+        "seedWireBytes": 2000000,
+        "validationWireBytes": 10000000,
+        "otherRemainingTransferBytes": 500000000,
+        "dailyUpdateWireBytes": 317020,
+        "keyCount": 20000,
+        "scanCallsPerPass": 200
+      },
+      "result": {
+        "productionReady": false,
+        "backupOperations": 80400,
+        "localRestoreOperations": 80000,
+        "localRestoreUpstashOperations": 0,
+        "rollbackReserveOperations": 80000,
+        "seedOperations": 135,
+        "batches": 27,
+        "seedRPCs": 81,
+        "migrationRPCsExcludingUnknownValidation": 100481,
+        "seoHTMLOperations": 3150,
+        "allReservedOperations": 200030,
+        "commandAllowance": 136000,
+        "commandMargin": -64030,
+        "payloadTransferBytes": 1332427620,
+        "transferBytes": 1665534525,
+        "transferAllowance": 6400000000,
+        "transferMargin": 4734465475,
+        "missing": [],
+        "withinProposedBudget": false,
+        "notice": "Scenario only. Includes one old-data rollback; full restore rehearsal stays local. No extra complete backup/retry is included. Upstash metering, reset implementation and request overhead require verification."
+      }
+    },
+    {
+      "assumptions": {
+        "transferOverheadFactor": 1.25,
+        "seedRecords": 857,
+        "upstashDaysRemaining": 31,
+        "otherRemainingCommands": 30000,
+        "seoHTMLRequests": 5000,
+        "seoColdRequests": 50,
+        "dailyUpdateOperations": 133,
+        "validationOperations": 2000,
+        "compatibilityOperations": 200,
+        "controlOperations": 20,
+        "resetAndRollbackClearOperations": 2,
+        "seoAdmissionTracking": false,
+        "backupDownloadBytes": 270200000,
+        "rollbackUploadBytes": 270200000,
+        "rollbackVerificationDownloadBytes": 270200000,
+        "seedWireBytes": 2000000,
+        "validationWireBytes": 10000000,
+        "otherRemainingTransferBytes": 500000000,
+        "dailyUpdateWireBytes": 317020,
+        "keyCount": 20000,
+        "scanCallsPerPass": 200
+      },
+      "result": {
+        "productionReady": false,
+        "backupOperations": 80400,
+        "localRestoreOperations": 80000,
+        "localRestoreUpstashOperations": 0,
+        "rollbackReserveOperations": 80000,
+        "seedOperations": 135,
+        "batches": 27,
+        "seedRPCs": 81,
+        "migrationRPCsExcludingUnknownValidation": 100481,
+        "seoHTMLOperations": 15750,
+        "allReservedOperations": 212630,
+        "commandAllowance": 136000,
+        "commandMargin": -76630,
+        "payloadTransferBytes": 1332427620,
+        "transferBytes": 1665534525,
+        "transferAllowance": 6400000000,
+        "transferMargin": 4734465475,
+        "missing": [],
+        "withinProposedBudget": false,
+        "notice": "Scenario only. Includes one old-data rollback; full restore rehearsal stays local. No extra complete backup/retry is included. Upstash metering, reset implementation and request overhead require verification."
+      }
+    },
+    {
+      "assumptions": {
+        "transferOverheadFactor": 1.25,
+        "seedRecords": 857,
+        "upstashDaysRemaining": 31,
+        "otherRemainingCommands": 30000,
+        "seoHTMLRequests": 10000,
+        "seoColdRequests": 100,
+        "dailyUpdateOperations": 133,
+        "validationOperations": 2000,
+        "compatibilityOperations": 200,
+        "controlOperations": 20,
+        "resetAndRollbackClearOperations": 2,
+        "seoAdmissionTracking": false,
+        "backupDownloadBytes": 270200000,
+        "rollbackUploadBytes": 270200000,
+        "rollbackVerificationDownloadBytes": 270200000,
+        "seedWireBytes": 2000000,
+        "validationWireBytes": 10000000,
+        "otherRemainingTransferBytes": 500000000,
+        "dailyUpdateWireBytes": 317020,
+        "keyCount": 20000,
+        "scanCallsPerPass": 200
+      },
+      "result": {
+        "productionReady": false,
+        "backupOperations": 80400,
+        "localRestoreOperations": 80000,
+        "localRestoreUpstashOperations": 0,
+        "rollbackReserveOperations": 80000,
+        "seedOperations": 135,
+        "batches": 27,
+        "seedRPCs": 81,
+        "migrationRPCsExcludingUnknownValidation": 100481,
+        "seoHTMLOperations": 31500,
+        "allReservedOperations": 228380,
+        "commandAllowance": 136000,
+        "commandMargin": -92380,
+        "payloadTransferBytes": 1332427620,
+        "transferBytes": 1665534525,
+        "transferAllowance": 6400000000,
+        "transferMargin": 4734465475,
+        "missing": [],
+        "withinProposedBudget": false,
+        "notice": "Scenario only. Includes one old-data rollback; full restore rehearsal stays local. No extra complete backup/retry is included. Upstash metering, reset implementation and request overhead require verification."
+      }
+    }
+  ],
+  "vercelScenarios": [
+    {
+      "assumptions": {
+        "builds": 1,
+        "cpuMinutesPerBuild": 60,
+        "reserveUSD": 2,
+        "seo": {
+          "cpuMsPerHTML": 20,
+          "memoryGB": 1,
+          "wallMsPerHTML": 500,
+          "htmlBytes": 148443,
+          "eventsPerHTML": 5,
+          "htmlRequests": 10000
+        }
+      },
+      "result": {
+        "productionReady": false,
+        "builds": 1,
+        "cpuMinutes": 60,
+        "buildUSD": 0.21120689655172414,
+        "seoRuntime": {
+          "usage": {
+            "additionalInvocations": 10000,
+            "additionalActiveCPUMinutes": 3.3333333333333335,
+            "additionalMemoryGBHours": 1.3888888888888888,
+            "additionalOriginMB": 1484.43,
+            "additionalEvents": 50000
+          },
+          "cost": {
+            "invocationsUSD": 0.0061020258725897,
+            "activeCPUUSD": 0.007017543859649123,
+            "memoryUSD": 0.014823937237730341,
+            "originUSD": 0.10653803827751197,
+            "observabilityUSD": 0.04510973633819414
+          },
+          "totalUSD": 0.17959128158567528,
+          "additionalBuildCPUForPageViews": 0,
+          "notice": "Hypothetical incremental runtime; assumes all dynamic HTML bytes billed as Origin Transfer. Compression, caching, regional pricing and event attribution unverified."
+        },
+        "projectedPeriodTotalUSD": 17.20625272359194,
+        "creditMarginUSD": 2.793747276408059,
+        "reserveUSD": 2,
+        "withinProposedBudget": true,
+        "notice": "No additional builds outside this plan assumed; snapshot scope/elapsed days and real per-deployment CPU must be verified."
+      }
+    },
+    {
+      "assumptions": {
+        "builds": 1,
+        "cpuMinutesPerBuild": 300,
+        "reserveUSD": 2,
+        "seo": {
+          "cpuMsPerHTML": 20,
+          "memoryGB": 1,
+          "wallMsPerHTML": 500,
+          "htmlBytes": 148443,
+          "eventsPerHTML": 5,
+          "htmlRequests": 10000
+        }
+      },
+      "result": {
+        "productionReady": false,
+        "builds": 1,
+        "cpuMinutes": 300,
+        "buildUSD": 1.0560344827586208,
+        "seoRuntime": {
+          "usage": {
+            "additionalInvocations": 10000,
+            "additionalActiveCPUMinutes": 3.3333333333333335,
+            "additionalMemoryGBHours": 1.3888888888888888,
+            "additionalOriginMB": 1484.43,
+            "additionalEvents": 50000
+          },
+          "cost": {
+            "invocationsUSD": 0.0061020258725897,
+            "activeCPUUSD": 0.007017543859649123,
+            "memoryUSD": 0.014823937237730341,
+            "originUSD": 0.10653803827751197,
+            "observabilityUSD": 0.04510973633819414
+          },
+          "totalUSD": 0.17959128158567528,
+          "additionalBuildCPUForPageViews": 0,
+          "notice": "Hypothetical incremental runtime; assumes all dynamic HTML bytes billed as Origin Transfer. Compression, caching, regional pricing and event attribution unverified."
+        },
+        "projectedPeriodTotalUSD": 18.051080309798838,
+        "creditMarginUSD": 1.948919690201162,
+        "reserveUSD": 2,
+        "withinProposedBudget": false,
+        "notice": "No additional builds outside this plan assumed; snapshot scope/elapsed days and real per-deployment CPU must be verified."
+      }
+    },
+    {
+      "assumptions": {
+        "builds": 2,
+        "cpuMinutesPerBuild": 60,
+        "reserveUSD": 2,
+        "seo": {
+          "cpuMsPerHTML": 20,
+          "memoryGB": 1,
+          "wallMsPerHTML": 500,
+          "htmlBytes": 148443,
+          "eventsPerHTML": 5,
+          "htmlRequests": 10000
+        }
+      },
+      "result": {
+        "productionReady": false,
+        "builds": 2,
+        "cpuMinutes": 120,
+        "buildUSD": 0.4224137931034483,
+        "seoRuntime": {
+          "usage": {
+            "additionalInvocations": 10000,
+            "additionalActiveCPUMinutes": 3.3333333333333335,
+            "additionalMemoryGBHours": 1.3888888888888888,
+            "additionalOriginMB": 1484.43,
+            "additionalEvents": 50000
+          },
+          "cost": {
+            "invocationsUSD": 0.0061020258725897,
+            "activeCPUUSD": 0.007017543859649123,
+            "memoryUSD": 0.014823937237730341,
+            "originUSD": 0.10653803827751197,
+            "observabilityUSD": 0.04510973633819414
+          },
+          "totalUSD": 0.17959128158567528,
+          "additionalBuildCPUForPageViews": 0,
+          "notice": "Hypothetical incremental runtime; assumes all dynamic HTML bytes billed as Origin Transfer. Compression, caching, regional pricing and event attribution unverified."
+        },
+        "projectedPeriodTotalUSD": 17.417459620143667,
+        "creditMarginUSD": 2.582540379856333,
+        "reserveUSD": 2,
+        "withinProposedBudget": true,
+        "notice": "No additional builds outside this plan assumed; snapshot scope/elapsed days and real per-deployment CPU must be verified."
+      }
+    },
+    {
+      "assumptions": {
+        "builds": 2,
+        "cpuMinutesPerBuild": 300,
+        "reserveUSD": 2,
+        "seo": {
+          "cpuMsPerHTML": 20,
+          "memoryGB": 1,
+          "wallMsPerHTML": 500,
+          "htmlBytes": 148443,
+          "eventsPerHTML": 5,
+          "htmlRequests": 10000
+        }
+      },
+      "result": {
+        "productionReady": false,
+        "builds": 2,
+        "cpuMinutes": 600,
+        "buildUSD": 2.1120689655172415,
+        "seoRuntime": {
+          "usage": {
+            "additionalInvocations": 10000,
+            "additionalActiveCPUMinutes": 3.3333333333333335,
+            "additionalMemoryGBHours": 1.3888888888888888,
+            "additionalOriginMB": 1484.43,
+            "additionalEvents": 50000
+          },
+          "cost": {
+            "invocationsUSD": 0.0061020258725897,
+            "activeCPUUSD": 0.007017543859649123,
+            "memoryUSD": 0.014823937237730341,
+            "originUSD": 0.10653803827751197,
+            "observabilityUSD": 0.04510973633819414
+          },
+          "totalUSD": 0.17959128158567528,
+          "additionalBuildCPUForPageViews": 0,
+          "notice": "Hypothetical incremental runtime; assumes all dynamic HTML bytes billed as Origin Transfer. Compression, caching, regional pricing and event attribution unverified."
+        },
+        "projectedPeriodTotalUSD": 19.10711479255746,
+        "creditMarginUSD": 0.8928852074425393,
+        "reserveUSD": 2,
+        "withinProposedBudget": false,
+        "notice": "No additional builds outside this plan assumed; snapshot scope/elapsed days and real per-deployment CPU must be verified."
+      }
+    },
+    {
+      "assumptions": {
+        "builds": 1,
+        "cpuMinutesPerBuild": 60,
+        "reserveUSD": 2,
+        "seo": {
+          "cpuMsPerHTML": 20,
+          "memoryGB": 1,
+          "wallMsPerHTML": 500,
+          "htmlBytes": 148443,
+          "eventsPerHTML": 5,
+          "htmlRequests": 50000
+        }
+      },
+      "result": {
+        "productionReady": false,
+        "builds": 1,
+        "cpuMinutes": 60,
+        "buildUSD": 0.21120689655172414,
+        "seoRuntime": {
+          "usage": {
+            "additionalInvocations": 50000,
+            "additionalActiveCPUMinutes": 16.666666666666668,
+            "additionalMemoryGBHours": 6.944444444444445,
+            "additionalOriginMB": 7422.15,
+            "additionalEvents": 250000
+          },
+          "cost": {
+            "invocationsUSD": 0.0305101293629485,
+            "activeCPUUSD": 0.03508771929824562,
+            "memoryUSD": 0.07411968618865171,
+            "originUSD": 0.5326901913875598,
+            "observabilityUSD": 0.2255486816909707
+          },
+          "totalUSD": 0.8979564079283764,
+          "additionalBuildCPUForPageViews": 0,
+          "notice": "Hypothetical incremental runtime; assumes all dynamic HTML bytes billed as Origin Transfer. Compression, caching, regional pricing and event attribution unverified."
+        },
+        "projectedPeriodTotalUSD": 17.92461784993464,
+        "creditMarginUSD": 2.0753821500653586,
+        "reserveUSD": 2,
+        "withinProposedBudget": true,
+        "notice": "No additional builds outside this plan assumed; snapshot scope/elapsed days and real per-deployment CPU must be verified."
+      }
+    },
+    {
+      "assumptions": {
+        "builds": 1,
+        "cpuMinutesPerBuild": 300,
+        "reserveUSD": 2,
+        "seo": {
+          "cpuMsPerHTML": 20,
+          "memoryGB": 1,
+          "wallMsPerHTML": 500,
+          "htmlBytes": 148443,
+          "eventsPerHTML": 5,
+          "htmlRequests": 50000
+        }
+      },
+      "result": {
+        "productionReady": false,
+        "builds": 1,
+        "cpuMinutes": 300,
+        "buildUSD": 1.0560344827586208,
+        "seoRuntime": {
+          "usage": {
+            "additionalInvocations": 50000,
+            "additionalActiveCPUMinutes": 16.666666666666668,
+            "additionalMemoryGBHours": 6.944444444444445,
+            "additionalOriginMB": 7422.15,
+            "additionalEvents": 250000
+          },
+          "cost": {
+            "invocationsUSD": 0.0305101293629485,
+            "activeCPUUSD": 0.03508771929824562,
+            "memoryUSD": 0.07411968618865171,
+            "originUSD": 0.5326901913875598,
+            "observabilityUSD": 0.2255486816909707
+          },
+          "totalUSD": 0.8979564079283764,
+          "additionalBuildCPUForPageViews": 0,
+          "notice": "Hypothetical incremental runtime; assumes all dynamic HTML bytes billed as Origin Transfer. Compression, caching, regional pricing and event attribution unverified."
+        },
+        "projectedPeriodTotalUSD": 18.769445436141538,
+        "creditMarginUSD": 1.2305545638584618,
+        "reserveUSD": 2,
+        "withinProposedBudget": false,
+        "notice": "No additional builds outside this plan assumed; snapshot scope/elapsed days and real per-deployment CPU must be verified."
+      }
+    },
+    {
+      "assumptions": {
+        "builds": 2,
+        "cpuMinutesPerBuild": 60,
+        "reserveUSD": 2,
+        "seo": {
+          "cpuMsPerHTML": 20,
+          "memoryGB": 1,
+          "wallMsPerHTML": 500,
+          "htmlBytes": 148443,
+          "eventsPerHTML": 5,
+          "htmlRequests": 50000
+        }
+      },
+      "result": {
+        "productionReady": false,
+        "builds": 2,
+        "cpuMinutes": 120,
+        "buildUSD": 0.4224137931034483,
+        "seoRuntime": {
+          "usage": {
+            "additionalInvocations": 50000,
+            "additionalActiveCPUMinutes": 16.666666666666668,
+            "additionalMemoryGBHours": 6.944444444444445,
+            "additionalOriginMB": 7422.15,
+            "additionalEvents": 250000
+          },
+          "cost": {
+            "invocationsUSD": 0.0305101293629485,
+            "activeCPUUSD": 0.03508771929824562,
+            "memoryUSD": 0.07411968618865171,
+            "originUSD": 0.5326901913875598,
+            "observabilityUSD": 0.2255486816909707
+          },
+          "totalUSD": 0.8979564079283764,
+          "additionalBuildCPUForPageViews": 0,
+          "notice": "Hypothetical incremental runtime; assumes all dynamic HTML bytes billed as Origin Transfer. Compression, caching, regional pricing and event attribution unverified."
+        },
+        "projectedPeriodTotalUSD": 18.135824746486367,
+        "creditMarginUSD": 1.8641752535136327,
+        "reserveUSD": 2,
+        "withinProposedBudget": false,
+        "notice": "No additional builds outside this plan assumed; snapshot scope/elapsed days and real per-deployment CPU must be verified."
+      }
+    },
+    {
+      "assumptions": {
+        "builds": 2,
+        "cpuMinutesPerBuild": 300,
+        "reserveUSD": 2,
+        "seo": {
+          "cpuMsPerHTML": 20,
+          "memoryGB": 1,
+          "wallMsPerHTML": 500,
+          "htmlBytes": 148443,
+          "eventsPerHTML": 5,
+          "htmlRequests": 50000
+        }
+      },
+      "result": {
+        "productionReady": false,
+        "builds": 2,
+        "cpuMinutes": 600,
+        "buildUSD": 2.1120689655172415,
+        "seoRuntime": {
+          "usage": {
+            "additionalInvocations": 50000,
+            "additionalActiveCPUMinutes": 16.666666666666668,
+            "additionalMemoryGBHours": 6.944444444444445,
+            "additionalOriginMB": 7422.15,
+            "additionalEvents": 250000
+          },
+          "cost": {
+            "invocationsUSD": 0.0305101293629485,
+            "activeCPUUSD": 0.03508771929824562,
+            "memoryUSD": 0.07411968618865171,
+            "originUSD": 0.5326901913875598,
+            "observabilityUSD": 0.2255486816909707
+          },
+          "totalUSD": 0.8979564079283764,
+          "additionalBuildCPUForPageViews": 0,
+          "notice": "Hypothetical incremental runtime; assumes all dynamic HTML bytes billed as Origin Transfer. Compression, caching, regional pricing and event attribution unverified."
+        },
+        "projectedPeriodTotalUSD": 19.82547991890016,
+        "creditMarginUSD": 0.17452008109983908,
+        "reserveUSD": 2,
+        "withinProposedBudget": false,
+        "notice": "No additional builds outside this plan assumed; snapshot scope/elapsed days and real per-deployment CPU must be verified."
+      }
+    },
+    {
+      "assumptions": {
+        "builds": 1,
+        "cpuMinutesPerBuild": 60,
+        "reserveUSD": 2,
+        "seo": {
+          "cpuMsPerHTML": 20,
+          "memoryGB": 1,
+          "wallMsPerHTML": 500,
+          "htmlBytes": 148443,
+          "eventsPerHTML": 5,
+          "htmlRequests": 100000
+        }
+      },
+      "result": {
+        "productionReady": false,
+        "builds": 1,
+        "cpuMinutes": 60,
+        "buildUSD": 0.21120689655172414,
+        "seoRuntime": {
+          "usage": {
+            "additionalInvocations": 100000,
+            "additionalActiveCPUMinutes": 33.333333333333336,
+            "additionalMemoryGBHours": 13.88888888888889,
+            "additionalOriginMB": 14844.3,
+            "additionalEvents": 500000
+          },
+          "cost": {
+            "invocationsUSD": 0.061020258725897,
+            "activeCPUUSD": 0.07017543859649124,
+            "memoryUSD": 0.14823937237730342,
+            "originUSD": 1.0653803827751196,
+            "observabilityUSD": 0.4510973633819414
+          },
+          "totalUSD": 1.7959128158567528,
+          "additionalBuildCPUForPageViews": 0,
+          "notice": "Hypothetical incremental runtime; assumes all dynamic HTML bytes billed as Origin Transfer. Compression, caching, regional pricing and event attribution unverified."
+        },
+        "projectedPeriodTotalUSD": 18.822574257863018,
+        "creditMarginUSD": 1.1774257421369825,
+        "reserveUSD": 2,
+        "withinProposedBudget": false,
+        "notice": "No additional builds outside this plan assumed; snapshot scope/elapsed days and real per-deployment CPU must be verified."
+      }
+    },
+    {
+      "assumptions": {
+        "builds": 1,
+        "cpuMinutesPerBuild": 300,
+        "reserveUSD": 2,
+        "seo": {
+          "cpuMsPerHTML": 20,
+          "memoryGB": 1,
+          "wallMsPerHTML": 500,
+          "htmlBytes": 148443,
+          "eventsPerHTML": 5,
+          "htmlRequests": 100000
+        }
+      },
+      "result": {
+        "productionReady": false,
+        "builds": 1,
+        "cpuMinutes": 300,
+        "buildUSD": 1.0560344827586208,
+        "seoRuntime": {
+          "usage": {
+            "additionalInvocations": 100000,
+            "additionalActiveCPUMinutes": 33.333333333333336,
+            "additionalMemoryGBHours": 13.88888888888889,
+            "additionalOriginMB": 14844.3,
+            "additionalEvents": 500000
+          },
+          "cost": {
+            "invocationsUSD": 0.061020258725897,
+            "activeCPUUSD": 0.07017543859649124,
+            "memoryUSD": 0.14823937237730342,
+            "originUSD": 1.0653803827751196,
+            "observabilityUSD": 0.4510973633819414
+          },
+          "totalUSD": 1.7959128158567528,
+          "additionalBuildCPUForPageViews": 0,
+          "notice": "Hypothetical incremental runtime; assumes all dynamic HTML bytes billed as Origin Transfer. Compression, caching, regional pricing and event attribution unverified."
+        },
+        "projectedPeriodTotalUSD": 19.667401844069914,
+        "creditMarginUSD": 0.3325981559300857,
+        "reserveUSD": 2,
+        "withinProposedBudget": false,
+        "notice": "No additional builds outside this plan assumed; snapshot scope/elapsed days and real per-deployment CPU must be verified."
+      }
+    },
+    {
+      "assumptions": {
+        "builds": 2,
+        "cpuMinutesPerBuild": 60,
+        "reserveUSD": 2,
+        "seo": {
+          "cpuMsPerHTML": 20,
+          "memoryGB": 1,
+          "wallMsPerHTML": 500,
+          "htmlBytes": 148443,
+          "eventsPerHTML": 5,
+          "htmlRequests": 100000
+        }
+      },
+      "result": {
+        "productionReady": false,
+        "builds": 2,
+        "cpuMinutes": 120,
+        "buildUSD": 0.4224137931034483,
+        "seoRuntime": {
+          "usage": {
+            "additionalInvocations": 100000,
+            "additionalActiveCPUMinutes": 33.333333333333336,
+            "additionalMemoryGBHours": 13.88888888888889,
+            "additionalOriginMB": 14844.3,
+            "additionalEvents": 500000
+          },
+          "cost": {
+            "invocationsUSD": 0.061020258725897,
+            "activeCPUUSD": 0.07017543859649124,
+            "memoryUSD": 0.14823937237730342,
+            "originUSD": 1.0653803827751196,
+            "observabilityUSD": 0.4510973633819414
+          },
+          "totalUSD": 1.7959128158567528,
+          "additionalBuildCPUForPageViews": 0,
+          "notice": "Hypothetical incremental runtime; assumes all dynamic HTML bytes billed as Origin Transfer. Compression, caching, regional pricing and event attribution unverified."
+        },
+        "projectedPeriodTotalUSD": 19.033781154414743,
+        "creditMarginUSD": 0.9662188455852565,
+        "reserveUSD": 2,
+        "withinProposedBudget": false,
+        "notice": "No additional builds outside this plan assumed; snapshot scope/elapsed days and real per-deployment CPU must be verified."
+      }
+    },
+    {
+      "assumptions": {
+        "builds": 2,
+        "cpuMinutesPerBuild": 300,
+        "reserveUSD": 2,
+        "seo": {
+          "cpuMsPerHTML": 20,
+          "memoryGB": 1,
+          "wallMsPerHTML": 500,
+          "htmlBytes": 148443,
+          "eventsPerHTML": 5,
+          "htmlRequests": 100000
+        }
+      },
+      "result": {
+        "productionReady": false,
+        "builds": 2,
+        "cpuMinutes": 600,
+        "buildUSD": 2.1120689655172415,
+        "seoRuntime": {
+          "usage": {
+            "additionalInvocations": 100000,
+            "additionalActiveCPUMinutes": 33.333333333333336,
+            "additionalMemoryGBHours": 13.88888888888889,
+            "additionalOriginMB": 14844.3,
+            "additionalEvents": 500000
+          },
+          "cost": {
+            "invocationsUSD": 0.061020258725897,
+            "activeCPUUSD": 0.07017543859649124,
+            "memoryUSD": 0.14823937237730342,
+            "originUSD": 1.0653803827751196,
+            "observabilityUSD": 0.4510973633819414
+          },
+          "totalUSD": 1.7959128158567528,
+          "additionalBuildCPUForPageViews": 0,
+          "notice": "Hypothetical incremental runtime; assumes all dynamic HTML bytes billed as Origin Transfer. Compression, caching, regional pricing and event attribution unverified."
+        },
+        "projectedPeriodTotalUSD": 20.723436326828537,
+        "creditMarginUSD": -0.7234363268285371,
+        "reserveUSD": 2,
+        "withinProposedBudget": false,
+        "notice": "No additional builds outside this plan assumed; snapshot scope/elapsed days and real per-deployment CPU must be verified."
+      }
+    }
+  ],
+  "buildMinutes": [
+    {
+      "cpuMinutes": 10,
+      "costUSD": 0.035201149425287355
+    },
+    {
+      "cpuMinutes": 30,
+      "costUSD": 0.10560344827586207
+    },
+    {
+      "cpuMinutes": 60,
+      "costUSD": 0.21120689655172414
+    },
+    {
+      "cpuMinutes": 300,
+      "costUSD": 1.0560344827586208
+    }
+  ],
+  "gate": {
+    "ready": false,
+    "missing": [
+      "overageBehaviorVerified",
+      "usageScopeVerified",
+      "meteringTopologyVerified",
+      "databaseDedicated",
+      "quotasRefreshed",
+      "upstashResetDateKnown",
+      "keyCountMeasured",
+      "backupWireBytesMeasured",
+      "luaBillingVerified",
+      "providerRestoreVerified",
+      "writersCovered",
+      "pcBackupRestoreVerified",
+      "seedBytesMeasured",
+      "periodTrafficBudgeted",
+      "buildCPUPerReleaseMeasured",
+      "existingBuildActivityBudgeted",
+      "productionAdapterVerified"
+    ],
+    "redis": "budget not verified",
+    "vercel": "budget not verified",
+    "authorization": "Never authorizes reset, deploy or billing changes"
+  },
+  "releaseBuildPlan": {
+    "plannedBuilds": 2,
+    "targetBuilds": 1,
+    "ready": false,
+    "missing": [
+      "productionAdapterVerified",
+      "environmentFinalized",
+      "stagedChecksSafe",
+      "legacyWriterStopVerified"
+    ],
+    "mode": "bridge release may be needed; budget two builds",
+    "authorization": "Plan only. No deployment, promotion, environment or billing mutation is performed."
+  },
+  "servicesContacted": false
+}
