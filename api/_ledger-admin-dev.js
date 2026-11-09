@@ -34,7 +34,12 @@ function admin(command,{controlKey='doko:dev:content-control:v1',clock=Date.now}
   if(!reason||String(reason).length>500)throw Error('review reason required');const wk=store.keys.work(type,id),sk=store.keys.seo(type,id),snapshot=await store.read([wk,sk]),old=snapshot[wk];if(!old.data||old.meta.revision!==revision)throw Error('stale work review');
   lockedFields=lockedFields??old.data.lockedFields??[];confirm=confirm??old.data.confirmed;
   const permitted=['title','originalTitle','releaseDate','posterPath','overview','runtimeMinutes','genres','director','cast','rating','status','errors'];if(Object.keys(patch).some(k=>!permitted.includes(k))||lockedFields.some(k=>!permitted.includes(k)||k==='errors'))throw Error('unsupported editorial field');
-  const next=normalizeWorkV2(type,id,{...old.data,...patch,lockedFields,confirmed:confirm,locked:confirm});if(confirm&&next.errors?.some(e=>e.status==='open'))throw Error('unresolved work errors');if(type==='tv'&&!Object.hasOwn(old.data,'seasons')){delete next.seasons;delete next.seasonCount;delete next.episodeCount;}const seo=createSeoRecord(next,{updatedAt:new Date(clock()).toISOString()});
+  const checked=normalizeWorkV2(type,id,{...old.data,...patch,lockedFields,confirmed:confirm,locked:confirm});
+  // Review must not re-normalize untouched fields (full casts, multiple directors,
+  // unknown editorial extensions and page text are part of the protected original).
+  const changed=Object.fromEntries(Object.keys(patch).map(field=>[field,checked[field]]));
+  if(Object.hasOwn(patch,'cast')){if(!Array.isArray(patch.cast)||patch.cast.length>5000||patch.cast.some(p=>!Number.isSafeInteger(p.id)||p.id<1||typeof p.name!=='string'||!p.name.trim()))throw Error('invalid reviewed cast');changed.cast=structuredClone(patch.cast)}
+  const next={...old.data,...changed,lockedFields:[...lockedFields],confirmed:confirm===true,locked:confirm===true};if(confirm&&next.errors?.some(e=>e.status==='open'))throw Error('unresolved work errors');if(type==='tv'&&!Object.hasOwn(old.data,'seasons')){delete next.seasons;delete next.seasonCount;delete next.episodeCount;}const seo=createSeoRecord(next,{updatedAt:new Date(clock()).toISOString()});
   return store.commit([{key:wk,revision,data:next,meta:{...old.meta,reviewReason:reason}},{key:sk,revision:snapshot[sk].meta.revision,data:seo,meta:{sourceDigest:digest(next)}}],{mode:'reviewed'});
  }
  async function backup(names){

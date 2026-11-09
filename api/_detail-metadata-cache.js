@@ -11,7 +11,7 @@ function fixedOnly(item){
   return metadata;
 }
 async function metadataWithLedger(type,id,load){
-  if(require('./_recovery-fetch-cache').enabled()){const dev=require('./_dev-content-ledgers'),{devCommand}=require('./_shared-streaming-read');const existing=await devCommand(['GET',dev.keys.work(type,Number(id))]);if(existing!==null)return dev.readWork(type,Number(id));return {...fixedOnly(verified(await load(),id,'work',type)),ledgerManaged:true};}
+  if(require('./_recovery-fetch-cache').enabled())return require('./_recovery-fixed-work').readWork(type,Number(id),{load});
   if(process.env.DEV_CONTENT_LEDGER_ENABLED==='1'){const dev=require('./_dev-content-ledgers');if(dev.enabled())return dev.readWork(type,Number(id));}
   if(process.env.WORK_LEDGER_ENABLED!=='1')return verified(await load(),id,'work',type);
   try{

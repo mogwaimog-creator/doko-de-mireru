@@ -1,0 +1,72 @@
+{
+  "scope": "Redis 7.2.6 loopback, idle server required; 266 repository IDs, empty JP success fixture; not live contract usage",
+  "beforeCommit": "cfcc842",
+  "before": {
+    "clientRedisRPCs": 20,
+    "redisOperationsIncludingLua": 126,
+    "requestArgumentBytes": 315777,
+    "responseJsonBytes": 7076,
+    "journalRedisBytes": 14408
+  },
+  "after": {
+    "scope": "Redis 7.2.6 loopback, idle server required; 266 repository IDs, empty JP success fixture; not live contract usage",
+    "result": {
+      "status": "complete",
+      "reason": "finished",
+      "day": "2026-11-09",
+      "total": 266,
+      "succeeded": 266,
+      "failed": 0,
+      "pending": 0,
+      "dispatches": 266,
+      "runs": 1,
+      "revision": 18
+    },
+    "clientRedisRPCs": 20,
+    "redisOperationsIncludingLua": 126,
+    "adapterHelloCommands": 21,
+    "commands": {
+      "del": 1,
+      "get": 57,
+      "set": 11,
+      "pexpire": 9,
+      "mget": 10,
+      "pexpireat": 9,
+      "eval": 20,
+      "mset": 9
+    },
+    "commandCounts": {
+      "EVAL": 20
+    },
+    "requestArgumentBytes": 159429,
+    "responseJsonBytes": 7076,
+    "upstreamFixtureLoads": 266,
+    "elapsedMs": 91,
+    "journalRedisBytes": 14408,
+    "recordRedisBytes": 107456,
+    "ttlSeconds": 1209599,
+    "journal15CalendarDaysBytes": 216120,
+    "legacySame266": {
+      "clientRedisRPCs": 269,
+      "redisOperationsIncludingLua": 271,
+      "requestArgumentBytes": 35150,
+      "responseJsonBytes": 2400,
+      "upstreamFixtureLoads": 266,
+      "elapsedMs": 473,
+      "commands": {
+        "del": 1,
+        "get": 1,
+        "set": 267,
+        "mget": 1,
+        "eval": 1
+      },
+      "source": "real api/update-streaming.js with same266 IDs, local Redis namespace and empty JP fixture"
+    },
+    "billing": "EVAL internals metering and network billing are unverified. Argument bytes exclude RESP/TLS/HTTP overhead. Run without competing Redis tests."
+  },
+  "reductionPercent": {
+    "requestArguments": 49.51215573015134,
+    "requestPlusResponse": 48.42699308973434
+  },
+  "limitations": "argument bytes exclude transport overhead; fixture response, not Upstash metering or actual production bandwidth"
+}

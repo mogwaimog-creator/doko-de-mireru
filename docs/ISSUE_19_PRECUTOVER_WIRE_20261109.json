@@ -1,0 +1,38 @@
+{
+  "scope": "loopback, same266 repository IDs, empty JP fixture; fixed next-day clock; excludes HTTP/TLS/RESP overhead and live provider billing",
+  "beforeCommit": "cfcc842",
+  "measurements": {
+    "before": {
+      "cold": {
+        "rpcs": 20,
+        "requestArgumentBytes": 313266,
+        "responseJsonBytes": 7076,
+        "loads": 266
+      },
+      "nextDay": {
+        "rpcs": 20,
+        "requestArgumentBytes": 384193,
+        "responseJsonBytes": 89175,
+        "loads": 266
+      }
+    },
+    "after": {
+      "cold": {
+        "rpcs": 20,
+        "requestArgumentBytes": 156918,
+        "responseJsonBytes": 7076,
+        "loads": 266
+      },
+      "nextDay": {
+        "rpcs": 20,
+        "requestArgumentBytes": 227845,
+        "responseJsonBytes": 89175,
+        "loads": 266
+      }
+    }
+  },
+  "reductionPercent": {
+    "cold": 49.9090230028155,
+    "nextDay": 40.695171437272414
+  }
+}

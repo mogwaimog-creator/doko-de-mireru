@@ -72,3 +72,9 @@ local('killed batch process resumes after actual lease expiry without repeating 
  const child=spawn(process.execPath,['-e',code,prefix,JSON.stringify(works.slice(0,2))],{cwd:require('node:path').join(__dirname,'..'),env:process.env,stdio:['ignore','pipe','pipe']});let timer;
  try{await Promise.race([once(child.stdout,'data'),new Promise((_,reject)=>timer=setTimeout(()=>reject(Error('child checkpoint timeout')),5000))]);const ended=once(child,'exit');child.kill('SIGKILL');await ended;await new Promise(r=>setTimeout(r,1100));let loads=0;const result=await leanSeriesRefresh(command,async()=>{loads++;return payload},options).run(at,works.slice(0,2));assert.equal(result.status,'complete');assert.equal(loads,1);assert.equal(result.dispatches,2)}finally{clearTimeout(timer);child.kill('SIGKILL')}
 });
+local('wire progress sends only changed keys while persisted journals retain the full roster and resume state',async({prefix,options})=>{
+ const {INTENT,COMMIT}=require('../api/_lean-series-refresh');let deltaBytes=0,fullBytes=0;
+ const send=async args=>{if([INTENT,COMMIT].includes(args[1])){const delta=JSON.parse(args[5+Number(args[2])]);assert.equal(delta.wireVersion,1);assert.equal(delta.keys,undefined);assert(Object.keys(delta.sent).length<=32);assert(Object.keys(delta.done).length<=32);deltaBytes+=Buffer.byteLength(JSON.stringify(delta))}return command(args)};
+ const runner=leanSeriesRefresh(send,async()=>payload,{...options,onIntent:async job=>{fullBytes+=Buffer.byteLength(JSON.stringify(job))},onCommit:async job=>{fullBytes+=Buffer.byteLength(JSON.stringify(job))}});
+ assert.equal((await runner.run(at,works)).status,'complete');assert(deltaBytes<fullBytes/2);const saved=JSON.parse(await command(['GET',runner.keys.jobKey('2026-11-09')]));assert.equal(saved.keys.length,266);assert.equal(Object.keys(saved.done).length,266);assert.equal(Object.keys(saved.sent).length,266);assert.equal(saved.wireVersion,undefined);
+});

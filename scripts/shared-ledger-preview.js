@@ -21,11 +21,11 @@ global.fetch=async(url,options)=>{
  if(new URL(url).hostname==='api.themoviedb.org'){
   upstreamCalls++;upstreamUrls.push(String(url).replace(/api_key=[^&]*/g,'api_key=fixture'));const u=new URL(url),parts=u.pathname.split('/'),id=Number(parts[3]),type=parts[2];
   let data;
-  if(u.pathname.startsWith('/3/search/'))data={page:1,total_pages:1,total_results:1,results:[{id:12345678,title:'Issue19Fixture',name:'Issue19Fixture',media_type:parts[3]==='person'?'person':parts[3]==='tv'?'tv':'movie',release_date:'2020-01-01',first_air_date:'2020-01-01',genre_ids:[],popularity:100,vote_count:100,vote_average:8,poster_path:'/fixture.jpg'}]};
+  if(u.pathname.startsWith('/3/search/'))data={page:1,total_pages:1,total_results:1,results:[{id:12345678,title:u.searchParams.get('query')||'Issue19Fixture',name:u.searchParams.get('query')||'Issue19Fixture',media_type:parts[3]==='person'?'person':parts[3]==='tv'||u.searchParams.get('query')?.startsWith('TVFixture')?'tv':'movie',release_date:'2020-01-01',first_air_date:'2020-01-01',genre_ids:u.searchParams.get('query')?.startsWith('AnimeFixture')?[16]:[],popularity:100,vote_count:100,vote_average:8,poster_path:'/fixture.jpg'}]};
   else if(u.pathname.endsWith('/watch/providers'))data=fixture;
   else if(/\/season\/[0-9]+$/.test(u.pathname))data={id:12345,season_number:Number(parts.at(-1)),name:'隔離試験シーズン',episodes:[{episode_number:1,name:'隔離試験エピソード',runtime:24}]};
   else if(parts.length>4)data={results:[],cast:[],crew:[]};
-  else data={id,title:saved.get(type+':'+id)||'隔離試験用作品',name:saved.get(type+':'+id)||'隔離試験用作品',overview:'ローカル隔離検証用の説明。配信情報は試験データです。',release_date:'2020-10-16',first_air_date:'2019-04-06',genres:[],credits:{cast:[],crew:[]},seasons:[],production_countries:[],production_companies:[],spoken_languages:[],vote_average:8,vote_count:100,runtime:117,number_of_seasons:0,number_of_episodes:0,status:'Released','watch/providers':fixture};
+  else data={id,poster_path:'/fixture-poster.jpg',title:saved.get(type+':'+id)||'隔離試験用作品',name:saved.get(type+':'+id)||'隔離試験用作品',overview:'ローカル隔離検証用の説明。配信情報は試験データです。',release_date:'2020-10-16',first_air_date:'2019-04-06',genres:[],credits:{cast:[],crew:[]},seasons:[],production_countries:[],production_companies:[],spoken_languages:[],vote_average:8,vote_count:100,runtime:117,number_of_seasons:0,number_of_episodes:0,status:'Released','watch/providers':fixture};
   return {ok:true,status:200,json:async()=>data,text:async()=>JSON.stringify(data)};
  }
  return originalFetch(url,options);
@@ -36,11 +36,13 @@ require.cache[require.resolve('../api/_redis')]={exports:{command:async args=>{
  if(args[0]==='GET')return null;throw Error('legacy fixture is read-only');
 }}};
 process.env.DEV_CONTENT_LEDGER_ENABLED='1';process.env.TMDB_API_KEY='local-fixture';process.env.SHARED_STREAMING_READ_ENABLED='1';process.env.SHARED_LEDGER_DEV_URL='http://127.0.0.1:16380';
-process.env.DEV_SHARED_CRON_ENABLED='1';process.env.CRON_SECRET='local-fixture-cron';
+process.env.DEV_SHARED_CRON_ENABLED='1';process.env.DEV_DETAIL_HTML_ENABLED='1';process.env.CRON_SECRET='local-fixture-cron';
 const handlers={'update-streaming':require('../api/update-streaming'),search:require('../api/search'),'series-watch':require('../api/series-watch')};
 async function start(){
  const works=rows.map(r=>({type:r.type,id:r.id,memberships:r.memberships}));
  const native=sharedStore(command);
+ const runtime=require('../api/_cutover-runtime-dev').runtime(command);
+ if(require('../api/_cutover-runtime-dev').enabled()){process.env.DEV_LEDGER_ADMIN_TOKEN='local-fixture-operator';for(const name of Object.keys(handlers))handlers[name]=runtime.wrap(name,handlers[name]);handlers['ledger-control']=require('../api/ledger-control').createHandler({ops:runtime});}
  const s=service(native,async()=>{providerFixtureLoads++;return fixture});
  for(const w of Object.values(catalog).flat()){await s.visit(w.type,w.id,now,[]);await command(['SET','doko:dev:legacy-watch:v3:'+w.type+':'+w.id,JSON.stringify({flatrate:fixture.results.JP.flatrate,checkedAt:now}),'NX']);}
  const content=require('../api/_dev-content-ledgers');
@@ -73,7 +75,7 @@ async function start(){
  if(process.env.DEV_LEAN_SERIES_ENABLED!=='1')await command(['SET',searchIndex.READY,'1']);
  http.createServer(async(req,res)=>{
   try{let body='';for await(const chunk of req)body+=chunk;if(body.length>1000000)throw Error('large body');const args=JSON.parse(body);
-   if(req.url==='/recovery-cache'){if(process.env.DEV_LEAN_SERIES_ENABLED!=='1')throw Error('recovery disabled');const cache=require('../api/_recovery-fetch-cache');if(!Array.isArray(args)||args[0]!=='EVAL'||![cache.CLAIM,cache.SAVE,cache.RELEASE].includes(args[1]))throw Error('recovery operation not allowed');const n=Number(args[2]);if(!Number.isInteger(n)||n<1||n>4||!args.slice(3,3+n).every(k=>k==='doko:dev:content-control:v1'||/^doko:dev:recovery:v1:(?:query:[0-9]+|content:[a-f0-9]{64})(?::lock)?$/.test(k)||k==='doko:dev:recovery:v1:content-bytes'))throw Error('recovery namespace');res.setHeader('Content-Type','application/json');return res.end(JSON.stringify({result:await command(args)}))}
+   if(req.url==='/recovery-cache'){if(process.env.DEV_LEAN_SERIES_ENABLED!=='1')throw Error('recovery disabled');if(Array.isArray(args)&&args[0]==='EVAL'&&args[1]===require('../api/_recovery-initial-seo').PROJECT){if(args[2]!=='2'||!/^doko:dev:work:v2:(movie|tv):[1-9][0-9]*$/.test(args[3])||!/^doko:dev:recovery:v1:content:[a-f0-9]{64}$/.test(args[4]))throw Error('SEO projection namespace');res.setHeader('Content-Type','application/json');return res.end(JSON.stringify({result:await command(args)}))}const cache=require('../api/_recovery-fetch-cache');if(!Array.isArray(args)||args[0]!=='EVAL'||![cache.CLAIM,cache.SAVE,cache.RELEASE].includes(args[1]))throw Error('recovery operation not allowed');const n=Number(args[2]);if(!Number.isInteger(n)||n<1||n>4||!args.slice(3,3+n).every(k=>k==='doko:dev:content-control:v1'||/^doko:dev:recovery:v1:(?:query:[0-9]+|content:[a-f0-9]{64})(?::lock)?$/.test(k)||k==='doko:dev:recovery:v1:content-bytes'))throw Error('recovery namespace');res.setHeader('Content-Type','application/json');return res.end(JSON.stringify({result:await command(args)}))}
    if(req.url==='/refresh'){
     if(process.env.DEV_STREAMING_REFRESH_ENABLED!=='1')throw Error('development refresh disabled');
     const control=await require('../api/_dev-content-store').contentStore(command).readControl();if(control&&control.status!=='ready'){res.setHeader('Content-Type','application/json');return res.end(JSON.stringify({status:'paused',reason:'shared-pause'}))}
@@ -103,8 +105,9 @@ async function start(){
   const u=new URL(req.url,'http://127.0.0.1:16381');
   try{
    const api=u.pathname.match(/^\/api\/([^/]+)$/);
-   if(api){if(!handlers[api[1]]){res.statusCode=404;return res.end('{}')};req.query=Object.fromEntries(u.searchParams);res.status=n=>(res.statusCode=n,res);res.json=body=>{res.setHeader('Content-Type','application/json');res.end(JSON.stringify(body))};return await handlers[api[1]](req,res)}
+   if(api){if(!handlers[api[1]]){res.statusCode=404;return res.end('{}')};req.query=Object.fromEntries(u.searchParams);if(api[1]==='ledger-control'&&req.method==='POST'){let body='';for await(const chunk of req){body+=chunk;if(body.length>65536)throw Error('operator request too large')}req.body=JSON.parse(body)}res.status=n=>(res.statusCode=n,res);res.json=body=>{res.setHeader('Content-Type','application/json');res.end(JSON.stringify(body))};return await handlers[api[1]](req,res)}
    if(u.pathname==='/__metrics'){res.setHeader('Content-Type','application/json');return res.end(JSON.stringify({upstreamFixtureCalls:upstreamCalls,providerFixtureLoads,upstreamUrls}))}
+   if(u.pathname==='/detail.html'&&process.env.DEV_LEAN_SERIES_ENABLED==='1'){req.query=Object.fromEntries(u.searchParams);res.status=n=>(res.statusCode=n,res);const handler=require('../api/detail-page');return await (require('../api/_cutover-runtime-dev').enabled()?runtime.wrap('detail-html',handler):handler)(req,res)}
    const file=path.resolve(root,'.'+(u.pathname==='/'?'/index.html':u.pathname));if(!file.startsWith(root+path.sep))throw Error('path');
    let body=fs.readFileSync(file);if(file.endsWith('.html')){res.setHeader('Content-Type','text/html; charset=utf-8');body=Buffer.from(body.toString().replaceAll("'https://doko-de-mireru.com'","''"));}
    if(file.endsWith('/detail.html')&&u.searchParams.has('id')){

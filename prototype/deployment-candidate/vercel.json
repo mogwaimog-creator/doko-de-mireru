@@ -1,0 +1,28 @@
+{
+  "rewrites": [
+    {
+      "source": "/detail.html",
+      "destination": "/api/detail-page"
+    },
+    {
+      "source": "/movie/:id",
+      "destination": "/index.html"
+    }
+  ],
+  "crons": [
+    {
+      "path": "/api/update-streaming",
+      "schedule": "0 21 * * *"
+    }
+  ],
+  "git": {
+    "deploymentEnabled": {
+      "work/four-ledgers-20261107": false
+    }
+  },
+  "functions": {
+    "api/detail-page.js": {
+      "includeFiles": "detail.html"
+    }
+  }
+}
