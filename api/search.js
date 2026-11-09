@@ -2270,7 +2270,7 @@ async function getMovieDetail(
 
 
   const movie =
-    await metadataWithLedger('movie',movieId,()=>fetchJson(movieUrl));
+    await metadataWithLedger('movie',movieId,()=>fetchJson(movieUrl,{rawWork:true}));
 
 
   // =======================================================
@@ -4968,11 +4968,11 @@ async function getCollection(
 // JSON取得
 // =========================================================
 
-async function fetchJson(url) {
+async function fetchJson(url,{rawWork=false}={}) {
   const recovery=require('./_recovery-fetch-cache');if(recovery.enabled()){
     const parsed=new URL(url),match=parsed.pathname.match(/^\/3\/(movie|tv)\/([1-9][0-9]*)$/),append=parsed.searchParams.get('append_to_response'),attach=match&&append?.split(',').includes('watch/providers');
     if(attach){const keep=append.split(',').filter(x=>x!=='watch/providers');if(keep.length)parsed.searchParams.set('append_to_response',keep.join(','));else parsed.searchParams.delete('append_to_response')}
-    const result=await recovery.cache(recovery.devCommand).load(parsed.toString(),()=>fetchJsonNetwork(parsed.toString()));
+    const result=match&&rawWork?await fetchJsonNetwork(parsed.toString()):await recovery.cache(recovery.devCommand).load(parsed.toString(),async()=>{const data=await fetchJsonNetwork(parsed.toString());return match?require('./_work-v2-detail-adapter').toBasicTmdbDetail(require('./_new-work-ingest').canonical(match[1],Number(match[2]),data)):data});
     if(attach)return {...result,'watch/providers':(await require('./_shared-streaming-read').readDetail(match[1],Number(match[2]))).data};return result;
   }
   return fetchJsonNetwork(url);
@@ -12129,7 +12129,7 @@ async function getTvDetail(tvId, apiKey) {
       ? "&append_to_response=credits"
       : "&append_to_response=credits,watch/providers");
 
-  const fixedTv = await metadataWithLedger('tv',tvId,()=>fetchJson(url));
+  const fixedTv = await metadataWithLedger('tv',tvId,()=>fetchJson(url,{rawWork:true}));
   let tv = fixedTv;
   const sharedProviders=await require('./_shared-streaming-read').readDetail('tv',tvId);
   if(sharedProviders){tv={...fixedTv,'watch/providers':sharedProviders.data};}

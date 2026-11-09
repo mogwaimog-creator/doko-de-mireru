@@ -10,8 +10,8 @@
     "production environment finalized before build",
     "legacy writer shutdown or same-artifact legacy/paused/new mode proven",
     "staged deployment cannot start writes or scheduled jobs before authorized cutover",
-    "full backup is retained on user PC; full restore rehearsal stays local",
-    "all quota, traffic and build-CPU checks pass with rollback reserve",
+    "non-retrievable editorial/manual/lock data are protected and verified locally; full old-Redis restore is not mandatory",
+    "all quota, traffic and build-CPU checks pass with a bounded new-ledger recovery/repair reserve",
     "explicit future user authorization for every production operation"
   ],
   "currentConditionsVerified": false,

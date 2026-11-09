@@ -17,10 +17,10 @@ function createHandler({active=enabled,template=()=>fs.readFileSync(path.join(__
   try{
    const apiKey=process.env.TMDB_API_KEY,url=metadataUrl(type,id,apiKey);
    const projected=project?await project(type,id,{command:cacheCommand,clock}):null;
-   const work=projected?null:await readFixed(type,id,{load:()=>recovery.cache(cacheCommand).load(url,async()=>{
+   const work=projected?null:await readFixed(type,id,{load:async()=>{
     if(!apiKey)throw Error('metadata unavailable');const response=await fetchMetadata(url,{signal:AbortSignal.timeout(6500),headers:{Accept:'application/json'}});
     if(!response.ok){const error=Error('metadata unavailable');error.httpStatus=response.status===404?404:503;throw error}return response.json();
-   })});
+   }});
    if(!projected&&(typeof (work.title||work.name)!=='string'||!(work.title||work.name).trim()))throw Error('invalid work title');
    const record=projected||createSeoRecord({type,id,title:work.title||work.name,releaseDate:work.release_date||work.first_air_date,posterPath:work.poster_path,overview:work.overview,shortIntro:work.shortIntro},{updatedAt:new Date(clock()).toISOString()});
    const html=renderDetailHtml(template(),record);

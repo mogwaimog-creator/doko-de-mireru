@@ -1,0 +1,7 @@
+'use strict';
+// Git-tracked source inventory only. No Redis/account/network access.
+const fs=require('node:fs'),path=require('node:path'),{createHash}=require('node:crypto');
+const membership=require('../data/watch-order-memberships.json'),root=path.join(__dirname,'..'),hash=s=>createHash('sha256').update(s).digest('hex');
+const series=Object.entries(membership).map(([name,works])=>{const file=name+'.html',body=fs.readFileSync(path.join(root,file));return {series:name,file,sha256:hash(body),orderedMembership:works,orderedMembershipSha256:hash(JSON.stringify(works)),count:works.length,protection:'keep complete tracked HTML including editorial text, order, ID mappings and links; no upstream replacement'}});
+const staticFiles=['ghibli.html',...fs.readdirSync(root).filter(n=>/^movie_shelf_.*\.html$/.test(n))].map(file=>({file,sha256:hash(fs.readFileSync(path.join(root,file)))}));
+console.log(JSON.stringify({date:'2026-11-09',scope:'tracked repository sources, not a production Redis inventory',seriesCount:series.length,uniqueWorks:new Set(series.flatMap(s=>s.orderedMembership.map(w=>w.type+':'+w.id))).size,series,staticFiles,unverified:['manual edits/confirmation/field locks existing only in production Redis','all live published titles/decades versus deployed files','per-series clients consuming new shared fixed-work projections'],oldProviderCacheRestoreRequired:false,productionReady:false},null,2));

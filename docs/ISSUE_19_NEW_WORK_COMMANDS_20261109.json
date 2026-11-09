@@ -1,0 +1,24 @@
+{
+  "scope": "native loopback fixture; not Upstash metering",
+  "cold": {
+    "del": 1,
+    "zadd": 2,
+    "get": 14,
+    "incrby": 2,
+    "pttl": 1,
+    "set": 1,
+    "mget": 2,
+    "pexpireat": 1,
+    "eval": 5,
+    "type": 2,
+    "mset": 1,
+    "incr": 1
+  },
+  "coldExecutedCommands": 33,
+  "warm": {
+    "mget": 1
+  },
+  "warmExecutedCommands": 1,
+  "upstreamCalls": 1,
+  "productionReady": false
+}

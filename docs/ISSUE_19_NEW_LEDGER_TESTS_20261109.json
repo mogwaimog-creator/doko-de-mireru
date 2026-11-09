@@ -1,0 +1,12 @@
+{
+  "branch": "work/four-ledgers-20261107",
+  "node": {"tests": 477, "passed": 477, "failed": 0, "skipped": 0},
+  "browserRecovery": {"checks": 26, "passed": 26},
+  "browserInitialHtml": {"checks": 8, "passed": 8, "javaScriptDisabledForSeo": true},
+  "data": "repository series IDs plus synthetic metadata and provider fixtures",
+  "productionRedisConnected": false,
+  "realUpstashConnected": false,
+  "realTmdbFetched": false,
+  "deployed": false,
+  "productionReady": false
+}

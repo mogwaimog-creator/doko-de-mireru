@@ -1,17 +1,17 @@
 'use strict';
 const {test}=require('node:test'),assert=require('node:assert/strict');
-const cache=require.cache,redisPath=require.resolve('../api/_redis'),readerPath=require.resolve('../api/_shared-streaming-read'),handlerPath=require.resolve('../api/series-watch');
+const cache=require.cache,redisPath=require.resolve('../api/_redis'),readerPath=require.resolve('../api/_shared-streaming-read'),handlerPath=require.resolve('../api/series-watch'),workPath=require.resolve('../api/_series-work-read');
 const actualReader=require(readerPath);
 async function run({enabled=false,newRecords={},readFails=false,env='development',recovery=false}={}){
- const oldRedis=cache[redisPath],oldReader=cache[readerPath],oldHandler=cache[handlerPath],oldEnv={...process.env};let calls=[];
+ const oldWork=cache[workPath],oldRedis=cache[redisPath],oldReader=cache[readerPath],oldHandler=cache[handlerPath],oldEnv={...process.env};let calls=[];
  try{
   process.env.SHARED_STREAMING_READ_ENABLED=enabled?'1':'0';process.env.VERCEL_ENV=env;
   cache[redisPath]={exports:{command:async args=>{calls.push(args);assert.equal(args[0],'MGET');return args.slice(1).map(()=>JSON.stringify({flatrate:[],checkedAt:new Date(Date.now()-60000).toISOString()}))}}};
   cache[readerPath]={exports:{recoveryOnly:()=>recovery&&actualReader.enabled(),enabled:actualReader.enabled,selectWatch:actualReader.selectWatch,readMany:async()=>{if(readFails)throw Error('local unavailable');return newRecords}}};
-  delete cache[handlerPath];const handler=require(handlerPath);
+  cache[workPath]={exports:{readMany:async()=>({works:{},missing:[]})}};delete cache[handlerPath];const handler=require(handlerPath);
   const response={setHeader(){},status(code){this.code=code;return this},json(body){this.body=body;return this}};
   await handler({method:'GET',query:{series:'kimetsu'}},response);return {response,calls};
- }finally{process.env=oldEnv;for(const [p,v] of [[redisPath,oldRedis],[readerPath,oldReader],[handlerPath,oldHandler]])if(v)cache[p]=v;else delete cache[p]}
+ }finally{process.env=oldEnv;for(const [p,v] of [[workPath,oldWork],[redisPath,oldRedis],[readerPath,oldReader],[handlerPath,oldHandler]])if(v)cache[p]=v;else delete cache[p]}
 }
 test('flag off retains exact legacy read contract, empty is confirmed and no TMDB',async()=>{
  const {response,calls}=await run();assert.equal(response.code,200);assert.equal(response.body.complete,true);assert.equal(calls.length,1);assert(calls[0].slice(1).every(k=>k.startsWith('doko:watch:v3:')));assert.deepEqual(response.body.providers['movie:635302'].flatrate,[]);
