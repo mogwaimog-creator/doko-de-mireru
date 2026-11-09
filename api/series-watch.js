@@ -47,7 +47,6 @@ module.exports=async(req,res)=>{
       }
       failures.push(keys[i]);
     }
-    const fixed=sharedReader.recoveryOnly()?await require('./_series-work-read').readMany(works):null;
-    return res.status(200).json({providers,failures,...(fixed?{works:fixed.works,workFailures:fixed.missing}:{}),complete:failures.length===0&&(!fixed||fixed.missing.length===0)});
+    return res.status(200).json({providers,failures,complete:failures.length===0});
   }catch(e){console.error('series-watch read:',e.message);return res.status(503).json({error:'保存済みの配信情報を読み込めません'});}
 };

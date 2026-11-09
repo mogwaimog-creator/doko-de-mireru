@@ -8,7 +8,7 @@ async function run({enabled=false,newRecords={},readFails=false,env='development
   process.env.SHARED_STREAMING_READ_ENABLED=enabled?'1':'0';process.env.VERCEL_ENV=env;
   cache[redisPath]={exports:{command:async args=>{calls.push(args);assert.equal(args[0],'MGET');return args.slice(1).map(()=>JSON.stringify({flatrate:[],checkedAt:new Date(Date.now()-60000).toISOString()}))}}};
   cache[readerPath]={exports:{recoveryOnly:()=>recovery&&actualReader.enabled(),enabled:actualReader.enabled,selectWatch:actualReader.selectWatch,readMany:async()=>{if(readFails)throw Error('local unavailable');return newRecords}}};
-  cache[workPath]={exports:{readMany:async()=>({works:{},missing:[]})}};delete cache[handlerPath];const handler=require(handlerPath);
+  cache[workPath]={exports:{readMany:async()=>{throw Error('existing series must never read fixed work metadata')}}};delete cache[handlerPath];const handler=require(handlerPath);
   const response={setHeader(){},status(code){this.code=code;return this},json(body){this.body=body;return this}};
   await handler({method:'GET',query:{series:'kimetsu'}},response);return {response,calls};
  }finally{process.env=oldEnv;for(const [p,v] of [[workPath,oldWork],[redisPath,oldRedis],[readerPath,oldReader],[handlerPath,oldHandler]])if(v)cache[p]=v;else delete cache[p]}
