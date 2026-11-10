@@ -45,6 +45,10 @@ function renderDetailHtml(template,record){
  const h1=/<h1\b(?=[^>]*\bid\s*=\s*(["'])title\1)[^>]*>[\s\S]*?<\/h1>/i;
  if(!h1.test(html))throw Error('missing title heading');
  html=html.replace(h1,()=>'<h1 id="title">'+esc(record.h1)+'</h1>');
+ // Show the saved synopsis in the initial HTML without making any new API call.
+ // The existing client can replace this text with its normal rendered version.
+ const synopsis=/<div\\b(?=[^>]*\\bid\\s*=\\s*(["'])overview\\1)[^>]*>[\\s\\S]*?<\\/div>/i;
+ if(record.synopsis&&synopsis.test(html))html=html.replace(synopsis,()=>'<div id="overview" class="side-text overview-text">'+esc(record.synopsis)+'</div>');
  // The original template hides #content until JavaScript finishes. Expose the
  // saved heading in initial HTML, while later JS may still hide it on an error.
  for(const [selector,value] of [
