@@ -1,17 +1,4 @@
 {
-  "routes": [
-    {
-      "src": "/detail\\.html",
-      "dest": "/api/detail-page"
-    },
-    {
-      "handle": "filesystem"
-    },
-    {
-      "src": "/movie/([^/]+)",
-      "dest": "/index.html"
-    }
-  ],
   "crons": [
     {
       "path": "/api/update-streaming",
@@ -30,5 +17,26 @@
     "api/update-streaming.js": {
       "maxDuration": 300
     }
-  }
+  },
+  "rewrites": [
+    {
+      "source": "/detail.html",
+      "destination": "/api/detail-page"
+    },
+    {
+      "source": "/movie/:path*",
+      "destination": "/index.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/detail.html",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "private, no-store"
+        }
+      ]
+    }
+  ]
 }
