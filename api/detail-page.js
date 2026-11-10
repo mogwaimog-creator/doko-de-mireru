@@ -17,13 +17,32 @@ function createHandler({active=enabled,template=()=>fs.readFileSync(path.join(__
   try{
    const apiKey=process.env.TMDB_API_KEY,url=metadataUrl(type,id,apiKey);
    const projected=project?await project(type,id,{command:cacheCommand,clock}):null;
-   const work=projected?null:await readFixed(type,id,{load:async()=>{
+   // Reuse the same saved work record as the SEO projection; avoid a second
+   // detail fetch or TV season-manifest dependency on the normal SSR path.
+   const savedRaw=projected?await cacheCommand(['GET',require('./_dev-content-ledgers').keys.work(type,id)]):null;
+   const savedWork=savedRaw?JSON.parse(savedRaw):null;
+   const work=savedWork||await readFixed(type,id,{load:async()=>{
     if(!apiKey)throw Error('metadata unavailable');const response=await fetchMetadata(url,{signal:AbortSignal.timeout(6500),headers:{Accept:'application/json'}});
     if(!response.ok){const error=Error('metadata unavailable');error.httpStatus=response.status===404?404:503;throw error}return response.json();
    }});
    if(!projected&&(typeof (work.title||work.name)!=='string'||!(work.title||work.name).trim()))throw Error('invalid work title');
    const record=projected||createSeoRecord({type,id,title:work.title||work.name,releaseDate:work.release_date||work.first_air_date,posterPath:work.poster_path,overview:work.overview,shortIntro:work.shortIntro},{updatedAt:new Date(clock()).toISOString()});
-   const html=renderDetailHtml(template(),record);
+   // Read the shared streaming ledger only; never trigger a streaming refresh for SSR.
+   const streamKey=require('./_shared-streaming-store').sharedStore(cacheCommand).keys.dataKey(type+':'+id);
+   let streamRaw=null;
+   try{streamRaw=await cacheCommand(['GET',streamKey]);}
+   catch{/* Optional streaming cache failure must not make the SEO page a 503. */}
+   let streaming=null;
+   if(streamRaw){
+    try{
+     const saved=JSON.parse(streamRaw);
+     if(saved.type===type&&saved.id===id&&saved.schemaVersion===1&&saved.lastSuccessAt&&saved.japan&&
+        ['flatrate','rent','buy'].every(k=>Array.isArray(saved.japan[k]))){
+      streaming={...saved.japan,lastSuccessAt:saved.lastSuccessAt};
+     }
+    }catch{/* Invalid provider record is not a reason to fail the work page. */}
+   }
+   const html=renderDetailHtml(template(),record,{overview:work.overview||work.shortIntro||'',releaseDate:work.releaseDate||work.release_date||work.first_air_date||'',genres:work.genres||[],streaming});
    return res.status(200).end(req.method==='HEAD'?'':html);
   }catch(error){res.setHeader('X-Robots-Tag','noindex');if(error.httpStatus===404)return res.status(404).end('作品情報が見つかりません。');res.setHeader('Retry-After','5');return res.status(503).end('作品情報を読み込めません。時間をおいて再度お試しください。')}
  };
