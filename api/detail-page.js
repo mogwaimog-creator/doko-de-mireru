@@ -29,7 +29,9 @@ function createHandler({active=enabled,template=()=>fs.readFileSync(path.join(__
    const record=projected||createSeoRecord({type,id,title:work.title||work.name,releaseDate:work.release_date||work.first_air_date,posterPath:work.poster_path,overview:work.overview,shortIntro:work.shortIntro},{updatedAt:new Date(clock()).toISOString()});
    // Read the shared streaming ledger only; never trigger a streaming refresh for SSR.
    const streamKey=require('./_shared-streaming-store').sharedStore(cacheCommand).keys.dataKey(type+':'+id);
-   const streamRaw=await cacheCommand(['GET',streamKey]);
+   let streamRaw=null;
+   try{streamRaw=await cacheCommand(['GET',streamKey]);}
+   catch{/* Optional streaming cache failure must not make the SEO page a 503. */}
    let streaming=null;
    if(streamRaw){
     try{
