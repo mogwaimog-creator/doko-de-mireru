@@ -17,7 +17,7 @@ function setMeta(html,attribute,value,content){
  if(!found)throw Error('missing meta '+value);
  return result;
 }
-function renderDetailHtml(template,record,{overview='',releaseDate='',posterPath='',genres=[]}={}){
+function renderDetailHtml(template,record,{overview='',releaseDate='',posterPath='',genres=[],streaming=null}={}){
  validateSeoRecord(record);
  if(typeof template!=='string'||!template.includes('</head>'))throw Error('invalid detail template');
  let html=template;
@@ -65,6 +65,21 @@ function renderDetailHtml(template,record,{overview='',releaseDate='',posterPath
  if(names.length)jsonLd.genre=names;
  const safeJson=JSON.stringify(jsonLd).replace(/</g,'\\u003c').replace(/>/g,'\\u003e').replace(/&/g,'\\u0026');
  html=html.replace('</head>','<script type="application/ld+json" id="serverWorkStructuredData">'+safeJson+'</script>\n</head>');
+ // Streaming is read-only: never refresh TMDB while producing SEO HTML.
+ if(streaming&&typeof streaming==='object'){
+  const groups=[['flatrate','見放題'],['rent','レンタル'],['buy','購入']];
+  const lines=groups.map(([kind,label])=>{
+   const names=(Array.isArray(streaming[kind])?streaming[kind]:[])
+    .map(p=>typeof p==='string'?p:p?.provider_name||p?.name)
+    .filter(n=>typeof n==='string'&&n.trim()).slice(0,20);
+   return names.length?'<p><strong>'+label+'：</strong>'+names.map(esc).join('、')+'</p>':'';
+  }).filter(Boolean);
+  const notice=streaming.lastSuccessAt?'<p>配信情報の最終取得：'+esc(streaming.lastSuccessAt)+'</p>':'';
+  const body=lines.length?lines.join('')+notice:'<p>保存済みの配信情報は現在ありません。視聴前に各公式サイトでご確認ください。</p>';
+  const target=/<div\\b(?=[^>]*\\bid\\s*=\\s*(["'])providers\\1)[^>]*>[\\s\\S]*?<\\/div>/i;
+  if(!target.test(html))throw Error('missing provider container');
+  html=html.replace(target,tag=>tag.replace(/<\\/div>$/i,()=>'<div id="serverProviders">'+body+'</div></div>'));
+ }
  // The original template hides #content until JavaScript finishes. Expose the
  // saved heading in initial HTML, while later JS may still hide it on an error.
  for(const [selector,value] of [
