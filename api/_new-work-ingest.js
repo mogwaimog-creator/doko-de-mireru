@@ -9,7 +9,6 @@ if control.status~='ready' then return {0,'paused'} end
 if control.newWorkAcquisitionPaused then return {0,'acquisition-paused'} end
 local count=tonumber(redis.call('GET',KEYS[2]) or '0');if control.newWorkDailyLimit and count>=tonumber(control.newWorkDailyLimit) then return {0,'daily-limit'} end
 redis.call('INCR',KEYS[2]);redis.call('PEXPIREAT',KEYS[2],ARGV[1]);return {1,'counted'}`;
-const SETTLE="if redis.call('GET',KEYS[1])~=ARGV[1] then return 0 end;if redis.call('GET',KEYS[2])~=ARGV[2] then return 0 end;redis.call('INCRBY',KEYS[3],ARGV[3]);return 1";
 function canonical(type,id,raw){
  require('./_frozen-load').verified(raw,id,'work',type);
  const tv=type==='tv';return normalizeWorkV2(type,id,{title:tv?raw.name:raw.title,originalTitle:tv?raw.original_name:raw.original_title,releaseDate:tv?raw.first_air_date:raw.release_date,posterPath:raw.poster_path,overview:raw.overview,runtimeMinutes:tv?raw.episode_run_time?.[0]:raw.runtime,genres:raw.genres,director:raw.credits?.crew?.find(p=>p.job==='Director'),cast:raw.credits?.cast,rating:raw.vote_average,status:raw.status});
@@ -35,4 +34,4 @@ async function ingest(type,id,{command,load,clock=Date.now,controlKey='doko:dev:
   return work;
  }finally{await store.releaseLease(wk,token)}
 }
-module.exports={ingest,canonical,RESERVE,SETTLE};
+module.exports={ingest,canonical,RESERVE};
