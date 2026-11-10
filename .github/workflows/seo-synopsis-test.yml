@@ -1,0 +1,18 @@
+name: SEO synopsis isolated tests
+on:
+  push:
+    branches:
+      - test/seo-saved-work-only-20261110
+  workflow_dispatch:
+jobs:
+  seo-synopsis:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --test test/seo-synopsis.test.js
