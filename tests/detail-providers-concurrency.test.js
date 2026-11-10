@@ -1,6 +1,8 @@
 'use strict';
 const test=require('node:test');
 const assert=require('node:assert/strict');
+const previousResume=process.env.LEDGER_WRITES_RESUME;
+test.after(()=>{if(previousResume===undefined)delete process.env.LEDGER_WRITES_RESUME;else process.env.LEDGER_WRITES_RESUME=previousResume;});
 const redisPath=require.resolve('../api/_redis');
 const ledgerPath=require.resolve('../api/_work-ledger');
 const cachePath=require.resolve('../api/_detail-providers-cache');
@@ -27,7 +29,7 @@ for(const p of [ledgerPath,cachePath])delete require.cache[p];
 const {getDetailProviders,DAY}=require('../api/_detail-providers-cache');
 const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 test.after(()=>{for(const [p,v] of original){if(v)require.cache[p]=v;else delete require.cache[p];}});
-test.beforeEach(()=>{values.clear();failRead=false;failLock=false;failWrite=false;});
+test.beforeEach(()=>{process.env.LEDGER_WRITES_RESUME='1';values.clear();failRead=false;failLock=false;failWrite=false;});
 test('two simultaneous first requests fetch providers once',async()=>{
  let loads=0;
  const load=async()=>{loads++;await sleep(180);return {results:{JP:{flatrate:[]}}};};

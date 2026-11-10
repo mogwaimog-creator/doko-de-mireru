@@ -31,7 +31,7 @@ function redis(){
 }
 test('person ledger saves compact credits, retains profile, reuses cache',async()=>{
   const r=redis();let calls=0;
-  const {withPersonLedger}=loadModule('_person-ledger.js',{'./_redis':r,'node:crypto':{randomUUID:()=> 'test-token'}},{WORK_LEDGER_ENABLED:'1'});
+  const {withPersonLedger}=loadModule('_person-ledger.js',{'./_redis':r,'node:crypto':{randomUUID:()=> 'test-token'}},{WORK_LEDGER_ENABLED:'1',LEDGER_WRITES_RESUME:'1'});
   const person={id:42,biography:'profile',popularity:9,cast:[{id:10,title:'Example',release_status:'upcoming',poster_path:'/a.jpg',character:'Lead',overview:'long',original_title:'Original',popularity:4,vote_average:8}],voice:[],directed:[],documentary_talk:[],other:[]};
   const first=await withPersonLedger(42,async()=>{calls++;return person;});
   const saved=JSON.parse(r.data.get('doko:person:v1:42')).person;
@@ -47,7 +47,7 @@ test('person ledger saves compact credits, retains profile, reuses cache',async(
 });
 test('detail provider cache saves JP only, reuses cache',async()=>{
   const r=redis();let calls=0;
-  const {getDetailProviders}=loadModule('_detail-providers-cache.js',{'./_redis':r,'./_work-ledger':{identity:(type,id)=>({type,id})},'node:crypto':{randomUUID:()=> 'test-token'}});
+  const {getDetailProviders}=loadModule('_detail-providers-cache.js',{'./_redis':r,'./_work-ledger':{identity:(type,id)=>({type,id})},'node:crypto':{randomUUID:()=> 'test-token'}},{LEDGER_WRITES_RESUME:'1'});
   const upstream={id:7,results:{JP:{flatrate:[{provider_id:1}],rent:[{provider_id:2}],buy:[{provider_id:3}]},US:{flatrate:[{provider_id:99}]}}};
   const first=await getDetailProviders('movie',7,async()=>{calls++;return upstream;});
   const saved=JSON.parse(r.data.get('doko:detail-providers:v1:movie:7')).data;
@@ -60,7 +60,7 @@ test('detail provider cache saves JP only, reuses cache',async()=>{
 });
 test('provider cache supports missing JP without inventing availability',async()=>{
   const r=redis();
-  const {getDetailProviders}=loadModule('_detail-providers-cache.js',{'./_redis':r,'./_work-ledger':{identity:(type,id)=>({type,id})},'node:crypto':{randomUUID:()=> 'test-token'}});
+  const {getDetailProviders}=loadModule('_detail-providers-cache.js',{'./_redis':r,'./_work-ledger':{identity:(type,id)=>({type,id})},'node:crypto':{randomUUID:()=> 'test-token'}},{LEDGER_WRITES_RESUME:'1'});
   const response=await getDetailProviders('tv',8,async()=>({id:8,results:{US:{flatrate:[]}}}));
   assert.deepEqual(JSON.parse(JSON.stringify(response.data.results)),{});
 });

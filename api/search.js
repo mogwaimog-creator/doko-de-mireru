@@ -1,6 +1,8 @@
 const {getDetailProviders}=require('./_detail-providers-cache');
 const {metadataWithLedger}=require('./_detail-metadata-cache');
 const {withPersonLedger}=require('./_person-ledger');
+// Optional, backward-compatible detail response format for the SEO pilot.
+const {splitDetailResponse}=require('../scripts/seo-detail-response-contract');
 // =========================================================
 // doko-de-mireru
 // api/search.js
@@ -439,7 +441,7 @@ if (id) {
 
     return res
       .status(200)
-      .json(result);
+      .json(req.query?.detailFormat === 'split' ? splitDetailResponse(result) : result);
   }
 
   // 映画の場合
@@ -449,7 +451,7 @@ if (id) {
       apiKey
     );
 
-  return res.status(200).json(result);
+  return res.status(200).json(req.query?.detailFormat === 'split' ? splitDetailResponse(result) : result);
 }
 
 // =====================================================
@@ -2244,7 +2246,8 @@ async function getMovieDetail(
 
   } catch (error) {
 
-    if(error?.code==='DETAIL_PROVIDERS_BUSY'||error?.code==='DETAIL_STORAGE_UNAVAILABLE')throw error;
+    // An enabled ledger must not turn a provider outage into a false 'not available'.
+    if(process.env.WORK_LEDGER_ENABLED==='1')throw error;
 
     console.error(
       "WATCH PROVIDERS ERROR:",
@@ -12045,7 +12048,8 @@ async function getTvDetail(tvId, apiKey) {
       // Never mutate the canonical metadata record shared with other requests.
       tv={...fixedTv,'watch/providers':cached.data};
     } catch(error){
-      if(error?.code==='DETAIL_PROVIDERS_BUSY'||error?.code==='DETAIL_STORAGE_UNAVAILABLE')throw error;
+      // An enabled ledger must not turn a provider outage into a false 'not available'.
+    if(process.env.WORK_LEDGER_ENABLED==='1')throw error;
       console.error('TV PROVIDERS ERROR:',error);
       tv={...fixedTv,'watch/providers':{results:{}}};
     }

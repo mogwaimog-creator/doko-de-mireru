@@ -1,0 +1,99 @@
+name: SEO static pilot tests
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'api/_seo-initial-html.js'
+      - 'scripts/build-seo-static.js'
+      - 'api/detail-providers-only.js'
+      - 'scripts/seo-provider-display-prototype.js'
+      - 'scripts/seo-normalized-fixed-display.js'
+      - 'scripts/prepare-seo-fixed-display.js'
+      - 'scripts/audit-seo-display-parity.js'
+      - 'scripts/seo-detail-response-contract.js'
+      - 'tests/prepare-seo-fixed-display.test.js'
+      - 'tests/audit-seo-display-parity.test.js'
+      - 'scripts/seo-static-route.js'
+      - 'scripts/seo-page-identity.js'
+      - 'scripts/audit-seo-browser-fetches.js'
+      - 'scripts/extract-seo-fixed-detail.js'
+      - 'tests/seo-*.test.js'
+      - 'tests/audit-work-ledger-export.test.js'
+      - 'tests/select-seo-verified-works.test.js'
+      - 'scripts/select-seo-verified-works.js'
+      - 'scripts/build-seo-from-ledger-export.js'
+      - 'tests/build-seo-from-ledger-export.test.js'
+      - 'scripts/audit-work-ledger-export.js'
+      - 'tests/fixtures/seo-static-sample.json'
+      - '.github/workflows/seo-static-pilot.yml'
+jobs:
+  node-tests:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run offline SEO tests (no credentials, no deployment)
+        run: node --test tests/build-seo-from-ledger-export.test.js tests/select-seo-verified-works.test.js tests/audit-work-ledger-export.test.js tests/seo-initial-html.test.js tests/seo-static-build.test.js tests/seo-static-route.test.js tests/seo-page-identity.test.js tests/seo-fixed-detail.test.js tests/seo-fixed-pipeline.test.js tests/seo-ledger-audit.test.js tests/seo-fixed-embed.test.js tests/seo-fixed-reader.test.js tests/seo-generated-reader-integration.test.js tests/seo-detail-response-contract.test.js tests/seo-live-response-shape.test.js tests/seo-split-api-optin.test.js tests/seo-session-cache-behavior.test.js tests/seo-normalized-fixed-display.test.js tests/prepare-seo-fixed-display.test.js tests/audit-seo-display-parity.test.js tests/seo-static-display-embedding.test.js tests/seo-provider-only.test.js tests/seo-provider-display-prototype.test.js
+      - name: Generate sample HTML from existing page templates
+        run: node scripts/build-seo-static.js tests/fixtures/seo-static-sample.json /tmp/doko-seo-static
+      - name: Check generated files and routing manifest
+        run: |
+          node -e "const fs=require('fs'); const p='/tmp/doko-seo-static/'; const files=['movie-50014.html','tv-202879.html','person-1134684.html']; for(const file of files){const html=fs.readFileSync(p+file,'utf8');if(!html.includes('staticSeoId'))throw Error(file+' missing identity');} const routes=JSON.parse(fs.readFileSync(p+'seo-route-manifest.json','utf8'));if(routes.length!==3)throw Error('expected three routes');console.log('Generated pages and route manifest verified');"
+      - name: Generate and verify manually entered real-film SEO HTML (offline only)
+        run: |
+          node scripts/build-seo-static.js data/seo-manual-pilot-one-work.json /tmp/doko-seo-manual-one-work
+          node -e "const fs=require('fs');const p='/tmp/doko-seo-manual-one-work/';const html=fs.readFileSync(p+'movie-157336.html','utf8');const manifest=JSON.parse(fs.readFileSync(p+'seo-route-manifest.json','utf8'));for(const value of ['<title>インターステラーはどこで見れる？','<h1','インターステラー','https://doko-de-mireru.com/detail.html?id=157336','property=\"og:title\"','name=\"description\"'])if(!html.includes(value))throw Error('Manual SEO output missing '+value);if(manifest.length!==1||manifest[0].url!=='/detail.html?id=157336'||manifest[0].file!=='movie-157336.html')throw Error('Manual SEO route manifest mismatch');console.log('Manual real-film SEO HTML and manifest verified offline')"
+      - name: Verify real-film URL routing in isolated preview (offline only)
+        run: |
+          node scripts/stage-seo-preview.js /tmp/doko-seo-manual-one-work /tmp/doko-seo-manual-route
+          node -e "const fs=require('fs');const p='/tmp/doko-seo-manual-route/';const cfg=JSON.parse(fs.readFileSync(p+'vercel.json','utf8'));const seo=cfg.rewrites.filter(r=>r.destination==='/seo-pages/movie-157336.html');if(seo.length!==2)throw Error('Expected typed and untyped movie routes');if(!seo.every(r=>r.source==='/detail.html'&&r.has.some(h=>h.type==='query'&&h.key==='id'&&h.value==='157336')))throw Error('Movie ID not constrained');if(!seo.some(r=>r.missing?.some(m=>m.key==='type'))||!seo.some(r=>r.has.some(h=>h.key==='type'&&h.value==='movie')))throw Error('Movie type routes incomplete');if(!cfg.rewrites.some(r=>r.source==='/detail.html'&&r.destination==='/detail-fallback.html'))throw Error('Legacy fallback missing');const html=fs.readFileSync(p+'seo-pages/movie-157336.html','utf8');if(!html.includes('インターステラー')||!html.includes('staticSeoId'))throw Error('Real film SEO page missing');console.log('Manual real-film preview routes and fallback verified offline; no deployment')"
+      - name: Verify real-film routing in full-site preview (offline only)
+        run: |
+          node scripts/stage-seo-full-preview.js /tmp/doko-seo-manual-one-work /tmp/doko-seo-manual-full-preview
+          node -e "const fs=require('fs');const p='/tmp/doko-seo-manual-full-preview/';const c=JSON.parse(fs.readFileSync(p+'vercel.json','utf8'));if(fs.existsSync(p+'detail.html'))throw Error('Physical legacy detail page shadows SEO rewrites');if(!fs.existsSync(p+'detail-fallback.html')||!fs.existsSync(p+'api/search.js'))throw Error('Existing detail page/API not preserved');const routes=c.rewrites.filter(r=>r.destination==='/seo-pages/movie-157336.html');if(routes.length!==2||!routes.every(r=>r.source==='/detail.html'&&r.has.some(h=>h.key==='id'&&h.value==='157336')))throw Error('Real film rewrite mismatch');if(!c.rewrites.some(r=>r.source==='/detail.html'&&r.destination==='/detail-fallback.html'))throw Error('Unmatched movie fallback missing');if(!c.rewrites.some(r=>r.source==='/movie/:id'&&r.destination==='/index.html'))throw Error('Original route lost');if(c.crons)throw Error('Unexpected cron');console.log('Real-film full-site preview routing and fallback verified offline; no deployment')"
+      - name: Stage isolated query-aware routing preview (offline only)
+        run: |
+          node scripts/stage-seo-preview.js /tmp/doko-seo-static /tmp/doko-seo-preview
+          node -e "const fs=require('fs'); const p='/tmp/doko-seo-preview/'; const c=JSON.parse(fs.readFileSync(p+'vercel.json','utf8')); if(c.rewrites.length!==6)throw Error('expected six preview routing rules'); for(const f of ['seo-pages/movie-50014.html','seo-pages/tv-202879.html','seo-pages/person-1134684.html','detail-fallback.html','person-fallback.html'])if(!fs.existsSync(p+f))throw Error('missing '+f); console.log('Offline preview staging verified; not deployed')"
+      - name: Stage complete tracked-site preview candidate (offline only)
+        run: |
+          node scripts/stage-seo-full-preview.js /tmp/doko-seo-static /tmp/doko-seo-full-preview
+          node -e "const fs=require('fs');const p='/tmp/doko-seo-full-preview/';for(const f of ['api/search.js','seo-pages/movie-50014.html','seo-pages/tv-202879.html','seo-pages/person-1134684.html','detail-fallback.html','person-fallback.html','index.html'])if(!fs.existsSync(p+f))throw Error('missing '+f);for(const f of ['detail.html','person.html'])if(fs.existsSync(p+f))throw Error('legacy path shadows preview rewrite: '+f);console.log('Complete tracked-site preview candidate verified; not deployed')"
+      - name: Verify full-site preview structure and SEO tags (offline only)
+        run: node scripts/verify-seo-full-preview.js /tmp/doko-seo-full-preview
+      - name: Upload complete preview candidate (NOT a deployment)
+        uses: actions/upload-artifact@v4
+        with:
+          name: seo-full-site-preview-candidate
+          path: /tmp/doko-seo-full-preview/
+          retention-days: 3
+      - name: Inventory legacy page dependencies (offline)
+        run: | 
+          node scripts/audit-seo-preview-dependencies.js > /tmp/seo-preview-dependencies.json
+          node -e "const a=require('/tmp/seo-preview-dependencies.json'); console.log('Preview dependency audit:',JSON.stringify({pages:a.pages.map(p=>({page:p.page,localReferences:p.localReferences.length})),missingLocal:a.missingLocal,apiReferences:a.apiReferences,externalHosts:a.externalHosts,fetchSites:a.fetchSites,previewReady:a.previewReady,blockers:a.blockers}))"
+      - name: Upload dependency inventory for review
+        uses: actions/upload-artifact@v4
+        with:
+          name: seo-preview-dependency-inventory
+          path: /tmp/seo-preview-dependencies.json
+          retention-days: 3
+      - name: Upload isolated preview staging artifact (NOT a deployment)
+        uses: actions/upload-artifact@v4
+        with:
+          name: seo-routing-preview-staging
+          path: /tmp/doko-seo-preview/
+          retention-days: 3
+      - name: Upload generated sample for preview inspection only
+        uses: actions/upload-artifact@v4
+        with:
+          name: seo-static-offline-sample
+          path: /tmp/doko-seo-static/
+          retention-days: 3
+
+      - name: Audit browser API fetch locations (offline)
+        run: node scripts/audit-seo-browser-fetches.js
