@@ -27,7 +27,7 @@ function createHandler({active=enabled,template=()=>fs.readFileSync(path.join(__
    }});
    if(!projected&&(typeof (work.title||work.name)!=='string'||!(work.title||work.name).trim()))throw Error('invalid work title');
    const record=projected||createSeoRecord({type,id,title:work.title||work.name,releaseDate:work.release_date||work.first_air_date,posterPath:work.poster_path,overview:work.overview,shortIntro:work.shortIntro},{updatedAt:new Date(clock()).toISOString()});
-   const html=renderDetailHtml(template(),record,{overview:work.overview||work.shortIntro||''});
+   const html=renderDetailHtml(template(),record,{overview:work.overview||work.shortIntro||'',releaseDate:work.releaseDate||work.release_date||work.first_air_date||'',genres:work.genres||[]});
    return res.status(200).end(req.method==='HEAD'?'':html);
   }catch(error){res.setHeader('X-Robots-Tag','noindex');if(error.httpStatus===404)return res.status(404).end('作品情報が見つかりません。');res.setHeader('Retry-After','5');return res.status(503).end('作品情報を読み込めません。時間をおいて再度お試しください。')}
  };
