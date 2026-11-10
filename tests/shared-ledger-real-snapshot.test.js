@@ -3,8 +3,8 @@ const {test}=require('node:test'),assert=require('node:assert/strict'),fs=requir
 const {store,providers}=require('../prototype/streaming-ledger');
 const {compatible}=require('../api/_shared-streaming-read');
 const {inventory}=require('../scripts/audit-shared-ledgers');
-const html=fs.readFileSync(path.join(__dirname,'../streaming.html'),'utf8');
-const data=JSON.parse(html.match(/<script type="application\/json" id="series-comparison-data">([\s\S]*?)<\/script>/)[1]);
+// Historical import keeps its original dated fixture; the live comparison no longer embeds old availability.
+const data=require('./fixtures/historical-comparison-20261005.json');
 test('203 real historical entries: 152 ID-verified snapshots stay stale; 51 unverified entries rejected',()=>{
  const {records,rejected}=require('../prototype/shared-streaming-import').planComparisonSnapshot(data);
  assert.equal(records.length,152);assert.equal(rejected.length,51);

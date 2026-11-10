@@ -1,0 +1,9 @@
+'use strict';
+const {test}=require('node:test'),assert=require('node:assert/strict'),{evaluate}=require('../scripts/lib/final-cutover-gate');
+const now=Date.parse('2026-11-10T01:00:00Z');
+function complete(){return {upstash:{observedAt:new Date(now).toISOString(),freePlanConfirmed:true,autoUpgradeDisabled:true,usedCommands:200000,commandLimit:500000,usedBytes:100000000,byteLimit:250000000,usedTransferBytes:1e9,transferLimit:1e10},vercel:{observedAt:new Date(now).toISOString(),remainingCreditUSD:6},plan:{commands:10000,additionalBytes:8000000,transferBytes:10000000,vercelCostUSD:1},billingHardStopConfirmed:true,sameRegisteredNamespaceVerified:true,all266StoredWithoutRefetch:true,manualFieldsReviewed:true,static13Preserved:true,allEntryPointsVerified:true,refreshAndFailurePolicyVerified:true,rollbackRehearsed:true,productionConfigurationReviewed:true,legacyWritersStoppedAndDrained:true,explicitProductionApproval:true}}
+test('missing usage and approval cannot authorize publication',()=>{const r=evaluate({}, {now});assert.equal(r.ready,false);assert(r.blockers.includes('commands:unmeasured'));assert(r.blockers.includes('explicitProductionApproval'));assert.equal(r.operationsExecuted,0)});
+test('fresh measured plan with preservation and rollback evidence is reviewable',()=>{const r=evaluate(complete(),{now});assert.equal(r.ready,true);assert.equal(r.operationsExecuted,0)});
+test('unknown, stale, NaN and insufficient budget each fail closed',()=>{
+ for(const mutate of [e=>e.upstash.observedAt='2026-11-09T00:00:00Z',e=>e.upstash.usedCommands=390001,e=>e.upstash.usedBytes=199000000,e=>e.upstash.usedTransferBytes=8e9,e=>e.vercel.remainingCreditUSD=2.5,e=>e.plan.commands=NaN,e=>e.upstash.autoUpgradeDisabled=false,e=>e.manualFieldsReviewed=false,e=>e.legacyWritersStoppedAndDrained=false,e=>e.sameRegisteredNamespaceVerified=false,e=>e.explicitProductionApproval=false]){const e=complete();mutate(e);assert.equal(evaluate(e,{now}).ready,false)}
+});

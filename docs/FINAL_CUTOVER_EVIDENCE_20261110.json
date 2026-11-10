@@ -1,0 +1,313 @@
+{
+  "sourceCommit": "8938425",
+  "scope": "final preparation only; no production actions",
+  "registeredWorks": 266,
+  "tmdbMetadataRequests": 0,
+  "legacyWrites": 0,
+  "legacyScan": 0,
+  "legacyBoundedManualInspection": {
+    "at": "2026-11-10T01:43:43.528Z",
+    "mode": "inspection-only",
+    "readCommands": 68,
+    "receivedBytes": 21498902,
+    "records": 123,
+    "unknownFields": 123,
+    "embeddedDifferences": 0,
+    "embeddedProblems": 0,
+    "seasonSources": 14,
+    "lockedRecords": 0,
+    "recordsWithExtras": 123,
+    "oldWrites": 0,
+    "scans": 0,
+    "info": {
+      "usedMemoryBytes": 1278591,
+      "totalCommandsProcessed": 116212,
+      "totalNetInputBytes": null,
+      "totalNetOutputBytes": null
+    },
+    "reservedCommands": 69,
+    "sessionReservedCommands": 20122
+  },
+  "manualUnknownFieldNames": [
+    "backdropPath",
+    "collectionName",
+    "voteCount",
+    "nextCheckAt",
+    "manualReview"
+  ],
+  "privateManualReviewPrepared": true,
+  "manualReviewApproved": false,
+  "upstash": {
+    "at": "2026-11-10T01:52:26.925Z",
+    "ownedKeyCount": 1724,
+    "ownedMemoryBytes": 2517174,
+    "knownKeysMeasured": 1726,
+    "info": {
+      "usedMemoryBytes": 7436678,
+      "totalCommandsProcessed": 240200,
+      "totalNetInputBytes": null,
+      "totalNetOutputBytes": null
+    },
+    "readRequests": 15,
+    "reservedCommands": 1727,
+    "cumulativeReservedCommands": 22807,
+    "cumulativeRequests": 10174,
+    "monthlyCommandsUsed": null,
+    "monthlyCommandsRemaining": null,
+    "accountStorageBytes": null,
+    "billingHardStopVerified": false,
+    "legacyReads": 0,
+    "writes": 0
+  },
+  "browser": {
+    "passed": 14,
+    "checks": [
+      {
+        "test": "saved new movie/TV, person, season, all JP categories",
+        "passed": true,
+        "movieId": 315011,
+        "tvId": 202411,
+        "personId": 18615,
+        "episodes": 10
+      },
+      {
+        "test": "movie/TV detail and watch-order responses share providers and success timestamp",
+        "passed": true
+      },
+      {
+        "test": "initial SEO HTML movie",
+        "passed": true
+      },
+      {
+        "test": "initial SEO HTML tv",
+        "passed": true
+      },
+      {
+        "test": "unregistered HTML is noindex and cannot trigger acquisition/storage",
+        "passed": true
+      },
+      {
+        "test": "static person page ID bypasses work-only acquisition guard",
+        "passed": true
+      },
+      {
+        "test": "1280 external title search → saved new movie and JP UI",
+        "passed": true
+      },
+      {
+        "test": "1280 external person search → saved profile/credits UI",
+        "passed": true
+      },
+      {
+        "test": "1280 new TV → first collected season → episodes UI",
+        "passed": true
+      },
+      {
+        "test": "390 external title search → saved new movie and JP UI",
+        "passed": true
+      },
+      {
+        "test": "390 external person search → saved profile/credits UI",
+        "passed": true
+      },
+      {
+        "test": "390 new TV → first collected season → episodes UI",
+        "passed": true
+      },
+      {
+        "test": "20 parallel saved reads, no source reread or TMDB calls",
+        "passed": true,
+        "p50Ms": 1316.155184000003,
+        "p95Ms": 1484.8808209999988
+      },
+      {
+        "test": "real TMDB image CDN responses loaded within bounded image budget",
+        "passed": true
+      }
+    ],
+    "errors": [],
+    "images": {
+      "enabled": true,
+      "requests": 4,
+      "bytes": 233556,
+      "failures": 0,
+      "loadedImages": [
+        {
+          "width": 1280,
+          "url": "/detail.html",
+          "decoded": 1
+        },
+        {
+          "width": 1280,
+          "url": "/person.html",
+          "decoded": 1
+        },
+        {
+          "width": 1280,
+          "url": "/detail.html",
+          "decoded": 1
+        },
+        {
+          "width": 390,
+          "url": "/detail.html",
+          "decoded": 1
+        },
+        {
+          "width": 390,
+          "url": "/person.html",
+          "decoded": 1
+        },
+        {
+          "width": 390,
+          "url": "/detail.html",
+          "decoded": 1
+        }
+      ]
+    },
+    "sourceReads": 0,
+    "liveSearchRequests": 0
+  },
+  "comparisonAndInitialSeo": {
+    "checks": [
+      {
+        "width": 1280,
+        "series": 13,
+        "searchRequests": 0,
+        "detailDialog": true
+      },
+      {
+        "width": 390,
+        "series": 13,
+        "searchRequests": 0,
+        "detailDialog": true
+      },
+      {
+        "type": "movie",
+        "initialSeoWithoutJavaScript": true
+      },
+      {
+        "type": "tv",
+        "initialSeoWithoutJavaScript": true
+      }
+    ],
+    "errors": [],
+    "source": "real saved Upstash; images blocked in comparison; no metadata acquisition"
+  },
+  "providerLogoVerification": {
+    "at": "2026-11-10T01:58:42.674Z",
+    "requests": 6,
+    "bytes": 38062,
+    "decoded": 6,
+    "results": [
+      {
+        "providerId": 8,
+        "bytes": 2285
+      },
+      {
+        "providerId": 9,
+        "bytes": 5081
+      },
+      {
+        "providerId": 337,
+        "bytes": 10263
+      },
+      {
+        "providerId": 15,
+        "bytes": 13878
+      },
+      {
+        "providerId": 84,
+        "bytes": 3611
+      },
+      {
+        "providerId": 2683,
+        "bytes": 2944
+      }
+    ],
+    "tmdbMetadataRequests": 0,
+    "redisRequests": 0,
+    "scope": "provider logos from existing collected JP records, real CDN responses and browser decoding"
+  },
+  "static13": {
+    "passed": 14,
+    "tabsChecked": 52,
+    "allHtmlUnchanged": {
+      "godzilla": true,
+      "mcu": true,
+      "jurassic": true,
+      "harrypotter": true,
+      "lordoftherings": true,
+      "starwars": true,
+      "wildspeed": true,
+      "minions": true,
+      "odoru": true,
+      "eva": true,
+      "conan": true,
+      "gundam": true,
+      "kimetsu": true
+    }
+  },
+  "comparisonMatchesCurrentMain3328432": true,
+  "tests": {
+    "fullPassed": 547,
+    "fullFailed": 0,
+    "fullSkipped": 0,
+    "finalGateAfterConfigReviewRequirement": {
+      "passed": 3,
+      "failed": 0
+    }
+  },
+  "releaseEnvironmentPresenceInExecutorOnly": {
+    "LEDGER_RELEASE_MODE": false,
+    "LEDGER_RELEASE_SHA256": false,
+    "LEDGER_RELEASE_READY_SHA256": false,
+    "LEDGER_RELEASE_REDIS_URL": false,
+    "LEDGER_RELEASE_REDIS_TOKEN": false,
+    "LEDGER_ADMIN_TOKEN": false,
+    "CRON_SECRET": false,
+    "LEDGER_UPSTREAM_DAILY_LIMIT": false
+  },
+  "gate": {
+    "ready": false,
+    "blockers": [
+      "upstash-usage:missing-or-stale",
+      "vercel-usage:missing-or-stale",
+      "upstash-free-plan",
+      "upstash-auto-upgrade-disabled",
+      "billing-hard-stop-confirmed",
+      "commands:unmeasured",
+      "storage:unmeasured",
+      "transfer:unmeasured",
+      "vercel-cost:unmeasured",
+      "manualFieldsReviewed",
+      "productionConfigurationReviewed",
+      "legacyWritersStoppedAndDrained",
+      "explicitProductionApproval"
+    ],
+    "authority": "review only; no deployment permission",
+    "operationsExecuted": 0
+  },
+  "productionDeployments": 0,
+  "mainMerges": 0,
+  "publicCutovers": 0,
+  "oldDeletes": 0,
+  "residualRisks": [
+    "Fresh account-wide Upstash monthly Commands, transfer, storage limits and hard-stop behavior are unverified.",
+    "Latest Vercel remaining credit, complete billing period and new candidate CPU/CDN behavior are unverified.",
+    "Unmarked manual edits or other storage locations require owner review.",
+    "Legacy writers/Cron are not stopped; no production setting was changed.",
+    "Real production deployment/CDN/cron/rollback require explicit approval and were not executed."
+  ],
+  "accountUsageStatus": {
+    "source": "user instruction 2026-11-10",
+    "upstashCommands": "未確認",
+    "upstashCapacity": "未確認",
+    "upstashTransfer": "未確認",
+    "upstashResetDate": "未確認",
+    "upstashPlan": "未確認",
+    "upstashOverageStop": "未確認",
+    "vercelRemainingCredit": "未確認",
+    "vercelBillingPeriod": "未確認",
+    "noFurtherPaidOperations": true
+  }
+}
