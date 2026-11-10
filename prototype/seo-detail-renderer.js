@@ -76,9 +76,9 @@ function renderDetailHtml(template,record,{overview='',releaseDate='',posterPath
   }).filter(Boolean);
   const notice=streaming.lastSuccessAt?'<p>配信情報の最終取得：'+esc(streaming.lastSuccessAt)+'</p>':'';
   const body=lines.length?lines.join('')+notice:'<p>保存済みの配信情報は現在ありません。視聴前に各公式サイトでご確認ください。</p>';
-  const target=/<div\\b(?=[^>]*\\bid\\s*=\\s*(["'])providers\\1)[^>]*>[\\s\\S]*?<\\/div>/i;
+  const target=/<div\b(?=[^>]*\bid\s*=\s*(["'])providers\1)[^>]*>[\s\S]*?<\/div>/i;
   if(!target.test(html))throw Error('missing provider container');
-  html=html.replace(target,tag=>tag.replace(/<\\/div>$/i,()=>'<div id="serverProviders">'+body+'</div></div>'));
+  html=html.replace(target,tag=>tag.replace(/<\/div>$/i,()=>'<div id="serverProviders">'+body+'</div></div>'));
  }
  // The original template hides #content until JavaScript finishes. Expose the
  // saved heading in initial HTML, while later JS may still hide it on an error.
