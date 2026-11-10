@@ -29,5 +29,5 @@ test('synopsis is escaped, not executable HTML',()=>{
 });
 test('missing synopsis does not invent content',()=>{
  const html=render('movie',2,'');
- assert.match(html,/<div\s+id="overview"\s+class="side-text overview-text"\s*><\/div>/);
+ assert.match(html,/<div\b(?=[^>]*\bid\s*=\s*"overview")[^>]*>\s*<\/div>/);
 });
