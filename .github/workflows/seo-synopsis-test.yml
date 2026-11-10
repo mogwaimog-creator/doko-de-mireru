@@ -15,4 +15,4 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: node --test test/seo-synopsis.test.js
+      - run: node --test test/seo-synopsis.test.js test/detail-page-diagnostics.test.js
