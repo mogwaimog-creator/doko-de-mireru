@@ -20,6 +20,10 @@
   },
   "rewrites": [
     {
+      "source": "/seo-route-probe",
+      "destination": "/api/detail-page?id=1726"
+    },
+    {
       "source": "/detail.html",
       "destination": "/api/detail-page"
     },
