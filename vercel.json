@@ -1,12 +1,15 @@
 {
-  "rewrites": [
+  "routes": [
     {
-      "source": "/detail.html",
-      "destination": "/api/detail-page"
+      "src": "/detail\\.html",
+      "dest": "/api/detail-page"
     },
     {
-      "source": "/movie/:id",
-      "destination": "/index.html"
+      "handle": "filesystem"
+    },
+    {
+      "src": "/movie/([^/]+)",
+      "dest": "/index.html"
     }
   ],
   "crons": [
