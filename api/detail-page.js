@@ -6,7 +6,7 @@ const recovery=require('./_recovery-fetch-cache');
 const {createSeoRecord}=require('../prototype/seo-ledger');
 const {renderDetailHtml}=require('../prototype/seo-detail-renderer');
 function enabled(){return process.env.DEV_DETAIL_HTML_ENABLED==='1'&&recovery.enabled()}
-function createHandler({active=enabled,template=()=>fs.readFileSync(path.join(__dirname,'../detail.html'),'utf8'),readFixed=readWork,cacheCommand=recovery.devCommand,project=readFixed===readWork?require('./_recovery-initial-seo').projectSeo:null,fetchMetadata=fetch,clock=Date.now}={}){
+function createHandler({active=enabled,template=()=>fs.readFileSync(path.join(__dirname,'../detail.html'),'utf8'),readFixed=readWork,cacheCommand=recovery.devCommand,project=readFixed===readWork?require('./_recovery-initial-seo').projectSeo:null,fetchMetadata=fetch,clock=Date.now,onDiagnostic=null}={}){
  return async function detailPage(req,res){
   res.setHeader('Content-Type','text/html; charset=utf-8');res.setHeader('Cache-Control','private, no-store');
   if(!active())return res.status(404).end('Not found');
@@ -14,7 +14,9 @@ function createHandler({active=enabled,template=()=>fs.readFileSync(path.join(__
   const type=req.query?.type||'movie',idText=String(req.query?.id||'');
   if(!['movie','tv'].includes(type)||! /^[1-9][0-9]*$/.test(idText)||!Number.isSafeInteger(Number(idText))){res.setHeader('X-Robots-Tag','noindex');return res.status(400).end('Invalid work identity')}
   const id=Number(idText);
+  let stage='initialize';
   try{
+   stage='read-saved-work';
    const apiKey=process.env.TMDB_API_KEY,url=metadataUrl(type,id,apiKey);
    const projected=project?await project(type,id,{command:cacheCommand,clock}):null;
    const work=projected?null:await readFixed(type,id,{load:async()=>{
@@ -23,9 +25,10 @@ function createHandler({active=enabled,template=()=>fs.readFileSync(path.join(__
    }});
    if(!projected&&(typeof (work.title||work.name)!=='string'||!(work.title||work.name).trim()))throw Error('invalid work title');
    const record=projected||createSeoRecord({type,id,title:work.title||work.name,releaseDate:work.release_date||work.first_air_date,posterPath:work.poster_path,overview:work.overview,shortIntro:work.shortIntro},{updatedAt:new Date(clock()).toISOString()});
+   stage='render-html';
    const html=renderDetailHtml(template(),record);
    return res.status(200).end(req.method==='HEAD'?'':html);
-  }catch(error){res.setHeader('X-Robots-Tag','noindex');if(error.httpStatus===404)return res.status(404).end('作品情報が見つかりません。');res.setHeader('Retry-After','5');return res.status(503).end('作品情報を読み込めません。時間をおいて再度お試しください。')}
+  }catch(error){if(typeof onDiagnostic==='function'){try{onDiagnostic({stage,category:error.httpStatus===404?'not-found':error.httpStatus===503?'unavailable':'unexpected',type,id})}catch{/* diagnostics must never affect response */}}res.setHeader('X-Robots-Tag','noindex');if(error.httpStatus===404)return res.status(404).end('作品情報が見つかりません。');res.setHeader('Retry-After','5');return res.status(503).end('作品情報を読み込めません。時間をおいて再度お試しください。')}
  };
 }
 const legacyHandler=createHandler();module.exports=async(req,res)=>{if(process.env.LEDGER_RELEASE_MODE!==undefined&&await require('./_release-dispatch').dispatch('detail-page',req,res))return;if(!enabled()){res.setHeader('Content-Type','text/html; charset=utf-8');return res.status(200).end(req.method==='HEAD'?'':fs.readFileSync(path.join(__dirname,'../detail.html'),'utf8'))}return legacyHandler(req,res)};module.exports.createHandler=createHandler;module.exports.enabled=enabled;
