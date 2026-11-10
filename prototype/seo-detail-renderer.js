@@ -17,7 +17,7 @@ function setMeta(html,attribute,value,content){
  if(!found)throw Error('missing meta '+value);
  return result;
 }
-function renderDetailHtml(template,record,{overview=''}={}){
+function renderDetailHtml(template,record,{overview='',releaseDate='',posterPath='',genres=[]}={}){
  validateSeoRecord(record);
  if(typeof template!=='string'||!template.includes('</head>'))throw Error('invalid detail template');
  let html=template;
@@ -52,6 +52,19 @@ function renderDetailHtml(template,record,{overview=''}={}){
   if(!target.test(html))throw Error('missing overview container');
   html=html.replace(target,tag=>tag.replace(/<\/div>$/i,()=>esc(summary)+'</div>'));
  }
+ // Basic work facts and structured data are derived from the saved ledger only.
+ const year=String(releaseDate||'').match(/^\d{4}/)?.[0]||'';
+ if(year){
+  const release=/<div\b(?=[^>]*\bid\s*=\s*(["'])releaseDate\1)[^>]*>[\s\S]*?<\/div>/i;
+  if(release.test(html))html=html.replace(release,tag=>tag.replace(/<\/div>$/i,()=>esc('公開年：'+year+'年')+'</div>'));
+ }
+ const names=Array.isArray(genres)?genres.map(g=>typeof g==='string'?g:g?.name).filter(v=>typeof v==='string'&&v.trim()).slice(0,8):[];
+ const jsonLd={'@context':'https://schema.org','@type':record.type==='tv'?'TVSeries':'Movie',name:record.h1,url:record.canonical,description:summary||record.description};
+ if(releaseDate)jsonLd.datePublished=String(releaseDate).slice(0,10);
+ if(record.ogImage)jsonLd.image=record.ogImage;
+ if(names.length)jsonLd.genre=names;
+ const safeJson=JSON.stringify(jsonLd).replace(/</g,'\\u003c').replace(/>/g,'\\u003e').replace(/&/g,'\\u0026');
+ html=html.replace('</head>','<script type="application/ld+json" id="serverWorkStructuredData">'+safeJson+'</script>\n</head>');
  // The original template hides #content until JavaScript finishes. Expose the
  // saved heading in initial HTML, while later JS may still hide it on an error.
  for(const [selector,value] of [
