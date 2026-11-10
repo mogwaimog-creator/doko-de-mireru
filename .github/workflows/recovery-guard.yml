@@ -7,6 +7,7 @@ on:
       - 'api/_release-transport-candidate.js'
       - 'tests/acquisition-recovery.test.js'
       - 'tests/acquisition-redis.test.js'
+      - 'tests/acquisition-source-integration.test.js'
       - '.github/workflows/recovery-guard.yml'
   workflow_dispatch:
 jobs:
@@ -32,7 +33,7 @@ jobs:
           node --check api/_release-transport-candidate.js
           node --check tests/acquisition-recovery.test.js
       - name: Run isolated regression tests
-        run: node --test tests/acquisition-recovery.test.js
+        run: node --test tests/acquisition-recovery.test.js tests/acquisition-source-integration.test.js
       - name: Install Redis CLI
         run: sudo apt-get update -qq && sudo apt-get install -y -qq redis-tools
       - name: Run real Redis Lua tests (isolated CI only)
