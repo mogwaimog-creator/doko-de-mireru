@@ -79,3 +79,11 @@ test('render exception has render-html stage and 503',async()=>{
  assert.equal(diagnostics[0].stage,'render-html');
  assert.equal(diagnostics[0].category,'unexpected');
 });
+
+test('release SEO route forbids acquisition fallback when saved work is missing',()=>{
+ const release=fs.readFileSync(path.join(__dirname,'../api/_release-application.js'),'utf8');
+ const route=release.match(/'detail-page':require\('\.\/detail-page'\)\.createHandler\(\{[\s\S]*?\}\),\s*'streaming-status'/);
+ assert.ok(route,'release detail-page route must exist');
+ assert.match(route[0],/readFixed:async\(\)=>\{const error=Error\('SEO work not saved; acquisition disabled'\)/);
+ assert.doesNotMatch(route[0],/readFixed:async\(type,id\)=>fixed\(type,id\)/);
+});
