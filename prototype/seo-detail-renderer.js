@@ -17,7 +17,7 @@ function setMeta(html,attribute,value,content){
  if(!found)throw Error('missing meta '+value);
  return result;
 }
-function renderDetailHtml(template,record){
+function renderDetailHtml(template,record,{overview=''}={}){
  validateSeoRecord(record);
  if(typeof template!=='string'||!template.includes('</head>'))throw Error('invalid detail template');
  let html=template;
@@ -45,6 +45,13 @@ function renderDetailHtml(template,record){
  const h1=/<h1\b(?=[^>]*\bid\s*=\s*(["'])title\1)[^>]*>[\s\S]*?<\/h1>/i;
  if(!h1.test(html))throw Error('missing title heading');
  html=html.replace(h1,()=>'<h1 id="title">'+esc(record.h1)+'</h1>');
+ // Preserve the existing layout; provide the saved synopsis to crawlers before JS runs.
+ const summary=String(overview||'').replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim().slice(0,1200);
+ if(summary){
+  const target=/<div\b(?=[^>]*\bid\s*=\s*(["'])overview\1)[^>]*>[\s\S]*?<\/div>/i;
+  if(!target.test(html))throw Error('missing overview container');
+  html=html.replace(target,tag=>tag.replace(/<\/div>$/i,()=>esc(summary)+'</div>'));
+ }
  // The original template hides #content until JavaScript finishes. Expose the
  // saved heading in initial HTML, while later JS may still hide it on an error.
  for(const [selector,value] of [
