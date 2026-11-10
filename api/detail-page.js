@@ -36,7 +36,7 @@ function createHandler({active=enabled,template=()=>fs.readFileSync(path.join(__
    if(streamRaw){
     try{
      const saved=JSON.parse(streamRaw);
-     if(saved.type===type&&saved.id===id&&saved.schemaVersion===1&&saved.japan&&
+     if(saved.type===type&&saved.id===id&&saved.schemaVersion===1&&saved.lastSuccessAt&&saved.japan&&
         ['flatrate','rent','buy'].every(k=>Array.isArray(saved.japan[k]))){
       streaming={...saved.japan,lastSuccessAt:saved.lastSuccessAt};
      }
