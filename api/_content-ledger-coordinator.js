@@ -9,6 +9,7 @@ function coordinator(store,{failureCooldownMs=30*60000,guarded=false,leaseMs=300
  const stale=(at,now,days)=>!Number.isFinite(Date.parse(at))||Date.parse(at)>Date.parse(now)+60000||Date.parse(now)-Date.parse(at)>=days*DAY;
  const entry=(key,snapshot,data,meta={})=>({key,revision:snapshot?.meta.revision||0,data,meta:{...snapshot?.meta,...meta}});
  async function failure(key,old,error,at){
+  if(error?.code==='ACQUISITION_STOPPED')return {status:'acquisition-paused',record:old?.data||null,error:'New acquisition stopped'};
   if(!old?.data){if(store.noteFailure)await store.noteFailure(key,old?.meta.revision||0,{...old?.meta,lastAttemptAt:at,lastError:String(error.message||error).slice(0,500)});return {status:'failed',record:null,error:String(error.message||error).slice(0,500)}};
   const result=await store.commit([entry(key,old,old.data,{lastAttemptAt:at,lastError:String(error.message||error).slice(0,500)})]);
   return {status:result.saved?'stale-error':'conflict',record:old.data,error:String(error.message||error).slice(0,500)};

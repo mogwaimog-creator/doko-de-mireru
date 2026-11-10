@@ -40,7 +40,7 @@ function validateEntry(k,data){
 }
 function contentStore(command,{controlKey='doko:dev:content-control:v1'}={}){
  if(typeof command!=='function'||!/^doko:dev:[a-z0-9:-]+$/.test(controlKey))throw Error('local content command/control required');
- const transport=command;command=async args=>{try{return await transport(args)}catch(cause){const error=Error('Content storage unavailable');error.code='CONTENT_STORAGE_UNAVAILABLE';error.cause=cause;throw error}};
+ const transport=command;command=async args=>{try{return await transport(args)}catch(cause){if(cause?.code==='ACQUISITION_STOPPED')throw cause;const error=Error('Content storage unavailable');error.code='CONTENT_STORAGE_UNAVAILABLE';error.cause=cause;throw error}};
  return {
   async read(names){if(!names.length)return {};names.forEach(validateKey);const values=await command(['MGET',...names.flatMap(k=>[k,k+':meta'])]);if(!Array.isArray(values)||values.length!==names.length*2)throw Error('invalid content batch');return Object.fromEntries(names.map((k,i)=>[k,{data:values[2*i]===null?null:JSON.parse(values[2*i]),meta:values[2*i+1]===null?{revision:0}:JSON.parse(values[2*i+1])}]))},
   async commit(entries,{mode='automatic',lease=null,requireReady=false}={}){
