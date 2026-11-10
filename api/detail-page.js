@@ -19,6 +19,7 @@ function createHandler({active=enabled,template=()=>fs.readFileSync(path.join(__
    stage='read-saved-work';
    const apiKey=process.env.TMDB_API_KEY,url=metadataUrl(type,id,apiKey);
    const projected=project?await project(type,id,{command:cacheCommand,clock}):null;
+   if(!projected)stage='saved-seo-missing';
    const work=projected?null:await readFixed(type,id,{load:async()=>{
     if(!apiKey)throw Error('metadata unavailable');const response=await fetchMetadata(url,{signal:AbortSignal.timeout(6500),headers:{Accept:'application/json'}});
     if(!response.ok){const error=Error('metadata unavailable');error.httpStatus=response.status===404?404:503;throw error}return response.json();
