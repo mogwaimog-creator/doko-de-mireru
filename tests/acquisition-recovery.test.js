@@ -35,8 +35,8 @@ test('guard keeps a request-scoped active ticket and does not consult v1 pause',
  });
  assert.equal(calls.length,3);
  assert.deepEqual(calls[2],['HDEL','doko:dev:cutover:v1:active','ticket-1']);
- assert.equal(calls[1][3],'3');
- assert.equal(calls[1][4],guardModule.KEY);
+ assert.equal(calls[1][2],'3');
+ assert.equal(calls[1][3],guardModule.KEY);
  assert.ok(calls.every(c=>!JSON.stringify(c).includes('acquisition-guard:v1')));
 });
 
