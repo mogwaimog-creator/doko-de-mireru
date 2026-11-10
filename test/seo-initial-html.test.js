@@ -29,6 +29,6 @@ test('saved Japanese streaming names are in initial HTML without a fetch',()=>{
  const record=createSeoRecord({type:'tv',id:1399,title:'ゲーム・オブ・スローンズ'});
  const html=renderDetailHtml(template,record,{streaming:{flatrate:[{provider_name:'U-NEXT'}],rent:[],buy:[],lastSuccessAt:'2026-11-11T00:00:00.000Z'}});
  assert.match(html,/id="serverProviders"/);
- assert.match(html,/見放題：<\\/strong>U-NEXT/);
+ assert.match(html,/見放題：<\/strong>U-NEXT/);
  assert.match(html,/2026-11-11T00:00:00.000Z/);
 });
