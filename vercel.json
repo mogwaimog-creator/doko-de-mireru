@@ -18,29 +18,21 @@
       "maxDuration": 300
     }
   },
-  "rewrites": [
+  "routes": [
     {
-      "source": "/seo-route-probe",
-      "destination": "/api/detail-page?id=1726"
+      "src": "/detail\\.html",
+      "dest": "/api/detail-page"
     },
     {
-      "source": "/detail.html",
-      "destination": "/api/detail-page"
+      "src": "/seo-route-probe",
+      "dest": "/api/detail-page"
     },
     {
-      "source": "/movie/:path*",
-      "destination": "/index.html"
-    }
-  ],
-  "headers": [
+      "handle": "filesystem"
+    },
     {
-      "source": "/detail.html",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "private, no-store"
-        }
-      ]
+      "src": "/movie/([^/]+)",
+      "dest": "/index.html"
     }
   ]
 }
