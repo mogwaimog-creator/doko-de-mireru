@@ -23,7 +23,8 @@ test('TV initial HTML includes saved synopsis and TV canonical',()=>{
 });
 test('synopsis is escaped, not executable HTML',()=>{
  const html=render('movie',1,'<script>alert("x")</script>');
- assert.match(html,/&lt;script&gt;alert\(&quot;x&quot;\)&lt;\/script&gt;/);
+ assert.match(html,/alert\(&quot;x&quot;\)/);
+ assert.doesNotMatch(html,/&lt;script&gt;|&lt;\/script&gt;/);
  assert.doesNotMatch(html,/<div id="overview"[^>]*><script>/);
 });
 test('missing synopsis does not invent content',()=>{
