@@ -1,0 +1,29 @@
+name: Recovery guard regression
+on:
+  pull_request:
+    paths:
+      - 'api/_acquisition-guard.js'
+      - 'api/_new-work-ingest.js'
+      - 'api/_release-transport-candidate.js'
+      - 'tests/acquisition-recovery.test.js'
+      - '.github/workflows/recovery-guard.yml'
+  workflow_dispatch:
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check syntax
+        run: |
+          node --check api/_acquisition-guard.js
+          node --check api/_new-work-ingest.js
+          node --check api/_release-transport-candidate.js
+          node --check tests/acquisition-recovery.test.js
+      - name: Run isolated regression tests
+        run: node --test tests/acquisition-recovery.test.js
