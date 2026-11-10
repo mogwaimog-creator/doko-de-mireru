@@ -15,10 +15,10 @@ function storage(dir,target,{request=fetch,env=process.env,localCommand}={}){
  if(!endpoint||!token)throw Error('Upstash credentials missing; local work may continue');
  function reserve(cost){if(batchReserved+cost>2500||state.reservedCommands+cost>MAX_COMMANDS)throw Error('storage command cap reached before send');batchReserved+=cost;state.reservedCommands+=cost;state.requests++;saveState(dir,state)}
  async function send(args,cost=1){
-  reserve(cost);let value;
+  reserve(cost);let value,httpStatus=null;
   try{if(target==='local'){if(!localCommand)throw Error('local adapter missing');value=await localCommand(args)}else{
-   const r=await request(endpoint,{method:'POST',redirect:'error',headers:{Authorization:'Bearer '+token,'Content-Type':'application/json'},body:JSON.stringify(args),signal:AbortSignal.timeout(10000)});if(!r.ok||!r.body?.getReader)throw Error('storage HTTP failure');const reader=r.body.getReader(),chunks=[];let size=0;try{while(true){const {done,value}=await reader.read();if(done)break;size+=value.byteLength;if(size>8*1024*1024){await reader.cancel();throw Error('storage response limit')}chunks.push(Buffer.from(value))}}finally{reader.releaseLock()};const data=JSON.parse(Buffer.concat(chunks).toString());if(data.error||!Object.hasOwn(data,'result'))throw Error('storage command rejected');value=data.result;
-  }}catch{throw Error('Storage request stopped; no automatic retry; reservation retained')}
+   const r=await request(endpoint,{method:'POST',redirect:'error',headers:{Authorization:'Bearer '+token,'Content-Type':'application/json'},body:JSON.stringify(args),signal:AbortSignal.timeout(10000)});httpStatus=r.status;if(!r.ok||!r.body?.getReader)throw Error('storage HTTP failure');const reader=r.body.getReader(),chunks=[];let size=0;try{while(true){const {done,value}=await reader.read();if(done)break;size+=value.byteLength;if(size>8*1024*1024){await reader.cancel();throw Error('storage response limit')}chunks.push(Buffer.from(value))}}finally{reader.releaseLock()};const data=JSON.parse(Buffer.concat(chunks).toString());if(data.error||!Object.hasOwn(data,'result'))throw Error('storage command rejected');value=data.result;
+  }}catch{throw Error('Storage request stopped'+(httpStatus===null?'':' (HTTP '+httpStatus+')')+'; no automatic retry; reservation retained')}
   return value;
  }
  const scripts=transport.coreScripts(),rules=new Map(scripts.map(s=>[s.script,s]));
