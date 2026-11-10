@@ -17,7 +17,7 @@ function cache(command,{prefix='doko:dev:recovery:v1:',controlKey='doko:dev:cont
   await new Promise(resolve=>setTimeout(resolve,250));
   result=await command(['EVAL',CLAIM,'4',key,lock,controlKey,prefix+'content-bytes',token,identity,isQuery?'query':'content']);
  }if(Number(result[0])===1){const saved=JSON.parse(result[1]);if(saved.identity!==identity)throw Error('cache identity mismatch');return saved.data}
- if(Number(result[0])!==2)throw Error('metadata storage '+result[1]);
+ if(Number(result[0])!==2){if(isQuery&&['busy','capacity'].includes(String(result[1])))return load();throw Error('metadata storage '+result[1]);}
  try{const data=await load();if(isQuery&&!Array.isArray(data?.results))throw Error('invalid search results');if(isContent){const match=path.match(/^\/3\/(movie|tv|person)\/([1-9][0-9]*)/);if(Number(data?.id)!==Number(match[2])&&!/\/season\/|\/combined_credits$/.test(path))throw Error('source identity mismatch');if(/\/combined_credits$/.test(path)&&(!Array.isArray(data?.cast)||!Array.isArray(data?.crew)))throw Error('invalid credits');if(/\/season\//.test(path)&&Number(data?.season_number)!==Number(path.split('/').at(-1)))throw Error('season identity mismatch')}
  const fixed=isContent&&Object.hasOwn(data,'watch/providers')?Object.fromEntries(Object.entries(data).filter(([key])=>key!=='watch/providers')):data;const raw=JSON.stringify({identity,data:fixed});if(Buffer.byteLength(raw)> (isQuery?32768:262144))return data;const saved=Number(await command(['EVAL',SAVE,'4',key,lock,controlKey,prefix+'content-bytes',token,raw,'3600000',isQuery?'query':'content']));if(saved===0)throw Error('metadata save fenced');if(saved===-1)throw Error('metadata capacity stop');return data;
  }finally{await command(['EVAL',RELEASE,'1',lock,token])}
