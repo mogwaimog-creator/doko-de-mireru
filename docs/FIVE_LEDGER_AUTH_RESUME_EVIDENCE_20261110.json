@@ -1,0 +1,120 @@
+{
+  "definition": [
+    "commonWork",
+    "person",
+    "seo",
+    "season",
+    "sharedStreaming"
+  ],
+  "sourceCommit": "cbd3152",
+  "scope": "isolated-owned-upstash-namespace",
+  "authentication": {
+    "attempts": 1,
+    "httpStatus": 200,
+    "success": true
+  },
+  "audit": {
+    "counts": {
+      "works": 5,
+      "seo": 5,
+      "seasonManifests": 1,
+      "firstSeasons": 1,
+      "episodes": 10,
+      "people": 1,
+      "jpProviders": 5
+    },
+    "ownedKeyCount": 42,
+    "ownedMemoryBytes": 60251,
+    "legacyReads": 0,
+    "scans": 0,
+    "deletes": 0
+  },
+  "browser": {
+    "passed": 14,
+    "errors": [],
+    "images": {
+      "enabled": true,
+      "requests": 4,
+      "bytes": 233556,
+      "failures": 0,
+      "loadedImages": [
+        {
+          "width": 1280,
+          "url": "/detail.html",
+          "decoded": 1
+        },
+        {
+          "width": 1280,
+          "url": "/person.html",
+          "decoded": 1
+        },
+        {
+          "width": 1280,
+          "url": "/detail.html",
+          "decoded": 1
+        },
+        {
+          "width": 390,
+          "url": "/detail.html",
+          "decoded": 1
+        },
+        {
+          "width": 390,
+          "url": "/person.html",
+          "decoded": 1
+        },
+        {
+          "width": 390,
+          "url": "/detail.html",
+          "decoded": 1
+        }
+      ]
+    },
+    "metrics": {
+      "target": "upstash",
+      "registered": 5,
+      "sourceReads": 2,
+      "liveSearchRequests": 2,
+      "liveSearchBytes": 4742,
+      "reservedCommands": 805,
+      "requests": 381,
+      "scope": "private-staged-real-data",
+      "productionChanged": false,
+      "errors": []
+    },
+    "memory": {
+      "ownedKeyCount": 44,
+      "ownedMemoryBytes": 65313,
+      "reservedCommands": 456,
+      "sessionReservedCommands": 872,
+      "sessionRequests": 448
+    }
+  },
+  "productionDeployment": false,
+  "legacyDeletion": false,
+  "earlierLegacyInspection": {
+    "scope": "not the five new ledgers",
+    "scanPages": 33,
+    "sampledRecords": 80,
+    "writes": 0
+  },
+  "notes": [
+    "INFO command counters varied between requests; database-wide difference is not attributed to this run or used as a billing measurement.",
+    "Reserved command counts cover this new isolated target, not earlier sessions; previous private checkpoints are unavailable.",
+    "No mass collection or migration; only 5 explicit works, 1 person and 1 season."
+  ],
+  "tests": {
+    "offline": {
+      "passed": 28,
+      "failed": 0
+    },
+    "localRedisIntegration": {
+      "redisVersion": "7.2.7",
+      "passed": 32,
+      "failed": 0
+    },
+    "initialIntegrationBlocker": "6 tests required a local redis-cli; resolved by building official Redis and rerunning",
+    "syntaxCheck": true,
+    "diffCheck": true
+  }
+}

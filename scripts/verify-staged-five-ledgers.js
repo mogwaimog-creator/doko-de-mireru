@@ -2,6 +2,20 @@
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),{chromium}=require('playwright');
 async function main(){const base=process.argv[2],dir=require('./lib/staged-tmdb').privateDirectory(path.resolve(process.argv[3]));if(new URL(base).hostname!=='127.0.0.1')throw Error('loopback only');const checks=[],errors=[],get=async route=>{const r=await fetch(base+route);assert.equal(r.status,200,route);return r.json()},info=await get('/__staged');
  const movieRef=info.works.find(w=>w.id===315011)||info.works.find(w=>w.type==='movie'),tvRef=info.works.find(w=>w.id===202411)||info.works.find(w=>w.type==='tv');assert(movieRef&&tvRef&&info.people.length);const movie=await get(`/api/search?type=movie&id=${movieRef.id}`),tv=await get(`/api/search?type=tv&id=${tvRef.id}`),person=await get('/api/search?personId='+info.people[0]),seasonNumber=tv.seasons.find(s=>s.season_number>0).season_number,season=await get(`/api/search?type=tv&id=${tv.id}&season=${seasonNumber}`);assert(season.episodes.length);for(const d of [movie,tv]){assert.equal(d.streamingMeta.status,'fresh');for(const k of ['streaming','rental','purchase'])assert(Array.isArray(d[k]))}checks.push({test:'saved new movie/TV, person, season, all JP categories',passed:true,movieId:movie.id,tvId:tv.id,personId:person.id,episodes:season.episodes.length});
+ // Both public response shapes must project the same saved provider record.
+ const catalog=require('../data/watch-order-memberships.json'),seriesCache=new Map();
+ for(const [type,d] of [['movie',movie],['tv',tv]]){
+  const memberships=Object.entries(catalog).filter(([,works])=>works.some(w=>w.type===type&&w.id===d.id));
+  assert(memberships.length,'sample must belong to a watch-order series');
+  for(const [name] of memberships){
+   if(!seriesCache.has(name))seriesCache.set(name,await get('/api/series-watch?series='+encodeURIComponent(name)));
+   const watch=seriesCache.get(name).providers[type+':'+d.id];assert(watch,'saved shared providers missing from series response');
+   const ids=rows=>rows.map(p=>p.provider_id??p.providerId??p.id).sort((a,b)=>a-b);
+   assert.deepEqual(ids(watch.flatrate),ids(d.streaming));
+   assert.equal(watch.checkedAt,d.streamingMeta.lastSuccessAt);
+  }
+ }
+ checks.push({test:'movie/TV detail and watch-order responses share providers and success timestamp',passed:true});
  for(const [type,d] of [['movie',movie],['tv',tv]]){const r=await fetch(base+`/detail.html?id=${d.id}&type=${type}`),html=await r.text();assert.equal(r.status,200);for(const part of ['data-seo-ledger="1"','<h1 id="title">',d.title,'property="og:title"','name="description"','rel="canonical"'])assert(html.includes(part));checks.push({test:'initial SEO HTML '+type,passed:true})}
  const guardBefore=await get('/__metrics'),missing=await fetch(base+'/detail.html?id=999000001');assert.equal(missing.status,503);assert.equal(missing.headers.get('x-robots-tag'),'noindex');const guardAfter=await get('/__metrics');assert.equal(guardBefore.reservedCommands,guardAfter.reservedCommands);assert.equal(guardBefore.liveSearchRequests,guardAfter.liveSearchRequests);checks.push({test:'unregistered HTML is noindex and cannot trigger acquisition/storage',passed:true});const personPage=await fetch(base+'/person.html?id='+person.id);assert.equal(personPage.status,200);checks.push({test:'static person page ID bypasses work-only acquisition guard',passed:true});
  const browser=await chromium.launch({executablePath:'/usr/bin/chromium',headless:true,args:['--no-sandbox']});let blocked=0;const primaryPaths=[movie.poster_path,tv.poster_path,person.profile_path].filter(Boolean);const loadedImages=[];const images={enabled:process.argv.includes('--images'),requests:0,bytes:0,failures:0},imageCache=new Map();
