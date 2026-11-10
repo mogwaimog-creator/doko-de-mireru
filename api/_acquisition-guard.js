@@ -6,7 +6,7 @@ const {createHash}=require('node:crypto');
 const KEY='doko:dev:acquisition-guard:v2';
 const CONTROL='doko:dev:content-control:v1';
 const ACTIVE='doko:dev:cutover:v1:active';
-const ENTER=`local raw=redis.call('GET',KEYS[1]);if not raw then return 0 end;local ok,c=pcall(cjson.decode,raw);if not ok or c.status~='ready' then return 0 end;if redis.call('HLEN',KEYS[2])>=64 then return -1 end;redis.call('HSET',KEYS[2],ARGV[1],ARGV[2]);return 1`;
+const ENTER=`local raw=redis.call('GET',KEYS[1]);if not raw then return 0 end;local ok,c=pcall(cjson.decode,raw);if not ok or c.status~='ready' then return 0 end;local now=tonumber(ARGV[3]);if not now then return 0 end;local entries=redis.call('HGETALL',KEYS[2]);for i=1,#entries,2 do local valid,t=pcall(cjson.decode,entries[i+1]);if not valid or type(t)~='table' or type(t.startedAt)~='number' or t.startedAt<now-900000 or t.startedAt>now+60000 then redis.call('HDEL',KEYS[2],entries[i]) end end;if redis.call('HLEN',KEYS[2])>=64 then return -1 end;redis.call('HSET',KEYS[2],ARGV[1],ARGV[2]);return 1`;
 const ADMIT=`local raw=redis.call('GET',KEYS[2]);if not raw then return {0,'control-unavailable'} end;local ok,c=pcall(cjson.decode,raw);if not ok or c.status~='ready' or c.newWorkAcquisitionPaused then return {0,'operator-pause'} end
 local failure=redis.call('GET',KEYS[3]);if failure then local good,f=pcall(cjson.decode,failure);if good and f.identity==ARGV[1] and f.untilAt>tonumber(ARGV[2]) then return {0,'failure-cooldown'} end end
 local rawState=redis.call('GET',KEYS[1]);local valid,s=pcall(cjson.decode,rawState or '');if not valid or s.version~=2 then s={version=2,minute=0,requests=0,acquisitions=0,scheduled=0,failures=0,day='',daily=0,dailyScheduled=0} end
@@ -22,7 +22,7 @@ function session(command,{clock=Date.now}={}){
  const current=()=>context.getStore();
  return {
   withContext:fn=>context.run({token:null,paused:false,allowed:false},fn),
-  async enter(token,ticket){const c=current();if(!c)throw stopped('missing-context');c.token=token;const result=Number(await command(['EVAL',ENTER,'2',CONTROL,ACTIVE,token,ticket]));c.paused=result!==1;return result},
+  async enter(token,ticket){const c=current();if(!c)throw stopped('missing-context');c.token=token;const result=Number(await command(['EVAL',ENTER,'2',CONTROL,ACTIVE,token,ticket,String(clock())]));c.paused=result!==1;return result},
   async finish(token){await command(['HDEL',ACTIVE,token])},
   async admit(path,params,{scheduled=false,dailyLimit=300}={}){
    const c=current();if(!c||c.paused)throw stopped('inactive');
