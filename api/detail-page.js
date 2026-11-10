@@ -17,7 +17,11 @@ function createHandler({active=enabled,template=()=>fs.readFileSync(path.join(__
   try{
    const apiKey=process.env.TMDB_API_KEY,url=metadataUrl(type,id,apiKey);
    const projected=project?await project(type,id,{command:cacheCommand,clock}):null;
-   const work=await readFixed(type,id,{load:async()=>{
+   // Reuse the same saved work record as the SEO projection; avoid a second
+   // detail fetch or TV season-manifest dependency on the normal SSR path.
+   const savedRaw=projected?await cacheCommand(['GET',require('./_dev-content-ledgers').keys.work(type,id)]):null;
+   const savedWork=savedRaw?JSON.parse(savedRaw):null;
+   const work=savedWork||await readFixed(type,id,{load:async()=>{
     if(!apiKey)throw Error('metadata unavailable');const response=await fetchMetadata(url,{signal:AbortSignal.timeout(6500),headers:{Accept:'application/json'}});
     if(!response.ok){const error=Error('metadata unavailable');error.httpStatus=response.status===404?404:503;throw error}return response.json();
    }});
