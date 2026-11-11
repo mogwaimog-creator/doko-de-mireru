@@ -32,7 +32,7 @@
   function render(){
     ensure();
     if(!pending||!pending.providers){
-      line.textContent='配信情報：前回取得分を表示しています（更新状況を確認できません）';
+      line.textContent='配信情報：更新状況を確認できません';
       return;
     }
     const records=Object.values(pending.providers);
