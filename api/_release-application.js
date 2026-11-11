@@ -19,6 +19,15 @@ function application({command,adminCommand=()=>command,config,source,clock=Date.
  async function season(id,number){const key='doko:dev:season:v1:tv:'+id,raw=await command(['GET',key]);if(raw){const saved=JSON.parse(raw);if(saved.tvId!==id)throw Error('season identity');const seasonLedger=require('../prototype/season-ledger'),prior=seasonLedger.toDetailEpisodes(saved,number),entry=saved.seasons.find(s=>s.seasonNumber===number);if(prior&&(guard?.isPaused()||!seasonLedger.isDue(entry.episodesCheckedAt,new Date(clock()).toISOString(),saved.refreshDays)))return prior}await fixed('tv',id);const coordinator=require('./_content-ledger-coordinator').coordinator(require('./_dev-content-store').contentStore(command),{});await coordinator.episode(id,number,async signal=>require('./_content-source-adapters').episodeSource(id,number,{tvId:id,seasonNumber:number,data:await source('/3/tv/'+id+'/season/'+number,{},signal)}),new Date(clock()).toISOString());const saved=JSON.parse(await command(['GET',key]));const result=require('../prototype/season-ledger').toDetailEpisodes(saved,number);if(!result)throw Error('episodes missing');return result}
  async function person(id){
   const store=require('./_dev-content-store').contentStore(command);
+  // Temporarily freeze person ledger writes only; preserve existing profiles and work/streaming acquisition.
+  // For uncached people, serve a one-off response without saving it to the person ledger.
+  if(process.env.PERSON_LEDGER_WRITES_PAUSED==='1'){
+   const saved=(await store.read([store.keys.person(id)]))[store.keys.person(id)].data;
+   if(saved?.person)return saved.person;
+   const profile=await source('/3/person/'+id,{});
+   const credits=await source('/3/person/'+id+'/combined_credits',{});
+   return require('./_content-source-adapters').personSource(id,profile,credits).person;
+  }
   if(guard?.isPaused()){const value=(await store.read([store.keys.person(id)]))[store.keys.person(id)].data;if(!value)throw Error('Person not stored; acquisition paused');return value.person;}
   const result=await require('./_content-ledger-coordinator').coordinator(store).person(id,async signal=>{
    const profile=await source('/3/person/'+id,{},signal);
