@@ -1184,7 +1184,7 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
 </style><style>
 .hp-order-tabs{margin:20px 0 24px;padding:18px 22px;background:linear-gradient(135deg,#1f2937,#312e81);border-radius:16px;gap:14px;align-items:center}.hp-order-tabs .hp-tab{display:inline-flex;align-items:center;justify-content:center}.hp-progress{margin-bottom:20px}
 @media(max-width:600px){.hp-order-tabs{padding:16px;gap:12px}}
-</style></head>
+</style><script src="/series-update-status.js"></script></head>
 
 <body>
 
@@ -3028,7 +3028,7 @@ let hpBatchPromise = null;
 function fetchHpProviders(id){
   if(!hpBatchPromise){
     hpBatchPromise = fetch(dokoApiRoot + "/api/series-watch?series=harrypotter")
-      .then(response => {if(!response.ok)throw new Error("配信情報を取得できませんでした");return response.json();})
+      .then(response => {if(!response.ok)throw new Error("配信情報を取得できませんでした");return response.json().then(d=>{window.dokoUpdateSeriesStatus(d);return d;});})
       .catch(error => {console.error("ハリポタ配信情報取得エラー:",error);return null;});
   }
   return hpBatchPromise.then(data => {

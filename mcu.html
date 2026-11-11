@@ -8270,7 +8270,7 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
  box-shadow:0 0 12px rgba(167,139,250,.90),0 0 24px rgba(124,58,237,.48);
 }
 </style>
-</head>
+<script src="/series-update-status.js"></script></head>
 <body>
 <div class="page-wrap">
 <header class="mcu-header">
@@ -8318,7 +8318,7 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
 
 
 <section class="series-watch-summary" aria-labelledby="series-watch-summary-title">
-<p class="series-update-date">ページ更新日：<time datetime="2026-10-04">2026年10月4日</time></p>
+<p class="series-update-date">記事更新日：<time datetime="2026-10-04">2026年10月4日</time></p>
 <h2 id="series-watch-summary-title">📺 MCUをまとめて楽しむならDisney＋</h2>
 <p>ほかの配信先も「配信一覧」タブで確認できます。</p>
 <a class="series-watch-official" href="mcu.html?view=streaming#mcuWatchList">配信一覧を見る →</a>
@@ -14854,7 +14854,7 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
 
 <script>
 /* MCU配信ロゴ：Redisの保存済み情報を一括取得。訪問者からTMDBへ問い合わせない */
-const mcuCachedRecords=fetch('/api/series-watch?series=mcu',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('配信API '+r.status);return r.json();}).then(d=>d.providers||{});
+const mcuCachedRecords=fetch('/api/series-watch?series=mcu',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('配信API '+r.status);return r.json().then(d=>{window.dokoUpdateSeriesStatus(d);return d;});}).then(d=>d.providers||{});
 async function getMcuCachedRecord(id,type){const records=await mcuCachedRecords;return records[type+':'+id]||null;}
 async function loadMcuProviderBox(box){
  if(!box||box.dataset.loaded||box.dataset.loading)return;
