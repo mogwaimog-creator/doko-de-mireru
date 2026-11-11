@@ -26,7 +26,7 @@ function application({command,adminCommand=()=>command,config,source,clock=Date.
    if(saved?.person)return saved.person;
    const profile=await source('/3/person/'+id,{});
    const credits=await source('/3/person/'+id+'/combined_credits',{});
-   return require('./_content-source-adapters').personSource(id,profile,credits).person;
+   return require('../prototype/person-ledger').normalizePerson(require('./_content-source-adapters').personSource(id,profile,credits));
   }
   if(guard?.isPaused()){const value=(await store.read([store.keys.person(id)]))[store.keys.person(id)].data;if(!value)throw Error('Person not stored; acquisition paused');return value.person;}
   const result=await require('./_content-ledger-coordinator').coordinator(store).person(id,async signal=>{
