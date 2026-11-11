@@ -144,7 +144,7 @@ header{background:linear-gradient(125deg,#131820,#2d3035);border-bottom:5px soli
 @media (max-width: 600px) {
   .watch-order-recommend, .family-intro { padding: 16px; }
 }
-</style></head><body id="page-top"><header><div class="wrap"><nav class="toplinks"><a class="back-link" href="series.html">← シリーズ一覧</a><a class="back-link" href="index.html">⌂ ドコデミレル？ホーム</a></nav><div class="eyebrow">🏁 FAST &amp; FURIOUS GUIDE</div><h1>ワイルド・スピード（ワイスピ） 見る順番ガイド</h1><p>初めてなら公開順。もう一度なら時系列。<br/>車、仲間、迫力のアクション——あなたの「見たい」から走り出そう。</p></div></header><main class="wrap"><section aria-labelledby="action-overview-title" class="action-overview"><h2 id="action-overview-title">🏎️ ワイルド・スピード（ワイスピ）とは？</h2><p>2001年に始まった、大人気カーアクション映画シリーズ『ワイルド・スピード』。</p><p>ストリートレースや改造車から始まった物語は、シリーズが進むにつれて世界を舞台にした壮大なアクションへと進化！</p><p>でも、最大の魅力は車だけではありません。血のつながりを超えた仲間たちの絆、「ファミリー」こそが、このシリーズの大きな見どころです。</p><p>そして、物語はまだ終わっていません！ 最終章となる新作映画も公開予定。今から見始めても、これからの展開を一緒に楽しめます。</p></section><section aria-labelledby="watch-order-recommend-title" class="watch-order-recommend">
+</style><script src="/series-update-status.js"></script></head><body id="page-top"><header><div class="wrap"><nav class="toplinks"><a class="back-link" href="series.html">← シリーズ一覧</a><a class="back-link" href="index.html">⌂ ドコデミレル？ホーム</a></nav><div class="eyebrow">🏁 FAST &amp; FURIOUS GUIDE</div><h1>ワイルド・スピード（ワイスピ） 見る順番ガイド</h1><p>初めてなら公開順。もう一度なら時系列。<br/>車、仲間、迫力のアクション——あなたの「見たい」から走り出そう。</p></div></header><main class="wrap"><section aria-labelledby="action-overview-title" class="action-overview"><h2 id="action-overview-title">🏎️ ワイルド・スピード（ワイスピ）とは？</h2><p>2001年に始まった、大人気カーアクション映画シリーズ『ワイルド・スピード』。</p><p>ストリートレースや改造車から始まった物語は、シリーズが進むにつれて世界を舞台にした壮大なアクションへと進化！</p><p>でも、最大の魅力は車だけではありません。血のつながりを超えた仲間たちの絆、「ファミリー」こそが、このシリーズの大きな見どころです。</p><p>そして、物語はまだ終わっていません！ 最終章となる新作映画も公開予定。今から見始めても、これからの展開を一緒に楽しめます。</p></section><section aria-labelledby="watch-order-recommend-title" class="watch-order-recommend">
 <h2 id="watch-order-recommend-title">🏁 初めて見るなら、公開順がおすすめ！</h2>
 <p>登場人物や出来事を、<strong>映画で明かされていく順番</strong>に知ることができるので、初めての方でも楽しみやすい見方です。</p>
 </section><section aria-labelledby="order-compare-title" class="order-compare">
@@ -180,7 +180,7 @@ function normalize(items){const aliases={1796:8,2100:9},seen=new Set(),out=[];fo
 function paint(key,items,failed=false){document.querySelectorAll('.providers').forEach(box=>{if(box.dataset.key!==key)return;box.replaceChildren();const list=normalize(items);if(failed||!list.length){box.textContent=failed?'配信状況は作品詳細・公式でご確認ください':'見放題の掲載情報なし。レンタル・購入は作品詳細で確認';return}const label=document.createElement('strong');label.textContent='見放題';box.append(label);list.forEach(p=>{if(!p.logo_path)return;const img=document.createElement('img');img.src='https://image.tmdb.org/t/p/w92'+p.logo_path;img.alt=p.provider_name||'配信サービス';img.title=p.provider_name||'';img.loading='lazy';box.append(img)})})}
 // One shared Redis-only request; no visitor-triggered TMDB searches.
 const wildspeedProviders=fetch(apiRoot+'/api/series-watch?series=wildspeed')
-  .then(r=>{if(!r.ok)throw Error('cache unavailable');return r.json()})
+  .then(r=>{if(!r.ok)throw Error('cache unavailable');return r.json().then(d=>{window.dokoUpdateSeriesStatus(d);return d;})})
   .catch(()=>null);
 async function refresh(m){
   const data=await wildspeedProviders;
