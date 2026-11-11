@@ -38,9 +38,9 @@
       return;
     }
     const records=Object.values(pending.providers);
-    const valid=records.map(r=>({date:new Date(r.checkedAt),stale:r.stale})).filter(r=>Number.isFinite(r.date.getTime()));
+    const valid=records.map(r=>({date:new Date(r.checkedAt),stale:r.stale})).filter(r=>Number.isFinite(r.date.getTime())&&r.date.getTime()<=Date.now()+60000);
     if(!valid.length){
-      line.textContent='配信情報：更新日を確認できません';
+      line.textContent='配信情報：保存済みデータの取得日を確認できません';
       return;
     }
     const newest=new Date(Math.max(...valid.map(r=>r.date.getTime())));
