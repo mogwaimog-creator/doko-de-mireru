@@ -44,7 +44,7 @@ function createHandler({active=enabled,template=()=>fs.readFileSync(path.join(__
    }
    const html=renderDetailHtml(template(),record,{overview:work.overview||work.shortIntro||'',releaseDate:work.releaseDate||work.release_date||work.first_air_date||'',genres:work.genres||[],streaming});
    return res.status(200).end(req.method==='HEAD'?'':html);
-  }catch(error){res.setHeader('X-Robots-Tag','noindex');if(error.httpStatus===404)return res.status(404).end('作品情報が見つかりません。');res.setHeader('Retry-After','5');return res.status(503).end('作品情報を読み込めません。時間をおいて再度お試しください。')}
+  }catch(error){console.error('DETAIL_PAGE_SSR_FAILED',{type,id,code:error?.code||null,message:String(error?.message||'unknown').slice(0,180)});res.setHeader('X-Robots-Tag','noindex');if(error.httpStatus===404)return res.status(404).end('作品情報が見つかりません。');res.setHeader('Retry-After','5');return res.status(503).end('作品情報を読み込めません。時間をおいて再度お試しください。')}
  };
 }
 const legacyHandler=createHandler();module.exports=async(req,res)=>{if(process.env.LEDGER_RELEASE_MODE!==undefined&&await require('./_release-dispatch').dispatch('detail-page',req,res))return;if(!enabled()){res.setHeader('Content-Type','text/html; charset=utf-8');return res.status(200).end(req.method==='HEAD'?'':fs.readFileSync(path.join(__dirname,'../detail.html'),'utf8'))}return legacyHandler(req,res)};module.exports.createHandler=createHandler;module.exports.enabled=enabled;
