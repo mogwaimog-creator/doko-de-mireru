@@ -5,7 +5,7 @@
   let panel, line;
   function ensure(){
     if(panel)return;
-    const main=document.querySelector('main')||document.body;
+    const main=document.getElementById('mcuWatchList')||document.querySelector('main')||document.body;
     panel=document.createElement('section');
     panel.className='doko-series-update-status';
     panel.setAttribute('aria-label','配信情報の更新状況');
@@ -18,7 +18,9 @@
     const notice=document.createElement('div');
     notice.textContent=message;
     panel.append(line,schedule,notice);
-    main.insertBefore(panel,main.firstChild);
+    const title=main.id==='mcuWatchList'?main.querySelector('#mcuWatchTitle'):null;
+    if(title)title.insertAdjacentElement('afterend',panel);
+    else main.insertBefore(panel,main.firstChild);
   }
   function dayJst(date){
     return new Intl.DateTimeFormat('ja-JP',{timeZone:'Asia/Tokyo',year:'numeric',month:'numeric',day:'numeric'}).format(date);
