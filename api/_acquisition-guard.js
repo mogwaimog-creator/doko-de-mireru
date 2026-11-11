@@ -15,7 +15,7 @@ if type(s.day)~='string' then s.day='' end
 local minute=math.floor(tonumber(ARGV[2])/60000);if s.minute~=minute then s.minute=minute;s.requests=0;s.acquisitions=0;s.scheduled=0;s.failures=0 end
 if s.day~=ARGV[3] then s.day=ARGV[3];s.daily=0;s.dailyScheduled=0 end
 local scheduled=ARGV[4]=='1';local rate=scheduled and 'scheduled' or 'acquisitions';local daily=scheduled and 'dailyScheduled' or 'daily';local perMinute=scheduled and 300 or 30;local perDay=scheduled and 266 or math.min(3000,tonumber(ARGV[5]))
-if s[rate]>=perMinute or (scheduled and s[daily]>=perDay) then return {0,'upstream-limit'} end
+if scheduled and (s[rate]>=perMinute or s[daily]>=perDay) then return {0,'upstream-limit'} end
 s[rate]=s[rate]+1;s[daily]=s[daily]+1;redis.call('SET',KEYS[1],cjson.encode(s));return {1,'admitted'}`;
 const FAILURE=`local raw=redis.call('GET',KEYS[1]);local ok,s=pcall(cjson.decode,raw or '');if not ok or s.version~=2 then return 0 end;local minute=math.floor(tonumber(ARGV[2])/60000);if s.minute~=minute then s.minute=minute;s.requests=0;s.acquisitions=0;s.scheduled=0;s.failures=0 end;s.failures=s.failures+1;redis.call('SET',KEYS[2],ARGV[3],'PX',300000);redis.call('SET',KEYS[1],cjson.encode(s));return s.failures>=5 and 1 or 0`;
 function stopped(reason){return Object.assign(Error('Acquisition stopped: '+reason),{code:'ACQUISITION_STOPPED'})}
