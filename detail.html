@@ -5115,43 +5115,8 @@ if(
       "director"
     );
 
-  if(
-    directorElement &&
-    movie.director.id
-  ){
+  setText("director", movie.director.name);
 
-    const directorLink =
-      document.createElement(
-        "a"
-      );
-
-    directorLink.href =
-      "./person.html?id=" +
-      encodeURIComponent(
-        movie.director.id
-      );
-
-    directorLink.className =
-      "person-link";
-
-    directorLink.textContent =
-      movie.director.name;
-
-    directorElement.innerHTML =
-      "";
-
-    directorElement.appendChild(
-      directorLink
-    );
-
-  }else{
-
-    setText(
-      "director",
-      movie.director.name
-    );
-
-  }
 
 }else{
 
@@ -5318,32 +5283,8 @@ function renderCast(cast){
     }
 
 
-    const item =
-  document.createElement(
-    "a"
-  );
-
-
-item.className =
-  "cast-item person-link";
-
-
-if(
-  person.id
-){
-
-  item.href =
-    "./person.html?id=" +
-    encodeURIComponent(
-      person.id
-    );
-
-}else{
-
-  item.href =
-    "#";
-
-}
+    const item = document.createElement("span");
+    item.className = "cast-item";
 
 
 item.textContent =
