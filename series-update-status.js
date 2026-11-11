@@ -1,7 +1,7 @@
 /* Shared display only. Uses the response of the existing series-watch request; no additional API calls. */
 (function(){
   'use strict';
-  const message='※配信状況や料金は変更される場合があります。ご契約・ご視聴の前に、必ず各配信サービスの公式サイトで最新情報をご確認ください。';
+  const message='※掲載している配信情報は、実際の配信状況と異なる場合があります。見放題・レンタル・購入の提供状況や料金は予告なく変更されることがあるため、ご契約・ご視聴の前に、必ず各配信サービスの公式サイトで最新情報をご確認ください。';
   let panel, line;
   function ensure(){
     if(panel)return;
