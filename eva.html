@@ -1470,7 +1470,7 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
 <style>
 .eva-story-intro{margin:8px 0 24px;padding:22px 25px;background:#f2eef7;border:1px solid #d7cce5;border-left:5px solid #6d28a0;border-radius:16px;color:#374151}.eva-story-intro>span{font-size:14px;font-weight:600;color:#5b287a}.eva-story-intro h2{font-size:24px;line-height:1.5;margin:7px 0 13px;color:#39214b}.eva-story-intro p{font-size:16px;line-height:1.85;margin:10px 0}.eva-story-intro p:last-child{margin-bottom:0}
 @media(max-width:600px){.eva-story-intro{padding:18px 17px}.eva-story-intro h2{font-size:21px}}
-</style><style>.eva-story-intro{background:#edf3f8;border-color:#c4d2df;border-left-color:#365b78}.eva-story-intro>span{color:#45617a}.eva-story-intro h2{color:#213f58}</style><style>.eva-story-intro{background:#f2f7df;border-color:#cfdda3;border-left-color:#73972c}.eva-story-intro>span{color:#4e681f}.eva-story-intro h2{color:#354c19}</style></head>
+</style><style>.eva-story-intro{background:#edf3f8;border-color:#c4d2df;border-left-color:#365b78}.eva-story-intro>span{color:#45617a}.eva-story-intro h2{color:#213f58}</style><style>.eva-story-intro{background:#f2f7df;border-color:#cfdda3;border-left-color:#73972c}.eva-story-intro>span{color:#4e681f}.eva-story-intro h2{color:#354c19}</style><script src="/series-update-status.js"></script></head>
 
 
 <body id="eva-page-top">
@@ -2223,7 +2223,7 @@ async function loadEvaStreaming(){
   try{
     const response=await fetch(dokoApiRoot+'/api/series-watch?series=eva');
     if(!response.ok)throw Error('cache unavailable');
-    data=await response.json();
+    data=await response.json().then(d=>{window.dokoUpdateSeriesStatus(d);return d;});
   }catch(e){console.warn('Eva cached streaming unavailable',e)}
   document.querySelectorAll('.eva-work-streaming[data-movie-id]').forEach(element=>{
     const key=(element.dataset.mediaType||'movie')+':'+element.dataset.movieId;
