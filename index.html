@@ -5215,6 +5215,8 @@ body.search-mode.show-other-search
   overflow-y:visible;
 }
   
+/* Temporary: keep person search inaccessible while investigating API load. */
+#personSearchSection[hidden]{display:none!important;}
 </style>
 
      
@@ -5419,14 +5421,7 @@ body.search-mode.show-other-search
   </a>
 
 
-  <a href="#personSearchSection">
-    <span class="home-nav-icon">👤</span>
 
-    <span class="home-nav-text">
-      <strong>人物</strong>
-      <small>俳優・女優・監督から探す</small>
-    </span>
-  </a>
 
 
   <a href="#advancedSearchSection">
@@ -5919,6 +5914,7 @@ body.search-mode.show-other-search
 <section
   id="personSearchSection"
   class="person-search-section"
+  hidden
   aria-labelledby="personSearchHeading"
 >
   <div class="person-search-heading">
