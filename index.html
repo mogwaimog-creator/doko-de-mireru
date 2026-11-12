@@ -10311,13 +10311,8 @@ function createPersonSearchResult(
 
 
   return (
-    '<a ' +
-      'class="person-search-result" ' +
-      'href="./person.html?id=' +
-      encodeURIComponent(
-        person.id
-      ) +
-      '&from=index">' +
+    '<div ' +
+      'class="person-search-result">' +
 
       photo +
 
@@ -10364,7 +10359,7 @@ function createPersonSearchResult(
 
       '</div>' +
 
-    '</a>'
+    '</div>'
   );
 
 }
