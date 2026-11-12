@@ -7,6 +7,7 @@ on:
       - 'api/_release-application.js'
       - 'api/_new-work-ingest.js'
       - 'tests/integration-operations-preservation.test.js'
+      - 'tests/acquisition-redis.test.js'
       - '.github/workflows/recovery-guard.yml'
   pull_request:
     paths:
@@ -14,6 +15,7 @@ on:
       - 'api/_new-work-ingest.js'
       - 'api/_release-application.js'
       - 'tests/integration-operations-preservation.test.js'
+      - 'tests/acquisition-redis.test.js'
       - 'api/_release-transport-candidate.js'
       - 'tests/acquisition-recovery.test.js'
       - 'tests/acquisition-redis.test.js'
