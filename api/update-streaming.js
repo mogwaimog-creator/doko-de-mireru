@@ -12,7 +12,7 @@ const WORK_BUDGET_MS=240000;
 function windowJST(now=Date.now()){
  const d=new Date(now+9*3600000);const hour=d.getUTCHours();
  const day=(hour<6?new Date(d.getTime()-86400000):d).toISOString().slice(0,10);
- return `${day}-${hour<6?'18':hour<18?'06':'18'}`;
+ return `${day}-06`;
 }
 function needsRefresh(record,win,now=Date.now()){
  const checked=Date.parse(record?.checkedAt);
@@ -28,10 +28,12 @@ async function provider(work){
  return Array.isArray(jp.flatrate)?jp.flatrate.filter(p=>p&&Number.isInteger(p.provider_id)&&typeof p.logo_path==='string'):[];
 }
 module.exports=async(req,res)=>{
+ if(process.env.LEDGER_RELEASE_MODE!==undefined&&await require('./_release-dispatch').dispatch('update-streaming',req,res))return;
  res.setHeader('Cache-Control','private, no-store');
  if(req.method!=='GET')return res.status(405).json({error:'GET only'});
  const secret=process.env.CRON_SECRET;
  if(!secret||req.headers.authorization!==`Bearer ${secret}`)return res.status(401).json({error:'Unauthorized'});
+ if(process.env.DEV_SHARED_CRON_ENABLED==='1'&&process.env.NODE_ENV!=='production'&&process.env.VERCEL_ENV!=='production')return require('./_ledger-scheduler-dev').handle(req,res);
  const token=`${Date.now()}:${Math.random()}`;
  let acquired=false;
  try{

@@ -1,0 +1,7 @@
+'use strict';
+// Counts native Redis execution including Lua calls. Run without concurrent local tests.
+const client=require('./lib/local-binary-redis'),{ingest}=require('../api/_new-work-ingest');
+async function stats(){const raw=(await client.command(['INFO','commandstats'])).toString();return Object.fromEntries([...raw.matchAll(/cmdstat_([^:]+):calls=(\d+)/g)].filter(m=>m[1]!=='info').map(m=>[m[1],Number(m[2])]))}
+async function main(){const id=300000000+Date.now()%100000000,prefix='doko:dev:measure-acquisition:'+id+':',send=async args=>{const value=await client.command(args);const decode=x=>Buffer.isBuffer(x)?x.toString():Array.isArray(x)?x.map(decode):x;return decode(value)};let upstream=0;const options={command:send,prefix,controlKey:prefix+'control',load:async()=>{upstream++;return {id,title:'隔離命令計測作品',overview:'試験説明',credits:{cast:[],crew:[]}}}};
+ const before=await stats();await ingest('movie',id,options);const after=await stats();await ingest('movie',id,{...options,load:async()=>{throw Error('unexpected fetch')}});const warm=await stats();const delta=(a,b)=>Object.fromEntries(Object.keys(b).map(k=>[k,b[k]-(a[k]||0)]).filter(([,n])=>n));const cold=delta(before,after),reuse=delta(after,warm);console.log(JSON.stringify({scope:'native loopback fixture; not Upstash metering',cold, coldExecutedCommands:Object.values(cold).reduce((a,b)=>a+b,0),warm:reuse,warmExecutedCommands:Object.values(reuse).reduce((a,b)=>a+b,0),upstreamCalls:upstream,productionReady:false},null,2))}
+main().catch(e=>{console.error(e);process.exitCode=1});

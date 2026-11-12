@@ -1,0 +1,5079 @@
+{
+  "dateJst": "2026-11-10",
+  "branch": "work/four-ledgers-20261107",
+  "previousReportCommit": "2c54350",
+  "scope": "real-tmdb-registration-new-owned-local-ledgers",
+  "oldLedgerMigrationRequired": false,
+  "reusedShadowWorks": 2,
+  "newlyCollectedWorks": 264,
+  "additionalTmdbRequests": 588,
+  "additionalTmdbResponseBytes": 28441869,
+  "realExternalSearchRequests": 2,
+  "collectionStages": [
+    {
+      "at": "2026-11-09T23:42:13.257Z",
+      "elapsedMs": 3830,
+      "completed": [
+        {
+          "type": "movie",
+          "id": 1678
+        },
+        {
+          "type": "movie",
+          "id": 315011
+        },
+        {
+          "type": "movie",
+          "id": 940721
+        },
+        {
+          "type": "movie",
+          "id": 124905
+        }
+      ],
+      "stats": {
+        "requests": 10,
+        "responseBytes": 563161,
+        "reused": 0,
+        "requestMs": [
+          693,
+          270,
+          300,
+          254,
+          287,
+          255,
+          291,
+          334,
+          256,
+          313
+        ]
+      },
+      "totalFixed": 6,
+      "totalProviders": 6,
+      "remoteRedisCommands": 0,
+      "productionChanged": false
+    },
+    {
+      "at": "2026-11-09T23:43:13.092Z",
+      "elapsedMs": 6246,
+      "completed": [
+        {
+          "type": "movie",
+          "id": 293167
+        },
+        {
+          "type": "movie",
+          "id": 373571
+        },
+        {
+          "type": "movie",
+          "id": 399566
+        },
+        {
+          "type": "movie",
+          "id": 823464
+        },
+        {
+          "type": "tv",
+          "id": 202411
+        },
+        {
+          "type": "tv",
+          "id": 117678
+        },
+        {
+          "type": "movie",
+          "id": 929
+        },
+        {
+          "type": "movie",
+          "id": 1679
+        }
+      ],
+      "stats": {
+        "requests": 18,
+        "responseBytes": 877364,
+        "reused": 0,
+        "requestMs": [
+          346,
+          276,
+          292,
+          316,
+          286,
+          262,
+          297,
+          260,
+          309,
+          274,
+          275,
+          268,
+          277,
+          283,
+          294,
+          325,
+          270,
+          262
+        ]
+      },
+      "totalFixed": 14,
+      "totalProviders": 14,
+      "remoteRedisCommands": 0,
+      "productionChanged": false
+    },
+    {
+      "at": "2026-11-09T23:43:36.726Z",
+      "elapsedMs": 11151,
+      "completed": [
+        {
+          "type": "movie",
+          "id": 1680
+        },
+        {
+          "type": "movie",
+          "id": 1682
+        },
+        {
+          "type": "movie",
+          "id": 15766
+        },
+        {
+          "type": "movie",
+          "id": 19545
+        },
+        {
+          "type": "movie",
+          "id": 3115
+        },
+        {
+          "type": "movie",
+          "id": 18627
+        },
+        {
+          "type": "movie",
+          "id": 3107
+        },
+        {
+          "type": "movie",
+          "id": 39462
+        },
+        {
+          "type": "movie",
+          "id": 39464
+        },
+        {
+          "type": "movie",
+          "id": 19336
+        },
+        {
+          "type": "movie",
+          "id": 39264
+        },
+        {
+          "type": "movie",
+          "id": 38582
+        },
+        {
+          "type": "movie",
+          "id": 19333
+        },
+        {
+          "type": "movie",
+          "id": 421467
+        },
+        {
+          "type": "movie",
+          "id": 18289
+        },
+        {
+          "type": "movie",
+          "id": 36679
+        }
+      ],
+      "stats": {
+        "requests": 32,
+        "responseBytes": 616720,
+        "reused": 0,
+        "requestMs": [
+          354,
+          305,
+          274,
+          273,
+          269,
+          254,
+          266,
+          252,
+          267,
+          266,
+          269,
+          309,
+          282,
+          259,
+          254,
+          257,
+          280,
+          256,
+          250,
+          319,
+          256,
+          246,
+          281,
+          264,
+          258,
+          257,
+          340,
+          256,
+          262,
+          259,
+          261,
+          254
+        ]
+      },
+      "totalFixed": 30,
+      "totalProviders": 30,
+      "remoteRedisCommands": 0,
+      "productionChanged": false
+    },
+    {
+      "at": "2026-11-09T23:44:26.004Z",
+      "elapsedMs": 11188,
+      "completed": [
+        {
+          "type": "movie",
+          "id": 39465
+        },
+        {
+          "type": "movie",
+          "id": 6593
+        },
+        {
+          "type": "movie",
+          "id": 39466
+        },
+        {
+          "type": "movie",
+          "id": 12561
+        },
+        {
+          "type": "movie",
+          "id": 10643
+        },
+        {
+          "type": "movie",
+          "id": 39468
+        },
+        {
+          "type": "movie",
+          "id": 36243
+        },
+        {
+          "type": "movie",
+          "id": 12636
+        },
+        {
+          "type": "movie",
+          "id": 39469
+        },
+        {
+          "type": "movie",
+          "id": 15767
+        },
+        {
+          "type": "movie",
+          "id": 449574
+        },
+        {
+          "type": "movie",
+          "id": 492719
+        },
+        {
+          "type": "movie",
+          "id": 536115
+        },
+        {
+          "type": "movie",
+          "id": 39410
+        },
+        {
+          "type": "movie",
+          "id": 36214
+        },
+        {
+          "type": "movie",
+          "id": 36212
+        }
+      ],
+      "stats": {
+        "requests": 32,
+        "responseBytes": 612849,
+        "reused": 0,
+        "requestMs": [
+          390,
+          273,
+          274,
+          253,
+          269,
+          288,
+          272,
+          253,
+          267,
+          270,
+          267,
+          268,
+          294,
+          305,
+          313,
+          274,
+          275,
+          245,
+          336,
+          250,
+          259,
+          254,
+          257,
+          263,
+          249,
+          252,
+          274,
+          256,
+          323,
+          260,
+          251,
+          247
+        ]
+      },
+      "totalFixed": 46,
+      "totalProviders": 46,
+      "remoteRedisCommands": 0,
+      "productionChanged": false
+    },
+    {
+      "at": "2026-11-09T23:45:55.791Z",
+      "elapsedMs": 11720,
+      "completed": [
+        {
+          "type": "movie",
+          "id": 36247
+        },
+        {
+          "type": "movie",
+          "id": 19742
+        },
+        {
+          "type": "movie",
+          "id": 438604
+        },
+        {
+          "type": "movie",
+          "id": 1771
+        },
+        {
+          "type": "movie",
+          "id": 299537
+        },
+        {
+          "type": "movie",
+          "id": 1726
+        },
+        {
+          "type": "movie",
+          "id": 10138
+        },
+        {
+          "type": "movie",
+          "id": 1724
+        },
+        {
+          "type": "movie",
+          "id": 10195
+        },
+        {
+          "type": "movie",
+          "id": 24428
+        },
+        {
+          "type": "movie",
+          "id": 76338
+        },
+        {
+          "type": "movie",
+          "id": 68721
+        },
+        {
+          "type": "movie",
+          "id": 100402
+        },
+        {
+          "type": "movie",
+          "id": 118340
+        },
+        {
+          "type": "movie",
+          "id": 283995
+        },
+        {
+          "type": "tv",
+          "id": 232125
+        }
+      ],
+      "stats": {
+        "requests": 33,
+        "responseBytes": 2134866,
+        "reused": 0,
+        "requestMs": [
+          392,
+          254,
+          366,
+          301,
+          278,
+          248,
+          332,
+          283,
+          383,
+          263,
+          299,
+          257,
+          406,
+          246,
+          284,
+          259,
+          315,
+          269,
+          352,
+          263,
+          325,
+          251,
+          334,
+          259,
+          331,
+          269,
+          283,
+          304,
+          345,
+          249,
+          256,
+          264,
+          252
+        ]
+      },
+      "totalFixed": 62,
+      "totalProviders": 62,
+      "remoteRedisCommands": 0,
+      "productionChanged": false
+    },
+    {
+      "at": "2026-11-09T23:46:36.522Z",
+      "elapsedMs": 11981,
+      "completed": [
+        {
+          "type": "movie",
+          "id": 99861
+        },
+        {
+          "type": "movie",
+          "id": 102899
+        },
+        {
+          "type": "movie",
+          "id": 271110
+        },
+        {
+          "type": "movie",
+          "id": 497698
+        },
+        {
+          "type": "movie",
+          "id": 284054
+        },
+        {
+          "type": "movie",
+          "id": 315635
+        },
+        {
+          "type": "movie",
+          "id": 284052
+        },
+        {
+          "type": "movie",
+          "id": 284053
+        },
+        {
+          "type": "movie",
+          "id": 363088
+        },
+        {
+          "type": "movie",
+          "id": 299536
+        },
+        {
+          "type": "movie",
+          "id": 299534
+        },
+        {
+          "type": "tv",
+          "id": 85271
+        },
+        {
+          "type": "movie",
+          "id": 566525
+        },
+        {
+          "type": "tv",
+          "id": 88396
+        },
+        {
+          "type": "movie",
+          "id": 429617
+        },
+        {
+          "type": "movie",
+          "id": 524434
+        }
+      ],
+      "stats": {
+        "requests": 34,
+        "responseBytes": 3006702,
+        "reused": 0,
+        "requestMs": [
+          408,
+          280,
+          307,
+          268,
+          291,
+          270,
+          304,
+          255,
+          299,
+          319,
+          332,
+          278,
+          329,
+          266,
+          340,
+          251,
+          318,
+          249,
+          344,
+          259,
+          379,
+          245,
+          276,
+          270,
+          286,
+          277,
+          255,
+          268,
+          258,
+          285,
+          293,
+          268,
+          297,
+          264
+        ]
+      },
+      "totalFixed": 78,
+      "totalProviders": 78,
+      "remoteRedisCommands": 0,
+      "productionChanged": false
+    },
+    {
+      "at": "2026-11-09T23:46:51.059Z",
+      "elapsedMs": 13696,
+      "completed": [
+        {
+          "type": "movie",
+          "id": 634649
+        },
+        {
+          "type": "movie",
+          "id": 453395
+        },
+        {
+          "type": "tv",
+          "id": 88329
+        },
+        {
+          "type": "tv",
+          "id": 92749
+        },
+        {
+          "type": "movie",
+          "id": 505642
+        },
+        {
+          "type": "tv",
+          "id": 122226
+        },
+        {
+          "type": "tv",
+          "id": 92783
+        },
+        {
+          "type": "tv",
+          "id": 92782
+        },
+        {
+          "type": "movie",
+          "id": 616037
+        },
+        {
+          "type": "movie",
+          "id": 894205
+        },
+        {
+          "type": "movie",
+          "id": 774752
+        },
+        {
+          "type": "movie",
+          "id": 640146
+        },
+        {
+          "type": "movie",
+          "id": 447365
+        },
+        {
+          "type": "tv",
+          "id": 114472
+        },
+        {
+          "type": "movie",
+          "id": 609681
+        },
+        {
+          "type": "tv",
+          "id": 138501
+        }
+      ],
+      "stats": {
+        "requests": 39,
+        "responseBytes": 2320416,
+        "reused": 0,
+        "requestMs": [
+          360,
+          278,
+          318,
+          331,
+          289,
+          255,
+          305,
+          355,
+          247,
+          284,
+          323,
+          255,
+          265,
+          256,
+          285,
+          255,
+          251,
+          270,
+          254,
+          295,
+          264,
+          287,
+          249,
+          289,
+          255,
+          276,
+          262,
+          291,
+          266,
+          301,
+          258,
+          267,
+          251,
+          307,
+          340,
+          268,
+          282,
+          258,
+          269
+        ]
+      },
+      "totalFixed": 94,
+      "totalProviders": 94,
+      "remoteRedisCommands": 0,
+      "productionChanged": false
+    },
+    {
+      "at": "2026-11-09T23:47:04.825Z",
+      "elapsedMs": 12646,
+      "completed": [
+        {
+          "type": "tv",
+          "id": 114471
+        },
+        {
+          "type": "movie",
+          "id": 822119
+        },
+        {
+          "type": "tv",
+          "id": 202555
+        },
+        {
+          "type": "movie",
+          "id": 986056
+        },
+        {
+          "type": "tv",
+          "id": 84958
+        },
+        {
+          "type": "tv",
+          "id": 91363
+        },
+        {
+          "type": "movie",
+          "id": 533535
+        },
+        {
+          "type": "movie",
+          "id": 617126
+        },
+        {
+          "type": "movie",
+          "id": 969681
+        },
+        {
+          "type": "movie",
+          "id": 329
+        },
+        {
+          "type": "movie",
+          "id": 330
+        },
+        {
+          "type": "movie",
+          "id": 331
+        },
+        {
+          "type": "movie",
+          "id": 135397
+        },
+        {
+          "type": "movie",
+          "id": 351286
+        },
+        {
+          "type": "movie",
+          "id": 507086
+        },
+        {
+          "type": "movie",
+          "id": 1234821
+        }
+      ],
+      "stats": {
+        "requests": 36,
+        "responseBytes": 2831202,
+        "reused": 0,
+        "requestMs": [
+          347,
+          256,
+          276,
+          360,
+          254,
+          264,
+          262,
+          276,
+          306,
+          264,
+          259,
+          250,
+          286,
+          250,
+          247,
+          292,
+          307,
+          256,
+          353,
+          254,
+          311,
+          255,
+          271,
+          312,
+          268,
+          258,
+          279,
+          317,
+          307,
+          259,
+          291,
+          271,
+          285,
+          270,
+          260,
+          255
+        ]
+      },
+      "totalFixed": 110,
+      "totalProviders": 110,
+      "remoteRedisCommands": 0,
+      "productionChanged": false
+    },
+    {
+      "at": "2026-11-09T23:47:17.342Z",
+      "elapsedMs": 11324,
+      "completed": [
+        {
+          "type": "movie",
+          "id": 671
+        },
+        {
+          "type": "movie",
+          "id": 672
+        },
+        {
+          "type": "movie",
+          "id": 673
+        },
+        {
+          "type": "movie",
+          "id": 674
+        },
+        {
+          "type": "movie",
+          "id": 675
+        },
+        {
+          "type": "movie",
+          "id": 767
+        },
+        {
+          "type": "movie",
+          "id": 12444
+        },
+        {
+          "type": "movie",
+          "id": 12445
+        },
+        {
+          "type": "movie",
+          "id": 259316
+        },
+        {
+          "type": "movie",
+          "id": 338952
+        },
+        {
+          "type": "movie",
+          "id": 338953
+        },
+        {
+          "type": "movie",
+          "id": 120
+        },
+        {
+          "type": "movie",
+          "id": 121
+        },
+        {
+          "type": "movie",
+          "id": 122
+        },
+        {
+          "type": "movie",
+          "id": 49051
+        },
+        {
+          "type": "movie",
+          "id": 57158
+        }
+      ],
+      "stats": {
+        "requests": 32,
+        "responseBytes": 2732536,
+        "reused": 0,
+        "requestMs": [
+          345,
+          280,
+          280,
+          270,
+          275,
+          311,
+          278,
+          264,
+          286,
+          320,
+          267,
+          264,
+          279,
+          265,
+          294,
+          260,
+          340,
+          270,
+          275,
+          267,
+          260,
+          269,
+          306,
+          265,
+          273,
+          256,
+          277,
+          257,
+          289,
+          270,
+          279,
+          277
+        ]
+      },
+      "totalFixed": 126,
+      "totalProviders": 126,
+      "remoteRedisCommands": 0,
+      "productionChanged": false
+    },
+    {
+      "at": "2026-11-09T23:47:40.966Z",
+      "elapsedMs": 14465,
+      "completed": [
+        {
+          "type": "movie",
+          "id": 122917
+        },
+        {
+          "type": "movie",
+          "id": 839033
+        },
+        {
+          "type": "tv",
+          "id": 84773
+        },
+        {
+          "type": "tv",
+          "id": 114479
+        },
+        {
+          "type": "movie",
+          "id": 1893
+        },
+        {
+          "type": "movie",
+          "id": 1894
+        },
+        {
+          "type": "movie",
+          "id": 12180
+        },
+        {
+          "type": "tv",
+          "id": 4194
+        },
+        {
+          "type": "tv",
+          "id": 203085
+        },
+        {
+          "type": "movie",
+          "id": 1895
+        },
+        {
+          "type": "tv",
+          "id": 251091
+        },
+        {
+          "type": "tv",
+          "id": 288055
+        },
+        {
+          "type": "tv",
+          "id": 105971
+        },
+        {
+          "type": "tv",
+          "id": 289219
+        },
+        {
+          "type": "movie",
+          "id": 348350
+        },
+        {
+          "type": "tv",
+          "id": 92830
+        }
+      ],
+      "stats": {
+        "requests": 41,
+        "responseBytes": 1489351,
+        "reused": 0,
+        "requestMs": [
+          339,
+          264,
+          264,
+          316,
+          251,
+          272,
+          276,
+          272,
+          249,
+          264,
+          321,
+          275,
+          291,
+          278,
+          278,
+          253,
+          267,
+          259,
+          266,
+          267,
+          281,
+          263,
+          281,
+          257,
+          292,
+          265,
+          282,
+          298,
+          258,
+          268,
+          293,
+          265,
+          267,
+          267,
+          260,
+          275,
+          349,
+          245,
+          272,
+          269,
+          278
+        ]
+      },
+      "totalFixed": 142,
+      "totalProviders": 142,
+      "remoteRedisCommands": 0,
+      "productionChanged": false
+    },
+    {
+      "at": "2026-11-09T23:47:56.008Z",
+      "elapsedMs": 13808,
+      "completed": [
+        {
+          "type": "tv",
+          "id": 83867
+        },
+        {
+          "type": "tv",
+          "id": 60554
+        },
+        {
+          "type": "movie",
+          "id": 330459
+        },
+        {
+          "type": "movie",
+          "id": 11
+        },
+        {
+          "type": "movie",
+          "id": 1891
+        },
+        {
+          "type": "movie",
+          "id": 1892
+        },
+        {
+          "type": "tv",
+          "id": 82856
+        },
+        {
+          "type": "tv",
+          "id": 115036
+        },
+        {
+          "type": "tv",
+          "id": 114461
+        },
+        {
+          "type": "tv",
+          "id": 202879
+        },
+        {
+          "type": "movie",
+          "id": 1228710
+        },
+        {
+          "type": "tv",
+          "id": 79093
+        },
+        {
+          "type": "movie",
+          "id": 140607
+        },
+        {
+          "type": "movie",
+          "id": 181808
+        },
+        {
+          "type": "movie",
+          "id": 181812
+        },
+        {
+          "type": "movie",
+          "id": 9799
+        }
+      ],
+      "stats": {
+        "requests": 39,
+        "responseBytes": 1959405,
+        "reused": 0,
+        "requestMs": [
+          341,
+          246,
+          329,
+          258,
+          245,
+          259,
+          277,
+          255,
+          286,
+          257,
+          282,
+          245,
+          278,
+          245,
+          263,
+          250,
+          261,
+          268,
+          249,
+          293,
+          259,
+          295,
+          257,
+          263,
+          258,
+          266,
+          263,
+          251,
+          271,
+          252,
+          259,
+          363,
+          254,
+          290,
+          261,
+          307,
+          259,
+          271,
+          311
+        ]
+      },
+      "totalFixed": 158,
+      "totalProviders": 158,
+      "remoteRedisCommands": 0,
+      "productionChanged": false
+    },
+    {
+      "at": "2026-11-09T23:48:08.596Z",
+      "elapsedMs": 11343,
+      "completed": [
+        {
+          "type": "movie",
+          "id": 584
+        },
+        {
+          "type": "movie",
+          "id": 9615
+        },
+        {
+          "type": "movie",
+          "id": 13804
+        },
+        {
+          "type": "movie",
+          "id": 51497
+        },
+        {
+          "type": "movie",
+          "id": 82992
+        },
+        {
+          "type": "movie",
+          "id": 168259
+        },
+        {
+          "type": "movie",
+          "id": 337339
+        },
+        {
+          "type": "movie",
+          "id": 384018
+        },
+        {
+          "type": "movie",
+          "id": 385128
+        },
+        {
+          "type": "movie",
+          "id": 385687
+        },
+        {
+          "type": "movie",
+          "id": 20352
+        },
+        {
+          "type": "movie",
+          "id": 93456
+        },
+        {
+          "type": "movie",
+          "id": 211672
+        },
+        {
+          "type": "movie",
+          "id": 324852
+        },
+        {
+          "type": "movie",
+          "id": 438148
+        },
+        {
+          "type": "movie",
+          "id": 519182
+        }
+      ],
+      "stats": {
+        "requests": 32,
+        "responseBytes": 2518288,
+        "reused": 0,
+        "requestMs": [
+          346,
+          268,
+          290,
+          254,
+          298,
+          264,
+          274,
+          264,
+          311,
+          266,
+          288,
+          254,
+          295,
+          278,
+          316,
+          256,
+          334,
+          263,
+          357,
+          250,
+          271,
+          261,
+          289,
+          265,
+          271,
+          260,
+          267,
+          253,
+          271,
+          306,
+          263,
+          260
+        ]
+      },
+      "totalFixed": 174,
+      "totalProviders": 174,
+      "remoteRedisCommands": 0,
+      "productionChanged": false
+    },
+    {
+      "at": "2026-11-09T23:48:21.570Z",
+      "elapsedMs": 11736,
+      "completed": [
+        {
+          "type": "movie",
+          "id": 1315772
+        },
+        {
+          "type": "tv",
+          "id": 20794
+        },
+        {
+          "type": "movie",
+          "id": 545255
+        },
+        {
+          "type": "movie",
+          "id": 545819
+        },
+        {
+          "type": "movie",
+          "id": 55382
+        },
+        {
+          "type": "movie",
+          "id": 55384
+        },
+        {
+          "type": "movie",
+          "id": 65841
+        },
+        {
+          "type": "movie",
+          "id": 835865
+        },
+        {
+          "type": "movie",
+          "id": 193402
+        },
+        {
+          "type": "movie",
+          "id": 1285372
+        },
+        {
+          "type": "movie",
+          "id": 1285375
+        },
+        {
+          "type": "movie",
+          "id": 1491083
+        },
+        {
+          "type": "movie",
+          "id": 1172474
+        },
+        {
+          "type": "movie",
+          "id": 59952
+        },
+        {
+          "type": "movie",
+          "id": 45070
+        },
+        {
+          "type": "movie",
+          "id": 1394731
+        }
+      ],
+      "stats": {
+        "requests": 33,
+        "responseBytes": 420112,
+        "reused": 0,
+        "requestMs": [
+          321,
+          258,
+          263,
+          253,
+          262,
+          258,
+          301,
+          261,
+          255,
+          260,
+          248,
+          268,
+          264,
+          278,
+          255,
+          258,
+          256,
+          263,
+          249,
+          260,
+          256,
+          269,
+          310,
+          269,
+          251,
+          287,
+          303,
+          288,
+          310,
+          270,
+          263,
+          271,
+          256
+        ]
+      },
+      "totalFixed": 190,
+      "totalProviders": 190,
+      "remoteRedisCommands": 0,
+      "productionChanged": false
+    },
+    {
+      "at": "2026-11-09T23:48:43.909Z",
+      "elapsedMs": 6064,
+      "completed": [
+        {
+          "type": "movie",
+          "id": 1475877
+        },
+        {
+          "type": "movie",
+          "id": 15137
+        },
+        {
+          "type": "movie",
+          "id": 22843
+        },
+        {
+          "type": "movie",
+          "id": 75629
+        },
+        {
+          "type": "movie",
+          "id": 283566
+        },
+        {
+          "type": "movie",
+          "id": 18491
+        },
+        {
+          "type": "tv",
+          "id": 890
+        },
+        {
+          "type": "movie",
+          "id": 21422
+        }
+      ],
+      "stats": {
+        "requests": 17,
+        "responseBytes": 508037,
+        "reused": 0,
+        "requestMs": [
+          354,
+          248,
+          281,
+          260,
+          282,
+          251,
+          279,
+          320,
+          275,
+          262,
+          268,
+          254,
+          260,
+          257,
+          292,
+          253,
+          262
+        ]
+      },
+      "totalFixed": 198,
+      "totalProviders": 198,
+      "remoteRedisCommands": 0,
+      "productionChanged": false
+    },
+    {
+      "at": "2026-11-09T23:48:50.465Z",
+      "elapsedMs": 5754,
+      "completed": [
+        {
+          "type": "movie",
+          "id": 21452
+        },
+        {
+          "type": "movie",
+          "id": 28808
+        },
+        {
+          "type": "movie",
+          "id": 20677
+        },
+        {
+          "type": "movie",
+          "id": 32022
+        },
+        {
+          "type": "movie",
+          "id": 26662
+        },
+        {
+          "type": "movie",
+          "id": 39202
+        },
+        {
+          "type": "movie",
+          "id": 39203
+        },
+        {
+          "type": "movie",
+          "id": 39204
+        }
+      ],
+      "stats": {
+        "requests": 16,
+        "responseBytes": 273580,
+        "reused": 0,
+        "requestMs": [
+          338,
+          263,
+          265,
+          279,
+          271,
+          250,
+          257,
+          278,
+          254,
+          248,
+          253,
+          297,
+          267,
+          246,
+          256,
+          305
+        ]
+      },
+      "totalFixed": 206,
+      "totalProviders": 206,
+      "remoteRedisCommands": 0,
+      "productionChanged": false
+    },
+    {
+      "at": "2026-11-09T23:48:56.974Z",
+      "elapsedMs": 5700,
+      "completed": [
+        {
+          "type": "movie",
+          "id": 39205
+        },
+        {
+          "type": "movie",
+          "id": 39206
+        },
+        {
+          "type": "movie",
+          "id": 39207
+        },
+        {
+          "type": "movie",
+          "id": 28764
+        },
+        {
+          "type": "movie",
+          "id": 97375
+        },
+        {
+          "type": "movie",
+          "id": 77617
+        },
+        {
+          "type": "movie",
+          "id": 122583
+        },
+        {
+          "type": "movie",
+          "id": 228805
+        }
+      ],
+      "stats": {
+        "requests": 16,
+        "responseBytes": 295507,
+        "reused": 0,
+        "requestMs": [
+          337,
+          251,
+          258,
+          256,
+          268,
+          277,
+          272,
+          254,
+          260,
+          305,
+          296,
+          308,
+          277,
+          253,
+          248,
+          262
+        ]
+      },
+      "totalFixed": 214,
+      "totalProviders": 214,
+      "remoteRedisCommands": 0,
+      "productionChanged": false
+    },
+    {
+      "at": "2026-11-09T23:49:03.489Z",
+      "elapsedMs": 5694,
+      "completed": [
+        {
+          "type": "movie",
+          "id": 257512
+        },
+        {
+          "type": "movie",
+          "id": 316873
+        },
+        {
+          "type": "movie",
+          "id": 374856
+        },
+        {
+          "type": "movie",
+          "id": 438058
+        },
+        {
+          "type": "movie",
+          "id": 493006
+        },
+        {
+          "type": "movie",
+          "id": 566555
+        },
+        {
+          "type": "movie",
+          "id": 662638
+        },
+        {
+          "type": "movie",
+          "id": 903939
+        }
+      ],
+      "stats": {
+        "requests": 16,
+        "responseBytes": 541805,
+        "reused": 0,
+        "requestMs": [
+          331,
+          251,
+          255,
+          310,
+          261,
+          251,
+          268,
+          249,
+          329,
+          250,
+          278,
+          253,
+          265,
+          253,
+          271,
+          245
+        ]
+      },
+      "totalFixed": 222,
+      "totalProviders": 222,
+      "remoteRedisCommands": 0,
+      "productionChanged": false
+    },
+    {
+      "at": "2026-11-09T23:49:33.103Z",
+      "elapsedMs": 7546,
+      "completed": [
+        {
+          "type": "movie",
+          "id": 1047041
+        },
+        {
+          "type": "movie",
+          "id": 1209217
+        },
+        {
+          "type": "movie",
+          "id": 1396965
+        },
+        {
+          "type": "movie",
+          "id": 1545621
+        },
+        {
+          "type": "tv",
+          "id": 30983
+        },
+        {
+          "type": "tv",
+          "id": 21731
+        },
+        {
+          "type": "tv",
+          "id": 45500
+        },
+        {
+          "type": "tv",
+          "id": 196400
+        }
+      ],
+      "stats": {
+        "requests": 20,
+        "responseBytes": 2382066,
+        "reused": 0,
+        "requestMs": [
+          330,
+          252,
+          295,
+          253,
+          338,
+          252,
+          277,
+          300,
+          309,
+          250,
+          642,
+          268,
+          247,
+          270,
+          261,
+          304,
+          244,
+          308,
+          247,
+          385
+        ]
+      },
+      "totalFixed": 230,
+      "totalProviders": 230,
+      "remoteRedisCommands": 0,
+      "productionChanged": false
+    },
+    {
+      "at": "2026-11-09T23:49:42.006Z",
+      "elapsedMs": 7880,
+      "completed": [
+        {
+          "type": "tv",
+          "id": 64375
+        },
+        {
+          "type": "tv",
+          "id": 43887
+        },
+        {
+          "type": "movie",
+          "id": 37048
+        },
+        {
+          "type": "tv",
+          "id": 21732
+        },
+        {
+          "type": "tv",
+          "id": 13674
+        },
+        {
+          "type": "tv",
+          "id": 5660
+        },
+        {
+          "type": "movie",
+          "id": 16157
+        },
+        {
+          "type": "tv",
+          "id": 88865
+        }
+      ],
+      "stats": {
+        "requests": 22,
+        "responseBytes": 597410,
+        "reused": 0,
+        "requestMs": [
+          313,
+          260,
+          260,
+          265,
+          255,
+          259,
+          261,
+          257,
+          264,
+          255,
+          270,
+          253,
+          258,
+          264,
+          266,
+          262,
+          257,
+          251,
+          253,
+          269,
+          253,
+          258
+        ]
+      },
+      "totalFixed": 238,
+      "totalProviders": 238,
+      "remoteRedisCommands": 0,
+      "productionChanged": false
+    },
+    {
+      "at": "2026-11-09T23:49:50.028Z",
+      "elapsedMs": 6819,
+      "completed": [
+        {
+          "type": "tv",
+          "id": 46512
+        },
+        {
+          "type": "movie",
+          "id": 883768
+        },
+        {
+          "type": "movie",
+          "id": 553610
+        },
+        {
+          "type": "movie",
+          "id": 685274
+        },
+        {
+          "type": "movie",
+          "id": 910850
+        },
+        {
+          "type": "movie",
+          "id": 16308
+        },
+        {
+          "type": "tv",
+          "id": 72677
+        },
+        {
+          "type": "tv",
+          "id": 25797
+        }
+      ],
+      "stats": {
+        "requests": 19,
+        "responseBytes": 550832,
+        "reused": 0,
+        "requestMs": [
+          346,
+          258,
+          259,
+          264,
+          256,
+          270,
+          275,
+          267,
+          272,
+          274,
+          264,
+          312,
+          261,
+          290,
+          269,
+          267,
+          265,
+          253,
+          263
+        ]
+      },
+      "totalFixed": 246,
+      "totalProviders": 246,
+      "remoteRedisCommands": 0,
+      "productionChanged": false
+    },
+    {
+      "at": "2026-11-09T23:49:59.694Z",
+      "elapsedMs": 8370,
+      "completed": [
+        {
+          "type": "tv",
+          "id": 20111
+        },
+        {
+          "type": "movie",
+          "id": 1146972
+        },
+        {
+          "type": "tv",
+          "id": 30093
+        },
+        {
+          "type": "tv",
+          "id": 21730
+        },
+        {
+          "type": "tv",
+          "id": 25504
+        },
+        {
+          "type": "tv",
+          "id": 37546
+        },
+        {
+          "type": "tv",
+          "id": 45835
+        },
+        {
+          "type": "tv",
+          "id": 61414
+        }
+      ],
+      "stats": {
+        "requests": 23,
+        "responseBytes": 631930,
+        "reused": 0,
+        "requestMs": [
+          334,
+          264,
+          255,
+          269,
+          267,
+          332,
+          257,
+          315,
+          266,
+          251,
+          262,
+          250,
+          248,
+          260,
+          366,
+          258,
+          411,
+          351,
+          264,
+          249,
+          272,
+          264,
+          258
+        ]
+      },
+      "totalFixed": 254,
+      "totalProviders": 254,
+      "remoteRedisCommands": 0,
+      "productionChanged": false
+    },
+    {
+      "at": "2026-11-09T23:50:13.972Z",
+      "elapsedMs": 7274,
+      "completed": [
+        {
+          "type": "tv",
+          "id": 60667
+        },
+        {
+          "type": "tv",
+          "id": 76821
+        },
+        {
+          "type": "tv",
+          "id": 91566
+        },
+        {
+          "type": "tv",
+          "id": 122468
+        },
+        {
+          "type": "movie",
+          "id": 22914
+        },
+        {
+          "type": "movie",
+          "id": 39228
+        },
+        {
+          "type": "movie",
+          "id": 39229
+        },
+        {
+          "type": "movie",
+          "id": 39230
+        }
+      ],
+      "stats": {
+        "requests": 20,
+        "responseBytes": 326958,
+        "reused": 0,
+        "requestMs": [
+          412,
+          268,
+          274,
+          252,
+          308,
+          267,
+          271,
+          304,
+          251,
+          259,
+          257,
+          302,
+          256,
+          254,
+          304,
+          249,
+          256,
+          250,
+          271,
+          263
+        ]
+      },
+      "totalFixed": 262,
+      "totalProviders": 262,
+      "remoteRedisCommands": 0,
+      "productionChanged": false
+    },
+    {
+      "at": "2026-11-09T23:50:18.062Z",
+      "elapsedMs": 2977,
+      "completed": [
+        {
+          "type": "movie",
+          "id": 19256
+        },
+        {
+          "type": "movie",
+          "id": 19257
+        },
+        {
+          "type": "movie",
+          "id": 30606
+        },
+        {
+          "type": "movie",
+          "id": 1311031
+        }
+      ],
+      "stats": {
+        "requests": 8,
+        "responseBytes": 250772,
+        "reused": 0,
+        "requestMs": [
+          338,
+          250,
+          257,
+          249,
+          244,
+          252,
+          298,
+          249
+        ]
+      },
+      "totalFixed": 266,
+      "totalProviders": 266,
+      "remoteRedisCommands": 0,
+      "productionChanged": false
+    }
+  ],
+  "localRegistrationStages": [
+    {
+      "at": "2026-11-09T23:42:47.828Z",
+      "target": "local",
+      "completed": [
+        {
+          "type": "movie",
+          "id": 1678
+        },
+        {
+          "type": "movie",
+          "id": 315011
+        },
+        {
+          "type": "movie",
+          "id": 940721
+        },
+        {
+          "type": "movie",
+          "id": 124905
+        },
+        {
+          "type": "tv",
+          "id": 85937
+        },
+        {
+          "type": "movie",
+          "id": 635302
+        }
+      ],
+      "totalSaved": 6,
+      "before": {
+        "usedMemoryBytes": 2657896,
+        "totalCommandsProcessed": 1935,
+        "totalNetInputBytes": 1216276,
+        "totalNetOutputBytes": 760447
+      },
+      "after": {
+        "usedMemoryBytes": 2779848,
+        "totalCommandsProcessed": 2533,
+        "totalNetInputBytes": 1385353,
+        "totalNetOutputBytes": 832810
+      },
+      "ownedKeyCount": 51,
+      "ownedMemoryBytes": 96424,
+      "reservedCommands": 433,
+      "sessionReservedCommands": 433,
+      "sessionRequests": 173,
+      "observedDatabaseCommandsDelta": 598,
+      "note": "database INFO delta includes concurrent clients; reservedCommands is a conservative owned-operation bound, not billing",
+      "productionRoutesChanged": false,
+      "legacyReads": 0,
+      "scans": 0,
+      "oldDeletes": 0
+    },
+    {
+      "at": "2026-11-09T23:43:25.483Z",
+      "target": "local",
+      "completed": [
+        {
+          "type": "movie",
+          "id": 293167
+        },
+        {
+          "type": "movie",
+          "id": 373571
+        },
+        {
+          "type": "movie",
+          "id": 399566
+        },
+        {
+          "type": "movie",
+          "id": 823464
+        },
+        {
+          "type": "tv",
+          "id": 202411
+        },
+        {
+          "type": "tv",
+          "id": 117678
+        },
+        {
+          "type": "movie",
+          "id": 929
+        },
+        {
+          "type": "movie",
+          "id": 1679
+        }
+      ],
+      "totalSaved": 14,
+      "before": {
+        "usedMemoryBytes": 2779848,
+        "totalCommandsProcessed": 2540,
+        "totalNetInputBytes": 1385501,
+        "totalNetOutputBytes": 849362
+      },
+      "after": {
+        "usedMemoryBytes": 2868280,
+        "totalCommandsProcessed": 3077,
+        "totalNetInputBytes": 1521181,
+        "totalNetOutputBytes": 959307
+      },
+      "ownedKeyCount": 103,
+      "ownedMemoryBytes": 180816,
+      "reservedCommands": 545,
+      "sessionReservedCommands": 979,
+      "sessionRequests": 397,
+      "observedDatabaseCommandsDelta": 537,
+      "note": "database INFO delta includes concurrent clients; reservedCommands is a conservative owned-operation bound, not billing",
+      "productionRoutesChanged": false,
+      "legacyReads": 0,
+      "scans": 0,
+      "oldDeletes": 0
+    },
+    {
+      "at": "2026-11-09T23:44:14.728Z",
+      "target": "local",
+      "completed": [
+        {
+          "type": "movie",
+          "id": 1680
+        },
+        {
+          "type": "movie",
+          "id": 1682
+        },
+        {
+          "type": "movie",
+          "id": 15766
+        },
+        {
+          "type": "movie",
+          "id": 19545
+        },
+        {
+          "type": "movie",
+          "id": 3115
+        },
+        {
+          "type": "movie",
+          "id": 18627
+        },
+        {
+          "type": "movie",
+          "id": 3107
+        },
+        {
+          "type": "movie",
+          "id": 39462
+        },
+        {
+          "type": "movie",
+          "id": 39464
+        },
+        {
+          "type": "movie",
+          "id": 19336
+        },
+        {
+          "type": "movie",
+          "id": 39264
+        },
+        {
+          "type": "movie",
+          "id": 38582
+        },
+        {
+          "type": "movie",
+          "id": 19333
+        },
+        {
+          "type": "movie",
+          "id": 421467
+        },
+        {
+          "type": "movie",
+          "id": 18289
+        },
+        {
+          "type": "movie",
+          "id": 36679
+        }
+      ],
+      "totalSaved": 30,
+      "before": {
+        "usedMemoryBytes": 2868280,
+        "totalCommandsProcessed": 3078,
+        "totalNetInputBytes": 1521195,
+        "totalNetOutputBytes": 964678
+      },
+      "after": {
+        "usedMemoryBytes": 2989688,
+        "totalCommandsProcessed": 3997,
+        "totalNetInputBytes": 1757046,
+        "totalNetOutputBytes": 1095113
+      },
+      "ownedKeyCount": 199,
+      "ownedMemoryBytes": 296376,
+      "reservedCommands": 935,
+      "sessionReservedCommands": 1915,
+      "sessionRequests": 759,
+      "observedDatabaseCommandsDelta": 919,
+      "note": "database INFO delta includes concurrent clients; reservedCommands is a conservative owned-operation bound, not billing",
+      "productionRoutesChanged": false,
+      "legacyReads": 0,
+      "scans": 0,
+      "oldDeletes": 0
+    },
+    {
+      "at": "2026-11-09T23:44:55.602Z",
+      "target": "local",
+      "completed": [
+        {
+          "type": "movie",
+          "id": 39465
+        },
+        {
+          "type": "movie",
+          "id": 6593
+        },
+        {
+          "type": "movie",
+          "id": 39466
+        },
+        {
+          "type": "movie",
+          "id": 12561
+        },
+        {
+          "type": "movie",
+          "id": 10643
+        },
+        {
+          "type": "movie",
+          "id": 39468
+        },
+        {
+          "type": "movie",
+          "id": 36243
+        },
+        {
+          "type": "movie",
+          "id": 12636
+        },
+        {
+          "type": "movie",
+          "id": 39469
+        },
+        {
+          "type": "movie",
+          "id": 15767
+        },
+        {
+          "type": "movie",
+          "id": 449574
+        },
+        {
+          "type": "movie",
+          "id": 492719
+        },
+        {
+          "type": "movie",
+          "id": 536115
+        },
+        {
+          "type": "movie",
+          "id": 39410
+        },
+        {
+          "type": "movie",
+          "id": 36214
+        },
+        {
+          "type": "movie",
+          "id": 36212
+        }
+      ],
+      "totalSaved": 46,
+      "before": {
+        "usedMemoryBytes": 2989688,
+        "totalCommandsProcessed": 3998,
+        "totalNetInputBytes": 1757060,
+        "totalNetOutputBytes": 1100488
+      },
+      "after": {
+        "usedMemoryBytes": 3104392,
+        "totalCommandsProcessed": 4917,
+        "totalNetInputBytes": 1997943,
+        "totalNetOutputBytes": 1231990
+      },
+      "ownedKeyCount": 295,
+      "ownedMemoryBytes": 424790,
+      "reservedCommands": 935,
+      "sessionReservedCommands": 2851,
+      "sessionRequests": 1121,
+      "observedDatabaseCommandsDelta": 919,
+      "note": "database INFO delta includes concurrent clients; reservedCommands is a conservative owned-operation bound, not billing",
+      "productionRoutesChanged": false,
+      "legacyReads": 0,
+      "scans": 0,
+      "oldDeletes": 0
+    },
+    {
+      "at": "2026-11-09T23:46:24.419Z",
+      "target": "local",
+      "completed": [
+        {
+          "type": "movie",
+          "id": 36247
+        },
+        {
+          "type": "movie",
+          "id": 19742
+        },
+        {
+          "type": "movie",
+          "id": 438604
+        },
+        {
+          "type": "movie",
+          "id": 1771
+        },
+        {
+          "type": "movie",
+          "id": 299537
+        },
+        {
+          "type": "movie",
+          "id": 1726
+        },
+        {
+          "type": "movie",
+          "id": 10138
+        },
+        {
+          "type": "movie",
+          "id": 1724
+        },
+        {
+          "type": "movie",
+          "id": 10195
+        },
+        {
+          "type": "movie",
+          "id": 24428
+        },
+        {
+          "type": "movie",
+          "id": 76338
+        },
+        {
+          "type": "movie",
+          "id": 68721
+        },
+        {
+          "type": "movie",
+          "id": 100402
+        },
+        {
+          "type": "movie",
+          "id": 118340
+        },
+        {
+          "type": "movie",
+          "id": 283995
+        },
+        {
+          "type": "tv",
+          "id": 232125
+        }
+      ],
+      "totalSaved": 62,
+      "before": {
+        "usedMemoryBytes": 3109744,
+        "totalCommandsProcessed": 5276,
+        "totalNetInputBytes": 2055185,
+        "totalNetOutputBytes": 1465334
+      },
+      "after": {
+        "usedMemoryBytes": 3265784,
+        "totalCommandsProcessed": 6241,
+        "totalNetInputBytes": 2298345,
+        "totalNetOutputBytes": 1594127
+      },
+      "ownedKeyCount": 395,
+      "ownedMemoryBytes": 579448,
+      "reservedCommands": 981,
+      "sessionReservedCommands": 4216,
+      "sessionRequests": 1691,
+      "observedDatabaseCommandsDelta": 965,
+      "note": "database INFO delta includes concurrent clients; reservedCommands is a conservative owned-operation bound, not billing",
+      "productionRoutesChanged": false,
+      "legacyReads": 0,
+      "scans": 0,
+      "oldDeletes": 0
+    },
+    {
+      "at": "2026-11-09T23:46:37.265Z",
+      "target": "local",
+      "completed": [
+        {
+          "type": "movie",
+          "id": 99861
+        },
+        {
+          "type": "movie",
+          "id": 102899
+        },
+        {
+          "type": "movie",
+          "id": 271110
+        },
+        {
+          "type": "movie",
+          "id": 497698
+        },
+        {
+          "type": "movie",
+          "id": 284054
+        },
+        {
+          "type": "movie",
+          "id": 315635
+        },
+        {
+          "type": "movie",
+          "id": 284052
+        },
+        {
+          "type": "movie",
+          "id": 284053
+        },
+        {
+          "type": "movie",
+          "id": 363088
+        },
+        {
+          "type": "movie",
+          "id": 299536
+        },
+        {
+          "type": "movie",
+          "id": 299534
+        },
+        {
+          "type": "tv",
+          "id": 85271
+        },
+        {
+          "type": "movie",
+          "id": 566525
+        },
+        {
+          "type": "tv",
+          "id": 88396
+        },
+        {
+          "type": "movie",
+          "id": 429617
+        },
+        {
+          "type": "movie",
+          "id": 524434
+        }
+      ],
+      "totalSaved": 78,
+      "before": {
+        "usedMemoryBytes": 3265784,
+        "totalCommandsProcessed": 6242,
+        "totalNetInputBytes": 2298359,
+        "totalNetOutputBytes": 1599502
+      },
+      "after": {
+        "usedMemoryBytes": 3464640,
+        "totalCommandsProcessed": 7219,
+        "totalNetInputBytes": 2555748,
+        "totalNetOutputBytes": 1739452
+      },
+      "ownedKeyCount": 495,
+      "ownedMemoryBytes": 779492,
+      "reservedCommands": 993,
+      "sessionReservedCommands": 5210,
+      "sessionRequests": 2083,
+      "observedDatabaseCommandsDelta": 977,
+      "note": "database INFO delta includes concurrent clients; reservedCommands is a conservative owned-operation bound, not billing",
+      "productionRoutesChanged": false,
+      "legacyReads": 0,
+      "scans": 0,
+      "oldDeletes": 0
+    },
+    {
+      "at": "2026-11-09T23:46:52.085Z",
+      "target": "local",
+      "completed": [
+        {
+          "type": "movie",
+          "id": 634649
+        },
+        {
+          "type": "movie",
+          "id": 453395
+        },
+        {
+          "type": "tv",
+          "id": 88329
+        },
+        {
+          "type": "tv",
+          "id": 92749
+        },
+        {
+          "type": "movie",
+          "id": 505642
+        },
+        {
+          "type": "tv",
+          "id": 122226
+        },
+        {
+          "type": "tv",
+          "id": 92783
+        },
+        {
+          "type": "tv",
+          "id": 92782
+        },
+        {
+          "type": "movie",
+          "id": 616037
+        },
+        {
+          "type": "movie",
+          "id": 894205
+        },
+        {
+          "type": "movie",
+          "id": 774752
+        },
+        {
+          "type": "movie",
+          "id": 640146
+        },
+        {
+          "type": "movie",
+          "id": 447365
+        },
+        {
+          "type": "tv",
+          "id": 114472
+        },
+        {
+          "type": "movie",
+          "id": 609681
+        },
+        {
+          "type": "tv",
+          "id": 138501
+        }
+      ],
+      "totalSaved": 94,
+      "before": {
+        "usedMemoryBytes": 3464640,
+        "totalCommandsProcessed": 7220,
+        "totalNetInputBytes": 2555762,
+        "totalNetOutputBytes": 1744828
+      },
+      "after": {
+        "usedMemoryBytes": 3621280,
+        "totalCommandsProcessed": 8342,
+        "totalNetInputBytes": 2840035,
+        "totalNetOutputBytes": 1908894
+      },
+      "ownedKeyCount": 605,
+      "ownedMemoryBytes": 926403,
+      "reservedCommands": 1138,
+      "sessionReservedCommands": 6349,
+      "sessionRequests": 2550,
+      "observedDatabaseCommandsDelta": 1122,
+      "note": "database INFO delta includes concurrent clients; reservedCommands is a conservative owned-operation bound, not billing",
+      "productionRoutesChanged": false,
+      "legacyReads": 0,
+      "scans": 0,
+      "oldDeletes": 0
+    },
+    {
+      "at": "2026-11-09T23:47:05.933Z",
+      "target": "local",
+      "completed": [
+        {
+          "type": "tv",
+          "id": 114471
+        },
+        {
+          "type": "movie",
+          "id": 822119
+        },
+        {
+          "type": "tv",
+          "id": 202555
+        },
+        {
+          "type": "movie",
+          "id": 986056
+        },
+        {
+          "type": "tv",
+          "id": 84958
+        },
+        {
+          "type": "tv",
+          "id": 91363
+        },
+        {
+          "type": "movie",
+          "id": 533535
+        },
+        {
+          "type": "movie",
+          "id": 617126
+        },
+        {
+          "type": "movie",
+          "id": 969681
+        },
+        {
+          "type": "movie",
+          "id": 329
+        },
+        {
+          "type": "movie",
+          "id": 330
+        },
+        {
+          "type": "movie",
+          "id": 331
+        },
+        {
+          "type": "movie",
+          "id": 135397
+        },
+        {
+          "type": "movie",
+          "id": 351286
+        },
+        {
+          "type": "movie",
+          "id": 507086
+        },
+        {
+          "type": "movie",
+          "id": 1234821
+        }
+      ],
+      "totalSaved": 110,
+      "before": {
+        "usedMemoryBytes": 3621280,
+        "totalCommandsProcessed": 8343,
+        "totalNetInputBytes": 2840049,
+        "totalNetOutputBytes": 1914270
+      },
+      "after": {
+        "usedMemoryBytes": 3795600,
+        "totalCommandsProcessed": 9378,
+        "totalNetInputBytes": 3114155,
+        "totalNetOutputBytes": 2071959
+      },
+      "ownedKeyCount": 709,
+      "ownedMemoryBytes": 1099014,
+      "reservedCommands": 1051,
+      "sessionReservedCommands": 7401,
+      "sessionRequests": 2972,
+      "observedDatabaseCommandsDelta": 1035,
+      "note": "database INFO delta includes concurrent clients; reservedCommands is a conservative owned-operation bound, not billing",
+      "productionRoutesChanged": false,
+      "legacyReads": 0,
+      "scans": 0,
+      "oldDeletes": 0
+    },
+    {
+      "at": "2026-11-09T23:47:18.222Z",
+      "target": "local",
+      "completed": [
+        {
+          "type": "movie",
+          "id": 671
+        },
+        {
+          "type": "movie",
+          "id": 672
+        },
+        {
+          "type": "movie",
+          "id": 673
+        },
+        {
+          "type": "movie",
+          "id": 674
+        },
+        {
+          "type": "movie",
+          "id": 675
+        },
+        {
+          "type": "movie",
+          "id": 767
+        },
+        {
+          "type": "movie",
+          "id": 12444
+        },
+        {
+          "type": "movie",
+          "id": 12445
+        },
+        {
+          "type": "movie",
+          "id": 259316
+        },
+        {
+          "type": "movie",
+          "id": 338952
+        },
+        {
+          "type": "movie",
+          "id": 338953
+        },
+        {
+          "type": "movie",
+          "id": 120
+        },
+        {
+          "type": "movie",
+          "id": 121
+        },
+        {
+          "type": "movie",
+          "id": 122
+        },
+        {
+          "type": "movie",
+          "id": 49051
+        },
+        {
+          "type": "movie",
+          "id": 57158
+        }
+      ],
+      "totalSaved": 126,
+      "before": {
+        "usedMemoryBytes": 3795600,
+        "totalCommandsProcessed": 9379,
+        "totalNetInputBytes": 3114169,
+        "totalNetOutputBytes": 2077335
+      },
+      "after": {
+        "usedMemoryBytes": 4073616,
+        "totalCommandsProcessed": 10298,
+        "totalNetInputBytes": 3367096,
+        "totalNetOutputBytes": 2207672
+      },
+      "ownedKeyCount": 805,
+      "ownedMemoryBytes": 1376888,
+      "reservedCommands": 935,
+      "sessionReservedCommands": 8337,
+      "sessionRequests": 3334,
+      "observedDatabaseCommandsDelta": 919,
+      "note": "database INFO delta includes concurrent clients; reservedCommands is a conservative owned-operation bound, not billing",
+      "productionRoutesChanged": false,
+      "legacyReads": 0,
+      "scans": 0,
+      "oldDeletes": 0
+    },
+    {
+      "at": "2026-11-09T23:47:42.111Z",
+      "target": "local",
+      "completed": [
+        {
+          "type": "movie",
+          "id": 122917
+        },
+        {
+          "type": "movie",
+          "id": 839033
+        },
+        {
+          "type": "tv",
+          "id": 84773
+        },
+        {
+          "type": "tv",
+          "id": 114479
+        },
+        {
+          "type": "movie",
+          "id": 1893
+        },
+        {
+          "type": "movie",
+          "id": 1894
+        },
+        {
+          "type": "movie",
+          "id": 12180
+        },
+        {
+          "type": "tv",
+          "id": 4194
+        },
+        {
+          "type": "tv",
+          "id": 203085
+        },
+        {
+          "type": "movie",
+          "id": 1895
+        },
+        {
+          "type": "tv",
+          "id": 251091
+        },
+        {
+          "type": "tv",
+          "id": 288055
+        },
+        {
+          "type": "tv",
+          "id": 105971
+        },
+        {
+          "type": "tv",
+          "id": 289219
+        },
+        {
+          "type": "movie",
+          "id": 348350
+        },
+        {
+          "type": "tv",
+          "id": 92830
+        }
+      ],
+      "totalSaved": 142,
+      "before": {
+        "usedMemoryBytes": 4073616,
+        "totalCommandsProcessed": 10299,
+        "totalNetInputBytes": 3367110,
+        "totalNetOutputBytes": 2213053
+      },
+      "after": {
+        "usedMemoryBytes": 4267928,
+        "totalCommandsProcessed": 11479,
+        "totalNetInputBytes": 3671964,
+        "totalNetOutputBytes": 2411663
+      },
+      "ownedKeyCount": 919,
+      "ownedMemoryBytes": 1554996,
+      "reservedCommands": 1196,
+      "sessionReservedCommands": 9534,
+      "sessionRequests": 3831,
+      "observedDatabaseCommandsDelta": 1180,
+      "note": "database INFO delta includes concurrent clients; reservedCommands is a conservative owned-operation bound, not billing",
+      "productionRoutesChanged": false,
+      "legacyReads": 0,
+      "scans": 0,
+      "oldDeletes": 0
+    },
+    {
+      "at": "2026-11-09T23:47:57.157Z",
+      "target": "local",
+      "completed": [
+        {
+          "type": "tv",
+          "id": 83867
+        },
+        {
+          "type": "tv",
+          "id": 60554
+        },
+        {
+          "type": "movie",
+          "id": 330459
+        },
+        {
+          "type": "movie",
+          "id": 11
+        },
+        {
+          "type": "movie",
+          "id": 1891
+        },
+        {
+          "type": "movie",
+          "id": 1892
+        },
+        {
+          "type": "tv",
+          "id": 82856
+        },
+        {
+          "type": "tv",
+          "id": 115036
+        },
+        {
+          "type": "tv",
+          "id": 114461
+        },
+        {
+          "type": "tv",
+          "id": 202879
+        },
+        {
+          "type": "movie",
+          "id": 1228710
+        },
+        {
+          "type": "tv",
+          "id": 79093
+        },
+        {
+          "type": "movie",
+          "id": 140607
+        },
+        {
+          "type": "movie",
+          "id": 181808
+        },
+        {
+          "type": "movie",
+          "id": 181812
+        },
+        {
+          "type": "movie",
+          "id": 9799
+        }
+      ],
+      "totalSaved": 158,
+      "before": {
+        "usedMemoryBytes": 4267928,
+        "totalCommandsProcessed": 11480,
+        "totalNetInputBytes": 3671978,
+        "totalNetOutputBytes": 2417043
+      },
+      "after": {
+        "usedMemoryBytes": 4446688,
+        "totalCommandsProcessed": 12602,
+        "totalNetInputBytes": 3965719,
+        "totalNetOutputBytes": 2608311
+      },
+      "ownedKeyCount": 1029,
+      "ownedMemoryBytes": 1732090,
+      "reservedCommands": 1138,
+      "sessionReservedCommands": 10673,
+      "sessionRequests": 4298,
+      "observedDatabaseCommandsDelta": 1122,
+      "note": "database INFO delta includes concurrent clients; reservedCommands is a conservative owned-operation bound, not billing",
+      "productionRoutesChanged": false,
+      "legacyReads": 0,
+      "scans": 0,
+      "oldDeletes": 0
+    },
+    {
+      "at": "2026-11-09T23:48:09.730Z",
+      "target": "local",
+      "completed": [
+        {
+          "type": "movie",
+          "id": 584
+        },
+        {
+          "type": "movie",
+          "id": 9615
+        },
+        {
+          "type": "movie",
+          "id": 13804
+        },
+        {
+          "type": "movie",
+          "id": 51497
+        },
+        {
+          "type": "movie",
+          "id": 82992
+        },
+        {
+          "type": "movie",
+          "id": 168259
+        },
+        {
+          "type": "movie",
+          "id": 337339
+        },
+        {
+          "type": "movie",
+          "id": 384018
+        },
+        {
+          "type": "movie",
+          "id": 385128
+        },
+        {
+          "type": "movie",
+          "id": 385687
+        },
+        {
+          "type": "movie",
+          "id": 20352
+        },
+        {
+          "type": "movie",
+          "id": 93456
+        },
+        {
+          "type": "movie",
+          "id": 211672
+        },
+        {
+          "type": "movie",
+          "id": 324852
+        },
+        {
+          "type": "movie",
+          "id": 438148
+        },
+        {
+          "type": "movie",
+          "id": 519182
+        }
+      ],
+      "totalSaved": 174,
+      "before": {
+        "usedMemoryBytes": 4446688,
+        "totalCommandsProcessed": 12603,
+        "totalNetInputBytes": 3965733,
+        "totalNetOutputBytes": 2613695
+      },
+      "after": {
+        "usedMemoryBytes": 4612616,
+        "totalCommandsProcessed": 13522,
+        "totalNetInputBytes": 4212088,
+        "totalNetOutputBytes": 2744078
+      },
+      "ownedKeyCount": 1125,
+      "ownedMemoryBytes": 1920431,
+      "reservedCommands": 935,
+      "sessionReservedCommands": 11609,
+      "sessionRequests": 4660,
+      "observedDatabaseCommandsDelta": 919,
+      "note": "database INFO delta includes concurrent clients; reservedCommands is a conservative owned-operation bound, not billing",
+      "productionRoutesChanged": false,
+      "legacyReads": 0,
+      "scans": 0,
+      "oldDeletes": 0
+    },
+    {
+      "at": "2026-11-09T23:48:23.284Z",
+      "target": "local",
+      "completed": [
+        {
+          "type": "movie",
+          "id": 1315772
+        },
+        {
+          "type": "tv",
+          "id": 20794
+        },
+        {
+          "type": "movie",
+          "id": 545255
+        },
+        {
+          "type": "movie",
+          "id": 545819
+        },
+        {
+          "type": "movie",
+          "id": 55382
+        },
+        {
+          "type": "movie",
+          "id": 55384
+        },
+        {
+          "type": "movie",
+          "id": 65841
+        },
+        {
+          "type": "movie",
+          "id": 835865
+        },
+        {
+          "type": "movie",
+          "id": 193402
+        },
+        {
+          "type": "movie",
+          "id": 1285372
+        },
+        {
+          "type": "movie",
+          "id": 1285375
+        },
+        {
+          "type": "movie",
+          "id": 1491083
+        },
+        {
+          "type": "movie",
+          "id": 1172474
+        },
+        {
+          "type": "movie",
+          "id": 59952
+        },
+        {
+          "type": "movie",
+          "id": 45070
+        },
+        {
+          "type": "movie",
+          "id": 1394731
+        }
+      ],
+      "totalSaved": 190,
+      "before": {
+        "usedMemoryBytes": 4612616,
+        "totalCommandsProcessed": 13523,
+        "totalNetInputBytes": 4212102,
+        "totalNetOutputBytes": 2749461
+      },
+      "after": {
+        "usedMemoryBytes": 4887192,
+        "totalCommandsProcessed": 14471,
+        "totalNetInputBytes": 4463533,
+        "totalNetOutputBytes": 2885544
+      },
+      "ownedKeyCount": 1223,
+      "ownedMemoryBytes": 2140718,
+      "reservedCommands": 965,
+      "sessionReservedCommands": 12575,
+      "sessionRequests": 5038,
+      "observedDatabaseCommandsDelta": 948,
+      "note": "database INFO delta includes concurrent clients; reservedCommands is a conservative owned-operation bound including closing INFO, not billing",
+      "productionRoutesChanged": false,
+      "legacyReads": 0,
+      "scans": 0,
+      "oldDeletes": 0
+    },
+    {
+      "at": "2026-11-09T23:48:44.616Z",
+      "target": "local",
+      "completed": [
+        {
+          "type": "movie",
+          "id": 1475877
+        },
+        {
+          "type": "movie",
+          "id": 15137
+        },
+        {
+          "type": "movie",
+          "id": 22843
+        },
+        {
+          "type": "movie",
+          "id": 75629
+        },
+        {
+          "type": "movie",
+          "id": 283566
+        },
+        {
+          "type": "movie",
+          "id": 18491
+        },
+        {
+          "type": "tv",
+          "id": 890
+        },
+        {
+          "type": "movie",
+          "id": 21422
+        }
+      ],
+      "totalSaved": 198,
+      "before": {
+        "usedMemoryBytes": 4887192,
+        "totalCommandsProcessed": 14472,
+        "totalNetInputBytes": 4463547,
+        "totalNetOutputBytes": 2890923
+      },
+      "after": {
+        "usedMemoryBytes": 4956512,
+        "totalCommandsProcessed": 14980,
+        "totalNetInputBytes": 4595719,
+        "totalNetOutputBytes": 2999275
+      },
+      "ownedKeyCount": 1273,
+      "ownedMemoryBytes": 2207562,
+      "reservedCommands": 517,
+      "sessionReservedCommands": 13092,
+      "sessionRequests": 5247,
+      "observedDatabaseCommandsDelta": 508,
+      "note": "database INFO delta includes concurrent clients; reservedCommands is a conservative owned-operation bound including closing INFO, not billing",
+      "productionRoutesChanged": false,
+      "legacyReads": 0,
+      "scans": 0,
+      "oldDeletes": 0
+    },
+    {
+      "at": "2026-11-09T23:48:51.197Z",
+      "target": "local",
+      "completed": [
+        {
+          "type": "movie",
+          "id": 21452
+        },
+        {
+          "type": "movie",
+          "id": 28808
+        },
+        {
+          "type": "movie",
+          "id": 20677
+        },
+        {
+          "type": "movie",
+          "id": 32022
+        },
+        {
+          "type": "movie",
+          "id": 26662
+        },
+        {
+          "type": "movie",
+          "id": 39202
+        },
+        {
+          "type": "movie",
+          "id": 39203
+        },
+        {
+          "type": "movie",
+          "id": 39204
+        }
+      ],
+      "totalSaved": 206,
+      "before": {
+        "usedMemoryBytes": 4956512,
+        "totalCommandsProcessed": 14981,
+        "totalNetInputBytes": 4595733,
+        "totalNetOutputBytes": 3004654
+      },
+      "after": {
+        "usedMemoryBytes": 5017920,
+        "totalCommandsProcessed": 15460,
+        "totalNetInputBytes": 4711572,
+        "totalNetOutputBytes": 3096311
+      },
+      "ownedKeyCount": 1321,
+      "ownedMemoryBytes": 2266399,
+      "reservedCommands": 488,
+      "sessionReservedCommands": 13580,
+      "sessionRequests": 5441,
+      "observedDatabaseCommandsDelta": 479,
+      "note": "database INFO delta includes concurrent clients; reservedCommands is a conservative owned-operation bound including closing INFO, not billing",
+      "productionRoutesChanged": false,
+      "legacyReads": 0,
+      "scans": 0,
+      "oldDeletes": 0
+    },
+    {
+      "at": "2026-11-09T23:48:57.711Z",
+      "target": "local",
+      "completed": [
+        {
+          "type": "movie",
+          "id": 39205
+        },
+        {
+          "type": "movie",
+          "id": 39206
+        },
+        {
+          "type": "movie",
+          "id": 39207
+        },
+        {
+          "type": "movie",
+          "id": 28764
+        },
+        {
+          "type": "movie",
+          "id": 97375
+        },
+        {
+          "type": "movie",
+          "id": 77617
+        },
+        {
+          "type": "movie",
+          "id": 122583
+        },
+        {
+          "type": "movie",
+          "id": 228805
+        }
+      ],
+      "totalSaved": 214,
+      "before": {
+        "usedMemoryBytes": 5017920,
+        "totalCommandsProcessed": 15461,
+        "totalNetInputBytes": 4711586,
+        "totalNetOutputBytes": 3101686
+      },
+      "after": {
+        "usedMemoryBytes": 5086840,
+        "totalCommandsProcessed": 15940,
+        "totalNetInputBytes": 4829510,
+        "totalNetOutputBytes": 3193850
+      },
+      "ownedKeyCount": 1369,
+      "ownedMemoryBytes": 2332599,
+      "reservedCommands": 488,
+      "sessionReservedCommands": 14068,
+      "sessionRequests": 5635,
+      "observedDatabaseCommandsDelta": 479,
+      "note": "database INFO delta includes concurrent clients; reservedCommands is a conservative owned-operation bound including closing INFO, not billing",
+      "productionRoutesChanged": false,
+      "legacyReads": 0,
+      "scans": 0,
+      "oldDeletes": 0
+    },
+    {
+      "at": "2026-11-09T23:49:04.321Z",
+      "target": "local",
+      "completed": [
+        {
+          "type": "movie",
+          "id": 257512
+        },
+        {
+          "type": "movie",
+          "id": 316873
+        },
+        {
+          "type": "movie",
+          "id": 374856
+        },
+        {
+          "type": "movie",
+          "id": 438058
+        },
+        {
+          "type": "movie",
+          "id": 493006
+        },
+        {
+          "type": "movie",
+          "id": 566555
+        },
+        {
+          "type": "movie",
+          "id": 662638
+        },
+        {
+          "type": "movie",
+          "id": 903939
+        }
+      ],
+      "totalSaved": 222,
+      "before": {
+        "usedMemoryBytes": 5086840,
+        "totalCommandsProcessed": 15941,
+        "totalNetInputBytes": 4829524,
+        "totalNetOutputBytes": 3199225
+      },
+      "after": {
+        "usedMemoryBytes": 5148440,
+        "totalCommandsProcessed": 16420,
+        "totalNetInputBytes": 4948119,
+        "totalNetOutputBytes": 3292037
+      },
+      "ownedKeyCount": 1417,
+      "ownedMemoryBytes": 2392023,
+      "reservedCommands": 488,
+      "sessionReservedCommands": 14556,
+      "sessionRequests": 5829,
+      "observedDatabaseCommandsDelta": 479,
+      "note": "database INFO delta includes concurrent clients; reservedCommands is a conservative owned-operation bound including closing INFO, not billing",
+      "productionRoutesChanged": false,
+      "legacyReads": 0,
+      "scans": 0,
+      "oldDeletes": 0
+    },
+    {
+      "at": "2026-11-09T23:49:34.033Z",
+      "target": "local",
+      "completed": [
+        {
+          "type": "movie",
+          "id": 1047041
+        },
+        {
+          "type": "movie",
+          "id": 1209217
+        },
+        {
+          "type": "movie",
+          "id": 1396965
+        },
+        {
+          "type": "movie",
+          "id": 1545621
+        },
+        {
+          "type": "tv",
+          "id": 30983
+        },
+        {
+          "type": "tv",
+          "id": 21731
+        },
+        {
+          "type": "tv",
+          "id": 45500
+        },
+        {
+          "type": "tv",
+          "id": 196400
+        }
+      ],
+      "totalSaved": 230,
+      "before": {
+        "usedMemoryBytes": 5148440,
+        "totalCommandsProcessed": 16421,
+        "totalNetInputBytes": 4948133,
+        "totalNetOutputBytes": 3297415
+      },
+      "after": {
+        "usedMemoryBytes": 5345912,
+        "totalCommandsProcessed": 17016,
+        "totalNetInputBytes": 5233891,
+        "totalNetOutputBytes": 3813554
+      },
+      "ownedKeyCount": 1473,
+      "ownedMemoryBytes": 2586662,
+      "reservedCommands": 604,
+      "sessionReservedCommands": 15160,
+      "sessionRequests": 6083,
+      "observedDatabaseCommandsDelta": 595,
+      "note": "database INFO delta includes concurrent clients; reservedCommands is a conservative owned-operation bound including closing INFO, not billing",
+      "productionRoutesChanged": false,
+      "legacyReads": 0,
+      "scans": 0,
+      "oldDeletes": 0
+    },
+    {
+      "at": "2026-11-09T23:49:43.109Z",
+      "target": "local",
+      "completed": [
+        {
+          "type": "tv",
+          "id": 64375
+        },
+        {
+          "type": "tv",
+          "id": 43887
+        },
+        {
+          "type": "movie",
+          "id": 37048
+        },
+        {
+          "type": "tv",
+          "id": 21732
+        },
+        {
+          "type": "tv",
+          "id": 13674
+        },
+        {
+          "type": "tv",
+          "id": 5660
+        },
+        {
+          "type": "movie",
+          "id": 16157
+        },
+        {
+          "type": "tv",
+          "id": 88865
+        }
+      ],
+      "totalSaved": 238,
+      "before": {
+        "usedMemoryBytes": 5345912,
+        "totalCommandsProcessed": 17017,
+        "totalNetInputBytes": 5233905,
+        "totalNetOutputBytes": 3818943
+      },
+      "after": {
+        "usedMemoryBytes": 5437712,
+        "totalCommandsProcessed": 17670,
+        "totalNetInputBytes": 5421809,
+        "totalNetOutputBytes": 4009719
+      },
+      "ownedKeyCount": 1533,
+      "ownedMemoryBytes": 2677502,
+      "reservedCommands": 662,
+      "sessionReservedCommands": 15822,
+      "sessionRequests": 6367,
+      "observedDatabaseCommandsDelta": 653,
+      "note": "database INFO delta includes concurrent clients; reservedCommands is a conservative owned-operation bound including closing INFO, not billing",
+      "productionRoutesChanged": false,
+      "legacyReads": 0,
+      "scans": 0,
+      "oldDeletes": 0
+    },
+    {
+      "at": "2026-11-09T23:49:51.193Z",
+      "target": "local",
+      "completed": [
+        {
+          "type": "tv",
+          "id": 46512
+        },
+        {
+          "type": "movie",
+          "id": 883768
+        },
+        {
+          "type": "movie",
+          "id": 553610
+        },
+        {
+          "type": "movie",
+          "id": 685274
+        },
+        {
+          "type": "movie",
+          "id": 910850
+        },
+        {
+          "type": "movie",
+          "id": 16308
+        },
+        {
+          "type": "tv",
+          "id": 72677
+        },
+        {
+          "type": "tv",
+          "id": 25797
+        }
+      ],
+      "totalSaved": 246,
+      "before": {
+        "usedMemoryBytes": 5437712,
+        "totalCommandsProcessed": 17671,
+        "totalNetInputBytes": 5421823,
+        "totalNetOutputBytes": 4015103
+      },
+      "after": {
+        "usedMemoryBytes": 5514568,
+        "totalCommandsProcessed": 18237,
+        "totalNetInputBytes": 5570769,
+        "totalNetOutputBytes": 4147284
+      },
+      "ownedKeyCount": 1587,
+      "ownedMemoryBytes": 2752044,
+      "reservedCommands": 575,
+      "sessionReservedCommands": 16397,
+      "sessionRequests": 6606,
+      "observedDatabaseCommandsDelta": 566,
+      "note": "database INFO delta includes concurrent clients; reservedCommands is a conservative owned-operation bound including closing INFO, not billing",
+      "productionRoutesChanged": false,
+      "legacyReads": 0,
+      "scans": 0,
+      "oldDeletes": 0
+    },
+    {
+      "at": "2026-11-09T23:50:01.026Z",
+      "target": "local",
+      "completed": [
+        {
+          "type": "tv",
+          "id": 20111
+        },
+        {
+          "type": "movie",
+          "id": 1146972
+        },
+        {
+          "type": "tv",
+          "id": 30093
+        },
+        {
+          "type": "tv",
+          "id": 21730
+        },
+        {
+          "type": "tv",
+          "id": 25504
+        },
+        {
+          "type": "tv",
+          "id": 37546
+        },
+        {
+          "type": "tv",
+          "id": 45835
+        },
+        {
+          "type": "tv",
+          "id": 61414
+        }
+      ],
+      "totalSaved": 254,
+      "before": {
+        "usedMemoryBytes": 5514568,
+        "totalCommandsProcessed": 18238,
+        "totalNetInputBytes": 5570783,
+        "totalNetOutputBytes": 4152665
+      },
+      "after": {
+        "usedMemoryBytes": 5600792,
+        "totalCommandsProcessed": 18920,
+        "totalNetInputBytes": 5763415,
+        "totalNetOutputBytes": 4372561
+      },
+      "ownedKeyCount": 1649,
+      "ownedMemoryBytes": 2837167,
+      "reservedCommands": 691,
+      "sessionReservedCommands": 17088,
+      "sessionRequests": 6905,
+      "observedDatabaseCommandsDelta": 682,
+      "note": "database INFO delta includes concurrent clients; reservedCommands is a conservative owned-operation bound including closing INFO, not billing",
+      "productionRoutesChanged": false,
+      "legacyReads": 0,
+      "scans": 0,
+      "oldDeletes": 0
+    },
+    {
+      "at": "2026-11-09T23:50:14.989Z",
+      "target": "local",
+      "completed": [
+        {
+          "type": "tv",
+          "id": 60667
+        },
+        {
+          "type": "tv",
+          "id": 76821
+        },
+        {
+          "type": "tv",
+          "id": 91566
+        },
+        {
+          "type": "tv",
+          "id": 122468
+        },
+        {
+          "type": "movie",
+          "id": 22914
+        },
+        {
+          "type": "movie",
+          "id": 39228
+        },
+        {
+          "type": "movie",
+          "id": 39229
+        },
+        {
+          "type": "movie",
+          "id": 39230
+        }
+      ],
+      "totalSaved": 262,
+      "before": {
+        "usedMemoryBytes": 5600792,
+        "totalCommandsProcessed": 18921,
+        "totalNetInputBytes": 5763429,
+        "totalNetOutputBytes": 4377953
+      },
+      "after": {
+        "usedMemoryBytes": 5677920,
+        "totalCommandsProcessed": 19516,
+        "totalNetInputBytes": 5917274,
+        "totalNetOutputBytes": 4520452
+      },
+      "ownedKeyCount": 1705,
+      "ownedMemoryBytes": 2912293,
+      "reservedCommands": 604,
+      "sessionReservedCommands": 17692,
+      "sessionRequests": 7159,
+      "observedDatabaseCommandsDelta": 595,
+      "note": "database INFO delta includes concurrent clients; reservedCommands is a conservative owned-operation bound including closing INFO, not billing",
+      "productionRoutesChanged": false,
+      "legacyReads": 0,
+      "scans": 0,
+      "oldDeletes": 0
+    },
+    {
+      "at": "2026-11-09T23:50:18.758Z",
+      "target": "local",
+      "completed": [
+        {
+          "type": "movie",
+          "id": 19256
+        },
+        {
+          "type": "movie",
+          "id": 19257
+        },
+        {
+          "type": "movie",
+          "id": 30606
+        },
+        {
+          "type": "movie",
+          "id": 1311031
+        }
+      ],
+      "totalSaved": 266,
+      "before": {
+        "usedMemoryBytes": 5677920,
+        "totalCommandsProcessed": 19517,
+        "totalNetInputBytes": 5917288,
+        "totalNetOutputBytes": 4525836
+      },
+      "after": {
+        "usedMemoryBytes": 5722216,
+        "totalCommandsProcessed": 19776,
+        "totalNetInputBytes": 5984078,
+        "totalNetOutputBytes": 4607160
+      },
+      "ownedKeyCount": 1729,
+      "ownedMemoryBytes": 2955245,
+      "reservedCommands": 264,
+      "sessionReservedCommands": 17956,
+      "sessionRequests": 7269,
+      "observedDatabaseCommandsDelta": 259,
+      "note": "database INFO delta includes concurrent clients; reservedCommands is a conservative owned-operation bound including closing INFO, not billing",
+      "productionRoutesChanged": false,
+      "legacyReads": 0,
+      "scans": 0,
+      "oldDeletes": 0
+    }
+  ],
+  "audit": {
+    "at": "2026-11-09T23:50:23.566Z",
+    "target": "local",
+    "counts": {
+      "works": 266,
+      "seo": 266,
+      "seasonManifests": 59,
+      "firstSeasons": 59,
+      "episodes": 2275,
+      "people": 2,
+      "jpProviders": 266
+    },
+    "checks": [
+      {
+        "key": "movie:1678",
+        "passed": true
+      },
+      {
+        "key": "movie:315011",
+        "passed": true
+      },
+      {
+        "key": "movie:940721",
+        "passed": true
+      },
+      {
+        "key": "movie:124905",
+        "passed": true
+      },
+      {
+        "key": "tv:85937",
+        "passed": true
+      },
+      {
+        "key": "movie:635302",
+        "passed": true
+      },
+      {
+        "key": "movie:293167",
+        "passed": true
+      },
+      {
+        "key": "movie:373571",
+        "passed": true
+      },
+      {
+        "key": "movie:399566",
+        "passed": true
+      },
+      {
+        "key": "movie:823464",
+        "passed": true
+      },
+      {
+        "key": "tv:202411",
+        "passed": true
+      },
+      {
+        "key": "tv:117678",
+        "passed": true
+      },
+      {
+        "key": "movie:929",
+        "passed": true
+      },
+      {
+        "key": "movie:1679",
+        "passed": true
+      },
+      {
+        "key": "movie:1680",
+        "passed": true
+      },
+      {
+        "key": "movie:1682",
+        "passed": true
+      },
+      {
+        "key": "movie:15766",
+        "passed": true
+      },
+      {
+        "key": "movie:19545",
+        "passed": true
+      },
+      {
+        "key": "movie:3115",
+        "passed": true
+      },
+      {
+        "key": "movie:18627",
+        "passed": true
+      },
+      {
+        "key": "movie:3107",
+        "passed": true
+      },
+      {
+        "key": "movie:39462",
+        "passed": true
+      },
+      {
+        "key": "movie:39464",
+        "passed": true
+      },
+      {
+        "key": "movie:19336",
+        "passed": true
+      },
+      {
+        "key": "movie:39264",
+        "passed": true
+      },
+      {
+        "key": "movie:38582",
+        "passed": true
+      },
+      {
+        "key": "movie:19333",
+        "passed": true
+      },
+      {
+        "key": "movie:421467",
+        "passed": true
+      },
+      {
+        "key": "movie:18289",
+        "passed": true
+      },
+      {
+        "key": "movie:36679",
+        "passed": true
+      },
+      {
+        "key": "movie:39465",
+        "passed": true
+      },
+      {
+        "key": "movie:6593",
+        "passed": true
+      },
+      {
+        "key": "movie:39466",
+        "passed": true
+      },
+      {
+        "key": "movie:12561",
+        "passed": true
+      },
+      {
+        "key": "movie:10643",
+        "passed": true
+      },
+      {
+        "key": "movie:39468",
+        "passed": true
+      },
+      {
+        "key": "movie:36243",
+        "passed": true
+      },
+      {
+        "key": "movie:12636",
+        "passed": true
+      },
+      {
+        "key": "movie:39469",
+        "passed": true
+      },
+      {
+        "key": "movie:15767",
+        "passed": true
+      },
+      {
+        "key": "movie:449574",
+        "passed": true
+      },
+      {
+        "key": "movie:492719",
+        "passed": true
+      },
+      {
+        "key": "movie:536115",
+        "passed": true
+      },
+      {
+        "key": "movie:39410",
+        "passed": true
+      },
+      {
+        "key": "movie:36214",
+        "passed": true
+      },
+      {
+        "key": "movie:36212",
+        "passed": true
+      },
+      {
+        "key": "movie:36247",
+        "passed": true
+      },
+      {
+        "key": "movie:19742",
+        "passed": true
+      },
+      {
+        "key": "movie:438604",
+        "passed": true
+      },
+      {
+        "key": "movie:1771",
+        "passed": true
+      },
+      {
+        "key": "movie:299537",
+        "passed": true
+      },
+      {
+        "key": "movie:1726",
+        "passed": true
+      },
+      {
+        "key": "movie:10138",
+        "passed": true
+      },
+      {
+        "key": "movie:1724",
+        "passed": true
+      },
+      {
+        "key": "movie:10195",
+        "passed": true
+      },
+      {
+        "key": "movie:24428",
+        "passed": true
+      },
+      {
+        "key": "movie:76338",
+        "passed": true
+      },
+      {
+        "key": "movie:68721",
+        "passed": true
+      },
+      {
+        "key": "movie:100402",
+        "passed": true
+      },
+      {
+        "key": "movie:118340",
+        "passed": true
+      },
+      {
+        "key": "movie:283995",
+        "passed": true
+      },
+      {
+        "key": "tv:232125",
+        "passed": true
+      },
+      {
+        "key": "movie:99861",
+        "passed": true
+      },
+      {
+        "key": "movie:102899",
+        "passed": true
+      },
+      {
+        "key": "movie:271110",
+        "passed": true
+      },
+      {
+        "key": "movie:497698",
+        "passed": true
+      },
+      {
+        "key": "movie:284054",
+        "passed": true
+      },
+      {
+        "key": "movie:315635",
+        "passed": true
+      },
+      {
+        "key": "movie:284052",
+        "passed": true
+      },
+      {
+        "key": "movie:284053",
+        "passed": true
+      },
+      {
+        "key": "movie:363088",
+        "passed": true
+      },
+      {
+        "key": "movie:299536",
+        "passed": true
+      },
+      {
+        "key": "movie:299534",
+        "passed": true
+      },
+      {
+        "key": "tv:85271",
+        "passed": true
+      },
+      {
+        "key": "movie:566525",
+        "passed": true
+      },
+      {
+        "key": "tv:88396",
+        "passed": true
+      },
+      {
+        "key": "movie:429617",
+        "passed": true
+      },
+      {
+        "key": "movie:524434",
+        "passed": true
+      },
+      {
+        "key": "movie:634649",
+        "passed": true
+      },
+      {
+        "key": "movie:453395",
+        "passed": true
+      },
+      {
+        "key": "tv:88329",
+        "passed": true
+      },
+      {
+        "key": "tv:92749",
+        "passed": true
+      },
+      {
+        "key": "movie:505642",
+        "passed": true
+      },
+      {
+        "key": "tv:122226",
+        "passed": true
+      },
+      {
+        "key": "tv:92783",
+        "passed": true
+      },
+      {
+        "key": "tv:92782",
+        "passed": true
+      },
+      {
+        "key": "movie:616037",
+        "passed": true
+      },
+      {
+        "key": "movie:894205",
+        "passed": true
+      },
+      {
+        "key": "movie:774752",
+        "passed": true
+      },
+      {
+        "key": "movie:640146",
+        "passed": true
+      },
+      {
+        "key": "movie:447365",
+        "passed": true
+      },
+      {
+        "key": "tv:114472",
+        "passed": true
+      },
+      {
+        "key": "movie:609681",
+        "passed": true
+      },
+      {
+        "key": "tv:138501",
+        "passed": true
+      },
+      {
+        "key": "tv:114471",
+        "passed": true
+      },
+      {
+        "key": "movie:822119",
+        "passed": true
+      },
+      {
+        "key": "tv:202555",
+        "passed": true
+      },
+      {
+        "key": "movie:986056",
+        "passed": true
+      },
+      {
+        "key": "tv:84958",
+        "passed": true
+      },
+      {
+        "key": "tv:91363",
+        "passed": true
+      },
+      {
+        "key": "movie:533535",
+        "passed": true
+      },
+      {
+        "key": "movie:617126",
+        "passed": true
+      },
+      {
+        "key": "movie:969681",
+        "passed": true
+      },
+      {
+        "key": "movie:329",
+        "passed": true
+      },
+      {
+        "key": "movie:330",
+        "passed": true
+      },
+      {
+        "key": "movie:331",
+        "passed": true
+      },
+      {
+        "key": "movie:135397",
+        "passed": true
+      },
+      {
+        "key": "movie:351286",
+        "passed": true
+      },
+      {
+        "key": "movie:507086",
+        "passed": true
+      },
+      {
+        "key": "movie:1234821",
+        "passed": true
+      },
+      {
+        "key": "movie:671",
+        "passed": true
+      },
+      {
+        "key": "movie:672",
+        "passed": true
+      },
+      {
+        "key": "movie:673",
+        "passed": true
+      },
+      {
+        "key": "movie:674",
+        "passed": true
+      },
+      {
+        "key": "movie:675",
+        "passed": true
+      },
+      {
+        "key": "movie:767",
+        "passed": true
+      },
+      {
+        "key": "movie:12444",
+        "passed": true
+      },
+      {
+        "key": "movie:12445",
+        "passed": true
+      },
+      {
+        "key": "movie:259316",
+        "passed": true
+      },
+      {
+        "key": "movie:338952",
+        "passed": true
+      },
+      {
+        "key": "movie:338953",
+        "passed": true
+      },
+      {
+        "key": "movie:120",
+        "passed": true
+      },
+      {
+        "key": "movie:121",
+        "passed": true
+      },
+      {
+        "key": "movie:122",
+        "passed": true
+      },
+      {
+        "key": "movie:49051",
+        "passed": true
+      },
+      {
+        "key": "movie:57158",
+        "passed": true
+      },
+      {
+        "key": "movie:122917",
+        "passed": true
+      },
+      {
+        "key": "movie:839033",
+        "passed": true
+      },
+      {
+        "key": "tv:84773",
+        "passed": true
+      },
+      {
+        "key": "tv:114479",
+        "passed": true
+      },
+      {
+        "key": "movie:1893",
+        "passed": true
+      },
+      {
+        "key": "movie:1894",
+        "passed": true
+      },
+      {
+        "key": "movie:12180",
+        "passed": true
+      },
+      {
+        "key": "tv:4194",
+        "passed": true
+      },
+      {
+        "key": "tv:203085",
+        "passed": true
+      },
+      {
+        "key": "movie:1895",
+        "passed": true
+      },
+      {
+        "key": "tv:251091",
+        "passed": true
+      },
+      {
+        "key": "tv:288055",
+        "passed": true
+      },
+      {
+        "key": "tv:105971",
+        "passed": true
+      },
+      {
+        "key": "tv:289219",
+        "passed": true
+      },
+      {
+        "key": "movie:348350",
+        "passed": true
+      },
+      {
+        "key": "tv:92830",
+        "passed": true
+      },
+      {
+        "key": "tv:83867",
+        "passed": true
+      },
+      {
+        "key": "tv:60554",
+        "passed": true
+      },
+      {
+        "key": "movie:330459",
+        "passed": true
+      },
+      {
+        "key": "movie:11",
+        "passed": true
+      },
+      {
+        "key": "movie:1891",
+        "passed": true
+      },
+      {
+        "key": "movie:1892",
+        "passed": true
+      },
+      {
+        "key": "tv:82856",
+        "passed": true
+      },
+      {
+        "key": "tv:115036",
+        "passed": true
+      },
+      {
+        "key": "tv:114461",
+        "passed": true
+      },
+      {
+        "key": "tv:202879",
+        "passed": true
+      },
+      {
+        "key": "movie:1228710",
+        "passed": true
+      },
+      {
+        "key": "tv:79093",
+        "passed": true
+      },
+      {
+        "key": "movie:140607",
+        "passed": true
+      },
+      {
+        "key": "movie:181808",
+        "passed": true
+      },
+      {
+        "key": "movie:181812",
+        "passed": true
+      },
+      {
+        "key": "movie:9799",
+        "passed": true
+      },
+      {
+        "key": "movie:584",
+        "passed": true
+      },
+      {
+        "key": "movie:9615",
+        "passed": true
+      },
+      {
+        "key": "movie:13804",
+        "passed": true
+      },
+      {
+        "key": "movie:51497",
+        "passed": true
+      },
+      {
+        "key": "movie:82992",
+        "passed": true
+      },
+      {
+        "key": "movie:168259",
+        "passed": true
+      },
+      {
+        "key": "movie:337339",
+        "passed": true
+      },
+      {
+        "key": "movie:384018",
+        "passed": true
+      },
+      {
+        "key": "movie:385128",
+        "passed": true
+      },
+      {
+        "key": "movie:385687",
+        "passed": true
+      },
+      {
+        "key": "movie:20352",
+        "passed": true
+      },
+      {
+        "key": "movie:93456",
+        "passed": true
+      },
+      {
+        "key": "movie:211672",
+        "passed": true
+      },
+      {
+        "key": "movie:324852",
+        "passed": true
+      },
+      {
+        "key": "movie:438148",
+        "passed": true
+      },
+      {
+        "key": "movie:519182",
+        "passed": true
+      },
+      {
+        "key": "movie:1315772",
+        "passed": true
+      },
+      {
+        "key": "tv:20794",
+        "passed": true
+      },
+      {
+        "key": "movie:545255",
+        "passed": true
+      },
+      {
+        "key": "movie:545819",
+        "passed": true
+      },
+      {
+        "key": "movie:55382",
+        "passed": true
+      },
+      {
+        "key": "movie:55384",
+        "passed": true
+      },
+      {
+        "key": "movie:65841",
+        "passed": true
+      },
+      {
+        "key": "movie:835865",
+        "passed": true
+      },
+      {
+        "key": "movie:193402",
+        "passed": true
+      },
+      {
+        "key": "movie:1285372",
+        "passed": true
+      },
+      {
+        "key": "movie:1285375",
+        "passed": true
+      },
+      {
+        "key": "movie:1491083",
+        "passed": true
+      },
+      {
+        "key": "movie:1172474",
+        "passed": true
+      },
+      {
+        "key": "movie:59952",
+        "passed": true
+      },
+      {
+        "key": "movie:45070",
+        "passed": true
+      },
+      {
+        "key": "movie:1394731",
+        "passed": true
+      },
+      {
+        "key": "movie:1475877",
+        "passed": true
+      },
+      {
+        "key": "movie:15137",
+        "passed": true
+      },
+      {
+        "key": "movie:22843",
+        "passed": true
+      },
+      {
+        "key": "movie:75629",
+        "passed": true
+      },
+      {
+        "key": "movie:283566",
+        "passed": true
+      },
+      {
+        "key": "movie:18491",
+        "passed": true
+      },
+      {
+        "key": "tv:890",
+        "passed": true
+      },
+      {
+        "key": "movie:21422",
+        "passed": true
+      },
+      {
+        "key": "movie:21452",
+        "passed": true
+      },
+      {
+        "key": "movie:28808",
+        "passed": true
+      },
+      {
+        "key": "movie:20677",
+        "passed": true
+      },
+      {
+        "key": "movie:32022",
+        "passed": true
+      },
+      {
+        "key": "movie:26662",
+        "passed": true
+      },
+      {
+        "key": "movie:39202",
+        "passed": true
+      },
+      {
+        "key": "movie:39203",
+        "passed": true
+      },
+      {
+        "key": "movie:39204",
+        "passed": true
+      },
+      {
+        "key": "movie:39205",
+        "passed": true
+      },
+      {
+        "key": "movie:39206",
+        "passed": true
+      },
+      {
+        "key": "movie:39207",
+        "passed": true
+      },
+      {
+        "key": "movie:28764",
+        "passed": true
+      },
+      {
+        "key": "movie:97375",
+        "passed": true
+      },
+      {
+        "key": "movie:77617",
+        "passed": true
+      },
+      {
+        "key": "movie:122583",
+        "passed": true
+      },
+      {
+        "key": "movie:228805",
+        "passed": true
+      },
+      {
+        "key": "movie:257512",
+        "passed": true
+      },
+      {
+        "key": "movie:316873",
+        "passed": true
+      },
+      {
+        "key": "movie:374856",
+        "passed": true
+      },
+      {
+        "key": "movie:438058",
+        "passed": true
+      },
+      {
+        "key": "movie:493006",
+        "passed": true
+      },
+      {
+        "key": "movie:566555",
+        "passed": true
+      },
+      {
+        "key": "movie:662638",
+        "passed": true
+      },
+      {
+        "key": "movie:903939",
+        "passed": true
+      },
+      {
+        "key": "movie:1047041",
+        "passed": true
+      },
+      {
+        "key": "movie:1209217",
+        "passed": true
+      },
+      {
+        "key": "movie:1396965",
+        "passed": true
+      },
+      {
+        "key": "movie:1545621",
+        "passed": true
+      },
+      {
+        "key": "tv:30983",
+        "passed": true
+      },
+      {
+        "key": "tv:21731",
+        "passed": true
+      },
+      {
+        "key": "tv:45500",
+        "passed": true
+      },
+      {
+        "key": "tv:196400",
+        "passed": true
+      },
+      {
+        "key": "tv:64375",
+        "passed": true
+      },
+      {
+        "key": "tv:43887",
+        "passed": true
+      },
+      {
+        "key": "movie:37048",
+        "passed": true
+      },
+      {
+        "key": "tv:21732",
+        "passed": true
+      },
+      {
+        "key": "tv:13674",
+        "passed": true
+      },
+      {
+        "key": "tv:5660",
+        "passed": true
+      },
+      {
+        "key": "movie:16157",
+        "passed": true
+      },
+      {
+        "key": "tv:88865",
+        "passed": true
+      },
+      {
+        "key": "tv:46512",
+        "passed": true
+      },
+      {
+        "key": "movie:883768",
+        "passed": true
+      },
+      {
+        "key": "movie:553610",
+        "passed": true
+      },
+      {
+        "key": "movie:685274",
+        "passed": true
+      },
+      {
+        "key": "movie:910850",
+        "passed": true
+      },
+      {
+        "key": "movie:16308",
+        "passed": true
+      },
+      {
+        "key": "tv:72677",
+        "passed": true
+      },
+      {
+        "key": "tv:25797",
+        "passed": true
+      },
+      {
+        "key": "tv:20111",
+        "passed": true
+      },
+      {
+        "key": "movie:1146972",
+        "passed": true
+      },
+      {
+        "key": "tv:30093",
+        "passed": true
+      },
+      {
+        "key": "tv:21730",
+        "passed": true
+      },
+      {
+        "key": "tv:25504",
+        "passed": true
+      },
+      {
+        "key": "tv:37546",
+        "passed": true
+      },
+      {
+        "key": "tv:45835",
+        "passed": true
+      },
+      {
+        "key": "tv:61414",
+        "passed": true
+      },
+      {
+        "key": "tv:60667",
+        "passed": true
+      },
+      {
+        "key": "tv:76821",
+        "passed": true
+      },
+      {
+        "key": "tv:91566",
+        "passed": true
+      },
+      {
+        "key": "tv:122468",
+        "passed": true
+      },
+      {
+        "key": "movie:22914",
+        "passed": true
+      },
+      {
+        "key": "movie:39228",
+        "passed": true
+      },
+      {
+        "key": "movie:39229",
+        "passed": true
+      },
+      {
+        "key": "movie:39230",
+        "passed": true
+      },
+      {
+        "key": "movie:19256",
+        "passed": true
+      },
+      {
+        "key": "movie:19257",
+        "passed": true
+      },
+      {
+        "key": "movie:30606",
+        "passed": true
+      },
+      {
+        "key": "movie:1311031",
+        "passed": true
+      }
+    ],
+    "ownedKeyCount": 1729,
+    "ownedMemoryBytes": 2955245,
+    "reservedCommands": 1986,
+    "sessionReservedCommands": 19942,
+    "sessionRequests": 9255,
+    "legacyReads": 0,
+    "scans": 0,
+    "deletes": 0,
+    "productionChanged": false
+  },
+  "initialBrowser": {
+    "scope": "staged-real-data",
+    "target": "local",
+    "passed": 10,
+    "checks": [
+      {
+        "test": "saved new movie/TV, person, season, all JP categories",
+        "passed": true,
+        "movieId": 315011,
+        "tvId": 202411,
+        "personId": 1256603,
+        "episodes": 10
+      },
+      {
+        "test": "initial SEO HTML movie",
+        "passed": true
+      },
+      {
+        "test": "initial SEO HTML tv",
+        "passed": true
+      },
+      {
+        "test": "1280 external title search → saved new movie and JP UI",
+        "passed": true
+      },
+      {
+        "test": "1280 external person search → saved profile/credits UI",
+        "passed": true
+      },
+      {
+        "test": "1280 new TV → first collected season → episodes UI",
+        "passed": true
+      },
+      {
+        "test": "390 external title search → saved new movie and JP UI",
+        "passed": true
+      },
+      {
+        "test": "390 external person search → saved profile/credits UI",
+        "passed": true
+      },
+      {
+        "test": "390 new TV → first collected season → episodes UI",
+        "passed": true
+      },
+      {
+        "test": "20 parallel saved reads, no source reread or TMDB calls",
+        "passed": true,
+        "p50Ms": 80.46651799999927,
+        "p95Ms": 94.84647899999982
+      }
+    ],
+    "errors": [],
+    "externalImageRequestsBlocked": 93,
+    "metrics": {
+      "target": "local",
+      "registered": 46,
+      "sourceReads": 2,
+      "liveSearchRequests": 2,
+      "reservedCommands": 3235,
+      "requests": 1298,
+      "scope": "private-staged-real-data",
+      "productionChanged": false,
+      "errors": []
+    },
+    "productionChanged": false
+  },
+  "finalBrowser": {
+    "scope": "staged-real-data",
+    "target": "local",
+    "passed": 12,
+    "checks": [
+      {
+        "test": "saved new movie/TV, person, season, all JP categories",
+        "passed": true,
+        "movieId": 315011,
+        "tvId": 202411,
+        "personId": 1256603,
+        "episodes": 10
+      },
+      {
+        "test": "initial SEO HTML movie",
+        "passed": true
+      },
+      {
+        "test": "initial SEO HTML tv",
+        "passed": true
+      },
+      {
+        "test": "unregistered HTML is noindex and cannot trigger acquisition/storage",
+        "passed": true
+      },
+      {
+        "test": "static person page ID bypasses work-only acquisition guard",
+        "passed": true
+      },
+      {
+        "test": "1280 external title search → saved new movie and JP UI",
+        "passed": true
+      },
+      {
+        "test": "1280 external person search → saved profile/credits UI",
+        "passed": true
+      },
+      {
+        "test": "1280 new TV → first collected season → episodes UI",
+        "passed": true
+      },
+      {
+        "test": "390 external title search → saved new movie and JP UI",
+        "passed": true
+      },
+      {
+        "test": "390 external person search → saved profile/credits UI",
+        "passed": true
+      },
+      {
+        "test": "390 new TV → first collected season → episodes UI",
+        "passed": true
+      },
+      {
+        "test": "20 parallel saved reads, no source reread or TMDB calls",
+        "passed": true,
+        "p50Ms": 125.8971130000009,
+        "p95Ms": 173.60946800000056
+      }
+    ],
+    "errors": [],
+    "externalImageRequestsBlocked": 93,
+    "images": {
+      "enabled": false,
+      "requests": 0,
+      "bytes": 0,
+      "failures": 0
+    },
+    "metrics": {
+      "target": "local",
+      "registered": 266,
+      "sourceReads": 0,
+      "liveSearchRequests": 0,
+      "liveSearchBytes": 0,
+      "reservedCommands": 20867,
+      "requests": 9708,
+      "scope": "private-staged-real-data",
+      "productionChanged": false,
+      "errors": []
+    },
+    "memory": {
+      "ownedKeyCount": 1729,
+      "ownedMemoryBytes": 2955245,
+      "reservedCommands": 385,
+      "sessionReservedCommands": 20889,
+      "sessionRequests": 9730
+    },
+    "productionChanged": false
+  },
+  "localSessionReservedCommands": 20889,
+  "localSessionRequests": 9730,
+  "ownedMemoryBytes": 2955245,
+  "ownedKeys": 1729,
+  "safety": {
+    "newOwnedNamespaceOnly": true,
+    "oldRecordReads": 0,
+    "wholeDatabaseScans": 0,
+    "oldDataDeletes": 0,
+    "maxBatchReservedCommands": 2500,
+    "maxSessionReservedCommands": 40000,
+    "maxOwnedBytes": 8388608,
+    "maxDatabaseBytesWithReservation": 240000000,
+    "nodeTestsPassed": 14
+  },
+  "upstash": {
+    "executed": false,
+    "requests": 0,
+    "blocker": "existing credentials not registered in Codex environment",
+    "freePlanMetadataConfirmed": true,
+    "monthlyCommandsPlanLimit": 500000,
+    "autoUpgrade": false,
+    "eviction": false,
+    "actualBillingCommandsMeasured": false,
+    "actualCapacityMeasured": false
+  },
+  "imageCdnVerified": false,
+  "productionDeployments": 0,
+  "productionRoutesChanged": false,
+  "oldDataDeleted": false
+}

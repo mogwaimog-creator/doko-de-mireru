@@ -1,0 +1,42 @@
+{
+  "dateJst": "2026-11-09",
+  "baseline": {
+    "node": 519,
+    "fullSuiteRerun": false,
+    "savedCommit": "891ed91"
+  },
+  "afterConnection": {
+    "relatedSelected": 62,
+    "passed": 62,
+    "failures": 0
+  },
+  "afterMinimalProbeAndSafetyChanges": {
+    "selected": 26,
+    "passed": 26,
+    "failures": 0,
+    "overlapsOtherRuns": true
+  },
+  "productionConnectionFile": {
+    "selected": 7,
+    "passed": 7,
+    "includedIn26": true
+  },
+  "realUpstash": false,
+  "realTmdb": false,
+  "realVercel": false,
+  "productionOrBillingChanges": false,
+  "probe": {
+    "executed": false,
+    "maxRPCs": 1,
+    "maxCommandsIncludingLua": 14,
+    "temporaryKeys": 5,
+    "ttlSeconds": 60
+  },
+  "credentialAvailability": {
+    "upstash": false,
+    "tmdb": false,
+    "admin": false,
+    "cron": false
+  },
+  "publicReady": false
+}

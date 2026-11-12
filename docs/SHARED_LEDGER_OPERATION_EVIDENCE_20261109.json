@@ -1,0 +1,984 @@
+{
+  "dateJST": "2026-11-09",
+  "recoveredBase": "dfc4559fd0d8e31089cddfa54edc5966356465d9",
+  "recoveryCheckpoint": "6da30cc",
+  "scope": "local Redis 7.2.6, Node v24.22.1, Chromium; no live TMDB/Upstash/Vercel",
+  "node": {
+    "summary": {
+      "tests": 387,
+      "pass": 387,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "durationMs": 22406.474802,
+    "passedOutput": [
+      "compact daily update completes all 266 real work IDs over several isolated invocations with no repeat fetch",
+      "resume reconciles committed records after outcome checkpoint fails, without refetch",
+      "normal recorded provider failures finish as complete-with-errors and are not retried that day",
+      "persistent intent caps repeated storage-failure dispatches across restarts",
+      "changed roster is rejected without replacing the saved manifest; before six creates no journal",
+      "killed job process resumes after lease expiry from persisted progress",
+      "time-budget and abort pause durably and resume the remaining records",
+      "next-day job refreshes the whole roster while preserving a paused prior-day journal",
+      "expired job owner cannot checkpoint or release the new lease; concurrent invocation is busy",
+      "v2 TTL is fixed at creation, partial progress survives reclaim, and old v1 data is untouched",
+      "expired journal cannot accept checkpoint or recreate an old day",
+      "supervisor resumes all 266 actual IDs automatically with bounded chunks and no duplicate fetch",
+      "persistent daily invocation cap stops fresh supervisors from bypassing the limit",
+      "supervisor stops on storage, dispatch, normal failures, busy and abort without spinning",
+      "packed journal backup restores exact progress and original expiry without touching source",
+      "work and SEO publish one CAS generation; stale contender cannot publish either",
+      "confirmed work, field locks, editorial notes and unresolved errors survive automatic ingestion",
+      "person refresh caches for 60 days, preserves creation, and retains credits on failure with cooldown",
+      "season manifest and lazy episodes share one consistent record and preserve episodes on manifest refresh",
+      "invalid identity and oversized bundles never replace prior work or SEO",
+      "legacy compatibility enriches only matching IDs while compact titles remain authoritative",
+      "v1 import preserves confirmed metadata, full compatibility copy and separate TV manifest atomically",
+      "content backup round-trip retains data, metadata revisions and editorial locks in a separate namespace",
+      "v1 field-lock aliases protect director and rating after compact migration",
+      "TMDB-shaped person copies retain profile and all five typed credit groups without provider work",
+      "TV and season IDs stay distinct and missing episode bodies remain unknown",
+      "two simultaneous first requests fetch providers once",
+      "concurrent refresh returns stale data without a second fetch",
+      "failed refresh returns stale cached data",
+      "provider refresh lock remains valid through slow upstream calls",
+      "malformed upstream response cannot overwrite previously saved availability",
+      "valid empty provider results are still cacheable",
+      "Redis read outage does not trigger TMDB provider fetch",
+      "Redis lock outage does not trigger TMDB provider fetch",
+      "Redis write outage never reports uncached data as safely cached",
+      "Redis lock outage returns stale saved provider data without TMDB fetch",
+      "corrupt saved provider payload is not served as a valid cache hit",
+      "server SEO HTML retains legacy detail fetch count without adding requests",
+      "SEO marker is limited to server-rendered output and existing client guards it",
+      "server-rendered movie and TV canonical URLs follow existing client URL rules",
+      "server payload supplies cached Japan flatrate to existing detail response",
+      "server payload separates movie and TV and preserves confirmed empty",
+      "related cards use shared hits; managed misses never launch legacy provider requests",
+      "season episode requests occur in loadSeason and are separate from related-series requests",
+      "related cards prefer available shared streaming and retain fallback for unknown records",
+      "confirmed empty streaming renders no providers without a new request",
+      "saved compact movie/TV identity, separate season manifest, counts, and episodes agree without upstream calls",
+      "saved person and SEO validate identity and never fetch or write missing content",
+      "production ignores all development content flags without issuing any commands",
+      "SEO refuses a saved generation that no longer matches its work while keeping legacy records readable",
+      "explicit saved related links resolve canonical work keys; watch-order membership does not invent a collection",
+      "stale person and unknown episodes use opt-in refresh then saved readers; outage retains success",
+      "refresh rejects non-loopback endpoints and production ignores opt-in without HTTP",
+      "frozen metadata coalesces concurrent and immediate sequential reads, validates ID and avoids Redis mutations",
+      "frozen person coalesces and rejects mismatched IDs without writing",
+      "frozen providers coalesce without claiming persistence or taking Redis locks",
+      "bounded frozen cache expires, caps memory, and suppresses repeated failures",
+      "hung frozen lookup times out and caches a bounded failure instead of occupying a slot forever",
+      "ID validation remains active with legacy ledger flags off and preserves valid object identity",
+      "freeze preserves stale saved provider/person successes without refreshing or writing",
+      "independent content workers share a lease; person, season and episode calls fetch once",
+      "expired content owner cannot commit or release a replacement lease",
+      "first-load timeout persists cooldown and ignores late success without a partial save",
+      "separate Node process owns content lease and prevents a second process from fetching",
+      "saved search filters canonical records, normalizes names, paginates and never fetches upstream",
+      "storage write failure latches a shared stop before another worker fetches",
+      "compact work cards contain exactly five fields",
+      "old person ledger card shape with content_type and release_date",
+      "missing dates and malformed dates do not create bogus years",
+      "60 day refresh schedule and failure preserving previous data",
+      "snapshot reload and duplicate detection",
+      "first saved date persists across refresh and restore",
+      "old version 1 snapshots can be loaded without extra work-card fields",
+      "strict stored schema rejects unknown fields at every level",
+      "unknown source fields are ignored, never saved",
+      "large filmographies are never silently truncated at 500 credits",
+      "first access saves v2 record, subsequent access reuses without upstream call",
+      "60 day refresh keeps initial creation timestamp",
+      "failed refresh preserves existing record and its checkedAt",
+      "read-only preview does not write even when record is missing",
+      "lost refresh lease cannot overwrite another worker record",
+      "oversized filmography is rejected without partial save or truncation",
+      "oversized refresh retains prior record and timestamp",
+      "incomplete upstream credits do not erase previously saved filmography",
+      "unexpected empty filmography cannot overwrite populated credits",
+      "first request stores person and second request reuses it without loading upstream",
+      "stale data refreshes after sixty days",
+      "failed refresh serves previously saved person",
+      "disabled flag bypasses Redis",
+      "invalid upstream identity is rejected and lock released",
+      "person credits resolve movie and TV works with identical numeric ID without provider duplication",
+      "TV season ledger provides correct detail episodes and rejects duplicates",
+      "one identity for a work irrespective of its pages",
+      "watch-order refreshes once at 06:00 JST, never again that day",
+      "non-series uses 24h since last successful refresh",
+      "Japanese provider data only and no duplicate series memberships",
+      "one MGET reads existing cache without writes or refresh",
+      "confirmed empty cache differs from missing or malformed record",
+      "Redis failure returns original detail with no write",
+      "duplicate cards read once and empty series makes no Redis request",
+      "stale cached empty result is not reported as confirmed no streaming",
+      "fresh cached empty result remains confirmed no streaming",
+      "missing flatrate field is unknown, not confirmed empty",
+      "future timestamp outside tolerance is unknown",
+      "tests/related-group-resolver.test.js",
+      "tests/related-work-resolver.test.js",
+      "tests/search-handler-offline-behavior.test.js",
+      "tests/search-routing-static-regression.test.js",
+      "tests/season-api-refresh-integration.test.js",
+      "tests/season-detail-click-fetch.test.js",
+      "tests/season-detail-contract.test.js",
+      "tests/season-detail-renderer-contract.test.js",
+      "tests/season-detail-renderer-fields.test.js",
+      "tests/season-fetch-coalescer.test.js",
+      "tests/season-frozen-display.test.js",
+      "tests/season-frozen-miss-load.test.js",
+      "large show checkpoints, resumes and commits only when complete",
+      "manifest revision change discards incompatible staged data",
+      "fetch failure does not commit incomplete data",
+      "staging strips synopsis and other unused episode payload fields",
+      "tests/season-ledger-cache.test.js",
+      "multi-run staging publishes only complete season snapshots",
+      "fetch failure retains stage and releases lock",
+      "rejected compare-and-swap does not publish and leaves staged data",
+      "invalid TV IDs never acquire lock",
+      "tests/season-ledger-http.test.js",
+      "offline first fetch saves only display fields, never synopsis",
+      "ended show switches to 90 days, planned continuation stays at 7",
+      "too many required season fetches never partially overwrites or wastes calls",
+      "failed refresh preserves previous snapshot",
+      "missing episode details are distinct from a confirmed empty list",
+      "tests/season-ledger-redis-mock.test.js",
+      "tests/season-ledger-redis.test.js",
+      "tests/season-ledger-response.test.js",
+      "tests/season-ledger-route.test.js",
+      "tests/season-legacy-compatibility.test.js",
+      "tests/season-realistic-tmdb-fixture.test.js",
+      "tests/season-record-schema-compatibility.test.js",
+      "tests/season-refresh-integration.test.js",
+      "tests/season-refresh-opt-in.test.js",
+      "tests/season-refresh-policy-boundaries.test.js",
+      "tests/season-refresh-policy.test.js",
+      "tests/season-refresh-safety-edge.test.js",
+      "tests/season-refresh-writer.test.js",
+      "tests/season-regression-suite.test.js",
+      "tests/season-search-flag.test.js",
+      "tests/season-search-integration.test.js",
+      "tests/season-search-switch-behavior.test.js",
+      "tests/season-stale-refresh.test.js",
+      "tests/season-storage-compaction.test.js",
+      "tests/season-write-guard.test.js",
+      "server response has unique SEO and visible H1 before JS runs",
+      "missing required head tags fails closed",
+      "actual detail.html template gets crawler-visible title, H1, canonical and social metadata",
+      "same numeric movie and TV IDs have distinct canonical URLs",
+      "movie initial HTML includes work-specific SEO fields",
+      "TV and movie with same numeric ID have distinct canonical URLs",
+      "untrusted work titles are escaped in generated HTML",
+      "invalid or empty work identity is rejected",
+      "unknown ledger fields cannot be rendered",
+      "shared ledger gives legacy flatrate cards without an additional fetch",
+      "unknown record stays unknown while confirmed empty is no streaming",
+      "same numeric movie and TV IDs cannot cross over",
+      "203 real historical entries: 152 ID-verified snapshots stay stale; 51 unverified entries rejected",
+      "real repository works preserve per-page membership and metadata confirmation locks",
+      "13-series membership inventory exactly matches the protected existing API arrays",
+      "all 266 repository titles resolve from explicit ID evidence without inventing full release dates",
+      "managed direct provider endpoint reads saved data and never calls TMDB",
+      "managed metadata append excludes providers and substitutes saved availability",
+      "disabled flag preserves legacy upstream URL and response",
+      "flag off retains exact legacy read contract, empty is confirmed and no TMDB",
+      "flag on uses shared cache for same work across series; missing data falls back",
+      "shared Redis outage rolls back to saved legacy records",
+      "production environment ignores the development flag",
+      "stale shared availability cannot hide a newer successful empty legacy result",
+      "real Redis: owner expiry, fencing, CAS, and token checked release",
+      "real Redis: simultaneous workers fetch once, failed refresh preserves success",
+      "real Redis: all 13 series actual IDs deduplicate, six JST boundary and no visit refresh",
+      "real Redis: save outage is distinct from fetch error and cannot erase stored success",
+      "real Redis: isolated backup restores records into a different namespace",
+      "read compatibility distinguishes never fetched, malformed, empty, stale, and movie/tv",
+      "development namespace and local endpoint guards reject production resources",
+      "real Redis: killed worker leaves prior data intact and TTL permits recovery",
+      "real Redis: failed daily attempt is not retried until the next JST day",
+      "optimized claim and combined commit fence expired owners, preserve empty arrays, and release atomically",
+      "lost commit acknowledgement remains retry-safe without falsely recording a fetch failure",
+      "backwards caller clock cannot replace a later successful record",
+      "optimized refresh returns the committed schema and revision immediately, including failure records",
+      "daily update completes all 266 real work IDs over several isolated invocations with no repeat fetch",
+      "resume reconciles committed records after outcome checkpoint fails, without refetch",
+      "normal recorded provider failures finish as complete-with-errors and are not retried that day",
+      "persistent intent caps repeated storage-failure dispatches across restarts",
+      "changed roster is rejected without replacing the saved manifest; before six creates no journal",
+      "killed job process resumes after lease expiry from persisted progress",
+      "time-budget and abort pause durably and resume the remaining records",
+      "next-day job refreshes the whole roster while preserving a paused prior-day journal",
+      "expired job owner cannot checkpoint or release the new lease; concurrent invocation is busy",
+      "two independent workers cannot both refresh same work",
+      "release cannot remove a lock now owned by another worker",
+      "failure releases owned lock",
+      "movie and tv identities use distinct lock keys",
+      "newer legacy success beats stale shared success; newer shared beats legacy, ties prefer shared",
+      "empty successful legacy result remains confirmed; failed/unknown is not empty success",
+      "partial new watch information retains older rent/buy with separate timestamps and stale warning",
+      "failed refresh retains prior success and labels failure, malformed legacy is not empty success",
+      "missing JP or flatrate in legacy copies never proves zero; known partial rental data survives",
+      "TMDB watch/providers is normalized once and reused for detail and watch order",
+      "no JP results means valid empty availability, not a missing response",
+      "unfetched work is distinct from confirmed no providers",
+      "malformed TMDB payload is rejected without touching stored data",
+      "simultaneous first visits fetch once; second visitor sees in-flight",
+      "simultaneous stale visits retain old data while refreshing",
+      "save/load preserves cooldown and shared provider data",
+      "expired lease rejects late success from previous owner",
+      "06 JST series cron, no visitor refresh, no second same-day cron",
+      "nonseries visit only after 24h; membership changes switch policies",
+      "failure keeps old data and allows next cron retry",
+      "concurrent same-work visits share in-flight guard",
+      "detail shape matches search.js providerData.results.JP and all three categories",
+      "TV detail uses same provider envelope and independent movie/tv identities",
+      "unknown or failed first fetch is not presented as confirmed empty availability",
+      "successful empty JP result is distinct from unknown availability",
+      "two controllers cannot concurrently fetch same movie using shared lease",
+      "timeout does not replace previously saved streaming info",
+      "restarted controller must not update same series twice in a day",
+      "daily marker survives JSON save and reload",
+      "repeated errors stay one entry and survive save/load",
+      "success preserves previous data after failure and resolves error",
+      "initial failure blocks repeated visits for 30 minutes",
+      "failure cooldown does not override daily series cron",
+      "resolved errors and prior successful cache use normal schedule",
+      "expired lease cannot overwrite newer streaming information",
+      "expired owner cannot release newer owner lease",
+      "two independent workers share one atomic lease",
+      "release must not delete a lock owned by another token",
+      "failed task releases its lease",
+      "report classifies errors and deferrals without changing records",
+      "report distinguishes lock contention from failure",
+      "empty batch is healthy and safe",
+      "unexpected results are explicitly counted",
+      "storage failure is reported separately from upstream failure",
+      "atomic owner-checked commit stores one record only",
+      "old owner cannot remove replacement lock or overwrite newer record",
+      "writes-disabled mode does not acquire or save",
+      "adapter uses Upstash REST command arrays with isolated prototype keys",
+      "only lease owner can save; stale owner cannot overwrite newer data",
+      "read-only path never mutates data and no Redis connection occurs on import",
+      "owner saves one complete record atomically",
+      "old owner cannot overwrite or unlock new owner",
+      "second worker cannot acquire active lease",
+      "watch order membership selects series without duplicating work",
+      "series refresh at 06:00 JST by cron only, not on visits",
+      "non-series: initial visit and >=24h visit, never cron",
+      "series removal returns to visit-only policy",
+      "first failure is saved without claiming successful empty data",
+      "repeated failures aggregate, later success resolves",
+      "refresh failure preserves cached provider and success timestamp",
+      "writes disabled prevents fetch and failure persistence",
+      "expired lease prevents stale failure persistence",
+      "cron never exceeds configured concurrency",
+      "timed-out TMDB request does not save empty or false success",
+      "cron defers remaining works when time budget expires",
+      "invalid limits are rejected",
+      "first visit persists normalized JP record, second visit uses cache",
+      "series updates at 06 JST and not during visits",
+      "write freeze keeps previous success and prevents TMDB call",
+      "failed refresh preserves previously saved data",
+      "cron isolates a Redis read failure and processes remaining series works",
+      "release failure cannot mask successful saved streaming data",
+      "release failure cannot mask original fetch error or replace old data",
+      "registered but never fetched is unknown, not confirmed empty",
+      "successful JP empty availability is confirmed and next eligible after 24h",
+      "failure retains last success, prior providers and next eligible time",
+      "failed first attempt is unknown, not confirmed empty",
+      "movie and tv with same ID remain distinct",
+      "invalid JP payload cannot replace prior success",
+      "first fetch in progress shows wait notice without fabricating empty availability",
+      "concurrent update shows previously saved data immediately",
+      "failed refresh keeps previous availability and offers retry",
+      "first fetch failure does not claim no streaming providers",
+      "disabled writes prevent registration and fetch",
+      "writes disabled during fetch cannot overwrite saved streaming data",
+      "disabled write in leased update is rejected without saving",
+      "single Japanese provider record reused for detail and watch order",
+      "failed update keeps last successful data and timestamp; reload reuses same record",
+      "missing Japan data does not erase existing data",
+      "successful refresh persists confirmed empty and 24h eligibility",
+      "failed fetch preserves last success and providers",
+      "scheduled watch-order refresh marks day even on fetch failure",
+      "recheck inside lock prevents stale pre-lock decision",
+      "concurrent requests for same work share one refresh",
+      "movie and tv with identical numeric ID have separate locks",
+      "failed refresh releases lock for a later retry",
+      "not due does not invoke refresh",
+      "watch-order updates only in scheduled 06:00 JST run",
+      "watch-order cannot be attempted twice on same JST day",
+      "other works refresh on first access after 24h since success",
+      "other works with no success are eligible for first fetch",
+      "failed refresh does not change 24h-from-last-success rule",
+      "JST day boundary is not UTC day boundary",
+      "failed first fetch waits 30 minutes before retry",
+      "failed refresh retains stale success but throttles immediate retry",
+      "fresh success overrides old failed attempt",
+      "successful atomic save advances version",
+      "write error leaves old data intact",
+      "stale worker cannot overwrite newer successful save",
+      "restart after uncommitted candidate sees prior record",
+      "three ledgers render matching work-specific HTML and Japan streaming data for ten works",
+      "person ledger saves compact credits, retains profile, reuses cache",
+      "detail provider cache saves JP only, reuses cache",
+      "provider cache supports missing JP without inventing availability",
+      "same metadata creates no anomaly",
+      "records old and observed values for relevant changes",
+      "movie and tv anomalies are separated",
+      "detects cast changes beyond the shortened history preview",
+      "detail page displays busy message only for the dedicated 503 code",
+      "API busy response is not CDN cached and suggests retry",
+      "detail page explains provider refresh contention instead of generic missing data",
+      "API returns uncached retryable response for provider refresh contention",
+      "storage outage is distinguishable from contention in the detail page",
+      "storage outage returns retryable non-cacheable response without exposing Redis details",
+      "TV detail preserves storage outage instead of reporting empty providers",
+      "TV metadata fetch excludes duplicate provider append when ledger is enabled",
+      "two simultaneous work-detail requests fetch TMDB once",
+      "work-detail never calls TMDB when feature is disabled",
+      "work-detail preserves TMDB 404",
+      "work-detail rejects mismatched TMDB ID",
+      "slow initial fetch gives second visitor retryable busy response without duplicate TMDB call",
+      "public work-detail response excludes internal notes and cached TMDB extensions",
+      "frozen work-detail coalesces verified metadata without any Redis writes or private fields",
+      "frozen work-detail rejects mismatched source IDs without persisting them",
+      "tests/work-display-adapter.test.js",
+      "two simultaneous requests share one first TMDB metadata fetch",
+      "failed first fetch releases lock so later visitor can retry",
+      "cached work avoids further metadata fetches",
+      "waiter times out with retryable busy error without duplicate TMDB fetch",
+      "waiting request rejects a cached record with mismatched TMDB ID",
+      "wrong-ID saved metadata is not reused after acquiring the lock",
+      "movie and tv with same TMDB number have independent locks",
+      "Redis lock outage fails closed without fetching TMDB",
+      "Redis read outage fails closed without fetching TMDB",
+      "release never deletes a lock owned by a different worker",
+      "feature flag off does not touch Redis locking or work ledger",
+      "first-load lock TTL covers slow upstream requests and storage writes",
+      "Redis read failure after acquiring metadata lock returns storage error without TMDB fetch",
+      "10 works: detail conversion reads saved data without mutating or refetching",
+      "only changed fields lock; other fields can update automatically",
+      "same work linked from multiple features without duplicating metadata",
+      "invalid references and scopes rejected",
+      "confirmed and locked manual fields are protected from automatic updates",
+      "new work record stores references and editorial status",
+      "removal plan does not mutate source",
+      "movie and tv use distinct keys for the same numeric ID",
+      "metadata, review fields, errors and extensible page fields remain separate",
+      "TMDB conversion excludes streaming and preserves fixed credits",
+      "full fixed detail keeps editorial fields but never includes streaming",
+      "detail streaming refresh is independent of series refresh windows",
+      "unknown future fields and page-specific notes do not collide",
+      "feature flag off preserves existing detail loading without ledger access",
+      "incomplete existing ledger never causes another TMDB metadata fetch",
+      "unchanged snapshots report no growth",
+      "flags unexpected per-record growth, not new records",
+      "reports removed records and error growth",
+      "does not mutate original snapshot or ledger",
+      "repeated identical unresolved errors do not grow storage",
+      "resolved error history remains; a new occurrence can be recorded",
+      "size audit flags large records and remains stable after reads",
+      "10 works integrated lifecycle with disk persistence and cached reuse",
+      "ten works: registration, edits, confirmations, errors, membership, persistence and audit",
+      "annual rating and preserved manual listing fields",
+      "related IDs persist without duplicating work records; season totals are excluded",
+      "first write wins and subsequent registration does not overwrite editorial changes",
+      "same numeric ID for movie and TV creates independent records",
+      "malformed existing record is not silently overwritten",
+      "error log is stored once, global list is derived and survives reload",
+      "100 reads and automatic updates after confirmation do not grow saved data",
+      "legacy saves with a duplicate global errorLog can load and re-save without duplication",
+      "tests/work-ledger-v2-schema.test.js",
+      "review keeps original work and saves previous and observed values",
+      "reject mismatched TMDB identity before logging",
+      "history remains bounded to 30 events after repeated distinct reviews",
+      "work ledger to SEO ledger to real detail HTML: movie and TV with identical numeric IDs",
+      "manual confirmation keeps fixed work metadata stable for SEO generation",
+      "same movie and TV ID remain separate across work, SEO and streaming ledgers",
+      "streaming failure preserves last successful Japan availability",
+      "streaming ledger rejects absent Japan data and deduplicates providers",
+      "tests/work-v2-detail-adapter.test.js"
+    ]
+  },
+  "browser": {
+    "results": [
+      {
+        "test": "series API godzilla",
+        "passed": true,
+        "works": 47
+      },
+      {
+        "test": "series API mcu",
+        "passed": true,
+        "works": 54
+      },
+      {
+        "test": "series API jurassic",
+        "passed": true,
+        "works": 7
+      },
+      {
+        "test": "series API harrypotter",
+        "passed": true,
+        "works": 11
+      },
+      {
+        "test": "series API lordoftherings",
+        "passed": true,
+        "works": 8
+      },
+      {
+        "test": "series API starwars",
+        "passed": true,
+        "works": 28
+      },
+      {
+        "test": "series API wildspeed",
+        "passed": true,
+        "works": 11
+      },
+      {
+        "test": "series API minions",
+        "passed": true,
+        "works": 7
+      },
+      {
+        "test": "series API odoru",
+        "passed": true,
+        "works": 16
+      },
+      {
+        "test": "series API eva",
+        "passed": true,
+        "works": 6
+      },
+      {
+        "test": "series API conan",
+        "passed": true,
+        "works": 30
+      },
+      {
+        "test": "series API gundam",
+        "passed": true,
+        "works": 38
+      },
+      {
+        "test": "series API kimetsu",
+        "passed": true,
+        "works": 3
+      },
+      {
+        "test": "1280 godzilla.html",
+        "passed": true,
+        "seriesReads": 1,
+        "horizontalOverflow": false
+      },
+      {
+        "test": "1280 mcu.html",
+        "passed": true,
+        "seriesReads": 1,
+        "horizontalOverflow": false
+      },
+      {
+        "test": "1280 jurassic.html",
+        "passed": true,
+        "seriesReads": 1,
+        "horizontalOverflow": false
+      },
+      {
+        "test": "1280 harrypotter.html",
+        "passed": true,
+        "seriesReads": 1,
+        "horizontalOverflow": false
+      },
+      {
+        "test": "1280 lordoftherings.html",
+        "passed": true,
+        "seriesReads": 1,
+        "horizontalOverflow": false
+      },
+      {
+        "test": "1280 starwars.html",
+        "passed": true,
+        "seriesReads": 1,
+        "horizontalOverflow": false
+      },
+      {
+        "test": "1280 wildspeed.html",
+        "passed": true,
+        "seriesReads": 1,
+        "horizontalOverflow": false
+      },
+      {
+        "test": "1280 minions.html",
+        "passed": true,
+        "seriesReads": 1,
+        "horizontalOverflow": false
+      },
+      {
+        "test": "1280 odoru.html",
+        "passed": true,
+        "seriesReads": 1,
+        "horizontalOverflow": false
+      },
+      {
+        "test": "1280 eva.html",
+        "passed": true,
+        "seriesReads": 1,
+        "horizontalOverflow": false
+      },
+      {
+        "test": "1280 conan.html",
+        "passed": true,
+        "seriesReads": 1,
+        "horizontalOverflow": false
+      },
+      {
+        "test": "1280 gundam.html",
+        "passed": true,
+        "seriesReads": 1,
+        "horizontalOverflow": false
+      },
+      {
+        "test": "1280 kimetsu.html",
+        "passed": true,
+        "seriesReads": 1,
+        "horizontalOverflow": false
+      },
+      {
+        "test": "1280 streaming.html",
+        "passed": true,
+        "seriesReads": 2,
+        "horizontalOverflow": false
+      },
+      {
+        "test": "1280 detail movie",
+        "passed": true,
+        "initialSeo": true
+      },
+      {
+        "test": "1280 detail tv",
+        "passed": true,
+        "initialSeo": true
+      },
+      {
+        "test": "390 godzilla.html",
+        "passed": true,
+        "seriesReads": 1,
+        "horizontalOverflow": false
+      },
+      {
+        "test": "390 mcu.html",
+        "passed": true,
+        "seriesReads": 1,
+        "horizontalOverflow": false
+      },
+      {
+        "test": "390 jurassic.html",
+        "passed": true,
+        "seriesReads": 1,
+        "horizontalOverflow": false
+      },
+      {
+        "test": "390 harrypotter.html",
+        "passed": true,
+        "seriesReads": 1,
+        "horizontalOverflow": false
+      },
+      {
+        "test": "390 lordoftherings.html",
+        "passed": true,
+        "seriesReads": 1,
+        "horizontalOverflow": false
+      },
+      {
+        "test": "390 starwars.html",
+        "passed": true,
+        "seriesReads": 1,
+        "horizontalOverflow": false
+      },
+      {
+        "test": "390 wildspeed.html",
+        "passed": true,
+        "seriesReads": 1,
+        "horizontalOverflow": false
+      },
+      {
+        "test": "390 minions.html",
+        "passed": true,
+        "seriesReads": 1,
+        "horizontalOverflow": false
+      },
+      {
+        "test": "390 odoru.html",
+        "passed": true,
+        "seriesReads": 1,
+        "horizontalOverflow": false
+      },
+      {
+        "test": "390 eva.html",
+        "passed": true,
+        "seriesReads": 1,
+        "horizontalOverflow": false
+      },
+      {
+        "test": "390 conan.html",
+        "passed": true,
+        "seriesReads": 1,
+        "horizontalOverflow": false
+      },
+      {
+        "test": "390 gundam.html",
+        "passed": true,
+        "seriesReads": 1,
+        "horizontalOverflow": false
+      },
+      {
+        "test": "390 kimetsu.html",
+        "passed": true,
+        "seriesReads": 1,
+        "horizontalOverflow": false
+      },
+      {
+        "test": "390 streaming.html",
+        "passed": true,
+        "seriesReads": 2,
+        "horizontalOverflow": false
+      },
+      {
+        "test": "390 detail movie",
+        "passed": true,
+        "initialSeo": true
+      },
+      {
+        "test": "390 detail tv",
+        "passed": true,
+        "initialSeo": true
+      },
+      {
+        "test": "normal movie/TV/all and person saved search, no-hit, zero upstream calls",
+        "passed": true
+      },
+      {
+        "test": "mobile person search UI links to canonical saved person",
+        "passed": true
+      },
+      {
+        "test": "mobile normal work search UI links to canonical saved details",
+        "passed": true
+      },
+      {
+        "test": "local explicit refresh publishes work and SEO through normal detail API and initial HTML",
+        "passed": true
+      },
+      {
+        "test": "mobile season click reads saved episode ledger through actual API",
+        "passed": true
+      },
+      {
+        "test": "missing fixed work fails closed without legacy TMDB fallback",
+        "passed": true
+      },
+      {
+        "test": "saved person API and mobile page",
+        "passed": true
+      },
+      {
+        "test": "TV season list/count and lazy episodes share one saved manifest",
+        "passed": true
+      },
+      {
+        "test": "general work API refreshes eligible saved fixture and reuses success",
+        "passed": true
+      },
+      {
+        "test": "saved work/person/season API routes issue zero TMDB calls",
+        "passed": true
+      },
+      {
+        "test": "all 266 known-title works return saved SEO in initial HTML",
+        "passed": true,
+        "works": 266
+      },
+      {
+        "test": "all 266 actual IDs traverse saved detail API with zero upstream loads",
+        "passed": true,
+        "works": 266,
+        "metadata": "repository names only; seasons/providers are fixtures"
+      },
+      {
+        "test": "1280 freshness fresh and managed related misses",
+        "passed": true
+      },
+      {
+        "test": "1280 freshness stale and managed related misses",
+        "passed": true
+      },
+      {
+        "test": "1280 freshness unknown and managed related misses",
+        "passed": true
+      },
+      {
+        "test": "1280 freshness failed and managed related misses",
+        "passed": true
+      },
+      {
+        "test": "390 freshness fresh and managed related misses",
+        "passed": true
+      },
+      {
+        "test": "390 freshness stale and managed related misses",
+        "passed": true
+      },
+      {
+        "test": "390 freshness unknown and managed related misses",
+        "passed": true
+      },
+      {
+        "test": "390 freshness failed and managed related misses",
+        "passed": true
+      }
+    ],
+    "errors": [],
+    "externalRequestsBlocked": 259,
+    "liveExternalRequests": 0
+  },
+  "dailyBenchmark": {
+    "scope": "Redis 7.2.6 loopback; 266 repository IDs; successful empty JP fixture",
+    "results": {
+      "jsonV1": {
+        "works": 266,
+        "result": {
+          "status": "complete",
+          "reason": "finished",
+          "day": "2026-11-09",
+          "total": 266,
+          "attempted": 266,
+          "succeeded": 266,
+          "failed": 0,
+          "pending": 0,
+          "dispatches": 266,
+          "revision": 46,
+          "invocations": 1
+        },
+        "clientRedisRPCs": 580,
+        "redisOperationsIncludingLua": 2630,
+        "requestArgumentBytes": 784859,
+        "upstreamFixtureLoads": 266,
+        "commands": {
+          "get": 891,
+          "set": 580,
+          "mget": 1,
+          "eval": 579,
+          "pttl": 312,
+          "del": 267,
+          "mset": 0,
+          "hget": 0,
+          "hset": 0,
+          "hgetall": 0,
+          "exists": 0,
+          "expire": 0
+        },
+        "elapsedMs": 1179,
+        "journalRedisBytes": 14488,
+        "ttlSeconds": -1
+      },
+      "packedV2": {
+        "works": 266,
+        "result": {
+          "status": "complete",
+          "reason": "finished",
+          "day": "2026-11-09",
+          "total": 266,
+          "attempted": 266,
+          "succeeded": 266,
+          "failed": 0,
+          "pending": 0,
+          "dispatches": 266,
+          "revision": 46,
+          "invocations": 1
+        },
+        "clientRedisRPCs": 580,
+        "redisOperationsIncludingLua": 2724,
+        "requestArgumentBytes": 390835,
+        "upstreamFixtureLoads": 266,
+        "commands": {
+          "get": 844,
+          "set": 533,
+          "mget": 1,
+          "eval": 579,
+          "pttl": 358,
+          "del": 267,
+          "mset": 0,
+          "hget": 92,
+          "hset": 47,
+          "hgetall": 1,
+          "exists": 1,
+          "expire": 1
+        },
+        "elapsedMs": 1238,
+        "journalRedisBytes": 4544,
+        "ttlSeconds": 1209599
+      }
+    },
+    "reductionPercent": {
+      "requestArguments": 50.20315750982023,
+      "journalMemory": 68.63611264494754
+    },
+    "retention": {
+      "newV2Days": 14,
+      "newV2SteadyBytes14Days": 63616,
+      "newV2Conservative15CalendarDaysBytes": 68160,
+      "oldV1MonthlyGrowthBytes30Days": 434640,
+      "oldV1YearlyGrowthBytes365Days": 5288120,
+      "existingV1": "untouched; not expired/deleted"
+    },
+    "billing": "Neither local server operation counts nor argument bytes are confirmed Upstash billable units. Excludes responses, protocol, TLS and reader traffic."
+  },
+  "contentBenchmark": {
+    "scope": "one new person, local Redis 7.2.6 only; no upstream calls",
+    "results": {
+      "beforeCASOnly": {
+        "clientRedisRPCs": 2,
+        "redisOperationsIncludingLua": 5,
+        "upstreamFixtureLoads": 1,
+        "commands": {
+          "get": 2,
+          "set": 0,
+          "mget": 1,
+          "eval": 1,
+          "pttl": 0,
+          "del": 0,
+          "mset": 1,
+          "exists": 0
+        }
+      },
+      "fencedWithSharedStop": {
+        "clientRedisRPCs": 4,
+        "redisOperationsIncludingLua": 13,
+        "upstreamFixtureLoads": 1,
+        "commands": {
+          "get": 4,
+          "set": 1,
+          "mget": 1,
+          "eval": 3,
+          "pttl": 1,
+          "del": 1,
+          "mset": 1,
+          "exists": 1
+        }
+      }
+    },
+    "billing": "Does not establish Upstash billable counts. Public cached reads do not take this update lease."
+  },
+  "knownLocalCapacity": {
+    "scope": "known loopback preview keys only; 266 repository IDs plus general-work fixture; seasons/person/provider data are explicitly fixtures",
+    "measured": {
+      "streaming": {
+        "records": 267,
+        "missing": 0,
+        "jsonBytes": 93887,
+        "redisBytes": 123432,
+        "MB": 0.123432
+      },
+      "legacyWatchCopies": {
+        "records": 266,
+        "missing": 0,
+        "jsonBytes": 39900,
+        "redisBytes": 67568,
+        "MB": 0.067568
+      },
+      "work": {
+        "records": 267,
+        "missing": 0,
+        "jsonBytes": 102872,
+        "redisBytes": 128152,
+        "MB": 0.128152
+      },
+      "person": {
+        "records": 1,
+        "missing": 0,
+        "jsonBytes": 475,
+        "redisBytes": 568,
+        "MB": 0.000568
+      },
+      "season": {
+        "records": 59,
+        "missing": 0,
+        "jsonBytes": 22789,
+        "redisBytes": 28296,
+        "MB": 0.028296
+      },
+      "seo": {
+        "records": 266,
+        "missing": 0,
+        "jsonBytes": 149345,
+        "redisBytes": 174848,
+        "MB": 0.174848
+      },
+      "contentMeta": {
+        "records": 2,
+        "missing": 591,
+        "jsonBytes": 230,
+        "redisBytes": 416,
+        "MB": 0.000416
+      },
+      "searchCatalog": {
+        "records": 1,
+        "missing": 0,
+        "jsonBytes": 7398,
+        "redisBytes": 7528,
+        "MB": 0.007528
+      }
+    },
+    "totalMB": 0.530808,
+    "excludes": "Redis process overhead, test/benchmark namespaces, full real people/season populations, production keys, legacy-work compatibility copies not staged in this preview, future growth, backups, active locks",
+    "productionCurrentMB": null,
+    "productionPeakMB": null,
+    "productionAfterMB": null,
+    "productionFreeHeadroom": null
+  },
+  "production": {
+    "currentMB": null,
+    "peakMB": null,
+    "afterMB": null,
+    "freeHeadroom": null,
+    "additionalFees": null,
+    "reason": "No production credentials/usage/plan verified; no live external resources contacted."
+  },
+  "protectedFilesUnchangedFrom": "dfc4559",
+  "protectedFileSHA256": {
+    "kimetsu.html": "b046f4d3393d0e5b6167f3debc761949cabab0c911c57a279ea528a8c2db6a88",
+    "streaming.html": "3e450856186db8b5c2fca950bd6262edebdbe0b02dc940b5cdf35bee8dd6f94d",
+    "godzilla.html": "a977bb0f4e1859f191ec0cac310f4d7377d4ee2355cf9a62be53839c855574d5",
+    "mcu.html": "06a22b9968fde0263f76c19e039acb7cf3d2878c23e71afd0af04157452b8a56",
+    "jurassic.html": "0682639700951bdf9ee795070f94a98c45749d1f9c8c5bf46e76a9b12df5a8ac",
+    "harrypotter.html": "853c185511f942ce773d968fbff7075f6c98f276fd20400a62587a93b342f16f",
+    "lordoftherings.html": "e4510d9ea538408ed4a6a4bef8559b000cf9771b8f8f0f412d0525974100ada0",
+    "starwars.html": "88365c0ec71cd69291bbb3a4dc62322a4b0cbbb1ad0c44774753b4ac62041012",
+    "wildspeed.html": "f79f395ff124e24898f89ada42b8c733786dd636fe7956a8aadf6e1a34e7eb48",
+    "minions.html": "032fc68729663a3360ca385be30db2246094d5a3a52495fab44e30f8650fff04",
+    "odoru.html": "ac05233c7d069473db7aa56335bca35d6019a8cae0a965cf87463fa0f2d0b4f0",
+    "eva.html": "faa2c4a437922b59db392e0d9971f102d1d4fa30e683dd35d04653d5e25075e2",
+    "conan.html": "4aa40e41ff0cdf99031210b744ae91468410f667d4d5d78aff020580eaf85317",
+    "gundam.html": "ce3d3d1d9f5a20e9ba83a1de09fd20987272b2677eb17ec064bfb625530a3d20",
+    "index.html": "e9c46dbf8aa57a99f643de8cbdb646c2a6a3b692a44bec4ab9d62c3be6858979",
+    "detail.html": "2263f460d1647af1b7634f5536777b55fff780ff0567bcb9594e967d18045df9",
+    "person.html": "60b397cf377e193a7470a8c7d0e51bf3aeb153613c0e213dd7150cfec9f40041",
+    "vercel.json": "730ec955b8e706ac6974323cc8b3c0537e1c6de07d9adcc4dd643706dc7f0377",
+    "data/streaming-works.json": "27ed32b6c0ba590a9c344bf6f139f85fd59517d7c07ac8e3463252764a360da4",
+    "data/watch-order-memberships.json": "148863d182f46eb2ed53d9302ffe724f2149b96992ebcdc9577f0c432195bd2c"
+  },
+  "wholeLocalRedisProcess": {
+    "scope": "Entire local test Redis process, including retained test/benchmark namespaces; not production.",
+    "bytes": {
+      "used_memory": 15082056,
+      "used_memory_dataset": 12690856,
+      "used_memory_peak": 15129888,
+      "used_memory_rss": 18993152
+    }
+  }
+}

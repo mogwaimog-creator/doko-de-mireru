@@ -1,0 +1,9 @@
+'use strict';
+// No per-result metadata/provider fetches or index writes.
+async function search(query,{type='movie',kind='work',page=1,apiKey,fetchJson}){
+ const sources=kind==='person'?['person']:type==='all'?['multi']:type==='anime'?['tv','movie']:['tv','drama'].includes(type)?['tv']:['movie'];
+ const payloads=await Promise.all(sources.map(source=>{const url=new URL('https://api.themoviedb.org/3/search/'+source);for(const [key,value] of Object.entries({api_key:apiKey,language:'ja-JP',include_adult:'false',page:String(page),query}))url.searchParams.set(key,value);return fetchJson(url.toString())}));
+ const unique=new Map();for(let i=0;i<payloads.length;i++){const body=payloads[i];if(!Array.isArray(body?.results))throw Error('invalid search source');for(const row of body.results){if(!Number.isSafeInteger(row.id)||row.id<1)continue;if(kind==='person'){unique.set('person:'+row.id,row);continue}const media=sources[i]==='multi'?row.media_type:sources[i];if(!['movie','tv'].includes(media))continue;const anime=Array.isArray(row.genre_ids)&&row.genre_ids.includes(16);if(type==='anime'&&!anime||type==='drama'&&anime)continue;unique.set(media+':'+row.id,{id:row.id,title:row.title||row.name||'',original_title:row.original_title||row.original_name||'',poster_path:row.poster_path||null,overview:row.overview||'',release_date:row.release_date||row.first_air_date||'',date:row.release_date||row.first_air_date||'',vote_average:row.vote_average||0,content_type:type==='anime'?(media==='tv'?'anime_tv':'anime_movie'):media,display_type:anime?'anime':media==='tv'?'drama':'movie',media_type:media==='movie'?'映画':'TVシリーズ'})}}
+ const results=[...unique.values()];return {results,page,hasMore:payloads.some(p=>Number(p.total_pages)>page),scope:'recovery-query-cache',...(type==='anime'?{tvAnime:results.filter(r=>r.content_type==='anime_tv'),animeMovies:results.filter(r=>r.content_type==='anime_movie')}: {})};
+}
+module.exports={search};

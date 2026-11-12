@@ -1,0 +1,17 @@
+{
+  "baseCommit": "1d00fcc",
+  "branch": "work/four-ledgers-20261107",
+  "node": {"tests": 484, "passed": 484, "failed": 0, "skipped": 0},
+  "browser": {"seriesAndOperations": 19, "recoveryRegression": 26, "initialHtmlAndPause": 8, "totalPassed": 53},
+  "series": 13,
+  "uniqueWorkIds": 266,
+  "entryTicketInclusiveCommandsFor13OriginRequests": 94,
+  "coreReadCommandsFor13OriginRequests": 29,
+  "clientSnapshotRequestsPerPage": 1,
+  "fixtures": "unique local preview namespace; metadata/providers are synthetic",
+  "realUpstashConnected": false,
+  "realTmdbFetched": false,
+  "productionVercelAccessed": false,
+  "deployed": false,
+  "productionReady": false
+}

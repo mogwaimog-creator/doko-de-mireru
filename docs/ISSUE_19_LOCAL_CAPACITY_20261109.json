@@ -1,0 +1,67 @@
+{
+  "scope": "known loopback preview keys only; 266 repository IDs plus general-work fixture; seasons/person/provider data are explicitly fixtures",
+  "measured": {
+    "streaming": {
+      "records": 267,
+      "missing": 0,
+      "jsonBytes": 96015,
+      "redisBytes": 128216,
+      "MB": 0.128216
+    },
+    "legacyWatchCopies": {
+      "records": 266,
+      "missing": 0,
+      "jsonBytes": 39900,
+      "redisBytes": 67568,
+      "MB": 0.067568
+    },
+    "work": {
+      "records": 267,
+      "missing": 0,
+      "jsonBytes": 102872,
+      "redisBytes": 128152,
+      "MB": 0.128152
+    },
+    "person": {
+      "records": 1,
+      "missing": 0,
+      "jsonBytes": 475,
+      "redisBytes": 568,
+      "MB": 0.000568
+    },
+    "season": {
+      "records": 59,
+      "missing": 0,
+      "jsonBytes": 22789,
+      "redisBytes": 28296,
+      "MB": 0.028296
+    },
+    "seo": {
+      "records": 266,
+      "missing": 0,
+      "jsonBytes": 149345,
+      "redisBytes": 174848,
+      "MB": 0.174848
+    },
+    "contentMeta": {
+      "records": 2,
+      "missing": 591,
+      "jsonBytes": 230,
+      "redisBytes": 416,
+      "MB": 0.000416
+    },
+    "searchCatalog": {
+      "records": 1,
+      "missing": 0,
+      "jsonBytes": 7398,
+      "redisBytes": 7528,
+      "MB": 0.007528
+    }
+  },
+  "totalMB": 0.535592,
+  "excludes": "Redis process overhead, test/benchmark namespaces, full real people/season populations, production keys, legacy-work compatibility copies not staged in this preview, future growth, backups, active locks",
+  "productionCurrentMB": null,
+  "productionPeakMB": null,
+  "productionAfterMB": null,
+  "productionFreeHeadroom": null
+}

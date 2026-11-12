@@ -1,0 +1,630 @@
+{
+  "at": "2026-11-10T01:31:50.757Z",
+  "sourceCommit": "5d4cb60",
+  "developmentBranch": "work/four-ledgers-20261107",
+  "status": "complete",
+  "target": "same-owned-isolated-upstash-namespace",
+  "totalWorks": 266,
+  "movieWorks": 207,
+  "tvWorks": 59,
+  "initialWorksReused": 5,
+  "addedWorks": 261,
+  "remainingWorks": 0,
+  "duplicateNewWorks": 0,
+  "initialWorksRefetched": 0,
+  "counts": {
+    "works": 266,
+    "seo": 266,
+    "seasonManifests": 59,
+    "firstSeasons": 59,
+    "episodes": 2275,
+    "people": 1,
+    "jpProviders": 266
+  },
+  "batches": [
+    {
+      "batch": 1,
+      "addedWorks": 8,
+      "totalSaved": 13,
+      "remaining": 253,
+      "tmdbRequests": 17,
+      "tmdbBytes": 827993,
+      "reservedCommandsForCollectionSaveAudit": 563,
+      "cumulativeReservedCommands": 1435,
+      "ownedKeyCount": 94,
+      "ownedMemoryBytes": 130984,
+      "observedDatabaseBefore": {
+        "usedMemoryBytes": 937786,
+        "totalCommandsProcessed": 112800,
+        "totalNetInputBytes": null,
+        "totalNetOutputBytes": null
+      },
+      "observedDatabaseAfter": {
+        "usedMemoryBytes": 886201,
+        "totalCommandsProcessed": 112867,
+        "totalNetInputBytes": null,
+        "totalNetOutputBytes": null
+      },
+      "errors": []
+    },
+    {
+      "batch": 2,
+      "addedWorks": 16,
+      "totalSaved": 29,
+      "remaining": 237,
+      "tmdbRequests": 32,
+      "tmdbBytes": 595512,
+      "reservedCommandsForCollectionSaveAudit": 1036,
+      "cumulativeReservedCommands": 2471,
+      "ownedKeyCount": 190,
+      "ownedMemoryBytes": 231671,
+      "observedDatabaseBefore": {
+        "usedMemoryBytes": 160610,
+        "totalCommandsProcessed": 224348,
+        "totalNetInputBytes": null,
+        "totalNetOutputBytes": null
+      },
+      "observedDatabaseAfter": {
+        "usedMemoryBytes": 256019,
+        "totalCommandsProcessed": 225140,
+        "totalNetInputBytes": null,
+        "totalNetOutputBytes": null
+      },
+      "errors": []
+    },
+    {
+      "batch": 3,
+      "addedWorks": 16,
+      "totalSaved": 45,
+      "remaining": 221,
+      "tmdbRequests": 32,
+      "tmdbBytes": 606138,
+      "reservedCommandsForCollectionSaveAudit": 1036,
+      "cumulativeReservedCommands": 3507,
+      "ownedKeyCount": 286,
+      "ownedMemoryBytes": 338953,
+      "observedDatabaseBefore": {
+        "usedMemoryBytes": 205258,
+        "totalCommandsProcessed": 113070,
+        "totalNetInputBytes": null,
+        "totalNetOutputBytes": null
+      },
+      "observedDatabaseAfter": {
+        "usedMemoryBytes": 223713,
+        "totalCommandsProcessed": 113187,
+        "totalNetInputBytes": null,
+        "totalNetOutputBytes": null
+      },
+      "errors": []
+    },
+    {
+      "batch": 4,
+      "addedWorks": 16,
+      "totalSaved": 61,
+      "remaining": 205,
+      "tmdbRequests": 33,
+      "tmdbBytes": 2369393,
+      "reservedCommandsForCollectionSaveAudit": 1067,
+      "cumulativeReservedCommands": 4574,
+      "ownedKeyCount": 384,
+      "ownedMemoryBytes": 477861,
+      "observedDatabaseBefore": {
+        "usedMemoryBytes": 366267,
+        "totalCommandsProcessed": 226040,
+        "totalNetInputBytes": null,
+        "totalNetOutputBytes": null
+      },
+      "observedDatabaseAfter": {
+        "usedMemoryBytes": 289888,
+        "totalCommandsProcessed": 113361,
+        "totalNetInputBytes": null,
+        "totalNetOutputBytes": null
+      },
+      "errors": []
+    },
+    {
+      "batch": 5,
+      "addedWorks": 16,
+      "totalSaved": 77,
+      "remaining": 189,
+      "tmdbRequests": 34,
+      "tmdbBytes": 2907873,
+      "reservedCommandsForCollectionSaveAudit": 1098,
+      "cumulativeReservedCommands": 5672,
+      "ownedKeyCount": 484,
+      "ownedMemoryBytes": 629095,
+      "observedDatabaseBefore": {
+        "usedMemoryBytes": 496095,
+        "totalCommandsProcessed": 226915,
+        "totalNetInputBytes": null,
+        "totalNetOutputBytes": null
+      },
+      "observedDatabaseAfter": {
+        "usedMemoryBytes": 581426,
+        "totalCommandsProcessed": 113554,
+        "totalNetInputBytes": null,
+        "totalNetOutputBytes": null
+      },
+      "errors": []
+    },
+    {
+      "batch": 6,
+      "addedWorks": 16,
+      "totalSaved": 93,
+      "remaining": 173,
+      "tmdbRequests": 40,
+      "tmdbBytes": 2314586,
+      "reservedCommandsForCollectionSaveAudit": 1284,
+      "cumulativeReservedCommands": 6956,
+      "ownedKeyCount": 596,
+      "ownedMemoryBytes": 781475,
+      "observedDatabaseBefore": {
+        "usedMemoryBytes": 643853,
+        "totalCommandsProcessed": 227799,
+        "totalNetInputBytes": null,
+        "totalNetOutputBytes": null
+      },
+      "observedDatabaseAfter": {
+        "usedMemoryBytes": 720860,
+        "totalCommandsProcessed": 113774,
+        "totalNetInputBytes": null,
+        "totalNetOutputBytes": null
+      },
+      "errors": []
+    },
+    {
+      "batch": 7,
+      "addedWorks": 16,
+      "totalSaved": 109,
+      "remaining": 157,
+      "tmdbRequests": 35,
+      "tmdbBytes": 2858429,
+      "reservedCommandsForCollectionSaveAudit": 1129,
+      "cumulativeReservedCommands": 8085,
+      "ownedKeyCount": 698,
+      "ownedMemoryBytes": 945217,
+      "observedDatabaseBefore": {
+        "usedMemoryBytes": 803398,
+        "totalCommandsProcessed": 228834,
+        "totalNetInputBytes": null,
+        "totalNetOutputBytes": null
+      },
+      "observedDatabaseAfter": {
+        "usedMemoryBytes": 974482,
+        "totalCommandsProcessed": 229693,
+        "totalNetInputBytes": null,
+        "totalNetOutputBytes": null
+      },
+      "errors": []
+    },
+    {
+      "batch": 8,
+      "addedWorks": 16,
+      "totalSaved": 125,
+      "remaining": 141,
+      "tmdbRequests": 32,
+      "tmdbBytes": 2713416,
+      "reservedCommandsForCollectionSaveAudit": 1036,
+      "cumulativeReservedCommands": 9121,
+      "ownedKeyCount": 794,
+      "ownedMemoryBytes": 1140944,
+      "observedDatabaseBefore": {
+        "usedMemoryBytes": 974482,
+        "totalCommandsProcessed": 229758,
+        "totalNetInputBytes": null,
+        "totalNetOutputBytes": null
+      },
+      "observedDatabaseAfter": {
+        "usedMemoryBytes": 1054292,
+        "totalCommandsProcessed": 114147,
+        "totalNetInputBytes": null,
+        "totalNetOutputBytes": null
+      },
+      "errors": []
+    },
+    {
+      "batch": 9,
+      "addedWorks": 16,
+      "totalSaved": 141,
+      "remaining": 125,
+      "tmdbRequests": 42,
+      "tmdbBytes": 1521549,
+      "reservedCommandsForCollectionSaveAudit": 1346,
+      "cumulativeReservedCommands": 10467,
+      "ownedKeyCount": 910,
+      "ownedMemoryBytes": 1316367,
+      "observedDatabaseBefore": {
+        "usedMemoryBytes": 1176467,
+        "totalCommandsProcessed": 230596,
+        "totalNetInputBytes": null,
+        "totalNetOutputBytes": null
+      },
+      "observedDatabaseAfter": {
+        "usedMemoryBytes": 1348709,
+        "totalCommandsProcessed": 231629,
+        "totalNetInputBytes": null,
+        "totalNetOutputBytes": null
+      },
+      "errors": []
+    },
+    {
+      "batch": 10,
+      "addedWorks": 16,
+      "totalSaved": 157,
+      "remaining": 109,
+      "tmdbRequests": 38,
+      "tmdbBytes": 1948196,
+      "reservedCommandsForCollectionSaveAudit": 1222,
+      "cumulativeReservedCommands": 11689,
+      "ownedKeyCount": 1018,
+      "ownedMemoryBytes": 1476723,
+      "observedDatabaseBefore": {
+        "usedMemoryBytes": 1342178,
+        "totalCommandsProcessed": 231697,
+        "totalNetInputBytes": null,
+        "totalNetOutputBytes": null
+      },
+      "observedDatabaseAfter": {
+        "usedMemoryBytes": 1351262,
+        "totalCommandsProcessed": 114587,
+        "totalNetInputBytes": null,
+        "totalNetOutputBytes": null
+      },
+      "errors": []
+    },
+    {
+      "batch": 11,
+      "addedWorks": 16,
+      "totalSaved": 173,
+      "remaining": 93,
+      "tmdbRequests": 32,
+      "tmdbBytes": 2423709,
+      "reservedCommandsForCollectionSaveAudit": 1036,
+      "cumulativeReservedCommands": 12725,
+      "ownedKeyCount": 1114,
+      "ownedMemoryBytes": 1626827,
+      "observedDatabaseBefore": {
+        "usedMemoryBytes": 1458900,
+        "totalCommandsProcessed": 232692,
+        "totalNetInputBytes": null,
+        "totalNetOutputBytes": null
+      },
+      "observedDatabaseAfter": {
+        "usedMemoryBytes": 1426063,
+        "totalCommandsProcessed": 114778,
+        "totalNetInputBytes": null,
+        "totalNetOutputBytes": null
+      },
+      "errors": []
+    },
+    {
+      "batch": 12,
+      "addedWorks": 16,
+      "totalSaved": 189,
+      "remaining": 77,
+      "tmdbRequests": 33,
+      "tmdbBytes": 350770,
+      "reservedCommandsForCollectionSaveAudit": 1067,
+      "cumulativeReservedCommands": 13792,
+      "ownedKeyCount": 1212,
+      "ownedMemoryBytes": 1753299,
+      "observedDatabaseBefore": {
+        "usedMemoryBytes": 1551858,
+        "totalCommandsProcessed": 233525,
+        "totalNetInputBytes": null,
+        "totalNetOutputBytes": null
+      },
+      "observedDatabaseAfter": {
+        "usedMemoryBytes": 1596510,
+        "totalCommandsProcessed": 234357,
+        "totalNetInputBytes": null,
+        "totalNetOutputBytes": null
+      },
+      "errors": []
+    },
+    {
+      "batch": 13,
+      "addedWorks": 16,
+      "totalSaved": 205,
+      "remaining": 61,
+      "tmdbRequests": 33,
+      "tmdbBytes": 809539,
+      "reservedCommandsForCollectionSaveAudit": 1067,
+      "cumulativeReservedCommands": 14859,
+      "ownedKeyCount": 1310,
+      "ownedMemoryBytes": 1870962,
+      "observedDatabaseBefore": {
+        "usedMemoryBytes": 1572835,
+        "totalCommandsProcessed": 234412,
+        "totalNetInputBytes": null,
+        "totalNetOutputBytes": null
+      },
+      "observedDatabaseAfter": {
+        "usedMemoryBytes": 1480845,
+        "totalCommandsProcessed": 115134,
+        "totalNetInputBytes": null,
+        "totalNetOutputBytes": null
+      },
+      "errors": []
+    },
+    {
+      "batch": 14,
+      "addedWorks": 16,
+      "totalSaved": 221,
+      "remaining": 45,
+      "tmdbRequests": 32,
+      "tmdbBytes": 882312,
+      "reservedCommandsForCollectionSaveAudit": 1036,
+      "cumulativeReservedCommands": 15895,
+      "ownedKeyCount": 1406,
+      "ownedMemoryBytes": 1987494,
+      "observedDatabaseBefore": {
+        "usedMemoryBytes": 1668733,
+        "totalCommandsProcessed": 235275,
+        "totalNetInputBytes": null,
+        "totalNetOutputBytes": null
+      },
+      "observedDatabaseAfter": {
+        "usedMemoryBytes": 1764924,
+        "totalCommandsProcessed": 236047,
+        "totalNetInputBytes": null,
+        "totalNetOutputBytes": null
+      },
+      "errors": []
+    },
+    {
+      "batch": 15,
+      "addedWorks": 16,
+      "totalSaved": 237,
+      "remaining": 29,
+      "tmdbRequests": 43,
+      "tmdbBytes": 2937488,
+      "reservedCommandsForCollectionSaveAudit": 1377,
+      "cumulativeReservedCommands": 17272,
+      "ownedKeyCount": 1524,
+      "ownedMemoryBytes": 2262717,
+      "observedDatabaseBefore": {
+        "usedMemoryBytes": 1554923,
+        "totalCommandsProcessed": 115373,
+        "totalNetInputBytes": null,
+        "totalNetOutputBytes": null
+      },
+      "observedDatabaseAfter": {
+        "usedMemoryBytes": 2012550,
+        "totalCommandsProcessed": 237156,
+        "totalNetInputBytes": null,
+        "totalNetOutputBytes": null
+      },
+      "errors": []
+    },
+    {
+      "batch": 16,
+      "addedWorks": 8,
+      "totalSaved": 245,
+      "remaining": 21,
+      "tmdbRequests": 19,
+      "tmdbBytes": 679119,
+      "reservedCommandsForCollectionSaveAudit": 625,
+      "cumulativeReservedCommands": 17897,
+      "ownedKeyCount": 1578,
+      "ownedMemoryBytes": 2333993,
+      "observedDatabaseBefore": {
+        "usedMemoryBytes": 1724980,
+        "totalCommandsProcessed": 115610,
+        "totalNetInputBytes": null,
+        "totalNetOutputBytes": null
+      },
+      "observedDatabaseAfter": {
+        "usedMemoryBytes": 2059808,
+        "totalCommandsProcessed": 237716,
+        "totalNetInputBytes": null,
+        "totalNetOutputBytes": null
+      },
+      "errors": []
+    },
+    {
+      "batch": 17,
+      "addedWorks": 8,
+      "totalSaved": 253,
+      "remaining": 13,
+      "tmdbRequests": 23,
+      "tmdbBytes": 532438,
+      "reservedCommandsForCollectionSaveAudit": 749,
+      "cumulativeReservedCommands": 18646,
+      "ownedKeyCount": 1640,
+      "ownedMemoryBytes": 2411183,
+      "observedDatabaseBefore": {
+        "usedMemoryBytes": 1737345,
+        "totalCommandsProcessed": 115702,
+        "totalNetInputBytes": null,
+        "totalNetOutputBytes": null
+      },
+      "observedDatabaseAfter": {
+        "usedMemoryBytes": 1790654,
+        "totalCommandsProcessed": 115798,
+        "totalNetInputBytes": null,
+        "totalNetOutputBytes": null
+      },
+      "errors": []
+    },
+    {
+      "batch": 18,
+      "addedWorks": 13,
+      "totalSaved": 266,
+      "remaining": 0,
+      "tmdbRequests": 30,
+      "tmdbBytes": 1026920,
+      "reservedCommandsForCollectionSaveAudit": 971,
+      "cumulativeReservedCommands": 19617,
+      "ownedKeyCount": 1726,
+      "ownedMemoryBytes": 2522236,
+      "observedDatabaseBefore": {
+        "usedMemoryBytes": 1787910,
+        "totalCommandsProcessed": 115824,
+        "totalNetInputBytes": null,
+        "totalNetOutputBytes": null
+      },
+      "observedDatabaseAfter": {
+        "usedMemoryBytes": 2159595,
+        "totalCommandsProcessed": 239104,
+        "totalNetInputBytes": null,
+        "totalNetOutputBytes": null
+      },
+      "errors": []
+    }
+  ],
+  "tmdb": {
+    "requestsThisRun": 580,
+    "responseBytesThisRun": 28305380,
+    "errors": 0,
+    "recursiveCastOrCreditsExpansion": false
+  },
+  "budget": {
+    "initialReservedCommands": 872,
+    "finalReservedCommands": 20053,
+    "reservedCommandsThisRun": 19181,
+    "finalRequests": 9517,
+    "requestsThisRun": 9069,
+    "maxCumulativeReservedCommands": 40000,
+    "earlyStopThreshold": 38000,
+    "maxBatchReservedCommands": 2500,
+    "maxOwnedBytes": 8388608,
+    "maxDatabaseBytesWithHeadroom": 240000000,
+    "monthlyBillingRemaining": null,
+    "billingMeasured": false,
+    "infoCounterDeltaIsBilling": false
+  },
+  "finalMetrics": {
+    "ownedKeyCount": 1726,
+    "ownedMemoryBytes": 2522236,
+    "reservedCommands": 436,
+    "sessionReservedCommands": 20053,
+    "sessionRequests": 9517
+  },
+  "verification": {
+    "at": "2026-11-10T01:31:50.757Z",
+    "scope": "all-13-series-saved-data-read-only",
+    "target": "upstash",
+    "checks": [
+      {
+        "series": "godzilla",
+        "works": 47,
+        "sample": "movie:1678",
+        "sameSharedProviders": true,
+        "sameSuccessTimestamp": true
+      },
+      {
+        "series": "mcu",
+        "works": 54,
+        "sample": "movie:1771",
+        "sameSharedProviders": true,
+        "sameSuccessTimestamp": true
+      },
+      {
+        "series": "jurassic",
+        "works": 7,
+        "sample": "movie:329",
+        "sameSharedProviders": true,
+        "sameSuccessTimestamp": true
+      },
+      {
+        "series": "harrypotter",
+        "works": 11,
+        "sample": "movie:671",
+        "sameSharedProviders": true,
+        "sameSuccessTimestamp": true
+      },
+      {
+        "series": "lordoftherings",
+        "works": 8,
+        "sample": "movie:120",
+        "sameSharedProviders": true,
+        "sameSuccessTimestamp": true
+      },
+      {
+        "series": "starwars",
+        "works": 28,
+        "sample": "tv:114479",
+        "sameSharedProviders": true,
+        "sameSuccessTimestamp": true
+      },
+      {
+        "series": "wildspeed",
+        "works": 11,
+        "sample": "movie:9799",
+        "sameSharedProviders": true,
+        "sameSuccessTimestamp": true
+      },
+      {
+        "series": "minions",
+        "works": 7,
+        "sample": "movie:20352",
+        "sameSharedProviders": true,
+        "sameSuccessTimestamp": true
+      },
+      {
+        "series": "odoru",
+        "works": 16,
+        "sample": "tv:20794",
+        "sameSharedProviders": true,
+        "sameSuccessTimestamp": true
+      },
+      {
+        "series": "eva",
+        "works": 6,
+        "sample": "movie:15137",
+        "sameSharedProviders": true,
+        "sameSuccessTimestamp": true
+      },
+      {
+        "series": "conan",
+        "works": 30,
+        "sample": "movie:21422",
+        "sameSharedProviders": true,
+        "sameSuccessTimestamp": true
+      },
+      {
+        "series": "gundam",
+        "works": 38,
+        "sample": "tv:21731",
+        "sameSharedProviders": true,
+        "sameSuccessTimestamp": true
+      },
+      {
+        "series": "kimetsu",
+        "works": 3,
+        "sample": "tv:85937",
+        "sameSharedProviders": true,
+        "sameSuccessTimestamp": true
+      }
+    ],
+    "uniqueWorks": 266,
+    "uniqueDetailSamples": 13,
+    "sourceCalls": 0,
+    "readRequests": 43,
+    "metrics": {
+      "ownedKeyCount": 1726,
+      "ownedMemoryBytes": 2522236,
+      "reservedCommands": 436,
+      "sessionReservedCommands": 20053,
+      "sessionRequests": 9517
+    },
+    "legacyReads": 0,
+    "dataWrites": 0,
+    "runtimeTrackingWrites": 26,
+    "productionChanged": false
+  },
+  "tests": {
+    "passed": 10,
+    "failed": 0,
+    "skipped": 0
+  },
+  "seriesHtmlUnchanged": true,
+  "legacyReads": 0,
+  "legacyChanges": 0,
+  "scans": 0,
+  "oldDeletes": 0,
+  "productionDeployment": false,
+  "publicCutover": false,
+  "privateCheckpointDirectory": "/workspace/work/staged-five-ledgers-20261110"
+}

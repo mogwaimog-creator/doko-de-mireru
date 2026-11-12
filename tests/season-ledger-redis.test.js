@@ -1,0 +1,12 @@
+'use strict';
+const assert=require('node:assert/strict');
+const {key,decode}=require('../api/_season-ledger-redis');
+assert.equal(key('tv',123,1),'doko:season:v1:tv:123:1');
+assert.equal(key('tv',123,0),'doko:season:v1:tv:123:0');
+assert.throws(()=>key('movie',123,1),/Invalid/);
+const record={type:'tv',id:123,seasonNumber:1,episodes:[]};
+assert.deepEqual(decode(JSON.stringify(record),'tv',123,1),record);
+assert.equal(decode(null,'tv',123,1),null);
+assert.throws(()=>decode('{broken','tv',123,1),/Invalid stored season JSON/);
+assert.throws(()=>decode(JSON.stringify(record),'tv',124,1),/Invalid stored season record/);
+console.log('season ledger Redis adapter pure tests passed');

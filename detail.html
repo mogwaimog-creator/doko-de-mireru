@@ -2626,6 +2626,11 @@ Netflix、Amazon Prime Video、U-NEXT、Hulu、Disney+など、
 </p>
 
 <div id="providers"></div>
+<div id="providerUpdateNotice" role="note" style="margin:14px 0;padding:14px 16px;border:1px solid #d6e0f0;border-radius:12px;background:#f3f6fc;color:#334155;line-height:1.7;font-size:14px;">
+  <strong style="display:block;margin-bottom:5px;color:#1b3359;">配信情報について</strong>
+  <p style="margin:0;">配信情報は1日1回を目安に更新しています。配信状況や料金は変更される場合がありますので、視聴前に各サービスの公式サイトで最新情報をご確認ください。</p>
+  <!-- 最終取得日時・次回更新可能日時は、共通配信台帳が日時を返すようになってから実データで表示する。推測した日時は表示しない。 -->
+</div>
 
 <!-- 配信サービスの料金・機能比較への案内 -->
 <div class="streaming-comparison-guide">
@@ -3087,7 +3092,10 @@ const movieId =
   params.get("id");
 
 const mediaType =
-  params.get("type") || "movie";  
+  params.get("type") || "movie";
+
+// Server-rendered SEO is authoritative; legacy client updates remain for static pages.
+const hasServerSeo = document.documentElement.getAttribute("data-seo-ledger") === "1";  
 
 /* =========================================================
    詳細ページの正規URL作成
@@ -3202,7 +3210,7 @@ const canonical =
   );
 
 
-if(canonical){
+if(canonical && !hasServerSeo){
 
   canonical.href =
     initialCanonicalUrl;
@@ -3214,11 +3222,13 @@ if(canonical){
    初期OGP URL
 ========================================================= */
 
+if(!hasServerSeo){
 setMetaProperty(
   "ogUrl",
   "content",
   initialCanonicalUrl
 );
+}
 
 
 /* =========================================================
@@ -3346,6 +3356,7 @@ async function loadMovie(){
     renderMovie(
       movie
     );
+    renderStreamingFreshness(movie.streamingMeta);
 
     setupFavoriteButton(
   movie
@@ -3385,6 +3396,8 @@ async function loadMovie(){
 ========================================================= */
 
 function updateSeo(movie){
+
+  if(hasServerSeo)return;
 
   if(!movie){
 
@@ -4619,6 +4632,37 @@ function isGodzillaGuideWork(movie){
    作品情報表示
 ========================================================= */
 
+function renderStreamingFreshness(meta){
+  let notice=document.getElementById('streamingFreshness');
+  if(!meta){if(notice)notice.remove();return;}
+  const section=document.getElementById('providersSection');
+  if(!section)return;
+  if(!notice){notice=document.createElement('p');notice.id='streamingFreshness';notice.setAttribute('role','status');section.prepend(notice);}
+  const date=meta.lastSuccessAt?new Date(meta.lastSuccessAt):null;
+  const checked=date&&Number.isFinite(date.getTime())?date.toLocaleString('ja-JP',{timeZone:'Asia/Tokyo'})+'（日本時間）':null;
+  let text=meta.status==='failed'?'配信情報を取得できていません。':meta.status==='unknown'?'配信情報はまだ取得していません。':meta.status==='stale'?'古い配信情報です。':'保存済みの配信情報です。';
+  if(meta.storageUnavailable)text+=' 配信情報の保存・読込を完了できていません。';
+  if(checked)text+=' 最終正常取得：'+checked+'。';
+  if(meta.refreshFailed)text+=' 更新に失敗したため、前回の正常情報を表示しています。';
+  if(meta.coverage&&!['flatrate','rent','buy'].every(k=>meta.coverage.includes(k))&&checked)text+=' 一部の配信区分は未取得です。';
+  notice.textContent=text;
+  const description=document.getElementById('providersDescription');if(description)description.textContent=meta.status==='unknown'||meta.status==='failed'?'現在の配信状況は確認できていません。公式サイトをご確認ください。':meta.status==='stale'?'以下は前回の正常取得情報です。現在の提供状況は公式サイトでご確認ください。':meta.coverage?.length===3?'日本向けの見放題・レンタル・購入情報を表示しています。':'取得済みの配信区分のみを表示しています。';
+  if(meta.status==='unknown'||meta.status==='failed'){
+    const providers=document.getElementById('providers');if(providers)providers.textContent='取得失敗・未取得は「配信なし」を意味しません。';
+  }
+  const empty=document.querySelector('#providers .provider-empty-message');
+  if(empty&&checked){empty.textContent=meta.status==='stale'?'前回正常取得時点では配信情報は0件でした。現在の状況は未確認です。':meta.coverage?.length===3?'最終正常取得時点では、日本向けの見放題・レンタル・購入は0件でした。':'保存情報では見放題は0件です。レンタル・購入は未取得です。';}
+  const unknown=meta.status==='unknown'||meta.status==='failed';
+  for(const item of document.querySelectorAll('#faqList .faq-item')){
+    const question=item.querySelector('.faq-question'),answer=item.querySelector('.faq-answer');
+    if(answer&&question&&unknown&&/配信|見放題|Netflix|Amazon|レンタル|購入|Hulu|Disney|U-NEXT/i.test(question.textContent))answer.textContent='配信情報は未取得、または取得失敗のため、公式サイトでご確認ください。';
+  }
+  if(meta.status!=='fresh'){
+    const faq=document.getElementById('faqList');
+    if(faq){const walker=document.createTreeWalker(faq,NodeFilter.SHOW_TEXT);let node;while((node=walker.nextNode()))node.nodeValue=node.nodeValue.replace(/現在/g,'保存情報では');}
+  }
+}
+
 function renderMovie(movie){
 
   loading.style.display =
@@ -5071,43 +5115,8 @@ if(
       "director"
     );
 
-  if(
-    directorElement &&
-    movie.director.id
-  ){
+  setText("director", movie.director.name);
 
-    const directorLink =
-      document.createElement(
-        "a"
-      );
-
-    directorLink.href =
-      "./person.html?id=" +
-      encodeURIComponent(
-        movie.director.id
-      );
-
-    directorLink.className =
-      "person-link";
-
-    directorLink.textContent =
-      movie.director.name;
-
-    directorElement.innerHTML =
-      "";
-
-    directorElement.appendChild(
-      directorLink
-    );
-
-  }else{
-
-    setText(
-      "director",
-      movie.director.name
-    );
-
-  }
 
 }else{
 
@@ -5144,7 +5153,9 @@ if(
   );
 
   renderSeries(
-    movie.series
+    movie.series,
+    movie.seriesStreamingByWork,
+    movie.seriesStreamingManaged
   );
 
 
@@ -5272,32 +5283,8 @@ function renderCast(cast){
     }
 
 
-    const item =
-  document.createElement(
-    "a"
-  );
-
-
-item.className =
-  "cast-item person-link";
-
-
-if(
-  person.id
-){
-
-  item.href =
-    "./person.html?id=" +
-    encodeURIComponent(
-      person.id
-    );
-
-}else{
-
-  item.href =
-    "#";
-
-}
+    const item = document.createElement("span");
+    item.className = "cast-item";
 
 
 item.textContent =
@@ -7421,33 +7408,6 @@ function renderEpisodes(data){
     }
 
 
-    /*
-       あらすじ
-    */
-
-    if(episode.overview){
-
-      const overview =
-        document.createElement(
-          "div"
-        );
-
-
-      overview.className =
-        "episode-overview";
-
-
-      overview.textContent =
-        episode.overview;
-
-
-      content.appendChild(
-        overview
-      );
-
-    }
-
-
     item.appendChild(
       content
     );
@@ -7487,7 +7447,7 @@ function renderEpisodes(data){
    シリーズ作品
 ========================================================= */
 
-function renderSeries(series){
+function renderSeries(series, streamingByWork, managed=false){
 
   const section =
     document.getElementById(
@@ -7810,12 +7770,25 @@ container.appendChild(
 );
 
 
-/* 配信情報はカード表示後に取得 */
-loadSeriesStreamingStatus(
-  streamingStatus,
-  movie.id,
-  isTv
-);
+/* 共通配信台帳から取得済みの見放題情報があれば追加API呼び出しを省略。
+   null/未指定は未取得として従来の取得経路を維持する。 */
+const sharedStreaming =
+  streamingByWork &&
+  Object.prototype.hasOwnProperty.call(
+    streamingByWork,
+    (isTv ? "tv:" : "movie:") + movie.id
+  )
+    ? streamingByWork[(isTv ? "tv:" : "movie:") + movie.id]
+    : null;
+
+if(Array.isArray(sharedStreaming)){
+  renderSeriesStreamingProviders(streamingStatus, sharedStreaming);
+}else if(managed){
+  streamingStatus.className = "series-streaming-status unknown";
+  streamingStatus.textContent = "配信情報は未取得、または更新待ちです";
+}else{
+  loadSeriesStreamingStatus(streamingStatus, movie.id, isTv);
+}
 
     }
   );
@@ -7826,6 +7799,34 @@ loadSeriesStreamingStatus(
    関連シリーズ 配信状況取得
    ※ 見放題のみ表示
 ========================================================= */
+
+/* 共通台帳の取得済み見放題情報を従来カード形式で表示 */
+function renderSeriesStreamingProviders(element, values){
+  const streaming = normalizeProviders(values);
+  if(streaming.length === 0){
+    element.className = "series-streaming-status none";
+    element.textContent = "配信情報なし";
+    return;
+  }
+  const providers = streaming.filter(function(p){ return p && p.logo_path; }).slice(0,3);
+  element.className = "series-streaming-status streaming";
+  element.innerHTML = "";
+  const label = document.createElement("div");
+  label.className = "series-streaming-label";
+  label.textContent = "配信中";
+  element.appendChild(label);
+  const logos = document.createElement("div");
+  logos.className = "series-streaming-logos";
+  providers.forEach(function(p){
+    const img = document.createElement("img");
+    img.src = "https://image.tmdb.org/t/p/w92" + p.logo_path;
+    img.alt = p.provider_name || "配信サービス";
+    img.title = p.provider_name || "";
+    img.loading = "lazy";
+    logos.appendChild(img);
+  });
+  element.appendChild(logos);
+}
 
 async function loadSeriesStreamingStatus(
   element,

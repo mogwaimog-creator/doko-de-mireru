@@ -1,0 +1,255 @@
+{
+  "scope": "continued-real-validation-local-and-blocked-upstash",
+  "dateJST": "2026-11-10",
+  "baseCommit": "41ba15d",
+  "initialUncommittedChanges": false,
+  "priorPrivateArtifactsAvailable": false,
+  "secrets": {
+    "valuesDisplayed": false,
+    "TMDB_API_KEY": "real requests succeeded",
+    "UPSTASH_REDIS_REST_URL": "proxy placeholder; explicit configured allowed HTTPS host used",
+    "UPSTASH_REDIS_REST_TOKEN": "configured ready; actual service HTTP 401 WRONGPASS"
+  },
+  "tmdb": {
+    "metadataRequests": 13,
+    "metadataBytes": 652959,
+    "externalSearchRequests": 2,
+    "externalSearchBytes": 4742
+  },
+  "upstash": {
+    "attemptedOperations": [
+      "INFO",
+      "INFO"
+    ],
+    "httpStatus": 401,
+    "errorCategory": "WRONGPASS",
+    "reservedCommands": 2,
+    "writes": 0,
+    "savedRecords": 0,
+    "capacityMeasured": false,
+    "billedCommandsMeasured": false,
+    "automaticRetries": 0
+  },
+  "limits": {
+    "commandsPerBatch": 2500,
+    "commandsPerTargetSession": 40000,
+    "ownedBytes": 8388608,
+    "databaseStopBytes": 240000000
+  },
+  "localSaveBatches": [
+    {
+      "at": "2026-11-10T00:10:26.369Z",
+      "target": "local",
+      "completed": [
+        {
+          "type": "movie",
+          "id": 1678
+        },
+        {
+          "type": "movie",
+          "id": 315011
+        },
+        {
+          "type": "movie",
+          "id": 940721
+        },
+        {
+          "type": "movie",
+          "id": 124905
+        }
+      ],
+      "totalSaved": 4,
+      "before": {
+        "usedMemoryBytes": 994048,
+        "totalCommandsProcessed": 0,
+        "totalNetInputBytes": 14,
+        "totalNetOutputBytes": 0
+      },
+      "after": {
+        "usedMemoryBytes": 1493856,
+        "totalCommandsProcessed": 259,
+        "totalNetInputBytes": 87732,
+        "totalNetOutputBytes": 20938
+      },
+      "ownedKeyCount": 34,
+      "ownedMemoryBytes": 47488,
+      "reservedCommands": 265,
+      "sessionReservedCommands": 265,
+      "sessionRequests": 107,
+      "observedDatabaseCommandsDelta": 259,
+      "note": "database INFO delta includes concurrent clients; reservedCommands is a conservative owned-operation bound including closing INFO, not billing",
+      "productionRoutesChanged": false,
+      "legacyReads": 0,
+      "scans": 0,
+      "oldDeletes": 0
+    },
+    {
+      "at": "2026-11-10T00:10:30.939Z",
+      "target": "local",
+      "completed": [
+        {
+          "type": "tv",
+          "id": 202411
+        }
+      ],
+      "totalSaved": 5,
+      "before": {
+        "usedMemoryBytes": 1493856,
+        "totalCommandsProcessed": 260,
+        "totalNetInputBytes": 87746,
+        "totalNetOutputBytes": 26268
+      },
+      "after": {
+        "usedMemoryBytes": 1501728,
+        "totalCommandsProcessed": 368,
+        "totalNetInputBytes": 112470,
+        "totalNetOutputBytes": 69445
+      },
+      "ownedKeyCount": 42,
+      "ownedMemoryBytes": 55520,
+      "reservedCommands": 110,
+      "sessionReservedCommands": 375,
+      "sessionRequests": 161,
+      "observedDatabaseCommandsDelta": 108,
+      "note": "database INFO delta includes concurrent clients; reservedCommands is a conservative owned-operation bound including closing INFO, not billing",
+      "productionRoutesChanged": false,
+      "legacyReads": 0,
+      "scans": 0,
+      "oldDeletes": 0
+    }
+  ],
+  "browser": {
+    "scope": "staged-real-data",
+    "target": "local",
+    "passed": 13,
+    "checks": [
+      {
+        "test": "saved new movie/TV, person, season, all JP categories",
+        "passed": true,
+        "movieId": 315011,
+        "tvId": 202411,
+        "personId": 18615,
+        "episodes": 10
+      },
+      {
+        "test": "initial SEO HTML movie",
+        "passed": true
+      },
+      {
+        "test": "initial SEO HTML tv",
+        "passed": true
+      },
+      {
+        "test": "unregistered HTML is noindex and cannot trigger acquisition/storage",
+        "passed": true
+      },
+      {
+        "test": "static person page ID bypasses work-only acquisition guard",
+        "passed": true
+      },
+      {
+        "test": "1280 external title search → saved new movie and JP UI",
+        "passed": true
+      },
+      {
+        "test": "1280 external person search → saved profile/credits UI",
+        "passed": true
+      },
+      {
+        "test": "1280 new TV → first collected season → episodes UI",
+        "passed": true
+      },
+      {
+        "test": "390 external title search → saved new movie and JP UI",
+        "passed": true
+      },
+      {
+        "test": "390 external person search → saved profile/credits UI",
+        "passed": true
+      },
+      {
+        "test": "390 new TV → first collected season → episodes UI",
+        "passed": true
+      },
+      {
+        "test": "20 parallel saved reads, no source reread or TMDB calls",
+        "passed": true,
+        "p50Ms": 84.77641799999947,
+        "p95Ms": 94.73653700000068
+      },
+      {
+        "test": "real TMDB image CDN responses loaded within bounded image budget",
+        "passed": true
+      }
+    ],
+    "errors": [],
+    "externalImageRequestsBlocked": 78,
+    "images": {
+      "enabled": true,
+      "requests": 4,
+      "bytes": 231189,
+      "failures": 0,
+      "loadedImages": [
+        {
+          "width": 1280,
+          "url": "/detail.html",
+          "decoded": 1
+        },
+        {
+          "width": 1280,
+          "url": "/person.html",
+          "decoded": 1
+        },
+        {
+          "width": 1280,
+          "url": "/detail.html",
+          "decoded": 1
+        },
+        {
+          "width": 390,
+          "url": "/detail.html",
+          "decoded": 1
+        },
+        {
+          "width": 390,
+          "url": "/person.html",
+          "decoded": 1
+        },
+        {
+          "width": 390,
+          "url": "/detail.html",
+          "decoded": 1
+        }
+      ]
+    },
+    "metrics": {
+      "target": "local",
+      "registered": 5,
+      "sourceReads": 2,
+      "liveSearchRequests": 2,
+      "liveSearchBytes": 4742,
+      "reservedCommands": 960,
+      "requests": 451,
+      "scope": "private-staged-real-data",
+      "productionChanged": false,
+      "errors": []
+    },
+    "memory": {
+      "ownedKeyCount": 44,
+      "ownedMemoryBytes": 60784,
+      "reservedCommands": 567,
+      "sessionReservedCommands": 982,
+      "sessionRequests": 473
+    },
+    "productionChanged": false
+  },
+  "nodeTests": {
+    "passed": 11,
+    "failed": 0
+  },
+  "productionDeployment": false,
+  "publicCutover": false,
+  "legacyModification": false,
+  "legacyDeletion": false,
+  "databaseScans": 0
+}

@@ -1,0 +1,7 @@
+'use strict';
+// Explicitly artificial. Never presented as real metadata or migration evidence.
+const kit=require('./package'),manual=require('./targeted-manual');
+const at='2026-11-09T00:00:00Z';
+function packets(){return kit.roster.map(({type,id})=>({type,id,source:{kind:'synthetic-fixture',capturedAt:at},data:{id,title:'隔離用映画'+id,name:'隔離用TV'+id,overview:'実在作品の内容ではない試験用説明。'.repeat(5),poster_path:'/fixture.jpg',release_date:'2020-01-01',first_air_date:'2020-01-01',runtime:120,episode_run_time:[24],genres:[{id:18,name:'ドラマ'}],credits:{cast:Array.from({length:12},(_,n)=>({id:n+1,name:'試験出演者'+n})),crew:[{id:50,name:'試験監督',job:'Director'}]},status:'Ended',seasons:type==='tv'?[{season_number:1,name:'第1シーズン',episode_count:12}]:undefined}}))}
+async function manualFixture(){const w=kit.roster[0],key='doko:work:v1:'+w.type+':'+w.id,value=JSON.stringify({schemaVersion:1,...w,title:'手動確認済みの隔離作品',confirmed:true,lockedFields:['title','cast'],cast:Array.from({length:30},(_,n)=>({id:n+1,name:'保持する出演者'+n})),directors:[{id:80,name:'監督その一'},{id:81,name:'監督その二'}],pageExtras:{godzilla:{note:'保持する独自文章',order:1,award:'試験の賞'}}});const snapshot=await manual.capture(async args=>args.slice(1).map(k=>k===key?value:null),{writersStopped:true});return {snapshot,review:manual.review(snapshot,{sourceLocationsConfirmed:true,unmarkedCorrectionsReviewed:true,operatorReason:'synthetic manual fixture only',decisions:[{sourceKey:key,sourceSha256:snapshot.records[0].sourceSha256,keepFixedFields:[]}]})}}
+module.exports={packets,manualFixture,at};

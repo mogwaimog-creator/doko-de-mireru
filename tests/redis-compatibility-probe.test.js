@@ -1,0 +1,5 @@
+'use strict';
+const {test}=require('node:test'),assert=require('node:assert/strict'),{probe}=require('../scripts/lib/redis-compatibility-probe'),{command}=require('./helpers/local-redis');
+test('compatibility probe never runs without explicit isolated transport',async()=>{await assert.rejects(probe(),/explicit/);await assert.rejects(probe(()=>assert.fail(),{prefix:'doko:watch:v3:'}),/explicit/)});
+test('local essential compatibility passes in a small fixed command budget',{skip:!process.env.REDIS_TEST_CLI},async()=>{const result=await probe(command);assert(result.complete);assert.equal(result.checks.length,5);assert(result.rpcs<40);assert.match(result.fullBackupBinaryTransport,/not covered/)});
+test('unsupported provider commands fail the report without falling back or resetting data',{skip:!process.env.REDIS_TEST_CLI},async()=>{const result=await probe(args=>{if(args[0]==='EVAL')throw Error('unsupported');return command(args)});assert.equal(result.complete,false);assert(result.checks.some(c=>!c.passed));assert(result.rpcs<40)});

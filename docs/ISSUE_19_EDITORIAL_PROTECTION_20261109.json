@@ -1,0 +1,1219 @@
+{
+  "date": "2026-11-09",
+  "scope": "tracked repository sources, not a production Redis inventory",
+  "seriesCount": 13,
+  "uniqueWorks": 266,
+  "series": [
+    {
+      "series": "godzilla",
+      "file": "godzilla.html",
+      "sha256": "a977bb0f4e1859f191ec0cac310f4d7377d4ee2355cf9a62be53839c855574d5",
+      "orderedMembership": [
+        {
+          "type": "movie",
+          "id": 1678
+        },
+        {
+          "type": "movie",
+          "id": 315011
+        },
+        {
+          "type": "movie",
+          "id": 940721
+        },
+        {
+          "type": "movie",
+          "id": 124905
+        },
+        {
+          "type": "movie",
+          "id": 293167
+        },
+        {
+          "type": "movie",
+          "id": 373571
+        },
+        {
+          "type": "movie",
+          "id": 399566
+        },
+        {
+          "type": "movie",
+          "id": 823464
+        },
+        {
+          "type": "tv",
+          "id": 202411
+        },
+        {
+          "type": "tv",
+          "id": 117678
+        },
+        {
+          "type": "movie",
+          "id": 929
+        },
+        {
+          "type": "movie",
+          "id": 1679
+        },
+        {
+          "type": "movie",
+          "id": 1680
+        },
+        {
+          "type": "movie",
+          "id": 1682
+        },
+        {
+          "type": "movie",
+          "id": 15766
+        },
+        {
+          "type": "movie",
+          "id": 19545
+        },
+        {
+          "type": "movie",
+          "id": 3115
+        },
+        {
+          "type": "movie",
+          "id": 18627
+        },
+        {
+          "type": "movie",
+          "id": 3107
+        },
+        {
+          "type": "movie",
+          "id": 39462
+        },
+        {
+          "type": "movie",
+          "id": 39464
+        },
+        {
+          "type": "movie",
+          "id": 19336
+        },
+        {
+          "type": "movie",
+          "id": 39264
+        },
+        {
+          "type": "movie",
+          "id": 38582
+        },
+        {
+          "type": "movie",
+          "id": 19333
+        },
+        {
+          "type": "movie",
+          "id": 421467
+        },
+        {
+          "type": "movie",
+          "id": 18289
+        },
+        {
+          "type": "movie",
+          "id": 36679
+        },
+        {
+          "type": "movie",
+          "id": 39465
+        },
+        {
+          "type": "movie",
+          "id": 6593
+        },
+        {
+          "type": "movie",
+          "id": 39466
+        },
+        {
+          "type": "movie",
+          "id": 12561
+        },
+        {
+          "type": "movie",
+          "id": 10643
+        },
+        {
+          "type": "movie",
+          "id": 39468
+        },
+        {
+          "type": "movie",
+          "id": 36243
+        },
+        {
+          "type": "movie",
+          "id": 12636
+        },
+        {
+          "type": "movie",
+          "id": 39469
+        },
+        {
+          "type": "movie",
+          "id": 15767
+        },
+        {
+          "type": "movie",
+          "id": 449574
+        },
+        {
+          "type": "movie",
+          "id": 492719
+        },
+        {
+          "type": "movie",
+          "id": 536115
+        },
+        {
+          "type": "movie",
+          "id": 39410
+        },
+        {
+          "type": "movie",
+          "id": 36214
+        },
+        {
+          "type": "movie",
+          "id": 36212
+        },
+        {
+          "type": "movie",
+          "id": 36247
+        },
+        {
+          "type": "movie",
+          "id": 19742
+        },
+        {
+          "type": "movie",
+          "id": 438604
+        }
+      ],
+      "orderedMembershipSha256": "77a815637341835e444cd1efcaa37ec1830ecaa67a6bcbc3890b00e47d394012",
+      "count": 47,
+      "protection": "keep complete tracked HTML including editorial text, order, ID mappings and links; no upstream replacement"
+    },
+    {
+      "series": "mcu",
+      "file": "mcu.html",
+      "sha256": "06a22b9968fde0263f76c19e039acb7cf3d2878c23e71afd0af04157452b8a56",
+      "orderedMembership": [
+        {
+          "type": "movie",
+          "id": 1771
+        },
+        {
+          "type": "movie",
+          "id": 299537
+        },
+        {
+          "type": "movie",
+          "id": 1726
+        },
+        {
+          "type": "movie",
+          "id": 10138
+        },
+        {
+          "type": "movie",
+          "id": 1724
+        },
+        {
+          "type": "movie",
+          "id": 10195
+        },
+        {
+          "type": "movie",
+          "id": 24428
+        },
+        {
+          "type": "movie",
+          "id": 76338
+        },
+        {
+          "type": "movie",
+          "id": 68721
+        },
+        {
+          "type": "movie",
+          "id": 100402
+        },
+        {
+          "type": "movie",
+          "id": 118340
+        },
+        {
+          "type": "movie",
+          "id": 283995
+        },
+        {
+          "type": "tv",
+          "id": 232125
+        },
+        {
+          "type": "movie",
+          "id": 99861
+        },
+        {
+          "type": "movie",
+          "id": 102899
+        },
+        {
+          "type": "movie",
+          "id": 271110
+        },
+        {
+          "type": "movie",
+          "id": 497698
+        },
+        {
+          "type": "movie",
+          "id": 284054
+        },
+        {
+          "type": "movie",
+          "id": 315635
+        },
+        {
+          "type": "movie",
+          "id": 284052
+        },
+        {
+          "type": "movie",
+          "id": 284053
+        },
+        {
+          "type": "movie",
+          "id": 363088
+        },
+        {
+          "type": "movie",
+          "id": 299536
+        },
+        {
+          "type": "movie",
+          "id": 299534
+        },
+        {
+          "type": "tv",
+          "id": 85271
+        },
+        {
+          "type": "movie",
+          "id": 566525
+        },
+        {
+          "type": "tv",
+          "id": 88396
+        },
+        {
+          "type": "movie",
+          "id": 429617
+        },
+        {
+          "type": "movie",
+          "id": 524434
+        },
+        {
+          "type": "movie",
+          "id": 634649
+        },
+        {
+          "type": "movie",
+          "id": 453395
+        },
+        {
+          "type": "tv",
+          "id": 88329
+        },
+        {
+          "type": "tv",
+          "id": 92749
+        },
+        {
+          "type": "movie",
+          "id": 505642
+        },
+        {
+          "type": "tv",
+          "id": 122226
+        },
+        {
+          "type": "tv",
+          "id": 92783
+        },
+        {
+          "type": "tv",
+          "id": 92782
+        },
+        {
+          "type": "movie",
+          "id": 616037
+        },
+        {
+          "type": "movie",
+          "id": 894205
+        },
+        {
+          "type": "movie",
+          "id": 774752
+        },
+        {
+          "type": "movie",
+          "id": 640146
+        },
+        {
+          "type": "movie",
+          "id": 447365
+        },
+        {
+          "type": "tv",
+          "id": 114472
+        },
+        {
+          "type": "movie",
+          "id": 609681
+        },
+        {
+          "type": "tv",
+          "id": 138501
+        },
+        {
+          "type": "tv",
+          "id": 114471
+        },
+        {
+          "type": "movie",
+          "id": 822119
+        },
+        {
+          "type": "tv",
+          "id": 202555
+        },
+        {
+          "type": "movie",
+          "id": 986056
+        },
+        {
+          "type": "tv",
+          "id": 84958
+        },
+        {
+          "type": "tv",
+          "id": 91363
+        },
+        {
+          "type": "movie",
+          "id": 533535
+        },
+        {
+          "type": "movie",
+          "id": 617126
+        },
+        {
+          "type": "movie",
+          "id": 969681
+        }
+      ],
+      "orderedMembershipSha256": "bb10bfe3ca6e2728d7d589f06d0de6780a60e9f03f2bd648750ba843cf527bbd",
+      "count": 54,
+      "protection": "keep complete tracked HTML including editorial text, order, ID mappings and links; no upstream replacement"
+    },
+    {
+      "series": "jurassic",
+      "file": "jurassic.html",
+      "sha256": "0682639700951bdf9ee795070f94a98c45749d1f9c8c5bf46e76a9b12df5a8ac",
+      "orderedMembership": [
+        {
+          "type": "movie",
+          "id": 329
+        },
+        {
+          "type": "movie",
+          "id": 330
+        },
+        {
+          "type": "movie",
+          "id": 331
+        },
+        {
+          "type": "movie",
+          "id": 135397
+        },
+        {
+          "type": "movie",
+          "id": 351286
+        },
+        {
+          "type": "movie",
+          "id": 507086
+        },
+        {
+          "type": "movie",
+          "id": 1234821
+        }
+      ],
+      "orderedMembershipSha256": "8dc87cb96e85206599160a3a9beb2ad27963f5f83fcd29cbc5c31d8e7ae81da5",
+      "count": 7,
+      "protection": "keep complete tracked HTML including editorial text, order, ID mappings and links; no upstream replacement"
+    },
+    {
+      "series": "harrypotter",
+      "file": "harrypotter.html",
+      "sha256": "853c185511f942ce773d968fbff7075f6c98f276fd20400a62587a93b342f16f",
+      "orderedMembership": [
+        {
+          "type": "movie",
+          "id": 671
+        },
+        {
+          "type": "movie",
+          "id": 672
+        },
+        {
+          "type": "movie",
+          "id": 673
+        },
+        {
+          "type": "movie",
+          "id": 674
+        },
+        {
+          "type": "movie",
+          "id": 675
+        },
+        {
+          "type": "movie",
+          "id": 767
+        },
+        {
+          "type": "movie",
+          "id": 12444
+        },
+        {
+          "type": "movie",
+          "id": 12445
+        },
+        {
+          "type": "movie",
+          "id": 259316
+        },
+        {
+          "type": "movie",
+          "id": 338952
+        },
+        {
+          "type": "movie",
+          "id": 338953
+        }
+      ],
+      "orderedMembershipSha256": "419e12c378d4c105c70371a55e774eb0caef113e0ae90796c90e31abf51f438e",
+      "count": 11,
+      "protection": "keep complete tracked HTML including editorial text, order, ID mappings and links; no upstream replacement"
+    },
+    {
+      "series": "lordoftherings",
+      "file": "lordoftherings.html",
+      "sha256": "e4510d9ea538408ed4a6a4bef8559b000cf9771b8f8f0f412d0525974100ada0",
+      "orderedMembership": [
+        {
+          "type": "movie",
+          "id": 120
+        },
+        {
+          "type": "movie",
+          "id": 121
+        },
+        {
+          "type": "movie",
+          "id": 122
+        },
+        {
+          "type": "movie",
+          "id": 49051
+        },
+        {
+          "type": "movie",
+          "id": 57158
+        },
+        {
+          "type": "movie",
+          "id": 122917
+        },
+        {
+          "type": "movie",
+          "id": 839033
+        },
+        {
+          "type": "tv",
+          "id": 84773
+        }
+      ],
+      "orderedMembershipSha256": "e50028e1bfce722a870e47c0cab25ec44960d4fc0ed3bb2945b50bc6be4aba1f",
+      "count": 8,
+      "protection": "keep complete tracked HTML including editorial text, order, ID mappings and links; no upstream replacement"
+    },
+    {
+      "series": "starwars",
+      "file": "starwars.html",
+      "sha256": "88365c0ec71cd69291bbb3a4dc62322a4b0cbbb1ad0c44774753b4ac62041012",
+      "orderedMembership": [
+        {
+          "type": "tv",
+          "id": 114479
+        },
+        {
+          "type": "movie",
+          "id": 1893
+        },
+        {
+          "type": "movie",
+          "id": 1894
+        },
+        {
+          "type": "movie",
+          "id": 12180
+        },
+        {
+          "type": "tv",
+          "id": 4194
+        },
+        {
+          "type": "tv",
+          "id": 203085
+        },
+        {
+          "type": "movie",
+          "id": 1895
+        },
+        {
+          "type": "tv",
+          "id": 251091
+        },
+        {
+          "type": "tv",
+          "id": 288055
+        },
+        {
+          "type": "tv",
+          "id": 105971
+        },
+        {
+          "type": "tv",
+          "id": 289219
+        },
+        {
+          "type": "movie",
+          "id": 348350
+        },
+        {
+          "type": "tv",
+          "id": 92830
+        },
+        {
+          "type": "tv",
+          "id": 83867
+        },
+        {
+          "type": "tv",
+          "id": 60554
+        },
+        {
+          "type": "movie",
+          "id": 330459
+        },
+        {
+          "type": "movie",
+          "id": 11
+        },
+        {
+          "type": "movie",
+          "id": 1891
+        },
+        {
+          "type": "movie",
+          "id": 1892
+        },
+        {
+          "type": "tv",
+          "id": 82856
+        },
+        {
+          "type": "tv",
+          "id": 115036
+        },
+        {
+          "type": "tv",
+          "id": 114461
+        },
+        {
+          "type": "tv",
+          "id": 202879
+        },
+        {
+          "type": "movie",
+          "id": 1228710
+        },
+        {
+          "type": "tv",
+          "id": 79093
+        },
+        {
+          "type": "movie",
+          "id": 140607
+        },
+        {
+          "type": "movie",
+          "id": 181808
+        },
+        {
+          "type": "movie",
+          "id": 181812
+        }
+      ],
+      "orderedMembershipSha256": "e43a1162bcc7eaa1d01981847b536760fdb06939c749c6d9057266e298f253cc",
+      "count": 28,
+      "protection": "keep complete tracked HTML including editorial text, order, ID mappings and links; no upstream replacement"
+    },
+    {
+      "series": "wildspeed",
+      "file": "wildspeed.html",
+      "sha256": "f79f395ff124e24898f89ada42b8c733786dd636fe7956a8aadf6e1a34e7eb48",
+      "orderedMembership": [
+        {
+          "type": "movie",
+          "id": 9799
+        },
+        {
+          "type": "movie",
+          "id": 584
+        },
+        {
+          "type": "movie",
+          "id": 9615
+        },
+        {
+          "type": "movie",
+          "id": 13804
+        },
+        {
+          "type": "movie",
+          "id": 51497
+        },
+        {
+          "type": "movie",
+          "id": 82992
+        },
+        {
+          "type": "movie",
+          "id": 168259
+        },
+        {
+          "type": "movie",
+          "id": 337339
+        },
+        {
+          "type": "movie",
+          "id": 384018
+        },
+        {
+          "type": "movie",
+          "id": 385128
+        },
+        {
+          "type": "movie",
+          "id": 385687
+        }
+      ],
+      "orderedMembershipSha256": "2dbb838497a270eb45e39fd6c7e51de874610f56c4e6b51be256d74801d65774",
+      "count": 11,
+      "protection": "keep complete tracked HTML including editorial text, order, ID mappings and links; no upstream replacement"
+    },
+    {
+      "series": "minions",
+      "file": "minions.html",
+      "sha256": "032fc68729663a3360ca385be30db2246094d5a3a52495fab44e30f8650fff04",
+      "orderedMembership": [
+        {
+          "type": "movie",
+          "id": 20352
+        },
+        {
+          "type": "movie",
+          "id": 93456
+        },
+        {
+          "type": "movie",
+          "id": 211672
+        },
+        {
+          "type": "movie",
+          "id": 324852
+        },
+        {
+          "type": "movie",
+          "id": 438148
+        },
+        {
+          "type": "movie",
+          "id": 519182
+        },
+        {
+          "type": "movie",
+          "id": 1315772
+        }
+      ],
+      "orderedMembershipSha256": "f6b2882c34a3f8fb25e33f457792960555d229528bb5f190cf38a60b41507894",
+      "count": 7,
+      "protection": "keep complete tracked HTML including editorial text, order, ID mappings and links; no upstream replacement"
+    },
+    {
+      "series": "odoru",
+      "file": "odoru.html",
+      "sha256": "ac05233c7d069473db7aa56335bca35d6019a8cae0a965cf87463fa0f2d0b4f0",
+      "orderedMembership": [
+        {
+          "type": "tv",
+          "id": 20794
+        },
+        {
+          "type": "movie",
+          "id": 545255
+        },
+        {
+          "type": "movie",
+          "id": 545819
+        },
+        {
+          "type": "movie",
+          "id": 55382
+        },
+        {
+          "type": "movie",
+          "id": 55384
+        },
+        {
+          "type": "movie",
+          "id": 65841
+        },
+        {
+          "type": "movie",
+          "id": 835865
+        },
+        {
+          "type": "movie",
+          "id": 193402
+        },
+        {
+          "type": "movie",
+          "id": 1285372
+        },
+        {
+          "type": "movie",
+          "id": 1285375
+        },
+        {
+          "type": "movie",
+          "id": 1491083
+        },
+        {
+          "type": "movie",
+          "id": 1172474
+        },
+        {
+          "type": "movie",
+          "id": 59952
+        },
+        {
+          "type": "movie",
+          "id": 45070
+        },
+        {
+          "type": "movie",
+          "id": 1394731
+        },
+        {
+          "type": "movie",
+          "id": 1475877
+        }
+      ],
+      "orderedMembershipSha256": "0d74dd8e2126de05b9e5d0bc8fed082c28489fea7954583061d0b8e030579797",
+      "count": 16,
+      "protection": "keep complete tracked HTML including editorial text, order, ID mappings and links; no upstream replacement"
+    },
+    {
+      "series": "eva",
+      "file": "eva.html",
+      "sha256": "faa2c4a437922b59db392e0d9971f102d1d4fa30e683dd35d04653d5e25075e2",
+      "orderedMembership": [
+        {
+          "type": "movie",
+          "id": 15137
+        },
+        {
+          "type": "movie",
+          "id": 22843
+        },
+        {
+          "type": "movie",
+          "id": 75629
+        },
+        {
+          "type": "movie",
+          "id": 283566
+        },
+        {
+          "type": "movie",
+          "id": 18491
+        },
+        {
+          "type": "tv",
+          "id": 890
+        }
+      ],
+      "orderedMembershipSha256": "f9a7f516cd6d5870ad545868e1d84e612ae1b1475ccb9f19bee36a8e089fe1fd",
+      "count": 6,
+      "protection": "keep complete tracked HTML including editorial text, order, ID mappings and links; no upstream replacement"
+    },
+    {
+      "series": "conan",
+      "file": "conan.html",
+      "sha256": "4aa40e41ff0cdf99031210b744ae91468410f667d4d5d78aff020580eaf85317",
+      "orderedMembership": [
+        {
+          "type": "movie",
+          "id": 21422
+        },
+        {
+          "type": "movie",
+          "id": 21452
+        },
+        {
+          "type": "movie",
+          "id": 28808
+        },
+        {
+          "type": "movie",
+          "id": 20677
+        },
+        {
+          "type": "movie",
+          "id": 32022
+        },
+        {
+          "type": "movie",
+          "id": 26662
+        },
+        {
+          "type": "movie",
+          "id": 39202
+        },
+        {
+          "type": "movie",
+          "id": 39203
+        },
+        {
+          "type": "movie",
+          "id": 39204
+        },
+        {
+          "type": "movie",
+          "id": 39205
+        },
+        {
+          "type": "movie",
+          "id": 39206
+        },
+        {
+          "type": "movie",
+          "id": 39207
+        },
+        {
+          "type": "movie",
+          "id": 28764
+        },
+        {
+          "type": "movie",
+          "id": 97375
+        },
+        {
+          "type": "movie",
+          "id": 77617
+        },
+        {
+          "type": "movie",
+          "id": 122583
+        },
+        {
+          "type": "movie",
+          "id": 228805
+        },
+        {
+          "type": "movie",
+          "id": 257512
+        },
+        {
+          "type": "movie",
+          "id": 316873
+        },
+        {
+          "type": "movie",
+          "id": 374856
+        },
+        {
+          "type": "movie",
+          "id": 438058
+        },
+        {
+          "type": "movie",
+          "id": 493006
+        },
+        {
+          "type": "movie",
+          "id": 566555
+        },
+        {
+          "type": "movie",
+          "id": 662638
+        },
+        {
+          "type": "movie",
+          "id": 903939
+        },
+        {
+          "type": "movie",
+          "id": 1047041
+        },
+        {
+          "type": "movie",
+          "id": 1209217
+        },
+        {
+          "type": "movie",
+          "id": 1396965
+        },
+        {
+          "type": "movie",
+          "id": 1545621
+        },
+        {
+          "type": "tv",
+          "id": 30983
+        }
+      ],
+      "orderedMembershipSha256": "7e8365d1e7f71a3ad26b70fe9c4dba047ce59e1f44394cdb6e1f47df7ab889cd",
+      "count": 30,
+      "protection": "keep complete tracked HTML including editorial text, order, ID mappings and links; no upstream replacement"
+    },
+    {
+      "series": "gundam",
+      "file": "gundam.html",
+      "sha256": "ce3d3d1d9f5a20e9ba83a1de09fd20987272b2677eb17ec064bfb625530a3d20",
+      "orderedMembership": [
+        {
+          "type": "tv",
+          "id": 21731
+        },
+        {
+          "type": "tv",
+          "id": 45500
+        },
+        {
+          "type": "tv",
+          "id": 196400
+        },
+        {
+          "type": "tv",
+          "id": 64375
+        },
+        {
+          "type": "tv",
+          "id": 43887
+        },
+        {
+          "type": "movie",
+          "id": 37048
+        },
+        {
+          "type": "tv",
+          "id": 21732
+        },
+        {
+          "type": "tv",
+          "id": 13674
+        },
+        {
+          "type": "tv",
+          "id": 5660
+        },
+        {
+          "type": "movie",
+          "id": 16157
+        },
+        {
+          "type": "tv",
+          "id": 88865
+        },
+        {
+          "type": "tv",
+          "id": 46512
+        },
+        {
+          "type": "movie",
+          "id": 883768
+        },
+        {
+          "type": "movie",
+          "id": 553610
+        },
+        {
+          "type": "movie",
+          "id": 685274
+        },
+        {
+          "type": "movie",
+          "id": 910850
+        },
+        {
+          "type": "movie",
+          "id": 16308
+        },
+        {
+          "type": "tv",
+          "id": 72677
+        },
+        {
+          "type": "tv",
+          "id": 25797
+        },
+        {
+          "type": "tv",
+          "id": 20111
+        },
+        {
+          "type": "movie",
+          "id": 1146972
+        },
+        {
+          "type": "tv",
+          "id": 30093
+        },
+        {
+          "type": "tv",
+          "id": 21730
+        },
+        {
+          "type": "tv",
+          "id": 25504
+        },
+        {
+          "type": "tv",
+          "id": 37546
+        },
+        {
+          "type": "tv",
+          "id": 45835
+        },
+        {
+          "type": "tv",
+          "id": 61414
+        },
+        {
+          "type": "tv",
+          "id": 60667
+        },
+        {
+          "type": "tv",
+          "id": 76821
+        },
+        {
+          "type": "tv",
+          "id": 91566
+        },
+        {
+          "type": "tv",
+          "id": 122468
+        },
+        {
+          "type": "movie",
+          "id": 22914
+        },
+        {
+          "type": "movie",
+          "id": 39228
+        },
+        {
+          "type": "movie",
+          "id": 39229
+        },
+        {
+          "type": "movie",
+          "id": 39230
+        },
+        {
+          "type": "movie",
+          "id": 19256
+        },
+        {
+          "type": "movie",
+          "id": 19257
+        },
+        {
+          "type": "movie",
+          "id": 30606
+        }
+      ],
+      "orderedMembershipSha256": "9cdb0463b259eaea0dca1d4c34cc7061b21d50452dc8a1dff75b36909285cf7d",
+      "count": 38,
+      "protection": "keep complete tracked HTML including editorial text, order, ID mappings and links; no upstream replacement"
+    },
+    {
+      "series": "kimetsu",
+      "file": "kimetsu.html",
+      "sha256": "b046f4d3393d0e5b6167f3debc761949cabab0c911c57a279ea528a8c2db6a88",
+      "orderedMembership": [
+        {
+          "type": "tv",
+          "id": 85937
+        },
+        {
+          "type": "movie",
+          "id": 635302
+        },
+        {
+          "type": "movie",
+          "id": 1311031
+        }
+      ],
+      "orderedMembershipSha256": "45fb529bdb83d21dbdb6c2d01940c1aa77d70f14234314415bd6e0fadfbb95e5",
+      "count": 3,
+      "protection": "keep complete tracked HTML including editorial text, order, ID mappings and links; no upstream replacement"
+    }
+  ],
+  "staticFiles": [
+    {
+      "file": "ghibli.html",
+      "sha256": "c2cebc073be1c0f7757885d51468e4b6564ffba18cb3d15ffb27d2bece47718e"
+    },
+    {
+      "file": "movie_shelf_1980_1984.html",
+      "sha256": "a0fc33bad5f6ed85ec176c52359c825ef42a00064adfc244a0acb61171d36f8d"
+    }
+  ],
+  "unverified": [
+    "manual edits/confirmation/field locks existing only in production Redis",
+    "all live published titles/decades versus deployed files",
+    "per-series clients consuming new shared fixed-work projections"
+  ],
+  "oldProviderCacheRestoreRequired": false,
+  "productionReady": false
+}

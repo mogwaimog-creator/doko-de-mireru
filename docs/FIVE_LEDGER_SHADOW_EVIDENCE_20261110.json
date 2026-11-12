@@ -1,0 +1,648 @@
+{
+  "dateJst": "2026-11-10",
+  "scope": "synthetic-shadow-fixtures",
+  "passed": 18,
+  "checks": [
+    {
+      "test": "saved movie, TV, person, episodes and shared JP providers traverse release API",
+      "passed": true
+    },
+    {
+      "test": "initial HTML SEO movie",
+      "passed": true,
+      "canonical": "https://doko-de-mireru.com/detail.html?id=635302"
+    },
+    {
+      "test": "initial HTML SEO tv",
+      "passed": true,
+      "canonical": "https://doko-de-mireru.com/detail.html?id=85937&type=tv"
+    },
+    {
+      "test": "canonical saved search movie",
+      "passed": true
+    },
+    {
+      "test": "canonical saved search tv",
+      "passed": true
+    },
+    {
+      "test": "canonical saved search all",
+      "passed": true
+    },
+    {
+      "test": "canonical saved search anime",
+      "passed": true
+    },
+    {
+      "test": "saved person search and no-hit do not fetch metadata",
+      "passed": true
+    },
+    {
+      "test": "partial series data stays incomplete and contains no fixed metadata",
+      "passed": true
+    },
+    {
+      "test": "uncollected work fails closed with noindex",
+      "passed": true
+    },
+    {
+      "test": "1280 work search → saved detail UI",
+      "passed": true
+    },
+    {
+      "test": "1280 person search → saved profile/credits UI",
+      "passed": true
+    },
+    {
+      "test": "1280 TV → season → saved episode UI",
+      "passed": true
+    },
+    {
+      "test": "390 work search → saved detail UI",
+      "passed": true
+    },
+    {
+      "test": "390 person search → saved profile/credits UI",
+      "passed": true
+    },
+    {
+      "test": "390 TV → season → saved episode UI",
+      "passed": true
+    },
+    {
+      "test": "browser console has no uncaught JS exceptions",
+      "passed": true,
+      "externalRequestsBlocked": 10
+    },
+    {
+      "test": "20 concurrent saved reads require zero upstream or source packet reloads",
+      "passed": true,
+      "requests": 20,
+      "p50Ms": 152.83,
+      "p95Ms": 185.85,
+      "localReservedCommandBound": 140,
+      "note": "local wire-adapter upper bound, not measured Upstash billing or Vercel performance"
+    }
+  ],
+  "errors": [],
+  "metrics": {
+    "scope": "synthetic-shadow-fixtures",
+    "works": [
+      {
+        "type": "movie",
+        "id": 635302
+      },
+      {
+        "type": "tv",
+        "id": 85937
+      }
+    ],
+    "personId": 900001,
+    "seasonNumber": 1,
+    "searchMode": "local canonical index only; external discovery is not tested by this server",
+    "liveTmdbRequests": 0,
+    "fixtureSourcePackets": 7,
+    "remoteRedisCommands": 0,
+    "deployments": 0,
+    "serverRequests": [
+      {
+        "path": "/__shadow",
+        "status": 200,
+        "ms": 2.39
+      },
+      {
+        "path": "/__metrics",
+        "status": 200,
+        "ms": 0.36
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 22.74
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 25.31
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 20.16
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 11.12
+      },
+      {
+        "path": "/detail.html",
+        "status": 200,
+        "ms": 32.17
+      },
+      {
+        "path": "/detail.html",
+        "status": 200,
+        "ms": 16.48
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 13.83
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 10.36
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 10.74
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 12.4
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 11.4
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 8.35
+      },
+      {
+        "path": "/api/series-watch",
+        "status": 200,
+        "ms": 9.81
+      },
+      {
+        "path": "/detail.html",
+        "status": 503,
+        "ms": 28.68
+      },
+      {
+        "path": "/index.html",
+        "status": 200,
+        "ms": 6.5
+      },
+      {
+        "path": "/tmdb-logo.svg",
+        "status": 200,
+        "ms": 0.88
+      },
+      {
+        "path": "/api/search",
+        "status": 400,
+        "ms": 0.34
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 21.1
+      },
+      {
+        "path": "/detail.html",
+        "status": 200,
+        "ms": 19.32
+      },
+      {
+        "path": "/tmdb-logo.svg",
+        "status": 200,
+        "ms": 0.45
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 27.32
+      },
+      {
+        "path": "/index.html",
+        "status": 200,
+        "ms": 1.99
+      },
+      {
+        "path": "/tmdb-logo.svg",
+        "status": 200,
+        "ms": 0.53
+      },
+      {
+        "path": "/api/search",
+        "status": 400,
+        "ms": 1.57
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 20.58
+      },
+      {
+        "path": "/__shadow",
+        "status": 200,
+        "ms": 0.31
+      },
+      {
+        "path": "/__metrics",
+        "status": 200,
+        "ms": 0.21
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 12.08
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 15.97
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 16.78
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 9.61
+      },
+      {
+        "path": "/detail.html",
+        "status": 200,
+        "ms": 14.14
+      },
+      {
+        "path": "/detail.html",
+        "status": 200,
+        "ms": 11.76
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 10.43
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 9.2
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 8.83
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 9.82
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 9.55
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 6.44
+      },
+      {
+        "path": "/api/series-watch",
+        "status": 200,
+        "ms": 8.3
+      },
+      {
+        "path": "/detail.html",
+        "status": 503,
+        "ms": 24.33
+      },
+      {
+        "path": "/index.html",
+        "status": 200,
+        "ms": 2.58
+      },
+      {
+        "path": "/tmdb-logo.svg",
+        "status": 200,
+        "ms": 0.45
+      },
+      {
+        "path": "/api/search",
+        "status": 400,
+        "ms": 1.22
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 14.37
+      },
+      {
+        "path": "/detail.html",
+        "status": 200,
+        "ms": 19.6
+      },
+      {
+        "path": "/tmdb-logo.svg",
+        "status": 200,
+        "ms": 0.35
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 26.69
+      },
+      {
+        "path": "/index.html",
+        "status": 200,
+        "ms": 2.65
+      },
+      {
+        "path": "/tmdb-logo.svg",
+        "status": 200,
+        "ms": 0.55
+      },
+      {
+        "path": "/api/search",
+        "status": 400,
+        "ms": 0.3
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 16
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 11.65
+      },
+      {
+        "path": "/person.html",
+        "status": 200,
+        "ms": 0.58
+      },
+      {
+        "path": "/tmdb-logo.svg",
+        "status": 200,
+        "ms": 0.4
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 27.07
+      },
+      {
+        "path": "/detail.html",
+        "status": 200,
+        "ms": 14.5
+      },
+      {
+        "path": "/tmdb-logo.svg",
+        "status": 200,
+        "ms": 0.23
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 23.11
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 21.43
+      },
+      {
+        "path": "/index.html",
+        "status": 200,
+        "ms": 3.24
+      },
+      {
+        "path": "/tmdb-logo.svg",
+        "status": 200,
+        "ms": 0.27
+      },
+      {
+        "path": "/api/search",
+        "status": 400,
+        "ms": 0.83
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 21.27
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 13.48
+      },
+      {
+        "path": "/detail.html",
+        "status": 200,
+        "ms": 21.59
+      },
+      {
+        "path": "/tmdb-logo.svg",
+        "status": 200,
+        "ms": 0.48
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 22.83
+      },
+      {
+        "path": "/index.html",
+        "status": 200,
+        "ms": 1.85
+      },
+      {
+        "path": "/tmdb-logo.svg",
+        "status": 200,
+        "ms": 0.32
+      },
+      {
+        "path": "/api/search",
+        "status": 400,
+        "ms": 0.16
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 17.08
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 14.62
+      },
+      {
+        "path": "/person.html",
+        "status": 200,
+        "ms": 0.5
+      },
+      {
+        "path": "/tmdb-logo.svg",
+        "status": 200,
+        "ms": 0.39
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 33.05
+      },
+      {
+        "path": "/detail.html",
+        "status": 200,
+        "ms": 26.39
+      },
+      {
+        "path": "/tmdb-logo.svg",
+        "status": 200,
+        "ms": 0.86
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 21.97
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 10.58
+      },
+      {
+        "path": "/__metrics",
+        "status": 200,
+        "ms": 0.31
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 122.82
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 81.68
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 85.05
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 89.44
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 92.97
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 97.62
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 102.8
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 106.63
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 110.66
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 114.38
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 118.86
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 145.5
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 153.3
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 157.14
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 161.62
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 170.88
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 125.28
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 178.76
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 176.42
+      },
+      {
+        "path": "/api/search",
+        "status": 200,
+        "ms": 132.37
+      }
+    ],
+    "namespace": "doko:ledger:release:01f6c3e8fa0d7edf:",
+    "localKeyCount": 24,
+    "localMemoryUsageBytes": 12672,
+    "memoryMeasurement": "sum of MEMORY USAGE for owned keys; excludes Redis process/allocator overhead; not Upstash measurement",
+    "sourcePacketReads": 7,
+    "transport": {
+      "requests": 300,
+      "reservedCommands": 852,
+      "requestBytes": 103944
+    }
+  },
+  "realDataVerified": false,
+  "productionChanged": false,
+  "baselineCommit": "6c9d3cd",
+  "nodeTests": {
+    "uniquePassed": 65,
+    "newTests": 4,
+    "existingTests": 61,
+    "failed": 0,
+    "fullSuiteRerun": false
+  },
+  "actualTmdbCollection": "deferred until existing TMDB_API_KEY is registered by user",
+  "remoteRedisVerified": false,
+  "productionCutoverReady": false
+}

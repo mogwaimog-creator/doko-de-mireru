@@ -1,0 +1,139 @@
+{
+  "source": "user-reported key count 16470 (previous8651); remaining commands approximately170000; no account access",
+  "keyGrowth": {
+    "previous": 8651,
+    "current": 16470,
+    "added": 7819,
+    "percent": 90.38261472662118,
+    "intervalUnknown": true
+  },
+  "billing": {
+    "policySource": "https://upstash.com/docs/redis/overall/billing",
+    "rule": "one command per executed Redis command; EVAL plus every redis.call/pcall; transactions include MULTI/EXEC; pipelines count all members",
+    "officialPolicyConfirmed": true,
+    "liveMeteringNotTested": true
+  },
+  "assumptions": {
+    "scanCallsPerPass": 165,
+    "otherReservedCommands": 52230,
+    "preflightGroupSize": 32,
+    "transferAndPayloadGroupLimitsNeedMeasurement": true,
+    "freeQuotaResetDate": null,
+    "namespaceOrSchemaNeverUsedToExcludeOldKeys": true
+  },
+  "scenarios": [
+    {
+      "name": "all-string",
+      "result": {
+        "keyCount": 16470,
+        "old": {
+          "backup": 66210,
+          "rollback": 65880,
+          "pair": 132090,
+          "total": 184320
+        },
+        "proposed": {
+          "backup": 33271,
+          "rollback": 33971,
+          "pair": 67242,
+          "total": 119472
+        },
+        "reduction": 64848,
+        "allowance": 136000,
+        "margin": 16528,
+        "withinProposedBudget": true,
+        "productionReady": false,
+        "notes": [
+          "TIME reserved once for backup and once for expired-key restore verification.",
+          "Full local restore/TYPE/value checks use no Upstash commands.",
+          "Functions/config inventory, actual scan/group counts, live traffic and account usage still require verification."
+        ]
+      }
+    },
+    {
+      "name": "90-percent-string",
+      "result": {
+        "keyCount": 16470,
+        "old": {
+          "backup": 66210,
+          "rollback": 65880,
+          "pair": 132090,
+          "total": 184320
+        },
+        "proposed": {
+          "backup": 33271,
+          "rollback": 35567,
+          "pair": 68838,
+          "total": 121068
+        },
+        "reduction": 63252,
+        "allowance": 136000,
+        "margin": 14932,
+        "withinProposedBudget": true,
+        "productionReady": false,
+        "notes": [
+          "TIME reserved once for backup and once for expired-key restore verification.",
+          "Full local restore/TYPE/value checks use no Upstash commands.",
+          "Functions/config inventory, actual scan/group counts, live traffic and account usage still require verification."
+        ]
+      }
+    },
+    {
+      "name": "all-non-string-worst",
+      "result": {
+        "keyCount": 16470,
+        "old": {
+          "backup": 66210,
+          "rollback": 65880,
+          "pair": 132090,
+          "total": 184320
+        },
+        "proposed": {
+          "backup": 33271,
+          "rollback": 49926,
+          "pair": 83197,
+          "total": 135427
+        },
+        "reduction": 48893,
+        "allowance": 136000,
+        "margin": 573,
+        "withinProposedBudget": true,
+        "productionReady": false,
+        "notes": [
+          "TIME reserved once for backup and once for expired-key restore verification.",
+          "Full local restore/TYPE/value checks use no Upstash commands.",
+          "Functions/config inventory, actual scan/group counts, live traffic and account usage still require verification."
+        ]
+      }
+    },
+    {
+      "name": "large-single-string-groups-worst",
+      "result": {
+        "keyCount": 16470,
+        "old": {
+          "backup": 66210,
+          "rollback": 65880,
+          "pair": 132090,
+          "total": 184320
+        },
+        "proposed": {
+          "backup": 33271,
+          "rollback": 49926,
+          "pair": 83197,
+          "total": 135427
+        },
+        "reduction": 48893,
+        "allowance": 136000,
+        "margin": 573,
+        "withinProposedBudget": true,
+        "productionReady": false,
+        "notes": [
+          "TIME reserved once for backup and once for expired-key restore verification.",
+          "Full local restore/TYPE/value checks use no Upstash commands.",
+          "Functions/config inventory, actual scan/group counts, live traffic and account usage still require verification."
+        ]
+      }
+    }
+  ],
+  "productionReady": false
+}

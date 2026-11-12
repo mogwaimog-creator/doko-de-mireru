@@ -1,0 +1,240 @@
+{
+  "observedAt": "2026-11-10T01:55:41.179Z",
+  "rollback": {
+    "id": "dpl_8LQ7HUHX1WXzg8Uaa8d3YAyoSY4b",
+    "url": "doko-de-mireru-eyq4zkx1y-mogwaimog-1706.vercel.app",
+    "state": "READY",
+    "sha": "332843235960714d38abcc1c0590ed1f834ed6ca",
+    "alias": [
+      "doko-de-mireru.com",
+      "doko-de-mireru.vercel.app",
+      "doko-de-mireru-mogwaimog-1706.vercel.app",
+      "doko-de-mireru-git-main-mogwaimog-1706.vercel.app"
+    ],
+    "teamId": "team_DuaQ7ug0BuRNFShbwRoNX2kU",
+    "projectId": "prj_FoQ5WZ15y54KYpUIekYm6mW1IWq9"
+  },
+  "billingSnapshots": [
+    {
+      "requestedFrom": "2026-11-09",
+      "requestedTo": "2026-11-10",
+      "summary": {
+        "recordCount": 846,
+        "periodStart": "2026-11-08T08:00:00.000Z",
+        "periodEnd": "2026-11-09T08:00:00.000Z",
+        "currency": "USD",
+        "totalBilledCost": 0.108790597835,
+        "totalEffectiveCost": 0.753951888158,
+        "totalsByCurrency": [
+          {
+            "currency": "USD",
+            "billedCost": 0.108790597835,
+            "effectiveCost": 0.753951888158,
+            "recordCount": 846
+          }
+        ]
+      },
+      "byService": [
+        {
+          "serviceName": "Deployment Storage",
+          "serviceCategory": "Build & Deploy",
+          "currency": "USD",
+          "billedCost": 0.094625254548,
+          "effectiveCost": 0.094625254548,
+          "recordCount": 1
+        },
+        {
+          "serviceName": "Observability Events",
+          "serviceCategory": "Observability",
+          "currency": "USD",
+          "billedCost": 0.0078624,
+          "effectiveCost": 0.0078624,
+          "recordCount": 2
+        },
+        {
+          "serviceName": "Fluid Provisioned Memory",
+          "serviceCategory": "Vercel Functions",
+          "currency": "USD",
+          "billedCost": 0.002274045042,
+          "effectiveCost": 0.002274045042,
+          "recordCount": 21
+        },
+        {
+          "serviceName": "Fluid Active CPU",
+          "serviceCategory": "Vercel Functions",
+          "currency": "USD",
+          "billedCost": 0.001871288889,
+          "effectiveCost": 0.001871288889,
+          "recordCount": 21
+        },
+        {
+          "serviceName": "Function Invocations",
+          "serviceCategory": "Vercel Functions",
+          "currency": "USD",
+          "billedCost": 0.0007158,
+          "effectiveCost": 0.0007158,
+          "recordCount": 1
+        },
+        {
+          "serviceName": "Firewall Rate Limit Requests",
+          "serviceCategory": "Web Application Firewall",
+          "currency": "USD",
+          "billedCost": 0.00059105,
+          "effectiveCost": 0.00059105,
+          "recordCount": 21
+        },
+        {
+          "serviceName": "Fast Origin Transfer",
+          "serviceCategory": "Vercel Functions",
+          "currency": "USD",
+          "billedCost": 0.00052906611,
+          "effectiveCost": 0.00052906611,
+          "recordCount": 21
+        },
+        {
+          "serviceName": "Function Storage",
+          "serviceCategory": "Build & Deploy",
+          "currency": "USD",
+          "billedCost": 0.000321693246,
+          "effectiveCost": 0.000321693246,
+          "recordCount": 1
+        }
+      ]
+    },
+    {
+      "requestedFrom": "2026-11-10",
+      "requestedTo": "2026-11-11",
+      "summary": {
+        "recordCount": 840,
+        "periodStart": "2026-11-09T08:00:00.000Z",
+        "periodEnd": "2026-11-10T08:00:00.000Z",
+        "currency": "USD",
+        "totalBilledCost": 0.747366236558,
+        "totalEffectiveCost": 0.747366236558,
+        "totalsByCurrency": [
+          {
+            "currency": "USD",
+            "billedCost": 0.747366236558,
+            "effectiveCost": 0.747366236558,
+            "recordCount": 840
+          }
+        ]
+      },
+      "byService": [
+        {
+          "serviceName": "Pro",
+          "serviceCategory": "Subscription Licenses",
+          "currency": "USD",
+          "billedCost": 0.645161290323,
+          "effectiveCost": 0.645161290323,
+          "recordCount": 1
+        },
+        {
+          "serviceName": "Deployment Storage",
+          "serviceCategory": "Build & Deploy",
+          "currency": "USD",
+          "billedCost": 0.094625254548,
+          "effectiveCost": 0.094625254548,
+          "recordCount": 1
+        },
+        {
+          "serviceName": "Observability Events",
+          "serviceCategory": "Observability",
+          "currency": "USD",
+          "billedCost": 0.0042912,
+          "effectiveCost": 0.0042912,
+          "recordCount": 2
+        },
+        {
+          "serviceName": "Fluid Provisioned Memory",
+          "serviceCategory": "Vercel Functions",
+          "currency": "USD",
+          "billedCost": 0.001232547271,
+          "effectiveCost": 0.001232547271,
+          "recordCount": 21
+        },
+        {
+          "serviceName": "Fluid Active CPU",
+          "serviceCategory": "Vercel Functions",
+          "currency": "USD",
+          "billedCost": 0.0009504,
+          "effectiveCost": 0.0009504,
+          "recordCount": 21
+        },
+        {
+          "serviceName": "Function Storage",
+          "serviceCategory": "Build & Deploy",
+          "currency": "USD",
+          "billedCost": 0.000321693246,
+          "effectiveCost": 0.000321693246,
+          "recordCount": 1
+        },
+        {
+          "serviceName": "Function Invocations",
+          "serviceCategory": "Vercel Functions",
+          "currency": "USD",
+          "billedCost": 0.0003,
+          "effectiveCost": 0.0003,
+          "recordCount": 1
+        },
+        {
+          "serviceName": "Firewall Rate Limit Requests",
+          "serviceCategory": "Web Application Firewall",
+          "currency": "USD",
+          "billedCost": 0.00027355,
+          "effectiveCost": 0.00027355,
+          "recordCount": 21
+        },
+        {
+          "serviceName": "Fast Origin Transfer",
+          "serviceCategory": "Vercel Functions",
+          "currency": "USD",
+          "billedCost": 0.00021030117,
+          "effectiveCost": 0.00021030117,
+          "recordCount": 21
+        }
+      ]
+    }
+  ],
+  "billingPeriodComplete": false,
+  "monthlyBalanceUSD": null,
+  "observabilityMetricAvailable": false,
+  "observabilityFailures": [
+    {
+      "message": "Vercel API request failed (400: bad_request).",
+      "recovery": "Check the API message, arguments, target team and resource state. Correct the request before retrying.",
+      "remediation": {
+        "actor": "agent",
+        "action": "correct_request"
+      },
+      "status": 400,
+      "code": "bad_request",
+      "operation": "POST /v2/observability/query",
+      "requestId": "iad1:icn1:iad1:sfo1::w2rc2-1794274991100-2b2680a81407"
+    },
+    {
+      "message": "Vercel API request failed (400: bad_request).",
+      "recovery": "Check the API message, arguments, target team and resource state. Correct the request before retrying.",
+      "remediation": {
+        "actor": "agent",
+        "action": "correct_request"
+      },
+      "status": 400,
+      "code": "bad_request",
+      "operation": "POST /v2/observability/query",
+      "requestId": "iad1:icn1:iad1:sfo1::w5smd-1794275022605-31436af31877"
+    }
+  ],
+  "recentLogEvidence": [
+    "## Runtime Log Counts\n\n**Project:** prj_FoQ5WZ15y54KYpUIekYm6mW1IWq9\n**Grouped by:** requestPath\n**Showing:** Top 25 groups by log count; this may omit other groups.\n\n| requestPath | count |\n|---|---|\n| /api/search | 40 |"
+  ],
+  "recentErrorLogEvidence": [
+    "## Runtime Log Counts\n\n**Project:** prj_FoQ5WZ15y54KYpUIekYm6mW1IWq9\n**Grouped by:** requestPath\n**Showing:** Top 25 groups by log count; this may omit other groups.\n\n| requestPath | count |\n|---|---|"
+  ],
+  "notes": [
+    "Daily billing summaries are team-wide and have response periods distinct from requested UTC windows; no monthly total or remaining credit is inferred.",
+    "Runtime log line counts are not request counts, CPU measurements or a performance forecast for the new candidate.",
+    "No deployment, promotion, rollback, environment mutation or billing setting change was performed."
+  ],
+  "currentAccountUsageStatus": "All Upstash usage/plan/stop settings and Vercel credit/billing period are unconfirmed per user instruction. Daily API records do not establish these values."
+}

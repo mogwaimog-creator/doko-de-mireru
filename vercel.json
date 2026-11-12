@@ -1,4 +1,34 @@
 {
-  "rewrites": [{"source":"/movie/:id","destination":"/index.html"}],
-  "crons": [{"path":"/api/update-streaming","schedule":"0 9,21 * * *"}]
+  "routes": [
+    {
+      "src": "/detail\\.html",
+      "dest": "/api/detail-page"
+    },
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "/movie/([^/]+)",
+      "dest": "/index.html"
+    }
+  ],
+  "crons": [
+    {
+      "path": "/api/update-streaming",
+      "schedule": "0 21 * * *"
+    }
+  ],
+  "git": {
+    "deploymentEnabled": {
+      "work/four-ledgers-20261107": false
+    }
+  },
+  "functions": {
+    "api/detail-page.js": {
+      "includeFiles": "detail.html"
+    },
+    "api/update-streaming.js": {
+      "maxDuration": 300
+    }
+  }
 }

@@ -1,0 +1,21 @@
+{
+  "date": "2026-11-09",
+  "baseline": "6a30a06",
+  "branch": "work/four-ledgers-20261107",
+  "scope": "user snapshot + offline calculations, local Redis regression; public docs only",
+  "node": {
+    "tests": 458,
+    "pass": 458,
+    "fail": 0,
+    "skipped": 0,
+    "logSha256": "f91655d28413bc06570180aaa667621d0a6ac2e2eefe84e14964a209c817b4f8"
+  },
+  "productChanges": [],
+  "browser": "not rerun: no API/HTML/root configuration changes",
+  "realUpstashOperations": 0,
+  "vercelBuilds": 0,
+  "deployments": 0,
+  "billingChanges": 0,
+  "releaseReady": false,
+  "sourceSnapshotSha256": "c078b9232b6fc4200527cf262a230a1c367385c41c69f8135b9abbc14380c598"
+}

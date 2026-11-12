@@ -1,0 +1,4390 @@
+{
+  "version": 1,
+  "scope": "266 canonical identities; editorial titles are not verified TMDB metadata",
+  "roster": [
+    {
+      "type": "movie",
+      "id": 1678
+    },
+    {
+      "type": "movie",
+      "id": 315011
+    },
+    {
+      "type": "movie",
+      "id": 940721
+    },
+    {
+      "type": "movie",
+      "id": 124905
+    },
+    {
+      "type": "movie",
+      "id": 293167
+    },
+    {
+      "type": "movie",
+      "id": 373571
+    },
+    {
+      "type": "movie",
+      "id": 399566
+    },
+    {
+      "type": "movie",
+      "id": 823464
+    },
+    {
+      "type": "tv",
+      "id": 202411
+    },
+    {
+      "type": "tv",
+      "id": 117678
+    },
+    {
+      "type": "movie",
+      "id": 929
+    },
+    {
+      "type": "movie",
+      "id": 1679
+    },
+    {
+      "type": "movie",
+      "id": 1680
+    },
+    {
+      "type": "movie",
+      "id": 1682
+    },
+    {
+      "type": "movie",
+      "id": 15766
+    },
+    {
+      "type": "movie",
+      "id": 19545
+    },
+    {
+      "type": "movie",
+      "id": 3115
+    },
+    {
+      "type": "movie",
+      "id": 18627
+    },
+    {
+      "type": "movie",
+      "id": 3107
+    },
+    {
+      "type": "movie",
+      "id": 39462
+    },
+    {
+      "type": "movie",
+      "id": 39464
+    },
+    {
+      "type": "movie",
+      "id": 19336
+    },
+    {
+      "type": "movie",
+      "id": 39264
+    },
+    {
+      "type": "movie",
+      "id": 38582
+    },
+    {
+      "type": "movie",
+      "id": 19333
+    },
+    {
+      "type": "movie",
+      "id": 421467
+    },
+    {
+      "type": "movie",
+      "id": 18289
+    },
+    {
+      "type": "movie",
+      "id": 36679
+    },
+    {
+      "type": "movie",
+      "id": 39465
+    },
+    {
+      "type": "movie",
+      "id": 6593
+    },
+    {
+      "type": "movie",
+      "id": 39466
+    },
+    {
+      "type": "movie",
+      "id": 12561
+    },
+    {
+      "type": "movie",
+      "id": 10643
+    },
+    {
+      "type": "movie",
+      "id": 39468
+    },
+    {
+      "type": "movie",
+      "id": 36243
+    },
+    {
+      "type": "movie",
+      "id": 12636
+    },
+    {
+      "type": "movie",
+      "id": 39469
+    },
+    {
+      "type": "movie",
+      "id": 15767
+    },
+    {
+      "type": "movie",
+      "id": 449574
+    },
+    {
+      "type": "movie",
+      "id": 492719
+    },
+    {
+      "type": "movie",
+      "id": 536115
+    },
+    {
+      "type": "movie",
+      "id": 39410
+    },
+    {
+      "type": "movie",
+      "id": 36214
+    },
+    {
+      "type": "movie",
+      "id": 36212
+    },
+    {
+      "type": "movie",
+      "id": 36247
+    },
+    {
+      "type": "movie",
+      "id": 19742
+    },
+    {
+      "type": "movie",
+      "id": 438604
+    },
+    {
+      "type": "movie",
+      "id": 1771
+    },
+    {
+      "type": "movie",
+      "id": 299537
+    },
+    {
+      "type": "movie",
+      "id": 1726
+    },
+    {
+      "type": "movie",
+      "id": 10138
+    },
+    {
+      "type": "movie",
+      "id": 1724
+    },
+    {
+      "type": "movie",
+      "id": 10195
+    },
+    {
+      "type": "movie",
+      "id": 24428
+    },
+    {
+      "type": "movie",
+      "id": 76338
+    },
+    {
+      "type": "movie",
+      "id": 68721
+    },
+    {
+      "type": "movie",
+      "id": 100402
+    },
+    {
+      "type": "movie",
+      "id": 118340
+    },
+    {
+      "type": "movie",
+      "id": 283995
+    },
+    {
+      "type": "tv",
+      "id": 232125
+    },
+    {
+      "type": "movie",
+      "id": 99861
+    },
+    {
+      "type": "movie",
+      "id": 102899
+    },
+    {
+      "type": "movie",
+      "id": 271110
+    },
+    {
+      "type": "movie",
+      "id": 497698
+    },
+    {
+      "type": "movie",
+      "id": 284054
+    },
+    {
+      "type": "movie",
+      "id": 315635
+    },
+    {
+      "type": "movie",
+      "id": 284052
+    },
+    {
+      "type": "movie",
+      "id": 284053
+    },
+    {
+      "type": "movie",
+      "id": 363088
+    },
+    {
+      "type": "movie",
+      "id": 299536
+    },
+    {
+      "type": "movie",
+      "id": 299534
+    },
+    {
+      "type": "tv",
+      "id": 85271
+    },
+    {
+      "type": "movie",
+      "id": 566525
+    },
+    {
+      "type": "tv",
+      "id": 88396
+    },
+    {
+      "type": "movie",
+      "id": 429617
+    },
+    {
+      "type": "movie",
+      "id": 524434
+    },
+    {
+      "type": "movie",
+      "id": 634649
+    },
+    {
+      "type": "movie",
+      "id": 453395
+    },
+    {
+      "type": "tv",
+      "id": 88329
+    },
+    {
+      "type": "tv",
+      "id": 92749
+    },
+    {
+      "type": "movie",
+      "id": 505642
+    },
+    {
+      "type": "tv",
+      "id": 122226
+    },
+    {
+      "type": "tv",
+      "id": 92783
+    },
+    {
+      "type": "tv",
+      "id": 92782
+    },
+    {
+      "type": "movie",
+      "id": 616037
+    },
+    {
+      "type": "movie",
+      "id": 894205
+    },
+    {
+      "type": "movie",
+      "id": 774752
+    },
+    {
+      "type": "movie",
+      "id": 640146
+    },
+    {
+      "type": "movie",
+      "id": 447365
+    },
+    {
+      "type": "tv",
+      "id": 114472
+    },
+    {
+      "type": "movie",
+      "id": 609681
+    },
+    {
+      "type": "tv",
+      "id": 138501
+    },
+    {
+      "type": "tv",
+      "id": 114471
+    },
+    {
+      "type": "movie",
+      "id": 822119
+    },
+    {
+      "type": "tv",
+      "id": 202555
+    },
+    {
+      "type": "movie",
+      "id": 986056
+    },
+    {
+      "type": "tv",
+      "id": 84958
+    },
+    {
+      "type": "tv",
+      "id": 91363
+    },
+    {
+      "type": "movie",
+      "id": 533535
+    },
+    {
+      "type": "movie",
+      "id": 617126
+    },
+    {
+      "type": "movie",
+      "id": 969681
+    },
+    {
+      "type": "movie",
+      "id": 329
+    },
+    {
+      "type": "movie",
+      "id": 330
+    },
+    {
+      "type": "movie",
+      "id": 331
+    },
+    {
+      "type": "movie",
+      "id": 135397
+    },
+    {
+      "type": "movie",
+      "id": 351286
+    },
+    {
+      "type": "movie",
+      "id": 507086
+    },
+    {
+      "type": "movie",
+      "id": 1234821
+    },
+    {
+      "type": "movie",
+      "id": 671
+    },
+    {
+      "type": "movie",
+      "id": 672
+    },
+    {
+      "type": "movie",
+      "id": 673
+    },
+    {
+      "type": "movie",
+      "id": 674
+    },
+    {
+      "type": "movie",
+      "id": 675
+    },
+    {
+      "type": "movie",
+      "id": 767
+    },
+    {
+      "type": "movie",
+      "id": 12444
+    },
+    {
+      "type": "movie",
+      "id": 12445
+    },
+    {
+      "type": "movie",
+      "id": 259316
+    },
+    {
+      "type": "movie",
+      "id": 338952
+    },
+    {
+      "type": "movie",
+      "id": 338953
+    },
+    {
+      "type": "movie",
+      "id": 120
+    },
+    {
+      "type": "movie",
+      "id": 121
+    },
+    {
+      "type": "movie",
+      "id": 122
+    },
+    {
+      "type": "movie",
+      "id": 49051
+    },
+    {
+      "type": "movie",
+      "id": 57158
+    },
+    {
+      "type": "movie",
+      "id": 122917
+    },
+    {
+      "type": "movie",
+      "id": 839033
+    },
+    {
+      "type": "tv",
+      "id": 84773
+    },
+    {
+      "type": "tv",
+      "id": 114479
+    },
+    {
+      "type": "movie",
+      "id": 1893
+    },
+    {
+      "type": "movie",
+      "id": 1894
+    },
+    {
+      "type": "movie",
+      "id": 12180
+    },
+    {
+      "type": "tv",
+      "id": 4194
+    },
+    {
+      "type": "tv",
+      "id": 203085
+    },
+    {
+      "type": "movie",
+      "id": 1895
+    },
+    {
+      "type": "tv",
+      "id": 251091
+    },
+    {
+      "type": "tv",
+      "id": 288055
+    },
+    {
+      "type": "tv",
+      "id": 105971
+    },
+    {
+      "type": "tv",
+      "id": 289219
+    },
+    {
+      "type": "movie",
+      "id": 348350
+    },
+    {
+      "type": "tv",
+      "id": 92830
+    },
+    {
+      "type": "tv",
+      "id": 83867
+    },
+    {
+      "type": "tv",
+      "id": 60554
+    },
+    {
+      "type": "movie",
+      "id": 330459
+    },
+    {
+      "type": "movie",
+      "id": 11
+    },
+    {
+      "type": "movie",
+      "id": 1891
+    },
+    {
+      "type": "movie",
+      "id": 1892
+    },
+    {
+      "type": "tv",
+      "id": 82856
+    },
+    {
+      "type": "tv",
+      "id": 115036
+    },
+    {
+      "type": "tv",
+      "id": 114461
+    },
+    {
+      "type": "tv",
+      "id": 202879
+    },
+    {
+      "type": "movie",
+      "id": 1228710
+    },
+    {
+      "type": "tv",
+      "id": 79093
+    },
+    {
+      "type": "movie",
+      "id": 140607
+    },
+    {
+      "type": "movie",
+      "id": 181808
+    },
+    {
+      "type": "movie",
+      "id": 181812
+    },
+    {
+      "type": "movie",
+      "id": 9799
+    },
+    {
+      "type": "movie",
+      "id": 584
+    },
+    {
+      "type": "movie",
+      "id": 9615
+    },
+    {
+      "type": "movie",
+      "id": 13804
+    },
+    {
+      "type": "movie",
+      "id": 51497
+    },
+    {
+      "type": "movie",
+      "id": 82992
+    },
+    {
+      "type": "movie",
+      "id": 168259
+    },
+    {
+      "type": "movie",
+      "id": 337339
+    },
+    {
+      "type": "movie",
+      "id": 384018
+    },
+    {
+      "type": "movie",
+      "id": 385128
+    },
+    {
+      "type": "movie",
+      "id": 385687
+    },
+    {
+      "type": "movie",
+      "id": 20352
+    },
+    {
+      "type": "movie",
+      "id": 93456
+    },
+    {
+      "type": "movie",
+      "id": 211672
+    },
+    {
+      "type": "movie",
+      "id": 324852
+    },
+    {
+      "type": "movie",
+      "id": 438148
+    },
+    {
+      "type": "movie",
+      "id": 519182
+    },
+    {
+      "type": "movie",
+      "id": 1315772
+    },
+    {
+      "type": "tv",
+      "id": 20794
+    },
+    {
+      "type": "movie",
+      "id": 545255
+    },
+    {
+      "type": "movie",
+      "id": 545819
+    },
+    {
+      "type": "movie",
+      "id": 55382
+    },
+    {
+      "type": "movie",
+      "id": 55384
+    },
+    {
+      "type": "movie",
+      "id": 65841
+    },
+    {
+      "type": "movie",
+      "id": 835865
+    },
+    {
+      "type": "movie",
+      "id": 193402
+    },
+    {
+      "type": "movie",
+      "id": 1285372
+    },
+    {
+      "type": "movie",
+      "id": 1285375
+    },
+    {
+      "type": "movie",
+      "id": 1491083
+    },
+    {
+      "type": "movie",
+      "id": 1172474
+    },
+    {
+      "type": "movie",
+      "id": 59952
+    },
+    {
+      "type": "movie",
+      "id": 45070
+    },
+    {
+      "type": "movie",
+      "id": 1394731
+    },
+    {
+      "type": "movie",
+      "id": 1475877
+    },
+    {
+      "type": "movie",
+      "id": 15137
+    },
+    {
+      "type": "movie",
+      "id": 22843
+    },
+    {
+      "type": "movie",
+      "id": 75629
+    },
+    {
+      "type": "movie",
+      "id": 283566
+    },
+    {
+      "type": "movie",
+      "id": 18491
+    },
+    {
+      "type": "tv",
+      "id": 890
+    },
+    {
+      "type": "movie",
+      "id": 21422
+    },
+    {
+      "type": "movie",
+      "id": 21452
+    },
+    {
+      "type": "movie",
+      "id": 28808
+    },
+    {
+      "type": "movie",
+      "id": 20677
+    },
+    {
+      "type": "movie",
+      "id": 32022
+    },
+    {
+      "type": "movie",
+      "id": 26662
+    },
+    {
+      "type": "movie",
+      "id": 39202
+    },
+    {
+      "type": "movie",
+      "id": 39203
+    },
+    {
+      "type": "movie",
+      "id": 39204
+    },
+    {
+      "type": "movie",
+      "id": 39205
+    },
+    {
+      "type": "movie",
+      "id": 39206
+    },
+    {
+      "type": "movie",
+      "id": 39207
+    },
+    {
+      "type": "movie",
+      "id": 28764
+    },
+    {
+      "type": "movie",
+      "id": 97375
+    },
+    {
+      "type": "movie",
+      "id": 77617
+    },
+    {
+      "type": "movie",
+      "id": 122583
+    },
+    {
+      "type": "movie",
+      "id": 228805
+    },
+    {
+      "type": "movie",
+      "id": 257512
+    },
+    {
+      "type": "movie",
+      "id": 316873
+    },
+    {
+      "type": "movie",
+      "id": 374856
+    },
+    {
+      "type": "movie",
+      "id": 438058
+    },
+    {
+      "type": "movie",
+      "id": 493006
+    },
+    {
+      "type": "movie",
+      "id": 566555
+    },
+    {
+      "type": "movie",
+      "id": 662638
+    },
+    {
+      "type": "movie",
+      "id": 903939
+    },
+    {
+      "type": "movie",
+      "id": 1047041
+    },
+    {
+      "type": "movie",
+      "id": 1209217
+    },
+    {
+      "type": "movie",
+      "id": 1396965
+    },
+    {
+      "type": "movie",
+      "id": 1545621
+    },
+    {
+      "type": "tv",
+      "id": 30983
+    },
+    {
+      "type": "tv",
+      "id": 21731
+    },
+    {
+      "type": "tv",
+      "id": 45500
+    },
+    {
+      "type": "tv",
+      "id": 196400
+    },
+    {
+      "type": "tv",
+      "id": 64375
+    },
+    {
+      "type": "tv",
+      "id": 43887
+    },
+    {
+      "type": "movie",
+      "id": 37048
+    },
+    {
+      "type": "tv",
+      "id": 21732
+    },
+    {
+      "type": "tv",
+      "id": 13674
+    },
+    {
+      "type": "tv",
+      "id": 5660
+    },
+    {
+      "type": "movie",
+      "id": 16157
+    },
+    {
+      "type": "tv",
+      "id": 88865
+    },
+    {
+      "type": "tv",
+      "id": 46512
+    },
+    {
+      "type": "movie",
+      "id": 883768
+    },
+    {
+      "type": "movie",
+      "id": 553610
+    },
+    {
+      "type": "movie",
+      "id": 685274
+    },
+    {
+      "type": "movie",
+      "id": 910850
+    },
+    {
+      "type": "movie",
+      "id": 16308
+    },
+    {
+      "type": "tv",
+      "id": 72677
+    },
+    {
+      "type": "tv",
+      "id": 25797
+    },
+    {
+      "type": "tv",
+      "id": 20111
+    },
+    {
+      "type": "movie",
+      "id": 1146972
+    },
+    {
+      "type": "tv",
+      "id": 30093
+    },
+    {
+      "type": "tv",
+      "id": 21730
+    },
+    {
+      "type": "tv",
+      "id": 25504
+    },
+    {
+      "type": "tv",
+      "id": 37546
+    },
+    {
+      "type": "tv",
+      "id": 45835
+    },
+    {
+      "type": "tv",
+      "id": 61414
+    },
+    {
+      "type": "tv",
+      "id": 60667
+    },
+    {
+      "type": "tv",
+      "id": 76821
+    },
+    {
+      "type": "tv",
+      "id": 91566
+    },
+    {
+      "type": "tv",
+      "id": 122468
+    },
+    {
+      "type": "movie",
+      "id": 22914
+    },
+    {
+      "type": "movie",
+      "id": 39228
+    },
+    {
+      "type": "movie",
+      "id": 39229
+    },
+    {
+      "type": "movie",
+      "id": 39230
+    },
+    {
+      "type": "movie",
+      "id": 19256
+    },
+    {
+      "type": "movie",
+      "id": 19257
+    },
+    {
+      "type": "movie",
+      "id": 30606
+    },
+    {
+      "type": "tv",
+      "id": 85937
+    },
+    {
+      "type": "movie",
+      "id": 635302
+    },
+    {
+      "type": "movie",
+      "id": 1311031
+    }
+  ],
+  "requiredSourceFields": [
+    "id",
+    "title(movie) or name(tv)",
+    "overview",
+    "poster_path",
+    "release_date(movie) or first_air_date(tv)",
+    "genres[]",
+    "credits.cast[]",
+    "credits.crew[]",
+    "seasons[](tv)"
+  ],
+  "editorialLabels": [
+    {
+      "type": "movie",
+      "id": 1678,
+      "label": "ゴジラ",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 315011,
+      "label": "シン・ゴジラ",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 940721,
+      "label": "ゴジラ-1.0",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 124905,
+      "label": "GODZILLA ゴジラ",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 293167,
+      "label": "キングコング：髑髏島の巨神",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 373571,
+      "label": "ゴジラ キング・オブ・モンスターズ",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 399566,
+      "label": "ゴジラvsコング",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 823464,
+      "label": "ゴジラxコング 新たなる帝国",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 202411,
+      "label": "モナーク：レガシー・オブ・モンスターズ",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 117678,
+      "label": "スカル・アイランド",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 929,
+      "label": "GODZILLA",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 1679,
+      "label": "ゴジラの逆襲",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 1680,
+      "label": "キングコング対ゴジラ",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 1682,
+      "label": "モスラ対ゴジラ",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 15766,
+      "label": "三大怪獣 地球最大の決戦",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 19545,
+      "label": "怪獣大戦争",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 3115,
+      "label": "ゴジラ・エビラ・モスラ 南海の大決闘",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 18627,
+      "label": "怪獣島の決戦 ゴジラの息子",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 3107,
+      "label": "怪獣総進撃",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 39462,
+      "label": "ゴジラ・ミニラ・ガバラ オール怪獣大進撃",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 39464,
+      "label": "ゴジラ対ヘドラ",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 19336,
+      "label": "地球攻撃命令 ゴジラ対ガイガン",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 39264,
+      "label": "ゴジラ対メガロ",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 38582,
+      "label": "ゴジラ対メカゴジラ",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 19333,
+      "label": "メカゴジラの逆襲",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 421467,
+      "label": "ゴジラ",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 18289,
+      "label": "ゴジラvsビオランテ",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 36679,
+      "label": "ゴジラvsキングギドラ",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 39465,
+      "label": "ゴジラvsモスラ",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 6593,
+      "label": "ゴジラvsメカゴジラ",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 39466,
+      "label": "ゴジラvsスペースゴジラ",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 12561,
+      "label": "ゴジラvsデストロイア",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 10643,
+      "label": "ゴジラ2000 ミレニアム",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 39468,
+      "label": "ゴジラ×メガギラス G消滅作戦",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 36243,
+      "label": "ゴジラ・モスラ・キングギドラ 大怪獣総攻撃",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 12636,
+      "label": "ゴジラ×メカゴジラ",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 39469,
+      "label": "ゴジラ×モスラ×メカゴジラ 東京SOS",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 15767,
+      "label": "ゴジラ FINAL WARS",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 449574,
+      "label": "GODZILLA 怪獣惑星",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 492719,
+      "label": "GODZILLA 決戦機動増殖都市",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 536115,
+      "label": "GODZILLA 星を喰う者",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 39410,
+      "label": "モスラ",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 36214,
+      "label": "モスラ",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 36212,
+      "label": "モスラ2 海底の大決戦",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 36247,
+      "label": "モスラ3 キングギドラ来襲",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 19742,
+      "label": "空の大怪獣ラドン",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 438604,
+      "label": "大怪獣バラン",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 1771,
+      "label": "キャプテン・アメリカ／ザ・ファースト・アベンジャー",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 299537,
+      "label": "キャプテン・マーベル",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 1726,
+      "label": "アイアンマン",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 10138,
+      "label": "アイアンマン2",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 1724,
+      "label": "インクレディブル・ハルク",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 10195,
+      "label": "マイティ・ソー",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 24428,
+      "label": "アベンジャーズ",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 76338,
+      "label": "マイティ・ソー／ダーク・ワールド",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 68721,
+      "label": "アイアンマン3",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 100402,
+      "label": "キャプテン・アメリカ／ウィンター・ソルジャー",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 118340,
+      "label": "ガーディアンズ・オブ・ギャラクシー",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 283995,
+      "label": "ガーディアンズ・オブ・ギャラクシー：リミックス",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 232125,
+      "label": "アイ・アム・グルート シーズン2",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 99861,
+      "label": "アベンジャーズ／エイジ・オブ・ウルトロン",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 102899,
+      "label": "アントマン",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 271110,
+      "label": "シビル・ウォー／キャプテン・アメリカ",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 497698,
+      "label": "ブラック・ウィドウ",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 284054,
+      "label": "ブラックパンサー",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 315635,
+      "label": "スパイダーマン：ホームカミング",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 284052,
+      "label": "ドクター・ストレンジ",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 284053,
+      "label": "マイティ・ソー バトルロイヤル",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 363088,
+      "label": "アントマン＆ワスプ",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 299536,
+      "label": "アベンジャーズ／インフィニティ・ウォー",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 299534,
+      "label": "アベンジャーズ／エンドゲーム",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 85271,
+      "label": "ワンダヴィジョン",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 566525,
+      "label": "シャン・チー／テン・リングスの伝説",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 88396,
+      "label": "ファルコン＆ウィンター・ソルジャー",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 429617,
+      "label": "スパイダーマン：ファー・フロム・ホーム",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 524434,
+      "label": "エターナルズ",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 634649,
+      "label": "スパイダーマン：ノー・ウェイ・ホーム",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 453395,
+      "label": "ドクター・ストレンジ／マルチバース・オブ・マッドネス",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 88329,
+      "label": "ホークアイ",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 92749,
+      "label": "ムーンナイト",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 505642,
+      "label": "ブラックパンサー／ワカンダ・フォーエバー",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 122226,
+      "label": "エコー",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 92783,
+      "label": "シー・ハルク：ザ・アトーニー",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 92782,
+      "label": "ミズ・マーベル",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 616037,
+      "label": "ソー：ラブ＆サンダー",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 894205,
+      "label": "ウェアウルフ・バイ・ナイト",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 774752,
+      "label": "ガーディアンズ・オブ・ギャラクシー ホリデー・スペシャル",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 640146,
+      "label": "アントマン＆ワスプ：クアントマニア",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 447365,
+      "label": "ガーディアンズ・オブ・ギャラクシー：VOLUME 3",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 114472,
+      "label": "シークレット・インベージョン",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 609681,
+      "label": "マーベルズ",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 138501,
+      "label": "アガサ・オール・アロング",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 114471,
+      "label": "アイアンハート",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 822119,
+      "label": "キャプテン・アメリカ：ブレイブ・ニュー・ワールド",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 202555,
+      "label": "デアデビル：ボーン・アゲイン シーズン1",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 986056,
+      "label": "サンダーボルツ*",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 84958,
+      "label": "ロキ シーズン2",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 91363,
+      "label": "ホワット・イフ...？ シーズン3",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 533535,
+      "label": "デッドプール＆ウルヴァリン",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 617126,
+      "label": "ファンタスティック4：ファースト・ステップ",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 969681,
+      "label": "スパイダーマン：ブランド・ニュー・デイ",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 329,
+      "label": "ジュラシック・パーク",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 330,
+      "label": "ロスト・ワールド／ジュラシック・パーク",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 331,
+      "label": "ジュラシック・パーク3",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 135397,
+      "label": "ジュラシック・ワールド",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 351286,
+      "label": "ジュラシック・ワールド／炎の王国",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 507086,
+      "label": "ジュラシック・ワールド／新たなる支配者",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 1234821,
+      "label": "ジュラシック・ワールド／復活の大地",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 671,
+      "label": "ハリー・ポッターと賢者の石",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 672,
+      "label": "ハリー・ポッターと秘密の部屋",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 673,
+      "label": "ハリー・ポッターとアズカバンの囚人",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 674,
+      "label": "ハリー・ポッターと炎のゴブレット",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 675,
+      "label": "ハリー・ポッターと不死鳥の騎士団",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 767,
+      "label": "ハリー・ポッターと謎のプリンス",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 12444,
+      "label": "ハリー・ポッターと死の秘宝 PART1",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 12445,
+      "label": "ハリー・ポッターと死の秘宝 PART2",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 259316,
+      "label": "ファンタスティック・ビーストと魔法使いの旅",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 338952,
+      "label": "ファンタスティック・ビーストと黒い魔法使いの誕生",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 338953,
+      "label": "ファンタスティック・ビーストとダンブルドアの秘密",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 120,
+      "label": "ロード・オブ・ザ・リング",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 121,
+      "label": "ロード・オブ・ザ・リング／二つの塔",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 122,
+      "label": "ロード・オブ・ザ・リング／王の帰還",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 49051,
+      "label": "ホビット 思いがけない冒険",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 57158,
+      "label": "ホビット 竜に奪われた王国",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 122917,
+      "label": "ホビット 決戦のゆくえ",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 839033,
+      "label": "アニメ映画『ロード・オブ・ザ・リング／ローハンの戦い』",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 84773,
+      "label": "ドラマ『ロード・オブ・ザ・リング：力の指輪』",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 114479,
+      "label": "スター・ウォーズ：アコライト",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 1893,
+      "label": "エピソード1／ファントム・メナス",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 1894,
+      "label": "エピソード2／クローンの攻撃",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 12180,
+      "label": "クローン・ウォーズ（アニメ映画）",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 4194,
+      "label": "クローン・ウォーズ（アニメシリーズ）",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 203085,
+      "label": "テイルズ・オブ・ジェダイ",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 1895,
+      "label": "エピソード3／シスの復讐",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 251091,
+      "label": "テイルズ・オブ・エンパイア",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 288055,
+      "label": "テイルズ・オブ・アンダーワールド",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 105971,
+      "label": "バッド・バッチ",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 289219,
+      "label": "モール／シャドウ・ロード",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 348350,
+      "label": "ハン・ソロ／スター・ウォーズ・ストーリー",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 92830,
+      "label": "オビ＝ワン・ケノービ",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 83867,
+      "label": "キャシアン・アンドー",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 60554,
+      "label": "スター・ウォーズ 反乱者たち",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 330459,
+      "label": "ローグ・ワン／スター・ウォーズ・ストーリー",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 11,
+      "label": "エピソード4／新たなる希望",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 1891,
+      "label": "エピソード5／帝国の逆襲",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 1892,
+      "label": "エピソード6／ジェダイの帰還",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 82856,
+      "label": "マンダロリアン",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 115036,
+      "label": "ボバ・フェット／The Book of Boba Fett",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 114461,
+      "label": "アソーカ",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 202879,
+      "label": "スケルトン・クルー",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 1228710,
+      "label": "スター・ウォーズ／マンダロリアン・アンド・グローグー",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 79093,
+      "label": "スター・ウォーズ レジスタンス",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 140607,
+      "label": "エピソード7／フォースの覚醒",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 181808,
+      "label": "エピソード8／最後のジェダイ",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 181812,
+      "label": "エピソード9／スカイウォーカーの夜明け",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 9799,
+      "label": "ワイルド・スピード",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 584,
+      "label": "ワイルド・スピード X2",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 9615,
+      "label": "ワイルド・スピード X3 TOKYO DRIFT",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 13804,
+      "label": "ワイルド・スピード MAX",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 51497,
+      "label": "ワイルド・スピード MEGA MAX",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 82992,
+      "label": "ワイルド・スピード EURO MISSION",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 168259,
+      "label": "ワイルド・スピード SKY MISSION",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 337339,
+      "label": "ワイルド・スピード ICE BREAK",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 384018,
+      "label": "ワイルド・スピード／スーパーコンボ",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 385128,
+      "label": "ワイルド・スピード／ジェットブレイク",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 385687,
+      "label": "ワイルド・スピード／ファイヤーブースト",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 20352,
+      "label": "怪盗グルーの月泥棒 3D",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 93456,
+      "label": "怪盗グルーのミニオン危機一発",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 211672,
+      "label": "ミニオンズ",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 324852,
+      "label": "怪盗グルーのミニオン大脱走",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 438148,
+      "label": "ミニオンズ フィーバー",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 519182,
+      "label": "怪盗グルーのミニオン超変身",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 1315772,
+      "label": "作品詳細・配信先を見る →",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 20794,
+      "label": "踊る大捜査線",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 545255,
+      "label": "踊る大捜査線 歳末特別警戒スペシャル",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 545819,
+      "label": "踊る大捜査線 秋の犯罪撲滅スペシャル",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 55382,
+      "label": "踊る大捜査線 THE MOVIE 湾岸署史上最悪の3日間！",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 55384,
+      "label": "踊る大捜査線 THE MOVIE 2 レインボーブリッジを封鎖せよ！",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 65841,
+      "label": "踊る大捜査線 THE MOVIE 3 ヤツらを解放せよ！",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 835865,
+      "label": "踊る大捜査線 THE LAST TV サラリーマン刑事と最後の難事件",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 193402,
+      "label": "踊る大捜査線 THE FINAL 新たなる希望",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 1285372,
+      "label": "室井慎次 敗れざる者",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 1285375,
+      "label": "室井慎次 生き続ける者",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 1491083,
+      "label": "踊る大捜査線 N.E.W. メトロポリスを駆け抜けろ！",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 1172474,
+      "label": "踊る大捜査線 番外編 湾岸署婦警物語 初夏の交通安全スペシャル",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 59952,
+      "label": "交渉人 真下正義",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 45070,
+      "label": "容疑者 室井慎次",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 1394731,
+      "label": "逃亡者 木島丈一郎",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 1475877,
+      "label": "弁護士 灰島秀樹",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 15137,
+      "label": "ヱヴァンゲリヲン新劇場版：序",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 22843,
+      "label": "ヱヴァンゲリヲン新劇場版：破",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 75629,
+      "label": "ヱヴァンゲリヲン新劇場版：Q",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 283566,
+      "label": "シン・エヴァンゲリオン劇場版",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 18491,
+      "label": "新世紀エヴァンゲリオン劇場版 Air／まごころを、君に",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 890,
+      "label": "新世紀エヴァンゲリオン",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 21422,
+      "label": "作品詳細・配信先を見る →",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 21452,
+      "label": "作品詳細・配信先を見る →",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 28808,
+      "label": "作品詳細・配信先を見る →",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 20677,
+      "label": "作品詳細・配信先を見る →",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 32022,
+      "label": "作品詳細・配信先を見る →",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 26662,
+      "label": "作品詳細・配信先を見る →",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 39202,
+      "label": "作品詳細・配信先を見る →",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 39203,
+      "label": "作品詳細・配信先を見る →",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 39204,
+      "label": "作品詳細・配信先を見る →",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 39205,
+      "label": "作品詳細・配信先を見る →",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 39206,
+      "label": "作品詳細・配信先を見る →",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 39207,
+      "label": "作品詳細・配信先を見る →",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 28764,
+      "label": "作品詳細・配信先を見る →",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 97375,
+      "label": "作品詳細・配信先を見る →",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 77617,
+      "label": "作品詳細・配信先を見る →",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 122583,
+      "label": "作品詳細・配信先を見る →",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 228805,
+      "label": "作品詳細・配信先を見る →",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 257512,
+      "label": "作品詳細・配信先を見る →",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 316873,
+      "label": "作品詳細・配信先を見る →",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 374856,
+      "label": "作品詳細・配信先を見る →",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 438058,
+      "label": "作品詳細・配信先を見る →",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 493006,
+      "label": "作品詳細・配信先を見る →",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 566555,
+      "label": "作品詳細・配信先を見る →",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 662638,
+      "label": "作品詳細・配信先を見る →",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 903939,
+      "label": "作品詳細・配信先を見る →",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 1047041,
+      "label": "作品詳細・配信先を見る →",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 1209217,
+      "label": "作品詳細・配信先を見る →",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 1396965,
+      "label": "作品詳細・配信先を見る →",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 1545621,
+      "label": "作品詳細・配信先を見る →",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 30983,
+      "label": "TVアニメの配信先を確認する →",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 21731,
+      "label": "機動戦士ガンダム",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 45500,
+      "label": "機動戦士ガンダムUC",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 196400,
+      "label": "機動戦士ガンダム 水星の魔女",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 64375,
+      "label": "機動戦士ガンダム 鉄血のオルフェンズ",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 43887,
+      "label": "機動戦士ガンダム 第08MS小隊",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 37048,
+      "label": "劇場版 機動戦士ガンダム00 -A wakening of the Trailblazer-",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 21732,
+      "label": "機動戦士ガンダム00",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 13674,
+      "label": "機動戦士Ζガンダム",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 5660,
+      "label": "機動戦士ガンダムΖΖ",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 16157,
+      "label": "機動戦士ガンダム 逆襲のシャア",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 88865,
+      "label": "機動戦士ガンダム THE ORIGIN",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 46512,
+      "label": "機動戦士ガンダム0080 ポケットの中の戦争",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 883768,
+      "label": "機動戦士ガンダム ククルス・ドアンの島",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 553610,
+      "label": "機動戦士ガンダムNT",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 685274,
+      "label": "機動戦士ガンダム 閃光のハサウェイ",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 910850,
+      "label": "機動戦士ガンダム 閃光のハサウェイ キルケーの魔女",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 16308,
+      "label": "機動戦士ガンダムF91",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 72677,
+      "label": "機動戦士ガンダム0083 STARDUST MEMORY",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 25797,
+      "label": "機動戦士Vガンダム",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 20111,
+      "label": "機動戦士ガンダムSEED",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 1146972,
+      "label": "機動戦士ガンダムSEED FREEDOM",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 30093,
+      "label": "機動武闘伝Gガンダム",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 21730,
+      "label": "新機動戦記ガンダムW",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 25504,
+      "label": "機動新世紀ガンダムX",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 37546,
+      "label": "∀ガンダム",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 45835,
+      "label": "機動戦士ガンダムAGE",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 61414,
+      "label": "ガンダム Gのレコンギスタ",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 60667,
+      "label": "ガンダムビルドファイターズ",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 76821,
+      "label": "ガンダムビルドダイバーズ",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 91566,
+      "label": "SDガンダムワールド 三国創傑伝",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 122468,
+      "label": "SDガンダムワールド ヒーローズ",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 22914,
+      "label": "新機動戦記ガンダムW Endless Waltz",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 39228,
+      "label": "機動戦士ガンダム",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 39229,
+      "label": "機動戦士ガンダムII 哀・戦士編",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 39230,
+      "label": "機動戦士ガンダムIII めぐりあい宇宙編",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 19256,
+      "label": "機動戦士Ζガンダム 星を継ぐ者",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 19257,
+      "label": "機動戦士ΖガンダムII 恋人たち",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 30606,
+      "label": "機動戦士ΖガンダムIII 星の鼓動は愛",
+      "verification": "repository label only"
+    },
+    {
+      "type": "tv",
+      "id": 85937,
+      "label": "鬼滅の刃（TVシリーズ）",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 635302,
+      "label": "劇場版「鬼滅の刃」無限列車編",
+      "verification": "repository label only"
+    },
+    {
+      "type": "movie",
+      "id": 1311031,
+      "label": "無限城編 第一章 猗窩座再来",
+      "verification": "repository label only"
+    }
+  ],
+  "editorial": {
+    "series": [
+      {
+        "series": "godzilla",
+        "file": "godzilla.html",
+        "sha256": "2b806918a6b61758e941d36d9a3b7c7a5ff19177b9725b671584e6611a7688a7",
+        "orderedWorks": [
+          {
+            "type": "movie",
+            "id": 1678
+          },
+          {
+            "type": "movie",
+            "id": 315011
+          },
+          {
+            "type": "movie",
+            "id": 940721
+          },
+          {
+            "type": "movie",
+            "id": 124905
+          },
+          {
+            "type": "movie",
+            "id": 293167
+          },
+          {
+            "type": "movie",
+            "id": 373571
+          },
+          {
+            "type": "movie",
+            "id": 399566
+          },
+          {
+            "type": "movie",
+            "id": 823464
+          },
+          {
+            "type": "tv",
+            "id": 202411
+          },
+          {
+            "type": "tv",
+            "id": 117678
+          },
+          {
+            "type": "movie",
+            "id": 929
+          },
+          {
+            "type": "movie",
+            "id": 1679
+          },
+          {
+            "type": "movie",
+            "id": 1680
+          },
+          {
+            "type": "movie",
+            "id": 1682
+          },
+          {
+            "type": "movie",
+            "id": 15766
+          },
+          {
+            "type": "movie",
+            "id": 19545
+          },
+          {
+            "type": "movie",
+            "id": 3115
+          },
+          {
+            "type": "movie",
+            "id": 18627
+          },
+          {
+            "type": "movie",
+            "id": 3107
+          },
+          {
+            "type": "movie",
+            "id": 39462
+          },
+          {
+            "type": "movie",
+            "id": 39464
+          },
+          {
+            "type": "movie",
+            "id": 19336
+          },
+          {
+            "type": "movie",
+            "id": 39264
+          },
+          {
+            "type": "movie",
+            "id": 38582
+          },
+          {
+            "type": "movie",
+            "id": 19333
+          },
+          {
+            "type": "movie",
+            "id": 421467
+          },
+          {
+            "type": "movie",
+            "id": 18289
+          },
+          {
+            "type": "movie",
+            "id": 36679
+          },
+          {
+            "type": "movie",
+            "id": 39465
+          },
+          {
+            "type": "movie",
+            "id": 6593
+          },
+          {
+            "type": "movie",
+            "id": 39466
+          },
+          {
+            "type": "movie",
+            "id": 12561
+          },
+          {
+            "type": "movie",
+            "id": 10643
+          },
+          {
+            "type": "movie",
+            "id": 39468
+          },
+          {
+            "type": "movie",
+            "id": 36243
+          },
+          {
+            "type": "movie",
+            "id": 12636
+          },
+          {
+            "type": "movie",
+            "id": 39469
+          },
+          {
+            "type": "movie",
+            "id": 15767
+          },
+          {
+            "type": "movie",
+            "id": 449574
+          },
+          {
+            "type": "movie",
+            "id": 492719
+          },
+          {
+            "type": "movie",
+            "id": 536115
+          },
+          {
+            "type": "movie",
+            "id": 39410
+          },
+          {
+            "type": "movie",
+            "id": 36214
+          },
+          {
+            "type": "movie",
+            "id": 36212
+          },
+          {
+            "type": "movie",
+            "id": 36247
+          },
+          {
+            "type": "movie",
+            "id": 19742
+          },
+          {
+            "type": "movie",
+            "id": 438604
+          }
+        ]
+      },
+      {
+        "series": "mcu",
+        "file": "mcu.html",
+        "sha256": "26ce8b21c54df3e90a146485d16a249d7a01aa349af790afa5f99a5a41459488",
+        "orderedWorks": [
+          {
+            "type": "movie",
+            "id": 1771
+          },
+          {
+            "type": "movie",
+            "id": 299537
+          },
+          {
+            "type": "movie",
+            "id": 1726
+          },
+          {
+            "type": "movie",
+            "id": 10138
+          },
+          {
+            "type": "movie",
+            "id": 1724
+          },
+          {
+            "type": "movie",
+            "id": 10195
+          },
+          {
+            "type": "movie",
+            "id": 24428
+          },
+          {
+            "type": "movie",
+            "id": 76338
+          },
+          {
+            "type": "movie",
+            "id": 68721
+          },
+          {
+            "type": "movie",
+            "id": 100402
+          },
+          {
+            "type": "movie",
+            "id": 118340
+          },
+          {
+            "type": "movie",
+            "id": 283995
+          },
+          {
+            "type": "tv",
+            "id": 232125
+          },
+          {
+            "type": "movie",
+            "id": 99861
+          },
+          {
+            "type": "movie",
+            "id": 102899
+          },
+          {
+            "type": "movie",
+            "id": 271110
+          },
+          {
+            "type": "movie",
+            "id": 497698
+          },
+          {
+            "type": "movie",
+            "id": 284054
+          },
+          {
+            "type": "movie",
+            "id": 315635
+          },
+          {
+            "type": "movie",
+            "id": 284052
+          },
+          {
+            "type": "movie",
+            "id": 284053
+          },
+          {
+            "type": "movie",
+            "id": 363088
+          },
+          {
+            "type": "movie",
+            "id": 299536
+          },
+          {
+            "type": "movie",
+            "id": 299534
+          },
+          {
+            "type": "tv",
+            "id": 85271
+          },
+          {
+            "type": "movie",
+            "id": 566525
+          },
+          {
+            "type": "tv",
+            "id": 88396
+          },
+          {
+            "type": "movie",
+            "id": 429617
+          },
+          {
+            "type": "movie",
+            "id": 524434
+          },
+          {
+            "type": "movie",
+            "id": 634649
+          },
+          {
+            "type": "movie",
+            "id": 453395
+          },
+          {
+            "type": "tv",
+            "id": 88329
+          },
+          {
+            "type": "tv",
+            "id": 92749
+          },
+          {
+            "type": "movie",
+            "id": 505642
+          },
+          {
+            "type": "tv",
+            "id": 122226
+          },
+          {
+            "type": "tv",
+            "id": 92783
+          },
+          {
+            "type": "tv",
+            "id": 92782
+          },
+          {
+            "type": "movie",
+            "id": 616037
+          },
+          {
+            "type": "movie",
+            "id": 894205
+          },
+          {
+            "type": "movie",
+            "id": 774752
+          },
+          {
+            "type": "movie",
+            "id": 640146
+          },
+          {
+            "type": "movie",
+            "id": 447365
+          },
+          {
+            "type": "tv",
+            "id": 114472
+          },
+          {
+            "type": "movie",
+            "id": 609681
+          },
+          {
+            "type": "tv",
+            "id": 138501
+          },
+          {
+            "type": "tv",
+            "id": 114471
+          },
+          {
+            "type": "movie",
+            "id": 822119
+          },
+          {
+            "type": "tv",
+            "id": 202555
+          },
+          {
+            "type": "movie",
+            "id": 986056
+          },
+          {
+            "type": "tv",
+            "id": 84958
+          },
+          {
+            "type": "tv",
+            "id": 91363
+          },
+          {
+            "type": "movie",
+            "id": 533535
+          },
+          {
+            "type": "movie",
+            "id": 617126
+          },
+          {
+            "type": "movie",
+            "id": 969681
+          }
+        ]
+      },
+      {
+        "series": "jurassic",
+        "file": "jurassic.html",
+        "sha256": "54771178d714272d089b77a4d50a699420217c501537ef67dd7d826a409ea5f4",
+        "orderedWorks": [
+          {
+            "type": "movie",
+            "id": 329
+          },
+          {
+            "type": "movie",
+            "id": 330
+          },
+          {
+            "type": "movie",
+            "id": 331
+          },
+          {
+            "type": "movie",
+            "id": 135397
+          },
+          {
+            "type": "movie",
+            "id": 351286
+          },
+          {
+            "type": "movie",
+            "id": 507086
+          },
+          {
+            "type": "movie",
+            "id": 1234821
+          }
+        ]
+      },
+      {
+        "series": "harrypotter",
+        "file": "harrypotter.html",
+        "sha256": "f3d65d46fb0b2a88d492aa4b6ed314a0dc7719534a7e16800bd5bb93417b8d26",
+        "orderedWorks": [
+          {
+            "type": "movie",
+            "id": 671
+          },
+          {
+            "type": "movie",
+            "id": 672
+          },
+          {
+            "type": "movie",
+            "id": 673
+          },
+          {
+            "type": "movie",
+            "id": 674
+          },
+          {
+            "type": "movie",
+            "id": 675
+          },
+          {
+            "type": "movie",
+            "id": 767
+          },
+          {
+            "type": "movie",
+            "id": 12444
+          },
+          {
+            "type": "movie",
+            "id": 12445
+          },
+          {
+            "type": "movie",
+            "id": 259316
+          },
+          {
+            "type": "movie",
+            "id": 338952
+          },
+          {
+            "type": "movie",
+            "id": 338953
+          }
+        ]
+      },
+      {
+        "series": "lordoftherings",
+        "file": "lordoftherings.html",
+        "sha256": "94d4e32aa08e50afe47d624570a25789782d431bd817eec07b0e32cb294f7522",
+        "orderedWorks": [
+          {
+            "type": "movie",
+            "id": 120
+          },
+          {
+            "type": "movie",
+            "id": 121
+          },
+          {
+            "type": "movie",
+            "id": 122
+          },
+          {
+            "type": "movie",
+            "id": 49051
+          },
+          {
+            "type": "movie",
+            "id": 57158
+          },
+          {
+            "type": "movie",
+            "id": 122917
+          },
+          {
+            "type": "movie",
+            "id": 839033
+          },
+          {
+            "type": "tv",
+            "id": 84773
+          }
+        ]
+      },
+      {
+        "series": "starwars",
+        "file": "starwars.html",
+        "sha256": "1902b264b5558d07f8fde2c672954d59df5ad9d91569adb838161b9928b26eb1",
+        "orderedWorks": [
+          {
+            "type": "tv",
+            "id": 114479
+          },
+          {
+            "type": "movie",
+            "id": 1893
+          },
+          {
+            "type": "movie",
+            "id": 1894
+          },
+          {
+            "type": "movie",
+            "id": 12180
+          },
+          {
+            "type": "tv",
+            "id": 4194
+          },
+          {
+            "type": "tv",
+            "id": 203085
+          },
+          {
+            "type": "movie",
+            "id": 1895
+          },
+          {
+            "type": "tv",
+            "id": 251091
+          },
+          {
+            "type": "tv",
+            "id": 288055
+          },
+          {
+            "type": "tv",
+            "id": 105971
+          },
+          {
+            "type": "tv",
+            "id": 289219
+          },
+          {
+            "type": "movie",
+            "id": 348350
+          },
+          {
+            "type": "tv",
+            "id": 92830
+          },
+          {
+            "type": "tv",
+            "id": 83867
+          },
+          {
+            "type": "tv",
+            "id": 60554
+          },
+          {
+            "type": "movie",
+            "id": 330459
+          },
+          {
+            "type": "movie",
+            "id": 11
+          },
+          {
+            "type": "movie",
+            "id": 1891
+          },
+          {
+            "type": "movie",
+            "id": 1892
+          },
+          {
+            "type": "tv",
+            "id": 82856
+          },
+          {
+            "type": "tv",
+            "id": 115036
+          },
+          {
+            "type": "tv",
+            "id": 114461
+          },
+          {
+            "type": "tv",
+            "id": 202879
+          },
+          {
+            "type": "movie",
+            "id": 1228710
+          },
+          {
+            "type": "tv",
+            "id": 79093
+          },
+          {
+            "type": "movie",
+            "id": 140607
+          },
+          {
+            "type": "movie",
+            "id": 181808
+          },
+          {
+            "type": "movie",
+            "id": 181812
+          }
+        ]
+      },
+      {
+        "series": "wildspeed",
+        "file": "wildspeed.html",
+        "sha256": "0c1e29e8bbbc4ffbcab29c5c56bba1462c71d7a4d774da4bdd71fc6c867fe1ca",
+        "orderedWorks": [
+          {
+            "type": "movie",
+            "id": 9799
+          },
+          {
+            "type": "movie",
+            "id": 584
+          },
+          {
+            "type": "movie",
+            "id": 9615
+          },
+          {
+            "type": "movie",
+            "id": 13804
+          },
+          {
+            "type": "movie",
+            "id": 51497
+          },
+          {
+            "type": "movie",
+            "id": 82992
+          },
+          {
+            "type": "movie",
+            "id": 168259
+          },
+          {
+            "type": "movie",
+            "id": 337339
+          },
+          {
+            "type": "movie",
+            "id": 384018
+          },
+          {
+            "type": "movie",
+            "id": 385128
+          },
+          {
+            "type": "movie",
+            "id": 385687
+          }
+        ]
+      },
+      {
+        "series": "minions",
+        "file": "minions.html",
+        "sha256": "63d20aff96f2af1ca53dda98fe5be6832e6f2e9c314493698130678f6a06e37e",
+        "orderedWorks": [
+          {
+            "type": "movie",
+            "id": 20352
+          },
+          {
+            "type": "movie",
+            "id": 93456
+          },
+          {
+            "type": "movie",
+            "id": 211672
+          },
+          {
+            "type": "movie",
+            "id": 324852
+          },
+          {
+            "type": "movie",
+            "id": 438148
+          },
+          {
+            "type": "movie",
+            "id": 519182
+          },
+          {
+            "type": "movie",
+            "id": 1315772
+          }
+        ]
+      },
+      {
+        "series": "odoru",
+        "file": "odoru.html",
+        "sha256": "c910a84e25c0c9ebd08e4843c254f14c94d67e51a6c9ff0aee8dcb6ffe5305b0",
+        "orderedWorks": [
+          {
+            "type": "tv",
+            "id": 20794
+          },
+          {
+            "type": "movie",
+            "id": 545255
+          },
+          {
+            "type": "movie",
+            "id": 545819
+          },
+          {
+            "type": "movie",
+            "id": 55382
+          },
+          {
+            "type": "movie",
+            "id": 55384
+          },
+          {
+            "type": "movie",
+            "id": 65841
+          },
+          {
+            "type": "movie",
+            "id": 835865
+          },
+          {
+            "type": "movie",
+            "id": 193402
+          },
+          {
+            "type": "movie",
+            "id": 1285372
+          },
+          {
+            "type": "movie",
+            "id": 1285375
+          },
+          {
+            "type": "movie",
+            "id": 1491083
+          },
+          {
+            "type": "movie",
+            "id": 1172474
+          },
+          {
+            "type": "movie",
+            "id": 59952
+          },
+          {
+            "type": "movie",
+            "id": 45070
+          },
+          {
+            "type": "movie",
+            "id": 1394731
+          },
+          {
+            "type": "movie",
+            "id": 1475877
+          }
+        ]
+      },
+      {
+        "series": "eva",
+        "file": "eva.html",
+        "sha256": "4140273402ba9955b98413078e90aa40afb43d28d6b35df417c044735150457b",
+        "orderedWorks": [
+          {
+            "type": "movie",
+            "id": 15137
+          },
+          {
+            "type": "movie",
+            "id": 22843
+          },
+          {
+            "type": "movie",
+            "id": 75629
+          },
+          {
+            "type": "movie",
+            "id": 283566
+          },
+          {
+            "type": "movie",
+            "id": 18491
+          },
+          {
+            "type": "tv",
+            "id": 890
+          }
+        ]
+      },
+      {
+        "series": "conan",
+        "file": "conan.html",
+        "sha256": "e5cd304b42a69f0124803b505304059af28e9cfe71898668313cf0a0164a3daf",
+        "orderedWorks": [
+          {
+            "type": "movie",
+            "id": 21422
+          },
+          {
+            "type": "movie",
+            "id": 21452
+          },
+          {
+            "type": "movie",
+            "id": 28808
+          },
+          {
+            "type": "movie",
+            "id": 20677
+          },
+          {
+            "type": "movie",
+            "id": 32022
+          },
+          {
+            "type": "movie",
+            "id": 26662
+          },
+          {
+            "type": "movie",
+            "id": 39202
+          },
+          {
+            "type": "movie",
+            "id": 39203
+          },
+          {
+            "type": "movie",
+            "id": 39204
+          },
+          {
+            "type": "movie",
+            "id": 39205
+          },
+          {
+            "type": "movie",
+            "id": 39206
+          },
+          {
+            "type": "movie",
+            "id": 39207
+          },
+          {
+            "type": "movie",
+            "id": 28764
+          },
+          {
+            "type": "movie",
+            "id": 97375
+          },
+          {
+            "type": "movie",
+            "id": 77617
+          },
+          {
+            "type": "movie",
+            "id": 122583
+          },
+          {
+            "type": "movie",
+            "id": 228805
+          },
+          {
+            "type": "movie",
+            "id": 257512
+          },
+          {
+            "type": "movie",
+            "id": 316873
+          },
+          {
+            "type": "movie",
+            "id": 374856
+          },
+          {
+            "type": "movie",
+            "id": 438058
+          },
+          {
+            "type": "movie",
+            "id": 493006
+          },
+          {
+            "type": "movie",
+            "id": 566555
+          },
+          {
+            "type": "movie",
+            "id": 662638
+          },
+          {
+            "type": "movie",
+            "id": 903939
+          },
+          {
+            "type": "movie",
+            "id": 1047041
+          },
+          {
+            "type": "movie",
+            "id": 1209217
+          },
+          {
+            "type": "movie",
+            "id": 1396965
+          },
+          {
+            "type": "movie",
+            "id": 1545621
+          },
+          {
+            "type": "tv",
+            "id": 30983
+          }
+        ]
+      },
+      {
+        "series": "gundam",
+        "file": "gundam.html",
+        "sha256": "6211002f9be5980c5d8eafd3cd29bd2f395f76d8a4182534f6fbdc72ba7fbd5a",
+        "orderedWorks": [
+          {
+            "type": "tv",
+            "id": 21731
+          },
+          {
+            "type": "tv",
+            "id": 45500
+          },
+          {
+            "type": "tv",
+            "id": 196400
+          },
+          {
+            "type": "tv",
+            "id": 64375
+          },
+          {
+            "type": "tv",
+            "id": 43887
+          },
+          {
+            "type": "movie",
+            "id": 37048
+          },
+          {
+            "type": "tv",
+            "id": 21732
+          },
+          {
+            "type": "tv",
+            "id": 13674
+          },
+          {
+            "type": "tv",
+            "id": 5660
+          },
+          {
+            "type": "movie",
+            "id": 16157
+          },
+          {
+            "type": "tv",
+            "id": 88865
+          },
+          {
+            "type": "tv",
+            "id": 46512
+          },
+          {
+            "type": "movie",
+            "id": 883768
+          },
+          {
+            "type": "movie",
+            "id": 553610
+          },
+          {
+            "type": "movie",
+            "id": 685274
+          },
+          {
+            "type": "movie",
+            "id": 910850
+          },
+          {
+            "type": "movie",
+            "id": 16308
+          },
+          {
+            "type": "tv",
+            "id": 72677
+          },
+          {
+            "type": "tv",
+            "id": 25797
+          },
+          {
+            "type": "tv",
+            "id": 20111
+          },
+          {
+            "type": "movie",
+            "id": 1146972
+          },
+          {
+            "type": "tv",
+            "id": 30093
+          },
+          {
+            "type": "tv",
+            "id": 21730
+          },
+          {
+            "type": "tv",
+            "id": 25504
+          },
+          {
+            "type": "tv",
+            "id": 37546
+          },
+          {
+            "type": "tv",
+            "id": 45835
+          },
+          {
+            "type": "tv",
+            "id": 61414
+          },
+          {
+            "type": "tv",
+            "id": 60667
+          },
+          {
+            "type": "tv",
+            "id": 76821
+          },
+          {
+            "type": "tv",
+            "id": 91566
+          },
+          {
+            "type": "tv",
+            "id": 122468
+          },
+          {
+            "type": "movie",
+            "id": 22914
+          },
+          {
+            "type": "movie",
+            "id": 39228
+          },
+          {
+            "type": "movie",
+            "id": 39229
+          },
+          {
+            "type": "movie",
+            "id": 39230
+          },
+          {
+            "type": "movie",
+            "id": 19256
+          },
+          {
+            "type": "movie",
+            "id": 19257
+          },
+          {
+            "type": "movie",
+            "id": 30606
+          }
+        ]
+      },
+      {
+        "series": "kimetsu",
+        "file": "kimetsu.html",
+        "sha256": "d88ca011aaf656129df09a3c7c03c7d30f091268a7a15e72e0a47731c18ebba6",
+        "orderedWorks": [
+          {
+            "type": "tv",
+            "id": 85937
+          },
+          {
+            "type": "movie",
+            "id": 635302
+          },
+          {
+            "type": "movie",
+            "id": 1311031
+          }
+        ]
+      }
+    ],
+    "staticFiles": [
+      {
+        "file": "ghibli.html",
+        "sha256": "c2cebc073be1c0f7757885d51468e4b6564ffba18cb3d15ffb27d2bece47718e"
+      },
+      {
+        "file": "movie_shelf_1980_1984.html",
+        "sha256": "eaaf9d1c07f5d7a71e9638c10bcad6fe67a80b3530ee0cf535cbbb4f6ee7e8f7"
+      }
+    ]
+  },
+  "missing": {
+    "fixedPackets": [
+      "movie:1678",
+      "movie:315011",
+      "movie:940721",
+      "movie:124905",
+      "movie:293167",
+      "movie:373571",
+      "movie:399566",
+      "movie:823464",
+      "tv:202411",
+      "tv:117678",
+      "movie:929",
+      "movie:1679",
+      "movie:1680",
+      "movie:1682",
+      "movie:15766",
+      "movie:19545",
+      "movie:3115",
+      "movie:18627",
+      "movie:3107",
+      "movie:39462",
+      "movie:39464",
+      "movie:19336",
+      "movie:39264",
+      "movie:38582",
+      "movie:19333",
+      "movie:421467",
+      "movie:18289",
+      "movie:36679",
+      "movie:39465",
+      "movie:6593",
+      "movie:39466",
+      "movie:12561",
+      "movie:10643",
+      "movie:39468",
+      "movie:36243",
+      "movie:12636",
+      "movie:39469",
+      "movie:15767",
+      "movie:449574",
+      "movie:492719",
+      "movie:536115",
+      "movie:39410",
+      "movie:36214",
+      "movie:36212",
+      "movie:36247",
+      "movie:19742",
+      "movie:438604",
+      "movie:1771",
+      "movie:299537",
+      "movie:1726",
+      "movie:10138",
+      "movie:1724",
+      "movie:10195",
+      "movie:24428",
+      "movie:76338",
+      "movie:68721",
+      "movie:100402",
+      "movie:118340",
+      "movie:283995",
+      "tv:232125",
+      "movie:99861",
+      "movie:102899",
+      "movie:271110",
+      "movie:497698",
+      "movie:284054",
+      "movie:315635",
+      "movie:284052",
+      "movie:284053",
+      "movie:363088",
+      "movie:299536",
+      "movie:299534",
+      "tv:85271",
+      "movie:566525",
+      "tv:88396",
+      "movie:429617",
+      "movie:524434",
+      "movie:634649",
+      "movie:453395",
+      "tv:88329",
+      "tv:92749",
+      "movie:505642",
+      "tv:122226",
+      "tv:92783",
+      "tv:92782",
+      "movie:616037",
+      "movie:894205",
+      "movie:774752",
+      "movie:640146",
+      "movie:447365",
+      "tv:114472",
+      "movie:609681",
+      "tv:138501",
+      "tv:114471",
+      "movie:822119",
+      "tv:202555",
+      "movie:986056",
+      "tv:84958",
+      "tv:91363",
+      "movie:533535",
+      "movie:617126",
+      "movie:969681",
+      "movie:329",
+      "movie:330",
+      "movie:331",
+      "movie:135397",
+      "movie:351286",
+      "movie:507086",
+      "movie:1234821",
+      "movie:671",
+      "movie:672",
+      "movie:673",
+      "movie:674",
+      "movie:675",
+      "movie:767",
+      "movie:12444",
+      "movie:12445",
+      "movie:259316",
+      "movie:338952",
+      "movie:338953",
+      "movie:120",
+      "movie:121",
+      "movie:122",
+      "movie:49051",
+      "movie:57158",
+      "movie:122917",
+      "movie:839033",
+      "tv:84773",
+      "tv:114479",
+      "movie:1893",
+      "movie:1894",
+      "movie:12180",
+      "tv:4194",
+      "tv:203085",
+      "movie:1895",
+      "tv:251091",
+      "tv:288055",
+      "tv:105971",
+      "tv:289219",
+      "movie:348350",
+      "tv:92830",
+      "tv:83867",
+      "tv:60554",
+      "movie:330459",
+      "movie:11",
+      "movie:1891",
+      "movie:1892",
+      "tv:82856",
+      "tv:115036",
+      "tv:114461",
+      "tv:202879",
+      "movie:1228710",
+      "tv:79093",
+      "movie:140607",
+      "movie:181808",
+      "movie:181812",
+      "movie:9799",
+      "movie:584",
+      "movie:9615",
+      "movie:13804",
+      "movie:51497",
+      "movie:82992",
+      "movie:168259",
+      "movie:337339",
+      "movie:384018",
+      "movie:385128",
+      "movie:385687",
+      "movie:20352",
+      "movie:93456",
+      "movie:211672",
+      "movie:324852",
+      "movie:438148",
+      "movie:519182",
+      "movie:1315772",
+      "tv:20794",
+      "movie:545255",
+      "movie:545819",
+      "movie:55382",
+      "movie:55384",
+      "movie:65841",
+      "movie:835865",
+      "movie:193402",
+      "movie:1285372",
+      "movie:1285375",
+      "movie:1491083",
+      "movie:1172474",
+      "movie:59952",
+      "movie:45070",
+      "movie:1394731",
+      "movie:1475877",
+      "movie:15137",
+      "movie:22843",
+      "movie:75629",
+      "movie:283566",
+      "movie:18491",
+      "tv:890",
+      "movie:21422",
+      "movie:21452",
+      "movie:28808",
+      "movie:20677",
+      "movie:32022",
+      "movie:26662",
+      "movie:39202",
+      "movie:39203",
+      "movie:39204",
+      "movie:39205",
+      "movie:39206",
+      "movie:39207",
+      "movie:28764",
+      "movie:97375",
+      "movie:77617",
+      "movie:122583",
+      "movie:228805",
+      "movie:257512",
+      "movie:316873",
+      "movie:374856",
+      "movie:438058",
+      "movie:493006",
+      "movie:566555",
+      "movie:662638",
+      "movie:903939",
+      "movie:1047041",
+      "movie:1209217",
+      "movie:1396965",
+      "movie:1545621",
+      "tv:30983",
+      "tv:21731",
+      "tv:45500",
+      "tv:196400",
+      "tv:64375",
+      "tv:43887",
+      "movie:37048",
+      "tv:21732",
+      "tv:13674",
+      "tv:5660",
+      "movie:16157",
+      "tv:88865",
+      "tv:46512",
+      "movie:883768",
+      "movie:553610",
+      "movie:685274",
+      "movie:910850",
+      "movie:16308",
+      "tv:72677",
+      "tv:25797",
+      "tv:20111",
+      "movie:1146972",
+      "tv:30093",
+      "tv:21730",
+      "tv:25504",
+      "tv:37546",
+      "tv:45835",
+      "tv:61414",
+      "tv:60667",
+      "tv:76821",
+      "tv:91566",
+      "tv:122468",
+      "movie:22914",
+      "movie:39228",
+      "movie:39229",
+      "movie:39230",
+      "movie:19256",
+      "movie:19257",
+      "movie:30606",
+      "tv:85937",
+      "movie:635302",
+      "movie:1311031"
+    ],
+    "manualReview": true,
+    "freshStreaming": [
+      "movie:1678",
+      "movie:315011",
+      "movie:940721",
+      "movie:124905",
+      "movie:293167",
+      "movie:373571",
+      "movie:399566",
+      "movie:823464",
+      "tv:202411",
+      "tv:117678",
+      "movie:929",
+      "movie:1679",
+      "movie:1680",
+      "movie:1682",
+      "movie:15766",
+      "movie:19545",
+      "movie:3115",
+      "movie:18627",
+      "movie:3107",
+      "movie:39462",
+      "movie:39464",
+      "movie:19336",
+      "movie:39264",
+      "movie:38582",
+      "movie:19333",
+      "movie:421467",
+      "movie:18289",
+      "movie:36679",
+      "movie:39465",
+      "movie:6593",
+      "movie:39466",
+      "movie:12561",
+      "movie:10643",
+      "movie:39468",
+      "movie:36243",
+      "movie:12636",
+      "movie:39469",
+      "movie:15767",
+      "movie:449574",
+      "movie:492719",
+      "movie:536115",
+      "movie:39410",
+      "movie:36214",
+      "movie:36212",
+      "movie:36247",
+      "movie:19742",
+      "movie:438604",
+      "movie:1771",
+      "movie:299537",
+      "movie:1726",
+      "movie:10138",
+      "movie:1724",
+      "movie:10195",
+      "movie:24428",
+      "movie:76338",
+      "movie:68721",
+      "movie:100402",
+      "movie:118340",
+      "movie:283995",
+      "tv:232125",
+      "movie:99861",
+      "movie:102899",
+      "movie:271110",
+      "movie:497698",
+      "movie:284054",
+      "movie:315635",
+      "movie:284052",
+      "movie:284053",
+      "movie:363088",
+      "movie:299536",
+      "movie:299534",
+      "tv:85271",
+      "movie:566525",
+      "tv:88396",
+      "movie:429617",
+      "movie:524434",
+      "movie:634649",
+      "movie:453395",
+      "tv:88329",
+      "tv:92749",
+      "movie:505642",
+      "tv:122226",
+      "tv:92783",
+      "tv:92782",
+      "movie:616037",
+      "movie:894205",
+      "movie:774752",
+      "movie:640146",
+      "movie:447365",
+      "tv:114472",
+      "movie:609681",
+      "tv:138501",
+      "tv:114471",
+      "movie:822119",
+      "tv:202555",
+      "movie:986056",
+      "tv:84958",
+      "tv:91363",
+      "movie:533535",
+      "movie:617126",
+      "movie:969681",
+      "movie:329",
+      "movie:330",
+      "movie:331",
+      "movie:135397",
+      "movie:351286",
+      "movie:507086",
+      "movie:1234821",
+      "movie:671",
+      "movie:672",
+      "movie:673",
+      "movie:674",
+      "movie:675",
+      "movie:767",
+      "movie:12444",
+      "movie:12445",
+      "movie:259316",
+      "movie:338952",
+      "movie:338953",
+      "movie:120",
+      "movie:121",
+      "movie:122",
+      "movie:49051",
+      "movie:57158",
+      "movie:122917",
+      "movie:839033",
+      "tv:84773",
+      "tv:114479",
+      "movie:1893",
+      "movie:1894",
+      "movie:12180",
+      "tv:4194",
+      "tv:203085",
+      "movie:1895",
+      "tv:251091",
+      "tv:288055",
+      "tv:105971",
+      "tv:289219",
+      "movie:348350",
+      "tv:92830",
+      "tv:83867",
+      "tv:60554",
+      "movie:330459",
+      "movie:11",
+      "movie:1891",
+      "movie:1892",
+      "tv:82856",
+      "tv:115036",
+      "tv:114461",
+      "tv:202879",
+      "movie:1228710",
+      "tv:79093",
+      "movie:140607",
+      "movie:181808",
+      "movie:181812",
+      "movie:9799",
+      "movie:584",
+      "movie:9615",
+      "movie:13804",
+      "movie:51497",
+      "movie:82992",
+      "movie:168259",
+      "movie:337339",
+      "movie:384018",
+      "movie:385128",
+      "movie:385687",
+      "movie:20352",
+      "movie:93456",
+      "movie:211672",
+      "movie:324852",
+      "movie:438148",
+      "movie:519182",
+      "movie:1315772",
+      "tv:20794",
+      "movie:545255",
+      "movie:545819",
+      "movie:55382",
+      "movie:55384",
+      "movie:65841",
+      "movie:835865",
+      "movie:193402",
+      "movie:1285372",
+      "movie:1285375",
+      "movie:1491083",
+      "movie:1172474",
+      "movie:59952",
+      "movie:45070",
+      "movie:1394731",
+      "movie:1475877",
+      "movie:15137",
+      "movie:22843",
+      "movie:75629",
+      "movie:283566",
+      "movie:18491",
+      "tv:890",
+      "movie:21422",
+      "movie:21452",
+      "movie:28808",
+      "movie:20677",
+      "movie:32022",
+      "movie:26662",
+      "movie:39202",
+      "movie:39203",
+      "movie:39204",
+      "movie:39205",
+      "movie:39206",
+      "movie:39207",
+      "movie:28764",
+      "movie:97375",
+      "movie:77617",
+      "movie:122583",
+      "movie:228805",
+      "movie:257512",
+      "movie:316873",
+      "movie:374856",
+      "movie:438058",
+      "movie:493006",
+      "movie:566555",
+      "movie:662638",
+      "movie:903939",
+      "movie:1047041",
+      "movie:1209217",
+      "movie:1396965",
+      "movie:1545621",
+      "tv:30983",
+      "tv:21731",
+      "tv:45500",
+      "tv:196400",
+      "tv:64375",
+      "tv:43887",
+      "movie:37048",
+      "tv:21732",
+      "tv:13674",
+      "tv:5660",
+      "movie:16157",
+      "tv:88865",
+      "tv:46512",
+      "movie:883768",
+      "movie:553610",
+      "movie:685274",
+      "movie:910850",
+      "movie:16308",
+      "tv:72677",
+      "tv:25797",
+      "tv:20111",
+      "movie:1146972",
+      "tv:30093",
+      "tv:21730",
+      "tv:25504",
+      "tv:37546",
+      "tv:45835",
+      "tv:61414",
+      "tv:60667",
+      "tv:76821",
+      "tv:91566",
+      "tv:122468",
+      "movie:22914",
+      "movie:39228",
+      "movie:39229",
+      "movie:39230",
+      "movie:19256",
+      "movie:19257",
+      "movie:30606",
+      "tv:85937",
+      "movie:635302",
+      "movie:1311031"
+    ]
+  },
+  "servicesContacted": false,
+  "productionReady": false,
+  "sha256": "e9536f0230e34ec2595d0192672cfe2146b34a29b17ad080b91a909d4d74603c"
+}

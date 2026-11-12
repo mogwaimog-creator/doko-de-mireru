@@ -7,9 +7,10 @@ function currentWindow(){
   const local=new Date(Date.now()+9*3600000);
   const hour=local.getUTCHours();
   const day=(hour<6?new Date(local.getTime()-86400000):local).toISOString().slice(0,10);
-  return day+'-'+(hour<6?'18':hour<18?'06':'18');
+  return day+'-06';
 }
 module.exports=async(req,res)=>{
+ if(process.env.LEDGER_RELEASE_MODE!==undefined&&await require('./_release-dispatch').dispatch('streaming-status',req,res))return;
   res.setHeader('Cache-Control','public, max-age=0, s-maxage=300, stale-while-revalidate=60');
   if(req.method!=='GET')return res.status(405).json({error:'GET only'});
   try{

@@ -1,0 +1,312 @@
+{
+  "dateJST": "2026-11-09",
+  "baseCommit": "984a7d9",
+  "branch": "work/four-ledgers-20261107",
+  "node": {
+    "tests": 341,
+    "pass": 341,
+    "fail": 0,
+    "skipped": 0
+  },
+  "browser": {
+    "results": [
+      {
+        "test": "series API godzilla",
+        "passed": true,
+        "works": 47
+      },
+      {
+        "test": "series API mcu",
+        "passed": true,
+        "works": 54
+      },
+      {
+        "test": "series API jurassic",
+        "passed": true,
+        "works": 7
+      },
+      {
+        "test": "series API harrypotter",
+        "passed": true,
+        "works": 11
+      },
+      {
+        "test": "series API lordoftherings",
+        "passed": true,
+        "works": 8
+      },
+      {
+        "test": "series API starwars",
+        "passed": true,
+        "works": 28
+      },
+      {
+        "test": "series API wildspeed",
+        "passed": true,
+        "works": 11
+      },
+      {
+        "test": "series API minions",
+        "passed": true,
+        "works": 7
+      },
+      {
+        "test": "series API odoru",
+        "passed": true,
+        "works": 16
+      },
+      {
+        "test": "series API eva",
+        "passed": true,
+        "works": 6
+      },
+      {
+        "test": "series API conan",
+        "passed": true,
+        "works": 30
+      },
+      {
+        "test": "series API gundam",
+        "passed": true,
+        "works": 38
+      },
+      {
+        "test": "series API kimetsu",
+        "passed": true,
+        "works": 3
+      },
+      {
+        "test": "1280 kimetsu.html",
+        "passed": true,
+        "seriesReads": 1,
+        "horizontalOverflow": false
+      },
+      {
+        "test": "1280 streaming.html",
+        "passed": true,
+        "seriesReads": 1,
+        "horizontalOverflow": false
+      },
+      {
+        "test": "1280 detail movie",
+        "passed": true,
+        "initialSeo": true
+      },
+      {
+        "test": "1280 detail tv",
+        "passed": true,
+        "initialSeo": true
+      },
+      {
+        "test": "390 kimetsu.html",
+        "passed": true,
+        "seriesReads": 1,
+        "horizontalOverflow": false
+      },
+      {
+        "test": "390 streaming.html",
+        "passed": true,
+        "seriesReads": 1,
+        "horizontalOverflow": false
+      },
+      {
+        "test": "390 detail movie",
+        "passed": true,
+        "initialSeo": true
+      },
+      {
+        "test": "390 detail tv",
+        "passed": true,
+        "initialSeo": true
+      },
+      {
+        "test": "mobile season click reads saved episode ledger through actual API",
+        "passed": true
+      },
+      {
+        "test": "missing fixed work fails closed without legacy TMDB fallback",
+        "passed": true
+      },
+      {
+        "test": "saved person API and mobile page",
+        "passed": true
+      },
+      {
+        "test": "TV season list/count and lazy episodes share one saved manifest",
+        "passed": true
+      },
+      {
+        "test": "general work API refreshes eligible saved fixture and reuses success",
+        "passed": true
+      },
+      {
+        "test": "saved work/person/season API routes issue zero TMDB calls",
+        "passed": true
+      },
+      {
+        "test": "all 223 known-title works return saved SEO in initial HTML",
+        "passed": true,
+        "works": 223
+      },
+      {
+        "test": "1280 freshness fresh and managed related misses",
+        "passed": true
+      },
+      {
+        "test": "1280 freshness stale and managed related misses",
+        "passed": true
+      },
+      {
+        "test": "1280 freshness unknown and managed related misses",
+        "passed": true
+      },
+      {
+        "test": "1280 freshness failed and managed related misses",
+        "passed": true
+      },
+      {
+        "test": "390 freshness fresh and managed related misses",
+        "passed": true
+      },
+      {
+        "test": "390 freshness stale and managed related misses",
+        "passed": true
+      },
+      {
+        "test": "390 freshness unknown and managed related misses",
+        "passed": true
+      },
+      {
+        "test": "390 freshness failed and managed related misses",
+        "passed": true
+      }
+    ],
+    "errors": [],
+    "externalRequestsBlocked": 38,
+    "liveExternalRequests": 0
+  },
+  "redisBenchmark": {
+    "scope": "loopback Redis 7.2.6; 266 actual work IDs, successful empty JP fixture; no production calls",
+    "results": {
+      "before": {
+        "works": 266,
+        "upstreamFixtureLoads": 266,
+        "clientRedisRPCs": 1330,
+        "redisCommandsIncludingLua": 2926,
+        "commands": {
+          "get": 1330,
+          "set": 532,
+          "mget": 0,
+          "eval": 532,
+          "pttl": 266,
+          "del": 266
+        },
+        "elapsedMs": 2276
+      },
+      "optimized": {
+        "works": 266,
+        "upstreamFixtureLoads": 266,
+        "clientRedisRPCs": 533,
+        "redisCommandsIncludingLua": 2395,
+        "commands": {
+          "get": 798,
+          "set": 532,
+          "mget": 1,
+          "eval": 532,
+          "pttl": 266,
+          "del": 266
+        },
+        "elapsedMs": 880
+      }
+    },
+    "reductionPercent": {
+      "clientRPC": 59.92481203007518,
+      "includingLua": 18.147641831852358
+    },
+    "billing": "RPC and server command counts are NOT confirmed Upstash billing counts"
+  },
+  "localKnownKeyCapacity": {
+    "scope": "known loopback preview keys only; 266 repository IDs plus general-work fixture; seasons/person/provider data are explicitly fixtures",
+    "measured": {
+      "streaming": {
+        "records": 267,
+        "missing": 0,
+        "jsonBytes": 93887,
+        "redisBytes": 123432,
+        "MB": 0.123432
+      },
+      "legacyWatchCopies": {
+        "records": 266,
+        "missing": 0,
+        "jsonBytes": 39900,
+        "redisBytes": 67568,
+        "MB": 0.067568
+      },
+      "work": {
+        "records": 224,
+        "missing": 0,
+        "jsonBytes": 86203,
+        "redisBytes": 107392,
+        "MB": 0.107392
+      },
+      "person": {
+        "records": 1,
+        "missing": 0,
+        "jsonBytes": 475,
+        "redisBytes": 568,
+        "MB": 0.000568
+      },
+      "season": {
+        "records": 34,
+        "missing": 0,
+        "jsonBytes": 13136,
+        "redisBytes": 16352,
+        "MB": 0.016352
+      },
+      "seo": {
+        "records": 223,
+        "missing": 0,
+        "jsonBytes": 125347,
+        "redisBytes": 146632,
+        "MB": 0.146632
+      }
+    },
+    "totalMB": 0.461944,
+    "excludes": "Redis process overhead, test/benchmark namespaces, full real people/season populations, production keys, future growth, backups, active locks",
+    "productionCurrentMB": null,
+    "productionPeakMB": null,
+    "productionAfterMB": null,
+    "productionFreeHeadroom": null
+  },
+  "originalFailures": {
+    "count": 30,
+    "handled": 30,
+    "groupCounts": {
+      "writeFreezeTestConditionsAndProductGaps": 16,
+      "personV2EvalMock": 6,
+      "obsoleteExpectationsOrMockRestrictions": 4,
+      "seasonOverviewContract": 4
+    }
+  },
+  "productionRedisConnected": false,
+  "productionVercelAccessed": false,
+  "productionDeployed": false,
+  "mainChanged": false,
+  "pricingOrResourcesChanged": false,
+  "remaining": [
+    "production usage/plan/free headroom",
+    "latest providers and real people/season data",
+    "full legacy v1/v2 display consumers",
+    "all write/review-lock/CAS paths for non-streaming ledgers",
+    "cross-worker frozen coalescing",
+    "real Upstash Lua billing and permissions",
+    "real Cron completion/resume and total budgets",
+    "production SSR routing",
+    "full real-data restore and all-screen regression"
+  ],
+  "limits": {
+    "frozenCoalescing": "process-local only; 30s cache is separate from 30-minute streaming failure policy",
+    "benchmarkBilling": "Redis commandstats and network RPC are not confirmed billing counts",
+    "fixtures": "person, seasons, and provider payloads are synthetic; repository IDs and known titles are real source data"
+  }
+}

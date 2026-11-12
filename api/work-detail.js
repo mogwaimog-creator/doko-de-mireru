@@ -1,14 +1,16 @@
 'use strict';
 // Metadata-only access for future detail pages and new watch-order guides.
 // This endpoint never fetches watch providers and does not change existing pages.
-const {getWork,putWorkIfAbsent,identity}=require('./_work-ledger');
+const {getWork,putWorkIfAbsent,identity,normalizeWork}=require('./_work-ledger');
 const {fromTmdb}=require('./_work-from-tmdb');
 const {firstWorkLoad}=require('./_work-first-load');
+const {metadataWithLedger,fixedOnly}=require('./_detail-metadata-cache');
 // Expose only display-safe fixed metadata. Internal review notes and cached
 // TMDB payloads stay in Redis and must never be returned to visitors.
 const PUBLIC_FIELDS=['schemaVersion','type','id','title','originalTitle','releaseDate','overview','runtimeMinutes','genres','posterPath','backdropPath','directors','cast','collectionId','collectionName','seasons','status','voteAverage','voteCount'];
 function publicWork(record){return Object.fromEntries(PUBLIC_FIELDS.map(key=>[key,record[key]??null]));}
 module.exports=async(req,res)=>{
+ if(process.env.LEDGER_RELEASE_MODE!==undefined&&await require('./_release-dispatch').dispatch('work-detail',req,res))return;
   res.setHeader('Cache-Control','private, no-store');
   if(req.method!=='GET')return res.status(405).json({error:'GET only'});
   // Keep the new public endpoint dormant until preview verification and explicit release.
@@ -22,10 +24,7 @@ module.exports=async(req,res)=>{
   }catch(e){console.error('WORK LEDGER READ FAILED',e);res.setHeader('Retry-After','5');return res.status(503).json({error:'Metadata storage temporarily unavailable',code:'WORK_STORAGE_UNAVAILABLE'});}
   const apiKey=process.env.TMDB_API_KEY;
   if(!apiKey)return res.status(503).json({error:'Metadata service unavailable'});
-  try{
-    const saved=await firstWorkLoad(work.type,work.id,async()=>{
-      const existing=await getWork(work.type,work.id);
-      if(existing)return existing;
+  const loadOriginal=async()=>{
       const url='https://api.themoviedb.org/3/'+work.type+'/'+work.id+'?api_key='+encodeURIComponent(apiKey)+'&language=ja-JP&append_to_response=credits';
       const response=await fetch(url,{signal:AbortSignal.timeout(7000)});
       if(!response.ok){
@@ -39,8 +38,19 @@ module.exports=async(req,res)=>{
         error.httpStatus=502;
         throw error;
       }
-      const {['watch/providers']:ignored,...fixedDetail}=original;
-      const record={...fromTmdb(work.type,original),extensions:{tmdbDetail:fixedDetail}};
+      return fixedOnly(original);
+  };
+  try{
+    if(process.env.LEDGER_WRITES_RESUME!=='1'){
+      const fixed=await metadataWithLedger(work.type,work.id,loadOriginal);
+      const record=normalizeWork(work.type,work.id,fromTmdb(work.type,fixed));
+      return res.status(200).json({work:publicWork(record),source:'upstream-unsaved',persisted:false});
+    }
+    await firstWorkLoad(work.type,work.id,async()=>{
+      const existing=await getWork(work.type,work.id);
+      if(existing)return existing;
+      const fixedDetail=await loadOriginal();
+      const record={...fromTmdb(work.type,fixedDetail),extensions:{tmdbDetail:fixedDetail}};
       return putWorkIfAbsent(work.type,work.id,record);
     });
     // firstWorkLoad waiters receive tmdbDetail; the endpoint must always
@@ -50,7 +60,7 @@ module.exports=async(req,res)=>{
     return res.status(200).json({work:publicWork(canonical),source:'ledger'});
   }catch(e){
     console.error('WORK DETAIL FAILED',e);
-    if(e?.code==='WORK_METADATA_BUSY'||e?.code==='WORK_STORAGE_UNAVAILABLE'){
+    if(e?.code==='WORK_METADATA_BUSY'||e?.code==='WORK_STORAGE_UNAVAILABLE'||e?.code==='FROZEN_LOOKUP_BUSY'||e?.code==='FROZEN_LOOKUP_TIMEOUT'){
       res.setHeader('Retry-After','5');
       return res.status(503).json({error:'Metadata temporarily unavailable',code:e.code});
     }

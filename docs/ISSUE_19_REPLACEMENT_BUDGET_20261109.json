@@ -1,0 +1,186 @@
+{
+  "scope": "illustrative demand, user-reported remaining170000, no whole old-data restore",
+  "scenarios": [
+    {
+      "name": "low",
+      "assumptions": {
+        "name": "low",
+        "seriesOriginRequests": 1000,
+        "seoHtmlRequests": 1000,
+        "seoColdRequests": 10,
+        "otherCommands": 30000,
+        "destructiveOperationCommands": 2
+      },
+      "result": {
+        "setup": {
+          "twoTargetedManualCaptures": 136,
+          "seedIncludingIndexAndVerification": 180,
+          "initialFreshStreamingWithMonitor": 133,
+          "compatibilityCommands": 200,
+          "validationCommands": 2000,
+          "controlCommands": 200,
+          "newRepairReserve": 2000
+        },
+        "operating": {
+          "dailyUpdateCommands": 4123,
+          "seriesOriginCommands": 8000,
+          "seoHtmlCommands": 7390,
+          "otherCommands": 30000
+        },
+        "seedBatches": 27,
+        "seedRPCs": 126,
+        "knownTotal": 54362,
+        "total": 54364,
+        "commandAllowance": 136000,
+        "commandMargin": 81636,
+        "commandScenarioFits": true,
+        "oldWholeBackupCommands": 0,
+        "oldWholeRestoreReserve": 0,
+        "localPayloadBytes": 750396,
+        "realWireBytes": null,
+        "realNewPhasePeakBytes": null,
+        "transferAllowance": 6400000000,
+        "storageAllowance": 200000000,
+        "unknown": [
+          "actual transfer including regular traffic and headers",
+          "actual peak storage including temporary data/index/log overhead",
+          "current measured plan limits/headroom",
+          "confirmed Upstash monthly reset time",
+          "fresh account usage and monthly reset time",
+          "real non-synthetic reviewed work data"
+        ],
+        "productionReady": false,
+        "notice": "Scenario coefficients include Lua internals and current ingress tickets; operational demand and real sizes must be verified. Does not authorize initialization or deployment."
+      }
+    },
+    {
+      "name": "middle",
+      "assumptions": {
+        "name": "middle",
+        "seriesOriginRequests": 5000,
+        "seoHtmlRequests": 5000,
+        "seoColdRequests": 50,
+        "otherCommands": 30000,
+        "destructiveOperationCommands": 2
+      },
+      "result": {
+        "setup": {
+          "twoTargetedManualCaptures": 136,
+          "seedIncludingIndexAndVerification": 180,
+          "initialFreshStreamingWithMonitor": 133,
+          "compatibilityCommands": 200,
+          "validationCommands": 2000,
+          "controlCommands": 200,
+          "newRepairReserve": 2000
+        },
+        "operating": {
+          "dailyUpdateCommands": 4123,
+          "seriesOriginCommands": 40000,
+          "seoHtmlCommands": 36950,
+          "otherCommands": 30000
+        },
+        "seedBatches": 27,
+        "seedRPCs": 126,
+        "knownTotal": 115922,
+        "total": 115924,
+        "commandAllowance": 136000,
+        "commandMargin": 20076,
+        "commandScenarioFits": true,
+        "oldWholeBackupCommands": 0,
+        "oldWholeRestoreReserve": 0,
+        "localPayloadBytes": 750396,
+        "realWireBytes": null,
+        "realNewPhasePeakBytes": null,
+        "transferAllowance": 6400000000,
+        "storageAllowance": 200000000,
+        "unknown": [
+          "actual transfer including regular traffic and headers",
+          "actual peak storage including temporary data/index/log overhead",
+          "current measured plan limits/headroom",
+          "confirmed Upstash monthly reset time",
+          "fresh account usage and monthly reset time",
+          "real non-synthetic reviewed work data"
+        ],
+        "productionReady": false,
+        "notice": "Scenario coefficients include Lua internals and current ingress tickets; operational demand and real sizes must be verified. Does not authorize initialization or deployment."
+      }
+    },
+    {
+      "name": "high",
+      "assumptions": {
+        "name": "high",
+        "seriesOriginRequests": 10000,
+        "seoHtmlRequests": 5000,
+        "seoColdRequests": 50,
+        "otherCommands": 30000,
+        "destructiveOperationCommands": 2
+      },
+      "result": {
+        "setup": {
+          "twoTargetedManualCaptures": 136,
+          "seedIncludingIndexAndVerification": 180,
+          "initialFreshStreamingWithMonitor": 133,
+          "compatibilityCommands": 200,
+          "validationCommands": 2000,
+          "controlCommands": 200,
+          "newRepairReserve": 2000
+        },
+        "operating": {
+          "dailyUpdateCommands": 4123,
+          "seriesOriginCommands": 80000,
+          "seoHtmlCommands": 36950,
+          "otherCommands": 30000
+        },
+        "seedBatches": 27,
+        "seedRPCs": 126,
+        "knownTotal": 155922,
+        "total": 155924,
+        "commandAllowance": 136000,
+        "commandMargin": -19924,
+        "commandScenarioFits": false,
+        "oldWholeBackupCommands": 0,
+        "oldWholeRestoreReserve": 0,
+        "localPayloadBytes": 750396,
+        "realWireBytes": null,
+        "realNewPhasePeakBytes": null,
+        "transferAllowance": 6400000000,
+        "storageAllowance": 200000000,
+        "unknown": [
+          "actual transfer including regular traffic and headers",
+          "actual peak storage including temporary data/index/log overhead",
+          "current measured plan limits/headroom",
+          "confirmed Upstash monthly reset time",
+          "fresh account usage and monthly reset time",
+          "real non-synthetic reviewed work data"
+        ],
+        "productionReady": false,
+        "notice": "Scenario coefficients include Lua internals and current ingress tickets; operational demand and real sizes must be verified. Does not authorize initialization or deployment."
+      }
+    }
+  ],
+  "gate": {
+    "ready": false,
+    "missing": [
+      "realDataPackageVerified",
+      "all13EditorialReviewed",
+      "manualSourceLocationsConfirmed",
+      "frozenManualSnapshotStillMatches",
+      "realUpstashCompatible",
+      "productionRoutesConnectedAndTested",
+      "productionGuardsBoundToCandidate",
+      "administratorAuthenticationVerified",
+      "legacyCronStopped",
+      "allLegacyWritersStoppedAndDrained",
+      "freshStreaming266Verified",
+      "seriesAndComparisonAndDetailAndSeoVerified",
+      "staticShelfApiDependencyVerified",
+      "monitorAndResumeVerified",
+      "notificationDestinationVerified",
+      "realBudgetVerified",
+      "explicitFinalAuthorization"
+    ],
+    "oldWholeRestoreRequired": false,
+    "operationsExecuted": false
+  },
+  "servicesContacted": false
+}

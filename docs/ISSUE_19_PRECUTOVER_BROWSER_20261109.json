@@ -1,0 +1,14 @@
+{
+  "scope": "loopback fixtures; initial HTML with JavaScript disabled, search UI with JavaScript enabled; no real services",
+  "passed": 8,
+  "checks": [
+    "movie: cold initial HTML, JS disabled, title/description/H1/canonical/OGP, warm HTML and JSON reuse, no metadata refetch",
+    "tv: cold initial HTML, JS disabled, title/description/H1/canonical/OGP, warm HTML and JSON reuse, no metadata refetch",
+    "invalid work noindex 400",
+    "authenticated runtime status and scheduler health",
+    "paused shared ingress blocks cron and general HTML and drains safely",
+    "reviewed resume restores HTML, no automatic blind resume",
+    "all-search TV link keeps type=tv",
+    "anime movie/TV search links remain distinct"
+  ]
+}

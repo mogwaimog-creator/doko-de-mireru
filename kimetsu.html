@@ -60,7 +60,8 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
 .kimetsu-card-duration{display:inline-block;font-size:15px;font-weight:800;color:#365e45;background:#edf5ee;border-radius:6px;padding:2px 8px;margin:8px 0 0}
 .pillar-name{display:inline-block;font-weight:800}.pillar-badge{display:inline-block;background:#f5e6be;color:#72501b;font-size:14px;font-weight:900;line-height:1.6;border-radius:6px;padding:1px 8px;margin:2px 5px 2px 4px;vertical-align:middle}
 @media(max-width:600px){.kimetsu-story-body,.kimetsu-time{padding:16px}.kimetsu-time-table{font-size:14px}.kimetsu-time-table th,.kimetsu-time-table td{padding:9px 5px}.kimetsu-time-table td:last-child{white-space:normal}}
-</style><script src="/series-update-status.js"></script></head><body>
+</style><script src="series-ledger-view.js" data-series="kimetsu"></script>
+</head><body>
 <header><div class="wrap toplinks"><a href="index.html">← ドコデミレル？に戻る</a><a href="series.html">他のシリーズを見る →</a></div><div class="hero"><div class="wrap"><div class="eyebrow">ANIME WATCH GUIDE</div><h1>鬼滅の刃を見る順番</h1><p>初めてなら物語の順に。見返すなら登場人物とつながりも。映画とテレビ版の違いも、迷う場所で確認できます。</p></div></div></header>
 <main class="wrap">
 <section class="kimetsu-story" aria-labelledby="kimetsu-story-title"><div class="kimetsu-story-head"><div class="kicker">🌸 鬼と人間の、切なくも熱い物語</div><h2 id="kimetsu-story-title">鬼滅の刃とは？</h2></div><div class="kimetsu-story-body"><p>『鬼滅の刃』は、大正時代の日本を舞台に、鬼と戦う少年たちの姿を描いた物語です。</p><p>家族を鬼に襲われた炭治郎は、鬼になった妹・禰豆子を人間に戻すため、鬼殺隊へ入隊します。</p><h3>⚔️ 鬼滅の刃の魅力は？</h3><p>迫力ある戦闘や美しい映像、家族や仲間との絆。そして、<strong>敵である鬼たちにも、人間だった頃の悲しい過去があること。</strong></p><p>単なる善と悪の戦いではない、切なくも心を揺さぶる物語です。</p></div></section>
@@ -131,8 +132,8 @@ function card(w,i,deep){
 for(const [id,deep] of [['shortCards',false],['deepCards',true]]){const el=document.getElementById(id);works.forEach((w,i)=>el.appendChild(card(w,i,deep)))}
 // Read the same cached series availability as the other viewing-order guides.
 // No visitor-triggered TMDB fetch; the existing 06:00 JST Cron owns refreshes.
-const kimetsuCachedProviders=fetch((location.protocol==='file:'?'https://doko-de-mireru.com':'')+'/api/series-watch?series=kimetsu',{cache:'no-store'})
- .then(r=>{if(!r.ok)throw Error('配信共有API HTTP '+r.status);return r.json().then(d=>{window.dokoUpdateSeriesStatus(d);return d;})})
+const kimetsuCachedProviders=dokoSeriesFetch((location.protocol==='file:'?'https://doko-de-mireru.com':'')+'/api/series-watch?series=kimetsu',{cache:'no-store'})
+ .then(r=>{if(!r.ok)throw Error('配信共有API HTTP '+r.status);return r.json()})
  .then(d=>d.providers||{}).catch(()=>null);
 async function showProviders(box){
  const providers=await kimetsuCachedProviders;

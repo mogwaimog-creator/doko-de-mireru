@@ -1,0 +1,39 @@
+{
+  "scope": "repository static sources only; deployed decades/titles not inspected",
+  "shelf": {
+    "file": "movie_shelf_1980_1984.html",
+    "sha256": "eaaf9d1c07f5d7a71e9638c10bcad6fe67a80b3530ee0cf535cbbb4f6ee7e8f7",
+    "awardRows": 32,
+    "rankingRows": 88,
+    "memoryRows": 34,
+    "years": [
+      1980,
+      1981,
+      1982,
+      1983,
+      1984
+    ],
+    "manuallyAuthoredData": [
+      "films",
+      "rankingData",
+      "memoryFilms",
+      "verifiedClassicInfo",
+      "classicKnownIds",
+      "approvedAwardStories"
+    ],
+    "runtimeApiDependencies": [
+      "/api/search?id=...&type=movie",
+      "/api/search?query=...&type=movie"
+    ],
+    "why": "poster and selected detail fields are dynamically supplemented even though authored copy/order/awards are static",
+    "oldWholeCacheMigrationRequired": false,
+    "requiredBeforeCutover": "cold and quota-limited shelf poster/detail behavior must be verified against new API; account for first-visit acquisition"
+  },
+  "ghibli": {
+    "file": "ghibli.html",
+    "sha256": "c2cebc073be1c0f7757885d51468e4b6564ffba18cb3d15ffb27d2bece47718e",
+    "fetchCallFound": false,
+    "apiPathFound": false
+  },
+  "productionReady": false
+}

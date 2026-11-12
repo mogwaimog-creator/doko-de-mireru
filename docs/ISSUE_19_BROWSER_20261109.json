@@ -1,0 +1,32 @@
+{
+  "environment": "loopback, fixture upstream only, DEV_LEAN_SERIES_ENABLED=1",
+  "passed": 26,
+  "checks": [
+    "new only godzilla",
+    "new only mcu",
+    "new only jurassic",
+    "new only harrypotter",
+    "new only lordoftherings",
+    "new only starwars",
+    "new only wildspeed",
+    "new only minions",
+    "new only odoru",
+    "new only eva",
+    "new only conan",
+    "new only gundam",
+    "new only kimetsu",
+    "static page ghibli.html",
+    "static page movie_shelf_1980_1984.html",
+    "static page kimetsu.html",
+    "static page streaming.html?view=series",
+    "general search first fetch then cached",
+    "unregistered detail first load then cache",
+    "saved person",
+    "saved season and episode compatibility",
+    "saved initial HTML SEO",
+    "new person profile and credits cache without provider fetch",
+    "new TV season first fetch then cache",
+    "mobile general search UI and detail link",
+    "authenticated lean cron completed 266"
+  ]
+}

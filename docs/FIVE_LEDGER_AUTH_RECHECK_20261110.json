@@ -1,0 +1,23 @@
+{
+  "authenticated": false,
+  "httpStatus": 401,
+  "commandsReserved": 1,
+  "writes": 0,
+  "scans": 0,
+  "at": "2026-11-10T00:21:57.378508+00:00",
+  "baseCommit": "5fb8193",
+  "branch": "work/four-ledgers-20261107",
+  "operation": "EXISTS on one validation-only key",
+  "automaticRetries": 0,
+  "legacyReads": 0,
+  "existingDataChanges": 0,
+  "deletes": 0,
+  "tmdbRequests": 0,
+  "registrationStarted": false,
+  "capacityMeasured": false,
+  "loadTestStarted": false,
+  "productionDeployment": false,
+  "publicSiteSwitched": false,
+  "commandAccounting": "One conservative reservation; not a measured billing command count",
+  "secretValuesRecorded": false
+}

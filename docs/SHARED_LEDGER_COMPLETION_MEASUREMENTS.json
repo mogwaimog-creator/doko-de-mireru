@@ -1,0 +1,178 @@
+{
+  "localCapacity": {
+    "scope": "known loopback preview keys only; 266 repository IDs plus general-work fixture; seasons/person/provider data are explicitly fixtures",
+    "measured": {
+      "streaming": {
+        "records": 267,
+        "missing": 0,
+        "jsonBytes": 93887,
+        "redisBytes": 123432,
+        "MB": 0.123432
+      },
+      "legacyWatchCopies": {
+        "records": 266,
+        "missing": 0,
+        "jsonBytes": 39900,
+        "redisBytes": 67568,
+        "MB": 0.067568
+      },
+      "work": {
+        "records": 267,
+        "missing": 0,
+        "jsonBytes": 102872,
+        "redisBytes": 128152,
+        "MB": 0.128152
+      },
+      "person": {
+        "records": 1,
+        "missing": 0,
+        "jsonBytes": 475,
+        "redisBytes": 568,
+        "MB": 0.000568
+      },
+      "season": {
+        "records": 59,
+        "missing": 0,
+        "jsonBytes": 22789,
+        "redisBytes": 28296,
+        "MB": 0.028296
+      },
+      "seo": {
+        "records": 266,
+        "missing": 0,
+        "jsonBytes": 149345,
+        "redisBytes": 174848,
+        "MB": 0.174848
+      },
+      "contentMeta": {
+        "records": 2,
+        "missing": 591,
+        "jsonBytes": 230,
+        "redisBytes": 416,
+        "MB": 0.000416
+      }
+    },
+    "totalMB": 0.52328,
+    "excludes": "Redis process overhead, test/benchmark namespaces, full real people/season populations, production keys, legacy-work compatibility copies not staged in this preview, future growth, backups, active locks",
+    "productionCurrentMB": null,
+    "productionPeakMB": null,
+    "productionAfterMB": null,
+    "productionFreeHeadroom": null
+  },
+  "localLimitedModel": {
+    "scope": "Local fixture model only. Does not represent production current/peak/after. No removal of old copies. One modeled Redis backup equals old-copy MEMORY USAGE; real backup encoding/allocator may differ.",
+    "baselineOldCopies": 67568,
+    "afterRetainingOldPlusOneDailyJournal": 537752,
+    "peakWithOneModeledOldCopyBackup": 605320,
+    "afterRetainingOldAnd30Journals": 957440,
+    "peakWith30JournalsAndModeledOldCopyBackup": 1025008,
+    "MB_and_changePercent": {
+      "baselineOldCopies": {
+        "MB": 0.067568,
+        "changePercent": 0.0
+      },
+      "afterRetainingOldPlusOneDailyJournal": {
+        "MB": 0.537752,
+        "changePercent": 695.8678664456547
+      },
+      "peakWithOneModeledOldCopyBackup": {
+        "MB": 0.60532,
+        "changePercent": 795.8678664456547
+      },
+      "afterRetainingOldAnd30Journals": {
+        "MB": 0.95744,
+        "changePercent": 1317.0021311863604
+      },
+      "peakWith30JournalsAndModeledOldCopyBackup": {
+        "MB": 1.025008,
+        "changePercent": 1417.0021311863604
+      }
+    }
+  },
+  "streamingBeforeAfter": {
+    "scope": "loopback Redis 7.2.6; 266 actual work IDs, successful empty JP fixture; no production calls",
+    "results": {
+      "before": {
+        "works": 266,
+        "upstreamFixtureLoads": 266,
+        "clientRedisRPCs": 1330,
+        "requestArgumentBytes": 296989,
+        "redisCommandsIncludingLua": 2926,
+        "commands": {
+          "get": 1330,
+          "set": 532,
+          "mget": 0,
+          "eval": 532,
+          "pttl": 266,
+          "del": 266
+        },
+        "elapsedMs": 2212
+      },
+      "optimized": {
+        "works": 266,
+        "upstreamFixtureLoads": 266,
+        "clientRedisRPCs": 533,
+        "requestArgumentBytes": 295226,
+        "redisCommandsIncludingLua": 2395,
+        "commands": {
+          "get": 798,
+          "set": 532,
+          "mget": 1,
+          "eval": 532,
+          "pttl": 266,
+          "del": 266
+        },
+        "elapsedMs": 849
+      }
+    },
+    "reductionPercent": {
+      "clientRPC": 59.92481203007518,
+      "includingLua": 18.147641831852358
+    },
+    "billing": "RPC and server command counts are NOT confirmed Upstash billing counts"
+  },
+  "resumableDaily": {
+    "scope": "local Redis 7.2.6 only; successful empty JP fixture, 266 actual IDs",
+    "result": {
+      "status": "complete",
+      "reason": "finished",
+      "day": "2026-11-10",
+      "total": 266,
+      "attempted": 266,
+      "succeeded": 266,
+      "failed": 0,
+      "pending": 0,
+      "dispatches": 266,
+      "revision": 46
+    },
+    "upstreamFixtureLoads": 266,
+    "clientRedisRPCs": 580,
+    "requestArgumentBytes": 772043,
+    "redisCommandsIncludingLua": 2630,
+    "commands": {
+      "get": 891,
+      "set": 580,
+      "mget": 1,
+      "eval": 579,
+      "pttl": 312,
+      "del": 267,
+      "mset": 0
+    },
+    "elapsedMs": 1141,
+    "journalJsonBytes": 14357,
+    "journalRedisBytes": 14472,
+    "monthlyJournalBytes30": 434160,
+    "yearlyJournalBytes365": 5282280,
+    "billing": "Not confirmed Upstash billable counts; no live Upstash/Vercel/TMDB"
+  },
+  "production": {
+    "currentMB": null,
+    "peakMB": null,
+    "afterMB": null,
+    "freeHeadroom": null,
+    "TMDB": null,
+    "Vercel": null,
+    "Upstash": null,
+    "reason": "No production/Upstash/Vercel/paid external service connected."
+  }
+}

@@ -23,6 +23,7 @@
 // =========================================================
 
 module.exports = async function handler(req, res) {
+ if(process.env.LEDGER_RELEASE_MODE!==undefined&&await require('./_release-dispatch').dispatch('sitemap',req,res))return;
 
   try {
 

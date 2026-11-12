@@ -1,0 +1,19 @@
+name: SEO initial HTML
+on:
+  pull_request:
+    paths:
+      - 'prototype/seo-*.js'
+      - 'api/detail-page.js'
+      - 'test/seo-initial-html.test.js'
+      - 'test/seo-detail-integration.test.js'
+      - '.github/workflows/seo-initial-html.yml'
+jobs:
+  seo-html:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --test test/seo-initial-html.test.js test/seo-detail-integration.test.js

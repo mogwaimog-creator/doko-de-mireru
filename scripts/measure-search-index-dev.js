@@ -1,0 +1,14 @@
+'use strict';
+// New isolated derived index only. Reads known fixture copies, no external APIs.
+const {command}=require('../tests/helpers/local-redis'),idx=require('../api/_search-index-v2'),{keys}=require('../api/_dev-content-ledgers');
+async function measure(){
+ const source=require('./audit-shared-ledgers').inventory().records,sourceKeys=[...source.map(w=>keys.work(w.type,w.id)),keys.person(1813)],prefix=`doko:dev:index-measure:${Date.now()}:`,docs=[];
+ for(let i=0;i<sourceKeys.length;i+=32){const batch=sourceKeys.slice(i,i+32),raws=await command(['MGET',...batch]);for(let j=0;j<batch.length;j++){if(raws[j]===null)throw Error('start isolated preview first');const doc=idx.document(batch[j],JSON.parse(raws[j]),{prefix});if(!await idx.seed(command,batch[j],raws[j],{prefix}))throw Error('changed source');docs.push(doc)}}
+ const groups={documents:docs.map(d=>d.docKey),registries:['work','person'].map(k=>prefix+'ids:'+k),grams:['work','person'].map(k=>prefix+'grams:'+k)},measured={};
+ for(const [group,names] of Object.entries(groups)){let bytes=0;for(const key of names)bytes+=await command(['MEMORY','USAGE',key,'SAMPLES','0']);measured[group]={keys:names.length,bytes,MB:bytes/1e6}}
+ const counts={};for(const kind of ['work','person'])counts[kind]={documents:await command(['ZCARD',prefix+'ids:'+kind]),members:await command(['ZCARD',prefix+'grams:'+kind])};
+ let rpc=0,argumentBytes=0,responseJsonBytes=0;const send=async args=>{rpc++;argumentBytes+=args.reduce((n,x)=>n+Buffer.byteLength(String(x)),0);const result=await command(args);responseJsonBytes+=Buffer.byteLength(JSON.stringify(result));return result};const search=await require('../api/_indexed-search').indexedSearch('鬼滅',{kind:'work',type:'all',page:1,command:send,prefix});
+ const legacyCatalog=await command(['GET',require('../api/_dev-ledger-search').CATALOG]),legacyWork=await command(['MGET',...source.map(w=>keys.work(w.type,w.id))]);const legacyRead={redisRPCs:2,responseJsonBytes:Buffer.byteLength(JSON.stringify(legacyCatalog))+Buffer.byteLength(JSON.stringify(legacyWork)),scope:'old full catalog + all 266 work records, before filtering'};
+ return {legacyRead,scope:'known 266 real repository title/ID records and one fixture person; new local index, not production',counts,measured,totalIndexMB:Object.values(measured).reduce((n,r)=>n+r.bytes,0)/1e6,searchSample:{query:'鬼滅',results:search.results.length,scanned:search.scanned,redisRPCs:rpc,requestArgumentBytes:argumentBytes,responseJsonBytes,excludes:'readiness GET, HTTP/TLS, other queries and failures'},excludes:'unverified full population, fragmentation/process overhead, backup, concurrent updates; do not extrapolate quota headroom'};
+}
+if(require.main===module)measure().then(r=>console.log(JSON.stringify(r,null,2))).catch(e=>{console.error(e);process.exitCode=1});module.exports={measure};

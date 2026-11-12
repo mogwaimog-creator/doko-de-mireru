@@ -3,6 +3,8 @@
 // compact credits cards, without fetching each work's detail separately.
 const {command}=require('./_redis');
 const {randomUUID}=require('node:crypto');
+const {createFrozenLoader,verified}=require('./_frozen-load');
+const frozen=createFrozenLoader();
 const PREFIX='doko:person:v1:';
 const TWO_MONTHS_MS=60*24*60*60*1000;
 const LOCK_SECONDS=30;
@@ -35,11 +37,11 @@ function compactPerson(person){
   return result;
 }
 async function withPersonLedger(id,load){
-  if(process.env.WORK_LEDGER_ENABLED!=='1')return load();
+  if(process.env.WORK_LEDGER_ENABLED!=='1')return verified(await load(),id,'person');
   const key=personKey(id);
   let existing=await read(key,id);
   // Emergency storage freeze: keep reading saved records, but never create or refresh person records.
-  if(process.env.LEDGER_WRITES_RESUME!=='1')return existing?existing.person:load();
+  if(process.env.LEDGER_WRITES_RESUME!=='1')return existing?existing.person:frozen.run(String(Number(id)),async()=>compactPerson(verified(await load(),id,'person')));
   if(existing&&Date.now()-Date.parse(existing.checkedAt)<TWO_MONTHS_MS)return existing.person;
   const lockKey=key+':refresh-lock',token=randomUUID();
   const locked=await command(['SET',lockKey,token,'EX',String(LOCK_SECONDS),'NX']);
@@ -78,4 +80,4 @@ async function withPersonLedger(id,load){
     await command(['EVAL',script,'1',lockKey,token]).catch(e=>console.error('PERSON LOCK RELEASE FAILED',e));
   }
 }
-module.exports={withPersonLedger};
+module.exports={withPersonLedger,_frozen:frozen};

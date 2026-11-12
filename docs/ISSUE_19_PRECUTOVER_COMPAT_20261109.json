@@ -1,0 +1,34 @@
+{
+  "environment": "Redis 7.2.6 loopback only; real Upstash not contacted",
+  "result": {
+    "scope": "only newly owned development probe keys; no production credentials, reset, scan or export",
+    "complete": true,
+    "checks": [
+      {
+        "name": "MSET/MGET preserve exact JSON and empty arrays",
+        "passed": true
+      },
+      {
+        "name": "Lua owner fencing and raw string CAS",
+        "passed": true
+      },
+      {
+        "name": "PXAT/PEXPIREAT and PTTL",
+        "passed": true
+      },
+      {
+        "name": "bounded active-request hash",
+        "passed": true
+      },
+      {
+        "name": "Lua progress delta JSON keeps identity and map entries",
+        "passed": true
+      }
+    ],
+    "rpcs": 13,
+    "requestArgumentBytes": 1862,
+    "maxRPCs": 40,
+    "fullBackupBinaryTransport": "not covered: DUMP/RESTORE/RDB export and REST binary decoding must be separately verified",
+    "billing": "Provider metering, command size/time limits, actual free quota and charges remain unverified. No remote adapter included."
+  }
+}

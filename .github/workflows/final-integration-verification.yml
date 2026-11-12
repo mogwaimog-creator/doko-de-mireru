@@ -1,0 +1,40 @@
+name: Final integration verification
+on:
+  push:
+    branches:
+      - integration/recover-latest-ledgers-20261112
+    paths:
+      - '.github/workflows/final-integration-verification.yml'
+  workflow_dispatch:
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    permissions:
+      contents: read
+    services:
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 16379:6379
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install isolated Redis client
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq redis-tools
+      - name: Check critical source syntax
+        run: |
+          for file in api/_release-application.js api/_release-dispatch.js api/_release-connection.js api/search.js api/work-detail.js api/series-watch.js api/update-streaming.js api/detail-page.js; do node --check "$file"; done
+      - name: Search, detail, series and comparison regression tests
+        env:
+          REDIS_TEST_CLI: /usr/bin/redis-cli
+        run: |
+          node --test \
+            tests/integration-operations-preservation.test.js \
+            tests/search-routing-static-regression.test.js \
+            tests/final-comparison-roster.test.js \
+            tests/shared-streaming-api.test.js \
+            tests/release-production-connection.test.js \
+            tests/release-person-ledger.test.js

@@ -1,6 +1,8 @@
 const {getDetailProviders}=require('./_detail-providers-cache');
 const {metadataWithLedger}=require('./_detail-metadata-cache');
 const {withPersonLedger}=require('./_person-ledger');
+const {preparePerson: preparePersonV2}=require('./_person-ledger-v2');
+const {command: personLedgerCommand}=require('./_redis');
 // =========================================================
 // doko-de-mireru
 // api/search.js
@@ -39,6 +41,7 @@ const {withPersonLedger}=require('./_person-ledger');
 // =========================================================
 
 module.exports = async function handler(req, res) {
+ if(process.env.LEDGER_RELEASE_MODE!==undefined&&!require('./_release-query-context').active()&&await require('./_release-dispatch').dispatch('search',req,res))return;
 
   // =======================================================
   // CORS
@@ -362,6 +365,9 @@ if (
   personSearch
 ) {
 
+  if(process.env.DEV_LEAN_SERIES_ENABLED==='1'&&require('./_recovery-fetch-cache').enabled())return res.status(200).json(await require('./_recovery-search').search(personSearch,{kind:'person',page,apiKey,fetchJson}));
+  if(process.env.DEV_CONTENT_LEDGER_ENABLED==='1'&&!require('./_recovery-fetch-cache').enabled()){const dev=require('./_dev-content-ledgers');if(dev.enabled())return res.status(200).json(await require('./_dev-ledger-search').search(personSearch,{kind:'person',cursor:req.query.cursor||null}));}
+
   const people =
     await searchPeople(
       personSearch,
@@ -384,11 +390,30 @@ if (
   personId
 ) {
 
-  const person =
-    await withPersonLedger(
-      personId,
-      () => getPersonDetail(personId, apiKey)
-    );
+  if(process.env.DEV_CONTENT_LEDGER_ENABLED==='1'){const dev=require('./_dev-content-ledgers');if(dev.enabled()&&(!require('./_recovery-fetch-cache').enabled()||await require('./_shared-streaming-read').devCommand(['GET',dev.keys.person(Number(personId))])!==null))return res.status(200).json(await dev.readPerson(Number(personId)));}
+
+  // Disabled by default. Demo-only v2 switch; never touches v1 keys.
+  // Enabling this flag requires a reviewed demo deployment.
+  const isPersonV2Demo = process.env.VERCEL_ENV === 'preview' &&
+    process.env.PERSON_LEDGER_V2_DEMO === '1';
+  // Explicitly reject a misconfigured production deployment rather than silently
+  // switching the live person route to the experimental ledger.
+  if (process.env.PERSON_LEDGER_V2_DEMO === '1' && !isPersonV2Demo) {
+    res.setHeader('Cache-Control', 'no-store');
+    return res.status(503).json({error:'人物台帳デモはプレビュー環境のみ利用できます。'});
+  }
+  const person = isPersonV2Demo
+    ? (await preparePersonV2({
+        command: personLedgerCommand,
+        id: personId,
+        load: () => getPersonDetail(personId, apiKey),
+        // No demo writes until the isolated Redis and backup checks are complete.
+        allowWrites: false
+      })).person
+    : await withPersonLedger(
+        personId,
+        () => getPersonDetail(personId, apiKey)
+      );
 
   return res
     .status(200)
@@ -417,6 +442,42 @@ if (id) {
     // ===================================================
 
     if (season > 0) {
+      if(process.env.DEV_CONTENT_LEDGER_ENABLED==='1'){const dev=require('./_dev-content-ledgers');if(dev.enabled()&&(!require('./_recovery-fetch-cache').enabled()||await require('./_shared-streaming-read').devCommand(['GET',dev.keys.season(Number(id))])!==null))return res.status(200).json(await dev.readSeason(Number(id),season));}
+
+      // Opt-in only: disabled by default. Keep the legacy path unchanged
+      // until live integration and rollback checks have been approved.
+      if (process.env.SEASON_LEDGER_ENABLED === "1") {
+        let seasonHandler;
+        try {
+          const { makeSeasonSearchBranch } = require("./_season-search-branch");
+          const { optionalSeasonRefreshRecord } = require("./_season-refresh-opt-in");
+          const refreshRecord = optionalSeasonRefreshRecord();
+          seasonHandler = makeSeasonSearchBranch({ fetchJson, apiKey, ...(refreshRecord ? { refreshRecord } : {}) });
+        } catch (error) {
+          console.error("SEASON LEDGER INIT FALLBACK:", error?.message || "unknown");
+        }
+        // The new parser requires a numeric ID and normalized TV identity.
+        // Legacy behavior remains the fallback for nonstandard inputs.
+        if (seasonHandler && /^[1-9]\d*$/.test(id) && Number.isSafeInteger(Number(id))) {
+          const newReq = { ...req, query: { ...req.query, id, type: "tv", season: String(season) } };
+          let newStatus = 200;
+          let newBody;
+          const capture = {
+            status(code) { newStatus = code; return this; },
+            json(body) { newBody = body; return this; }
+          };
+          try {
+            await seasonHandler(newReq, capture);
+            if (newStatus === 200) return res.status(200).json(newBody);
+          } catch (error) {
+            // An unexpected ledger failure must not disable the legacy season API.
+            console.error("SEASON LEDGER FALLBACK:", error?.message || "unknown");
+          }
+          // Do not cache a transient error or its legacy fallback response.
+          res.setHeader("Cache-Control", "no-store");
+          res.setHeader("Vercel-CDN-Cache-Control", "no-store");
+        }
+      }
 
       const result =
         await getTvSeason(
@@ -439,7 +500,7 @@ if (id) {
 
     return res
       .status(200)
-      .json(result);
+      .json(process.env.SHARED_STREAMING_READ_ENABLED==='1' ? await require('./_shared-streaming-read').attachRelated(result) : result);
   }
 
   // 映画の場合
@@ -449,7 +510,7 @@ if (id) {
       apiKey
     );
 
-  return res.status(200).json(result);
+  return res.status(200).json(process.env.SHARED_STREAMING_READ_ENABLED==='1' ? await require('./_shared-streaming-read').attachRelated(result) : result);
 }
 
 // =====================================================
@@ -1057,6 +1118,9 @@ if (provider === "disney") {
           "映画名を入力してください。"
       });
     }
+
+if(process.env.DEV_LEAN_SERIES_ENABLED==='1'&&require('./_recovery-fetch-cache').enabled())return res.status(200).json(await require('./_recovery-search').search(query,{type,page,apiKey,fetchJson}));
+if(process.env.DEV_CONTENT_LEDGER_ENABLED==='1'&&!require('./_recovery-fetch-cache').enabled()){const dev=require('./_dev-content-ledgers');if(dev.enabled())return res.status(200).json(await require('./_dev-ledger-search').search(query,{type,page,cursor:req.query.cursor||null}));}
 
 // =====================================================
 // ドラマ・アニメ検索
@@ -2168,6 +2232,8 @@ return res.status(200).json({
       return res.status(503).json({error:"ただいま作品情報の取得が混み合っています。少し時間をおいて、もう一度お試しください。",code:"WORK_METADATA_BUSY"});
     }
 
+    if(error?.code==='WORK_ACQUISITION_STOPPED'){res.setHeader('Retry-After','30');res.setHeader('Vercel-CDN-Cache-Control','no-store');return res.status(503).json({error:'新しい作品の取得を制限しています。登録済み作品は引き続き表示できます。',code:error.code});}
+    if(['FROZEN_LOOKUP_BUSY','FROZEN_LOOKUP_TIMEOUT'].includes(error?.code)){res.setHeader('Retry-After','30');return res.status(503).json({error:'作品情報を確認しています。しばらくして再度お試しください。'});}
     console.error(
       "SEARCH API ERROR:",
       error
@@ -2206,7 +2272,7 @@ async function getMovieDetail(
 
 
   const movie =
-    await metadataWithLedger('movie',movieId,()=>fetchJson(movieUrl));
+    await metadataWithLedger('movie',movieId,()=>fetchJson(movieUrl,{rawWork:true}));
 
 
   // =======================================================
@@ -2214,6 +2280,7 @@ async function getMovieDetail(
   // =======================================================
 
   let providersJP = {};
+  let streamingMeta;
 
 
   try {
@@ -2226,7 +2293,9 @@ async function getMovieDetail(
       encodeURIComponent(apiKey);
 
 
-    const providerData = process.env.WORK_LEDGER_ENABLED==='1'
+    const sharedProviders=await require('./_shared-streaming-read').readDetail('movie',movieId);
+    streamingMeta=sharedProviders?.meta;
+    const providerData = sharedProviders ? sharedProviders.data : process.env.WORK_LEDGER_ENABLED==='1'
       ? (await getDetailProviders('movie',movieId,()=>fetchJson(providerUrl))).data
       : await fetchJson(providerUrl);
 
@@ -2644,10 +2713,11 @@ let recommendations = []; // Disable detail recommendations API calls.
   // TMDBのコレクション情報
   // =======================================================
 
-  let series = null;
+  let series = movie.ledgerManaged && movie.savedRelated?.length ? {name:movie.belongs_to_collection?.name||"関連作品",movies:movie.savedRelated}:null;
 
 
   if (
+    !movie.ledgerManaged &&
     movie.belongs_to_collection &&
     movie.belongs_to_collection.id
   ) {
@@ -2679,6 +2749,7 @@ let recommendations = []; // Disable detail recommendations API calls.
 // =======================================================
 
 return {
+  ...(streamingMeta?{streamingMeta}:{}),
 
   id:
     movie.id,
@@ -4899,13 +4970,36 @@ async function getCollection(
 // JSON取得
 // =========================================================
 
-async function fetchJson(url) {
+async function fetchJson(url,{rawWork=false}={}) {
+  if(process.env.LEDGER_RELEASE_MODE!==undefined&&require('./_release-query-context').active())return require('./_release-query-context').json(url);
+  const recovery=require('./_recovery-fetch-cache');if(recovery.enabled()){
+    const parsed=new URL(url),match=parsed.pathname.match(/^\/3\/(movie|tv)\/([1-9][0-9]*)$/),append=parsed.searchParams.get('append_to_response'),attach=match&&append?.split(',').includes('watch/providers');
+    if(attach){const keep=append.split(',').filter(x=>x!=='watch/providers');if(keep.length)parsed.searchParams.set('append_to_response',keep.join(','));else parsed.searchParams.delete('append_to_response')}
+    const result=match&&rawWork?await fetchJsonNetwork(parsed.toString()):await recovery.cache(recovery.devCommand).load(parsed.toString(),async()=>{const data=await fetchJsonNetwork(parsed.toString());return match?require('./_work-v2-detail-adapter').toBasicTmdbDetail(require('./_new-work-ingest').canonical(match[1],Number(match[2]),data)):data});
+    if(attach)return {...result,'watch/providers':(await require('./_shared-streaming-read').readDetail(match[1],Number(match[2]))).data};return result;
+  }
+  return fetchJsonNetwork(url);
+}
+async function fetchJsonNetwork(url) {
+  const sharedReader=require('./_shared-streaming-read');
+  let removedProviderIdentity=null;
+  if(sharedReader.enabled()){
+    const parsed=new URL(url),match=parsed.pathname.match(/^\/3\/(movie|tv)\/([1-9][0-9]*)(\/watch\/providers)?$/);
+    if(match&&match[3])return (await sharedReader.readDetail(match[1],Number(match[2]))).data;
+    const append=parsed.searchParams.get('append_to_response');
+    if(match&&append?.split(',').includes('watch/providers')){
+      const keep=append.split(',').filter(x=>x!=='watch/providers');
+      if(keep.length)parsed.searchParams.set('append_to_response',keep.join(','));else parsed.searchParams.delete('append_to_response');
+      url=parsed.toString();removedProviderIdentity={type:match[1],id:Number(match[2])};
+    }
+  }
 
   const response =
-    await fetch(
+    await (process.env.LEDGER_RELEASE_MODE!==undefined?require('./_release-query-context').request:fetch)(
       url,
       {
         method: "GET",
+        ...(require('./_recovery-fetch-cache').enabled()?{signal:AbortSignal.timeout(6500)}:{}),
 
         headers: {
           "Accept":
@@ -4973,6 +5067,7 @@ async function fetchJson(url) {
   }
 
 
+  if(removedProviderIdentity){const r=await sharedReader.readDetail(removedProviderIdentity.type,removedProviderIdentity.id);data={...data,'watch/providers':r.data};}
   return data;
 
 }
@@ -5029,6 +5124,7 @@ async function getRecommendations(
   // =======================================================
 
   const collectionId =
+    !movie.ledgerManaged &&
     movie.belongs_to_collection &&
     movie.belongs_to_collection.id
       ? String(
@@ -5091,7 +5187,7 @@ async function getRecommendations(
   let collectionMovies = [];
 
 
-  if (collectionId) {
+  if (collectionId && !movie.ledgerManaged) {
 
     try {
 
@@ -8666,7 +8762,7 @@ if(
   // ===================================================
 
   const movieResponse =
-    await fetch(
+    await (process.env.LEDGER_RELEASE_MODE!==undefined?require('./_release-query-context').request:fetch)(
       movieUrl
     );
 
@@ -8677,7 +8773,7 @@ if(
     includeTv
   ){
     tvResponse =
-      await fetch(
+      await (process.env.LEDGER_RELEASE_MODE!==undefined?require('./_release-query-context').request:fetch)(
         tvUrl
       );
   }
@@ -12032,13 +12128,15 @@ async function getTvDetail(tvId, apiKey) {
     "?api_key=" +
     apiKey +
     "&language=ja-JP" +
-    (process.env.WORK_LEDGER_ENABLED==='1'
+    (process.env.WORK_LEDGER_ENABLED==='1'||require('./_shared-streaming-read').enabled()
       ? "&append_to_response=credits"
       : "&append_to_response=credits,watch/providers");
 
-  const fixedTv = await metadataWithLedger('tv',tvId,()=>fetchJson(url));
+  const fixedTv = await metadataWithLedger('tv',tvId,()=>fetchJson(url,{rawWork:true}));
   let tv = fixedTv;
-  if(process.env.WORK_LEDGER_ENABLED==='1'){
+  const sharedProviders=await require('./_shared-streaming-read').readDetail('tv',tvId);
+  if(sharedProviders){tv={...fixedTv,'watch/providers':sharedProviders.data};}
+  else if(process.env.WORK_LEDGER_ENABLED==='1'){
     const providerUrl='https://api.themoviedb.org/3/tv/'+encodeURIComponent(tvId)+'/watch/providers?api_key='+encodeURIComponent(apiKey);
     try {
       const cached=await getDetailProviders('tv',tvId,async()=>fixedTv['watch/providers']||fetchJson(providerUrl));
@@ -12172,12 +12270,14 @@ const runtime =
   // → これまで通り関連TVシリーズを取得
   // =======================================================
 
-  let series = [];
+  let series = tv.ledgerManaged ? (tv.savedRelated||[]) : [];
 
 
   try {
 
-    if (isAnime) {
+    if(tv.ledgerManaged){
+      series=tv.savedRelated||[];
+    } else if (isAnime) {
 
       // ===================================================
       // TVアニメの場合
@@ -12588,6 +12688,7 @@ const googlePlay =
     // 配信情報
     // ===================================================
 
+    ...(sharedProviders?.meta?{streamingMeta:sharedProviders.meta}:{}),
     streaming:
       streaming,
 

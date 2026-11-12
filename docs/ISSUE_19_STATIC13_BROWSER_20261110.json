@@ -1,0 +1,114 @@
+{
+  "dateJst": "2026-11-10",
+  "scope": "loopback Redis and provider fixtures only; no real services",
+  "passed": 14,
+  "checks": [
+    {
+      "series": "godzilla",
+      "exactDomMatchesBaseline": true,
+      "tabsChecked": 6,
+      "sharedStreamingRequests": 1,
+      "fixedMetadataFromLedger": false,
+      "providers": 47
+    },
+    {
+      "series": "mcu",
+      "exactDomMatchesBaseline": true,
+      "tabsChecked": 0,
+      "sharedStreamingRequests": 1,
+      "fixedMetadataFromLedger": false,
+      "providers": 54
+    },
+    {
+      "series": "jurassic",
+      "exactDomMatchesBaseline": true,
+      "tabsChecked": 3,
+      "sharedStreamingRequests": 1,
+      "fixedMetadataFromLedger": false,
+      "providers": 7
+    },
+    {
+      "series": "harrypotter",
+      "exactDomMatchesBaseline": true,
+      "tabsChecked": 0,
+      "sharedStreamingRequests": 1,
+      "fixedMetadataFromLedger": false,
+      "providers": 11
+    },
+    {
+      "series": "lordoftherings",
+      "exactDomMatchesBaseline": true,
+      "tabsChecked": 4,
+      "sharedStreamingRequests": 1,
+      "fixedMetadataFromLedger": false,
+      "providers": 8
+    },
+    {
+      "series": "starwars",
+      "exactDomMatchesBaseline": true,
+      "tabsChecked": 4,
+      "sharedStreamingRequests": 1,
+      "fixedMetadataFromLedger": false,
+      "providers": 28
+    },
+    {
+      "series": "wildspeed",
+      "exactDomMatchesBaseline": true,
+      "tabsChecked": 2,
+      "sharedStreamingRequests": 1,
+      "fixedMetadataFromLedger": false,
+      "providers": 11
+    },
+    {
+      "series": "minions",
+      "exactDomMatchesBaseline": true,
+      "tabsChecked": 3,
+      "sharedStreamingRequests": 1,
+      "fixedMetadataFromLedger": false,
+      "providers": 7
+    },
+    {
+      "series": "odoru",
+      "exactDomMatchesBaseline": true,
+      "tabsChecked": 3,
+      "sharedStreamingRequests": 1,
+      "fixedMetadataFromLedger": false,
+      "providers": 16
+    },
+    {
+      "series": "eva",
+      "exactDomMatchesBaseline": true,
+      "tabsChecked": 0,
+      "sharedStreamingRequests": 1,
+      "fixedMetadataFromLedger": false,
+      "providers": 6
+    },
+    {
+      "series": "conan",
+      "exactDomMatchesBaseline": true,
+      "tabsChecked": 14,
+      "sharedStreamingRequests": 1,
+      "fixedMetadataFromLedger": false,
+      "providers": 30
+    },
+    {
+      "series": "gundam",
+      "exactDomMatchesBaseline": true,
+      "tabsChecked": 4,
+      "sharedStreamingRequests": 1,
+      "fixedMetadataFromLedger": false,
+      "providers": 38
+    },
+    {
+      "series": "kimetsu",
+      "exactDomMatchesBaseline": true,
+      "tabsChecked": 9,
+      "sharedStreamingRequests": 1,
+      "fixedMetadataFromLedger": false,
+      "providers": 3
+    },
+    {
+      "streamingOutageKeepsAuthoredContent": true
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "kind": "synthetic loopback Redis; not production data or user PC",
+  "keys": 16470,
+  "sourcePattern": "doko:dev:low-benchmark:344861:1794215711154:*",
+  "archiveFile": "/tmp/doko-low-backup-344861-1794215711154.json",
+  "archiveBytes": 5325557,
+  "archiveFileSha256": "98cc6d0bb61f7d4f346cb1344e97eacefb13fd2f368ccd02b140a70186cba86e",
+  "rawKeyAndDumpBytes": 2497690,
+  "backup": {
+    "commands": 33503,
+    "rpcs": 1078,
+    "argumentBytes": 1877568
+  },
+  "localProof": {
+    "commands": 50440,
+    "rpcs": 2060,
+    "argumentBytes": 9672260
+  },
+  "fullRestore": {
+    "commands": 33970,
+    "rpcs": 2060,
+    "argumentBytes": 8299890
+  },
+  "result": {
+    "verified": 16470,
+    "expired": 0,
+    "records": 16470,
+    "stringGroups": 515,
+    "nonStrings": 0,
+    "complete": true,
+    "scope": "isolated target only; same byte/expiry verification required for any future provider rollback"
+  },
+  "phases": {
+    "backupMs": 897,
+    "localProofMs": 1709,
+    "fullRestoreMs": 1117
+  },
+  "totalMs": 4054,
+  "scanCommandsTotal": 562,
+  "productionReady": false,
+  "notes": [
+    "No source or existing keys deleted. Test source and verified permanent keys remain local.",
+    "Local argumentBytes omit RESP/HTTP overhead; response bytes and production compression are not measured.",
+    "Archive includes all matching fixture keys; production requires wildcard scope and separate Functions/config inventory."
+  ]
+}

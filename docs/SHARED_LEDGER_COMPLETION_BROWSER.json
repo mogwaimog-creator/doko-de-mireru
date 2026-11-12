@@ -1,0 +1,331 @@
+{
+  "results": [
+    {
+      "test": "series API godzilla",
+      "passed": true,
+      "works": 47
+    },
+    {
+      "test": "series API mcu",
+      "passed": true,
+      "works": 54
+    },
+    {
+      "test": "series API jurassic",
+      "passed": true,
+      "works": 7
+    },
+    {
+      "test": "series API harrypotter",
+      "passed": true,
+      "works": 11
+    },
+    {
+      "test": "series API lordoftherings",
+      "passed": true,
+      "works": 8
+    },
+    {
+      "test": "series API starwars",
+      "passed": true,
+      "works": 28
+    },
+    {
+      "test": "series API wildspeed",
+      "passed": true,
+      "works": 11
+    },
+    {
+      "test": "series API minions",
+      "passed": true,
+      "works": 7
+    },
+    {
+      "test": "series API odoru",
+      "passed": true,
+      "works": 16
+    },
+    {
+      "test": "series API eva",
+      "passed": true,
+      "works": 6
+    },
+    {
+      "test": "series API conan",
+      "passed": true,
+      "works": 30
+    },
+    {
+      "test": "series API gundam",
+      "passed": true,
+      "works": 38
+    },
+    {
+      "test": "series API kimetsu",
+      "passed": true,
+      "works": 3
+    },
+    {
+      "test": "1280 godzilla.html",
+      "passed": true,
+      "seriesReads": 1,
+      "horizontalOverflow": false
+    },
+    {
+      "test": "1280 mcu.html",
+      "passed": true,
+      "seriesReads": 1,
+      "horizontalOverflow": false
+    },
+    {
+      "test": "1280 jurassic.html",
+      "passed": true,
+      "seriesReads": 1,
+      "horizontalOverflow": false
+    },
+    {
+      "test": "1280 harrypotter.html",
+      "passed": true,
+      "seriesReads": 1,
+      "horizontalOverflow": false
+    },
+    {
+      "test": "1280 lordoftherings.html",
+      "passed": true,
+      "seriesReads": 1,
+      "horizontalOverflow": false
+    },
+    {
+      "test": "1280 starwars.html",
+      "passed": true,
+      "seriesReads": 1,
+      "horizontalOverflow": false
+    },
+    {
+      "test": "1280 wildspeed.html",
+      "passed": true,
+      "seriesReads": 1,
+      "horizontalOverflow": false
+    },
+    {
+      "test": "1280 minions.html",
+      "passed": true,
+      "seriesReads": 1,
+      "horizontalOverflow": false
+    },
+    {
+      "test": "1280 odoru.html",
+      "passed": true,
+      "seriesReads": 1,
+      "horizontalOverflow": false
+    },
+    {
+      "test": "1280 eva.html",
+      "passed": true,
+      "seriesReads": 1,
+      "horizontalOverflow": false
+    },
+    {
+      "test": "1280 conan.html",
+      "passed": true,
+      "seriesReads": 1,
+      "horizontalOverflow": false
+    },
+    {
+      "test": "1280 gundam.html",
+      "passed": true,
+      "seriesReads": 1,
+      "horizontalOverflow": false
+    },
+    {
+      "test": "1280 kimetsu.html",
+      "passed": true,
+      "seriesReads": 1,
+      "horizontalOverflow": false
+    },
+    {
+      "test": "1280 streaming.html",
+      "passed": true,
+      "seriesReads": 2,
+      "horizontalOverflow": false
+    },
+    {
+      "test": "1280 detail movie",
+      "passed": true,
+      "initialSeo": true
+    },
+    {
+      "test": "1280 detail tv",
+      "passed": true,
+      "initialSeo": true
+    },
+    {
+      "test": "390 godzilla.html",
+      "passed": true,
+      "seriesReads": 1,
+      "horizontalOverflow": false
+    },
+    {
+      "test": "390 mcu.html",
+      "passed": true,
+      "seriesReads": 1,
+      "horizontalOverflow": false
+    },
+    {
+      "test": "390 jurassic.html",
+      "passed": true,
+      "seriesReads": 1,
+      "horizontalOverflow": false
+    },
+    {
+      "test": "390 harrypotter.html",
+      "passed": true,
+      "seriesReads": 1,
+      "horizontalOverflow": false
+    },
+    {
+      "test": "390 lordoftherings.html",
+      "passed": true,
+      "seriesReads": 1,
+      "horizontalOverflow": false
+    },
+    {
+      "test": "390 starwars.html",
+      "passed": true,
+      "seriesReads": 1,
+      "horizontalOverflow": false
+    },
+    {
+      "test": "390 wildspeed.html",
+      "passed": true,
+      "seriesReads": 1,
+      "horizontalOverflow": false
+    },
+    {
+      "test": "390 minions.html",
+      "passed": true,
+      "seriesReads": 1,
+      "horizontalOverflow": false
+    },
+    {
+      "test": "390 odoru.html",
+      "passed": true,
+      "seriesReads": 1,
+      "horizontalOverflow": false
+    },
+    {
+      "test": "390 eva.html",
+      "passed": true,
+      "seriesReads": 1,
+      "horizontalOverflow": false
+    },
+    {
+      "test": "390 conan.html",
+      "passed": true,
+      "seriesReads": 1,
+      "horizontalOverflow": false
+    },
+    {
+      "test": "390 gundam.html",
+      "passed": true,
+      "seriesReads": 1,
+      "horizontalOverflow": false
+    },
+    {
+      "test": "390 kimetsu.html",
+      "passed": true,
+      "seriesReads": 1,
+      "horizontalOverflow": false
+    },
+    {
+      "test": "390 streaming.html",
+      "passed": true,
+      "seriesReads": 2,
+      "horizontalOverflow": false
+    },
+    {
+      "test": "390 detail movie",
+      "passed": true,
+      "initialSeo": true
+    },
+    {
+      "test": "390 detail tv",
+      "passed": true,
+      "initialSeo": true
+    },
+    {
+      "test": "local explicit refresh publishes work and SEO through normal detail API and initial HTML",
+      "passed": true
+    },
+    {
+      "test": "mobile season click reads saved episode ledger through actual API",
+      "passed": true
+    },
+    {
+      "test": "missing fixed work fails closed without legacy TMDB fallback",
+      "passed": true
+    },
+    {
+      "test": "saved person API and mobile page",
+      "passed": true
+    },
+    {
+      "test": "TV season list/count and lazy episodes share one saved manifest",
+      "passed": true
+    },
+    {
+      "test": "general work API refreshes eligible saved fixture and reuses success",
+      "passed": true
+    },
+    {
+      "test": "saved work/person/season API routes issue zero TMDB calls",
+      "passed": true
+    },
+    {
+      "test": "all 266 known-title works return saved SEO in initial HTML",
+      "passed": true,
+      "works": 266
+    },
+    {
+      "test": "all 266 actual IDs traverse saved detail API with zero upstream loads",
+      "passed": true,
+      "works": 266,
+      "metadata": "repository names only; seasons/providers are fixtures"
+    },
+    {
+      "test": "1280 freshness fresh and managed related misses",
+      "passed": true
+    },
+    {
+      "test": "1280 freshness stale and managed related misses",
+      "passed": true
+    },
+    {
+      "test": "1280 freshness unknown and managed related misses",
+      "passed": true
+    },
+    {
+      "test": "1280 freshness failed and managed related misses",
+      "passed": true
+    },
+    {
+      "test": "390 freshness fresh and managed related misses",
+      "passed": true
+    },
+    {
+      "test": "390 freshness stale and managed related misses",
+      "passed": true
+    },
+    {
+      "test": "390 freshness unknown and managed related misses",
+      "passed": true
+    },
+    {
+      "test": "390 freshness failed and managed related misses",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "externalRequestsBlocked": 315,
+  "liveExternalRequests": 0
+}

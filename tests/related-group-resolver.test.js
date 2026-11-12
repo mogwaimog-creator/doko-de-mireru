@@ -1,0 +1,10 @@
+'use strict';
+const assert = require('node:assert/strict');
+const {resolveRelatedGroup}=require('../api/_related-group-resolver');
+const group={key:'conan-movies',members:[{type:'movie',id:2},{type:'movie',id:1},{type:'movie',id:2}]};
+const works=[{type:'movie',id:1,title:'A'},{type:'movie',id:2,title:'B'}];
+assert.deepEqual(resolveRelatedGroup(group,works).works.map(x=>x.title),['B','A']);
+assert.deepEqual(resolveRelatedGroup(group,works).missing,[]);
+assert.deepEqual(resolveRelatedGroup(group,[works[0]]).missing,[{type:'movie',id:2}]);
+assert.throws(()=>resolveRelatedGroup({},works),/Invalid/);
+console.log('related-group resolver: 4 assertions passed');

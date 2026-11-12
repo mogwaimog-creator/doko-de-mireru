@@ -3,6 +3,7 @@
 // Shared work metadata ledger (not streaming availability).
 // This module is opt-in: existing pages and API routes are unchanged.
 const { command } = require('./_redis');
+const {normalizeLinks,normalizeEditorial} = require('./_work-ledger-editorial');
 
 const PREFIX = 'doko:work:v1';
 const MAX_CAST = 30;
@@ -49,18 +50,12 @@ function normalizeWork(type, id, source) {
     runtimeMinutes: Number.isFinite(source.runtimeMinutes) ? source.runtimeMinutes : null,
     genres: Array.isArray(source.genres) ? source.genres.slice(0, 20) : [],
     posterPath: textOrNull(source.posterPath),
-    backdropPath: textOrNull(source.backdropPath),
     directors: Array.isArray(source.directors) ? source.directors.slice(0, 10) : [],
     cast,
     collectionId: Number.isSafeInteger(source.collectionId) ? source.collectionId : null,
-    collectionName: textOrNull(source.collectionName),
     seasons: Array.isArray(source.seasons) ? source.seasons.slice(0, 100) : [],
     status: textOrNull(source.status),
     voteAverage: Number.isFinite(source.voteAverage) ? source.voteAverage : null,
-    voteCount: Number.isSafeInteger(source.voteCount) ? source.voteCount : null,
-    checkedAt: textOrNull(source.checkedAt) || new Date().toISOString(),
-    nextCheckAt: textOrNull(source.nextCheckAt),
-    manualReview: source.manualReview === true,
     // ID verification is independent of editorial/metadata checks.
     verification: {
       identity: textOrNull(source.verification?.identity) || 'not_recorded',
@@ -70,9 +65,11 @@ function normalizeWork(type, id, source) {
     },
     errors: Array.isArray(source.errors) ? source.errors : [],
     // Supplemental fields per page; not limited to a predefined list.
-    pageExtras: normalizePageExtras(source.pageExtras),
     commonNotes: plainObject(source.commonNotes),
-    extensions: plainObject(source.extensions)
+    extensions: plainObject(source.extensions),
+    pageExtras: normalizePageExtras(source.pageExtras),
+    relatedWorkIds: normalizeLinks(source.relatedWorkIds),
+    editorial: normalizeEditorial(source.editorial)
   };
   if (!record.title) throw new Error('Work title is required');
   return record;

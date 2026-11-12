@@ -1,0 +1,16 @@
+{
+  "source": "User reported dashboard observations; no account connection",
+  "keys": 16470,
+  "previousKeys": 8651,
+  "storageMB": 201,
+  "storageLimitMB": 250,
+  "commandsUsedApprox": 330000,
+  "commandsLimit": 500000,
+  "bandwidthUsedGB": 2,
+  "bandwidthLimitGB": 10,
+  "detailProvidersNoExpiryObserved": true,
+  "perPrefixCounts": null,
+  "observationInterval": null,
+  "freeCounterResetDateTime": null,
+  "productionDataInspected": false
+}

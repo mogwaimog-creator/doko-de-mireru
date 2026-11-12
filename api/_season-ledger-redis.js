@@ -1,0 +1,42 @@
+'use strict';
+// Opt-in storage adapter for future season ledger. No Redis command is run on import.
+// Uses a separate v1 namespace and SET NX to protect existing records.
+// Load Redis lazily so pure validation tests do not require Redis configuration.
+function redisCommand(args){return require('./_redis').command(args);}
+const {valid}=require('./_season-ledger-cache');
+const {assertSeasonWritesAllowed}=require('./_season-write-guard');
+const PREFIX='doko:season:v1';
+function key(type,id,seasonNumber){
+ if(!valid(type,id,seasonNumber))throw Error('Invalid season identity');
+ return `${PREFIX}:${type}:${id}:${seasonNumber}`;
+}
+function decode(raw,type,id,seasonNumber){
+ if(raw==null)return null;
+ let value;
+ try{value=typeof raw==='string'?JSON.parse(raw):raw;}catch{throw Error('Invalid stored season JSON');}
+ if(!value||value.type!==type||value.id!==id||value.seasonNumber!==seasonNumber||
+ !Array.isArray(value.episodes))throw Error('Invalid stored season record');
+ return value;
+}
+// Strip legacy episode synopses at the storage boundary, including injected callers.
+function compactRecord(record){
+ if(!record||!Array.isArray(record.episodes))throw Error('Invalid season record');
+ return {...record,episodes:record.episodes.map(({overview,...episode})=>episode)};
+}
+function createSeasonRedisAdapter(command){
+ if(typeof command!=='function')throw Error('Redis command function required');
+ async function getRecord(type,id,seasonNumber){
+  const raw=await command(['GET',key(type,id,seasonNumber)]);
+  return decode(raw,type,id,seasonNumber);
+ }
+ async function putRecordIfAbsent(record){
+  if(!record||!valid(record.type,record.id,record.seasonNumber)||!Array.isArray(record.episodes))
+   throw Error('Invalid season record');
+  assertSeasonWritesAllowed();
+  const saved=await command(['SET',key(record.type,record.id,record.seasonNumber),JSON.stringify(compactRecord(record)),'NX']);
+  return saved==='OK';
+ }
+ return {getRecord,putRecordIfAbsent};
+}
+const {getRecord,putRecordIfAbsent}=createSeasonRedisAdapter(redisCommand);
+module.exports={PREFIX,key,decode,compactRecord,createSeasonRedisAdapter,getRecord,putRecordIfAbsent};

@@ -1,0 +1,142 @@
+{
+  "dateJst": "2026-11-10",
+  "sourceCommit": "1ead98b",
+  "branch": "work/four-ledgers-20261107",
+  "project": {
+    "id": "prj_FoQ5WZ15y54KYpUIekYm6mW1IWq9",
+    "name": "doko-de-mireru",
+    "production": {
+      "id": "dpl_8LQ7HUHX1WXzg8Uaa8d3YAyoSY4b",
+      "sha": "332843235960714d38abcc1c0590ed1f834ed6ca",
+      "branch": "main"
+    }
+  },
+  "storage": {
+    "name": "upstash-kv-rose-saddle",
+    "plan": "free",
+    "autoUpgrade": false,
+    "quotaExceeded": false,
+    "connectedProjectCount": 1
+  },
+  "configuredProductionKeys": [
+    {
+      "key": "WORK_LEDGER_ENABLED",
+      "type": "sensitive",
+      "valueReadable": false
+    },
+    {
+      "key": "CRON_SECRET",
+      "type": "sensitive",
+      "valueReadable": false
+    },
+    {
+      "key": "KV_REST_API_READ_ONLY_TOKEN",
+      "type": "sensitive",
+      "valueReadable": false
+    },
+    {
+      "key": "KV_URL",
+      "type": "sensitive",
+      "valueReadable": false
+    },
+    {
+      "key": "KV_REST_API_URL",
+      "type": "sensitive",
+      "valueReadable": false
+    },
+    {
+      "key": "REDIS_URL",
+      "type": "sensitive",
+      "valueReadable": false
+    },
+    {
+      "key": "KV_REST_API_TOKEN",
+      "type": "sensitive",
+      "valueReadable": false
+    },
+    {
+      "key": "TMDB_API_KEY",
+      "type": "sensitive",
+      "valueReadable": false
+    }
+  ],
+  "executionEnvironmentCredentialsPresent": false,
+  "credentialsNeededForNextStep": [
+    "LEDGER_RELEASE_REDIS_URL",
+    "LEDGER_RELEASE_REDIS_TOKEN",
+    "TMDB_API_KEY"
+  ],
+  "usage": {
+    "source": "latest user-confirmed message; not new Redis measurement",
+    "approxRemainingCommands": 170000,
+    "approxStorageHeadroomBytes": 49000000,
+    "approxRemainingTransferBytes": 8000000000,
+    "vercelUsedUSD": 13.87,
+    "vercelCreditRemainingUSD": 6.13
+  },
+  "billingRead": {
+    "fullPeriod": "response exceeded catalog size; no total claimed",
+    "singleWindowSummary": {
+      "recordCount": 846,
+      "periodStart": "2026-11-08T08:00:00.000Z",
+      "periodEnd": "2026-11-09T08:00:00.000Z",
+      "currency": "USD",
+      "totalBilledCost": 0.013843650041,
+      "totalEffectiveCost": 0.753951888158,
+      "totalsByCurrency": [
+        {
+          "currency": "USD",
+          "billedCost": 0.013843650041,
+          "effectiveCost": 0.753951888158,
+          "recordCount": 846
+        }
+      ]
+    },
+    "doesNotEstablishCurrentPeriodBalance": true
+  },
+  "remoteOperations": {
+    "redisCommands": 0,
+    "tmdbRequests": 0,
+    "deployments": 0,
+    "builds": 0,
+    "productionSettingsChanged": false,
+    "cronChanged": false,
+    "mainChanged": false,
+    "deletions": 0
+  },
+  "preparedBudget": {
+    "probeMaxCommands": 14,
+    "manualCaptureCommands": 68,
+    "combinedMaxCommands": 82,
+    "commandHeadroomAfterPrep": 169918
+  },
+  "initialData": {
+    "fixed13HtmlMigration": false,
+    "bulkWorkMetadataRequired": false,
+    "syntheticDataForProduction": false,
+    "actualPacketsCollected": false,
+    "manualDataCaptured": false,
+    "reason": "read-only metadata can be accessed, secret values cannot be retrieved through connector"
+  },
+  "publicationReady": false,
+  "localPreparation": {
+    "existingProbePlanGenerated": true,
+    "existingRequirementsGenerated": true,
+    "privateBudgetPrepared": true,
+    "privateNextCommandsPrepared": true,
+    "newAdminSecretPrepared": true,
+    "filesOutsideGit": true,
+    "directoryMode": "0700",
+    "fileMode": "0600",
+    "privateMaterialPersistedToRepository": false
+  },
+  "secretReadVerification": {
+    "projectEnvMetadataRead": true,
+    "singleEnvironmentRead": true,
+    "decryptionRequested": true,
+    "productionRedisUrlValueReturned": false,
+    "productionRedisTokenValueReturned": false,
+    "productionTmdbKeyValueReturned": false,
+    "productionSecretTypeChanged": false
+  }
+}

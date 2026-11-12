@@ -9,7 +9,8 @@ const vm=require('node:vm');
 function loadModule(filename,dependencies,env={}){
   const module={exports:{}};
   const source=fs.readFileSync(path.join(__dirname,'..','api',filename),'utf8');
-  const context={module,exports:module.exports,process:{env},console,Date,setTimeout,clearTimeout,require(name){
+  const context={module,exports:module.exports,process:{env:{LEDGER_WRITES_RESUME:"1",...env}},console,Date,setTimeout,clearTimeout,require(name){
+    if(name==='./_frozen-load')return require('../api/_frozen-load');
     if(!Object.hasOwn(dependencies,name))throw Error('Unexpected dependency: '+name);
     return dependencies[name];
   }};
