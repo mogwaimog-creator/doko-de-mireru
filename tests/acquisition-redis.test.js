@@ -27,7 +27,7 @@ test('real Redis: new guard ignores old v1 pause and permits a bounded request',
 test('real Redis: per-work attempts do not reserve cumulative bytes',()=>{
  redis('FLUSHDB');
  redis('SET',control,JSON.stringify({status:'ready',newWorkDailyLimit:2}));
- const attempts='doko:dev:acquisition:v1:attempts:2026-11-11',until=Date.parse('2026-11-13T00:00:00+09:00');
+ const attempts='doko:dev:acquisition:v1:attempts:test',until=Date.now()+86400000;
  assert.deepEqual(evalScript(RESERVE,[control,attempts],[until]),[1,'counted']);
  assert.deepEqual(evalScript(RESERVE,[control,attempts],[until]),[1,'counted']);
  assert.deepEqual(evalScript(RESERVE,[control,attempts],[until]),[0,'daily-limit']);
