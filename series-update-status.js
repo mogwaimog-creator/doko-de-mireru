@@ -27,7 +27,7 @@
       'harrypotter':'#releaseMovies.hp-movie-grid',
       'lordoftherings':'.film-list',
       'starwars':'#cards',
-      'jurassic':'.jurassic-film-area',
+      'jurassic':'.cards.jurassic-film-area',
       'godzilla':'#watch-showa',
       'minions':'.movie-list',
       'conan':'#movieList',
