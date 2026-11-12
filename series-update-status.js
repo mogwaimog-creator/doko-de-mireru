@@ -19,7 +19,11 @@
     notice.textContent=message;
     panel.append(line,schedule,notice);
     const title=main.id==='mcuWatchList'?main.querySelector('#mcuWatchTitle'):null;
+    // Place the notice just before the first viewing-order work list.
+    // No additional data requests; the same panel is moved, not duplicated.
+    const firstList=document.querySelector('#rebuild .eva-rebuild-list, #releaseMovies.hp-movie-grid, .film-list');
     if(title)title.insertAdjacentElement('afterend',panel);
+    else if(firstList)firstList.insertAdjacentElement('beforebegin',panel);
     else main.insertBefore(panel,main.firstChild);
   }
   function dayJst(date){
