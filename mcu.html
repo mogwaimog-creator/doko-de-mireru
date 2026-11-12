@@ -5238,6 +5238,18 @@ a.mcu-tab{
 
 
 
+
+/* MCU: 配信データが取得できない場合もカードを崩さない */
+.phase-box .mcu-card .mcu-provider-logos[data-id],
+#timelineView .mcu-card .mcu-provider-logos[data-id]{min-width:0}
+.phase-box .mcu-card .mcu-provider-logos[data-id].mcu-provider-unavailable,
+#timelineView .mcu-card .mcu-provider-logos[data-id].mcu-provider-unavailable,
+#releaseView .mcu-provider-logos[data-id].mcu-provider-unavailable,
+#shortView .mcu-provider-logos[data-id].mcu-provider-unavailable{
+ display:block !important;width:100% !important;max-width:100% !important;
+ min-height:24px !important;white-space:normal;overflow-wrap:normal;word-break:normal;
+ font-size:12px;line-height:1.5;color:#64748b;
+}
 </style>
 
 <style>
@@ -14862,7 +14874,7 @@ async function loadMcuProviderBox(box){
  try{
   const record=await getMcuCachedRecord(box.dataset.id,box.dataset.type||'movie');
   box.replaceChildren();
-  if(!record){box.textContent='配信情報を取得できませんでした';}
+  if(!record){box.classList.add('mcu-provider-unavailable');box.textContent='配信情報は未取得です';}
   else if(!record.flatrate.length){if(record.stale){const warning=document.createElement('span');warning.textContent='更新遅延：前回取得時の配信情報';warning.style.display='block';warning.style.fontSize='14px';warning.style.color='#b91c1c';box.appendChild(warning)}const note=document.createElement('span');note.textContent='見放題の掲載情報なし';box.appendChild(note);}
   else{
    if(record.stale){const warning=document.createElement('span');warning.textContent='配信情報の更新が遅れています（前回取得時の情報）';warning.style.display='block';warning.style.fontSize='14px';warning.style.color='#b91c1c';box.appendChild(warning)}
@@ -14881,7 +14893,7 @@ async function loadMcuProviderBox(box){
    }
    if(!box.children.length)box.textContent='見放題情報は未確認です';
   }
- }catch(e){console.error('MCU保存済み配信情報:',e);box.textContent='配信情報を取得できませんでした';}
+ }catch(e){console.error('MCU保存済み配信情報:',e);box.classList.add('mcu-provider-unavailable');box.textContent='配信情報は未取得です';}
  finally{delete box.dataset.loading;box.dataset.loaded='1';}
 }
 (function(){
