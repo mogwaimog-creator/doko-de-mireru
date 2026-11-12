@@ -2165,7 +2165,7 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
 </section>
   
 <p class="hp-guide-sources">魔法界・寮の特徴の参考：<a href="https://www.harrypotter.com/features/hogwarts-house-meanings" target="_blank" rel="noopener noreferrer">ハリー・ポッター公式サイト</a>（リンク先には人物情報を含みます）</p>
-<aside class="doko-streaming-note"><p><strong>配信情報について</strong><br>見放題の配信情報は、毎日朝6時・夕方18時（日本時間）を目安に更新しています。配信状況は随時変更される場合があるため、視聴・契約の前に各配信サービスの公式サイトで最新情報をご確認ください。<br/>見放題の配信先は、比較表と同じ日本向けデータを使用しています。取得できた配信ロゴを表示し、同じサービスの広告付きプランはひとつにまとめています。追加チャンネルは通常のPrime Videoとは別の契約条件です。TVの全話・全シーズンの対象範囲と、契約前の見放題条件は公式サイトでご確認ください。</p><a href="streaming.html?view=series#series-harrypotter">このシリーズの見放題比較表を見る →</a></aside></main>
+<aside class="doko-streaming-note"><p><strong>配信情報について</strong><br><span class="doko-series-checked" data-series="harrypotter">最終取得日：確認できません</span><br>見放題の配信情報は、毎日朝6時・夕方18時（日本時間）を目安に更新しています。配信状況は随時変更される場合があるため、視聴・契約の前に各配信サービスの公式サイトで最新情報をご確認ください。<br/>見放題の配信先は、比較表と同じ日本向けデータを使用しています。取得できた配信ロゴを表示し、同じサービスの広告付きプランはひとつにまとめています。追加チャンネルは通常のPrime Videoとは別の契約条件です。TVの全話・全シーズンの対象範囲と、契約前の見放題条件は公式サイトでご確認ください。</p><a href="streaming.html?view=series#series-harrypotter">このシリーズの見放題比較表を見る →</a></aside></main>
 
 <!-- =========================================================
      データ・画像クレジット
@@ -2213,6 +2213,9 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
 
 </footer>
   
+<script>/* Observe the existing cached response; do not fetch again. */
+(function(){const el=document.querySelector('.doko-series-checked[data-series="harrypotter"]');const original=window.dokoSeriesFetch;if(!el||typeof original!=='function')return;window.dokoSeriesFetch=function(...args){const result=original.apply(this,args);if(String(args[0]||'').includes('/api/series-watch?series=harrypotter'))Promise.resolve(result).then(r=>r.clone().json()).then(d=>{const dates=Object.values(d.providers||{}).map(p=>Date.parse(p&&p.checkedAt)).filter(Number.isFinite);if(dates.length)el.textContent='最終取得日：'+new Intl.DateTimeFormat('ja-JP',{timeZone:'Asia/Tokyo',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(Math.max(...dates)))+'（作品ごとに取得日が異なる場合があります）';}).catch(()=>{});return result;};})();
+</script>
 <script>
 
 /* =====================================================
