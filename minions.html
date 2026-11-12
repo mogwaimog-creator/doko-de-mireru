@@ -55,7 +55,7 @@ MOVIES.forEach(m=>paint(m.key,[],true));
 minionsProviders.then(()=>MOVIES.forEach(refresh));
 const streamingControls=document.createElement('div');
 streamingControls.style.cssText='margin:12px 0;padding:12px 14px;border:1px solid #cbd5e1;border-radius:12px;background:#f8fafc;font-size:14px;line-height:1.7';
-streamingControls.textContent='見放題の配信情報は毎日朝6時・夕方18時（日本時間）を目安に更新しています。視聴・契約前には公式サービスで最新情報をご確認ください。';
+streamingControls.textContent='見放題の配信情報は毎朝6時（日本時間）を目安に更新しています。視聴・契約前には公式サービスで最新情報をご確認ください。';
 const firstMovie=document.querySelector('.movie');
 if(firstMovie)firstMovie.parentElement.insertBefore(streamingControls,firstMovie);
 document.querySelectorAll('img.poster').forEach(img=>img.addEventListener('error',()=>{const p=document.createElement('div');p.className='poster placeholder';p.textContent='🍌';p.setAttribute('aria-label','ポスター画像を読み込めませんでした');img.replaceWith(p)}));
