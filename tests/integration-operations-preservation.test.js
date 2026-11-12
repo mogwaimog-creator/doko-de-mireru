@@ -17,7 +17,9 @@ test('person ledger write pause preserves cached profiles and avoids person-ledg
  const src=read('api/_release-application.js');
  assert.match(src,/PERSON_LEDGER_WRITES_PAUSED==='1'/);
  assert.match(src,/if\(saved\?\.person\)return saved\.person/);
- assert.match(src,/Temporarily freeze person ledger writes only/);
+ assert.match(src,/While paused, serve only stored profiles/);
+ assert.match(src,/PERSON_ACQUISITION_PAUSED/);
+ assert.doesNotMatch(src,/For uncached people, serve a one-off response/);
 });
 
 test('old strict guard reservations are not restored',()=>{

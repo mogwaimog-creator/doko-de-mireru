@@ -15,16 +15,19 @@ test('real Redis: new guard ignores old v1 pause and permits a bounded request',
  const now=Date.parse('2026-11-11T00:00:00Z'),bucket=guard.KEY+':failure:1';
  assert.deepEqual(evalScript(guard.ADMIT,[guard.KEY,control,bucket],['id1',now,'2026-11-11','0',2]),[1,'admitted']);
  assert.deepEqual(evalScript(guard.ADMIT,[guard.KEY,control,bucket],['id1',now,'2026-11-11','0',2]),[1,'admitted']);
- assert.deepEqual(evalScript(guard.ADMIT,[guard.KEY,control,bucket],['id1',now,'2026-11-11','0',2]),[1,'admitted']);
+ assert.deepEqual(evalScript(guard.ADMIT,[guard.KEY,control,bucket],['id1',now,'2026-11-11','0',2]),[0,'upstream-limit']);
+ // Scheduled series updates use an independent quota and must not be blocked by public traffic.
+ assert.deepEqual(evalScript(guard.ADMIT,[guard.KEY,control,bucket],['id1',now,'2026-11-11','1',2]),[1,'admitted']);
  const state=JSON.parse(redis('GET',guard.KEY));
- assert.equal(state.daily,3);
- assert.equal(state.acquisitions,3);
+ assert.equal(state.daily,2);
+ assert.equal(state.acquisitions,2);
+ assert.equal(state.dailyScheduled,1);
  assert.equal(redis('HDEL',active,'t1'),1);
 });
 test('real Redis: per-work attempts do not reserve cumulative bytes',()=>{
  redis('FLUSHDB');
  redis('SET',control,JSON.stringify({status:'ready',newWorkDailyLimit:2}));
- const attempts='doko:dev:acquisition:v1:attempts:2026-11-11',until=Date.parse('2026-11-13T00:00:00+09:00');
+ const attempts='doko:dev:acquisition:v1:attempts:test',until=Date.now()+86400000;
  assert.deepEqual(evalScript(RESERVE,[control,attempts],[until]),[1,'counted']);
  assert.deepEqual(evalScript(RESERVE,[control,attempts],[until]),[1,'counted']);
  assert.deepEqual(evalScript(RESERVE,[control,attempts],[until]),[0,'daily-limit']);
