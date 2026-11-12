@@ -32,3 +32,14 @@ test('production release is opt-in; legacy mode remains supported',()=>{
  assert.match(src,/mode===undefined\|\|mode==='legacy'/);
  assert.match(src,/\['new','paused'\]/);
 });
+
+test('public work detail persists first-time metadata using guarded ingest rather than transient TMDB conversion',()=>{
+ const src=read('api/_release-application.js');
+ const ingest=read('api/_new-work-ingest.js');
+ assert.match(src,/if\(raw\)\{const saved=JSON\.parse\(raw\)/);
+ assert.match(src,/return require\('\.\/_new-work-ingest'\)\.ingest\(type,id,\{command,load:signal=>source\(/);
+ assert.doesNotMatch(src,/const work=require\('\.\/_new-work-ingest'\)\.canonical\(type,id,fetched\)/);
+ assert.match(ingest,/if\(before\[wk\]\.data\)return before\[wk\]\.data/);
+ assert.match(ingest,/store\.commit\(entries,\{lease,requireReady:true\}\)/);
+ assert.match(ingest,/if\(!result\.saved\)throw Error/);
+});
