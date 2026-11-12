@@ -21,7 +21,7 @@
     const title=main.id==='mcuWatchList'?main.querySelector('#mcuWatchTitle'):null;
     // Place the notice just before the first viewing-order work list.
     // No additional data requests; the same panel is moved, not duplicated.
-    const page=(location.pathname.split('/').pop()||'').replace(/\\.html$/,'');
+    const page=(location.pathname.split('/').pop()||'').replace(/\.html$/,'');
     const targets={
       'eva':'#rebuild .eva-rebuild-list',
       'harrypotter':'#releaseMovies.hp-movie-grid',
