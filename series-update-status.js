@@ -21,7 +21,22 @@
     const title=main.id==='mcuWatchList'?main.querySelector('#mcuWatchTitle'):null;
     // Place the notice just before the first viewing-order work list.
     // No additional data requests; the same panel is moved, not duplicated.
-    const firstList=document.querySelector('#rebuild .eva-rebuild-list, #releaseMovies.hp-movie-grid, .film-list');
+    const page=(location.pathname.split('/').pop()||'').replace(/\\.html$/,'');
+    const targets={
+      'eva':'#rebuild .eva-rebuild-list',
+      'harrypotter':'#releaseMovies.hp-movie-grid',
+      'lordoftherings':'.film-list',
+      'starwars':'#cards',
+      'jurassic':'.jurassic-film-area',
+      'godzilla':'#watch-showa',
+      'minions':'.movie-list',
+      'conan':'#movieList',
+      'wildspeed':'.movie-list',
+      'odoru':'#first .grid',
+      'gundam':'#alltimeline',
+      'kimetsu':'#shortCards'
+    };
+    const firstList=targets[page]?document.querySelector(targets[page]):null;
     if(title)title.insertAdjacentElement('afterend',panel);
     else if(firstList)firstList.insertAdjacentElement('beforebegin',panel);
     else main.insertBefore(panel,main.firstChild);
