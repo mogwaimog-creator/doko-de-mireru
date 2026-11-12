@@ -1887,6 +1887,8 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
   </div>
 
 
+  <aside class="doko-streaming-note" style="margin:18px auto 22px;padding:15px 18px;border-left:3px solid #64748b;background:#f8fafc;color:#334155;line-height:1.8"><strong>配信情報について</strong><br><span id="eva-streaming-checked">最終取得日：確認中</span><br>※掲載している配信情報は実際の配信状況と異なる場合があります。見放題・レンタル・購入の提供状況や料金は変更されることがあるため、ご契約・ご視聴の前に各配信サービスの公式サイトで最新情報をご確認ください。</aside>
+
   <div class="eva-rebuild-list">
 
 
@@ -2225,6 +2227,9 @@ async function loadEvaStreaming(){
     const response=await dokoSeriesFetch(dokoApiRoot+'/api/series-watch?series=eva');
     if(!response.ok)throw Error('cache unavailable');
     data=await response.json();
+    const checkedDates=Object.values(data?.providers||{}).map(p=>Date.parse(p?.checkedAt)).filter(Number.isFinite);
+    const checkedLabel=document.getElementById('eva-streaming-checked');
+    if(checkedLabel){checkedLabel.textContent=checkedDates.length?'最終取得日：'+new Intl.DateTimeFormat('ja-JP',{timeZone:'Asia/Tokyo',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(Math.max(...checkedDates)))+'（作品ごとに取得日が異なる場合があります）':'最終取得日：確認できません';}
   }catch(e){console.warn('Eva cached streaming unavailable',e)}
   document.querySelectorAll('.eva-work-streaming[data-movie-id]').forEach(element=>{
     const key=(element.dataset.mediaType||'movie')+':'+element.dataset.movieId;
