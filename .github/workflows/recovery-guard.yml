@@ -1,5 +1,13 @@
 name: Recovery guard regression
 on:
+  push:
+    branches:
+      - integration/recover-latest-ledgers-20261112
+    paths:
+      - 'api/_release-application.js'
+      - 'api/_new-work-ingest.js'
+      - 'tests/integration-operations-preservation.test.js'
+      - '.github/workflows/recovery-guard.yml'
   pull_request:
     paths:
       - 'api/_acquisition-guard.js'
