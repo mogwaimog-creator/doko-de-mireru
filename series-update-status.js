@@ -32,9 +32,9 @@
       'minions':'.movie-list',
       'conan':'#movieList',
       'wildspeed':'.movie-list',
-      'odoru':'#first .grid',
+      'odoru':'#odoru-tabs',
       'gundam':'#alltimeline',
-      'kimetsu':'#shortCards'
+      'kimetsu':'nav.tabs[role="tablist"]'
     };
     const firstList=targets[page]?document.querySelector(targets[page]):null;
     if(title)title.insertAdjacentElement('afterend',panel);
