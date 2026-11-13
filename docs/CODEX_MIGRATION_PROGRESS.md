@@ -75,3 +75,10 @@
 - 未完了: 実Aiven Freeサービス作成・安全なsecret提供、実先のversion/容量/RTT/接続数/ACL/Lua/restore互換、Upstash Exportの無料可否・command計上、全writer停止の承認と最新backup、原キーでの実target書込runnerの有効化/実移管/通常運行復旧。RDB版差でhashが異なれば検証を緩めず停止する。
 - 次の一手: ユーザーにFree $0サービス作成（wizard/importなし）と作業環境secret設定、本番変更なしの手順を案内。Upstash ConsoleでExport利用可否/料金/残量/既存backupを閲覧確認。情報が揃ったら限定接続テストとbackup方式/予算を具体化して承認を得る。
 - 本番反映: 緊急修正のみユーザー報告で昇格済み。今回の移管変更は未反映。実移管未実施。
+
+
+### 2026-11-14 08:42 JST / GitHub保存・継続地点の確定
+- 作業ブランチへ調査再開ログ5fef9bd、実装/公式計画/検証結果9160d30をpush済み。今回の追記で既存handoff/temporary手順にも最新の継続地点を記録。
+- 変更ファイル: 本ログ、REDIS_MIGRATION_HANDOFF_20261114.md、TEMPORARY_REDIS_MIGRATION_20261114.md（履歴を削除しない追記だけ）。テストは9160d30対象の93 PASS/0 FAIL/0 skipを引継ぎ、docsのみのため再実行なし。
+- 本番緊急修正の昇格はユーザー報告。今回の移管準備は未反映。実Redisデータ操作/環境変数変更/main統合/デプロイ/Cron実行なし。
+- 次の一手: AIVEN_MIGRATION_PLAN_20261114.md末尾のFreeサービスと安全なsecret提供、旧Upstash Export利用可否/料金・command計上・残量の閲覧確認。実先接続/backup/移管はその情報に基づく別承認前に実行しない。

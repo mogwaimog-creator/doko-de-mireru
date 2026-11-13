@@ -74,3 +74,16 @@ Redis 7.2.7を127.0.0.1:16379で実行、全データは合成/モック、ラ�
 終了前のリモート再確認で移管ブランチに引継ぎdocsだけの追加2コミット（5d8ee14 / c0eb943）を検出し、内容を確認してローカルへ保持した。main先端は89cd807のまま。最新のチャット指示に従い、緊急修正後の移管側ローカル検証まで行った。公開・実移管の工程は未実施。
 
 最終実行は REDIS_TEST_TRANSPORT=valkey REDIS_TEST_CLI=/workspace/doko-de-mireru/work/redis-7.2.7/src/redis-cli npm run test:migration。20ファイル87件成功、失敗0・skip0。GitHub CIは未実行。
+
+
+## 2026-11-14 08:42 JST / PR #50反映後の計画更新
+
+上記は各作業時点の履歴。現在はmain a05897e（PR #50）と緊急表示修正コードの一致を確認済み。ユーザーから緊急修正の本番昇格 dpl_5G4PAYgd2ojFt4EmpyAFEWf6Yu7S の報告を受領。二重適用・再デプロイなし。
+
+移管準備の追加実装は9160d30としてGitHub保存済み。公式調査、全DB/全型/原キー/TTLと手動・index・履歴の欠落防止、コマンド予算、ユーザー操作手順の最新版は [AIVEN_MIGRATION_PLAN_20261114.md](AIVEN_MIGRATION_PLAN_20261114.md) を参照。検証証拠は [AIVEN_LOCAL_VALIDATION_20261114.json](AIVEN_LOCAL_VALIDATION_20261114.json)。
+
+既存87件を再利用して追加6件、22ファイル93件PASS・FAIL/skip0。実TLS/CA拒否、合成RDB全6型/DB0とDB2、完全manifestからのno-SCAN snapshot（3K+1）、offline inventoryを追加。既存復元器の隔離prefix制限は解除しない。Aiven新URI valkeys://をTLSのrediss://へ正規化する。
+
+実移管の第一候補はUpstash provider RDB Export→local棚卸し→承認後のAiven原キー復元。Exportの無料利用可否/課金/command計上は未確定。Aiven標準migrationはreplication失敗時SCAN fallbackがあるため実行しない。Aiven Freeのmaxmemoryは無料専用資料の50%を基準に実先で確認する。
+
+未完了: Aiven Free実サービス/安全なsecret提供、実容量/RTT/接続数/ACL/Lua/restore検証、Export無料条件、整合最新backup、原キーtarget runner、実移管・切替・停止解除・通常運行。本番環境変数/main/デプロイ/Cron/旧Upstashデータには変更なし。次の一手は計画末尾のユーザー作業（Free $0だけ作成、Upstash Exportの可否/料金を閲覧確認）。

@@ -82,3 +82,11 @@ Repository: mogwaimog-creator/doko-de-mireru
 - 本番main統合・デプロイ・環境変数変更・実Redisデータ操作・停止解除は未実施。Git自動デプロイfalseを維持。
 - 未完了: 緊急修正の本番反映、Aiven無料条件/実互換性確認、最新の整合バックアップ、データコピー、接続切替、通常運行復旧、本番負荷観測。
 - 次工程は緊急修正のレビュー。その後、別途承認された工程だけを実施。詳細・負荷・テスト対象は `CODEX_MIGRATION_PROGRESS.md` と本ブランチの実装報告を参照。
+
+
+## 2026-11-14 08:42 JST / 緊急修正公開後のAiven移管準備の実績
+- main a05897e（PR #50）を確認。緊急修正コードは移管ブランチと同一。ユーザー報告で dpl_5G4PAYgd2ojFt4EmpyAFEWf6Yu7S が本番昇格済み。過去の未反映記録は当時の状態として保持する。
+- 移管準備9160d30を作業ブランチへpush済み。既存アダプター/backup/restoreを再利用。no-SCANの正確manifest経路、offline inventory、valkeys TLS URI、RDB多DB/全6型と実ローカルTLS検証を追加。93 PASS/FAIL0/skip0。実Aiven/旧Upstash未接続。
+- 公式調査でFree $0・maxmemory50%・Lua既定有効・標準migrationのSCAN fallbackを確認。Exportの無料可否/課金/計上と実先互換性は未確認。無料のままsource直結wizardを実行する方針ではない。
+- 最新の段階別計画・欠落防止範囲・予算・ユーザー手順は AIVEN_MIGRATION_PLAN_20261114.md、検証hashは AIVEN_LOCAL_VALIDATION_20261114.json、継続ログは CODEX_MIGRATION_PROGRESS.md。
+- 次はユーザーが空のFree $0サービスを用意し、安全な作業環境secretを設定。UpstashではExport可否/料金/残量/backupを閲覧確認する。実移管・本番変更・停止解除はまだ行わず、具体的な接続/backup計画の承認後に進める。
