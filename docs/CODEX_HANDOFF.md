@@ -17,10 +17,10 @@
 - ローカル作業ブランチ: `test/redis-read-guard-20261114`。
 - 開始時main: `de03bd5775328b09de8ff796c3425513e00f8b4c`（最新fetchでも一致）。
 - Redis修正コミット: `44879d5f430ca13838e4a538d917e71b92345f92`。ローカル作成済み。
-- 自動停止設定: 作業コピーに準備済み。まだGitHubへpushしていない。
-- 引継ぎ書: 本ファイルを作成済み。まだGitHubへpushしていない。
+- 自動停止設定: `2753ccc4149bf55ced1ef609534430a4c88b178d` に含め、GitHubの作業ブランチへpush済み。リモートのboolean falseを確認済み。
+- 引継ぎ書: `2753ccc` で初回push済み。作業の区切りに後続のdocsコミットで更新する。
 - main統合: 未実施。
-- 今回のVercelデプロイ作成: 0回。手動作成リクエストも未送信。
+- 今回のVercelデプロイ作成: 0回。初回push後も対象SHAのデプロイ0件を確認。手動作成リクエストは未送信。
 - 現行本番: `dpl_Hgo3EqZ8Z9CvdxXt77VDvRFpceLx` / main `de03bd5` / READY。
 - Vercelプロジェクト: `prj_FoQ5WZ15y54KYpUIekYm6mW1IWq9` (`doko-de-mireru`)。
 - Vercelチーム: `team_DuaQ7ug0BuRNFShbwRoNX2kU` (`mogwaimog-1706`)。
@@ -60,8 +60,8 @@ Redisガードを遅延登録し、純粋な読み取りではcontrolのGETだ�
 
 ## 次に実施する手順
 
-1. configのgit以外がmainと同一であること、対象ブランチ先端にboolean falseがあることを検証。Redis関連テスト再実行。
-2. この停止設定を含む先端だけをpushし、Vercel履歴を確認。旧Redis単独コミットを別途pushしない。
+1. 設定同一性検証と91件の再テストは完了。後続の変更がdocsだけであることを確認する。
+2. 停止設定込みの初回pushは完了。後続の先端とPRについてもVercel履歴を確認。旧Redis単独コミットを別途pushしない。
 3. PRでmainへ統合。GitHubチェック/失敗内容と競合を確認。統合後もmainのfalseとデプロイ履歴を再確認。
 4. 自動作成が0件であることを確かめ、確定したmainコミットから既存Vercelプロジェクトへ手動本番デプロイを1回だけ作成。
 5. 作成リクエスト直前に本書へ「デプロイ要求予定/未送信」を記録。要求を送ったらデプロイID・SHAを記録。途中で中断した場合は新規作成を再送せず、履歴から該当デプロイの有無を調べる。
