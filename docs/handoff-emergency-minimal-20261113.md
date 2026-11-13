@@ -77,6 +77,13 @@
 - **仮説と改善候補（未実装）**：SEOの最初のEVALで「未登録」を確定できるなら2度目のGETを省けるか、保存済み作品は必要なSEO項目と詳細項目を1回の取得で兼用できるか、実行分岐とエラー処理をローカルfixtureで比較。未登録の503がGooglebotに与える影響も別途評価。変更の承認があるまで本番・mainは変更しない。
 - Vercel Observabilityのリクエスト集計は読み取りAPIが400 bad_requestとなり実測取得できていない。Firewall active version 9を読み取り確認：bot_protection challenge active、/api/search にJA4 denyとIP 15/60秒 rate limitがactive。/detail.html専用のカスタムrate limitはこの設定結果には見当たらない。Googlebotへのchallengeの実発生は未確認。
 
+
+### 追加：詳細ページのCDNキャッシュとルーティングの確認
+- mainの `vercel.json` で `/detail.html` は `/api/detail-page` にrewriteされる。作品詳細HTMLは単なる静的ファイル配信ではなくFunction経由。
+- mainの `api/detail-page.js` は `Cache-Control: private, no-store` を設定。release applicationの `handle()` も同じno-storeを設定し、4xx/5xxでは `Vercel-CDN-Cache-Control: no-store` と `X-Robots-Tag: noindex` を付与。未登録作品の反復アクセスをCDNでまとめる構成ではない。SEO影響とコストを両立するため、no-storeを無条件で外さず、保存済み200と未登録503を分けてローカル検証する。
+- 同一デプロイに限定した直近60分のVercel runtime error logsは `/detail.html` 20件（取得時点）。エラーログ数でありアクセス数・Redis COMMANDSではない。
+- 優先検証候補（未実装）：(A) 未登録作品の二重読み取りEVAL→GETを1回にできるか、(B) 保存済み作品のSEO投影と本文取得の重複を減らせるか、(C) 保存済み200 HTMLのみ安全にCDNキャッシュできるか、(D) 未登録503のbot/Googlebot影響とrate limitの設計。すべて本番変更は承認後。
+
 ## 参照
 - PR #46: https://github.com/mogwaimog-creator/doko-de-mireru/pull/46
 - #46以前の調査報告: docs/paused-ledger-reads-20261113.md （PR #46ブランチで作成）
