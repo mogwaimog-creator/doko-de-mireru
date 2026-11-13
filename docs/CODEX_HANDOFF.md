@@ -20,7 +20,7 @@
 - 自動停止設定: `2753ccc4149bf55ced1ef609534430a4c88b178d` に含め、GitHubの作業ブランチへpush済み。リモートのboolean falseを確認済み。
 - 引継ぎ書: `2753ccc` で初回push済み。作業の区切りに後続のdocsコミットで更新する。
 - main統合: PR #47 (https://github.com/mogwaimog-creator/doko-de-mireru/pull/47) で完了。統合コミット `cc8a4f07622f5847481b4c1bcad208e82869c85d`。
-- 今回のVercelデプロイ作成: 0回。初回push後も対象SHAのデプロイ0件を確認。手動作成リクエストは未送信。
+- 今回のVercelデプロイ作成: 手動本番1回、自動0回。手動作成リクエスト送信済み。デプロイID `dpl_4EyPmEBUFSVeXhyhY2GXSnsSuNws`。作成直後はINITIALIZINGで、READY/本番疎通確認は未完了。再作成は禁止。
 - デプロイ前の現行本番: `dpl_Hgo3EqZ8Z9CvdxXt77VDvRFpceLx` / main `de03bd5` / READY。
 - Vercelプロジェクト: `prj_FoQ5WZ15y54KYpUIekYm6mW1IWq9` (`doko-de-mireru`)。
 - Vercelチーム: `team_DuaQ7ug0BuRNFShbwRoNX2kU` (`mogwaimog-1706`)。
@@ -64,14 +64,16 @@ Redisガードを遅延登録し、純粋な読み取りではcontrolのGETだ�
 - PR #47先端: `4e98534ff0fc3573a5f8714257a9b7b9c301f82a`。
 - GitHub Actions: Recovery guard regression (#43465900962)、Paused ledger reads (#43465901139) はともにsuccess。
 - ブランチpush・PR作成後の自動デプロイは0件。main統合後の履歴も確認してから本番を作成する。
-- 次の本番作成はまだ未実施。今回の1回分の作成枠は未使用。
+- 今回の本番作成枠1回は使用済み。作成済みIDをget_deploymentで追跡し、新規作成を再送しない。
+- 配信対象SHA: `5980937ef2e8484a217097f220941c16ef159034`（PR #48統合後main）。PR #47からの追加差分は引継ぎ書のみ。
+- 作成済みURL: https://doko-de-mireru-qif3cd02g-mogwaimog-1706.vercel.app
 
 ## 次に実施する手順
 
 1. 設定同一性検証と91件の再テストは完了。後続の変更がdocsだけであることを確認する。
 2. 停止設定込みの初回pushは完了。後続の先端とPRについてもVercel履歴を確認。旧Redis単独コミットを別途pushしない。
 3. PR #47のmain統合とCI成功は完了。引継ぎ更新をmainへ反映後、確定mainのfalseとデプロイ履歴を再確認。
-4. 自動作成が0件であることを確かめ、確定したmainコミットから既存Vercelプロジェクトへ手動本番デプロイを1回だけ作成。
+4. 自動0件の確認と手動本番1回の作成は完了。以後は作成済みデプロイだけを追跡し、READY・ドメイン切替・疎通を確認。
 5. 作成リクエスト直前に本書へ「デプロイ要求予定/未送信」を記録。要求を送ったらデプロイID・SHAを記録。途中で中断した場合は新規作成を再送せず、履歴から該当デプロイの有無を調べる。
 6. READY、対象SHA、既存ドメイン、Cron設定、少量の表示確認を検証。本書へ実測結果を追記し、自動停止を維持したdocs更新だけを反映。docs更新で再デプロイしない。
 
