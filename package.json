@@ -1,0 +1,12 @@
+{
+  "name": "doko-de-mireru",
+  "version": "1.0.0",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "test:migration": "node --test tests/valkey-transport.test.js tests/emergency-work-detail.test.js tests/paused-ledger-reads.test.js tests/lazy-request-guard.test.js tests/search-index-v2.test.js tests/streaming-ledger-service.test.js tests/seo-detail-renderer.test.js tests/acquisition-recovery.test.js tests/acquisition-source-integration.test.js tests/release-production-connection.test.js tests/person-season-work-integration.test.js tests/release-season-refresh.test.js tests/release-person-ledger.test.js tests/redis-full-backup.test.js tests/redis-low-command-backup.test.js tests/low-command-backup-budget.test.js tests/frozen-ledger-safety.test.js tests/season-refresh-policy-boundaries.test.js tests/season-refresh-writer.test.js tests/streaming-update-schedule.test.js"
+  },
+  "dependencies": {
+    "redis": "5.11.0"
+  }
+}
