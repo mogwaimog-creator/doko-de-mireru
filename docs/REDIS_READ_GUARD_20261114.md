@@ -1,5 +1,7 @@
 # 保存済み表示のRedisガード削減（2026-11-14）
 
+本書は初回ローカル検証時点の記録です。その後の承認・main統合・本番反映の実績と未完了の確認事項は [CODEX_HANDOFF.md](CODEX_HANDOFF.md) を参照してください。
+
 ブランチ: `test/redis-read-guard-20261114`
 開始点: 最新mainをfetchした `de03bd5775328b09de8ff796c3425513e00f8b4c`。
 ローカルのみ。push、PR作成、main統合、Vercelデプロイは未実施。
