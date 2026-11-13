@@ -2,6 +2,8 @@
 // Lazy RESP connection. No fallback to Upstash and no command replay.
 function createValkey(env=process.env,{createClient=require('redis').createClient}={}){
  const url=new URL(env.REDIS_URL||'');
+ // Aiven now documents valkeys://; node-redis uses rediss:// for the same TLS protocol.
+ if(url.protocol==='valkeys:')url.protocol='rediss:';
  const local=['127.0.0.1','localhost','[::1]'].includes(url.hostname);
  if(url.protocol!=='rediss:'&&!(url.protocol==='redis:'&&local&&env.NODE_ENV!=='production'&&env.VERCEL_ENV!=='production'))throw Error('Valkey requires verified TLS');
  if(url.search||url.hash)throw Error('Redis URL options forbidden');

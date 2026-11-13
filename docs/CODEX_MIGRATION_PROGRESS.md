@@ -61,3 +61,17 @@
 - 公式文書でAiven無料1GB RAM・maxmemory50%、Lua既定有効、MIGRATE等の制限を確認し、詳細調査中。契約・実先の確認は未完了。
 - 変更ファイル: 本進捗ログのみ。テスト: この節目は記録のみ、再実行未実施。
 - 次の一手: 最新無料条件/TLS/移行方法を資料化し、全キー型・期限・更新履歴を保持する計画とローカル検証を進める。実サービス作成・実移管・本番変更は承認前に行わない。
+
+
+### 2026-11-14T08:41:44+09:00 / Aiven公式条件・欠落防止計画・ローカル検証完了
+- ブランチ: test/temporary-redis-migration-20261114。開始main a05897e / 開始実装93c2b04。緊急修正はmainと同一のまま。
+- 完了: 公式無料条件、TLS、Lua、制限command、eviction、料金の確認範囲を AIVEN_MIGRATION_PLAN_20261114.md に出典URLつきで記録。Aiven標準migrationのSCAN fallbackを理由に旧source直結経路を不採用とした。
+- 計画: provider RDB exportを第一候補。全DB・全物理キー/型/絶対TTL、作品/配信/人物/シーズン、metadata、ロック/手動項目/index/履歴を保持。不明キーも捨てない。無料Exportの利用可否/料金/command計上は未確認なのでまだ実行しない。
+- 実装: 既存Valkeyアダプターにvalkeys://→rediss://のTLS URI互換を追加。既存snapshotに完全manifest証拠・キーchecksumを必須とするno-SCAN経路を追加（3K+1読取/DB、書込0）。完成済みの復元処理は再利用し、隔離prefix制限を維持。
+- 追加: migration-inventoryのoffline棚卸し/CLI（private0600・上書き拒否・外部接続なし）、ローカルUnix socket対応、RDB全6型/DB0とDB2のreload検証、信頼CA成功/未信頼CA拒否の実TLSテスト。
+- 変更: api/_valkey.js、scripts/lib/local-binary-redis.js、scripts/lib/redis-low-command-backup.js、scripts/lib/migration-inventory.js、scripts/migration-inventory.js、tests/valkey-transport.test.js、tests/migration-inventory.test.js、tests/migration-rdb-rehearsal.test.js、package.json、.github/workflows/temporary-redis-migration.yml、公式確認計画/検証JSON/進捗文書。
+- テスト: 既存87件+追加6件、22ファイル93 PASS / 0 FAIL / 0 skip。Redis7.2.7、native RESP、合成TMDB/合成RDBのみ。最終コマンドと対象ファイルhashを AIVEN_LOCAL_VALIDATION_20261114.json に保存。git diff --check成功。GitHub CI実績は未確認。
+- 本番/実データ: 旧Upstash、新Aiven、実TMDB、本番Vercelへの接続・データ操作なし。実Cron/移管/停止解除/環境変数変更/main統合/デプロイなし。Git自動デプロイfalse維持。
+- 未完了: 実Aiven Freeサービス作成・安全なsecret提供、実先のversion/容量/RTT/接続数/ACL/Lua/restore互換、Upstash Exportの無料可否・command計上、全writer停止の承認と最新backup、原キーでの実target書込runnerの有効化/実移管/通常運行復旧。RDB版差でhashが異なれば検証を緩めず停止する。
+- 次の一手: ユーザーにFree $0サービス作成（wizard/importなし）と作業環境secret設定、本番変更なしの手順を案内。Upstash ConsoleでExport利用可否/料金/残量/既存backupを閲覧確認。情報が揃ったら限定接続テストとbackup方式/予算を具体化して承認を得る。
+- 本番反映: 緊急修正のみユーザー報告で昇格済み。今回の移管変更は未反映。実移管未実施。

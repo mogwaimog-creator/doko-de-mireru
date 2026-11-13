@@ -38,3 +38,25 @@ test('production connection selects native transport without any REST fetch', {s
  // Unref sockets for this local connection after testing; process shutdown owns cleanup.
  require('../api/_valkey').close();
 });
+
+test('Aiven valkeys URI keeps TLS and certificate verification without opening a connection on import',async()=>{
+ let options;
+ const backend=createValkey(env({REDIS_URL:'valkeys://user:encoded%40password@example.invalid:1234'}),{createClient:o=>{options=o;return {isOpen:false,on(){},async connect(){this.isOpen=true},async sendCommand(){return 'OK'},destroy(){}}}});
+ assert.equal(options,undefined);assert.equal(await backend.command(['GET','key']),'OK');assert.equal(new URL(options.url).protocol,'rediss:');assert.equal(new URL(options.url).password,'encoded%40password');assert.equal(options.socket.tls,true);backend.close();
+ assert.throws(()=>createValkey(env({REDIS_URL:'valkey://example.invalid:1234'})),/TLS/);
+});
+
+test('real local TLS accepts the trusted CA and rejects an untrusted certificate', {skip:!process.env.REDIS_TEST_CLI},async()=>{
+ const fs=require('node:fs'),os=require('node:os'),path=require('node:path'),tls=require('node:tls'),net=require('node:net');
+ const directory=fs.mkdtempSync(path.join(os.tmpdir(),'doko-valkey-tls-')),key=path.join(directory,'key.pem'),cert=path.join(directory,'cert.pem');
+ const sockets=new Set();let server,backend,untrusted;
+ try{
+  require('node:child_process').execFileSync('openssl',['req','-x509','-newkey','rsa:2048','-nodes','-keyout',key,'-out',cert,'-days','1','-subj','/CN=127.0.0.1','-addext','subjectAltName=IP:127.0.0.1'],{stdio:'ignore',timeout:10000});
+  server=tls.createServer({key:fs.readFileSync(key),cert:fs.readFileSync(cert)},socket=>{const upstream=net.createConnection({host:'127.0.0.1',port:16379});sockets.add(upstream);upstream.on('close',()=>sockets.delete(upstream));upstream.on('error',()=>socket.destroy());socket.on('error',()=>{});socket.on('close',()=>upstream.destroy());socket.pipe(upstream).pipe(socket)});
+  server.on('connection',socket=>{sockets.add(socket);socket.on('close',()=>sockets.delete(socket))});server.on('tlsClientError',()=>{});
+  await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));const url='valkeys://127.0.0.1:'+server.address().port;
+  backend=createValkey(env({REDIS_URL:url,REDIS_CA_CERT:fs.readFileSync(cert,'utf8')}));
+  const k='doko:dev:tls:'+randomBytes(12).toString('hex');assert.equal(await backend.command(['SET',k,'日本語','NX','PX','60000']),'OK');assert.equal(await backend.command(['GET',k]),'日本語');assert.equal(await backend.command(['EVAL','return cjson.decode(ARGV[1]).value','0','{"value":42}']),42);
+  untrusted=createValkey(env({REDIS_URL:url}));await assert.rejects(untrusted.command(['GET',k]),/connection unavailable/);
+ }finally{backend?.close();untrusted?.close();for(const socket of sockets)socket.destroy();if(server)await new Promise(resolve=>server.close(resolve));fs.rmSync(directory,{recursive:true,force:true})}
+});
