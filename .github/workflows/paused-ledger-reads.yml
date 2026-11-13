@@ -6,6 +6,9 @@ on:
       - 'tests/home-emergency-minimal.test.js'
       - 'api/_paused-ledger-search.js'
       - 'api/_release-application.js'
+      - 'api/_cutover-runtime-dev.js'
+      - 'api/_release-connection.js'
+      - 'tests/lazy-request-guard.test.js'
       - 'api/_indexed-search.js'
       - 'prototype/streaming-ledger-service.js'
       - 'tests/paused-ledger-reads.test.js'
@@ -32,4 +35,4 @@ jobs:
       - name: Test saved reads, command counts, SEO and provider schedules
         env:
           REDIS_TEST_CLI: /usr/bin/redis-cli
-        run: node --test tests/home-emergency-minimal.test.js tests/paused-ledger-reads.test.js tests/search-index-v2.test.js tests/streaming-ledger-service.test.js tests/seo-detail-renderer.test.js
+        run: node --test tests/lazy-request-guard.test.js tests/home-emergency-minimal.test.js tests/paused-ledger-reads.test.js tests/search-index-v2.test.js tests/streaming-ledger-service.test.js tests/seo-detail-renderer.test.js

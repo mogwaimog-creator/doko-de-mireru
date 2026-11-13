@@ -19,9 +19,7 @@
     }
   ],
   "git": {
-    "deploymentEnabled": {
-      "work/four-ledgers-20261107": false
-    }
+    "deploymentEnabled": false
   },
   "functions": {
     "api/detail-page.js": {
