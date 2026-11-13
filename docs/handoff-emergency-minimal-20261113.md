@@ -68,6 +68,15 @@
 3. 共通配信台帳の重複・失敗・日本限定保存・24時間/6時更新、人物台帳・出演作品・シーズン台帳、SEOインデックスとの整合を順に検査。実データ更新は承認後。
 4. 結果は件数・具体的movie/tv:ID・不一致理由・修正候補・未確認事項として記録。追加課金を避けるため本番Redisの大量SCAN・TMDB一括取得は行わない。
 
+
+## 2026-11-13 夜：未登録作品への詳細HTMLアクセスで残るRedis読み取り（コード追跡）
+- 現行mainの `api/_release-application.js` 14行付近は `detail-page` に `projectSeo` と `fixed` を渡す。
+- `api/detail-page.js` の現行release経路では、最初に `projectSeo(type,id)` を呼び、`api/_recovery-initial-seo.js` が `EVAL`（Lua内で `GET`）を実行。作品が未登録ならnull。
+- 次に `readFixed` → `fixed` → `loadWork` が作品台帳へ `GET`。未登録の場合、`NON_STREAMING_ACQUISITION_PAUSED=1` により `WORK_ACQUISITION_STOPPED` を投げ、503。**したがって未登録HTMLへの1リクエストにつき少なくともトップレベル2回のRedis command()呼び出しが残る経路**がある（実際のUpstash課金COMMANDSは別）。ロック・quota確認より前で停止していることはログのmessageとも一致。
+- 2026-11-13の新デプロイ `dpl_Hgo3EqZ8Z9CvdxXt77VDvRFpceLx` に絞った直近30分のruntime error logsは `/detail.html` 18件。これはログ件数であり、総HTTPリクエスト数でもUpstash COMMANDSでもない。アクセス元がBOTか、同一ID反復かは未確定。
+- **仮説と改善候補（未実装）**：SEOの最初のEVALで「未登録」を確定できるなら2度目のGETを省けるか、保存済み作品は必要なSEO項目と詳細項目を1回の取得で兼用できるか、実行分岐とエラー処理をローカルfixtureで比較。未登録の503がGooglebotに与える影響も別途評価。変更の承認があるまで本番・mainは変更しない。
+- Vercel Observabilityのリクエスト集計は読み取りAPIが400 bad_requestとなり実測取得できていない。Firewall active version 9を読み取り確認：bot_protection challenge active、/api/search にJA4 denyとIP 15/60秒 rate limitがactive。/detail.html専用のカスタムrate limitはこの設定結果には見当たらない。Googlebotへのchallengeの実発生は未確認。
+
 ## 参照
 - PR #46: https://github.com/mogwaimog-creator/doko-de-mireru/pull/46
 - #46以前の調査報告: docs/paused-ledger-reads-20261113.md （PR #46ブランチで作成）
