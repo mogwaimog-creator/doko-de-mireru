@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 
-<html lang="ja">
+<!-- Emergency mode: set data-emergency-minimal to 0 to restore discovery UI. -->
+<html lang="ja" data-emergency-minimal="1">
 
 <head>
 
@@ -5221,6 +5222,14 @@ body.search-mode.show-other-search
 
      
      
+<style id="emergency-minimal-style">
+/* One switch restores both the discovery UI and its automatic loading. */
+html[data-emergency-minimal="1"] [data-emergency-discovery],
+html[data-emergency-minimal="1"] .home-section-nav a[href="#providerSearchSection"],
+html[data-emergency-minimal="1"] .home-section-nav a[href="#advancedSearchSection"] {
+  display: none !important;
+}
+</style>
 </head>
 
 <body>
@@ -5601,6 +5610,7 @@ body.search-mode.show-other-search
 
 <section
   id="providerSearchSection"
+  data-emergency-discovery
   class="provider-search-section"
 >
 
@@ -5971,6 +5981,7 @@ body.search-mode.show-other-search
 
 <section
   id="advancedSearchSection"
+  data-emergency-discovery
   class="advanced-search-section"
 >
 
@@ -6215,6 +6226,7 @@ body.search-mode.show-other-search
 
 <section
   class="popular-section"
+  data-emergency-discovery
   aria-labelledby="popularHeading"
 >
 
@@ -6294,6 +6306,8 @@ body.search-mode.show-other-search
 /* =========================================================
    DOM
 ========================================================= */
+
+const emergencyMinimalMode = document.documentElement.dataset.emergencyMinimal === "1";
 
 const queryInput =
   document.getElementById(
@@ -7630,42 +7644,11 @@ let detailUrl =
   encodeURIComponent(movieId);
 
 if(
-  movie.content_type === "tv"
+  ["tv", "tv_drama", "anime_tv"].includes(movie.content_type) ||
+  currentSearchType === "drama" ||
+  (currentSearchType === "anime" && movie.content_type !== "anime_movie")
 ){
-
-  detailUrl +=
-    "&type=tv";
-
-}     
-
-/* -------------------------------------------------------
-   ドラマ・アニメの場合
-   詳細ページにもTV作品であることを渡す
-------------------------------------------------------- */
-
-if(
-  currentSearchType === "drama"
-){
-
-  detailUrl +=
-    "&type=tv";
-
-}else if(
-  currentSearchType === "anime"
-){
-
-  if(movie.content_type === "anime_movie"){
-
-    detailUrl +=
-      "&type=movie";
-
-  }else{
-
-    detailUrl +=
-      "&type=tv";
-
-  }
-
+  detailUrl += "&type=tv";
 }
 
   /* -------------------------------------------------------
@@ -9834,6 +9817,7 @@ function observeGenreProviderStatuses(){
 ========================================================= */
 
 async function loadPopularMovies(){
+  if(emergencyMinimalMode)return;
 
   const popularMovies =
     document.getElementById("popularMovies");
@@ -10131,7 +10115,7 @@ if(lastQuery){
 
 }
 
-loadPopularMovies();     
+if(!emergencyMinimalMode)loadPopularMovies();
 
 
 // =========================================================
@@ -10853,7 +10837,7 @@ const advancedSearchSubmit =
   );
 
 
-if(advancedSearchSubmit){
+if(advancedSearchSubmit && !emergencyMinimalMode){
 
   advancedSearchSubmit.addEventListener(
     "click",
