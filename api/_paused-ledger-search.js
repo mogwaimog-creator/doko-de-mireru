@@ -13,9 +13,23 @@ async function search(q,{command,clock=Date.now}){
  if(!Number.isSafeInteger(page)||page<1||page>20||!['movie','tv','all','anime','drama','person'].includes(type))throw bad('Invalid saved search');
  if(!discovery.some(k=>q[k])){
   if(!query||query.length>100||!require('./_search-index-v2').fold(query))throw bad('Invalid query');
-  return indexedSearch(query,{kind:type==='person'||q.personSearch?'person':'work',type,page,cursor:q.cursor,command});
+  const kind=type==='person'||q.personSearch?'person':'work';
+  const result=await indexedSearch(query,{kind,type,page,cursor:q.cursor,command});
+  return kind==='work'?withSavedProviders(result,{command,clock,type}):result;
  }
  return browse(q,{command,clock,page,type});
+}
+async function withSavedProviders(result,{command,clock,type}){
+ if(!result.results.length)return result;
+ const works=result.results.map(row=>({type:['tv','tv_drama','anime_tv'].includes(row.content_type)?'tv':'movie',id:row.id}));
+ let records;
+ try{records=await require('./_shared-streaming-read').readMany(works,{command,now:clock()})}
+ catch{return result} // Optional provider storage must not prevent title search.
+ const results=result.results.map((row,i)=>{
+  const saved=records[works[i].type+':'+row.id],jp=saved?.detail?.data?.results?.JP||{};
+  return {...row,streaming:jp.flatrate||saved?.watch?.flatrate||[],rental:jp.rent||[],purchase:jp.buy||[]};
+ });
+ return {...result,results,...(type==='anime'?{tvAnime:results.filter(r=>r.content_type==='anime_tv'),animeMovies:results.filter(r=>r.content_type==='anime_movie')}: {})};
 }
 async function browse(q,{command,clock,page,type}){
  const popular=q.popular==='1',newReleases=Object.keys(providers).some(p=>q[p+'New']==='1'),limit=popular?5:newReleases?10:20,results=[];

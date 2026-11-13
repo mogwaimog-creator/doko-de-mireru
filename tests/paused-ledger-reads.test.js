@@ -49,6 +49,7 @@ local('saved index search, person search, anime cards, popularity and filters wo
  const anime=(await f.read({query:'保存作品',type:'anime'})).res.value;assert.equal(anime.tvAnime[0].content_type,'anime_tv');assert.equal(anime.results[0].display_type,'anime');
  const popular=await f.read({popular:'1'});assert.equal(popular.count,4);assert.equal(popular.res.value.results[0].poster_path,'/film.png');
  await f.savedStream('movie',90000001,new Date(NOW).toISOString());const provider=await f.read({advancedSearch:'1',provider:'netflix'});assert.equal(provider.res.value.results[0].id,90000001);assert.equal(provider.fetches.length,0);
+ const cards=await f.read({query:'保存作品',type:'all'});assert.equal(cards.res.value.results.find(w=>w.id===90000001).streaming[0].logo_path,'/fixture.png');assert.equal(cards.fetches.length,0);assert.equal(cards.calls.filter(a=>a[0]==='MGET').length,1);
  const country=await f.read({advancedSearch:'1',country:'jp'});assert.deepEqual(country.res.value.unavailableFilters,['country']);
  assert.equal((await f.read({query:'   '})).res.statusCode,400);
 }));
@@ -78,8 +79,8 @@ local('command comparison against pre-fix production application (top-level call
   ['missing movie',{id:'99999999'},'search',8,3],['missing TV',{id:'99999999',type:'tv'},'search',8,3],
   ['missing SSR',{id:'99999999'},'detail-page',9,4],['saved SSR',{id:'90000001'},'detail-page',5,5],
   ['stale person',{personId:'90000003'},'search',6,3],['stale episodes',{id:'90000002',type:'tv',season:'1'},'search',10,3],
-  ['query miss',{query:'存在しない作品'},'search',4,4],['saved query',{query:'保存作品',type:'all'},'search',4,5],
-  ['anime query',{query:'保存作品',type:'anime'},'search',6,5],['popular miss',{popular:'1'},'search',8,4]
+  ['query miss',{query:'存在しない作品'},'search',4,4],['saved query',{query:'保存作品',type:'all'},'search',4,6],
+  ['anime query',{query:'保存作品',type:'anime'},'search',6,6],['popular miss',{popular:'1'},'search',8,4]
  ]){const x=await before.read(q,route),y=await after.read(q,route);assert.equal(x.count,b,label+' before');assert.equal(y.count,a,label+' after');rows.push({label,before:x.count,after:y.count,saved:x.count-y.count})}
  for(const f of [before,after])await f.savedStream('movie',90000001,new Date(NOW).toISOString());
  for(const [label,delta,fail,b,a]of [['fresh providers',0,false,5,4],['due providers',86400000,false,8,7],['provider failure',2*86400000,true,9,8]]){
