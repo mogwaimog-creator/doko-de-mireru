@@ -1,0 +1,33 @@
+name: Paused ledger reads (isolated Redis)
+on:
+  pull_request:
+    paths:
+      - 'api/_paused-ledger-search.js'
+      - 'api/_release-application.js'
+      - 'api/_indexed-search.js'
+      - 'prototype/streaming-ledger-service.js'
+      - 'tests/paused-ledger-reads.test.js'
+      - '.github/workflows/paused-ledger-reads.yml'
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    services:
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 16379:6379
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq redis-tools
+      - name: Test saved reads, command counts, SEO and provider schedules
+        env:
+          REDIS_TEST_CLI: /usr/bin/redis-cli
+        run: node --test tests/paused-ledger-reads.test.js tests/search-index-v2.test.js tests/streaming-ledger-service.test.js tests/seo-detail-renderer.test.js

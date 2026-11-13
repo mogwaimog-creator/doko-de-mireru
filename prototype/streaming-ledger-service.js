@@ -105,6 +105,6 @@ function service(redis,fetchTmdb,{writesEnabled=()=>true,ttlMs=30000,timeoutMs=6
   await Promise.all(Array.from({length:Math.min(maxConcurrency,keys.length)},worker));
   return results;
  }
- return {update,visit:(type,id,now,works)=>update(type,id,now,'visit',works),cron};
+ return {update,visit:(type,id,now,works,prefetched)=>update(type,id,now,'visit',works,prefetched),cron};
 }
 module.exports={service};

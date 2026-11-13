@@ -5,7 +5,7 @@ function card(kind,ref,row,needle,type){
  if(row.schemaVersion!==2||row.id!==Number(ref.id)||row.type!==ref.type)throw Error('indexed work identity mismatch');
  const anime=(row.genres||[]).some(g=>/アニメ|animation/i.test(typeof g==='string'?g:g?.name||'')||g?.id===16);if(type==='movie'&&row.type!=='movie')return null;if(['tv','drama'].includes(type)&&row.type!=='tv')return null;if(type==='anime'&&!anime)return null;if(type==='drama'&&(anime||!row.genres?.length))return null;
  if(![row.title,row.originalTitle].some(x=>idx.fold(x).includes(needle)))return null;
- return {id:row.id,title:row.title,original_title:row.originalTitle||'',poster_path:row.posterPath,overview:row.overview||'',release_date:row.releaseDate||'',date:row.releaseDate||'',vote_average:row.rating||0,content_type:row.type==='tv'?(anime?'anime_tv':'tv_drama'):'movie',media_type:row.type==='tv'?'TVシリーズ':'映画'};
+ return {id:row.id,title:row.title,original_title:row.originalTitle||'',poster_path:row.posterPath,overview:row.overview||'',release_date:row.releaseDate||'',date:row.releaseDate||'',vote_average:row.rating||0,content_type:anime?(row.type==='tv'?'anime_tv':'anime_movie'):row.type,display_type:anime?'anime':row.type==='tv'?'drama':'movie',media_type:row.type==='tv'?'TVシリーズ':'映画'};
 }
 const READ="local out={};local bytes=0;for _,key in ipairs(KEYS) do local n=redis.call('STRLEN',key);if n>1048576 then return {err='canonical search record exceeds bound'} end;if #out>0 and bytes+n>524288 then break end;bytes=bytes+n;out[#out+1]=redis.call('GET',key) or false end;return out";
 async function indexedSearch(query,{kind,type,page,cursor,command,prefix}){
@@ -20,6 +20,6 @@ async function indexedSearch(query,{kind,type,page,cursor,command,prefix}){
   hasMore=results.length===20||members.length===32||raws.length<members.length;if(members.length<32&&raws.length===members.length&&results.length<20){hasMore=false;break}
  }
  const nextCursor=hasMore?Buffer.from(JSON.stringify({hash:plan.hash,after})).toString('base64url'):null;
- return {results,page,hasMore,nextCursor,scope:'saved-only',incomplete:missing>0||((scanned>=512||scannedBytes>=2*1024*1024)&&hasMore),scanned,scannedBytes,...(type==='anime'?{tvAnime:results.filter(r=>r.content_type==='anime_tv'),animeMovies:results.filter(r=>r.content_type==='movie')}:{} )};
+ return {results,page,hasMore,nextCursor,scope:'saved-only',incomplete:missing>0||((scanned>=512||scannedBytes>=2*1024*1024)&&hasMore),scanned,scannedBytes,...(type==='anime'?{tvAnime:results.filter(r=>r.content_type==='anime_tv'),animeMovies:results.filter(r=>r.content_type==='anime_movie')}:{} )};
 }
 module.exports={indexedSearch,card,READ};
