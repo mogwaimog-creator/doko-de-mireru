@@ -125,3 +125,23 @@
 - **SEO対策そのものは休止していない。** 本番では現行の初期HTML生成方式が動作している。ただし、Googleの検索表示・インデックスの回復は別課題であり、現行方式に問題がないと断定しない。
 - 将来、現行方式のSEO正確性・Googlebotの取得状況・表示・Redis COMMANDS・運用費を検証し、旧SEO台帳を再利用する必要がなければ**ユーザーと相談のうえ不要コードの削除を検討**する。現時点では削除しない。再利用する場合も、費用・保存先・既存処理との違いを説明し、承認後に実施。
 - 本追記は引継ぎ文書のみ。main・本番・Vercel・Redis・デプロイ・Cron・Firewallは変更しない。
+
+
+## 2026-11-14追記：翌日以降のCodex依頼候補とブランチ整理保留【ユーザー合意】
+
+### 優先候補：作品詳細のRedis読み取り回数削減（調査→検証）
+- 目的：現在の作品詳細の初期HTML・SEO表示を維持しながら、Redis COMMANDS・Vercel処理の無駄を減らす。追加課金を避ける。
+- 現状コード（2026-11-14読み取り確認）：`api/_recovery-initial-seo.js` の `projectSeo` は作品台帳キーをEVALで読み、SEO用の項目を抽出してSEOレコードをその場で生成する。`api/detail-page.js` は、その後、同じ作品台帳キーをGETして本文に使い、さらに配信台帳を別途GETする。共通の `detail.html` にSEOと作品情報をサーバー側で組み込んで返す。作品台帳の重複読み取りを1回にまとめられるかが検討対象。
+- 重要：SEO情報をブラウザで後付けするのではなく、**Googlebotに返す初期HTMLに固有title・description・canonical・h1・JSON-LD等を含める**順番を維持する。作品詳細本文、配信ロゴ・配信表示、映画/TVの区別、エラー時応答を壊さない。
+- 第一案：作品台帳の保存レコードを1回読み、同じ取得結果からSEO情報とページ本文を作る。独立SEO台帳の再稼働や、SEO項目を作品台帳へ重複保存することは、現時点で行わない。完成HTMLの永続保存も別案として扱い、勝手に実装しない。
+- 事前に読む：`api/_release-application.js`、`api/_recovery-initial-seo.js`、`api/detail-page.js`、`api/_recovery-fixed-work.js`、`prototype/seo-ledger.js`、`prototype/seo-detail-renderer.js`、関連テスト。mainの最新状態を必ず再確認する。
+- Codex依頼は**1日1件程度・利用枠内**で少しずつ。初回は読み取り専用の調査（処理順、実際のRedis操作、削減余地、リスク）を行い、コード変更はしない。次の段階で、Vercel自動デプロイが動かないことを確認してからテストブランチ等でローカル・モック中心の検証を検討。
+- 比較すべき結果：SEO初期HTMLの内容が同じか、作品詳細表示が正常か、作品台帳の読み取り回数が減ったか、配信台帳読み取り・エラー処理に影響しないか。ローカルのコマンド数は実際のUpstash請求コマンド数と同一とは限らない。費用効果は検証結果と推定を区別する。
+- **禁止：** ユーザーの事前承認なしにmainへの反映、PRのマージ、本番デプロイ、Redis実データへの書き込み・削除、Cron/Firewall/Vercel設定変更、大量APIアクセス、追加課金を伴う作業をしない。テストブランチの作成も自動デプロイの影響を確認してから。実装が有効でも本番反映は別途相談。
+
+### GitHubブランチ整理：当面保留
+- 2026-11-14時点でGitHubに64本のブランチを確認。大量のfix/test/docs/work等が残る。
+- 8本をサンプル比較：`work/four-ledgers-20261107`、`integration/recover-latest-ledgers-20261112`、`fix/pause-nonstreaming-acquisition-20261113`、`fix/detail-seo-route-20261110` はmainよりahead=0（mainに履歴が取り込まれた状態）。一方 `docs/handoff-emergency-minimal-20261113` はmainにない引継ぎ記録を含むので保全必須。`fix/paused-ledger-reads-20261113`、`test/detail-rewrite-probe-20261110`、`feature/shared-work-ledger-20261031` は分岐履歴があり要確認。
+- **全64本の個別監査は未完了。削除は一切していない。** ahead=0でも削除前に用途・未完了作業・復旧価値を確認する。
+- ユーザー決定：mainがしばらく安定稼働し、費用面も落ち着くまで**ブランチ整理・削除は実施しない**。その後、読み取り専用で全件を分類し、削除候補一覧を提示して個別承認を得る。main・引継ぎ資料・必要な復旧資産を保全。
+- 本追記は引継ぎ文書だけを変更する。main、本番、Redis、Vercel、Cron、Firewallは変更しない。
