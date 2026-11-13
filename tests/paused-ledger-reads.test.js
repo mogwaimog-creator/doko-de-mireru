@@ -20,7 +20,8 @@ async function fixture(factory=application){
  assert((await store.commit([{key:store.keys.season(90000002),revision:0,data:season},{key:store.keys.person(90000003),revision:0,data:person}])).saved);
  let now=NOW,fail=false,fetches=[];const guard=session(command,{clock:()=>now});
  const load=source({command,guard,clock:()=>now,apiKey:'fixture',dailyLimit:1000,request:async url=>{const path=new URL(url).pathname;fetches.push(path);assert(path.endsWith('/watch/providers'),'non-streaming upstream forbidden');if(fail)throw Error('fixture upstream outage');return new Response(JSON.stringify(payload))}});
- const app=factory({command,guard,source:load,config:{cronSecret:'fixture-cron'},clock:()=>now});
+ // Keep the historical saved-only mode under test; default emergency mode is covered separately.
+ const app=factory({transientDetails:false,command,guard,source:load,config:{cronSecret:'fixture-cron'},clock:()=>now});
  async function read(query,route='search'){calls.length=0;fetches=[];const res=response();await app.handle(route,{method:'GET',headers:{authorization:'Bearer fixture-cron'},query},res);return {res,calls:[...calls],fetches:[...fetches],count:calls.length}}
  async function savedStream(type,id,at){const s=require('../prototype/streaming-ledger').store();s.register(type,id);s.success(type,id,require('../prototype/streaming-ledger-compat').fromTmdb(payload),at);await command(['SET','doko:dev:shared-stream:v1:record:'+type+':'+id,JSON.stringify({...JSON.parse(s.save()).records[0],schemaVersion:1,revision:1})]);}
  return {read,command,store,savedStream,setNow:value=>now=value,setFail:value=>fail=value,client,works};
