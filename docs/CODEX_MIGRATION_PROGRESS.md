@@ -82,3 +82,18 @@
 - 変更ファイル: 本ログ、REDIS_MIGRATION_HANDOFF_20261114.md、TEMPORARY_REDIS_MIGRATION_20261114.md（履歴を削除しない追記だけ）。テストは9160d30対象の93 PASS/0 FAIL/0 skipを引継ぎ、docsのみのため再実行なし。
 - 本番緊急修正の昇格はユーザー報告。今回の移管準備は未反映。実Redisデータ操作/環境変数変更/main統合/デプロイ/Cron実行なし。
 - 次の一手: AIVEN_MIGRATION_PLAN_20261114.md末尾のFreeサービスと安全なsecret提供、旧Upstash Export利用可否/料金・command計上・残量の閲覧確認。実先接続/backup/移管はその情報に基づく別承認前に実行しない。
+
+
+### 2026-11-14T09:48:13+09:00 / Redis Search影響確認・Aiven Secret手順
+- ブランチ: test/temporary-redis-migration-20261114。再開HEAD/リモート先端0d79393fe437db58d54eae276bbbc5475f84cdf6の一致を確認。mainはa05897e、既存の緊急修正は再適用しない。
+- ユーザー報告: Aiven Free doko-de-mireru-valkey、Valkey9.1.3、Running。サービス作成は完了報告を受領。実先への照合は未実施。Upstash RDB Export料金/command計上は問い合わせ回答待ち。
+- コード調査完了: 現行検索はSEARCH.*/FT.*/VECTOR.*や@upstash/search/RediSearchを使わない。停止中の検索は_search-index-v2/_indexed-search/_paused-ledger-searchの通常zset/stringとwork/person JSON。通常検索は_recovery-search等のTMDB+cache。Redis Search固有indexのRDB除外による直接依存はない。実DBの別用途index有無は未確認。
+- 欠落条件: search:v2:doc/ids/gramsの全string/zset、canonical work/person、meta/配信等を同時点で移す必要あり。固有Search moduleと独自の通常キーを混同しない。index再生成で欠落を隠さない。
+- 追加検証: 既存COMMITで合成作品/人物と独自indexを作成し、日本語作品検索・人物検索・ジャンルbrowseをRDB保存→別ローカルserverへreload後に完全一致確認。再構築なし、work JSONバイト維持、検索中は読み取りだけ。
+- 結果: 22ファイル94 PASS / 0 FAIL / 0 skip（既存93件+今回1件）。Redis7.2.7/モックTMDB/合成RDBのみ。証拠はSEARCH_RDB_VALIDATION_20261114.json。実Aiven9.1.3/実Upstash exportの互換証明ではない。git diff --check成功。
+- Secret手順: このCloud実行環境のSecretsにREDIS_URL（完全TLS URI）、必要時だけREDIS_CA_CERT（PEM）。実host/portに限定した接続許可。既存Secret維持、Vercel/GitHub secrets/本番切替フラグは変更しない。現在のenvironment_statusにはAiven Secret/許可がない。HTTP proxy用placeholderとnative TCPで利用可能なSecretを区別し、安全な受渡し方式を確認する。
+- 確認待ちの実接続範囲: 1TLS接続、PING/TIME/INFO server/memory/clients各1回（アプリ5commands、認証/SDK handshake別）、timeout/再送なし。SET/EVAL/RESTORE/SCAN/KEYS/既存データGETなし。Secret準備だけで実行承認と解釈しない。
+- 変更ファイル: tests/migration-rdb-rehearsal.test.js、docs/SEARCH_RDB_AND_AIVEN_TEST_20261114.md、docs/SEARCH_RDB_VALIDATION_20261114.json、本ログ。アプリ実装変更なし。
+- 旧Upstash/実Aiven/実TMDB/本番Vercelへのアクセスなし。実移管、本番環境変数変更、main統合、deploy、Cron実行なし。Git自動デプロイfalse維持。GitHub読取/pushとローカルテストのみ。
+- 未完了: Secret準備/安全なTCP Secret受渡しと許可/範囲確認、実Aiven接続・Lua/restore版差検証、Upstash回答、実backup/移管/切替/通常運行。既存記録は削除せず保存。
+- 次の一手: ユーザーがCloud環境Secretと実host/port許可を準備し、読取5commandsの範囲を確認。準備後の設定適用状況をチェックしてから実Aivenテスト。Upstashは回答待ちでExport/旧データ読取を行わない。

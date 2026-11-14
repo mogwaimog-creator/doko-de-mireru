@@ -1,0 +1,26 @@
+{
+  "recordedAt": "2026-11-14T09:48:13+09:00",
+  "baseCommit": "0d79393fe437db58d54eae276bbbc5475f84cdf6",
+  "counts": {
+    "tests": 94,
+    "pass": 94,
+    "fail": 0,
+    "skipped": 0
+  },
+  "command": "REDIS_TEST_SERVER=/path/to/redis-server REDIS_TEST_CLI=/path/to/redis-cli REDIS_TEST_TRANSPORT=valkey npm run test:migration",
+  "contentSha256": {
+    "tests/migration-rdb-rehearsal.test.js": "0235fd9d18ae1045bd75bff04ecd02c2aba8a35bde98f82347e51e44a8a29304",
+    "api/_search-index-v2.js": "4d6844e58b22b72fb1c8bdd55479339a633b39b44bedb7c156d630f63fb1abc7",
+    "api/_indexed-search.js": "83f5f61aa71aeab7cabd3b456d39743b9b67192996d19fd21464410c2f4171f2",
+    "api/_paused-ledger-search.js": "0fd202fad1d8b77bc04b821778619eb7712301ae6e04211063ee12df15f12d0b",
+    "api/_release-application.js": "7d86ba0db459e16c5e9bfe10a0304a0e327fcb2e500bcf97aaec7c9cfef52066",
+    "api/_recovery-search.js": "7f3ba1e03b11d0350eb9efc84c072ed767f90e831650446e15cbcb97707e8f11",
+    "package.json": "19ff0f13c08364ab000802bff9a6d8e93e4fbb62ddfdae120fd852c071a4ad84"
+  },
+  "newTest": "Japanese work/person search and browsing survive RDB reload without Redis Search or index rebuild",
+  "localEngine": "Redis 7.2.7, synthetic RDB, Unix sockets",
+  "aivenVersionReportedByUser": "9.1.3",
+  "externalServicesContacted": false,
+  "actualAivenTest": "not executed; secrets and scope confirmation pending",
+  "upstashExport": "not executed; provider response pending"
+}
