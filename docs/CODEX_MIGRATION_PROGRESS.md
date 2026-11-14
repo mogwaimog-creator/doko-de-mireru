@@ -124,3 +124,16 @@
 - アクセス範囲: GitHubの読取/pushとnpm registryの固定依存取得、ローカル合成Redis試験のみ。実Aiven、旧Upstash、実TMDB、本番Vercelへの接続なし。main統合、本番deploy、環境変数変更、実backup/移管/停止解除なし。
 - 引継ぎ/次の一手: Windows実機のTTY操作と実AivenのTLS/ACL/INFO権限/疎通は未検証。ユーザーPCで準備手順を行い、実接続の別指示後に固定5commandテストを1回行う。共有するのは秘匿済み結果だけ。失敗時は自動再試行せず原因を確認する。疎通成功もLua/RESTORE/移行データ互換の証明ではない。旧Upstash Export回答待ち/実移管承認待ちは維持する。
 - GitHub保存: この追記を含むコミットを本テストブランチへ通常pushし、リモートSHAとの一致を確認する。コミットSHAはGit履歴参照。本番反映なし。
+
+### 2026-11-14 13:38 JST / Windows実Aiven疎通の報告受領・RDB容量/全件照合計画
+- ブランチ: `test/temporary-redis-migration-20261114`、開始HEAD `50bccbd939ca51832ac8446bbc76a526fedb5f83`。リモート一致/開始時変更なしを確認。状態: 実接続結果の記録と復元計画準備完了、実RDB容量判定/実復元は未実施。
+- ユーザー実測報告: Windows PCからAiven Freeへstatus PASS / tlsVerified true / commands 5 / version 9.1.3 / usedMemoryBytes 5174912 / maxmemoryBytes 312475648 / connectedClients 4。旧Upstashアクセス、Aiven書込、本番変更なしとの報告。エージェントが実接続で再確認した値ではなく、ユーザー報告として記録する。接続日時そのものは未提示、当項時刻は記録時刻。
+- 容量判断: maxmemoryは298MiB（約312.48MB）、疎通時使用量は約4.94MiB。以前の約193MBのRDBは正確なサイズ/単位/hash/内容/時点が未確認。圧縮RDBサイズとresident memoryは異なり、現時点で「収まる」「欠落しない」とは言えない。実RDB未提供のため容量ゲートは保留。以前のRAM1GBからの推定より今回のmaxmemory実測を優先。
+- 追加文書: `docs/AIVEN_RDB_RESTORE_WINDOWS_PLAN.md`。Windowsの秘密データ保管/hash、WSL2/Dockerによる通信遮断ローカルValkey9.1.3検証、全DB/binaryキー/型/絶対期限/値hash/未知キー保持、版差/loader/OOM判定、target容量監視、全台帳/index/lock/control/journalの照合、自然失効の別計上、部分復元後の停止を記載。Windows/Valkey9.1.3環境のセットアップ自体は今回未実行。実データを扱うコマンドや実target runnerの実行は承認待ち。
+- 復元前の必須条件: 最新で整合したexport、provider除外範囲/全DB件数の独立証拠、全writer停止/drain、正しいrelease namespace、実データのローカルロード/全件復元リハーサル、余裕を含む容量、空target/noeviction/互換性と実書込の別承認。上限70%（218732953 bytes）を仮の保守的停止線とするが、provider保証ではなく最大キー/batch/fragmentation/接続/persistenceのpeakも別途判断する。条件不足なら復元しない。
+- 既存ツールの制約: restoreVerifiedはlocal/隔離prefix専用、inventory CLIはarchive/proof入力専用で生RDB importerではない。Windows接続診断も5読取専用。原キーをAivenへ復元する専用runnerと全件verifierはまだ未完成で、既存安全制限の解除による流用はしない。設計要件を新文書に記録し、実書込前に別作業で実装/テスト/レビューする。
+- 今回の検証: `REDIS_TEST_SERVER=/workspace/.onboarding-tools/redis-7.2.7/src/redis-server /workspace/.onboarding-tools/node_modules/node/bin/node --test tests/migration-rdb-rehearsal.test.js tests/migration-capacity-rehearsal.test.js`。3 PASS / 0 FAIL / 0 skip。既存2件（全6型/複数DBと日本語作品/人物/ジャンル検索のRDB reload一致）に容量試験1件を追加。
+- 容量試験の実測: 合成RDB 25876 bytes、dataset 2232696 bytes、used_memory 3193216 bytes（最終run）。圧縮倍率は実データへ外挿しない。別の小容量noeviction targetへの合成RESTOREは64キー中10キーでOOMとなり停止、evicted_keys 0、元sentinelと成功済みキー保持、DBSIZEは11。これは「OOMでも原子的rollbackはなく不完全な復元が残る」ことを確認する期待どおりの試験結果。実AivenのOOM/eviction設定を確認したものではない。
+- 変更: 本ログ、新手順書、`tests/migration-capacity-rehearsal.test.js` の3ファイルのみ。アプリ/依存/lockfile/本番設定は変更なし。合成一時Redis・RDBは後片付け。過去94件を今回の実績と読み替えない。
+- 未完了/次の一手: Upstash Exportの回答/承認と最新RDBの安全な受領後、実ファイルhash/形式/全DB棚卸しとValkey9.1.3での容量測定を先行する。実データが余裕込みで収まらなければ停止し、削除/省略や無断課金で回避しない。原キーrunner/全件verifierの準備・実書込承認より先にAivenへ復元しない。
+- 今回の実アクセス: GitHub読取/pushとローカル合成試験だけ。実Aiven/旧Upstash/実TMDB/本番Vercelへの接続、実データ復元/削除/backup、main統合、本番deploy、環境変数変更、Cron/停止解除なし。Git自動デプロイfalse維持。テストブランチへ通常pushしSHA一致を確認する（コミットSHAはGit履歴）。
