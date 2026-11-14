@@ -112,3 +112,15 @@
 - 今回の検証: 公式ソース/Cloud仕様/既存adapterの読取、文書差分検査。コード/テスト変更なしのためアプリテストは再実行せず、前回94 PASSを今回の実績と読み替えない。ローカル検証runnerも今回は未作成・未実行。
 - 次に行う具体的な一手: ローカルPCで非表示入力するrunnerを別作業として準備・レビューし、合成資格情報でログ秘匿/TLS拒否/timeout/closeを検証する。その後、ユーザーが明示した接続範囲でだけ実Aiven疎通を行う。旧Upstash Export回答待ちは独立して維持し、回答確認のためのUpstashアクセスも今回は行わない。
 - 変更ファイル: 本進捗ログのみ。Git自動デプロイ `false`、Cron、アプリ、依存/lockfileは変更なし。実Aiven/旧Upstash/実TMDB/本番Vercelへのアクセス、本番環境変数変更、main統合、deploy、実backup/移管/停止解除は全て未実施。
+
+### 2026-11-14 10:10 JST / ローカルPC用Aiven接続診断ツール作成・ローカル検証
+- ブランチ: `test/temporary-redis-migration-20261114`。開始HEAD `7796f73bb482d37352648cbe39aba5e5306da28f` とリモートの一致、開始時の変更なしを確認。状態: ツール作成/ローカル検証完了。実Aiven接続は保留。
+- 追加: `scripts/aiven-connection-check.js`。アプリ/接続アダプターを読み込まない単独Node.js CLI。環境変数やURIで資格情報を取得せず、host/port/username/公開CAファイルパスと、非表示パスワードをTTYで対話入力する。パスワードを通常環境変数、argv、ファイル、ログへ保存しない。非TTY/コマンド引数は拒否し、debug/TLS検証無効化設定も拒否。Ctrl+C/入力エラー時にraw modeを復旧しlistenerを除去する。秘密値はプロセスメモリには存在し、JavaScriptの完全消去は保証しない。
+- TLS/通信: node-redis固定依存5.11.0を再利用。CAチェーンと入力hostの証明書照合を明示し、TLS検証無効化のオプションは提供しない。再接続/retry/offline queue無効、各接続/commandに8秒期限。PING/TIME/INFO server/memory/clientsだけを順次実行する固定リストで、任意command入力なし。AUTH等のSDK handshakeは別途発生し、CLIENT SETINFOは無効。成功/失敗/timeout後にsocketをdestroyし、QUITも送らない。旧Upstash接続/fallback、アプリ起動、Cron、GET/SCAN/KEYS/書込/EVAL/RESTORE経路なし。
+- 出力: PASS、TLS検証成否、5commands、versionと選択したメモリ/接続数の数値のみ。接続先、username、password、INFO全文やserver errorを出さない。失敗は固定メッセージ/終了コード1。Windows初心者向けのZIP取得、Node22、npm.cmd ci、対話入力、CA、結果の読み方、停止/共有範囲を `docs/AIVEN_CONNECTION_CHECK_WINDOWS.md` に作成。実接続操作は別途明示指示後と記載。
+- 今回のテスト: `REDIS_TEST_SERVER=/workspace/.onboarding-tools/redis-7.2.7/src/redis-server /workspace/.onboarding-tools/node_modules/node/bin/node --test tests/aiven-connection-check.test.js`。3 tests PASS / 0 FAIL / 0 skip。Node22.23.5、Redis7.2.7、合成パスワード、一時自己署名CAのTLSブリッジ、loopbackのみ。実Redisで認証成功/誤password拒否/未信頼CA拒否/hostname不一致拒否とsocket残存0を確認。一時Redisプロセス/証明書を後片付け。モックで固定5commands、TLS設定、単一connect、接続/command timeout、command/auth/不正応答の秘匿、destroyを確認。非表示入力、backspace、Ctrl+C/stream error/end、非TTY拒否、raw mode復旧も確認。
+- 追加検証: Linuxの実PTYでCLIを起動し、合成passwordを入力してCtrl+C。password非表示と固定FAIL/終了コード1を確認（接続前の中止）。node --check、git diff --check成功。既存アプリ/lockfileを変更していないためmigration全94件は今回再実行せず、今回の3件と混同しない。
+- 変更ファイル: 本進捗ログ、上記CLIとWindows手順、`tests/aiven-connection-check.test.js` の4ファイルだけ。npm ci --ignore-scriptsで既存lockどおり依存を導入。パッケージ宣言/lockfile、本番設定/環境変数は変更なし。vercel.jsonのgit.deploymentEnabled=false維持を確認。
+- アクセス範囲: GitHubの読取/pushとnpm registryの固定依存取得、ローカル合成Redis試験のみ。実Aiven、旧Upstash、実TMDB、本番Vercelへの接続なし。main統合、本番deploy、環境変数変更、実backup/移管/停止解除なし。
+- 引継ぎ/次の一手: Windows実機のTTY操作と実AivenのTLS/ACL/INFO権限/疎通は未検証。ユーザーPCで準備手順を行い、実接続の別指示後に固定5commandテストを1回行う。共有するのは秘匿済み結果だけ。失敗時は自動再試行せず原因を確認する。疎通成功もLua/RESTORE/移行データ互換の証明ではない。旧Upstash Export回答待ち/実移管承認待ちは維持する。
+- GitHub保存: この追記を含むコミットを本テストブランチへ通常pushし、リモートSHAとの一致を確認する。コミットSHAはGit履歴参照。本番反映なし。
