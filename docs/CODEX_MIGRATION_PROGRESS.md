@@ -97,3 +97,18 @@
 - 旧Upstash/実Aiven/実TMDB/本番Vercelへのアクセスなし。実移管、本番環境変数変更、main統合、deploy、Cron実行なし。Git自動デプロイfalse維持。GitHub読取/pushとローカルテストのみ。
 - 未完了: Secret準備/安全なTCP Secret受渡しと許可/範囲確認、実Aiven接続・Lua/restore版差検証、Upstash回答、実backup/移管/切替/通常運行。既存記録は削除せず保存。
 - 次の一手: ユーザーがCloud環境Secretと実host/port許可を準備し、読取5commandsの範囲を確認。準備後の設定適用状況をチェックしてから実Aivenテスト。Upstashは回答待ちでExport/旧データ読取を行わない。
+
+### 2026-11-14 10:06 JST / HTTPシークレットとAiven TCP/TLSの適合性調査
+- ブランチ: `test/temporary-redis-migration-20261114`。開始HEADは `6820232ea911d83b11b6b544c9fdb0e7a600c2fb`。状態: 調査完了 / 実接続は未実施。今回のコミットSHAはGit履歴を参照。
+- ユーザー指示: 実Aiven接続、旧Upstashアクセス、本番変更を行わない。調査結果と次手を追記してテストブランチだけへ通常pushする。
+- 結論: 現在のCloud HTTPシークレットは、node-redisのnative TCP/TLS認証へ直接利用できない。HTTPシークレットは許可されたHTTPS要求のproxy経路でplaceholderを置換する仕組みであり、汎用の生パスワードをローカルプロセスへ渡す仕組みではない。node-redisはRedis socketのAUTH（RESP設定によってHELLOの認証）に資格情報を載せる。HTTPSヘッダー/本文ではなくTLS内のRESPなので、許可ドメイン登録やHTTPS CONNECTトンネルだけでは認証値の置換は成立しない。プレースホルダーをREDIS_URLへ入れる方法、TLS検証無効化、HTTP secretの抽出・通常環境変数への転記は採用しない。
+- 根拠: このタスクで提供されたCloud onboarding仕様 `references/onboarding.md` の「Existing credentials and environment variables」「Draft tool contract」、runtime仕様 `references/networking.md` の「Use a configured identity」。HTTPS宛先限定の置換とTCP資格情報の非提供を確認。node-redis固定版の公式ソース https://github.com/redis/node-redis/blob/redis%405.11.0/packages/client/lib/client/index.ts のparseURL/認証ハンドシェイク、および本ブランチ `api/_valkey.js` のcreateClient/socket.tls設定を照合した。HTTP secretによる実接続試行はしていない。
+- 現在の設定確認: environment_statusはobservations_current=true、network policy enforced、secrets/runtime_variables/outbound_identitiesはいずれも空。Aiven用のraw TCP Secret提供機能が使える根拠はない。これはHTTPシークレット方式についての判断であり、将来の別のSecretファイル/credential provider機能まで利用不可と断定するものではない。
+- 以前の案内の訂正: 09:48の「Cloud環境Secretに完全REDIS_URLを設定して実接続へ進む」と、AIVEN_MIGRATION_PLAN_20261114.mdの安全なsecret提供待ちという案内は、このHTTPシークレットUIでは実現できない。通常環境変数の共有範囲「環境/個人」は秘密値の保護方式を意味しない。HTTPシークレットへのAivenパスワード登録も今回は不要。過去記録は履歴として残し、次手は本項を優先する。
+- 推奨する別経路（提案のみ、まだ実行しない）: ユーザー所有のローカルPCで、レビュー済みの小さなNode検証runnerを実行する。パスワードは端末の非表示対話入力、またはOSキーチェーンのAPIからプロセス内メモリだけへ渡し、node-redisのpasswordオプションで使う。通常環境変数、argv、接続URIを含むコマンド、シェル履歴、.env、平文ファイル、チャット、Git、CIログへ保存しない。秘密値を入力するのはユーザー自身のローカル端末で、Cloudの共有ターミナル/エージェント入力欄ではない。端末録画やdebug出力を無効にし、ログは成功可否と許可された非秘密メトリクスだけ、例外もURI/passwordを出さず固定メッセージへ整形する。メモリ上の秘密値の完全消去をJavaScriptで保証するものではない。
+- runnerの設計範囲: host/port/username/CAは秘密値と分離、TLSのCA/ホスト名検証を有効、再接続/再送なし、短い期限とfinallyでclose。既存createValkeyはenv引数を受け取れるが、秘密をprocess.envへ入れる必要はなく、runner内で構成を渡せる。node-redis自体を直接使う場合はpasswordオプションで渡し、パスワード入りURI生成も避ける。実先へのアプリ全体起動やtest:migration実行はせず、旧Upstashへfallbackする経路も読み込まない。
+- 接続確認の次段階（別途実行指示後のみ）: レビュー済みrunnerで新Aivenだけへ1接続、PING/TIME/INFO server/memory/clients各1回の計5commands。AUTH/SDK handshakeは別途発生するため総送信数5とは呼ばない。既存データGET、SCAN/KEYS、SET/EVAL/RESTORE、Cron、移管を含めない。共有結果はPASS/FAIL、TLS検証成否、必要なversion/容量/接続数の数値のみ。INFOの全文、endpoint、認証情報は共有しない。これは疎通確認でありLua/復元/データ移行の互換性証明ではない。
+- Cloud側で今できる代替: 合成パスワードとローカルCAのTLS Redisを用いた既存テストを継続できる。実Aivenへの到達性/ACL/9.1.3互換性を証明したとは扱わない。Cloudで実接続が必要なら、プラットフォーム提供のTCP対応Secretファイル/credential providerの有無を別途確認し、提供とアクセス保護が確認できるまで接続を保留する。HTTPゲートウェイ新設やSecret抽出による回避は行わない。
+- 今回の検証: 公式ソース/Cloud仕様/既存adapterの読取、文書差分検査。コード/テスト変更なしのためアプリテストは再実行せず、前回94 PASSを今回の実績と読み替えない。ローカル検証runnerも今回は未作成・未実行。
+- 次に行う具体的な一手: ローカルPCで非表示入力するrunnerを別作業として準備・レビューし、合成資格情報でログ秘匿/TLS拒否/timeout/closeを検証する。その後、ユーザーが明示した接続範囲でだけ実Aiven疎通を行う。旧Upstash Export回答待ちは独立して維持し、回答確認のためのUpstashアクセスも今回は行わない。
+- 変更ファイル: 本進捗ログのみ。Git自動デプロイ `false`、Cron、アプリ、依存/lockfileは変更なし。実Aiven/旧Upstash/実TMDB/本番Vercelへのアクセス、本番環境変数変更、main統合、deploy、実backup/移管/停止解除は全て未実施。
