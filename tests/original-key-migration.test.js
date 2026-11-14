@@ -30,6 +30,20 @@ async function fixture(client){
 async function environment(fn){const root=fs.mkdtempSync(path.join(os.tmpdir(),'original-keys-')),processes=[];const launch=async(name)=>{const s=await start(path.join(root,name));processes.push(s);return s};try{await fn({root,launch,processes})}finally{for(const s of processes){s.client.close();await stop(s.child);}fs.rmSync(root,{recursive:true,force:true})}}
 const capture=s=>core.capture(send(s.client),{rdbSha256:'a'.repeat(64),releaseSha256:sha,writersStopped:true,exportComplete:true});
 const skip={skip:!serverPath};
+test('baseline reference audit checks physical keys in the same DB/prefix, not JSON references',()=>{
+ const record=key=>({key:Buffer.from(key).toString('base64')});
+ const other='doko:ledger:release:'+ 'c'.repeat(16)+':';
+ const bundle={releaseSha256:sha,databases:[{index:0,archive:{records:[
+  prefix+'work:v2:movie:1',prefix+'seo:v1:movie:1',
+  prefix+'seo:v1:movie:2',prefix+'season:v1:tv:3',prefix+'shared-stream:v1:record:tv:4',
+  other+'work:v2:movie:2',prefix+'shared-stream:v1:lock:movie:5',
+ ].map(record)}},{index:2,archive:{records:[prefix+'work:v2:tv:3'].map(record)}}]};
+ const before=JSON.stringify(bundle),summary=core.ledgerSummary(bundle);
+ assert.equal(summary.activeNamespacePresent,true);
+ assert.deepEqual(summary.baselineWarnings,[2,3,4].map((id,i)=>({db:0,keySha256:core.hash(Buffer.from(prefix+['seo:v1:movie:','season:v1:tv:','shared-stream:v1:record:tv:'][i]+id)),issue:'canonical-work-absent-in-source'})));
+ assert.equal(JSON.stringify(bundle),before);
+ assert.equal(core.ledgerSummary({...bundle,releaseSha256:'d'.repeat(64)}).activeNamespacePresent,false);
+});
 test('Valkey9.1.3 RDB -> verified bundle -> original keys in all DBs; six types and every ledger preserved',skip,async()=>environment(async({root,launch,processes})=>{
  const source=await launch('source');await fixture(source.client);await stop(source.child);
  fs.mkdirSync(path.join(root,'loaded'));fs.copyFileSync(path.join(root,'source','data.rdb'),path.join(root,'loaded','data.rdb'));
@@ -92,7 +106,7 @@ test('binary TLS Aiven transport uses one authenticated connection, strict hostn
  }finally{client?.close();for(const s of sockets)s.destroy();await new Promise(r=>server.close(r))}
 }));
 
-test('type mismatch, additional database, raw-byte binary mismatch and source orphan are detected',skip,async()=>environment(async({launch})=>{
+test('type mismatch, additional database and raw-byte binary mismatch are detected',skip,async()=>environment(async({launch})=>{
  const source=await launch('source');await fixture(source.client);const bundle=await capture(source);
  for(const mode of ['type','extra-db','binary']){
   const target=await launch(mode);await core.restore(send(target.client),bundle,{writersStopped:true,localRehearsal:true,journal:async()=>{}});await target.client.command(['SELECT','0']);
@@ -101,8 +115,35 @@ test('type mismatch, additional database, raw-byte binary mismatch and source or
   if(mode==='binary')await target.client.command(['SET','',Buffer.from([0,255,129])]);
   await assert.rejects(core.verify(send(target.client),bundle),mode==='extra-db'?/EXTRA_DATABASE/:/MISMATCH/);
  }
- await source.client.command(['SELECT','0']);await source.client.command(['SET',prefix+'seo:v1:movie:999','{"title":"orphan"}']);const orphan=await capture(source);assert.equal(core.ledgerSummary(orphan).baselineWarnings.length,1);
- const empty=await launch('orphan-target');await assert.rejects(core.restore(send(empty.client),orphan,{writersStopped:true,localRehearsal:true,journal:async()=>{}}),/REFERENCE_REVIEW/);assert.equal(await empty.client.command(['DBSIZE']),0);
+}));
+
+test('316 source reference warnings are journaled before writes and preserved through rehearsal, restore and independent verification',skip,async()=>environment(async({launch})=>{
+ const source=await launch('source');await fixture(source.client);
+ for(let i=0;i<316;i++){
+  const family=i<200?'seo:v1:movie:':i%2?'season:v1:tv:':'shared-stream:v1:record:tv:';
+  await source.client.command(['SET',prefix+family+(1000+i),Buffer.from([0,255,i%256]),...(i===0?['PXAT',String(Date.now()+600000)]:[])]);
+ }
+ const bundle=await capture(source),before=JSON.stringify(bundle),warnings=core.ledgerSummary(bundle).baselineWarnings;
+ assert.equal(warnings.length,316);
+ const rehearsalTarget=await launch('rehearsal'),events=[];
+ const recording={command:async args=>{if(args[0]==='RESTORE')events.push({phase:'write'});return rehearsalTarget.client.command(args)},pipeline:batch=>rehearsalTarget.client.pipeline(batch)};
+ const report=await core.restore(send(recording),bundle,{writersStopped:true,localRehearsal:true,journal:async e=>events.push(e)});
+ assert.deepEqual(events.find(e=>e.phase==='source-baseline-warnings'),{phase:'source-baseline-warnings',bundleSha256:bundle.sha256,baselineWarnings:warnings});
+ assert(events.findIndex(e=>e.phase==='source-baseline-warnings')<events.findIndex(e=>e.phase==='intent'));
+ assert(events.findIndex(e=>e.phase==='intent')<events.findIndex(e=>e.phase==='write'));
+ assert.deepEqual(report.verification.baselineWarnings,warnings);
+ const target=await launch('target');const restored=await core.restore(send(target.client),bundle,{writersStopped:true,rehearsal:report,journal:async()=>{}});
+ assert.equal(restored.restored,331);assert.equal(restored.expired,0);
+ const verified=await core.verify(send(target.client),bundle);assert.equal(verified.verified,331);assert.deepEqual(verified.baselineWarnings,warnings);
+ assert.equal(JSON.stringify(bundle),before);
+ await target.client.command(['SELECT','0']);assert.equal(await target.client.command(['EXISTS',prefix+'work:v2:movie:1000']),0);
+ await target.client.command(['DEL',prefix+'seo:v1:movie:1000']);await assert.rejects(core.verify(send(target.client),bundle),/MISSING_KEY/);
+ const empty=await launch('journal-failure');let writes=0;
+ const wrapped={command:args=>{if(args[0]==='RESTORE')writes++;return empty.client.command(args)},pipeline:batch=>empty.client.pipeline(batch)};
+ await assert.rejects(core.restore(send(wrapped),bundle,{writersStopped:true,localRehearsal:true,journal:async e=>{if(e.phase==='source-baseline-warnings')throw Error('synthetic journal failure')}}),/journal failure/);
+ assert.equal(writes,0);assert.equal(await empty.client.command(['DBSIZE']),0);
+ const wrongNamespace=core.seal({...bundle,releaseSha256:'d'.repeat(64)});
+ await assert.rejects(core.restore(send(wrapped),wrongNamespace,{writersStopped:true,localRehearsal:true,journal:async()=>{}}),/SOURCE_LEDGER_REFERENCE_REVIEW/);assert.equal(writes,0);
 }));
 
 test('projected capacity, runtime OOM, eviction observation and invalid record bounds stop without replay',skip,async()=>environment(async({launch})=>{

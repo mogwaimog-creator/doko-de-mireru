@@ -130,7 +130,8 @@ async function restore(send,bundle,{writersStopped=false,localRehearsal=false,re
   if(!writersStopped||typeof journal!=='function'||!Number.isSafeInteger(maxmemory)||maxmemory<1) fail('TARGET_ATTESTATION');
   if(!localRehearsal)validateRehearsal(bundle,rehearsal,maxmemory);
   const summary=ledgerSummary(bundle);
-  if(summary.baselineWarnings.length||!summary.activeNamespacePresent) fail('SOURCE_LEDGER_REFERENCE_REVIEW');
+  // Preserve pre-existing reference gaps verbatim; full byte/type/expiry verification still applies.
+  if(!summary.activeNamespacePresent) fail('SOURCE_LEDGER_REFERENCE_REVIEW');
   let s=await state(send);const baseline=s;
   const ceiling=Math.floor(maxmemory*0.7);
   if(s.version!==bundle.valkeyVersion||s.max!==maxmemory||s.policy!=='noeviction'||s.used>=ceiling||s.peak>=ceiling) fail('CAPACITY_OR_POLICY');
@@ -140,6 +141,7 @@ async function restore(send,bundle,{writersStopped=false,localRehearsal=false,re
   // Every SELECT is tested before any RESTORE; never collapse databases into db0.
   for(const db of bundle.databases) {await select(send,db.index);if(Number(await send.command(['DBSIZE']))!==0)fail('NONEMPTY_TARGET');}
   await journal({phase:'start',bundleSha256:bundle.sha256,maxmemory});
+  if(summary.baselineWarnings.length) await journal({phase:'source-baseline-warnings',bundleSha256:bundle.sha256,baselineWarnings:summary.baselineWarnings});
   let restored=0,expired=0,largestIncrementBytes=1;
   for(const db of bundle.databases) {
     await select(send,db.index);

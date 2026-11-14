@@ -47,7 +47,8 @@ async function main(){
   else if(mode==='verify')result=await core.verify(send,bundle);
   else result=await core.restore(send,bundle,{writersStopped:true,localRehearsal:mode==='rehearse',rehearsal:report,journal:e=>journal.append(e),signal:controller.signal});
   fs.ftruncateSync(out,0);fs.writeSync(out,JSON.stringify(result)+'\n',0,'utf8');fs.fsyncSync(out);
-  console.log(JSON.stringify({status:'PASS',mode,bundleSha256:mode==='capture'?result.sha256:bundle.sha256,...(mode==='capture'?{databases:result.databases.length}:{}),notice:'Private full result saved. No automatic resume.'}));
+  const summary=mode==='capture'?core.ledgerSummary(result):result.verification||result;
+  console.log(JSON.stringify({status:'PASS',mode,bundleSha256:mode==='capture'?result.sha256:bundle.sha256,...(mode==='capture'?{databases:result.databases.length}:{}),baselineWarningCount:summary.baselineWarnings.length,notice:'Private full result saved. No automatic resume.'}));
  }finally{password=undefined;if(config)config.password=undefined;target?.close();journal?.close();fs.closeSync(out);process.removeListener('SIGINT',interrupted);process.removeListener('SIGTERM',interrupted)}
 }
 if(require.main===module)main().catch(()=>{console.error('FAIL: operation stopped. Target may be incomplete; last write may be unknown. Do not retry/resume/delete. Inspect private result and journal; no server details printed.');process.exitCode=1});

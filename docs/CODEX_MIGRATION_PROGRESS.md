@@ -151,3 +151,12 @@
 - 未完了/制約: 実最新RDB未提供のため約193MBが298MiBへ収まるか未判定。実provider exportの完全性/料金/command計上回答待ち。実Aivenのnoeviction/RESTORE/全DB/読取権限、実RDBのmodule/型/形式/最大record、容量peak/RSSとOS RAM、全writer停止/最新性、Windows実機は未確認。checksumは署名でもprovider完全性の証明でもない。sourceで既に失われたキーやexport除外はbundleだけでは検出できない。DUMP版差は比較を弱めず中断する。大きいrecordなどの現版上限は手順書に明記。
 - 次工程: Export回答後に承認済み方法で最新RDBを安全に受領し、private/local Valkey9.1.3で全DB棚卸し/capture→312475648/noevictionの空targetへrehearse→独立verify、独立件数証拠/失効/台帳内容/容量余裕をレビューする。基準未達なら省略/削除/無断課金で回避しない。実Aivenへの書込・本番切替は、その結果に基づく別判断まで行わない。
 - 変更ファイル: 本ログ、Windows新手順/既存計画の参照追記、新CLI/core/transport、新テストの計7ファイル。Git自動デプロイfalse、Cron、本番環境変数、アプリ/依存/lockfileは変更なし。GitHub読取/push、公式source取得、ローカル合成試験だけ。旧Upstash/実Aiven/本番Vercel接続、実データ復元/削除、main統合/deploy、料金プラン変更なし。本テストブランチへ通常pushしリモートSHA一致を確認する（commit SHAはGit履歴参照）。
+# 2026-11-14 原キー移管のbaseline警告レビュー（ローカルのみ）
+
+- 対象: `test/temporary-redis-migration-20261114`、基点 `8e94490`。詳細は `docs/ORIGINAL_KEY_MIGRATION_BASELINE_REVIEW_20261114.md`。3,020キーの実RDB/模擬Aiven全件照合PASSと316警告（映画200・TV116）はユーザー報告として受領し、実データを再取得/再検証していない。
+- `canonical-work-absent-in-source` は同DB・同prefixの参照側物理キーに対応するworkキーが元からない警告。移管による欠損ではなく、元の不整合を保存する移管では復元禁止は不要と判断。停止条件変更を事前提案し、ユーザーの明示承認後、警告による停止だけ解除した。active namespace不在時の停止は維持。
+- 警告全件をRESTORE前のprivate journalと成功結果へ保存、CLIへ件数表示を追加。原キー/値/型/絶対失効時刻・bundle構造・台帳/アプリ動作は変更しない。完全性照合・空target・容量/70%停止線/noeviction・intent/ack・書込記録失敗時停止・削除/REPLACE/再送/自動再開禁止を維持。
+- 合成Valkey9.1.3試験は16 PASS / 0 FAIL / 0 skip。316警告＋既存fixture＝331キーのrehearsal→report付き別target restore→独立verify成功。警告対象の移管後欠損は拒否、警告journal失敗/namespace不在は書込0。詳細文書にコマンド/検証範囲を記録。node構文確認・diff空白確認成功。
+- `LEDGER_RELEASE_SHA256` の実登録経路は `staged-ledger-store.js` の初回 `crypto.randomBytes(32).toString('hex')` → 私有 `ledger-upstash.json` の `sha`。Git/RDB/packageファイルhashからの再計算ではない。先頭 `52898b9ae978a165` から全文は得られない。指定私有ファイルは現環境になく、全文未確認。新規生成・推測・環境設定の取得/変更はしていない。所有者による保管値/稼働設定の安全な照合が残る。
+- 残る制約: 元からの参照不整合、provider export完全性、最新backupのwriter停止/新鮮性、実Aiven容量/権限/永続性、Windows実機、本番機能は未検証。今回のPASSは合成データの保存一致であり本番移管承認ではない。
+- 実Upstash/Aiven接続・実データ取得/復元/削除・main/本番環境変数変更・deploy・追加費用発生なし。変更は指定ブランチのローカル作業ツリー内。push未実施。
