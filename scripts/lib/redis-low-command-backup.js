@@ -15,13 +15,24 @@ async function scan(send,pattern,maxKeys,count){const found=new Map();let cursor
 async function serverNow(send){const t=await send.command(['TIME']);const ms=Number(str(t[0]))*1000+Math.floor(Number(str(t[1]))/1000);if(!Number.isSafeInteger(ms))throw Error('invalid server time');return ms}
 function seal(body){return {...body,sha256:sha(Buffer.from(JSON.stringify(body)))}}
 function validate(artifact){const {sha256,...body}=artifact||{};if(body.version!==2||sha256!==sha(Buffer.from(JSON.stringify(body)))||!Array.isArray(body.records)||body.records.length!==body.count)throw Error('archive hash/format mismatch');const seen=new Set();for(const r of body.records){decode(r.key);const dump=decode(r.dump);if(!dump.length||sha(dump)!==r.dumpSha256||seen.has(r.key)||!(r.expiresAt===null||Number.isSafeInteger(r.expiresAt)&&r.expiresAt>0))throw Error('invalid archive record');seen.add(r.key)}return true}
-async function snapshot(send,{writersStopped=false,pattern='*',maxKeys=100000,maxBytes=512*1024*1024,batchSize=32,scanCount=128,onBatch=async()=>{}}={}){
+async function snapshot(send,{writersStopped=false,pattern='*',maxKeys=100000,maxBytes=512*1024*1024,batchSize=32,scanCount=128,onBatch=async()=>{},keyManifest=null,manifestEvidence=null}={}){
  if(!writersStopped)throw Error('all writers must be stopped');if(!Number.isSafeInteger(batchSize)||batchSize<1||batchSize>64||!Number.isSafeInteger(scanCount)||scanCount<1||scanCount>10000||!Number.isSafeInteger(maxKeys)||maxKeys<1||!Number.isSafeInteger(maxBytes)||maxBytes<1)throw Error('invalid archive bounds');
- const keys=await scan(send,pattern,maxKeys,scanCount),records=[],expiredDuringRead=[];let bytes=0;
+ let keys;
+ if(keyManifest!==null){
+  if(!Array.isArray(keyManifest)||keyManifest.length>maxKeys||!manifestEvidence||manifestEvidence.complete!==true||! /^[a-f0-9]{64}$/.test(manifestEvidence.sha256||''))throw Error('complete reviewed key manifest evidence required');
+  if(keyManifest.some(k=>!Buffer.isBuffer(k)))throw Error('binary-safe manifest required');
+  keys=keyManifest.map(k=>Buffer.from(k)).sort(Buffer.compare);
+  if(new Set(keys.map(k=>k.toString('base64'))).size!==keys.length)throw Error('duplicate manifest key');
+  if(manifestEvidence.keyListSha256!==sha(Buffer.from(JSON.stringify(keys.map(k=>k.toString('base64'))))))throw Error('manifest key list checksum mismatch');
+ }else keys=await scan(send,pattern,maxKeys,scanCount);
+ const records=[],expiredDuringRead=[];let bytes=0;
  for(let i=0;i<keys.length;i+=batchSize){const batch=keys.slice(i,i+batchSize),results=await send.pipeline(batch.flatMap(k=>[['DUMP',k],['PEXPIRETIME',k]]));for(let j=0;j<batch.length;j++){const dump=results[j*2],expiry=Number(results[j*2+1]),key=batch[j].toString('base64');if(expiry===-2){expiredDuringRead.push({key,hadDump:dump!==null});continue}if(!Buffer.isBuffer(dump)||!(expiry===-1||Number.isSafeInteger(expiry)&&expiry>0))throw Error('expiry/byte transport mismatch; stop');bytes+=dump.length+batch[j].length;if(bytes>maxBytes)throw Error('archive byte bound exceeded');records.push({key,dump:dump.toString('base64'),dumpSha256:sha(dump),expiresAt:expiry===-1?null:expiry})}await onBatch({read:i+batch.length,records:records.length,commands:send.stats?.commands})}
- const second=await scan(send,pattern,maxKeys,scanCount),at=await serverNow(send),seen=new Set(records.map(r=>r.key)),expired=new Set(expiredDuringRead.map(r=>r.key)),live=new Set(second.map(k=>k.toString('base64')));
+ let second;
+ if(keyManifest!==null){second=[];for(let i=0;i<keys.length;i+=batchSize){const batch=keys.slice(i,i+batchSize),exists=await send.pipeline(batch.map(k=>['EXISTS',k]));for(let j=0;j<batch.length;j++){if(![0,1].includes(Number(exists[j])))throw Error('invalid manifest existence response');if(Number(exists[j])===1)second.push(batch[j])}}}
+ else second=await scan(send,pattern,maxKeys,scanCount);
+ const at=await serverNow(send),seen=new Set(records.map(r=>r.key)),expired=new Set(expiredDuringRead.map(r=>r.key)),live=new Set(second.map(k=>k.toString('base64')));
  if([...live].some(k=>!seen.has(k)&&!expired.has(k))||[...live].some(k=>expired.has(k)))throw Error('source changed during frozen snapshot');for(const r of records)if(!live.has(r.key)&&(r.expiresAt===null||r.expiresAt>at))throw Error('unexplained missing source key');
- return seal({version:2,pattern,scope:'key names, raw values and absolute expiries; global functions/config require separate inventory',observedKeys:keys.length,count:records.length,rawBytes:bytes,finishedServerTime:at,expiredDuringRead,records});
+ return seal({version:2,pattern,...(keyManifest===null?{}:{manifestEvidence,inventoryMethod:'exact-manifest-no-scan'}),scope:'key names, raw values and absolute expiries; global functions/config require separate inventory',observedKeys:keys.length,count:records.length,rawBytes:bytes,finishedServerTime:at,expiredDuringRead,records});
 }
 async function preflight(send,targets,batchSize){for(let i=0;i<targets.length;i+=batchSize)if(Number(await send.command(['EXISTS',...targets.slice(i,i+batchSize)]))!==0)throw Error('restore target exists; no overwrite')}
 async function proofFromLocal(send,artifact,{prefix,batchSize=32}={}){

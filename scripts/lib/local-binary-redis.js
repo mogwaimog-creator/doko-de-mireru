@@ -1,11 +1,13 @@
 'use strict';
 // Binary-safe, loopback-only adapter. Intentionally has no host/credential option.
 const net=require('node:net');
+function createClient({socketPath=null}={}){
+ if(socketPath!==null&&(typeof socketPath!=='string'||!require('node:path').isAbsolute(socketPath)||socketPath.includes('\0')))throw Error('absolute local Unix socket path required');
 function pipeline(commands){
  if(!Array.isArray(commands)||!commands.length||commands.length>1024)return Promise.reject(Error('bounded local pipeline required'));
  const encode=args=>{const values=args.map(x=>Buffer.isBuffer(x)?x:Buffer.from(String(x))),request=Buffer.concat([Buffer.from('*'+values.length+'\r\n'),...values.flatMap(v=>[Buffer.from('$'+v.length+'\r\n'),v,Buffer.from('\r\n')])]);return request};
  const request=Buffer.concat(commands.map(encode));
- return new Promise((resolve,reject)=>{let buffer=Buffer.alloc(0),finished=false;const socket=net.createConnection({host:'127.0.0.1',port:16379});
+ return new Promise((resolve,reject)=>{let buffer=Buffer.alloc(0),finished=false;const socket=net.createConnection(socketPath?{path:socketPath}:{host:'127.0.0.1',port:16379});
  const finish=(e,v)=>{if(finished)return;finished=true;socket.destroy();e?reject(e):resolve(v)};
  function parse(offset){const end=buffer.indexOf('\r\n',offset);if(end<0)return null;const tag=String.fromCharCode(buffer[offset]),line=buffer.subarray(offset+1,end).toString(),start=end+2;
  if(tag==='-')throw Error(line);if(tag==='+')return {value:line,next:start};if(tag===':')return {value:Number(line),next:start};
@@ -15,4 +17,6 @@ function pipeline(commands){
  });
 }
 async function command(args){return (await pipeline([args]))[0]}
-module.exports={command,pipeline};
+return {command,pipeline};
+}
+module.exports={...createClient(),createClient};

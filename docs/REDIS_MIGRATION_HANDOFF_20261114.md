@@ -75,10 +75,18 @@ Repository: mogwaimog-creator/doko-de-mireru
 
 ## 2026-11-14 08:14 JST / Codex実装・検証状況の追記（既存合意・初期記録は保持）
 - 本追記は上記の初期「未確認/未完了」記録より後の実績。実装とローカルテストは完了したが、公開・実移管の完了を意味しない。
-- 本ブランチ: `test/emergency-work-detail-20261114`。緊急表示修正のみ。Valkey依存・接続アダプターは含まない。
+- 本ブランチ: `test/temporary-redis-migration-20261114`。緊急修正を取り込んだ移管準備。実移管は未実施。
 - 緊急修正: 緊急ブランチ `c852599`、移管ブランチへの同内容取り込み `11a1fec`。登録済みは台帳から、未登録は停止中だけTMDBから表示し、旧Upstashへ保存しない。関連51件PASS、FAIL/skip 0。
 - 移管準備: 移管ブランチ `93c2b04`。TLS/RESP接続アダプターと手順、隔離Redisでの最終87件PASS、FAIL/skip 0。Aivenの実接続先未提供のため外部接続なし。
 - GitHub保存のユーザー承認を受領。保存直前のリモート先端 `a03bb014149041de25df337435e4289df82ff13a` を取り込み、既存引継ぎを上書き削除せず追記。両テストブランチだけを通常pushする。
 - 本番main統合・デプロイ・環境変数変更・実Redisデータ操作・停止解除は未実施。Git自動デプロイfalseを維持。
 - 未完了: 緊急修正の本番反映、Aiven無料条件/実互換性確認、最新の整合バックアップ、データコピー、接続切替、通常運行復旧、本番負荷観測。
 - 次工程は緊急修正のレビュー。その後、別途承認された工程だけを実施。詳細・負荷・テスト対象は `CODEX_MIGRATION_PROGRESS.md` と本ブランチの実装報告を参照。
+
+
+## 2026-11-14 08:42 JST / 緊急修正公開後のAiven移管準備の実績
+- main a05897e（PR #50）を確認。緊急修正コードは移管ブランチと同一。ユーザー報告で dpl_5G4PAYgd2ojFt4EmpyAFEWf6Yu7S が本番昇格済み。過去の未反映記録は当時の状態として保持する。
+- 移管準備9160d30を作業ブランチへpush済み。既存アダプター/backup/restoreを再利用。no-SCANの正確manifest経路、offline inventory、valkeys TLS URI、RDB多DB/全6型と実ローカルTLS検証を追加。93 PASS/FAIL0/skip0。実Aiven/旧Upstash未接続。
+- 公式調査でFree $0・maxmemory50%・Lua既定有効・標準migrationのSCAN fallbackを確認。Exportの無料可否/課金/計上と実先互換性は未確認。無料のままsource直結wizardを実行する方針ではない。
+- 最新の段階別計画・欠落防止範囲・予算・ユーザー手順は AIVEN_MIGRATION_PLAN_20261114.md、検証hashは AIVEN_LOCAL_VALIDATION_20261114.json、継続ログは CODEX_MIGRATION_PROGRESS.md。
+- 次はユーザーが空のFree $0サービスを用意し、安全な作業環境secretを設定。UpstashではExport可否/料金/残量/backupを閲覧確認する。実移管・本番変更・停止解除はまだ行わず、具体的な接続/backup計画の承認後に進める。
