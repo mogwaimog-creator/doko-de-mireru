@@ -26,3 +26,30 @@ test('upstream failure is recorded without a permanent pause',async()=>{
  await guard.withContext(async()=>{await guard.enter('token',JSON.stringify({startedAt:now}));try{await assert.rejects(()=>load('/3/movie/157336'),/metadata unavailable/);assert.equal(guard.isPaused(),false)}finally{await guard.finish('token')}});
  assert.ok(commands.some(x=>x[1]===require('../api/_acquisition-guard').FAILURE));
 });
+
+test('ordinary upstream allows past former cap but stops at 3000 daily; minute and scheduled limits remain', {skip:!process.env.REDIS_TEST_CLI}, async()=>{
+ const {command}=require('./helpers/local-redis');
+ const guardModule=require('../api/_acquisition-guard');
+ const now=Date.parse('2026-11-15T01:00:00Z'),minute=Math.floor(now/60000),day=new Date(now+9*3600000).toISOString().slice(0,10);
+ await command(['SET',guardModule.CONTROL||'doko:dev:content-control:v1',JSON.stringify({status:'ready'})]);
+ const baseline={version:2,minute,requests:0,acquisitions:0,scheduled:0,failures:0,day,daily:1200,dailyScheduled:0};
+ await command(['SET',guardModule.KEY,JSON.stringify(baseline)]);
+ const guard=guardModule.session(command,{clock:()=>now});
+ await guard.withContext(async()=>{
+  assert.equal(await guard.enter('restore-limit-test',JSON.stringify({startedAt:now})),1);
+  try{
+   await guard.admit('/3/movie/157336',{}, {dailyLimit:1200});
+   let state=await guard.status();
+   assert.equal(state.daily,1201);
+   await command(['SET',guardModule.KEY,JSON.stringify({...state,daily:2999,acquisitions:0})]);
+   await guard.admit('/3/movie/157336',{}, {dailyLimit:1200});
+   state=await guard.status();
+   assert.equal(state.daily,3000);
+   await assert.rejects(guard.admit('/3/movie/157337',{}, {dailyLimit:1200}),e=>e.code==='ACQUISITION_STOPPED'&&/upstream-limit/.test(e.message));
+   await command(['SET',guardModule.KEY,JSON.stringify({...state,acquisitions:30})]);
+   await assert.rejects(guard.admit('/3/movie/157337',{}, {dailyLimit:1200}),e=>e.code==='ACQUISITION_STOPPED');
+   await command(['SET',guardModule.KEY,JSON.stringify({...baseline,dailyScheduled:266})]);
+   await assert.rejects(guard.admit('/3/movie/157336/watch/providers',{}, {scheduled:true,dailyLimit:1200}),e=>e.code==='ACQUISITION_STOPPED');
+  }finally{await guard.finish('restore-limit-test')}
+ });
+});
