@@ -27,7 +27,7 @@ test('upstream failure is recorded without a permanent pause',async()=>{
  assert.ok(commands.some(x=>x[1]===require('../api/_acquisition-guard').FAILURE));
 });
 
-test('ordinary upstream no longer stops at the former daily cap; minute and scheduled limits remain', {skip:!process.env.REDIS_TEST_CLI}, async()=>{
+test('ordinary upstream allows past former cap but stops at 3000 daily; minute and scheduled limits remain', {skip:!process.env.REDIS_TEST_CLI}, async()=>{
  const {command}=require('./helpers/local-redis');
  const guardModule=require('../api/_acquisition-guard');
  const now=Date.parse('2026-11-15T01:00:00Z'),minute=Math.floor(now/60000),day=new Date(now+9*3600000).toISOString().slice(0,10);
@@ -41,6 +41,11 @@ test('ordinary upstream no longer stops at the former daily cap; minute and sche
    await guard.admit('/3/movie/157336',{}, {dailyLimit:1200});
    let state=await guard.status();
    assert.equal(state.daily,1201);
+   await command(['SET',guardModule.KEY,JSON.stringify({...state,daily:2999,acquisitions:0})]);
+   await guard.admit('/3/movie/157336',{}, {dailyLimit:1200});
+   state=await guard.status();
+   assert.equal(state.daily,3000);
+   await assert.rejects(guard.admit('/3/movie/157337',{}, {dailyLimit:1200}),e=>e.code==='ACQUISITION_STOPPED'&&/upstream-limit/.test(e.message));
    await command(['SET',guardModule.KEY,JSON.stringify({...state,acquisitions:30})]);
    await assert.rejects(guard.admit('/3/movie/157337',{}, {dailyLimit:1200}),e=>e.code==='ACQUISITION_STOPPED');
    await command(['SET',guardModule.KEY,JSON.stringify({...baseline,dailyScheduled:266})]);
