@@ -1,7 +1,7 @@
 'use strict';
 // Lazy RESP connection. No fallback to Upstash and no command replay.
 function createValkey(env=process.env,{createClient=require('redis').createClient}={}){
- const url=new URL(env.REDIS_URL||'');
+ const url=new URL(env.AIVEN_REDIS_URL||'');
  // Aiven now documents valkeys://; node-redis uses rediss:// for the same TLS protocol.
  if(url.protocol==='valkeys:')url.protocol='rediss:';
  const local=['127.0.0.1','localhost','[::1]'].includes(url.hostname);
@@ -17,6 +17,6 @@ function createValkey(env=process.env,{createClient=require('redis').createClien
  return {command,request:async(_url,options)=>new Response(JSON.stringify({result:await command(JSON.parse(options.body))})),close:()=>{if(client?.isOpen)client.destroy()}};
 }
 let pooled,identity;
-function sharedValkey(env=process.env){const next=JSON.stringify([env.REDIS_URL,env.REDIS_CA_CERT,env.NODE_ENV,env.VERCEL_ENV]);if(pooled&&identity!==next)throw Error('Redis configuration changed; restart required');if(!pooled){pooled=createValkey(env);identity=next}return pooled}
+function sharedValkey(env=process.env){const next=JSON.stringify([env.AIVEN_REDIS_URL,env.REDIS_CA_CERT,env.NODE_ENV,env.VERCEL_ENV]);if(pooled&&identity!==next)throw Error('Redis configuration changed; restart required');if(!pooled){pooled=createValkey(env);identity=next}return pooled}
 function close(){pooled?.close();pooled=undefined;identity=undefined}
 module.exports={createValkey,sharedValkey,close};

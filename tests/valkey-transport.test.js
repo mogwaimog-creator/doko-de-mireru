@@ -3,15 +3,15 @@ const {test}=require('node:test'),assert=require('node:assert/strict'),{randomBy
 const {createValkey}=require('../api/_valkey');
 const transport=require('../api/_release-transport-candidate'),connection=require('../api/_release-connection');
 const SHA=randomBytes(32).toString('hex');
-function env(extra={}){return {REDIS_PROVIDER:'valkey',REDIS_URL:'redis://127.0.0.1:16379',LEDGER_RELEASE_MODE:'new',LEDGER_RELEASE_SHA256:SHA,LEDGER_RELEASE_READY_SHA256:SHA,TMDB_API_KEY:'mock',LEDGER_ADMIN_TOKEN:'a'.repeat(32),CRON_SECRET:'c'.repeat(32),LEDGER_UPSTREAM_DAILY_LIMIT:'300',...extra}}
+function env(extra={}){return {REDIS_PROVIDER:'valkey',AIVEN_REDIS_URL:'redis://127.0.0.1:16379',LEDGER_RELEASE_MODE:'new',LEDGER_RELEASE_SHA256:SHA,LEDGER_RELEASE_READY_SHA256:SHA,TMDB_API_KEY:'mock',LEDGER_ADMIN_TOKEN:'a'.repeat(32),CRON_SECRET:'c'.repeat(32),LEDGER_UPSTREAM_DAILY_LIMIT:'300',...extra}}
 test('lazy initialization, verified TLS and no fallback/replay on command failure',async()=>{
  let creations=0,opens=0,sends=0,options;
- const backend=createValkey(env({REDIS_URL:'rediss://user:password@example.invalid:1234',REDIS_CA_CERT:'test-ca'}),{createClient:o=>{creations++;options=o;return {isOpen:false,on(){},async connect(){opens++;this.isOpen=true},async sendCommand(){sends++;throw Error('secret-server-error')},destroy(){}}}});
+ const backend=createValkey(env({AIVEN_REDIS_URL:'rediss://user:password@example.invalid:1234',REDIS_CA_CERT:'test-ca'}),{createClient:o=>{creations++;options=o;return {isOpen:false,on(){},async connect(){opens++;this.isOpen=true},async sendCommand(){sends++;throw Error('secret-server-error')},destroy(){}}}});
  assert.equal(creations,0);await assert.rejects(backend.command(['GET','owned:key']),/^Error: Valkey command failed/);assert.equal(creations,1);assert.equal(opens,1);assert.equal(sends,1);assert.equal(options.disableOfflineQueue,true);assert.equal(options.socket.reconnectStrategy,false);assert.equal(options.socket.tls,true);assert.equal(options.socket.ca,'test-ca');
- assert.throws(()=>createValkey(env({REDIS_URL:'redis://external.invalid:6379'})),/TLS/);
+ assert.throws(()=>createValkey(env({AIVEN_REDIS_URL:'redis://external.invalid:6379'})),/TLS/);
  assert.throws(()=>createValkey(env({NODE_ENV:'production'})),/TLS/);
- assert.throws(()=>createValkey(env({REDIS_URL:'rediss://host.invalid/?rejectUnauthorized=false'})),/options/);
- assert.throws(()=>connection.configuration(env({REDIS_URL:''})),/incomplete/);
+ assert.throws(()=>createValkey(env({AIVEN_REDIS_URL:'rediss://host.invalid/?rejectUnauthorized=false'})),/options/);
+ assert.throws(()=>connection.configuration(env({AIVEN_REDIS_URL:''})),/incomplete/);
  assert.throws(()=>connection.connect({env:env({REDIS_PROVIDER:'invalid'})}),/incomplete|provider/);
 });
 test('concurrent cold requests await the same connection before sending',async()=>{
@@ -41,9 +41,9 @@ test('production connection selects native transport without any REST fetch', {s
 
 test('Aiven valkeys URI keeps TLS and certificate verification without opening a connection on import',async()=>{
  let options;
- const backend=createValkey(env({REDIS_URL:'valkeys://user:encoded%40password@example.invalid:1234'}),{createClient:o=>{options=o;return {isOpen:false,on(){},async connect(){this.isOpen=true},async sendCommand(){return 'OK'},destroy(){}}}});
+ const backend=createValkey(env({AIVEN_REDIS_URL:'valkeys://user:encoded%40password@example.invalid:1234'}),{createClient:o=>{options=o;return {isOpen:false,on(){},async connect(){this.isOpen=true},async sendCommand(){return 'OK'},destroy(){}}}});
  assert.equal(options,undefined);assert.equal(await backend.command(['GET','key']),'OK');assert.equal(new URL(options.url).protocol,'rediss:');assert.equal(new URL(options.url).password,'encoded%40password');assert.equal(options.socket.tls,true);backend.close();
- assert.throws(()=>createValkey(env({REDIS_URL:'valkey://example.invalid:1234'})),/TLS/);
+ assert.throws(()=>createValkey(env({AIVEN_REDIS_URL:'valkey://example.invalid:1234'})),/TLS/);
 });
 
 test('real local TLS accepts the trusted CA and rejects an untrusted certificate', {skip:!process.env.REDIS_TEST_CLI},async()=>{
@@ -55,8 +55,8 @@ test('real local TLS accepts the trusted CA and rejects an untrusted certificate
   server=tls.createServer({key:fs.readFileSync(key),cert:fs.readFileSync(cert)},socket=>{const upstream=net.createConnection({host:'127.0.0.1',port:16379});sockets.add(upstream);upstream.on('close',()=>sockets.delete(upstream));upstream.on('error',()=>socket.destroy());socket.on('error',()=>{});socket.on('close',()=>upstream.destroy());socket.pipe(upstream).pipe(socket)});
   server.on('connection',socket=>{sockets.add(socket);socket.on('close',()=>sockets.delete(socket))});server.on('tlsClientError',()=>{});
   await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));const url='valkeys://127.0.0.1:'+server.address().port;
-  backend=createValkey(env({REDIS_URL:url,REDIS_CA_CERT:fs.readFileSync(cert,'utf8')}));
+  backend=createValkey(env({AIVEN_REDIS_URL:url,REDIS_CA_CERT:fs.readFileSync(cert,'utf8')}));
   const k='doko:dev:tls:'+randomBytes(12).toString('hex');assert.equal(await backend.command(['SET',k,'日本語','NX','PX','60000']),'OK');assert.equal(await backend.command(['GET',k]),'日本語');assert.equal(await backend.command(['EVAL','return cjson.decode(ARGV[1]).value','0','{"value":42}']),42);
-  untrusted=createValkey(env({REDIS_URL:url}));await assert.rejects(untrusted.command(['GET',k]),/connection unavailable/);
+  untrusted=createValkey(env({AIVEN_REDIS_URL:url}));await assert.rejects(untrusted.command(['GET',k]),/connection unavailable/);
  }finally{backend?.close();untrusted?.close();for(const socket of sockets)socket.destroy();if(server)await new Promise(resolve=>server.close(resolve));fs.rmSync(directory,{recursive:true,force:true})}
 });
