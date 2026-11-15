@@ -16,7 +16,7 @@ async function largeLocalCommand(args){
 }
 async function command(args){
  if(!process.env.REDIS_TEST_CLI)throw Error('REDIS_TEST_CLI must point to local redis-cli');
- if(process.env.REDIS_TEST_TRANSPORT==='valkey'){nativeValkey ||= require('../../api/_valkey').createValkey({REDIS_URL:'redis://127.0.0.1:16379',NODE_ENV:'test'});return nativeValkey.command(args)}
+ if(process.env.REDIS_TEST_TRANSPORT==='valkey'){nativeValkey ||= require('../../api/_valkey').createValkey({AIVEN_REDIS_URL:'redis://127.0.0.1:16379',NODE_ENV:'test'});return nativeValkey.command(args)}
  if(args.some(v=>Buffer.byteLength(String(v))>60000))return largeLocalCommand(args);
  const values=args.map(String),large=Buffer.byteLength(values.at(-1)||'')>60000;
  const stdout=await new Promise((resolve,reject)=>{
