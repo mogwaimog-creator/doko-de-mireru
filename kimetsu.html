@@ -144,6 +144,12 @@ async function showProviders(box){
  if(!record||!Array.isArray(record.flatrate)){
   label.textContent='配信情報は作品詳細でご確認ください';return;
  }
+ if(record.stale){
+  const notice=document.createElement('div');notice.className='doko-card-stale-notice';
+  notice.style.cssText='display:block;box-sizing:border-box;width:100%;max-width:100%;grid-column:1/-1;flex-basis:100%;min-width:0;font-size:12px;line-height:1.5;color:#b91c1c;white-space:normal;overflow-wrap:anywhere;margin:5px 0';
+  notice.textContent='※配信情報は前回取得時のものです（更新遅延）';
+  box.before(notice);
+ }
  const list=dokoNormalizeStreaming(record.flatrate);
  const unique=list.filter((p,i,arr)=>p?.logo_path&&arr.findIndex(x=>x?.provider_id===p.provider_id)===i);
  if(!unique.length){label.textContent='見放題情報は未確認です';return;}
