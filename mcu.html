@@ -14878,7 +14878,7 @@ async function getMcuCachedRecord(id,type){const records=await mcuCachedRecords;
 function showSeriesStaleNotice(box){
  const parent=box.parentElement;if(!parent)return;
  let notice=parent.querySelector('.doko-card-stale-notice');
- if(!notice){notice=document.createElement('div');notice.className='doko-card-stale-notice';notice.style.cssText='display:block;box-sizing:border-box;width:100%;max-width:100%;font-size:12px;line-height:1.5;color:#b91c1c;white-space:normal;overflow-wrap:anywhere;margin:5px 0';box.before(notice)}
+ if(!notice){notice=document.createElement('div');notice.className='doko-card-stale-notice';notice.style.cssText='display:block;box-sizing:border-box;width:100%;max-width:100%;grid-column:1/-1;flex-basis:100%;min-width:0;font-size:12px;line-height:1.5;color:#b91c1c;white-space:normal;overflow-wrap:anywhere;margin:5px 0';box.before(notice)}
  notice.textContent='※配信情報は前回取得時のものです（更新遅延）';
 }
 async function loadMcuProviderBox(box){
