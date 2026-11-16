@@ -307,7 +307,7 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
     }
     const unique=record.flatrate.filter((p,i,all)=>p&&p.logo_path&&all.findIndex(x=>x&&x.provider_id===p.provider_id)===i);
     if(!unique.length){box.textContent=record.stale?'前回取得時は見放題の掲載情報なし（更新遅延中）':'見放題の配信情報はありません';box.style.color=record.stale?'#b91c1c':'';return}
-    box.innerHTML='<span class="providers-label">'+(record.stale?'前回取得時の見放題（更新遅延中）':'見放題')+'</span>';
+    box.innerHTML='<span class="providers-label">見放題</span>';if(record.stale)window.dokoShowCardStaleNotice(box);
     box.style.color=record.stale?'#b91c1c':'';
     unique.forEach(p=>{const img=document.createElement('img');img.src='https://image.tmdb.org/t/p/w92'+p.logo_path;img.alt=p.provider_name||'配信サービス';img.loading='lazy';box.appendChild(img)});
   }
@@ -420,6 +420,19 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
   });
   update();
 })();
+</script>
+<script>
+/* 更新遅延のお知らせはロゴ欄の外に表示し、古い配信情報は残す */
+window.dokoShowCardStaleNotice=function(box){
+ if(!box||!box.parentElement)return;
+ let note=box.previousElementSibling;
+ if(!note||!note.classList.contains('doko-card-stale-notice')){
+  note=document.createElement('div');note.className='doko-card-stale-notice';
+  note.style.cssText='display:block;box-sizing:border-box;width:100%;max-width:100%;font-size:12px;line-height:1.5;color:#b91c1c;white-space:normal;overflow-wrap:anywhere;margin:5px 0';
+  box.before(note);
+ }
+ note.textContent='※配信情報は前回取得時のものです（更新遅延）';
+};
 </script>
 </body>
 </html>
