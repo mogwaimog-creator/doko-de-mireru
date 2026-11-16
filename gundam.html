@@ -184,6 +184,17 @@ header{justify-content:flex-start;align-items:center}
 <script src="series-ledger-view.js" data-series="gundam"></script>
 <style>
 /* 劇場版の警告は作品名・配信ロゴと同じ細い列に押し込まない */
+/* 取得失敗時の灰色案内も映画の狭い配信列から独立させる */
+#content .card.has-versions .gundam-film-item:has(> .availability-note:not(.gundam-stale-warning))>.availability-note{
+ grid-column:1/-1;grid-row:1;box-sizing:border-box;width:100%;min-width:0;
+ white-space:normal;overflow-wrap:anywhere;line-height:1.6;
+}
+#content .card.has-versions .gundam-film-item:has(> .availability-note:not(.gundam-stale-warning))>b{grid-column:1;grid-row:2}
+#content .card.has-versions .gundam-film-item:has(> .availability-note:not(.gundam-stale-warning))>a{grid-column:3;grid-row:2}
+@media(max-width:1100px){
+ #content .card.has-versions .gundam-film-item:has(> .availability-note:not(.gundam-stale-warning))>b{grid-column:1;grid-row:2}
+ #content .card.has-versions .gundam-film-item:has(> .availability-note:not(.gundam-stale-warning))>a{grid-column:1;grid-row:3}
+}
 #content .card.has-versions .gundam-film-item:has(> .gundam-stale-warning)>.gundam-stale-warning{
  grid-column:1/-1;grid-row:1;box-sizing:border-box;min-width:0;width:100%;
  white-space:normal;overflow-wrap:anywhere;line-height:1.6;
