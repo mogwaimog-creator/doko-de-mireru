@@ -199,7 +199,7 @@ window.dokoShowCardStaleNotice=function(box){
  let note=box.previousElementSibling;
  if(!note||!note.classList.contains('doko-card-stale-notice')){
   note=document.createElement('div');note.className='doko-card-stale-notice';
-  note.style.cssText='display:block;box-sizing:border-box;width:100%;max-width:100%;font-size:12px;line-height:1.5;color:#b91c1c;white-space:normal;overflow-wrap:anywhere;margin:5px 0';
+  note.style.cssText='display:block;box-sizing:border-box;width:100%;max-width:100%;grid-column:1/-1;flex-basis:100%;min-width:0;font-size:12px;line-height:1.5;color:#b91c1c;white-space:normal;overflow-wrap:anywhere;margin:5px 0';
   box.before(note);
  }
  note.textContent='※配信情報は前回取得時のものです（更新遅延）';
