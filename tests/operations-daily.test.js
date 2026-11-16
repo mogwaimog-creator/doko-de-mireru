@@ -1,0 +1,5 @@
+'use strict';
+const {test}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),os=require('node:os'),path=require('node:path');
+const {buildDaily,saveDaily}=require('../scripts/operations-daily');
+test('missing data stays unknown, stores once, and refuses historical overwrite',()=>{const root=fs.mkdtempSync(path.join(os.tmpdir(),'doko-analysis-'));try{const report=buildDaily({schemaVersion:1,day:'2026-11-16',observedAt:'2026-11-15T15:30:00Z',prefix:'scope',db:0,ledgers:{},alerts:[]});assert.equal(report.previousDayDelta.work.value,null);const target=saveDaily(root,report);assert.deepEqual(JSON.parse(fs.readFileSync(target)),report);assert.throws(()=>saveDaily(root,report));}finally{fs.rmSync(root,{recursive:true,force:true});}});
+test('invalid timestamp/date and path traversal are rejected',()=>{assert.throws(()=>buildDaily({schemaVersion:1,day:'2026-11-16',observedAt:'2026-11-14T15:30:00Z',ledgers:{},alerts:[]}));assert.throws(()=>saveDaily('/tmp',{day:'../../secrets'}));});
