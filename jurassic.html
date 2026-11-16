@@ -159,8 +159,8 @@ async function showProviders(box){
  if(info.stale)showSeriesStaleNotice(box);
  const list=dokoNormalizeStreaming(info.flatrate);
  const unique=list.filter((p,i,a)=>p&&p.logo_path&&a.findIndex(x=>x&&x.provider_id===p.provider_id)===i);
- if(!unique.length){const note=document.createElement('span');note.textContent='見放題の掲載情報なし';box.appendChild(note);return}
- if(!info.stale)box.replaceChildren();const label=document.createElement('span');label.className='provider-label';label.textContent='見放題';box.appendChild(label);
+ if(!unique.length){const note=document.createElement('span');note.textContent='見放題の掲載情報なし';box.replaceChildren();box.appendChild(note);return}
+ box.replaceChildren();const label=document.createElement('span');label.className='provider-label';label.textContent='見放題';box.appendChild(label);
  unique.forEach(p=>{const img=document.createElement('img');img.src='https://image.tmdb.org/t/p/w92'+p.logo_path;img.alt=p.provider_name||'配信サービス';img.loading='lazy';box.appendChild(img)});
 }
 if('IntersectionObserver'in window){const observer=new IntersectionObserver((entries,o)=>entries.forEach(e=>{if(e.isIntersecting){o.unobserve(e.target);showProviders(e.target)}}),{rootMargin:'200px'});document.querySelectorAll('.providers').forEach(el=>observer.observe(el))}else document.querySelectorAll('.providers').forEach(showProviders);</script><script>
