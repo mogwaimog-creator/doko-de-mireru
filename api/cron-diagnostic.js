@@ -8,7 +8,8 @@ function inspect(values,now=Date.now()){
  const parse=raw=>{if(!raw)return null;try{return JSON.parse(raw)}catch{return {invalid:true}}};
  const control=parse(controlRaw),lastAttempt=parse(attemptRaw),lastSuccess=parse(successRaw);
  const day=new Date(now+9*3600000).toISOString().slice(0,10);
- return {checkedAt:new Date(now).toISOString(),day,controlStatus:control?.status||'missing',lastAttempt,lastSuccess,updatedToday:lastSuccess?.day===day};
+ const fields=x=>x&&typeof x==='object'?Object.fromEntries(['day','at','status','reason','total','succeeded','failed','pending','dispatches','runs','revision'].filter(k=>['string','number'].includes(typeof x[k])).map(k=>[k,x[k]])):null;
+ return {checkedAt:new Date(now).toISOString(),day,controlStatus:['ready','paused','stopped'].includes(control?.status)?control.status:'unknown',lastAttempt:fields(lastAttempt),lastSuccess:fields(lastSuccess),updatedToday:lastSuccess?.day===day};
 }
 async function diagnose(command,{now=Date.now}={}){
  // One bounded read, no SCAN, no writes, no provider fetch, no refresh.
