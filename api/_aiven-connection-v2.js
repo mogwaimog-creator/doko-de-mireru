@@ -3,6 +3,21 @@
 // The existing release transport still enforces key isolation, Lua allowlisting and budgets.
 const {createClient:defaultCreateClient}=require('redis');
 const TIMEOUT_MS=8000;
+// Fixed categories only. Never emit raw Redis errors, scripts, keys, URLs or credentials.
+function failureCode(error){
+ const code=typeof error?.code==='string'?error.code.toUpperCase():'';
+ const name=typeof error?.name==='string'?error.name:'';
+ if(code==='ETIMEDOUT'||name==='TimeoutError'||name==='AbortError')return 'timeout';
+ if(['ECONNREFUSED','ECONNRESET','EPIPE','ENOTFOUND','EAI_AGAIN'].includes(code))return 'network';
+ if(['CERT_HAS_EXPIRED','UNABLE_TO_VERIFY_LEAF_SIGNATURE','DEPTH_ZERO_SELF_SIGNED_CERT'].includes(code))return 'tls';
+ const message=typeof error?.message==='string'?error.message:'';
+ if(/^(?:ERR )?NOSCRIPT\b/i.test(message))return 'lua-script-missing';
+ if(/^(?:ERR )?(?:Error running script|user_script:|Lua redis lib command arguments must be strings or integers)/i.test(message))return 'lua-runtime';
+ if(/^(?:ERR )?(?:NOPERM|NOAUTH|WRONGPASS)\b/i.test(message))return 'permission';
+ if(/^(?:ERR )?(?:OOM|command not allowed when used memory)/i.test(message))return 'memory';
+ if(/^(?:ERR )?(?:unknown command|wrong number of arguments|syntax error)/i.test(message))return 'command-rejected';
+ return 'unknown';
+}
 function safeStage(stage,ok,code='ok',emit=console.info){
  emit('AIVEN_CONNECTION_V2',JSON.stringify({stage,ok,code,at:new Date().toISOString()}));
 }
@@ -24,7 +39,7 @@ function createAivenConnection(env=process.env,{createClient=defaultCreateClient
   client.on('error',()=>{}); // errors surfaced through connect/sendCommand
   const candidate=client;
   opening=(async()=>{try{await candidate.connect();safeStage('connect',true,'ok',emit);return candidate}
-   catch{safeStage('connect',false,'connection-failed',emit);try{candidate.destroy()}catch{};throw Error('Aiven v2 connection failed')}})();
+   catch(error){safeStage('connect',false,'connection-'+failureCode(error),emit);try{candidate.destroy()}catch{};throw Error('Aiven v2 connection failed')}})();
   try{return await opening}finally{opening=null}
  }
  async function command(args){
@@ -34,8 +49,8 @@ function createAivenConnection(env=process.env,{createClient=defaultCreateClient
   try{
    const result=await c.sendCommand(args.map(String),{abortSignal:AbortSignal.timeout(TIMEOUT_MS)});
    safeStage(stage,true,'ok',emit);return result;
-  }catch{
-   safeStage(stage,false,'command-outcome-unknown',emit);
+  }catch(error){
+   safeStage(stage,false,'command-'+failureCode(error),emit);
    // Never retry writes: a lost response does not prove the command was not committed.
    try{c.destroy()}catch{}
    throw Error('Aiven v2 command failed; outcome may be unknown');
@@ -65,4 +80,4 @@ function sharedAivenConnection(env=process.env){
  return shared;
 }
 function close(){shared?.close();shared=null;identity=null}
-module.exports={createAivenConnection,sharedAivenConnection,close};
+module.exports={createAivenConnection,sharedAivenConnection,close,failureCode};
