@@ -12,8 +12,8 @@ function createAivenConnection(env=process.env,{createClient=defaultCreateClient
  if(!raw)throw Error('Aiven v2 URL missing');
  const url=new URL(raw);
  if(url.protocol==='valkeys:')url.protocol='rediss:';
- if(url.protocol!=='rediss:'||!url.hostname||!url.port||url.search||url.hash)throw Error('Aiven v2 requires explicit TLS endpoint');
- const fingerprint=[url.hostname,url.port,url.pathname].join(':'); // no secrets in logs
+ if(url.protocol!=='rediss:'||!url.hostname||!url.port||url.pathname!=='/'||url.search||url.hash)throw Error('Aiven v2 requires explicit TLS endpoint');
+ const fingerprint=[url.hostname,url.port].join(':'); // no credentials in diagnostics
  let client=null,opening=null;
  async function open(){
   if(client?.isOpen)return client;
@@ -30,7 +30,7 @@ function createAivenConnection(env=process.env,{createClient=defaultCreateClient
  }
  async function command(args){
   if(!Array.isArray(args)||args.length===0||args.some(x=>typeof x!=='string'&&typeof x!=='number'))throw Error('Aiven v2 invalid command');
-  const op=String(args[0]).toUpperCase(),stage=['GET','MGET','PING','EXISTS','TYPE','TIME'].includes(op)?'read':'command';
+  const op=String(args[0]).toUpperCase(),stage=['GET','MGET','PING','EXISTS','TYPE','TIME','HGET','HGETALL','ZRANGE','ZCARD'].includes(op)?'read':['SET','MSET','EVAL','HSET','ZADD','INCR','EXPIRE','PEXPIRE'].includes(op)?'save':'command';
   const c=await open();
   try{
    const result=await c.sendCommand(args.map(String),{abortSignal:AbortSignal.timeout(TIMEOUT_MS)});
