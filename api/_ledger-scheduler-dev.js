@@ -3,12 +3,12 @@
 const {supervisor}=require('./_daily-job-supervisor'),{jstDay}=require('../prototype/streaming-ledger-schedule');
 const ROOT='doko:dev:ops:v1:';
 const NOTIFY="local pairs={};for i=2,#KEYS-1 do pairs[#pairs+1]=KEYS[i];pairs[#pairs+1]=ARGV[i-1] end;if redis.call('EXISTS',KEYS[1])==0 then pairs[#pairs+1]=KEYS[#KEYS];pairs[#pairs+1]=ARGV[#ARGV];pairs[#pairs+1]=KEYS[1];pairs[#pairs+1]='1';redis.call('MSET',unpack(pairs));redis.call('EXPIRE',KEYS[1],1209600);redis.call('EXPIRE',KEYS[#KEYS],1209600) else redis.call('MSET',unpack(pairs)) end;return 1";
-function scheduler(command,job,{controlKey='doko:dev:content-control:v1',prefix=ROOT,clock=Date.now,lean=false}={}){
+function scheduler(command,job,{controlKey='doko:dev:content-control:v1',prefix=ROOT,clock=Date.now,lean=false,diagnostic=()=>{}}={}){
  if(!/^doko:dev:[a-z0-9:-]+$/.test(controlKey)||!/^doko:dev:[a-z0-9:-]+:$/.test(prefix))throw Error('local control required');
  async function run(works,{signal}={}){
   const at=new Date(clock()).toISOString(),day=jstDay(at),control=await command(['GET',controlKey]);let result;
   if(control&&JSON.parse(control).status!=='ready')result={status:'stopped',reason:'shared-pause'};
-  else if(lean){try{const last=await job.run(at,works,{maxItems:1000,signal});result={...last,last};if(!['complete','complete-with-errors','not-due','busy'].includes(result.status))result={...result,status:'stopped'}}catch{result={status:'stopped',reason:'storage-or-journal-error'}}}
+  else if(lean){try{const last=await job.run(at,works,{maxItems:1000,signal});result={...last,last};if(!['complete','complete-with-errors','not-due','busy'].includes(result.status))result={...result,status:'stopped'}}catch(error){if(lean){try{diagnostic(require('./_aiven-refresh-diagnostics').classifyFailure('aiven-save',error))}catch{}}result={status:'stopped',reason:'storage-or-journal-error'}}}
   else result=await supervisor(job).run(at,works,{maxItems:24,signal});
   const event={day,at,status:result.status,reason:result.reason||null,last:result.last||null};
   const writes=[prefix+'last-attempt',JSON.stringify(event)];if(result.status==='complete')writes.push(prefix+'last-success',JSON.stringify(event));
