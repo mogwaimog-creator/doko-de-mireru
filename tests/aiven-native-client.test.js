@@ -31,8 +31,8 @@ test('native client rejects plaintext, URL options and invalid commands',async()
 });
 test('native client only permits temporary writes through writeTest helper',async()=>{
  const m=mock(),c=createAivenConnection({AIVEN_REDIS_URL:'rediss://host.invalid:16890'},m.factory);
- await assert.rejects(c.writeTest('doko:dev:work:v2:movie:1','x'),/temporary/);
- await assert.rejects(c.writeTest('chatgpt:connection-test:one','x',301),/temporary/);
+ await assert.rejects(async()=>c.writeTest('doko:dev:work:v2:movie:1','x'),/temporary/);
+ await assert.rejects(async()=>c.writeTest('chatgpt:connection-test:one','x',301),/temporary/);
  assert.equal(await c.writeTest('chatgpt:connection-test:one','x',60),'OK');
  assert.deepEqual(m.calls[0],['SET','chatgpt:connection-test:one','x','NX','EX','60']);
  c.close();
