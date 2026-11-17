@@ -35,3 +35,16 @@ test('records setup errors before scheduler run',async()=>{
  assert.deepEqual(lines.map(x=>x.event),['started','failed']);
  assert.equal(lines[1].code,'SETUP_FAILED');
 });
+
+test('never prints unknown uppercase error codes that may contain credentials',async()=>{
+ const {observer}=require('../api/_streaming-cron-observer-core');const events=[];
+ await assert.rejects(observer({clock:()=>1000,emit:x=>events.push(x)})(async()=>{throw Object.assign(Error('failure'),{code:'SECRETAPIKEY123456789'})}));
+ assert.equal(events.at(-1).code,'UNKNOWN');
+ assert.equal(JSON.stringify(events).includes('SECRETAPIKEY'),false);
+});
+test('unknown status cannot leak arbitrary text into diagnostic output',async()=>{
+ const {observer}=require('../api/_streaming-cron-observer-core');const events=[];
+ await observer({clock:()=>1000,emit:x=>events.push(x)})(async()=>({status:'Bearer SECRET_TOKEN'}));
+ assert.equal(events.at(-1).status,'unknown');
+ assert.equal(JSON.stringify(events).includes('SECRET_TOKEN'),false);
+});
