@@ -77,3 +77,17 @@ test('Aiven v2 integrates with release key isolation and preserves streaming rec
  await assert.rejects(release.command(['SET','not-a-logical-key',payload]),/canonical logical key/);
  connection.close();
 });
+
+test('Aiven v2 does not claim persistence when save fails',async()=>{
+ const store=new Map(),events=[],calls=[];
+ const createClient=()=>({isOpen:false,on(){return this},async connect(){this.isOpen=true},
+  async sendCommand(args){calls.push(args);if(args[0]==='SET')throw Error('write rejected');if(args[0]==='GET')return store.get(args[1])??null;throw Error('unexpected command')},
+  destroy(){this.isOpen=false}});
+ const connection=createAivenConnection(env,{createClient,emit:(...args)=>events.push(args.join(' '))});
+ await assert.rejects(connection.command(['SET','doko:dev:shared-stream:v1:record:movie:157336','value']),/outcome may be unknown/);
+ assert.equal(store.size,0);
+ assert.equal(calls.length,1);
+ assert.ok(events.some(line=>line.includes('"stage":"save"')&&line.includes('"ok":false')));
+ assert.equal(events.some(line=>line.includes('"stage":"save"')&&line.includes('"ok":true')),false);
+ connection.close();
+});
