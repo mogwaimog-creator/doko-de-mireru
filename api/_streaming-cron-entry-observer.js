@@ -12,4 +12,7 @@ function recordPreflightFailure(name,error,{log=console.info}={}){
  if(name!=='update-streaming')return;
  try{log('STREAMING_CRON_DISPATCH_DIAGNOSTIC',JSON.stringify({event:'failed',code:'DISPATCH_PREFLIGHT_FAILED'}))}catch{}
 }
-module.exports={observeDispatch,recordPreflightFailure};
+function recordAuthFailure({log=console.info}={}){
+ try{log('STREAMING_CRON_DISPATCH_DIAGNOSTIC',JSON.stringify({event:'rejected',code:'CRON_UNAUTHORIZED'}))}catch{}
+}
+module.exports={observeDispatch,recordPreflightFailure,recordAuthFailure};
