@@ -8,7 +8,7 @@ function scheduler(command,job,{controlKey='doko:dev:content-control:v1',prefix=
  async function run(works,{signal}={}){
   const at=new Date(clock()).toISOString(),day=jstDay(at),control=await command(['GET',controlKey]);let result;
   if(control&&JSON.parse(control).status!=='ready')result={status:'stopped',reason:'shared-pause'};
-  else if(lean){try{const last=await job.run(at,works,{maxItems:1000,signal});result={...last,last};if(!['complete','complete-with-errors','not-due','busy'].includes(result.status))result={...result,status:'stopped'}}catch(error){if(lean){try{diagnostic(require('./_aiven-refresh-diagnostics').classifyFailure('aiven-save',error))}catch{}}result={status:'stopped',reason:'storage-or-journal-error'}}}
+  else if(lean){try{const last=await job.run(at,works,{maxItems:1000,signal});result={...last,last};if(!['complete','complete-with-errors','not-due','busy'].includes(result.status))result={...result,status:'stopped'}}catch(error){if(lean){try{diagnostic(require('./_aiven-refresh-diagnostics').classifyFailure('entry',error))}catch{}}result={status:'stopped',reason:'storage-or-journal-error'}}}
   else result=await supervisor(job).run(at,works,{maxItems:24,signal});
   const event={day,at,status:result.status,reason:result.reason||null,last:result.last||null};
   const writes=[prefix+'last-attempt',JSON.stringify(event)];if(result.status==='complete')writes.push(prefix+'last-success',JSON.stringify(event));
