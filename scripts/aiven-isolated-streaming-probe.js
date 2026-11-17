@@ -8,8 +8,10 @@ async function run({env=process.env,fetchImpl=fetch,createClient,emit=console.in
  if(env.REDIS_PROVIDER!=='valkey')throw Error('Aiven provider required');
  if(!env.TMDB_API_KEY)throw Error('TMDB API key missing');
  const id=157336,type='movie',key='doko:ledger:probe:aiven-v2:stream:'+randomUUID();
- const url='https://api.themoviedb.org/3/'+type+'/'+id+'/watch/providers';
- const response=await fetchImpl(url,{headers:{Authorization:'Bearer '+env.TMDB_API_KEY},signal:AbortSignal.timeout(8000)});
+ const url=new URL('https://api.themoviedb.org/3/'+type+'/'+id+'/watch/providers');
+ url.searchParams.set('api_key',env.TMDB_API_KEY);
+ url.searchParams.set('language','ja-JP');
+ const response=await fetchImpl(url,{headers:{Accept:'application/json'},signal:AbortSignal.timeout(8000)});
  if(!response.ok)throw Error('TMDB providers fetch failed: '+response.status);
  const raw=await response.json();
  if(!raw||typeof raw!=='object'||!raw.results||typeof raw.results!=='object')throw Error('invalid TMDB provider response');
