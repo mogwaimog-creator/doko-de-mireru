@@ -4,7 +4,7 @@ const source=fs.readFileSync(path.join(__dirname,'../api/_release-dispatch.js'),
 function fixture({connect=()=>{throw Error('rediss://PRIVATE_TOKEN')},mode='new'}={}){
  const lines=[],calls=[];
  const res={writableEnded:false,setHeader(...args){calls.push(['header',...args]);return this},status(code){calls.push(['status',code]);return this},end(value){calls.push(['end',value]);this.writableEnded=true;return this}};
- const entry={observeDispatch:run=>run(),recordPreflightFailure:()=>lines.push('preflight')};
+ const entry={observeDispatch:run=>run(),recordPreflightFailure:name=>{if(name==='update-streaming')lines.push('preflight')}};
  const dependencies={'./_streaming-cron-entry-observer':entry,'./_release-connection':{connect},'./_acquisition-guard':{session:()=>({})},'./_release-source':{source:()=>({})},'./_release-application':{application:()=>({handle:async()=>{calls.push(['handle'])}})}};
  const sandbox={module:{exports:{}},exports:{},process:{env:{LEDGER_RELEASE_MODE:mode}},require:name=>{if(!(name in dependencies))throw Error('Unexpected require '+name);return dependencies[name]},console:{info:()=>{},error:(...args)=>lines.push(args)}};
  vm.runInNewContext(source,sandbox,{filename:'_release-dispatch.js'});
