@@ -74,6 +74,6 @@ test('Aiven v2 integrates with release key isolation and preserves streaming rec
  assert.equal(wire[0][1],'doko:ledger:release:'+sha.slice(0,16)+':shared-stream:v1:record:movie:157336');
  assert.equal(wire[1][1],wire[0][1]);
  assert.ok(events.some(line=>line.includes('"stage":"save"')));
- assert.throws(()=>release.command(['SET','not-a-logical-key',payload]),/canonical logical key/);
+ await assert.rejects(release.command(['SET','not-a-logical-key',payload]),/canonical logical key/);
  connection.close();
 });
