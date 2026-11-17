@@ -2,7 +2,7 @@
 // The only environment-to-production binding. No connections on import.
 const transport=require('./_release-transport-candidate');
 const commands=new WeakSet(),clients=new WeakMap();
-function backend(env,request){const provider=env.REDIS_PROVIDER||'upstash';if(provider==='upstash')return request;if(provider!=='valkey')throw Error('Unknown Redis provider');return require('./_valkey').sharedValkey(env).request}
+function backend(env,request){const provider=env.REDIS_PROVIDER||'upstash';if(provider==='upstash')return request;if(provider!=='valkey')throw Error('Unknown Redis provider');if(env.AIVEN_CONNECTION_MODE==='direct-v2')return require('./_aiven-connection-v2').sharedAivenConnection(env).request;if(env.AIVEN_CONNECTION_MODE&&env.AIVEN_CONNECTION_MODE!=='legacy')throw Error('Unknown Aiven connection mode');return require('./_valkey').sharedValkey(env).request}
 // Preserve transport ownership when adding a request-local preflight.
 function beforeCommand(command,before){const wrapped=async args=>{await before(args);return command(args)};if(commands.has(command)){commands.add(wrapped);clients.set(wrapped,clients.get(command))}return wrapped}
 function approvedCommand(command){return commands.has(command)}
