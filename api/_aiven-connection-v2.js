@@ -10,8 +10,7 @@ function createAivenConnection(env=process.env,{createClient=defaultCreateClient
  if(env.REDIS_PROVIDER!=='valkey')throw Error('Aiven v2 requires explicit valkey provider');
  const raw=env.AIVEN_REDIS_URL;
  if(!raw)throw Error('Aiven v2 URL missing');
- const url=new URL(raw);
- if(url.protocol==='valkeys:')url.protocol='rediss:';
+ const url=new URL(raw.startsWith('valkeys://')?'rediss://'+raw.slice('valkeys://'.length):raw);
  if(url.protocol!=='rediss:'||!url.hostname||!url.port||url.pathname!=='/'||url.search||url.hash)throw Error('Aiven v2 requires explicit TLS endpoint');
  const fingerprint=[url.hostname,url.port].join(':'); // no credentials in diagnostics
  let client=null,opening=null;
