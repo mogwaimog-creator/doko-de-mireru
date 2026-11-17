@@ -20,16 +20,19 @@ async function main(){
  const key='chatgpt:connection-test:streaming:'+crypto.randomUUID(),payload=JSON.stringify(record);
  const socket=tls.connect({host,port,servername:host,timeout:10000});
  let buf=Buffer.alloc(0),pending;
- socket.on('data',chunk=>{buf=Buffer.concat([buf,chunk]);while(pending){const i=buf.indexOf('\r\n');if(i<0)return;const prefix=String.fromCharCode(buf[0]);let consumed=i+2,value;if(prefix==='$'){const len=Number(buf.subarray(1,i));consumed=len<0?i+2:i+2+len+2;if(buf.length<consumed)return;value=len<0?null:buf.subarray(i+2,i+2+len).toString()}else if(['+',':','-'].includes(prefix)){value=buf.subarray(1,i).toString()}else{pending.reject(Error('Unexpected RESP response'));pending=null;return}buf=buf.subarray(consumed);const p=pending;pending=null;prefix==='-'?p.reject(Error('Aiven command rejected')):p.resolve(value)}});
+ socket.on('data',chunk=>{buf=Buffer.concat([buf,chunk]);while(pending){const i=buf.indexOf('\r\n');if(i<0)return;const prefix=String.fromCharCode(buf[0]);let consumed=i+2,value;if(prefix==='$'){const len=Number(buf.subarray(1,i));consumed=len<0?i+2:i+2+len+2;if(buf.length<consumed)return;value=len<0?null:buf.subarray(i+2,i+2+len).toString()}else if(['+',':','-'].includes(prefix)){value=buf.subarray(1,i).toString()}else{pending.reject(Error('Unexpected RESP response'));pending=null;return}buf=buf.subarray(consumed);const p=pending;pending=null;prefix==='-'?p.reject(Error('Aiven rejected command: '+String(value).slice(0,160))):p.resolve(value)}});
  const fail=e=>{if(pending){pending.reject(e);pending=null}};
  socket.on('error',fail);socket.on('timeout',()=>{fail(Error('Aiven timeout'));socket.destroy()});
  await new Promise((resolve,reject)=>{socket.once('secureConnect',resolve);socket.once('error',reject)});
  const command=(...args)=>new Promise((resolve,reject)=>{if(pending)return reject(Error('Concurrent command'));pending={resolve,reject};socket.write(encode(args))});
  try{
+  console.log('Aiven認証を確認中');
   if(await command('AUTH','default',password)!=='OK')throw Error('Authentication failed');
   console.log('Aiven認証成功');
+  console.log('Aivenテスト用キーへの保存を確認中');
   if(await command('SET',key,payload,'NX','EX','60')!=='OK')throw Error('Temporary save failed');
   console.log('テスト用キーへの配信情報保存成功');
+  console.log('Aiven読み戻しを確認中');
   const saved=await command('GET',key);
   if(saved!==payload)throw Error('Readback mismatch');
   console.log('配信情報の読み戻し・完全一致成功');
