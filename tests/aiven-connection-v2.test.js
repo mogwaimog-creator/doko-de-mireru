@@ -56,3 +56,24 @@ test('Aiven v2 adapter writes streaming payload and reads identical bytes back',
  assert.ok(events.some(e=>e.includes('"stage":"read"')&&e.includes('"ok":true')));
  connection.close();
 });
+
+test('Aiven v2 integrates with release key isolation and preserves streaming record bytes',async()=>{
+ const {createTransport}=require('../api/_release-transport-candidate');
+ const store=new Map(),wire=[],events=[];
+ const createClient=()=>({isOpen:false,on(){return this},async connect(){this.isOpen=true},
+  async sendCommand(args){wire.push(args);if(args[0]==='SET'){store.set(args[1],args[2]);return 'OK'}if(args[0]==='GET')return store.get(args[1])??null;throw Error('unexpected operation')},
+  destroy(){this.isOpen=false}});
+ const connection=createAivenConnection(env,{createClient,emit:(...parts)=>events.push(parts.join(' '))});
+ const sha='a'.repeat(64);
+ const release=createTransport({endpoint:'https://valkey.invalid',token:'internal-valkey-transport-token',
+  releaseSha256:sha,phase:'new',enabled:true,request:connection.request,scripts:[],maxRequests:8,maxReservedCommands:8});
+ const logical='doko:dev:shared-stream:v1:record:movie:157336';
+ const payload=JSON.stringify({type:'movie',id:157336,watch:{flatrate:[{provider_id:9}]}});
+ assert.equal(await release.command(['SET',logical,payload]),'OK');
+ assert.equal(await release.command(['GET',logical]),payload);
+ assert.equal(wire[0][1],'doko:ledger:release:'+sha.slice(0,16)+':shared-stream:v1:record:movie:157336');
+ assert.equal(wire[1][1],wire[0][1]);
+ assert.ok(events.some(line=>line.includes('"stage":"save"')));
+ assert.throws(()=>release.command(['SET','not-a-logical-key',payload]),/canonical logical key/);
+ connection.close();
+});
