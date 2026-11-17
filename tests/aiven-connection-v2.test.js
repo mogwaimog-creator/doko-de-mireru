@@ -40,3 +40,19 @@ test('Aiven v2 request adapter preserves release transport response contract',as
  const response=await connection.request('https://valkey.invalid',{method:'POST',body:JSON.stringify(['PING'])});
  assert.deepEqual(await response.json(),{result:'PONG'});
 });
+
+test('Aiven v2 adapter writes streaming payload and reads identical bytes back',async()=>{
+ const records=new Map(),sent=[],events=[];
+ const createClient=options=>({isOpen:false,on(){return this},async connect(){this.isOpen=true},async sendCommand(args){sent.push(args);if(args[0]==='SET'){records.set(args[1],args[2]);return 'OK'}if(args[0]==='GET')return records.get(args[1])??null;throw Error('unexpected command')},destroy(){this.isOpen=false}});
+ const connection=createAivenConnection(env,{createClient,emit:(...a)=>events.push(a.join(' '))});
+ const key='doko:ledger:test:shared-stream:v1:record:movie:157336';
+ const payload=JSON.stringify({type:'movie',id:157336,watch:{flatrate:[{provider_id:9}]},lastSuccessAt:'2026-11-18T00:00:00.000Z'});
+ const write=await connection.request('https://valkey.invalid',{method:'POST',body:JSON.stringify(['SET',key,payload])});
+ assert.equal((await write.json()).result,'OK');
+ const read=await connection.request('https://valkey.invalid',{method:'POST',body:JSON.stringify(['GET',key])});
+ assert.equal((await read.json()).result,payload);
+ assert.deepEqual(sent.map(a=>a[0]),['SET','GET']);
+ assert.ok(events.some(e=>e.includes('"stage":"save"')&&e.includes('"ok":true')));
+ assert.ok(events.some(e=>e.includes('"stage":"read"')&&e.includes('"ok":true')));
+ connection.close();
+});
