@@ -16,7 +16,7 @@ test('one TMDB fetch is saved only to unique expiring Aiven probe key and read b
   throw Error('unexpected command');
  },destroy(){this.isOpen=false}});
  let fetched=0;
- const result=await run({env,createClient,fetchImpl:async(url)=>{fetched++;assert.match(url,/\/movie\/157336\/watch\/providers$/);return {ok:true,json:async()=>({results:{JP:{flatrate:[{provider_id:9}]}}})}},emit:(...args)=>events.push(args.join(' '))});
+ const result=await run({env,createClient,fetchImpl:async(url)=>{fetched++;assert.equal(url.pathname,'/3/movie/157336/watch/providers');assert.equal(url.searchParams.get('api_key'),'fixture');assert.equal(url.searchParams.get('language'),'ja-JP');return {ok:true,json:async()=>({results:{JP:{flatrate:[{provider_id:9}]}}})}},emit:(...args)=>events.push(args.join(' '))});
  assert.equal(result.ok,true);assert.equal(result.readback,true);assert.equal(fetched,1);
  assert.deepEqual(calls.map(args=>args[0]),['SET','GET']);
  assert.ok(events.some(s=>s.includes('"saved":true')&&s.includes('"readback":true')));
