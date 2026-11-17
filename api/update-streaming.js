@@ -1,7 +1,5 @@
 'use strict';
 // Scheduled job. Read-only visitors never invoke this endpoint.
-const {command}=require('./_redis');
-const works=require('../data/streaming-works.json');
 const KEYPREFIX='doko:watch:v3:';
 const LOCK='doko:watch:v3:refresh-lock';
 const CONCURRENCY=6;
@@ -35,8 +33,11 @@ module.exports=async(req,res)=>{
  if(!secret||req.headers.authorization!==`Bearer ${secret}`)return res.status(401).json({error:'Unauthorized'});
  if(process.env.DEV_SHARED_CRON_ENABLED==='1'&&process.env.NODE_ENV!=='production'&&process.env.VERCEL_ENV!=='production')return require('./_ledger-scheduler-dev').handle(req,res);
  const token=`${Date.now()}:${Math.random()}`;
- let acquired=false;
+ let acquired=false,command;
  try{
+   // Legacy-only imports must not block the release-mode Cron entrypoint.
+   ({command}=require('./_redis'));
+   const works=require('../data/streaming-works.json');
    acquired=(await command(['SET',LOCK,token,'NX','EX',LOCK_TTL_SECONDS]))==='OK';
    if(!acquired)return res.status(409).json({error:'Update already running'});
    const win=windowJST();
