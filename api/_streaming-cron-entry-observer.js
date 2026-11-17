@@ -2,6 +2,8 @@
 // Logs only dispatch failures; inner scheduler observer owns successful runs.
 // No storage reads/writes or network calls.
 async function observeDispatch(run,{log=console.info}={}){
+ // Emitted before release setup: distinguishes an entered handler from a missing invocation.
+ require('./_aiven-refresh-diagnostics').recordStage('entry',{emit:log});
  try{return await run()}catch(error){
   // Preserve thrown errors and let the existing dispatch error handler respond.
   try{log('STREAMING_CRON_DISPATCH_DIAGNOSTIC',JSON.stringify({event:'exception',code:'DISPATCH_EXCEPTION'}))}catch{}
