@@ -1,0 +1,9 @@
+'use strict';
+const test=require('node:test'),assert=require('node:assert/strict');
+const { _test:{handler} }=require('../api/cron-manual');
+const env={LEDGER_ADMIN_TOKEN:'a'.repeat(40),CRON_SECRET:'b'.repeat(40),REDIS_PROVIDER:'valkey',AIVEN_REDIS_URL:'rediss://example.invalid',LEDGER_RELEASE_MODE:'new'};
+function response(){return {statusCode:200,headers:{},setHeader(k,v){this.headers[k]=v},status(n){this.statusCode=n;return this},json(x){this.body=x;return this}}}
+test('manual recovery rejects GET without running',async()=>{let called=0;const res=response();await handler({method:'GET',headers:{}},res,{env,run:()=>called++});assert.equal(res.statusCode,405);assert.equal(called,0)});
+test('manual recovery requires administrator token and explicit confirmation',async()=>{let called=0;const run=()=>called++;let res=response();await handler({method:'POST',headers:{'x-confirm-cron-run':'run-once'}},res,{env,run});assert.equal(res.statusCode,401);res=response();await handler({method:'POST',headers:{authorization:'Bearer '+env.LEDGER_ADMIN_TOKEN}},res,{env,run});assert.equal(res.statusCode,400);assert.equal(called,0)});
+test('manual recovery refuses non-Aiven release mode',async()=>{let called=0;const res=response();await handler({method:'POST',headers:{authorization:'Bearer '+env.LEDGER_ADMIN_TOKEN,'x-confirm-cron-run':'run-once'}},res,{env:{...env,REDIS_PROVIDER:'upstash'},run:()=>called++});assert.equal(res.statusCode,503);assert.equal(called,0)});
+test('confirmed manual recovery delegates once to existing cron handler',async()=>{let called=0;const res=response();await handler({method:'POST',headers:{authorization:'Bearer '+env.LEDGER_ADMIN_TOKEN,'x-confirm-cron-run':'run-once'}},res,{env,run:async req=>{called++;assert.equal(req.method,'GET');assert.equal(req.headers.authorization,'Bearer '+env.CRON_SECRET);return res.status(200).json({status:'complete'})}});assert.equal(called,1);assert.equal(res.statusCode,200)});
