@@ -25,8 +25,8 @@ test('native client rejects plaintext, URL options and invalid commands',async()
   assert.throws(()=>createAivenConnection({AIVEN_REDIS_URL:url},m.factory));
  }
  const c=createAivenConnection({AIVEN_REDIS_URL:'rediss://host.invalid:16890'},m.factory);
- await assert.rejects(c.command([]),/Invalid/);
- await assert.rejects(c.command(['GET',{}]),/Invalid/);
+ await assert.rejects(async()=>c.command([]),/Invalid/);
+ await assert.rejects(async()=>c.command(['GET',{}]),/Invalid/);
  assert.equal(m.connects,0);
 });
 test('native client only permits temporary writes through writeTest helper',async()=>{
