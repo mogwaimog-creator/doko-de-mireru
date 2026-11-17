@@ -5,7 +5,7 @@ function load({mode='new',auth='Bearer valid'}={}){
  const calls=[],res={setHeader(){return this},status(code){this.statusCode=code;return this},json(value){this.body=value;return this}};
  const sandbox={module:{exports:{}},exports:{},process:{env:{LEDGER_RELEASE_MODE:mode,CRON_SECRET:'valid'}},require(name){
   calls.push(name);
-  if(name==='./_release-dispatch')return {dispatch:async()=>true};
+  if(name==='./_release-dispatch')return {dispatch:async()=>mode!=='legacy'};
   if(name==='./_redis')throw Error('legacy Redis must not load');
   if(name==='../data/streaming-works.json')throw Error('legacy roster must not load');
   throw Error('unexpected require: '+name);
