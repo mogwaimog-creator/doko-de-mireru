@@ -1,11 +1,12 @@
 'use strict';
 // Diagnostic only: no Redis commands or upstream requests.
-const ALLOWED=new Set(['complete','complete-with-errors','busy','stopped','not-due']);
+const ALLOWED=new Set(['complete','complete-with-errors','busy','stopped','paused','not-due']);
 function classify(result){
  if(!result||!ALLOWED.has(result.status))return 'UNEXPECTED_RESULT';
  if(result.status==='complete')return 'COMPLETE';
  if(result.status==='complete-with-errors')return 'PARTIAL_FAILURE';
  if(result.status==='not-due')return 'BEFORE_WINDOW';
+ if(result.status==='paused')return 'RUN_PAUSED';
  if(result.status==='busy')return result.reason==='work-busy'?'WORK_LEASE_BUSY':'SERIES_LEASE_BUSY';
  const reasons={'shared-pause':'CONTROL_PAUSED',paused:'CONTROL_PAUSED','run-budget':'RUN_BUDGET','storage-or-journal-error':'STORAGE_OR_JOURNAL_ERROR'};
  return reasons[result.reason]||'STOPPED_OTHER';
