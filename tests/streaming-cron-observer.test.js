@@ -48,3 +48,7 @@ test('unknown status cannot leak arbitrary text into diagnostic output',async()=
  assert.equal(events.at(-1).status,'unknown');
  assert.equal(JSON.stringify(events).includes('SECRET_TOKEN'),false);
 });
+
+test('paused scheduler state is not mistaken for unexpected result',()=>{
+ assert.equal(classify({status:'paused',reason:'time-budget'}),'RUN_PAUSED');
+});
