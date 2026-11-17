@@ -27,3 +27,11 @@ test('rejects unsafe error codes and unknown diagnostic fields',()=>{
  assert.equal(safeError({code:'secret://value'}),'UNKNOWN');
  assert.equal(diagnosticLine({event:'started',password:'hidden'}),'{"event":"started"}');
 });
+
+test('records setup errors before scheduler run',async()=>{
+ const {observer}=require('../api/_streaming-cron-observer-core');
+ const lines=[];const observe=observer({clock:()=>1000,emit:event=>lines.push(event)});
+ await assert.rejects(observe(async()=>{throw Object.assign(Error('setup failed'),{code:'SETUP_FAILED'})}),/setup failed/);
+ assert.deepEqual(lines.map(x=>x.event),['started','failed']);
+ assert.equal(lines[1].code,'SETUP_FAILED');
+});
