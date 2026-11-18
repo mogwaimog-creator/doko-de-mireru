@@ -11,7 +11,7 @@ module.exports=async function emergencyStreaming(req,res){
  res.setHeader('Cache-Control','private, no-store');
  res.setHeader('X-Robots-Tag','noindex');
  if(req.method!=='POST')return res.status(405).json({error:'POST only'});
- if(!validBearer(req.headers.authorization,process.env.CRON_SECRET))return res.status(401).json({error:'Unauthorized'});
+ if(!validBearer(req.headers.authorization,process.env.LEDGER_ADMIN_TOKEN))return res.status(401).json({error:'Unauthorized'});
  
  // Reuse the production Cron route, including its authentication, locks,
  // scheduled quota, existing daily progress and result response.
