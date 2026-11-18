@@ -10,7 +10,7 @@ function scheduler(command,job,{controlKey='doko:dev:content-control:v1',prefix=
   if(control&&JSON.parse(control).status!=='ready')result={status:'stopped',reason:'shared-pause'};
   else if(lean){try{const last=await job.run(at,works,{maxItems:1000,signal});result={...last,last};if(!['complete','complete-with-errors','not-due','busy'].includes(result.status))result={...result,status:'stopped'}}catch{result={status:'stopped',reason:'storage-or-journal-error'}}}
   else result=await supervisor(job).run(at,works,{maxItems:24,signal});
-  const event={day,at,status:result.status,reason:result.reason||null,last:result.last||null};
+  const counts=result.last||result;const event={day,at,status:result.status,reason:result.reason||null,last:result.last||null,...Object.fromEntries(['total','succeeded','failed','pending','dispatches','runs'].filter(k=>Number.isSafeInteger(counts?.[k])).map(k=>[k,counts[k]]))};
   const writes=[prefix+'last-attempt',JSON.stringify(event)];if(result.status==='complete')writes.push(prefix+'last-success',JSON.stringify(event));
   if(['stopped','complete-with-errors'].includes(result.status)){
    // Dedupe per day/status; bounded outbox, no external messages.
