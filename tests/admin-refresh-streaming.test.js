@@ -1,7 +1,7 @@
 'use strict';
 const test=require('node:test');
 const assert=require('node:assert/strict');
-const {validBearer}=require('../api/admin-refresh-streaming');
+const {validBearer}=require('../api/admin-refresh-streaming')._test;
 test('administrator token is required and compared exactly',()=>{
  const secret='a'.repeat(40);
  assert.equal(validBearer('Bearer '+secret,secret),true);
