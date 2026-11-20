@@ -1,0 +1,20 @@
+name: Aiven inventory read-only tests
+on:
+  pull_request:
+    paths:
+      - 'api/admin-aiven-inventory.js'
+      - 'tests/admin-aiven-inventory*.test.js'
+      - '.github/workflows/aiven-inventory-tests.yml'
+  workflow_dispatch:
+jobs:
+  inventory:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax
+        run: node --check api/admin-aiven-inventory.js
+      - name: Admin authentication, categories, and mocked Aiven integration
+        run: node --test tests/admin-aiven-inventory.test.js tests/admin-aiven-inventory-integration.test.js
