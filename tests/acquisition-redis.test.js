@@ -13,13 +13,15 @@ test('real Redis: new guard ignores old v1 pause and permits a bounded request',
  redis('SET','doko:dev:acquisition-guard:v1',JSON.stringify({paused:true,inflight:999}));
  assert.equal(evalScript(guard.ENTER,[control,active],['t1',JSON.stringify({startedAt:Date.parse('2026-11-11T00:00:00Z')}),Date.parse('2026-11-11T00:00:00Z')]),1);
  const now=Date.parse('2026-11-11T00:00:00Z'),bucket=guard.KEY+':failure:1';
+ // Production regular quota is 3000/day, not the obsolete test-only value of 2.
+ redis('SET',guard.KEY,JSON.stringify({version:2,minute:Math.floor(now/60000),requests:0,acquisitions:0,scheduled:0,failures:0,day:'2026-11-11',daily:2998,dailyScheduled:0}));
  assert.deepEqual(evalScript(guard.ADMIT,[guard.KEY,control,bucket],['id1',now,'2026-11-11','0',2]),[1,'admitted']);
  assert.deepEqual(evalScript(guard.ADMIT,[guard.KEY,control,bucket],['id1',now,'2026-11-11','0',2]),[1,'admitted']);
  assert.deepEqual(evalScript(guard.ADMIT,[guard.KEY,control,bucket],['id1',now,'2026-11-11','0',2]),[0,'upstream-limit']);
  // Scheduled series updates use an independent quota and must not be blocked by public traffic.
  assert.deepEqual(evalScript(guard.ADMIT,[guard.KEY,control,bucket],['id1',now,'2026-11-11','1',2]),[1,'admitted']);
  const state=JSON.parse(redis('GET',guard.KEY));
- assert.equal(state.daily,2);
+ assert.equal(state.daily,3000);
  assert.equal(state.acquisitions,2);
  assert.equal(state.dailyScheduled,1);
  assert.equal(redis('HDEL',active,'t1'),1);

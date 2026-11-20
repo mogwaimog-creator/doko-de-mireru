@@ -27,6 +27,9 @@
     },
     "api/update-streaming.js": {
       "maxDuration": 300
+    },
+    "api/admin-refresh-streaming.js": {
+      "maxDuration": 300
     }
   }
 }
