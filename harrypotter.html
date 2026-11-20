@@ -3082,7 +3082,7 @@ async function loadHpProviderBox(box){
   if(providers.length === 0){
     box.innerHTML = '<span class="doko-provider-unconfirmed">'+(result.missing?'配信情報を取得できませんでした':'見放題の掲載情報なし')+'</span>';
 
-    if(result.stale){const warning=document.createElement('span');warning.textContent='更新遅延：前回取得時の配信情報';warning.style.display='block';warning.style.fontSize='14px';warning.style.color='#b91c1c';box.appendChild(warning)}
+    if(result.stale)window.dokoShowCardStaleNotice(box);
     box.dataset.loaded = "1";
 
     return;
@@ -3090,7 +3090,7 @@ async function loadHpProviderBox(box){
 
 
   box.innerHTML = "";
-  if(result.stale){const warning=document.createElement('span');warning.textContent='更新遅延：前回取得時の配信情報';warning.style.display='block';warning.style.fontSize='14px';warning.style.color='#b91c1c';box.appendChild(warning)}
+  if(result.stale)window.dokoShowCardStaleNotice(box);
 
 
   for(const provider of providers){
@@ -3203,5 +3203,18 @@ document.addEventListener('click',event=>{
   document.querySelector('.hp-tab[data-view="'+view+'"]').click();
   requestAnimationFrame(()=>document.querySelector('#releaseMovies .hp-side-guide')?.scrollIntoView({block:'start',behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'}));
 });
-</script></body>
+</script><script>
+/* 更新遅延のお知らせはロゴ欄の外に表示し、古い配信情報は残す */
+window.dokoShowCardStaleNotice=function(box){
+ if(!box||!box.parentElement)return;
+ let note=box.previousElementSibling;
+ if(!note||!note.classList.contains('doko-card-stale-notice')){
+  note=document.createElement('div');note.className='doko-card-stale-notice';
+  note.style.cssText='display:block;box-sizing:border-box;width:100%;max-width:100%;grid-column:1/-1;flex-basis:100%;min-width:0;font-size:12px;line-height:1.5;color:#b91c1c;white-space:normal;overflow-wrap:anywhere;margin:5px 0';
+  box.before(note);
+ }
+ note.textContent='※配信情報は前回取得時のものです（更新遅延）';
+};
+</script>
+</body>
 </html>

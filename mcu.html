@@ -14875,6 +14875,12 @@ function dokoNormalizeStreaming(items){const aliases={1796:8,2100:9},seen=new Se
 /* MCU配信ロゴ：Redisの保存済み情報を一括取得。訪問者からTMDBへ問い合わせない */
 const mcuCachedRecords=dokoSeriesFetch('/api/series-watch?series=mcu',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('配信API '+r.status);return r.json();}).then(d=>d.providers||{});
 async function getMcuCachedRecord(id,type){const records=await mcuCachedRecords;return records[type+':'+id]||null;}
+function showSeriesStaleNotice(box){
+ const parent=box.parentElement;if(!parent)return;
+ let notice=parent.querySelector('.doko-card-stale-notice');
+ if(!notice){notice=document.createElement('div');notice.className='doko-card-stale-notice';notice.style.cssText='display:block;box-sizing:border-box;width:100%;max-width:100%;grid-column:1/-1;flex-basis:100%;min-width:0;font-size:12px;line-height:1.5;color:#b91c1c;white-space:normal;overflow-wrap:anywhere;margin:5px 0';box.before(notice)}
+ notice.textContent='※配信情報は前回取得時のものです（更新遅延）';
+}
 async function loadMcuProviderBox(box){
  if(!box||box.dataset.loaded||box.dataset.loading)return;
  box.dataset.loading='1';
@@ -14882,9 +14888,9 @@ async function loadMcuProviderBox(box){
   const record=await getMcuCachedRecord(box.dataset.id,box.dataset.type||'movie');
   box.replaceChildren();
   if(!record){box.classList.add('mcu-provider-unavailable');box.textContent='配信情報は未取得です';}
-  else if(!record.flatrate.length){if(record.stale){const warning=document.createElement('span');warning.textContent='更新遅延：前回取得時の配信情報';warning.style.display='block';warning.style.fontSize='14px';warning.style.color='#b91c1c';box.appendChild(warning)}const note=document.createElement('span');note.textContent='見放題の掲載情報なし';box.appendChild(note);}
+  else if(!record.flatrate.length){if(record.stale)showSeriesStaleNotice(box);const note=document.createElement('span');note.textContent='見放題の掲載情報なし';box.appendChild(note);}
   else{
-   if(record.stale){const warning=document.createElement('span');warning.textContent='配信情報の更新が遅れています（前回取得時の情報）';warning.style.display='block';warning.style.fontSize='14px';warning.style.color='#b91c1c';box.appendChild(warning)}
+   if(record.stale)showSeriesStaleNotice(box);
    // TMDBでは同一サービスに複数のprovider_idが付く場合がある。
    // IDの別名・同じロゴ画像をまとめ、表示上の重複だけを除外する。
    const seenIds=new Set(),seenLogos=new Set();
