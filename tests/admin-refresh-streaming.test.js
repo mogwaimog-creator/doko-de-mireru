@@ -28,3 +28,19 @@ test('unauthenticated requests do not invoke the cron',async()=>{
   else process.env.LEDGER_ADMIN_TOKEN=old;
  }
 });
+
+test('valid admin request fails safely if Cron secret is absent',async()=>{
+ const handler=require('../api/admin-refresh-streaming');
+ const oldAdmin=process.env.LEDGER_ADMIN_TOKEN,oldCron=process.env.CRON_SECRET;
+ process.env.LEDGER_ADMIN_TOKEN='a'.repeat(40);
+ delete process.env.CRON_SECRET;
+ const res={setHeader(){return this},status(n){this.statusCode=n;return this},json(v){this.body=v;return this}};
+ try{
+  await handler({method:'POST',headers:{authorization:'Bearer '+'a'.repeat(40)}},res);
+  assert.equal(res.statusCode,503);
+  assert.equal(res.body.error,'Cron configuration unavailable');
+ }finally{
+  if(oldAdmin===undefined)delete process.env.LEDGER_ADMIN_TOKEN;else process.env.LEDGER_ADMIN_TOKEN=oldAdmin;
+  if(oldCron===undefined)delete process.env.CRON_SECRET;else process.env.CRON_SECRET=oldCron;
+ }
+});
