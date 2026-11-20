@@ -42,12 +42,12 @@ module.exports=async function operatorBreakdown(req,res){
       valid++;
       if(streaming){
        if(Array.isArray(record.errors)&&record.errors.some(e=>e.status==='open'))withErrors++;
-       if(!record.lastSuccessAt&&!record.lastSuccessfulAt&&!record.lastCheckedAt&&!record.checkedAt)neverSucceeded++;
+       if(!record.lastSuccessAt)neverSucceeded++;
       }
      }catch{invalid++}
     }
    }
-   return {found,valid,invalid,...(streaming?{withOpenErrors:withErrors,withoutRecognizedSuccessTimestamp:neverSucceeded}:{})};
+   return {found,valid,invalid,...(streaming?{withOpenErrors:withErrors,withoutSuccessfulFetch:neverSucceeded}:{})};
   };
   const workInventory=await inspectRecords(workKeys);
   const streamingInventory=await inspectRecords(streamKeys,{streaming:true});
