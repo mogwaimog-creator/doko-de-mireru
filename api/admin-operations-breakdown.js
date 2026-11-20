@@ -28,20 +28,36 @@ module.exports=async function operatorBreakdown(req,res){
   const roster=require('../scripts/lib/cutover/package').roster;
   const workKeys=roster.map(w=>'doko:dev:work:v2:'+w.type+':'+w.id);
   const streamKeys=roster.map(w=>'doko:dev:shared-stream:v1:record:'+w.type+':'+w.id);
-  const countExisting=async keys=>{
-   let found=0;
+  const inspectRecords=async (keys,{streaming=false}={})=>{
+   let found=0,valid=0,invalid=0,withErrors=0,neverSucceeded=0;
    for(let i=0;i<keys.length;i+=32){
     const batch=await command(['MGET',...keys.slice(i,i+32)]);
     if(!Array.isArray(batch))throw Error('invalid inventory batch');
-    found+=batch.filter(v=>v!==null&&v!==false).length;
+    for(const raw of batch){
+     if(raw===null||raw===false)continue;
+     found++;
+     try{
+      const record=JSON.parse(raw);
+      if(!record||typeof record!=='object')throw Error('not an object');
+      valid++;
+      if(streaming){
+       if(Array.isArray(record.errors)&&record.errors.some(e=>e.status==='open'))withErrors++;
+       if(!record.lastSuccessAt&&!record.lastSuccessfulAt&&!record.lastCheckedAt&&!record.checkedAt)neverSucceeded++;
+      }
+     }catch{invalid++}
+    }
    }
-   return found;
+   return {found,valid,invalid,...(streaming?{withOpenErrors:withErrors,withoutRecognizedSuccessTimestamp:neverSucceeded}:{})};
   };
+  const workInventory=await inspectRecords(workKeys);
+  const streamingInventory=await inspectRecords(streamKeys,{streaming:true});
   const inventory={
    scope:'13-series roster only; NOT total Aiven database contents',
    worksInRoster:roster.length,
-   storedWorks:await countExisting(workKeys),
-   storedStreaming:await countExisting(streamKeys),
+   storedWorks:workInventory.found,
+   storedStreaming:streamingInventory.found,
+   workRecords:workInventory,
+   streamingRecords:streamingInventory,
    databaseTotal:null
   };
 
